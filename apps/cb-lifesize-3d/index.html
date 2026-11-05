@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Life-Size 3D Print Studio </title>
+<link rel="icon" href="cb-logo.png">
+<meta name="description" content="Design life-size houses, dresses and fabric, animals and boats for 3D printing. Auto-split into bed-sized interlocking parts. Export STL and 3MF.">
+<link rel="stylesheet" href="style.css"><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+<script>window.CB_FULL=true;window.CB_BUY="https://songwriterkaz.github.io/coffeebreak/apps/cb-lifesize-3d-buy/";</script>
+</head><body>
+<header><img src="cb-logo.png" alt="Coffeebreak CB logo"><div><h1>Coffeebreak Life-Size 3D Print Studio</h1><div class="sub">Houses · dresses &amp; fabric · animals · boats · real-world mm · auto-split parts · Full version</div></div><a class="badge" id="buyBadge" href="https://songwriterkaz.github.io/coffeebreak/apps/cb-lifesize-3d-buy/">Full version</a></header>
+<div class="tabs"><button data-tab="toolsPanel" class="on">Design</button><button data-tab="viewPanel">3D</button><button data-tab="partsPanel">Parts</button><button data-tab="printPanel">Print</button></div>
+<div class="wrap">
+<section class="panel show" id="toolsPanel"><h2>Design</h2>
+ <label>Category</label>
+ <div class="cats" id="cats">
+  <button data-cat="house" class="on">Houses</button>
+  <button data-cat="dress">Dresses &amp; fabric</button>
+  <button data-cat="animal">Animals</button>
+  <button data-cat="boat">Boats</button>
+ </div>
+
+ <div id="houseOpts">
+  <label>House preset</label>
+  <div class="tools"><button data-hpreset="cottage" class="on">Cottage</button><button data-hpreset="beach">Beach</button><button data-hpreset="mansion">Mansion</button><button data-hpreset="castle">Castle</button></div>
+  <label>Size vs life size</label>
+  <select id="hScale"><option value="0.05">5% of life size</option><option value="0.1" selected>10% of life size</option><option value="0.2">20% of life size</option><option value="0.5">50% of life size</option><option value="1">100% life size</option></select>
+  <label>Base plate (mm at print scale)</label><select id="hBase"><option value="0">None</option><option value="2" selected>2 mm</option><option value="3">3 mm</option></select>
+  <p class="small">House plans reuse Coffeebreak House Maker. At 100% life size a cottage is about 11 × 9 m and splits into many bed-sized interlocking wall and roof parts.</p>
+ </div>
+
+ <div id="dressOpts" hidden>
+  <label>Lattice style</label><select id="dStyle"><option value="chainmail">Chainmail rings</option><option value="diamond">Diamond lattice</option><option value="hex">Hex mesh</option></select>
+  <div class="row"><div><label>Bust mm</label><input type="number" id="dBust" value="900"></div><div><label>Waist mm</label><input type="number" id="dWaist" value="700"></div></div>
+  <div class="row"><div><label>Hips mm</label><input type="number" id="dHips" value="950"></div><div><label>Length mm</label><input type="number" id="dLen" value="900"></div></div>
+  <div class="row"><div><label>Sleeve mm (0=none)</label><input type="number" id="dSleeve" value="0"></div><div><label>Pitch mm</label><input type="number" id="dPitch" value="12"></div></div>
+  <p class="small">Printable fabric / chainmail-style dress shell sized to body measurements. Soft TPU or PETG recommended for wearables; always check local safety for skin contact.</p>
+ </div>
+
+ <div id="animalOpts" hidden>
+  <label>Animal</label>
+  <div class="tools"><button data-animal="dog" class="on">Dog</button><button data-animal="cat">Cat</button><button data-animal="horse">Horse</button><button data-animal="bird">Bird</button></div>
+  <label>Size vs life size</label>
+  <select id="aScale"><option value="0.25">25%</option><option value="0.5">50%</option><option value="1" selected>100% life size</option><option value="0.1">10%</option></select>
+  <p class="small">Low-poly parametric animals at real-world millimetre scale. Large animals auto-split into labelled interlocking parts.</p>
+ </div>
+
+ <div id="boatOpts" hidden>
+  <label>Boat</label>
+  <div class="tools"><button data-boat="kayak" class="on">Kayak</button><button data-boat="dinghy">Dinghy</button><button data-boat="sailboat">Small sailboat hull</button></div>
+  <label>Size vs life size</label>
+  <select id="bScale"><option value="0.1">10%</option><option value="0.25" selected>25%</option><option value="0.5">50%</option><option value="1">100% life size</option></select>
+  <p class="small">Hulls in real millimetres. Life-size boats need many parts and serious workshop space. Scale models are fine for desktop printers.</p>
+ </div>
+
+ <h3>Printer bed (for auto-split)</h3>
+ <div class="row"><div><label>Bed X mm</label><input type="number" id="bedX" value="220"></div><div><label>Bed Y mm</label><input type="number" id="bedY" value="220"></div><div><label>Bed Z mm</label><input type="number" id="bedZ" value="250"></div></div>
+ <label><input type="checkbox" id="doSplit" checked> Auto-split into interlocking bed-sized parts with labels</label>
+ <div class="row"><button class="dark" id="rebuild">Build model</button></div>
+ <div id="sizeInfo" class="notice ok small"></div>
+ <div id="dims"></div>
+</section>
+
+<section class="panel" id="viewPanel"><h2>3D view</h2>
+ <div class="row"><select id="viewMode"><option value="color">Colour view</option><option value="print">Print mesh</option></select>
+ <select id="viewPart"><option value="-1">Whole model</option></select></div>
+ <div id="view"></div>
+ <p class="small">Drag to orbit, scroll to zoom, right-drag to pan. Units are millimetres.</p>
+</section>
+
+<section class="panel" id="partsPanel"><h2>Parts list</h2>
+ <p class="small">Each part fits your bed (within the split settings), has interlocking keys and a raised label.</p>
+ <div id="partsList" class="parts"></div>
+ <div class="row"><button class="dark" id="expAllStl">Download all parts STL (zip)</button><button class="dark" id="expAll3mf">Download all parts 3MF (zip)</button></div>
+ <div class="row"><button id="expOneStl">Download selected STL</button><button id="expOne3mf">Download selected 3MF</button></div>
+ <div id="expInfo" class="small"></div>
+</section>
+
+<section class="panel" id="printPanel"><h2>3D print</h2>
+ <div class="notice red"><b>Safety notice for live printer control.</b> A 3D printer has a hot nozzle (200 °C+), a heated bed and moving parts. Only start a print when you are at the printer, the bed is clear and you will watch it. Never leave a printer unattended. Use Emergency stop if anything looks wrong. You are responsible for your printer's settings and safety.</div>
+ <div class="pgrid">
+ <div><h3>1. Export for your slicer (recommended)</h3>
+  <p class="small">STL and 3MF are in millimetres, Z up. Open in PrusaSlicer, Cura, Bambu Studio or OrcaSlicer. Prefer exporting parts from the Parts tab when the model is larger than the bed.</p>
+  <div class="row"><button class="dark" id="expStl">Download whole STL</button><button class="dark" id="exp3mf">Download whole 3MF</button></div>
+ </div>
+ <div><h3>2. Built-in basic slicer (experimental)</h3>
+  <div class="notice small">Basic perimeters and infill only. No supports. For best results use a real slicer on the STL.</div>
+  <div class="row"><div><label>Nozzle °C</label><input type="number" id="tNoz" value="205"></div><div><label>Bed °C</label><input type="number" id="tBed" value="60"></div></div>
+  <div class="row"><div><label>Layer mm</label><select id="lh"><option>0.2</option><option>0.28</option><option>0.12</option></select></div><div><label>Speed mm/s</label><input type="number" id="spd" value="40"></div><div><label>Infill %</label><input type="number" id="inf" value="15"></div></div>
+  <div class="row"><div><label>Nozzle mm</label><input type="number" id="noz" value="0.4" step="0.1"></div><div><label>Filament mm</label><input type="number" id="fil" value="1.75" step="0.05"></div></div>
+  <label>Part to slice</label><select id="slicePart"><option value="-1">Whole (if fits)</option></select>
+  <div class="row"><button class="dark" id="doSlice">Slice to G-code</button><button id="dlG" disabled>Download G-code</button></div>
+  <div id="sliceInfo" class="small"></div>
+  <input type="range" id="layerSlider" min="0" max="0" value="0" style="width:100%"><canvas id="gprev" width="400" height="400"></canvas>
+ </div>
+ <div><h3>3. Connect a printer</h3>
+  <label><input type="checkbox" id="safeOk"> I am at the printer and will watch the whole print</label>
+  <h3>USB (Marlin) via Web Serial</h3>
+  <p class="small">Works in desktop Chrome or Edge with the printer plugged in by USB. Not available on iPhone, iPad or Firefox.</p>
+  <div class="row"><select id="baud"><option>115200</option><option>250000</option><option>57600</option></select><button id="usbConnect">Connect USB</button><button id="usbDisc" disabled>Disconnect</button></div>
+  <div id="temps">Not connected</div><div id="pstatus" class="small"></div>
+  <div class="row"><button id="bHome" disabled>Home</button><button id="bPre" disabled>Preheat PLA</button><button id="bCool" disabled>Cool down</button></div>
+  <div class="row"><button class="dark" id="bPrint" disabled>Print sliced G-code</button><button id="bPause" disabled>Pause</button><button id="bCancel" disabled>Cancel</button></div>
+  <div class="row"><button class="warn" id="bStop" disabled>EMERGENCY STOP (M112)</button></div>
+  <div class="row"><input type="text" id="cmd" placeholder="Send a G-code line, e.g. M105"><button id="bSend" disabled>Send</button></div>
+  <div id="log"></div>
+  <h3>Network: OctoPrint or Moonraker/Klipper</h3>
+  <div class="row"><select id="netType"><option value="octo">OctoPrint</option><option value="moon">Moonraker / Klipper (Mainsail, Fluidd)</option></select></div>
+  <label>Printer URL</label><input type="text" id="netUrl" placeholder="http://192.168.1.50 or http://octopi.local">
+  <label>API key (OctoPrint required, Moonraker optional)</label><input type="password" id="netKey" autocomplete="off">
+  <label><input type="checkbox" id="netRemember"> Remember on this device only (saved in this browser, never sent to Coffeebreak)</label>
+  <label><input type="checkbox" id="netStart"> Start printing after upload</label>
+  <div class="row"><button id="netTest">Test connection</button><button class="dark" id="netUp">Upload G-code</button></div>
+  <div id="netInfo" class="small"></div>
+  <p class="small">Browsers block a secure https page from talking to a printer on plain http. If the test fails, download the full app and open it from your computer, give your printer an https address, or allow this site in OctoPrint CORS / Moonraker cors_domains. You can always download the G-code and upload it in your printer's own web page.</p>
+ </div>
+ </div>
+</section>
+</div>
+<div id="toast"></div>
+<footer>
+<p><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named; trademarks belong to their owners (including OctoPrint, Klipper, Moonraker, Marlin, Chrome and others). Models are for hobby fabrication and display only, not for real construction, habitation, flotation or load-bearing use. Use 3D printers safely and never leave them unattended. Wearable prints must be checked for skin-safe materials.</p>
+<p>© Coffeebreak · <a href="https://songwriterkaz.github.io/coffeebreak/apps/cb-lifesize-3d-buy/">Get the full version $10 USD</a> · Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a></p>
+</footer>
+<script src="lib/three.min.js"></script><script src="lib/OrbitControls.js"></script>
+<script src="core.js"></script><script src="house-hm.js"></script><script src="models.js"></script><script src="app.js"></script>
+</body></html>
