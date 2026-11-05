@@ -25,7 +25,7 @@ $('szgo').onclick=()=>{const sys=$('sys').value,g=$('gen').value,n=+$('szn').val
 let feet='both';const fb={left:'fL',right:'fR',both:'fB'};
 Object.keys(fb).forEach(k=>$(fb[k]).onclick=()=>{feet=k;Object.values(fb).forEach(id=>$(id).classList.remove('sel'));$(fb[k]).classList.add('sel');build();V.frame();});
 // ---- demo limits ----
-if(CB.DEMO){[...$('arch').options].forEach(o=>{if(o.value!=='medium')o.textContent+=' 🔒';});[...$('pat').options].forEach(o=>{if(o.value!=='none')o.textContent+=' 🔒';});}
+if(CB.DEMO){[...$('arch').options].forEach(o=>{if(o.value!=='medium')o.textContent+=' (full version)';});[...$('pat').options].forEach(o=>{if(o.value!=='none')o.textContent+=' (full version)';});}
 // ---- geometry ----
 const sm=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
 function outline(y,L,W){ // returns [centre x, half width] for right foot, medial side is -x

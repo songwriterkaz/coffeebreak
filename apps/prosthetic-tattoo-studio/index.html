@@ -1,7 +1,7 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Prosthetic Tattoo Studio</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Prosthetic Tattoo Studio</title><link rel="icon" href="img/cb-logo.png">
 <style>body{margin:0;font-family:Georgia,serif;background:#fff4f8;color:#1a1013}header{background:#1a1013;color:#ffd6ea;padding:18px;text-align:center}header img{width:110px;border-radius:12px;background:#f5ead6}h1{margin:8px 0 4px}nav a{color:#ff9fcb;margin:0 8px}section{max-width:1150px;margin:auto;padding:18px}.card{background:#fff;border:3px solid #1a1013;border-radius:14px;padding:14px;box-shadow:5px 5px 0 #ff4fa3}
 .svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.svc .card b.p{font-size:20px;color:#c2185b}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.pick{background:#fff;border:3px solid #1a1013;border-radius:12px;padding:6px;text-align:center;cursor:pointer;font-size:13px}.pick.on{outline:4px solid #ff4fa3}.spr{width:150px;height:220px;margin:auto;background-color:#f3e3e8;border-radius:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.pick{background:#fff;border:3px solid #1a1013;border-radius:12px;padding:6px;text-align:center;cursor:pointer;font-size:13px}.pick.on{outline:4px solid #ff4fa3}.spr{width:150px;height:220px;margin:auto;background-color:#f3e3e8;border-radius:8px;display:block}
 button,.btn{background:#ff4fa3;color:#fff;border:2px solid #1a1013;border-radius:20px;padding:8px 14px;font-weight:700;cursor:pointer}.ghost{background:#fff;color:#1a1013}select,input,textarea{width:100%;box-sizing:border-box;padding:7px;border:2px solid #1a1013;border-radius:8px;margin:3px 0}
 .bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.bar>*{flex:1;min-width:180px}#pager{display:flex;gap:8px;justify-content:center;align-items:center;margin:12px 0}
 .builder{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.pay{background:#ffe0ee;border-radius:10px;padding:10px;margin:10px 0}.note{background:#fff2c2;border:2px solid #1a1013;border-radius:10px;padding:10px}footer{text-align:center;padding:24px;background:#1a1013;color:#ffd6ea}footer a{color:#ff9fcb}</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
@@ -29,7 +29,7 @@ button,.btn{background:#ff4fa3;color:#fff;border:2px solid #1a1013;border-radius
 <li>Tell us the cover material if you know it (3D printed PETG or PLA, carbon, foam, fabric, silicone skin).</li>
 <li><b>Mail-in</b>: pack the cover in a sturdy box with padding, put your name and booking reference inside, and send it tracked. We email the postal address when your booking is confirmed. Return postage is included in the mail-in fee.</li>
 <li><b>Newcastle drop-off</b>: we arrange a time by email. No charge.</li></ol></div></section>
-<footer><img src="img/logo.jpg" alt="" style="width:50px;border-radius:50%"><br>Coffeebreak Prosthetic Tattoo Studio . Newcastle NSW . stigma free, everyone welcome<br>Questions: <a href="mailto:songwriterkaz@gmail.com">songwriterkaz@gmail.com</a> . <a href="https://coffeebreaks.itch.io">coffeebreaks.itch.io</a></footer>
+<footer><img src="img/logo.jpg" alt="" style="width:50px;border-radius:50%"><br>Coffeebreak Prosthetic Tattoo Studio . Newcastle NSW . stigma free, everyone welcome<br>Questions: <a href="mailto:songwriterkaz@gmail.com">songwriterkaz@gmail.com</a></footer>
 <script src="designs.js"></script><script src="viewer.js"></script>
 <script>
 // ===== CONFIG: edit prices and details here (all prices are PLACEHOLDERS, AUD) =====
@@ -53,12 +53,15 @@ $('bh').innerHTML=CONFIG.handover.map(s=>`<option value="${s.id}">${s.name}${s.p
 function calc(){const s=CONFIG.services.find(x=>x.id==$('bs').value),h=CONFIG.handover.find(x=>x.id==$('bh').value);const t=s.price+h.price;$('tot').textContent=money(t);$('dep').textContent=money(Math.round(t*CONFIG.depositPercent)/100);return{s,h,t}}
 ['bs','bh'].forEach(i=>$(i).onchange=calc);calc();
 const D=window.D,PER=30;let page=0;const cols=[...new Set(D.map(d=>d.col))].sort();$('col').innerHTML='<option value="">All collections</option>'+cols.map(c=>`<option>${c}</option>`).join('');
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.style.backgroundImage=`url(${e.target.dataset.src})`;io.unobserve(e.target)}}),{rootMargin:'300px'});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const el=e.target;io.unobserve(el);if(window.cbThumb)cbThumb(el,el._d)}}),{rootMargin:'300px'});
 function list(){const q=$('q').value.trim().toLowerCase(),c=$('col').value;return D.filter(d=>(!c||d.col==c)&&(!q||d.id.toLowerCase().includes(q)||d.name.toLowerCase().includes(q)))}
 function render(){const L=list(),pages=Math.max(1,Math.ceil(L.length/PER));page=Math.min(page,pages-1);$('count').textContent=L.length+' designs';$('grid').innerHTML='';
- L.slice(page*PER,page*PER+PER).forEach(d=>{const sh=Math.floor(d.n/60),k=d.n%60;const el=document.createElement('div');el.className='pick'+($('bd').value==d.id?' on':'');
-  el.innerHTML=`<div class="spr" role="img" aria-label="${d.name}" data-src="sprites/s${String(sh).padStart(3,'0')}.jpg" style="background-position:-${(k%10)*150}px -${Math.floor(k/10)*220}px"></div><b>${d.name}</b><br>${d.id}`;
-  el.onclick=()=>{$('bd').value=d.id;document.querySelectorAll('.pick').forEach(p=>p.classList.remove('on'));el.classList.add('on')};$('grid').appendChild(el);const zb=document.createElement('button');zb.className='ghost';zb.textContent='Zoom in';zb.onclick=ev=>{ev.stopPropagation();cbView(d)};el.appendChild(zb);io.observe(el.querySelector('.spr'))});
+ L.slice(page*PER,page*PER+PER).forEach(d=>{const el=document.createElement('div');el.className='pick'+($('bd').value==d.id?' on':'');
+  el.innerHTML=`<canvas class="spr" width="150" height="220" role="img" aria-label="${d.name}"></canvas><b>${d.name}</b><br>${d.id}`;
+  el.onclick=()=>{$('bd').value=d.id;document.querySelectorAll('.pick').forEach(p=>p.classList.remove('on'));el.classList.add('on')};
+  const cv=el.querySelector('canvas');cv._d=d;cv.style.cursor='zoom-in';cv.onclick=ev=>{ev.stopPropagation();cbView(d)};
+  const zb=document.createElement('button');zb.className='ghost';zb.textContent='Zoom in';zb.onclick=ev=>{ev.stopPropagation();cbView(d)};
+  el.appendChild(zb);$('grid').appendChild(el);if(window.cbThumb)cbThumb(cv,d);else io.observe(cv)});
  $('pager').innerHTML=`<button class="ghost" ${page==0?'disabled':''} id="pv">Previous</button><span>Page ${page+1} of ${pages}</span><button class="ghost" ${page>=pages-1?'disabled':''} id="nx">Next</button>`;
  $('pv').onclick=()=>{page--;render()};$('nx').onclick=()=>{page++;render()}}
 ['q','col'].forEach(i=>$(i).oninput=()=>{page=0;render()});render();

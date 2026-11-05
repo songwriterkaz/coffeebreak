@@ -92,25 +92,25 @@
     },
     {
       "t": "Coffeebreak 3D Orthotics Studio",
-      "u": "https://coffeebreaks.itch.io/coffeebreak-3d-orthotics-studio",
+      "u": "https://songwriterkaz.github.io/coffeebreak/apps/3d-orthotics-studio/",
       "img": "https://img.itch.zone/aW1nLzMxMTIzOTY5LnBuZw==/315x250%23c/DELtbo.png",
       "p": "$10",
-      "d": "",
+      "d": "Design custom 3D-printable orthotic insoles. Export STL.",
       "web": true,
       "c": "Studios & Makers",
       "n": false,
-      "src": "itch"
+      "src": "pages"
     },
     {
       "t": "Coffeebreak 3D Orthotics Studio Free Demo",
-      "u": "https://coffeebreaks.itch.io/coffeebreak-3d-orthotics-studio-free-demo",
+      "u": "https://songwriterkaz.github.io/coffeebreak/apps/3d-orthotics-studio-free-demo/",
       "img": "https://img.itch.zone/aW1nLzMxMTIzOTc0LnBuZw==/315x250%23c/l6EN7a.png",
       "p": "Free",
-      "d": "",
+      "d": "Demo of the 3D orthotics studio.",
       "web": true,
       "c": "Studios & Makers",
       "n": false,
-      "src": "itch"
+      "src": "pages"
     },
     {
       "t": "Coffeebreak 3D Print Studio",
@@ -147,25 +147,25 @@
     },
     {
       "t": "Coffeebreak 3D Prosthetic Leg Studio",
-      "u": "https://coffeebreaks.itch.io/coffeebreak-3d-prosthetic-leg-studio",
+      "u": "https://songwriterkaz.github.io/coffeebreak/apps/3d-prosthetic-leg-studio/",
       "img": "https://img.itch.zone/aW1nLzMxMTIzOTQ5LnBuZw==/315x250%23c/FJRUuE.png",
       "p": "$10",
-      "d": "",
+      "d": "Design and export a printable below-knee prosthetic cover shell. Adjust calf, length and foot. STL front and back halves.",
       "web": true,
       "c": "Studios & Makers",
       "n": false,
-      "src": "itch"
+      "src": "pages"
     },
     {
       "t": "Coffeebreak 3D Prosthetic Leg Studio Free Demo",
-      "u": "https://coffeebreaks.itch.io/coffeebreak-3d-prosthetic-leg-studio-free-demo",
+      "u": "https://songwriterkaz.github.io/coffeebreak/apps/3d-prosthetic-leg-studio-free-demo/",
       "img": "https://img.itch.zone/aW1nLzMxMTIzOTU4LnBuZw==/315x250%23c/og0a52.png",
       "p": "Free",
-      "d": "",
+      "d": "Demo of the 3D prosthetic leg cover studio. Core shapes unlocked; full catalogue in the paid studio.",
       "web": true,
       "c": "Studios & Makers",
       "n": false,
-      "src": "itch"
+      "src": "pages"
     },
     {
       "t": "Coffeebreak 40 Days of Love",
@@ -1236,14 +1236,14 @@
     },
     {
       "t": "CB Prosthetic Leg Covers",
-      "u": "https://coffeebreaks.itch.io/cb-prosthetic-leg-covers",
+      "u": "https://songwriterkaz.github.io/coffeebreak/apps/prosthetic-leg-covers/",
       "img": "https://img.itch.zone/aW1nLzMxMjAwMTUxLnBuZw==/315x250%23c/ph48im.png",
-      "p": "$298",
-      "d": "",
-      "web": false,
+      "p": "Enquire",
+      "d": "Physical prosthetic leg covers. Enquire via PayID.",
+      "web": true,
       "c": "Stores & Products",
       "n": false,
-      "src": "itch"
+      "src": "pages"
     },
     {
       "t": "Coffeebreak CB Radio",
@@ -6890,36 +6890,36 @@
     },
     {
       "t": "Coffeebreak Prosthetic Leg Flash",
-      "u": "https://coffeebreaks.itch.io/coffeebreak-prosthetic-leg-flash",
+      "u": "https://songwriterkaz.github.io/coffeebreak/apps/prosthetic-leg-flash/",
       "img": "https://img.itch.zone/aW1nLzMxMTMxMjUxLnBuZw==/315x250%23c/IUYuq4.png",
-      "p": "$1,000",
-      "d": "",
-      "web": false,
+      "p": "Free",
+      "d": "Prosthetic leg flash sheet gallery.",
+      "web": true,
       "c": "Tattoo Flash",
       "n": false,
-      "src": "itch"
+      "src": "pages"
     },
     {
       "t": "Coffeebreak Prosthetic Leg Store",
-      "u": "https://coffeebreaks.itch.io/coffeebreak-prosthetic-leg-store",
+      "u": "https://songwriterkaz.github.io/coffeebreak/apps/prosthetic-leg-store/",
       "img": "https://img.itch.zone/aW1nLzMxMTU3NjkyLnBuZw==/315x250%23c/6QBDjC.png",
       "p": "Free",
-      "d": "",
+      "d": "Shop prosthetic leg cover designs with zoom preview and sizing.",
       "web": true,
       "c": "Apps & Tools",
       "n": false,
-      "src": "itch"
+      "src": "pages"
     },
     {
       "t": "Coffeebreak Prosthetic Tattoo Studio",
-      "u": "https://coffeebreaks.itch.io/coffeebreak-prosthetic-tattoo-studio",
+      "u": "https://songwriterkaz.github.io/coffeebreak/apps/prosthetic-tattoo-studio/",
       "img": "https://img.itch.zone/aW1nLzMxMTU4MjIzLnBuZw==/315x250%23c/UrHZIc.png",
       "p": "Free",
-      "d": "",
+      "d": "Browse 2600+ prosthetic leg tattoo designs. Zoom, magnify and book a cover session.",
       "web": true,
       "c": "Tattoo Flash",
       "n": false,
-      "src": "itch"
+      "src": "pages"
     },
     {
       "t": "Coffeebreak Psychic Course",

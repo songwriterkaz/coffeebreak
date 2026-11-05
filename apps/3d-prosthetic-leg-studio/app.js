@@ -8,7 +8,7 @@ const PRE={Small:{len:240,calf:270,ankle:52,knee:82},Medium:{len:320,calf:340,an
 const setK=(k,v)=>{P[k]=v;const i=document.querySelector(`#params input[data-k="${k}"]`);i.value=v;$('v_'+k).textContent=v;};
 const pgrid=CB.sizeGrid($('psz'),{Sizes:Object.keys(PRE).map(n=>[n,PRE[n]])},o=>{Object.keys(o).forEach(k=>setK(k,o[k]));build();V.frame();},'Sizes','Medium');
 const demoPat={lattice:1,heart:1,none:1};
-if(CB.DEMO){[...$('pat').options].forEach(o=>{if(!demoPat[o.value])o.textContent+=' 🔒';});$('pat').value='lattice';$('txt').value='';$('txt').disabled=true;$('txt').placeholder='Full version';}
+if(CB.DEMO){[...$('pat').options].forEach(o=>{if(!demoPat[o.value])o.textContent+=' (full version)';});$('pat').value='lattice';$('txt').value='';$('txt').disabled=true;$('txt').placeholder='Full version';}
 // ---------- shape model ----------
 const smooth=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
 function radius(z,th,p,side){const L=p.len,ra=p.ankle/2,rk=p.knee/2,rc=Math.max(p.calf/(2*Math.PI),ra+2),zc=0.62*L;
