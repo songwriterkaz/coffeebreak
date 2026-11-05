@@ -17,7 +17,7 @@ CB.full=()=>localStorage.getItem('cbfull-'+CB.slug)==='1'||new URLSearchParams(l
 CB.DEMO=3; // free levels
 CB.locked=lvl=>lvl>CB.DEMO&&!CB.full();
 CB.text=(s,x,y,sz=20,col='#fff',al='center')=>{const g=CB.g;g.fillStyle=col;g.font='bold '+sz+'px system-ui,sans-serif';g.textAlign=al;g.fillText(s,x,y)};
-CB.btn=(s,x,y,w,h,col='#e0407b')=>{const g=CB.g;g.fillStyle=col;g.beginPath();g.roundRect(x-w/2,y-h/2,w,h,12);g.fill();CB.text(s,x,y+7,20)};
+CB.btn=(s,x,y,w,h,col='#e0407b')=>{const g=CB.g;g.fillStyle=col;g.beginPath();g.roundRect(x-w/2,y-h/2,w,h,12);g.fill();CB.text(s,x,y+7,w<70?13:20)};
 CB.hit=(p,x,y,w,h)=>p.x>x-w/2&&p.x<x+w/2&&p.y>y-h/2&&p.y<y+h/2;
 CB.paywall=()=>{document.getElementById('pay').style.display='flex'};
 // level flow
