@@ -1,11 +1,190 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Fox Hunt</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Fox Hunt</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Coffeebreak Fox Hunt</title>
+<link rel="icon" href="data:,">
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#0d1a12;font-family:Georgia,serif;color:#fde;touch-action:none}
+canvas{display:block}
+.scr{overflow:auto;position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(#3a1530,#0d1a12);z-index:20;text-align:center;padding:20px}
+.scr img{width:min(260px,50vw)}h1{color:#ff8fc8;margin:.3em 0;font-size:clamp(26px,6vw,52px)}
+button{background:#ff5fae;color:#fff;border:0;border-radius:24px;padding:12px 26px;margin:6px;font-size:18px;font-family:inherit;cursor:pointer}
+button:hover{background:#ff86c3}.hide{display:none!important}
+#hud{position:fixed;top:8px;left:8px;right:8px;display:flex;justify-content:space-between;pointer-events:none;z-index:5;font-size:15px}
+#hud .box{background:#0009;padding:8px 12px;border-radius:10px}
+#logoHud{position:fixed;top:52px;left:8px;width:70px;z-index:5;opacity:.85;pointer-events:none}
+#rx{position:fixed;bottom:34px;right:10px;width:230px;background:#221a1fdd;border:2px solid #ff8fc8;border-radius:12px;padding:10px;z-index:6}
+#meter{height:22px;background:#111;border-radius:6px;overflow:hidden;margin:6px 0}#bar{height:100%;width:0;background:linear-gradient(90deg,#3f6,#fe3,#f36)}
+#rx label{font-size:13px}#att{width:100%}
+#controls{position:fixed;bottom:34px;left:50%;transform:translateX(-50%);z-index:6;white-space:nowrap}
+@media (max-width:640px){#controls{bottom:auto;top:52px;left:auto;right:8px;transform:none;display:flex;flex-direction:column;align-items:flex-end}#controls button{padding:7px 16px;font-size:15px;margin:3px}#rx{width:180px;bottom:34px;padding:7px}#hud{font-size:12px}#hud .box{padding:6px 8px}#msg{font-size:18px;width:80%;text-align:center}}
+#joy{position:fixed;left:20px;bottom:50px;width:120px;height:120px;border-radius:50%;background:#fff2;z-index:6;display:none}#knob{position:absolute;left:35px;top:35px;width:50px;height:50px;border-radius:50%;background:#ff8fc8aa}
+#msg{position:fixed;top:30%;left:50%;transform:translateX(-50%);font-size:24px;background:#000a;padding:10px 20px;border-radius:12px;z-index:7;pointer-events:none}
+footer{position:fixed;bottom:0;left:0;right:0;font-size:11px;text-align:center;background:#000b;padding:5px;z-index:30;color:#fcd}
+.how{max-width:560px;text-align:left;line-height:1.5;background:#0007;padding:16px;border-radius:12px}
+#hint{font-size:13px;opacity:.8;margin-top:6px}#best{font-size:14px;margin-top:8px}#cross{position:fixed;left:50%;top:50%;width:8px;height:8px;margin:-4px;border-radius:50%;background:#fff8;z-index:4;pointer-events:none}
+</style></head><body>
+<div id="title" class="scr"><img src="logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Fox Hunt</h1><p>Radio direction finding in the bushland. Follow the loudest signal and find the hidden foxes.</p>
+<div><button id="play">Play</button><button id="howBtn">How to play</button></div><div id="vrSlot"></div><div id="hint">Keyboard and mouse, touch screens and VR headsets are all supported.</div><div id="best"></div></div>
+<div id="howScr" class="scr hide"><img src="logo.png" alt="Coffeebreak logo"><h1>How to play</h1><div class="how">
+<p>Hidden radio transmitters, called foxes, are somewhere in the park. Each one beeps its morse ID every few seconds.</p>
+<p>Your Yagi antenna is directional. Turn to face different ways: the signal is loudest and clearest when you point straight at a fox. Static means you are far away or pointing wrong.</p>
+<p>Walk toward the loudest signal. When the meter is pinned near full, turn up the attenuator to cut the strength so you can still tell which way is loudest.</p>
+<p>When you are close, press Find (F key, or trigger in VR). Level 1 has one fox, level 2 has three, level 3 has five. Be quick, the timer is running.</p>
+<p>Level 3 has a time limit of six minutes. Your score drops the longer each fox takes, and your best times and best score are saved on this device.</p>
+<p>Desktop: WASD or arrows to walk, drag mouse to aim, Q/E change attenuator. Mobile: joystick to walk, drag to aim, slider for attenuator. VR: press Enter VR on the title screen, thumbstick to walk, point the antenna in your first controller, read the receiver on your other hand, trigger to find, grip button to raise the attenuator.</p></div>
+<button id="back">Back</button></div>
+<div id="win" class="scr hide"><img src="logo.png" alt="Coffeebreak logo"><h1 id="winT">Level complete</h1><p id="winP"></p><button id="next">Next level</button><button id="retry" class="hide">Try again</button><button id="menu">Title screen</button></div>
+<div id="hud" class="hide"><div class="box" id="hl">Level 1</div><div class="box" id="hr">Time 0.0</div><div class="box" id="hc">Heading 0</div></div>
+<img id="logoHud" class="hide" src="logo.png" alt="">
+<div id="cross" class="hide"></div>
+<div id="rx" class="hide"><b>Receiver 144.500</b><div id="meter"><div id="bar"></div></div>
+<div id="dbv" style="font-size:13px">Signal 0 dB</div><label>Attenuator <span id="attV">0</span> dB</label><input id="att" type="range" min="0" max="60" step="10" value="0"><div id="foxLeft" style="font-size:13px"></div></div>
+<div id="controls" class="hide"><button id="findBtn">Find</button><button id="muteBtn">Sound on</button><button id="quitBtn">Menu</button></div>
+<div id="joy"><div id="knob"></div></div>
+<div id="msg" class="hide"></div>
+<footer>Coffeebreak keeps all rights to this game, its design, name and logo. Please do not copy it or make your own version.</footer>
+<script type="module">
+import * as THREE from './three.module.js';
+const $=id=>document.getElementById(id);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.xr.enabled=true;document.body.prepend(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xf6b6cf);scene.fog=new THREE.Fog(0xf6b6cf,30,140);
+const camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,.1,300);
+const rig=new THREE.Group();rig.add(camera);scene.add(rig);camera.position.y=1.6;
+scene.add(new THREE.HemisphereLight(0xffe8f0,0x335522,1.1));const sun=new THREE.DirectionalLight(0xffffff,1.2);sun.position.set(30,50,20);scene.add(sun);
+const R=90;
+const ground=new THREE.Mesh(new THREE.CircleGeometry(R+40,48),new THREE.MeshLambertMaterial({color:0x5b7a3a}));ground.rotation.x=-Math.PI/2;scene.add(ground);
+let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+const trunkM=new THREE.MeshLambertMaterial({color:0xd8d0c0}),leafM=new THREE.MeshLambertMaterial({color:0x6f8f4a}),rockM=new THREE.MeshLambertMaterial({color:0x8a7f78}),bushM=new THREE.MeshLambertMaterial({color:0x4d6b33});
+const tG=new THREE.CylinderGeometry(.25,.4,6,6),lG=new THREE.IcosahedronGeometry(2.4,0),bG=new THREE.IcosahedronGeometry(1,0),rG=new THREE.DodecahedronGeometry(1,0);
+for(let i=0;i<220;i++){const a=rnd()*6.283,d=8+rnd()*(R+25),x=Math.cos(a)*d,z=Math.sin(a)*d,k=rnd();
+ if(k<.5){const t=new THREE.Mesh(tG,trunkM);t.position.set(x,3,z);const l=new THREE.Mesh(lG,leafM);l.position.set(x,6.5,z);l.scale.y=.7;scene.add(t,l)}
+ else if(k<.85){const b=new THREE.Mesh(bG,bushM);b.position.set(x,.6,z);b.scale.setScalar(.8+rnd());scene.add(b)}
+ else{const r=new THREE.Mesh(rG,rockM);r.position.set(x,.4,z);r.scale.set(1+rnd(),.6,1+rnd());scene.add(r)}}
+const path=new THREE.Mesh(new THREE.RingGeometry(40,43,64),new THREE.MeshLambertMaterial({color:0xb8a079}));path.rotation.x=-Math.PI/2;path.position.y=.02;scene.add(path);
+// a start marker so the player has a landmark
+const startM=new THREE.Mesh(new THREE.CylinderGeometry(1.2,1.2,.1,24),new THREE.MeshLambertMaterial({color:0xff5fae}));startM.position.y=.06;scene.add(startM);
+// Yagi antenna model
+function makeYagi(){const g=new THREE.Group(),m=new THREE.MeshLambertMaterial({color:0xcccccc}),pm=new THREE.MeshLambertMaterial({color:0xff5fae});
+ const boom=new THREE.Mesh(new THREE.CylinderGeometry(.01,.01,.6),m);boom.rotation.x=Math.PI/2;boom.position.z=-.3;g.add(boom);
+ [[0,.36],[-.2,.32],[-.4,.28],[-.58,.26]].forEach(([z,w])=>{const e=new THREE.Mesh(new THREE.CylinderGeometry(.006,.006,w),m);e.rotation.z=Math.PI/2;e.position.z=z;g.add(e)});
+ const rx=new THREE.Mesh(new THREE.BoxGeometry(.08,.12,.05),pm);rx.position.set(0,-.08,.02);g.add(rx);return g}
+const handAnt=makeYagi();handAnt.position.set(.25,-.3,-.4);camera.add(handAnt);
+// foxes
+const foxes=[];const foxG=new THREE.Group();scene.add(foxG);
+function makeFoxMesh(){const g=new THREE.Group();const box=new THREE.Mesh(new THREE.BoxGeometry(.4,.25,.3),new THREE.MeshLambertMaterial({color:0xff7a1a}));box.position.y=.13;const w=new THREE.Mesh(new THREE.CylinderGeometry(.01,.01,1.2),new THREE.MeshLambertMaterial({color:0x222222}));w.position.y=.85;
+ const beam=new THREE.Mesh(new THREE.CylinderGeometry(.15,.15,30,10,1,true),new THREE.MeshBasicMaterial({color:0xffe14a,transparent:true,opacity:.45}));beam.position.y=15;g.add(box,w,beam);g.visible=false;return g}
+const IDS=['MOE','MOI','MOS','MOH','MO5'];
+const MORSE={M:'--',O:'---',E:'.',I:'..',S:'...',H:'....','5':'.....'};
+const LV={1:1,2:3,3:5},LIMIT={3:360};
+let level=1,startT=0,running=false,elapsed=0,score=0,timeLeft=null;
+function setupLevel(){foxG.clear();foxes.length=0;seed=1000+level*31+Math.floor(Math.random()*1e5);const n=LV[level];
+ for(let i=0;i<n;i++){const a=rnd()*6.283,d=25+rnd()*(R-30);const m=makeFoxMesh();m.position.set(Math.cos(a)*d,0,Math.sin(a)*d);foxG.add(m);foxes.push({mesh:m,pos:m.position,id:IDS[i],found:false,slot:i*3,cycle:Math.max(6,n*3),freq:560+i*110})}
+ rig.position.set(0,0,0);yaw=0;pitch=0;elapsed=0;timeLeft=LIMIT[level]||null;meterVal=0;lastDb=-99;startT=performance.now();running=true;updFox();flash('Level '+level+' started. Listen for the beeps')}
+// audio
+let actx,master,noiseG,toneG,osc,noiseSrc,muted=false;
+function initAudio(){if(actx){if(actx.state==='suspended')actx.resume();return}
+ const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;actx=new AC();master=actx.createGain();master.gain.value=muted?0:.5;master.connect(actx.destination);
+ const buf=actx.createBuffer(1,actx.sampleRate*2,actx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+ noiseSrc=actx.createBufferSource();noiseSrc.buffer=buf;noiseSrc.loop=true;const bp=actx.createBiquadFilter();bp.type='bandpass';bp.frequency.value=1500;bp.Q.value=.6;noiseG=actx.createGain();noiseG.gain.value=0;noiseSrc.connect(bp).connect(noiseG).connect(master);noiseSrc.start();
+ osc=actx.createOscillator();osc.type='sine';osc.frequency.value=700;toneG=actx.createGain();toneG.gain.value=0;osc.connect(toneG).connect(master);osc.start()}
+const DIT=.09;
+const seqCache={};function MORSE_SEQ(id){if(seqCache[id])return seqCache[id];const s=[];for(const ch of id){for(const c of MORSE[ch]){s.push([true,c=='.'?DIT:DIT*3]);s.push([false,DIT])}s.push([false,DIT*2])}return seqCache[id]=s}
+function keyed(f,t){const pat=MORSE_SEQ(f.id);const tt=(((t-f.slot)%f.cycle)+f.cycle)%f.cycle;let x=0;for(const [on,len] of pat){if(tt<x+len)return on;x+=len}return false}
+const tmpV=new THREE.Vector3(),fwd=new THREE.Vector3(),antW=new THREE.Vector3();
+let antennaObj=handAnt;
+// signal in dB for a fox: free space loss plus a directional Yagi pattern (strong front lobe, weak back)
+function signalFrom(f){antennaObj.updateWorldMatrix(true,false);antennaObj.getWorldPosition(antW);tmpV.copy(f.pos).sub(antW);tmpV.y=0;const d=Math.max(tmpV.length(),1);tmpV.normalize();
+ antennaObj.getWorldDirection(fwd);fwd.negate();fwd.y=0;fwd.normalize();const c=fwd.dot(tmpV);
+ const gain=Math.pow((1+c)/2,3)*0.95+0.05;
+ return 45-20*Math.log10(d)+20*Math.log10(gain)}
+let att=0,meterVal=0,lastDb=-99;
+function level01(db){return Math.max(0,Math.min(1,(db-att+25)/55))}
+function updAudio(t){let best=-200,bf=null;for(const f of foxes){if(f.found||!keyed(f,t))continue;const db=signalFrom(f);if(db>best){best=db;bf=f}}
+ let s=0;if(bf){s=level01(best);lastDb=best-att;meterVal+=(s-meterVal)*.4}else meterVal*=.985;
+ $('bar').style.width=(meterVal*100)+'%';$('dbv').textContent='Signal '+(lastDb<-90?'none':lastDb.toFixed(0)+' dB');
+ if(!actx)return;const sat=s>.97;
+ osc.frequency.setTargetAtTime(bf?bf.freq:700,actx.currentTime,.01);
+ toneG.gain.setTargetAtTime(bf?Math.min(.6,Math.pow(s,1.5)*.6):0,actx.currentTime,.005);
+ noiseG.gain.setTargetAtTime(.25*(1-s)+(sat?.15:0)+.02,actx.currentTime,.05)}
+// controls
+const keys={};let yaw=0,pitch=0;
+addEventListener('keydown',e=>{keys[e.code]=1;if(e.code=='KeyF')tryFind();if(e.code=='KeyQ')setAtt(att-10);if(e.code=='KeyE')setAtt(att+10)});addEventListener('keyup',e=>keys[e.code]=0);
+function setAtt(v){att=Math.max(0,Math.min(60,v));$('att').value=att;$('attV').textContent=att}$('att').oninput=e=>setAtt(+e.target.value);
+let drag=null;renderer.domElement.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY};initAudio()});
+addEventListener('pointermove',e=>{if(!drag)return;yaw-=(e.clientX-drag.x)*.005;pitch=Math.max(-1.2,Math.min(1.2,pitch-(e.clientY-drag.y)*.004));drag={x:e.clientX,y:e.clientY}});addEventListener('pointerup',()=>drag=null);
+const joy=$('joy'),knob=$('knob');let jv={x:0,y:0};if('ontouchstart' in window||navigator.maxTouchPoints>0)joy.style.display='block';
+joy.addEventListener('pointerdown',e=>{e.stopPropagation();joy.setPointerCapture(e.pointerId);initAudio()});
+joy.addEventListener('pointermove',e=>{if(!e.buttons&&e.pointerType!='touch')return;const r=joy.getBoundingClientRect();let x=(e.clientX-r.left-60)/50,y=(e.clientY-r.top-60)/50;const l=Math.hypot(x,y);if(l>1){x/=l;y/=l}jv={x,y};knob.style.left=35+x*35+'px';knob.style.top=35+y*35+'px'});
+const joyEnd=()=>{jv={x:0,y:0};knob.style.left=knob.style.top='35px'};joy.addEventListener('pointerup',joyEnd);joy.addEventListener('pointercancel',joyEnd);
+$('findBtn').onclick=()=>tryFind();
+$('muteBtn').onclick=()=>{muted=!muted;if(master)master.gain.value=muted?0:.5;$('muteBtn').textContent=muted?'Sound off':'Sound on'};
+let vrMsg='',vrMsgT=0;
+function flash(t){const m=$('msg');m.textContent=t;m.classList.remove('hide');clearTimeout(flash.h);flash.h=setTimeout(()=>m.classList.add('hide'),1800);vrMsg=t;vrMsgT=performance.now()+3000}
+function tryFind(){if(!running)return;const p=new THREE.Vector3();camera.getWorldPosition(p);let hit=null;for(const f of foxes){if(f.found)continue;const d=Math.hypot(f.pos.x-p.x,f.pos.z-p.z);if(d<4){hit=f;break}}
+ if(hit){hit.found=true;hit.mesh.visible=true;score+=Math.max(100,1000-Math.floor(elapsed)*5);flash('Fox '+hit.id+' found');updFox();if(foxes.every(f=>f.found))levelDone(true)}else flash('No fox here yet, keep listening')}
+function updFox(){$('foxLeft').textContent='Foxes left: '+foxes.filter(f=>!f.found).length+' / '+foxes.length;$('hl').textContent='Level '+level+'  Score '+score}
+function jget(k,d){try{return JSON.parse(localStorage.getItem(k)||d)}catch(e){return JSON.parse(d)}}
+function bests(){return jget('cbFoxBest','{}')}
+function bestScore(){return +jget('cbFoxScore','0')||0}
+function showBest(){const b=bests();$('best').textContent='Best times: '+[1,2,3].map(l=>'L'+l+' '+(b[l]?b[l].toFixed(1)+'s':'none')).join('   ')+'   Best score: '+(bestScore()||'none')}
+function saveScore(){try{if(score>bestScore())localStorage.setItem('cbFoxScore',JSON.stringify(score))}catch(e){}}
+function levelDone(won){running=false;let b=bests();
+ if(won){if(level==3)score+=Math.max(0,Math.floor(timeLeft||0))*2;try{if(!b[level]||elapsed<b[level]){b[level]=elapsed;localStorage.setItem('cbFoxBest',JSON.stringify(b))}}catch(e){}saveScore();updFox()}
+ else saveScore();
+ const vr=renderer.xr.isPresenting;
+ if(vr){flash(won?'Level complete. Next level starting':'Time is up. Restarting level');setTimeout(()=>{if(won){if(level<3)level++;else{level=1;score=0}}else score=Math.max(0,score);setupLevel()},2500);return}
+ $('winT').textContent=won?(level<3?'Level '+level+' complete':'All foxes found'):'Time is up';
+ $('winP').textContent=won?'Time '+elapsed.toFixed(1)+'s   Score '+score+'   Best '+(b[level]?b[level].toFixed(1):elapsed.toFixed(1))+'s':'You found '+foxes.filter(f=>f.found).length+' of '+foxes.length+' foxes. Score '+score;
+ $('next').classList.toggle('hide',!won||level>=3);$('retry').classList.toggle('hide',won);$('win').classList.remove('hide');showBest()}
+function showGame(on){['hud','rx','controls','logoHud','cross'].forEach(i=>$(i).classList.toggle('hide',!on))}
+function startGame(){initAudio();level=1;score=0;$('title').classList.add('hide');$('howScr').classList.add('hide');$('win').classList.add('hide');showGame(true);setupLevel()}
+$('play').onclick=startGame;
+$('howBtn').onclick=()=>{$('title').classList.add('hide');$('howScr').classList.remove('hide')};$('back').onclick=()=>{$('howScr').classList.add('hide');$('title').classList.remove('hide')};
+$('next').onclick=()=>{$('win').classList.add('hide');level++;setupLevel()};
+$('retry').onclick=()=>{$('win').classList.add('hide');score=Math.max(0,score);setupLevel()};
+const toMenu=()=>{running=false;$('win').classList.add('hide');showGame(false);$('title').classList.remove('hide');showBest();if(toneG){toneG.gain.value=0;noiseG.gain.value=0}};
+$('menu').onclick=toMenu;$('quitBtn').onclick=()=>{saveScore();toMenu()};
+showBest();
+// receiver panel for VR (a small screen held in the other hand)
+const pc=document.createElement('canvas');pc.width=pc.height=256;const pctx=pc.getContext('2d');const ptex=new THREE.CanvasTexture(pc);
+const panel=new THREE.Mesh(new THREE.PlaneGeometry(.2,.2),new THREE.MeshBasicMaterial({map:ptex}));panel.rotation.x=-.9;panel.position.set(0,.05,-.05);
+function drawPanel(){const c=pctx;c.fillStyle='#221a1f';c.fillRect(0,0,256,256);c.strokeStyle='#ff8fc8';c.lineWidth=6;c.strokeRect(3,3,250,250);c.fillStyle='#ff8fc8';c.font='bold 22px Georgia';c.fillText('Receiver 144.500',16,36);
+ c.fillStyle='#111';c.fillRect(16,50,224,30);const g=c.createLinearGradient(16,0,240,0);g.addColorStop(0,'#3f6');g.addColorStop(.5,'#fe3');g.addColorStop(1,'#f36');c.fillStyle=g;c.fillRect(16,50,224*meterVal,30);
+ c.fillStyle='#fde';c.font='18px Georgia';c.fillText('Signal '+(lastDb<-90?'none':lastDb.toFixed(0)+' dB'),16,108);c.fillText('Attenuator '+att+' dB',16,134);
+ c.fillText('Foxes left '+foxes.filter(f=>!f.found).length+' of '+foxes.length,16,160);c.fillText('Level '+level+'   Score '+score,16,186);
+ c.fillText('Time '+(timeLeft!=null?'left '+Math.max(0,timeLeft).toFixed(0):elapsed.toFixed(0))+'s',16,212);
+ if(performance.now()<vrMsgT){c.fillStyle='#ffe14a';c.font='16px Georgia';c.fillText(vrMsg.slice(0,30),16,240)}
+ ptex.needsUpdate=true}
+// WebXR
+const ctrl=renderer.xr.getController(0),ctrl2=renderer.xr.getController(1);rig.add(ctrl,ctrl2);const vrAnt=makeYagi();ctrl.add(vrAnt);
+let panelHost=null;function hostPanel(h){if(panelHost===h)return;if(panel.parent)panel.parent.remove(panel);h.add(panel);panelHost=h}
+ctrl.addEventListener('selectstart',()=>tryFind());ctrl2.addEventListener('selectstart',()=>tryFind());
+const cycleAtt=()=>setAtt(att>=60?0:att+10);ctrl.addEventListener('squeezestart',cycleAtt);ctrl2.addEventListener('squeezestart',cycleAtt);
+renderer.xr.addEventListener('sessionstart',()=>{antennaObj=vrAnt;handAnt.visible=false;initAudio();hostPanel(ctrl2);panel.position.set(0,.05,-.05);panel.rotation.x=-.9;
+ setTimeout(()=>{const s=renderer.xr.getSession();if(s&&s.inputSources.length<2){camera.add(panel);panelHost=camera;panel.position.set(-.3,-.25,-.6);panel.rotation.x=0}},2000);
+ if(!running){$('title').classList.add('hide');showGame(true);level=1;score=0;setupLevel()}});
+renderer.xr.addEventListener('sessionend',()=>{antennaObj=handAnt;handAnt.visible=true});
+window.__vrOk=false;
+if(navigator.xr){navigator.xr.isSessionSupported('immersive-vr').then(ok=>{if(!ok)return;window.__vrOk=true;const b=document.createElement('button');b.id='vrBtn';b.textContent='Enter VR';b.onclick=async()=>{try{const s=await navigator.xr.requestSession('immersive-vr',{optionalFeatures:['local-floor','bounded-floor']});renderer.xr.setSession(s)}catch(e){flash('VR could not start on this device')}};$('vrSlot').append(b)}).catch(()=>{})}
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+const clock=new THREE.Clock();let panelT=0;
+const DIRS=['N','NE','E','SE','S','SW','W','NW'];
+renderer.setAnimationLoop(()=>{const dt=Math.min(clock.getDelta(),.05),t=performance.now()/1000;
+ const xr=renderer.xr.isPresenting;
+ if(!xr){camera.rotation.set(pitch,yaw,0,'YXZ')}
+ let mx=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0)+jv.x,mz=(keys.KeyS||keys.ArrowDown?1:0)-(keys.KeyW||keys.ArrowUp?1:0)+jv.y;
+ if(xr){const s=renderer.xr.getSession();if(s)for(const src of s.inputSources){const a=src.gamepad&&src.gamepad.axes;if(a&&a.length>=4){mx+=Math.abs(a[2])>.15?a[2]:0;mz+=Math.abs(a[3])>.15?a[3]:0}}}
+ if(running&&(mx||mz)){camera.getWorldDirection(fwd);fwd.y=0;fwd.normalize();const right=new THREE.Vector3(-fwd.z,0,fwd.x);rig.position.addScaledVector(fwd,-mz*5*dt).addScaledVector(right,mx*5*dt);const l=Math.hypot(rig.position.x,rig.position.z);if(l>R+20)rig.position.multiplyScalar((R+20)/l)}
+ if(running){elapsed=(performance.now()-startT)/1000;if(LIMIT[level]){timeLeft=LIMIT[level]-elapsed;$('hr').textContent='Time left '+Math.max(0,timeLeft).toFixed(1)}else $('hr').textContent='Time '+elapsed.toFixed(1);
+  camera.getWorldDirection(fwd);const hd=((Math.atan2(-fwd.x,-fwd.z)*180/Math.PI)+360)%360;$('hc').textContent='Heading '+Math.round(hd)+' '+DIRS[Math.round(hd/45)%8];
+  updAudio(t);if(LIMIT[level]&&timeLeft<=0&&running)levelDone(false)}
+ else if(toneG){toneG.gain.value=0;noiseG.gain.value=0}
+ for(const f of foxes)if(f.found)f.mesh.rotation.y+=dt;
+ if(xr&&t-panelT>.1){panelT=t;drawPanel()}
+ renderer.render(scene,camera)});
+window.__fox={foxes,rig,camera,tryFind,drawPanel,setAtt,startGame,get level(){return level},get score(){return score},get running(){return running},get meter(){return meterVal},get att(){return att},get vrOk(){return window.__vrOk},setYaw:v=>yaw=v,signalFrom,keyed,level01,
+ faceFox:f=>{yaw=Math.atan2(-(f.pos.x-rig.position.x),-(f.pos.z-rig.position.z))},get timeLeft(){return timeLeft}};
+</script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

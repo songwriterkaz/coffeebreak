@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en-AU"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Date Night Auction</title>
+<meta name="description" content="A free charity auction app for date night experiences such as dinner for two. Pledged bids only. The app holds and takes no money. Unofficial planning tool.">
+<meta name="theme-color" content="#a3124f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+:root{--ink:#2b1220;--pink:#a3124f;--pink2:#d6366f;--blush:#fde3ec;--cream:#fff6ea;--paper:#ffffff;--line:#7d0e3e;--link:#0b3d91;--ok:#0a5c2e;--warn:#7a1c00;--focus:#0b57d0}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cream);color:var(--ink);font:18px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+a{color:var(--link);text-decoration:underline;text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+.hidden{display:none!important}
+header.top{background:var(--pink);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:12px}
+header.top img{width:62px;height:auto;border-radius:10px;background:var(--cream);flex:none;border:2px solid #fff}
+header.top h1{font-size:1.25rem;margin:0;line-height:1.15}
+header.top p{margin:2px 0 0;font-size:.85rem;color:#ffe3ee}
+#guestBar{background:var(--blush);border-bottom:3px solid var(--line);padding:8px 14px;font-weight:700;text-align:center}
+nav.steps{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:3px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr)}
+nav.steps button{min-height:54px;border:0;border-right:1px solid #d8b5c4;border-bottom:1px solid #d8b5c4;background:var(--paper);color:var(--ink);font:inherit;font-weight:700;font-size:.88rem;padding:4px 2px;cursor:pointer}
+nav.steps button .n{display:block;font-size:1.05rem}
+nav.steps button[aria-current="step"]{background:var(--pink);color:#fff}
+@media(min-width:760px){nav.steps{grid-template-columns:repeat(6,1fr)}nav.steps button{border-bottom:0}}
+main{max-width:900px;margin:0 auto;padding:14px 14px 40px}
+h2{font-size:1.5rem;margin:.4em 0 .2em}
+h3{font-size:1.2rem;margin:1.2em 0 .3em}
+.screen{display:none}.screen.on{display:block}
+.card{background:var(--paper);border:3px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
+.notice{background:#fff3cd;border:3px solid #7a4a00;border-radius:14px;padding:14px;margin:12px 0}
+.notice h2{margin-top:0;font-size:1.25rem}
+.notice p{margin:.4em 0}
+.warnbox{background:#fdecea;border:3px solid var(--warn);border-radius:14px;padding:12px;margin:12px 0}
+.okbox{background:#e8f5ec;border:3px solid var(--ok);border-radius:14px;padding:12px;margin:12px 0}
+label{display:block;font-weight:700;margin:12px 0 4px}
+input[type=text],input[type=tel],input[type=email],input[type=number],input[type=date],input[type=time],input[type=url],input[type=datetime-local],select,textarea{width:100%;min-height:54px;font:inherit;color:var(--ink);background:#fff;border:3px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{min-height:110px;resize:vertical}
+.row{display:grid;gap:10px}
+@media(min-width:600px){.row.two{grid-template-columns:1fr 1fr}.row.three{grid-template-columns:1fr 1fr 1fr}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:10px 18px;border-radius:12px;border:3px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-weight:700;cursor:pointer;text-decoration:none;text-align:center}
+.btn.primary{background:var(--pink);color:#fff}
+.btn.danger{background:#fff;color:var(--warn);border-color:var(--warn)}
+.btn.small{min-height:44px;padding:6px 12px;font-size:.95rem}
+.btn[disabled],.btn.off{opacity:.5;cursor:not-allowed}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.check{display:flex;gap:12px;align-items:flex-start;padding:10px;border:2px solid #d8b5c4;border-radius:10px;margin:8px 0;background:#fffdf8;font-weight:400}
+.check input[type=checkbox]{width:30px;height:30px;flex:none;margin-top:3px;accent-color:var(--pink)}
+.chip{display:inline-block;background:#e8f5ec;border:2px solid var(--ok);color:var(--ok);border-radius:99px;padding:1px 10px;font-weight:700;font-size:.82rem;margin:2px 4px 2px 0}
+.chip.bad{background:#fdecea;border-color:var(--warn);color:var(--warn)}
+.chip.ex{background:#fff3cd;border-color:#7a4a00;color:#5a3500}
+.chip.pk{background:var(--blush);border-color:var(--line);color:var(--line)}
+.muted{color:#4a2c3a;font-size:.95rem}
+.tiny{font-size:.82rem;color:#4a2c3a;margin-top:10px}
+.pager{display:flex;justify-content:space-between;gap:10px;margin:22px 0 8px}
+.saved{font-size:.85rem;color:#4a2c3a;margin:6px 0}
+.exp{border:2px solid #d8b5c4;border-radius:12px;padding:12px;margin:12px 0;background:#fffdf8}
+.exp .nm{font-weight:700;font-size:1.15rem}
+.exp .hi{font-size:1.3rem;font-weight:700;color:var(--pink);margin:6px 0 2px}
+.cd{font-size:1.4rem;font-weight:700;color:var(--pink);font-variant-numeric:tabular-nums}
+.cdbox{background:var(--blush);border:3px solid var(--line);border-radius:14px;padding:10px 14px;margin:12px 0;text-align:center}
+details summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+td,th{border-bottom:1px solid #e3cbd6;padding:5px 6px;vertical-align:top;text-align:left}
+.tw{overflow-x:auto}
+.bar{background:var(--pink2);height:14px;border-radius:7px;min-width:4px}
+.lb{display:grid;grid-template-columns:1fr;gap:2px;margin:8px 0}
+pre.msg{white-space:pre-wrap;word-break:break-word;background:#fffdf8;border:2px solid #d8b5c4;border-radius:10px;padding:10px;font:inherit;font-size:.95rem}
+#toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;z-index:50;max-width:90vw}
+footer.site{background:var(--pink);color:#fff;padding:16px 14px 30px;font-size:.9rem}
+footer.site a{color:#fff}
+footer.site p{max-width:900px;margin:.4em auto}
+/* certificate */
+.certwrap{container-type:inline-size;width:100%;max-width:760px;margin:10px auto}
+.cert{width:100%;aspect-ratio:277/190;background:var(--cream);border:1.2cqw double var(--pink);box-shadow:inset 0 0 0 .5cqw var(--cream),inset 0 0 0 .8cqw var(--pink2);color:#2b1220;text-align:center;font-family:Georgia,"Times New Roman",serif;padding:3cqw 5cqw;display:flex;flex-direction:column;align-items:center;justify-content:space-between;overflow:hidden;position:relative}
+.cert img{width:12cqw;height:auto;border-radius:1cqw}
+.cert .k{font:700 1.6cqw system-ui,Arial,sans-serif;letter-spacing:.35cqw;text-transform:uppercase;color:var(--pink)}
+.cert .big{font-size:5.6cqw;line-height:1.05;color:var(--pink);margin:0}
+.cert .to{font-size:1.9cqw;margin:0}
+.cert .who{font-size:5cqw;font-style:italic;margin:0;line-height:1.1;word-break:break-word;color:#2b1220}
+.cert .pl{font-size:2.4cqw;margin:0}
+.cert .ex{font-size:3.4cqw;font-weight:700;margin:0;line-height:1.15;word-break:break-word}
+.cert .sm{font-size:1.9cqw;margin:0;word-break:break-word}
+.cert .tm{font-size:1.4cqw;margin:0;color:#4a2c3a;word-break:break-word;font-family:system-ui,Arial,sans-serif}
+.cert .ft{font-size:1.1cqw;margin:0;color:#4a2c3a;font-family:system-ui,Arial,sans-serif}
+.cert .stamp{font:700 1.5cqw system-ui,Arial,sans-serif;color:#5a3500;background:#fff3cd;border:.2cqw solid #7a4a00;border-radius:.8cqw;padding:.2cqw 1.2cqw}
+#printArea{display:none}
+.sumhead{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.sumhead img{width:60px;height:auto}
+@media print{
+ body{background:#fff;font-size:12pt}
+ header.top,nav.steps,main,#guestBar,#toast,footer.site{display:none!important}
+ body[data-print="cert"] #printArea,body[data-print="summary"] #printArea{display:block}
+ #printArea .certpage{width:275mm;break-after:page;page-break-after:always}
+ #printArea .certpage:last-child{break-after:auto;page-break-after:auto}
+ #printArea .certwrap{max-width:none;margin:0}
+ .cert{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ #printArea h3{border-bottom:2px solid #000}
+ #printArea td,#printArea th{border-bottom:1px solid #999}
+}
+</style></head>
+<body data-print="" data-mode="org">
+<header class="top"><img id="hlogo" src="data:image/jpeg;base64,__LOGO__" alt="Coffeebreak logo" width="62" height="55">
+<div><h1>Coffeebreak Date Night Auction</h1><p>A charity auction for date night experiences</p></div></header>
+<div id="guestBar" class="hidden" role="note">You are looking at a read-only copy of an auction. Nothing here is sent unless you send it yourself.</div>
+<nav class="steps hidden" id="nav" aria-label="Steps"></nav>
+<main>
+<div class="notice" id="firstNotice" role="note">
+ <h2>Please read this first</h2>
+ <p><b>This app holds and takes no money.</b> A bid is a pledge only. If a bid wins, payment goes straight from the winner to the charity or the organiser, outside this app, the way the organiser arranges it.</p>
+ <p><b>Organisers must check the rules.</b> Check your local fundraising and charity rules, including whether you need an authority to fundraise (in NSW this is from NSW Fair Trading, and it depends on how much you raise and whether the charity is registered with the ACNC). Check that the charity is on the ACNC Charity Register. This app cannot check either for you.</p>
+ <p><b>Coffeebreak is not a party</b> to any auction, sale, pledge or payment, and has no connection to any charity, donor or organiser named in the app. Example data is made up and is labelled. This is not legal advice.</p>
+ <p class="rights"><b>Rights.</b> Karen O'Brien (Coffeebreak) keeps all rights to the app, design, name and logo. You may use it to run your own fundraiser. You may not copy it or make your own versions of the app.</p>
+</div>
+
+<!-- 1 setup -->
+<section class="screen" id="screen1" aria-labelledby="h1">
+ <h2 id="h1">1. Organiser setup</h2>
+ <p class="muted">For someone running a fundraiser, for example a venue or a community group. Everything is saved in this browser only.</p>
+ <div class="card">
+  <label for="e_name">Event name</label><input type="text" id="e_name" data-k="event.name" maxlength="80" placeholder="For example, Spring Fundraiser Night" autocomplete="off">
+  <label for="e_by">Run by (venue or group name, optional)</label><input type="text" id="e_by" data-k="event.by" maxlength="60" autocomplete="off">
+  <label for="e_charity">Charity that receives the winning bids</label><input type="text" id="e_charity" data-k="event.charity" maxlength="80" placeholder="The registered charity's name" autocomplete="off">
+  <p class="muted"><a href="https://www.acnc.gov.au/charity" target="_blank" rel="noopener noreferrer">Check the charity on the ACNC Charity Register</a> (opens in a new tab). Search by name or ABN and look for the registered status.</p>
+  <label class="check" for="e_acnc"><input type="checkbox" id="e_acnc" data-k="event.acnc"><span>I have checked that this charity is registered on the ACNC Charity Register.</span></label>
+  <label class="check" for="e_rules"><input type="checkbox" id="e_rules" data-k="event.rules"><span>I have checked what fundraising rules apply to this event, including whether an authority to fundraise is needed. <a href="https://www.nsw.gov.au/money-and-taxes/charitable-fundraising/apply-for-an-authority-to-fundraise" target="_blank" rel="noopener noreferrer">NSW information</a>*</span></label>
+  <div class="row two">
+   <div><label for="e_close">Closing date and time</label><input type="datetime-local" id="e_close" data-k="event.close"></div>
+   <div><label for="e_tz">Time zone used</label><input type="text" id="e_tz" readonly aria-readonly="true"></div>
+  </div>
+  <div class="row two">
+   <div><label for="e_min">Minimum bid (whole dollars)</label><input type="number" id="e_min" data-k="event.min" min="1" max="100000" step="1" inputmode="numeric"></div>
+   <div><label for="e_step">Bid step (whole dollars)</label><input type="number" id="e_step" data-k="event.step" min="1" max="100000" step="1" inputmode="numeric"></div>
+  </div>
+  <p class="muted" id="gridHint"></p>
+ </div>
+ <div class="card">
+  <h3 style="margin-top:0">How bids reach you</h3>
+  <p class="muted">Guests send their bid to you by message. These two are optional. If you fill them in, they go inside the share link, so anyone with the link can see them. Use only a number or address you are happy to share.</p>
+  <div class="row two">
+   <div><label for="e_sms">Text message number</label><input type="tel" id="e_sms" data-k="event.sms" maxlength="20" autocomplete="off"></div>
+   <div><label for="e_email">Email address</label><input type="email" id="e_email" data-k="event.email" maxlength="80" autocomplete="off"></div>
+  </div>
+  <p class="muted" id="contactHint" role="status"></p>
+  <label for="e_pay">How winners pay (your own words)</label>
+  <textarea id="e_pay" data-k="event.pay" maxlength="300" placeholder="For example, pay the charity directly on its own donation page within 7 days and send the organiser the receipt."></textarea>
+  <p class="muted">This goes in the winner message. The app never handles the payment.</p>
+ </div>
+ <details class="card"><summary>Advanced: address used in the share link</summary>
+  <label for="e_base">App address</label><input type="url" id="e_base" data-k="event.base" maxlength="300" placeholder="Leave blank to use the address of this page">
+  <p class="muted">Share links need the address where this app is open. On itch.io the app runs inside a frame, so open it in its own tab first and check the link works by opening it yourself before you send it.</p>
+ </details>
+</section>
+
+<!-- 2 experiences -->
+<section class="screen" id="screen2" aria-labelledby="h2">
+ <h2 id="h2">2. Experiences</h2>
+ <p class="muted">Date night experiences for a couple or two friends, donated by local businesses. Each one is won by the highest pledge and booked by the winner with the donor.</p>
+ <div class="notice" id="exNote"><p><b>Example data.</b> The experiences below marked Example data are made up so you can see how the app works. Edit them, remove them, or add your own.</p>
+  <div class="btns"><button class="btn small" type="button" id="rmEx">Remove all examples</button><button class="btn small" type="button" id="addEx">Add the examples back</button></div></div>
+ <div class="card" id="itemForm">
+  <h3 style="margin-top:0" id="ifTitle">Add an experience</h3>
+  <label for="i_title">Title</label><input type="text" id="i_title" maxlength="80" autocomplete="off">
+  <label for="i_desc">Description</label><textarea id="i_desc" maxlength="400"></textarea>
+  <div class="row two">
+   <div><label for="i_value">Estimated value (whole dollars, optional)</label><input type="number" id="i_value" min="0" max="1000000" step="1" inputmode="numeric"></div>
+   <div><label for="i_donor">Donor business</label><input type="text" id="i_donor" maxlength="60" autocomplete="off"></div>
+  </div>
+  <label for="i_terms">Terms (expiry and how to book)</label><textarea id="i_terms" maxlength="300"></textarea>
+  <p class="warnbox hidden" id="i_err" role="alert"></p>
+  <div class="btns"><button class="btn primary" type="button" id="i_save">Add experience</button><button class="btn hidden" type="button" id="i_cancel">Cancel editing</button></div>
+ </div>
+ <div id="itemList"></div>
+</section>
+
+<!-- 3 board -->
+<section class="screen" id="screen3" aria-labelledby="h3t">
+ <h2 id="h3t">3. Bidding board and share</h2>
+ <div id="boardRoot"></div>
+ <h3>Share a read-only auction link</h3>
+ <div class="card" id="shareBox"></div>
+</section>
+
+<!-- 4 collect -->
+<section class="screen" id="screen4" aria-labelledby="h4">
+ <h2 id="h4">4. Collect bids and pick winners</h2>
+ <p class="muted">There is no server, so guests send you their bid by message. Paste the messages here and the app merges them. At the closing time you confirm the winners.</p>
+ <div class="card">
+  <label for="paste">Paste bid messages here</label>
+  <textarea id="paste" placeholder="Paste one or many messages. The app reads the line that starts with DNA1."></textarea>
+  <div class="btns"><button class="btn primary" type="button" id="mergeBtn">Merge pasted bids</button><button class="btn" type="button" id="pasteClear">Clear the box</button></div>
+  <div id="mergeRep" role="status"></div>
+ </div>
+ <div class="card" id="standBox"></div>
+</section>
+
+<!-- 5 packs -->
+<section class="screen" id="screen5" aria-labelledby="h5">
+ <h2 id="h5">5. Winner packs</h2>
+ <div id="packRoot"></div>
+</section>
+
+<!-- 6 results -->
+<section class="screen" id="screen6" aria-labelledby="h6">
+ <h2 id="h6">6. Results</h2>
+ <div id="resRoot"></div>
+ <div class="btns">
+  <button class="btn primary" type="button" id="printSum">Print or save as PDF</button>
+  <button class="btn" type="button" id="copySum">Copy as text</button>
+  <button class="btn" type="button" id="csvRes">Results CSV</button>
+  <button class="btn" type="button" id="csvBids">All bids CSV</button>
+  <button class="btn" type="button" id="jsonAll">Everything as JSON</button>
+ </div>
+ <p class="muted" id="sumMsg" role="status"></p>
+ <h3>Start again</h3>
+ <div class="btns"><button class="btn danger" type="button" id="reset1">Clear everything</button>
+  <button class="btn danger hidden" type="button" id="reset2">Yes, clear everything on this device</button>
+  <button class="btn small hidden" type="button" id="reset3">Keep my data</button></div>
+ <p class="muted">Clearing removes the event, experiences, bids and winners from this browser. Download the JSON first if you want a copy.</p>
+</section>
+
+<!-- guest -->
+<section class="screen" id="guest" aria-labelledby="gh"><h2 id="gh" class="hidden">Auction</h2><div id="guestRoot"></div></section>
+<section class="screen" id="bad" aria-labelledby="bh"><h2 id="bh">This auction link cannot be opened</h2><div id="badRoot"></div></section>
+
+<div id="pager" class="pager hidden"><button class="btn" id="prev" type="button">Back</button><button class="btn primary" id="next" type="button">Next</button></div>
+<p class="saved" id="saved" role="status"></p>
+<p class="warnbox hidden" id="storeWarn" role="alert">This browser is not letting the app save. Your work will be lost when you close the page. If you are on itch.io, open the game in its own tab.</p>
+<div class="btns"><button class="btn small hidden" id="installBtn" type="button">Install this app</button></div>
+</main>
+<div id="printArea" aria-hidden="true"></div>
+<div id="toast" class="hidden" role="status" aria-live="polite"></div>
+<footer class="site">
+ <p><b>Not legal advice. The app holds and takes no money.</b> Payment goes from the winner to the charity or the organiser, outside the app. Organisers must check local fundraising and charity rules and that the charity is registered. Coffeebreak is not a party to any auction, sale or payment. Example data is made up.</p>
+ <p class="rights">Karen O'Brien (Coffeebreak) keeps all rights to the app, design, name and logo. You may use it to run your own fundraiser. You may not copy it or make your own versions of the app.</p>
+ <p>More from Coffeebreak: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener noreferrer">coffeebreaks.itch.io</a>. Links marked with an asterisk were confirmed by web search on 23 October 2026 only, and the ACNC register blocks automatic checking. If a page does not open, go to the home page and search from there.</p>
+</footer>

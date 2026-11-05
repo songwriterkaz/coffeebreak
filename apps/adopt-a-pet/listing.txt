@@ -1,0 +1,37 @@
+Title: Coffeebreak Adopt a Cat or Dog
+Short description: A guide to real Newcastle and NSW cat and dog rescues, plus made-to-order pet beds, collars, bowls and toys.
+Description:
+Coffeebreak Adopt a Cat or Dog is a guide and pre-order store page from Coffeebreak with two parts. A guide that points you to real rescue and adoption organisations, with an adoption checklist and a wish-list you keep in your own browser. Coffeebreak does not sell or rehome animals. Pet supplies are made to order.
+All items are pre-orders made to order, sourced through supplier partners. Delivery estimates are confirmed by email. Pictures and descriptions are concept designs, not photos of final products.
+Part 1, Find a real rescue: buttons that open each organisation's own page (links checked 24 October 2026). Nothing on this page sends money or goods to them, and Coffeebreak is not connected to any of them.
+- RSPCA NSW Hunter Shelter (Rutherford): https://www.rspcansw.org.au/support-services/locations-and-services/shelters-and-adoption-centres/hunter-shelter/
+- Hunter Animal Rescue: https://www.hunteranimalrescue.com.au/adopt-a-pet/
+- City of Newcastle Animal Care (Animal Management Facility): https://newcastle.nsw.gov.au/living/pets-and-animals/lost-and-found/lost-pets-in-ranger-care
+- Animal Welfare League NSW: https://www.awlnsw.com.au/adopt/
+- Cat Protection Society of NSW (Newtown, Sydney): https://catprotection.org.au/what-you-need-to-know-before-adopting/
+- Greyhound Adoption Program NSW (Greyhounds As Pets): https://www.gapnsw.com.au/
+- PetRescue: https://www.petrescue.com.au/
+- NSW Pet Registry (NSW Office of Local Government): https://www.petregistry.olg.nsw.gov.au/pets/nsw-pet-registry/owners/get-a-pet/adopt-a-cat-or-dog
+PetRescue blocked my automatic link check, so its pages were confirmed a second way. The RSPCA adoptapet.com.au site was left out because it showed a temporary maintenance notice when checked.
+Also on the page: a neutral adoption checklist (time, cost, housing, other pets and people) and a Pets I would adopt wish-list that the visitor can tick, saved only in their own browser (localStorage).
+Part 2, Pre-order pet supplies. Products (12), prices in AUD:
+- Cosy Pet Bed, Small to Medium AU$49: A round bolster bed with a soft plush top and a non-slip base, about 60cm across. Cover is removable for washing.
+- Large Pet Bed AU$69: A roomy rectangle bed with raised sides and a soft sleeping surface, about 90 x 65cm. Removable washable cover.
+- Cat Cave Bed AU$44: A felt style hooded bed with a soft cushion inside, about 40cm wide, for cats and small dogs who like a hideaway.
+- Paw Print Fleece Blanket AU$22: A soft fleece blanket with a paw print pattern, about 75 x 100cm. Machine washable.
+- Padded Collar AU$18: An adjustable padded collar in a solid colour with a metal buckle and a ring for a tag. Say the neck size in your order notes.
+- Collar and Lead Set AU$32: A matching adjustable collar and a 1.2m lead with a padded handle. Say the neck size in your order notes.
+- Engraved ID Tag AU$14: A round metal tag engraved with the pet name and the contact details you give us in your order notes. Ring included.
+- Pet Bandana AU$15: A cotton slip-on bandana in a Coffeebreak print, in small, medium or large. Pick the size in your order notes.
+- Ceramic Pet Bowl AU$19: A heavy glazed ceramic bowl, about 15cm across, with a wide base. Dishwasher safe.
+- Double Bowl With Stand AU$26: Two stainless steel bowls on a raised bamboo look stand, for food and water.
+- Cotton Rope Toy AU$12: A knotted cotton rope toy for tug and fetch, about 35cm long.
+- Soft Plush Toy AU$14: A soft plush toy with a gentle squeak, about 25cm. Suits supervised play only.
+How to order: add items to your pre-order, enter your details, then pay by PayID (darkokaz@gmx.com) or Bitcoin using the reference shown on screen. Press the email button to send your order to songwriterkaz@gmail.com. Payments are not detected automatically. Your order is confirmed once the payment has been checked by hand.
+Honest notes: Coffeebreak is not a rescue, does not sell or rehome animals, is not connected to the listed organisations, and buying here sends nothing to them. No veterinary or medical advice. Pet accessories only, made to order.
+Coffeebreak songwriter and creator from Newcastle NSW.
+Itch: https://coffeebreaks.itch.io
+Kind: HTML, playable in browser. Viewport 1000x800, mobile friendly. Price: free to view (no payments through itch).
+Tags: adopt, cat, dog, pet, rescue, pet supplies, pet bed, collar, pre-order, store, coffeebreak
+
+Rights and resale: Karen keeps all rights to her products, designs, apps, name and logo; buyers and fans may resell the physical products they bought but may not copy or make their own versions.

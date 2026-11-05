@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Book a Doctor - Coffeebreak</title>
+<meta name="description" content="A free planner that points you to real Australian booking routes, helps you prepare for an appointment and adds it to your calendar. It does not make bookings and does not give medical advice.">
+<style>
+:root{--bg:#ffffff;--ink:#111418;--soft:#f1f5f7;--line:#8a98a3;--brand:#0b4f6c;--brand2:#e3f1f7;--red:#9b0000;--ok:#0b5d2a;--focus:#5b2bd0}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:18px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:10px 12px 30px}
+header{display:flex;align-items:center;gap:12px;padding:6px 2px}
+.logo{width:52px;height:52px;border-radius:50%;flex:none;border:2px solid var(--brand);background:#fff7ef url(cb-logo.jpg) no-repeat;background-size:218px auto;background-position:-28px -8px}
+h1{font-size:23px;line-height:1.15;margin:0}
+header p{margin:2px 0 0;font-size:15px;color:#33414b}
+h2{font-size:21px;margin:4px 0 8px}
+h3{font-size:18px;margin:14px 0 6px}
+.banner{margin:8px 0;border-radius:14px;overflow:hidden;border:3px solid var(--red)}
+.banner .b1{background:var(--red);color:#fff;font-weight:800;font-size:20px;padding:10px 14px}
+.banner .b1 a{color:#fff;text-decoration:underline}
+.banner .b2{background:#fff;color:var(--ink);padding:8px 14px;font-size:16px;font-weight:600}
+.tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:8px;margin:10px 0 14px}
+.tab{min-height:52px;border:2px solid var(--brand);background:#fff;color:var(--brand);border-radius:12px;font:inherit;font-size:16px;font-weight:800;cursor:pointer;padding:6px 8px}
+.tab[aria-selected=true]{background:var(--brand);color:#fff}
+button,a,input,select,textarea,summary{font:inherit}
+:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+.panel[hidden]{display:none}
+.card{background:#fff;border:2px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
+.card.soft{background:var(--soft)}
+.q{font-weight:800;font-size:20px;margin:0 0 8px}
+.hint{font-size:16px;color:#33414b;margin:4px 0 8px}
+.opts{display:grid;gap:8px}
+.opts.two{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.opts.four{grid-template-columns:repeat(4,1fr)}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;width:100%;height:100%;left:0;top:0;margin:0;cursor:pointer}
+.opt span{display:flex;align-items:center;min-height:54px;padding:8px 12px;border:2px solid var(--line);border-radius:12px;background:#fff;font-weight:700}
+.opt input:checked+span{background:var(--brand);border-color:var(--brand);color:#fff}
+.opt input:focus-visible+span{outline:4px solid var(--focus);outline-offset:2px}
+.chk{display:flex;gap:12px;align-items:flex-start;min-height:52px;padding:8px 6px;border-bottom:1px solid #d3dbe0;cursor:pointer}
+.chk input{width:28px;height:28px;flex:none;margin-top:1px;accent-color:var(--brand)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:54px;min-width:54px;padding:10px 18px;border-radius:12px;border:2px solid var(--brand);background:var(--brand);color:#fff;font-weight:800;cursor:pointer;text-decoration:none;text-align:center}
+.btn.alt{background:#fff;color:var(--brand)}
+.btn.full{width:100%}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.row .btn{flex:1 1 140px}
+label.f{display:block;font-weight:700;margin:12px 0 4px}
+input[type=text],input[type=date],input[type=time],select,textarea{width:100%;min-height:52px;padding:10px 12px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+textarea{min-height:100px;resize:vertical}
+.steps{font-weight:700;color:#33414b;margin:0 0 4px;font-size:16px}
+.res{display:block;border:2px solid var(--brand);border-radius:14px;padding:12px 14px;margin:10px 0;text-decoration:none;color:var(--ink);background:#fff}
+.res b{display:block;font-size:19px;color:var(--brand);text-decoration:underline}
+.res small{display:block;font-size:16px;color:#2c3a44;margin-top:2px}
+.res.tel{border-color:var(--ok)}
+.res.tel b{color:var(--ok)}
+.note{border-left:6px solid var(--brand);background:var(--brand2);padding:10px 12px;border-radius:8px;margin:10px 0;font-size:17px}
+.note.warn{border-color:var(--red);background:#fdeaea}
+pre.out{white-space:pre-wrap;word-wrap:break-word;background:var(--soft);border:2px solid var(--line);border-radius:12px;padding:12px;font:16px/1.5 ui-monospace,Menlo,Consolas,monospace;margin:10px 0}
+.msg{min-height:26px;font-weight:700;color:var(--ok);margin:6px 0}
+.prog{font-weight:800;font-size:19px}
+.pay{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.pay .v{flex:1 1 200px;border:2px dashed var(--brand);border-radius:12px;padding:10px 12px;font-weight:800;word-break:break-all;background:#fff}
+.price{font-size:34px;font-weight:900;color:var(--brand);line-height:1.1}
+ul.t{margin:6px 0 6px 0;padding-left:22px}
+ul.t li{margin:5px 0}
+details{border:2px solid var(--line);border-radius:12px;padding:6px 12px;margin:10px 0}
+summary{min-height:48px;display:flex;align-items:center;font-weight:800;cursor:pointer}
+footer{margin-top:22px;padding-top:14px;border-top:2px solid var(--line);font-size:15px;text-align:center;color:#222}
+footer img{width:44px;height:44px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px;border:2px solid var(--brand)}
+@media (max-width:420px){.opts.four{grid-template-columns:repeat(2,1fr)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media print{body *{visibility:hidden}#sheetOut,#sheetOut *{visibility:visible}#sheetOut{position:absolute;left:0;top:0;width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="logo" role="img" aria-label="Coffeebreak logo"></div>
+<div><h1>Book a Doctor</h1><p>Coffeebreak planner for finding care in Australia</p></div>
+</header>
+
+<div class="banner" role="region" aria-label="Important safety information">
+<div class="b1">In an emergency call <a href="tel:000">000</a></div>
+<div class="b2">This app does not give medical advice and does not make bookings for you. It points you to real services and helps you get ready.</div>
+</div>
+
+<div class="tabs" role="tablist" aria-label="Sections">
+<button class="tab" role="tab" id="t-find" aria-controls="p-find" aria-selected="true">Find a route</button>
+<button class="tab" role="tab" id="t-prep" aria-controls="p-prep" aria-selected="false">Prep sheet</button>
+<button class="tab" role="tab" id="t-cal" aria-controls="p-cal" aria-selected="false">Calendar</button>
+<button class="tab" role="tab" id="t-tele" aria-controls="p-tele" aria-selected="false">Telehealth</button>
+<button class="tab" role="tab" id="t-guide" aria-controls="p-guide" aria-selected="false">Guided booking</button>
+</div>
+
+<!-- FIND -->
+<section class="panel" id="p-find" role="tabpanel" aria-labelledby="t-find">
+<div id="wiz"></div>
+<div id="results" hidden></div>
+</section>
+
+<!-- PREP -->
+<section class="panel" id="p-prep" role="tabpanel" aria-labelledby="t-prep" hidden>
+<div class="card">
+<h2>Appointment prep sheet</h2>
+<p class="hint">Type a few notes. Nothing is uploaded or saved. When you close this page the notes are gone, so copy the sheet if you want to keep it.</p>
+<label class="f" for="pName">First name (optional)</label>
+<input type="text" id="pName" autocomplete="off">
+<label class="f" for="pTopics">What I want to talk about</label>
+<textarea id="pTopics" placeholder="Write in your own words"></textarea>
+<label class="f" for="pQs">My own questions</label>
+<textarea id="pQs" placeholder="One question per line"></textarea>
+<label class="f" for="pMeds">Medicines I take, typed by me</label>
+<textarea id="pMeds" placeholder="One per line, for example name, strength, how often"></textarea>
+<h3>Questions many people find useful to ask</h3>
+<div id="stdQs"></div>
+<h3>What to bring</h3>
+<div id="bring"></div>
+<div class="row"><button class="btn" id="mkSheet">Make my sheet</button></div>
+</div>
+<div id="sheetWrap" hidden>
+<pre class="out" id="sheetOut" tabindex="0"></pre>
+<div class="row"><button class="btn" id="cpSheet">Copy sheet</button><button class="btn alt" id="prSheet">Print sheet</button></div>
+<div class="msg" id="sheetMsg" role="status"></div>
+</div>
+</section>
+
+<!-- CALENDAR -->
+<section class="panel" id="p-cal" role="tabpanel" aria-labelledby="t-cal" hidden>
+<div class="card">
+<h2>Add your appointment to a calendar</h2>
+<p class="hint">Use this after you have booked with the clinic. Enter what the clinic told you. Nothing is sent anywhere.</p>
+<label class="f" for="cClinic">Clinic or doctor name</label>
+<input type="text" id="cClinic" autocomplete="off">
+<label class="f" for="cDate">Date</label>
+<input type="date" id="cDate">
+<label class="f" for="cTime">Time</label>
+<input type="time" id="cTime">
+<label class="f" for="cLen">How long</label>
+<select id="cLen"><option value="15">15 minutes</option><option value="30" selected>30 minutes</option><option value="45">45 minutes</option><option value="60">1 hour</option></select>
+<label class="f" for="cType">Type of appointment</label>
+<select id="cType"><option>In person</option><option>Video call</option><option>Phone call</option></select>
+<label class="f" for="cRem">Remind me</label>
+<select id="cRem"><option value="1440">1 day before</option><option value="120">2 hours before</option><option value="60" selected>1 hour before</option><option value="30">30 minutes before</option></select>
+<label class="f" for="cWhere">Address or link (optional)</label>
+<input type="text" id="cWhere" autocomplete="off">
+<p class="hint">Please do not type health details here. Calendars are often shared.</p>
+<div class="row"><button class="btn" id="mkIcs">Download calendar file</button></div>
+<div class="msg" id="icsMsg" role="status"></div>
+</div>
+<div id="icsWrap" hidden>
+<div class="note">If the file did not download, copy this text, save it as a file ending in .ics and open it. Or add the event by hand in your calendar app.</div>
+<pre class="out" id="icsOut" tabindex="0"></pre>
+<div class="row"><button class="btn alt" id="cpIcs">Copy calendar text</button></div>
+</div>
+</section>
+
+<!-- TELEHEALTH -->
+<section class="panel" id="p-tele" role="tabpanel" aria-labelledby="t-tele" hidden>
+<div class="card">
+<h2>Telehealth checklist</h2>
+<p class="hint">Tick each one as you go. Ticks are kept only while this page is open.</p>
+<div class="prog" id="teleProg" role="status"></div>
+<div id="teleList"></div>
+<div class="note">Healthdirect Video Call is a way clinics run video appointments. It is not a booking service. Your clinic sends you the link. <a href="https://help.vcc.healthdirect.org.au/attending-a-video-call-appointment" target="_blank" rel="noopener noreferrer">Patient guide for joining a video call</a></div>
+</div>
+</section>
+
+<!-- GUIDED -->
+<section class="panel" id="p-guide" role="tabpanel" aria-labelledby="t-guide" hidden>
+<div class="card">
+<h2>Guided booking help</h2>
+<p>If you would rather not work it out alone, Karen can help you pick a clinic and book it through the clinic's own booking page.</p>
+<div class="price">$15 flat fee</div>
+<p class="hint">One fee for one guided booking. You pay the clinic separately for your appointment.</p>
+<div class="note warn">Karen is not a medical service and gives no medical advice. Do not send health details. In an emergency call 000.</div>
+<h3>What the fee covers</h3>
+<ul class="t">
+<li>Karen looks at the clinic booking pages that suit your state, in person or video choice and preferred days and times.</li>
+<li>She helps you choose one and book it through that clinic's own booking page, with you.</li>
+<li>She does not take money for the appointment. You pay the clinic yourself.</li>
+</ul>
+<h3>Terms</h3>
+<ul class="t">
+<li>Refund: if Karen cannot find a booking for you, the $15 is refunded in full.</li>
+<li>No health information is collected. The request form asks only for the details listed below.</li>
+<li>No guarantee of availability. Clinics decide what times they offer and what they charge.</li>
+<li>Karen is not a medical service, does not give medical advice and does not choose a doctor for medical reasons.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>Step 1. Pay by PayID</h2>
+<p class="hint">Send $15 to this PayID, which is an email address.</p>
+<div class="pay"><div class="v" id="payid">darkokaz@gmx.com</div><button class="btn" id="cpPay">Copy PayID</button></div>
+<label class="f" for="rName">Payment reference: your first name</label>
+<input type="text" id="rName" autocomplete="off">
+<label class="f" for="rDate">Payment reference: date you pay</label>
+<input type="date" id="rDate">
+<div class="pay" style="margin-top:10px"><div class="v" id="refOut">Guided booking</div><button class="btn" id="cpRef">Copy reference</button></div>
+<div class="msg" id="payMsg" role="status"></div>
+</div>
+
+<div class="card">
+<h2>Step 2. Send your request</h2>
+<div class="note">Please give only the details below. Do not write anything about your health, symptoms, medicines or conditions.</div>
+<label class="f" for="gName">First name</label>
+<input type="text" id="gName" autocomplete="off">
+<label class="f" for="gContact">Contact: email or mobile</label>
+<input type="text" id="gContact" autocomplete="off" inputmode="email">
+<label class="f" for="gState">State or territory</label>
+<select id="gState"><option value="">Choose</option><option>NSW</option><option>VIC</option><option>QLD</option><option>WA</option><option>SA</option><option>TAS</option><option>ACT</option><option>NT</option></select>
+<label class="f" for="gMode">In person or video</label>
+<select id="gMode"><option value="">Choose</option><option>In person</option><option>Video</option><option>Either</option></select>
+<label class="f" for="gWhen">Preferred days and times</label>
+<textarea id="gWhen" placeholder="For example weekday mornings, or Saturday any time"></textarea>
+<label class="chk"><input type="checkbox" id="gOk"><span>I have read the terms. I have not included any health details. I will pay the clinic myself.</span></label>
+<div class="row"><button class="btn" id="mkMsg">Make my request message</button></div>
+<div class="msg" id="gMsg" role="status"></div>
+</div>
+<div id="gWrap" hidden>
+<div class="note">There is no server in this app, so nothing has been sent. Copy the message or open it in your email app and press send there. Send it to <b>songwriterkaz@gmail.com</b>.</div>
+<pre class="out" id="gOut" tabindex="0"></pre>
+<div class="row"><button class="btn" id="cpMsg">Copy message</button><a class="btn alt" id="mailLink" href="#" target="_blank" rel="noopener noreferrer">Open in email app</a><button class="btn alt" id="cpTo">Copy email address</button></div>
+</div>
+</section>
+
+<footer>
+<img src="cb-logo.jpg" alt="Coffeebreak logo">
+Coffeebreak by Karen O'Brien. Karen keeps all rights to this app, its designs, name and logo. You may not copy it or make your own versions.
+<br><span>Links lead to services run by other organisations. Coffeebreak is not connected to them and earns nothing from them.</span>
+</footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+var mem={}; /* in-memory only: nothing is stored on the device */
+function $(id){return document.getElementById(id)}
+function el(tag,attrs,html){var e=document.createElement(tag);if(attrs)for(var k in attrs)e.setAttribute(k,attrs[k]);if(html!=null)e.innerHTML=html;return e}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function say(id,t){$(id).textContent=t}
+
+/* ---------- tabs ---------- */
+var tabs=['find','prep','cal','tele','guide'];
+function show(n){tabs.forEach(function(t){var on=t===n;$('t-'+t).setAttribute('aria-selected',on?'true':'false');$('p-'+t).hidden=!on});window.scrollTo(0,0)}
+tabs.forEach(function(t){$('t-'+t).addEventListener('click',function(){show(t)})});
+$('p-find').addEventListener('keydown',function(){});
+
+/* ---------- clipboard ---------- */
+function copyText(text,msgId,okText){
+  function done(ok){say(msgId,ok?(okText||'Copied'):'Could not copy automatically. Select the text and copy it by hand.')}
+  try{
+    var ta=el('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.top='0';ta.style.opacity='0';document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,text.length);
+    var ok=false;try{ok=document.execCommand('copy')}catch(e){}
+    document.body.removeChild(ta);
+    if(ok){done(true);return}
+  }catch(e){}
+  var allowed=false;try{var pp=document.permissionsPolicy||document.featurePolicy;allowed=!pp||pp.allowsFeature('clipboard-write')}catch(e){}
+  if(allowed&&navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){done(true)},function(){done(false)})}else done(false);
+}
+
+/* ---------- link data (each checked, see report) ---------- */
+var HD='https://www.healthdirect.gov.au/';
+var R={
+ finder:{t:'Healthdirect Service Finder',d:'The national directory of GPs, clinics, pharmacies, urgent care and hospitals. Search by place and filter by what matters to you.',u:HD+'australian-health-services'},
+ findGP:{t:'Find a GP, with a bulk billing question',d:'Healthdirect guided search for general practices near you. It asks if you want a GP who bulk bills.',u:HD+'australian-health-services/guided-search/general-practice'},
+ bulk:{t:'Bulk billing map',d:'Australian Government map of practices offering bulk billed appointments.',u:'https://www.health.gov.au/bulk-billing'},
+ bulkInfo:{t:'What bulk billing means',d:'Healthdirect explains bulk billing, Medicare benefits and gap payments. Ask the clinic about costs before you book.',u:HD+'healthcare-and-services/costs-and-financial-support/bulk-billing-for-medical-services'},
+ costs:{t:'Medical Costs Finder',d:'Australian Government tool that helps you understand what a GP or specialist visit may cost.',u:'https://medicalcostsfinder.health.gov.au/'},
+ hotdoc:{t:'HotDoc',d:'Online booking site used by many Australian clinics. Search by place and book through the clinic listing.',u:'https://www.hotdoc.com.au/'},
+ healthengine:{t:'Healthengine',d:'Another national online booking site used by many Australian clinics.',u:'https://healthengine.com.au/'},
+ vcc:{t:'Virtual care clinics',d:'Healthdirect explains how virtual care clinics work and how to find one in your state or territory.',u:HD+'healthcare-and-services/general-health/virtual-care-clinics'},
+ telehealth:{t:'Medicare telehealth information',d:'Australian Government page on phone and video appointments with Medicare, including who can use them. Ask the clinic if you are eligible.',u:'https://www.health.gov.au/topics/health-technologies-and-digital-health/about/telehealth'},
+ telehealth2:{t:'Services Australia: health care and Medicare',d:'Medicare information, including telehealth and urgent care clinics.',u:'https://www.servicesaustralia.gov.au/health-care-and-medicare'},
+ vidhelp:{t:'How to join a Healthdirect video call',d:'Patient guide. Your clinic sends you the link. This is not a booking service.',u:'https://help.vcc.healthdirect.org.au/attending-a-video-call-appointment'},
+ ucc:{t:'Find a Medicare Urgent Care Clinic',d:'Walk-in, bulk billed care for urgent but not life threatening problems. Map from the Department of Health.',u:'https://www.health.gov.au/find-a-medicare-ucc'},
+ uccHD:{t:'About Medicare Urgent Care Clinics',d:'Healthdirect explains what these clinics are and when to use them.',u:HD+'healthcare-and-services/emergency-and-urgent-care/urgent-care-clinics'},
+ eRx:{t:'Electronic prescriptions',d:'Department of Health page on how electronic prescriptions work, including the token sent by SMS or email to take to a pharmacy.',u:'https://www.health.gov.au/our-work/electronic-prescribing'},
+ home:{t:'13SICK National Home Doctor',d:'After hours home doctor visits and telehealth. Bookings are available from 6pm weekdays, 12pm Saturdays and all day Sundays and public holidays.',u:'https://13sick.com.au/',tel:'13 74 25',telh:'137425'},
+ bb:{t:'Beyond Blue support',d:'Information and support for anxiety and depression, with phone and online chat options.',u:'https://www.beyondblue.org.au/get-support'},
+ lifeline:{t:'Lifeline crisis support',d:'24 hour crisis support, phone and online.',u:'https://www.lifeline.org.au/get-help/services/crisis-support',tel:'13 11 14',telh:'131114'},
+ scbs:{t:'Suicide Call Back Service',d:'Phone and online counselling.',u:'https://www.suicidecallbackservice.org.au/',tel:'1300 659 467',telh:'1300659467'},
+ headspace:{t:'headspace',d:'Support for young people aged 12 to 25, including online and phone options.',u:'https://headspace.org.au/'},
+ kids:{t:'Kids Helpline',d:'Free counselling for young people aged 5 to 25.',u:'https://www.kidshelpline.com.au/',tel:'1800 55 1800',telh:'1800551800'},
+ mens:{t:'MensLine Australia',d:'Phone and online support for men.',u:'https://mensline.org.au/',tel:'1300 78 99 78',telh:'1300789978'},
+ yarn:{t:'13YARN',d:'Crisis support for Aboriginal and Torres Strait Islander people, run by Aboriginal and Torres Strait Islander people.',u:'https://www.13yarn.org.au/',tel:'13 92 76',telh:'139276'},
+ rch:{t:'Kids Health Info, Royal Children\'s Hospital',d:'Plain language information sheets for parents and carers.',u:'https://www.rch.org.au/kidsinfo/'},
+ pbb:{t:'Pregnancy, Birth and Baby',d:'Healthdirect service with a helpline, 7am to midnight every day, for pregnancy, birth and child health questions.',u:'https://www.pregnancybirthbaby.org.au/contact-us',tel:'1800 882 436',telh:'1800882436'},
+ options:{t:'1800 My Options',d:'Free confidential information and referrals about contraception, pregnancy options and sexual health. Weekdays 9am to 5pm.',u:'https://www.1800myoptions.org.au/contact/',tel:'1800 696 784',telh:'1800696784'},
+ respect:{t:'1800RESPECT',d:'Support for people affected by family or domestic violence or sexual assault, any time.',u:'https://www.1800respect.org.au/',tel:'1800 737 732',telh:'1800737732'},
+ ahpra:{t:'Check a doctor is registered',d:'Ahpra register of practitioners.',u:'https://www.ahpra.gov.au/Registration/Registers-of-Practitioners.aspx'},
+ tis:{t:'Translating and Interpreting Service (TIS National)',d:'Interpreter information. Ask your clinic to book an interpreter when you make the appointment.',u:'https://www.tisnational.gov.au/en/Need-an-interpreter'},
+ ndis:{t:'NDIS participants',d:'Official NDIS information for participants. Bring your plan details if they matter for the visit.',u:'https://www.ndis.gov.au/participants'}
+};
+var NURSE={t:'Healthdirect nurse line',d:'Speak to a registered nurse, 24 hours a day, seven days a week. Called NURSE-ON-CALL in Victoria. It is advice, not a booking.',u:HD+'healthcare-and-services/general-health/nurse-on-call',tel:'1800 022 222',telh:'1800022222'};
+var STATE={
+ NSW:[{t:'NSW Virtual Care Hub',d:'NSW Government information on video calls with your health service.',u:'https://www.nsw.gov.au/health-and-wellbeing/virtual-care-hub'}],
+ VIC:[{t:'Victorian Virtual Emergency Department',d:'Free video service, 24 hours a day, for non life threatening emergencies. It does not do routine prescription refills or certificates.',u:'https://www.vved.org.au/'}],
+ QLD:[{t:'13 HEALTH Queensland',d:'Health information, advice and referral, 24 hours a day. Virtual emergency care can be reached through it.',u:'https://www.qld.gov.au/health',tel:'13 43 25 84',telh:'134325'}],
+ WA:[{t:'WA Virtual Emergency Department',d:'Reached by calling 1800MEDICARE (1800 633 422) or the Healthdirect line, 8am to 10pm, for people who would otherwise be told to go to an emergency department.',u:'https://www.health.wa.gov.au/Improving-WA-Health/WA-Virtual-Emergency-Department'}],
+ SA:[{t:'SA Health',d:'South Australian Government health site. The SA Virtual Care Service is by referral from a health professional. Otherwise use the Healthdirect line.',u:'https://www.sahealth.sa.gov.au/'}],
+ TAS:[{t:'Tasmanian Health Service Finder',d:'Tasmanian Department of Health service finder.',u:'https://www.health.tas.gov.au/service-finder'}],
+ ACT:[{t:'Canberra Walk-in Centres',d:'Free, no appointment care for non life threatening problems, 7.30am to 10pm every day. Staffed by nurses and nurse practitioners, not doctors.',u:'https://www.canberrahealthservices.act.gov.au/services-and-clinics/services/walk-in-centres-wic'}],
+ NT:[{t:'NT Government telehealth',d:'Northern Territory telehealth information.',u:'https://nt.gov.au/wellbeing/hospitals-health-services/telehealth'},{t:'Northern Territory rural and remote health services',d:'Healthdirect list of services for remote areas.',u:HD+'healthcare-and-services/rural-and-remote/northern-territory-rural-and-remote-health-services'}]
+};
+var STATENAME={NSW:'New South Wales',VIC:'Victoria',QLD:'Queensland',WA:'Western Australia',SA:'South Australia',TAS:'Tasmania',ACT:'Australian Capital Territory',NT:'Northern Territory'};
+
+/* ---------- wizard ---------- */
+var REASONS=[['gp','General check-up'],['script','Repeat script'],['mh','Mental health'],['child','Child'],['urgent','Urgent but not an emergency'],['women','Women\'s health'],['cert','Certificate'],['other','Other']];
+var NEEDS=[['interp','I need an interpreter'],['deaf','I am deaf or hard of hearing'],['access','I need wheelchair or step free access'],['ndis','I am an NDIS participant'],['easy','I would like plain or easy read information'],['nocard','I do not have a Medicare card']];
+var W={step:1,state:'',mode:'',reason:'',needs:[]};
+function opt(name,val,label,checked,type){return '<label class="opt"><input type="'+(type||'radio')+'" name="'+name+'" value="'+val+'"'+(checked?' checked':'')+'><span>'+esc(label)+'</span></label>'}
+function renderWiz(){
+  var w=$('wiz'),h='';
+  $('results').hidden=true;w.hidden=false;
+  if(W.step===1){
+    h+='<div class="card"><p class="steps">Question 1 of 3</p><p class="q">Which state or territory are you in</p><div class="opts four" role="radiogroup" aria-label="State or territory">';
+    Object.keys(STATENAME).forEach(function(s){h+=opt('state',s,s,W.state===s)});
+    h+='</div><p class="q" style="margin-top:16px">How do you want to see the doctor</p><div class="opts two" role="radiogroup" aria-label="How">';
+    [['person','In person'],['video','Video call'],['phone','Phone call'],['any','Either, I am open']].forEach(function(m){h+=opt('mode',m[0],m[1],W.mode===m[0])});
+    h+='</div><div class="msg" id="wMsg" style="color:#9b0000" role="alert"></div><div class="row"><button class="btn full" id="wNext">Next</button></div></div>';
+  }else if(W.step===2){
+    h+='<div class="card"><p class="steps">Question 2 of 3</p><p class="q">What kind of visit is it</p><p class="hint">Pick the closest one. You do not need to give details.</p><div class="opts" role="radiogroup" aria-label="Reason type">';
+    REASONS.forEach(function(r){h+=opt('reason',r[0],r[1],W.reason===r[0])});
+    h+='</div><div class="msg" id="wMsg" style="color:#9b0000" role="alert"></div><div class="row"><button class="btn alt" id="wBack">Back</button><button class="btn" id="wNext">Next</button></div></div>';
+  }else{
+    h+='<div class="card"><p class="steps">Question 3 of 3</p><p class="q">Anything that would help the clinic</p><p class="hint">Tick any that apply, or tick none.</p>';
+    NEEDS.forEach(function(n){h+='<label class="chk"><input type="checkbox" name="need" value="'+n[0]+'"'+(W.needs.indexOf(n[0])>-1?' checked':'')+'><span>'+esc(n[1])+'</span></label>'});
+    h+='<div class="row"><button class="btn alt" id="wBack">Back</button><button class="btn" id="wGo">Show my booking routes</button></div></div>';
+  }
+  w.innerHTML=h;
+  var nx=$('wNext'),bk=$('wBack'),go=$('wGo');
+  if(nx)nx.addEventListener('click',function(){
+    if(W.step===1){var s=document.querySelector('input[name=state]:checked'),m=document.querySelector('input[name=mode]:checked');if(!s||!m){say('wMsg','Please choose a state and how you want to see the doctor.');return}W.state=s.value;W.mode=m.value;W.step=2;renderWiz()}
+    else{var r=document.querySelector('input[name=reason]:checked');if(!r){say('wMsg','Please choose one.');return}W.reason=r.value;W.step=3;renderWiz()}
+    window.scrollTo(0,0)});
+  if(bk)bk.addEventListener('click',function(){if(W.step===3)collectNeeds();W.step--;renderWiz()});
+  if(go)go.addEventListener('click',function(){collectNeeds();showResults()});
+}
+function collectNeeds(){W.needs=[].map.call(document.querySelectorAll('input[name=need]:checked'),function(i){return i.value})}
+function card(r,tel){
+  if(r.tel&&tel)return '';
+  var h='<a class="res" href="'+r.u+'" target="_blank" rel="noopener noreferrer"><b>'+esc(r.t)+'</b><small>'+esc(r.d)+'</small></a>';
+  if(r.tel)h+='<a class="res tel" href="tel:'+r.telh+'"><b>Call '+esc(r.tel)+'</b><small>'+esc(r.t)+'</small></a>';
+  return h;
+}
+function list(arr){return arr.map(function(r){return card(r)}).join('')}
+function showResults(){
+  var s=W.state,m=W.mode,rs=W.reason,n=W.needs,main=[],more=[],sup=[],h='';
+  var video=(m==='video'||m==='phone'||m==='any'),person=(m==='person'||m==='any');
+  if(rs==='urgent'){main.push(R.ucc,R.uccHD);STATE[s].forEach(function(x){main.push(x)});main.push(NURSE);if(video)more.push(R.vcc);more.push(R.home,R.finder)}
+  else if(rs==='mh'){main.push(R.finder,R.findGP);if(video)main.push(R.vcc,R.telehealth);sup.push(R.bb,R.lifeline,R.scbs,R.headspace,R.kids,R.mens,R.yarn);more.push(R.hotdoc,R.healthengine,R.bulk)}
+  else if(rs==='child'){main.push(R.findGP,R.finder);if(video)main.push(R.vcc);more.push(R.hotdoc,R.healthengine,R.bulk,R.rch,R.pbb);sup.push(R.kids,R.headspace)}
+  else if(rs==='women'){main.push(R.findGP,R.finder);if(video)main.push(R.vcc,R.telehealth);more.push(R.hotdoc,R.healthengine,R.bulk);sup.push(R.options,R.pbb,R.respect)}
+  else if(rs==='script'){main.push(R.findGP);if(video)main.push(R.vcc,R.telehealth);main.push(R.eRx);more.push(R.hotdoc,R.healthengine,R.finder,R.bulk)}
+  else if(rs==='cert'){main.push(R.findGP);if(video)main.push(R.vcc,R.telehealth);more.push(R.hotdoc,R.healthengine,R.finder,R.bulk)}
+  else{main.push(R.findGP,R.finder);if(video)main.push(R.vcc,R.telehealth);more.push(R.hotdoc,R.healthengine,R.bulk);if(rs==='other')more.push(R.uccHD)}
+  if(rs!=='urgent'){STATE[s].forEach(function(x){more.push(x)})}
+  if(rs!=='urgent')more.push(R.bulkInfo,R.costs);
+  if(video&&rs!=='urgent'&&main.indexOf(R.vidhelp)<0)more.push(R.vidhelp);
+  if(rs!=='urgent'&&rs!=='mh')more.push(R.home);
+  more.push(R.ahpra);
+  var acc=[];
+  if(n.indexOf('interp')>-1||n.indexOf('deaf')>-1)acc.push(R.tis);
+  if(n.indexOf('ndis')>-1)acc.push(R.ndis);
+  var modeName={person:'in person',video:'by video',phone:'by phone',any:'in person, by video or by phone'}[m];
+  var rsName=REASONS.filter(function(r){return r[0]===rs})[0][1].toLowerCase();
+  h+='<div class="card soft"><h2>Your booking routes</h2><p>'+esc(STATENAME[s])+', '+esc(modeName)+', '+esc(rsName)+'. These are real services run by other organisations. This app cannot see their appointments or book for you. Open one and book there.</p><div class="row"><button class="btn alt" id="rRestart">Change my answers</button></div></div>';
+  h+='<div class="note warn"><b>In an emergency call 000.</b> Do not use any booking site in an emergency.</div>';
+  h+='<h3>Start here</h3>'+list(main);
+  if(!(main.indexOf(NURSE)>-1)){h+='<h3>Not sure where to go</h3>'+card(NURSE)}
+  if(sup.length)h+='<h3>Support lines</h3>'+list(sup);
+  h+='<h3>More options</h3>'+list(more.filter(function(x,i,a){return a.indexOf(x)===i}));
+  if(n.length){
+    h+='<h3>Your needs</h3><div class="note">';
+    if(n.indexOf('interp')>-1)h+='<p>Ask for an interpreter when you book. Do this first so the clinic can plan.</p>';
+    if(n.indexOf('deaf')>-1)h+='<p>Ask the clinic what they offer, such as an Auslan interpreter or written communication, before you choose a time.</p>';
+    if(n.indexOf('access')>-1)h+='<p>Ask the clinic about step free access, parking and accessible toilets before you go. Video can be an option too.</p>';
+    if(n.indexOf('ndis')>-1)h+='<p>Take your plan details and tell the clinic when you book.</p>';
+    if(n.indexOf('easy')>-1)h+='<p>Ask the clinic for information in plain or easy read form. The Department of Health also publishes easy read sheets on bulk billing.</p>';
+    if(n.indexOf('nocard')>-1)h+='<p>Ask the clinic about costs before you book, because Medicare benefits may not apply.</p>';
+    h+='</div>'+list(acc);
+  }
+  h+='<h3>Next steps in this app</h3><div class="row"><button class="btn alt" data-go="prep">Make a prep sheet</button><button class="btn alt" data-go="cal">Add to calendar</button>'+(video?'<button class="btn alt" data-go="tele">Telehealth checklist</button>':'')+'<button class="btn alt" data-go="guide">Guided booking help</button></div>';
+  var r=$('results');r.innerHTML=h;r.hidden=false;$('wiz').hidden=true;window.scrollTo(0,0);
+  $('rRestart').addEventListener('click',function(){W.step=1;renderWiz();window.scrollTo(0,0)});
+  [].forEach.call(r.querySelectorAll('[data-go]'),function(b){b.addEventListener('click',function(){show(b.getAttribute('data-go'))})});
+}
+renderWiz();
+
+/* ---------- prep sheet ---------- */
+var STDQ=['What do you think is going on, and what are my options','What are the next steps and when should I come back','Do I need tests, a referral or a follow up visit','What does each option cost, and will you bulk bill','If a medicine is suggested, what is it for and how do I take it','Which signs mean I should get help sooner'];
+var BRING=['Medicare card or number','Concession or health care card','NDIS plan details, if relevant','Referral letter, if I have one','Photo ID','Private health insurance details, if relevant','My medicines or a list of them','Any earlier test results or letters','Glasses, hearing aids or other aids','A support person, if I would like one'];
+function checks(host,items,prefix,defaults){var h='';items.forEach(function(t,i){h+='<label class="chk"><input type="checkbox" data-k="'+prefix+i+'"'+(mem[prefix+i]!==undefined?(mem[prefix+i]?' checked':''):(defaults&&defaults[i]?' checked':''))+'><span>'+esc(t)+'</span></label>'});$(host).innerHTML=h;[].forEach.call($(host).querySelectorAll('input'),function(c){c.addEventListener('change',function(){mem[c.getAttribute('data-k')]=c.checked;if(host==='teleList')teleProg()})})}
+checks('stdQs',STDQ,'q',{0:1,1:1,2:0});
+checks('bring',BRING,'b',{0:1,1:0,3:0});
+['pName','pTopics','pQs','pMeds'].forEach(function(id){$(id).addEventListener('input',function(){mem[id]=$(id).value})});
+function lines(s){return s.split(/\n+/).map(function(x){return x.trim()}).filter(Boolean)}
+function sheetText(){
+  var out=['APPOINTMENT PREP SHEET'+($('pName').value.trim()?' - '+$('pName').value.trim():''),'Made with Coffeebreak Book a Doctor. Notes are my own. This is not medical advice.',''];
+  var t=lines($('pTopics').value);out.push('WHAT I WANT TO TALK ABOUT');(t.length?t:['(nothing written yet)']).forEach(function(x){out.push('- '+x)});out.push('');
+  var qs=[];[].forEach.call($('stdQs').querySelectorAll('input:checked'),function(c){qs.push(c.nextSibling.textContent)});lines($('pQs').value).forEach(function(x){qs.push(x)});
+  out.push('QUESTIONS TO ASK');(qs.length?qs:['(none chosen)']).forEach(function(x){out.push('- '+x)});out.push('');
+  var md=lines($('pMeds').value);out.push('MEDICINES I TAKE (typed by me)');(md.length?md:['(none listed)']).forEach(function(x){out.push('- '+x)});out.push('');
+  out.push('WHAT TO BRING');var any=false;[].forEach.call($('bring').querySelectorAll('input:checked'),function(c){any=true;out.push('[ ] '+c.nextSibling.textContent)});if(!any)out.push('(nothing ticked)');
+  out.push('','In an emergency call 000.');
+  return out.join('\n');
+}
+$('mkSheet').addEventListener('click',function(){$('sheetOut').textContent=sheetText();$('sheetWrap').hidden=false;say('sheetMsg','');$('sheetWrap').scrollIntoView({block:'start'})});
+$('cpSheet').addEventListener('click',function(){copyText($('sheetOut').textContent,'sheetMsg','Sheet copied')});
+$('prSheet').addEventListener('click',function(){try{window.print();say('sheetMsg','If a print window did not open, use Copy sheet and paste it into a document.')}catch(e){say('sheetMsg','Printing is not available here. Use Copy sheet and paste it into a document.')}});
+
+/* ---------- calendar ---------- */
+function p2(n){return (n<10?'0':'')+n}
+function icsEsc(s){return String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n')}
+function fold(line){var o=[];while(line.length>73){o.push(line.slice(0,73));line=' '+line.slice(73)}o.push(line);return o.join('\r\n')}
+function stamp(d){return d.getUTCFullYear()+p2(d.getUTCMonth()+1)+p2(d.getUTCDate())+'T'+p2(d.getUTCHours())+p2(d.getUTCMinutes())+p2(d.getUTCSeconds())+'Z'}
+function buildIcs(){
+  var clinic=$('cClinic').value.trim(),d=$('cDate').value,t=$('cTime').value;
+  if(!clinic||!d||!t)return null;
+  var len=parseInt($('cLen').value,10),rem=parseInt($('cRem').value,10),type=$('cType').value,where=$('cWhere').value.trim();
+  var p=d.split('-').map(Number),q=t.split(':').map(Number);
+  var s=new Date(Date.UTC(p[0],p[1]-1,p[2],q[0],q[1],0)),e=new Date(s.getTime()+len*60000);
+  function loc(x){return x.getUTCFullYear()+p2(x.getUTCMonth()+1)+p2(x.getUTCDate())+'T'+p2(x.getUTCHours())+p2(x.getUTCMinutes())+'00'}
+  var rl=rem>=1440?'1 day':(rem>=60?(rem/60)+' hour'+(rem>60?'s':''):rem+' minutes');
+  var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Coffeebreak//Book a Doctor//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH','BEGIN:VEVENT',
+   'UID:'+Date.now()+Math.floor(Math.random()*1e6)+'@coffeebreak-book-a-doctor','DTSTAMP:'+stamp(new Date()),
+   'DTSTART:'+loc(s),'DTEND:'+loc(e),'SUMMARY:'+icsEsc('Doctor appointment: '+clinic),
+   'DESCRIPTION:'+icsEsc(type+'. Bring your Medicare card. In an emergency call 000.'+(where?' Details: '+where:'')),
+   'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+icsEsc('Appointment with '+clinic+' in '+rl),'TRIGGER:-PT'+rem+'M','END:VALARM'];
+  if(where&&type==='In person')L.splice(L.length-5,0,'LOCATION:'+icsEsc(where));
+  L.push('END:VEVENT','END:VCALENDAR');
+  return L.map(fold).join('\r\n')+'\r\n';
+}
+$('mkIcs').addEventListener('click',function(){
+  var ics=buildIcs();
+  if(!ics){say('icsMsg','Please fill in the clinic name, date and time.');return}
+  $('icsOut').textContent=ics;$('icsWrap').hidden=false;
+  try{
+    var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'}),url=URL.createObjectURL(blob),a=el('a');
+    a.href=url;a.download='doctor-appointment.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);
+    setTimeout(function(){URL.revokeObjectURL(url)},4000);
+    say('icsMsg','Calendar file created. If nothing downloaded, copy the text below.');
+  }catch(e){say('icsMsg','Download is not available here. Copy the text below instead.')}
+});
+$('cpIcs').addEventListener('click',function(){copyText($('icsOut').textContent,'icsMsg','Calendar text copied')});
+
+/* ---------- telehealth ---------- */
+var TELE=['Charge my phone, tablet or computer, or plug it in','Test my camera and microphone, and the speaker or headphones','Check my internet or phone signal in the room I will use','Find a quiet, private room with good light','Have my photo ID and Medicare card ready','Write down the clinic phone number in case the video drops','Join about 10 minutes early using the link from the clinic','Choose a pharmacy for an electronic prescription, if I might need one','Ask for an interpreter when I book, if I need one','Have my notes and medicines list ready, from the prep sheet','Ask a support person to join me, if I would like to'];
+checks('teleList',TELE,'t',{});
+function teleProg(){var all=$('teleList').querySelectorAll('input'),on=$('teleList').querySelectorAll('input:checked');say('teleProg',on.length+' of '+all.length+' done')}
+teleProg();
+
+/* ---------- guided booking ---------- */
+var TO='songwriterkaz@gmail.com',PAYID='darkokaz@gmx.com';
+$('cpPay').addEventListener('click',function(){copyText(PAYID,'payMsg','PayID copied')});
+$('cpTo').addEventListener('click',function(){copyText(TO,'gMsg','Email address copied')});
+function fmtDate(d){if(!d)return '';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0]}
+function refText(){var n=$('rName').value.trim(),d=fmtDate($('rDate').value);return 'Guided booking'+(n?' '+n:'')+(d?' '+d:'')}
+function upRef(){$('refOut').textContent=refText()}
+$('rName').addEventListener('input',upRef);$('rDate').addEventListener('input',upRef);
+$('cpRef').addEventListener('click',function(){copyText(refText(),'payMsg','Reference copied')});
+$('gName').addEventListener('input',function(){if(!$('rName').value){$('rName').value=$('gName').value;upRef()}});
+function gText(){
+  return ['Hello Karen,','','I would like guided booking help. This message has no health details.','',
+  'First name: '+$('gName').value.trim(),'Contact: '+$('gContact').value.trim(),'State or territory: '+$('gState').value,'In person or video: '+$('gMode').value,'Preferred days and times: '+$('gWhen').value.trim().replace(/\n+/g,' '),'',
+  'I will pay the $15 fee by PayID to '+PAYID+' with the reference: '+refText(),
+  'I understand the terms: refund if no booking is found, no guarantee of availability, I pay the clinic separately, and Karen gives no medical advice.','','Thank you'].join('\n');
+}
+$('mkMsg').addEventListener('click',function(){
+  var miss=[];if(!$('gName').value.trim())miss.push('first name');if(!$('gContact').value.trim())miss.push('contact');if(!$('gState').value)miss.push('state');if(!$('gMode').value)miss.push('in person or video');if(!$('gWhen').value.trim())miss.push('preferred days and times');
+  if(miss.length){say('gMsg','Please fill in: '+miss.join(', ')+'.');$('gMsg').style.color='#9b0000';return}
+  if(!$('gOk').checked){say('gMsg','Please tick the box to confirm you have read the terms.');$('gMsg').style.color='#9b0000';return}
+  $('gMsg').style.color='';
+  var t=gText();$('gOut').textContent=t;$('gWrap').hidden=false;say('gMsg','Message ready. Nothing has been sent yet.');
+  $('mailLink').href='mailto:'+TO+'?subject='+encodeURIComponent('Guided booking request')+'&body='+encodeURIComponent(t);
+  $('gWrap').scrollIntoView({block:'start'});
+});
+$('cpMsg').addEventListener('click',function(){copyText($('gOut').textContent,'gMsg','Message copied')});
+
+window.__cb={W:W,mem:mem,buildIcs:buildIcs,gText:gText};
+})();
+</script>
+</body>
+</html>

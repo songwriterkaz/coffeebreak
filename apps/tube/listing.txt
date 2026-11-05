@@ -1,0 +1,16 @@
+Title: Coffeebreak Tube
+Short description: Share and watch videos with profiles where you choose your own gender and pronouns. Comments off by default.
+Tags: video, video-player, lgbtq, pronouns, inclusive, social, pwa, offline, creator, coffeebreak
+
+Description:
+Coffeebreak Tube is a video app from Coffeebreak. Upload and play your own videos, build a channel, search, like, make playlists and save videos to watch later.
+
+Every person picks their own gender and pronouns, from a wide list or in their own words, and decides whether to show them. Pronouns appear next to names on videos, channels and search. The app never guesses anyone's gender.
+
+Comments are off by default. Turn them on per video if you want them.
+
+Local demo: everything is saved on your device until a free backend is connected. Use Export to back up your channel and Import to bring it back.
+
+More apps: https://coffeebreaks.itch.io
+
+Karen keeps all rights to her products, designs, apps, name and logo. You may resell physical items you buy, but you may not copy them or make your own versions.

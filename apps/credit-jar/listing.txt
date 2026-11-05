@@ -1,0 +1,35 @@
+TITLE
+Coffeebreak Credit Jar
+
+TAGLINE (under 120 characters)
+Chip in a few credits so Karen O'Brien can keep making songs, apps and videos. PayID or Bitcoin.
+
+DESCRIPTION
+Coffeebreak Credit Jar is a simple one page web app for fans and friends of Karen O'Brien (Coffeebreak), a songwriter and creator in Newcastle NSW.
+
+Karen uses credits to make her Coffeebreak apps, songs and videos. If you enjoy her work, you can drop some credits in the jar. One credit means A$1 of support.
+
+How it works
+1. Choose 1, 5, 10 or 25 credits, or type your own amount from A$1.
+2. Add a message to Karen and, if you like, a display name.
+3. Give with PayID (one big button copies the PayID, the exact amount and a reference) or with Bitcoin (a button, a QR code and a plain three step guide).
+4. Press I have donated. It opens an email to Karen with your reference, amount, method and message so she can thank you.
+
+Also inside: a thank you wall that only shows people who say yes (in this version it is saved in your own browser only, and the example cards are clearly marked as examples), a monthly goal meter, and an easy mode with larger text.
+
+Where it goes, honestly
+- Donations are gifts to Karen O'Brien to help cover the costs of making her music, apps and videos.
+- Gifts are not tax deductible.
+- This is not a registered charity and it is not a business sale.
+- Nothing is promised in return.
+- No refunds are automatic.
+- Bitcoin is final and cannot be reversed.
+- The goal meter is not independently tracked. Karen updates it by hand.
+
+Works in any modern browser, on phones and computers. No account, no tracking, nothing to install.
+
+TAGS
+donate, tip jar, support, creator, songwriter, music, coffeebreak, payid, bitcoin, australia
+
+DISCLAIMER
+Karen O'Brien (Coffeebreak) keeps all rights to the app, design, name and logo. People may use the app but may not copy it or make their own versions.

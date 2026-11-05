@@ -1,0 +1,23 @@
+TITLE: Coffeebreak Lyric Cleaner
+SHORT DESCRIPTION (max 120): Check every lyric line before Suno, YouTube or radio. Flags lines that could be misread and suggests clean rewrites.
+PRICE: Free
+TAGS: lyrics, songwriting, songwriter, music, suno, radio-edit, clean-lyrics, lyric-generator, tool, coffeebreak
+
+DESCRIPTION:
+Coffeebreak Lyric Cleaner reads your song one line at a time and checks it before you upload to Suno, YouTube, radio or APRA.
+
+It flags lines that could be misread as being about young people, such as pet names like "baby" or "little" in a bedroom line, secrecy phrases, and age-gap wording. Each line gets red (rewrite needed), amber (could be misread) or green (clear), with the reason in plain words and two or three rewrites that make the grown-up meaning clear.
+
+Radio / Suno friendly mode also flags swearing and explicit words, with clean swaps.
+
+- Paste lyrics, or generate clean starter lyrics
+- One click to apply all rewrites, with a before and after view
+- Copy or export as .txt
+- Edit the word lists and add your own words
+- Works offline. Nothing leaves your device.
+
+This is a helper, not legal advice. Always read your lyrics yourself.
+
+Made by Coffeebreak, Newcastle NSW: https://coffeebreaks.itch.io
+
+Rights: Coffeebreak (Karen O'Brien) keeps all rights to this app and its designs. Buyers may resell physical items but may not copy them or make their own versions.

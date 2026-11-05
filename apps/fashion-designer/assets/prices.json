@@ -1,0 +1,589 @@
+{
+ "app": "fashiondesign",
+ "currency": "AUD",
+ "checked": "2026-10-13",
+ "fx": "S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)",
+ "default_markup_pct": 40,
+ "rows": [
+  {
+   "item": "tee",
+   "supplier": "S2",
+   "size": "XS",
+   "base_aud": 13.83,
+   "base_usd": 9.63,
+   "source": "S2-0",
+   "checked": "2026-10-13",
+   "note": "Gildan 64000 Softstyle tee; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "tee",
+   "supplier": "S2",
+   "size": "S",
+   "base_aud": 13.83,
+   "base_usd": 9.63,
+   "source": "S2-0",
+   "checked": "2026-10-13",
+   "note": "Gildan 64000 Softstyle tee; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "tee",
+   "supplier": "S2",
+   "size": "M",
+   "base_aud": 13.83,
+   "base_usd": 9.63,
+   "source": "S2-0",
+   "checked": "2026-10-13",
+   "note": "Gildan 64000 Softstyle tee; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "tee",
+   "supplier": "S2",
+   "size": "L",
+   "base_aud": 13.83,
+   "base_usd": 9.63,
+   "source": "S2-0",
+   "checked": "2026-10-13",
+   "note": "Gildan 64000 Softstyle tee; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "tee",
+   "supplier": "S2",
+   "size": "XL",
+   "base_aud": 13.83,
+   "base_usd": 9.63,
+   "source": "S2-0",
+   "checked": "2026-10-13",
+   "note": "Gildan 64000 Softstyle tee; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "tee",
+   "supplier": "S2",
+   "size": "2XL",
+   "base_aud": 16.71,
+   "base_usd": 11.63,
+   "source": "S2-0",
+   "checked": "2026-10-13",
+   "note": "Gildan 64000 Softstyle tee; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "tee",
+   "supplier": "S2",
+   "size": "3XL",
+   "base_aud": 19.58,
+   "base_usd": 13.63,
+   "source": "S2-0",
+   "checked": "2026-10-13",
+   "note": "Gildan 64000 Softstyle tee; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "tee",
+   "supplier": "S2",
+   "size": "4XL",
+   "base_aud": 22.45,
+   "base_usd": 15.63,
+   "source": "S2-0",
+   "checked": "2026-10-13",
+   "note": "Gildan 64000 Softstyle tee; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "tee",
+   "supplier": "S2",
+   "size": "5XL",
+   "base_aud": 25.33,
+   "base_usd": 17.63,
+   "source": "S2-0",
+   "checked": "2026-10-13",
+   "note": "Gildan 64000 Softstyle tee; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "tee",
+   "supplier": "S3",
+   "size": "*",
+   "base_aud": null,
+   "source": "S3-9",
+   "checked": "2026-10-13",
+   "note": "S3 shows base prices only inside its signed-in configurator"
+  },
+  {
+   "item": "tee",
+   "supplier": "S4",
+   "size": "*",
+   "base_aud": null,
+   "source": "S4-10",
+   "checked": "2026-10-13",
+   "note": "S4 shows production cost only inside its signed-in catalog"
+  },
+  {
+   "item": "hoodie",
+   "supplier": "S2",
+   "size": "S",
+   "base_aud": 32.51,
+   "base_usd": 22.63,
+   "source": "S2-11",
+   "checked": "2026-10-13",
+   "note": "Gildan 18500 hoodie; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "hoodie",
+   "supplier": "S2",
+   "size": "M",
+   "base_aud": 32.51,
+   "base_usd": 22.63,
+   "source": "S2-11",
+   "checked": "2026-10-13",
+   "note": "Gildan 18500 hoodie; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "hoodie",
+   "supplier": "S2",
+   "size": "L",
+   "base_aud": 32.51,
+   "base_usd": 22.63,
+   "source": "S2-11",
+   "checked": "2026-10-13",
+   "note": "Gildan 18500 hoodie; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "hoodie",
+   "supplier": "S2",
+   "size": "XL",
+   "base_aud": 32.51,
+   "base_usd": 22.63,
+   "source": "S2-11",
+   "checked": "2026-10-13",
+   "note": "Gildan 18500 hoodie; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "hoodie",
+   "supplier": "S2",
+   "size": "2XL",
+   "base_aud": 35.38,
+   "base_usd": 24.63,
+   "source": "S2-11",
+   "checked": "2026-10-13",
+   "note": "Gildan 18500 hoodie; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "hoodie",
+   "supplier": "S2",
+   "size": "3XL",
+   "base_aud": 38.25,
+   "base_usd": 26.63,
+   "source": "S2-11",
+   "checked": "2026-10-13",
+   "note": "Gildan 18500 hoodie; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "hoodie",
+   "supplier": "S2",
+   "size": "4XL",
+   "base_aud": 41.13,
+   "base_usd": 28.63,
+   "source": "S2-11",
+   "checked": "2026-10-13",
+   "note": "Gildan 18500 hoodie; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "hoodie",
+   "supplier": "S2",
+   "size": "5XL",
+   "base_aud": 44.0,
+   "base_usd": 30.63,
+   "source": "S2-11",
+   "checked": "2026-10-13",
+   "note": "Gildan 18500 hoodie; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "hoodie",
+   "supplier": "S3",
+   "size": "*",
+   "base_aud": null,
+   "source": "S3-9",
+   "checked": "2026-10-13",
+   "note": "S3 shows base prices only inside its signed-in configurator"
+  },
+  {
+   "item": "hoodie",
+   "supplier": "S4",
+   "size": "*",
+   "base_aud": null,
+   "source": "S4-10",
+   "checked": "2026-10-13",
+   "note": "S4 shows production cost only inside its signed-in catalog"
+  },
+  {
+   "item": "dress",
+   "supplier": "S2",
+   "size": "XS",
+   "base_aud": 49.24,
+   "base_usd": 34.28,
+   "source": "S2-21",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Dress; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "dress",
+   "supplier": "S2",
+   "size": "S",
+   "base_aud": 49.24,
+   "base_usd": 34.28,
+   "source": "S2-21",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Dress; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "dress",
+   "supplier": "S2",
+   "size": "M",
+   "base_aud": 49.24,
+   "base_usd": 34.28,
+   "source": "S2-21",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Dress; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "dress",
+   "supplier": "S2",
+   "size": "L",
+   "base_aud": 49.24,
+   "base_usd": 34.28,
+   "source": "S2-21",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Dress; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "dress",
+   "supplier": "S2",
+   "size": "XL",
+   "base_aud": 49.24,
+   "base_usd": 34.28,
+   "source": "S2-21",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Dress; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "dress",
+   "supplier": "S2",
+   "size": "2XL",
+   "base_aud": 52.12,
+   "base_usd": 36.28,
+   "source": "S2-21",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Dress; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "dress",
+   "supplier": "S2",
+   "size": "3XL",
+   "base_aud": 54.99,
+   "base_usd": 38.28,
+   "source": "S2-21",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Dress; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "dress",
+   "supplier": "S3",
+   "size": "*",
+   "base_aud": null,
+   "source": "S3-9",
+   "checked": "2026-10-13",
+   "note": "S3 shows base prices only inside its signed-in configurator"
+  },
+  {
+   "item": "dress",
+   "supplier": "S4",
+   "size": "*",
+   "base_aud": null,
+   "source": "S4-10",
+   "checked": "2026-10-13",
+   "note": "S4 shows production cost only inside its signed-in catalog"
+  },
+  {
+   "item": "leggings",
+   "supplier": "S2",
+   "size": "XS",
+   "base_aud": 34.3,
+   "base_usd": 23.88,
+   "source": "S2-30",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Leggings; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "leggings",
+   "supplier": "S2",
+   "size": "S",
+   "base_aud": 34.3,
+   "base_usd": 23.88,
+   "source": "S2-30",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Leggings; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "leggings",
+   "supplier": "S2",
+   "size": "M",
+   "base_aud": 34.3,
+   "base_usd": 23.88,
+   "source": "S2-30",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Leggings; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "leggings",
+   "supplier": "S2",
+   "size": "L",
+   "base_aud": 34.3,
+   "base_usd": 23.88,
+   "source": "S2-30",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Leggings; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "leggings",
+   "supplier": "S2",
+   "size": "XL",
+   "base_aud": 34.3,
+   "base_usd": 23.88,
+   "source": "S2-30",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Leggings; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "leggings",
+   "supplier": "S3",
+   "size": "*",
+   "base_aud": null,
+   "source": "S3-9",
+   "checked": "2026-10-13",
+   "note": "S3 shows base prices only inside its signed-in configurator"
+  },
+  {
+   "item": "leggings",
+   "supplier": "S4",
+   "size": "*",
+   "base_aud": null,
+   "source": "S4-10",
+   "checked": "2026-10-13",
+   "note": "S4 shows production cost only inside its signed-in catalog"
+  },
+  {
+   "item": "skirt",
+   "supplier": "S2",
+   "size": "XS",
+   "base_aud": 40.28,
+   "base_usd": 28.04,
+   "source": "S2-37",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Skirt; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "skirt",
+   "supplier": "S2",
+   "size": "S",
+   "base_aud": 40.28,
+   "base_usd": 28.04,
+   "source": "S2-37",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Skirt; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "skirt",
+   "supplier": "S2",
+   "size": "M",
+   "base_aud": 40.28,
+   "base_usd": 28.04,
+   "source": "S2-37",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Skirt; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "skirt",
+   "supplier": "S2",
+   "size": "L",
+   "base_aud": 40.28,
+   "base_usd": 28.04,
+   "source": "S2-37",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Skirt; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "skirt",
+   "supplier": "S2",
+   "size": "XL",
+   "base_aud": 40.28,
+   "base_usd": 28.04,
+   "source": "S2-37",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Skirt; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "skirt",
+   "supplier": "S2",
+   "size": "2XL",
+   "base_aud": 43.15,
+   "base_usd": 30.04,
+   "source": "S2-37",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Skirt; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "skirt",
+   "supplier": "S2",
+   "size": "3XL",
+   "base_aud": 46.03,
+   "base_usd": 32.04,
+   "source": "S2-37",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Skater Skirt; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "skirt",
+   "supplier": "S3",
+   "size": "*",
+   "base_aud": null,
+   "source": "S3-9",
+   "checked": "2026-10-13",
+   "note": "S3 shows base prices only inside its signed-in configurator"
+  },
+  {
+   "item": "skirt",
+   "supplier": "S4",
+   "size": "*",
+   "base_aud": null,
+   "source": "S4-10",
+   "checked": "2026-10-13",
+   "note": "S4 shows production cost only inside its signed-in catalog"
+  },
+  {
+   "item": "tote",
+   "supplier": "S2",
+   "size": "One size",
+   "base_aud": 25.28,
+   "base_usd": 17.6,
+   "source": "S2-46",
+   "checked": "2026-10-13",
+   "note": "All-Over Print Tote 15×15; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "tote",
+   "supplier": "S3",
+   "size": "*",
+   "base_aud": null,
+   "source": "S3-9",
+   "checked": "2026-10-13",
+   "note": "S3 shows base prices only inside its signed-in configurator"
+  },
+  {
+   "item": "tote",
+   "supplier": "S4",
+   "size": "*",
+   "base_aud": null,
+   "source": "S4-10",
+   "checked": "2026-10-13",
+   "note": "S4 shows production cost only inside its signed-in catalog"
+  },
+  {
+   "item": "socks",
+   "supplier": "S2",
+   "size": "M (AU 6–9)",
+   "base_aud": 15.23,
+   "base_usd": 10.6,
+   "source": "S2-49",
+   "checked": "2026-10-13",
+   "note": "Sublimated socks; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "socks",
+   "supplier": "S2",
+   "size": "L (AU 10–13)",
+   "base_aud": 15.23,
+   "base_usd": 10.6,
+   "source": "S2-49",
+   "checked": "2026-10-13",
+   "note": "Sublimated socks; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "socks",
+   "supplier": "S3",
+   "size": "*",
+   "base_aud": null,
+   "source": "S3-9",
+   "checked": "2026-10-13",
+   "note": "S3 shows base prices only inside its signed-in configurator"
+  },
+  {
+   "item": "socks",
+   "supplier": "S4",
+   "size": "*",
+   "base_aud": null,
+   "source": "S4-10",
+   "checked": "2026-10-13",
+   "note": "S4 shows production cost only inside its signed-in catalog"
+  },
+  {
+   "item": "cap",
+   "supplier": "S2",
+   "size": "Adjustable",
+   "base_aud": 21.46,
+   "base_usd": 14.94,
+   "source": "S2-53",
+   "checked": "2026-10-13",
+   "note": "Yupoong 6245CM dad hat; S2 publishes USD, converted via S1-La36c5e (USD→AUD 1.436501, 12 Oct 2026)"
+  },
+  {
+   "item": "cap",
+   "supplier": "S3",
+   "size": "*",
+   "base_aud": null,
+   "source": "S3-9",
+   "checked": "2026-10-13",
+   "note": "S3 shows base prices only inside its signed-in configurator"
+  },
+  {
+   "item": "cap",
+   "supplier": "S4",
+   "size": "*",
+   "base_aud": null,
+   "source": "S4-10",
+   "checked": "2026-10-13",
+   "note": "S4 shows production cost only inside its signed-in catalog"
+  },
+  {
+   "item": "back_print",
+   "supplier": "S2",
+   "size": "*",
+   "base_aud": null,
+   "source": "S2-56",
+   "checked": "2026-10-13",
+   "note": "Second print side not in S2's public base price"
+  },
+  {
+   "item": "shipping",
+   "supplier": "S2",
+   "size": "*",
+   "base_aud": null,
+   "source": "",
+   "checked": "2026-10-13",
+   "note": "Shipping not published as a flat rate; quoted at order"
+  },
+  {
+   "item": "shipping",
+   "supplier": "S3",
+   "size": "*",
+   "base_aud": null,
+   "source": "",
+   "checked": "2026-10-13",
+   "note": "Shipping not published as a flat rate; quoted at order"
+  },
+  {
+   "item": "shipping",
+   "supplier": "S4",
+   "size": "*",
+   "base_aud": null,
+   "source": "",
+   "checked": "2026-10-13",
+   "note": "Shipping not published as a flat rate; quoted at order"
+  }
+ ]
+}

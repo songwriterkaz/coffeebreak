@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Coffeebreak Organiser</title>
+<style>body{font-family:system-ui,sans-serif;background:#f4efe6;color:#2f3a33;margin:0;padding:1rem;max-width:760px;margin:auto;font-size:1.05rem}
+.o{background:#fff;border-radius:12px;padding:1rem;margin:.8rem 0;border:1px solid #d8cfbf}button{font-size:1rem;padding:.6rem 1rem;border-radius:10px;border:1px solid #5f7466;background:#fff}
+.pay{background:#5f7466;color:#fff}.err{color:#8a3b2b}input{font-size:1rem;padding:.5rem;margin:.2rem 0;width:100%;box-sizing:border-box}small{color:#666}</style></head><body>
+<h1>Coffeebreak Organiser</h1>
+<div id="login"><p>Organiser password</p><input type="password" id="pw" autocomplete="current-password"><button id="go">Open</button></div>
+<div id="main" hidden><p>Check your Teachers Mutual Bank app. When a PayID payment arrives with a matching reference and amount, tap Payment received. That sends the order to Printful.</p><button id="ref">Refresh</button><div id="list"></div></div>
+<script>
+let KEY=sessionStorage.getItem('ok')||'';const $=s=>document.querySelector(s);const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function api(p,m='GET',b){const r=await fetch(p,{method:m,headers:{'x-organiser-key':KEY,'content-type':'application/json'},body:b?JSON.stringify(b):undefined});const d=await r.json();if(r.status==401){sessionStorage.removeItem('ok');$('#login').hidden=false;$('#main').hidden=true;throw new Error('Wrong password')}return{ok:r.ok,d}}
+async function load(){const{d}=await api('/api/orders');$('#login').hidden=true;$('#main').hidden=false;sessionStorage.setItem('ok',KEY);
+$('#list').innerHTML=d.length?d.map(o=>{const c=o.customer;return`<div class="o"><strong>${esc(o.ref)}</strong> · AUD ${o.total.toFixed(2)} + shipping · <em>${esc(o.status)}</em><br><small>${esc(new Date(o.created).toLocaleString('en-AU'))}</small>
+<p>${o.items.map(i=>`${i.qty} x ${esc(i.name)} (${esc(i.size)})`).join('<br>')}</p><p>${esc(c.name)} · ${esc(c.email)}<br><small>${esc(c.address_text)}</small></p>
+${o.printful_id?`<p>Printful order ${esc(o.printful_id)} (${esc(o.printful_status)})</p>`:o.status=='cancelled'?'':`<details><summary>Delivery address for Printful</summary>
+<input placeholder="Street" data-f="address1" value="${esc(c.address1)}"><input placeholder="Unit (optional)" data-f="address2" value="${esc(c.address2)}"><input placeholder="Suburb" data-f="city" value="${esc(c.city)}"><input placeholder="State e.g. NSW" data-f="state" value="${esc(c.state)}"><input placeholder="Postcode" data-f="zip" value="${esc(c.zip)}">
+<button data-save="${esc(o.ref)}">Save address</button></details><p><button class="pay" data-paid="${esc(o.ref)}">Payment received</button> <button data-cancel="${esc(o.ref)}">Cancel order</button></p>`}
+${o.last_error?`<p class="err">${esc(o.last_error)}</p>`:''}</div>`}).join(''):'<p>No orders yet.</p>'}
+document.addEventListener('click',async e=>{const t=e.target.dataset;try{
+if(t.paid){if(!confirm('Payment for '+t.paid+' is in the bank with the right amount?'))return;e.target.disabled=true;e.target.textContent='Sending...';const r=await api('/api/orders/'+t.paid+'/paid','POST');if(!r.ok)alert(r.d.error);load()}
+if(t.cancel){if(confirm('Cancel '+t.cancel+'?')){await api('/api/orders/'+t.cancel+'/cancel','POST');load()}}
+if(t.save){const b={};e.target.closest('details').querySelectorAll('[data-f]').forEach(i=>b[i.dataset.f]=i.value);await api('/api/orders/'+t.save+'/address','POST',b);load()}}catch(x){alert(x.message)}});
+$('#go').onclick=()=>{KEY=$('#pw').value;load().catch(x=>alert(x.message))};$('#ref').onclick=load;if(KEY)load().catch(()=>{});
+</script></body></html>

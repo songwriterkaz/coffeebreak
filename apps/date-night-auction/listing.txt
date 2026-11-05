@@ -1,0 +1,48 @@
+TITLE
+Coffeebreak Date Night Auction
+
+TAGLINE (under 120 characters)
+A free charity auction for date night experiences. Pledged bids only. Takes no money. Works offline.
+
+DESCRIPTION
+Coffeebreak Date Night Auction is a free tool for a venue or community group that is running a charity fundraiser. Local businesses donate date night experiences, such as dinner for two, a picnic, a movie night, a dance lesson, a live music night or a coffee date. Guests make pledged bids. The highest pledge wins the experience for the winner's own date with a partner or a friend. The winning pledge goes to the charity the organiser has chosen. Nothing in the app is about bidding for a person. It works on a phone, a tablet or a computer, and it is made for Australia.
+
+What it does
+- 1. Setup: event name, who runs it, the charity (with a link to the ACNC Charity Register), closing date and time, minimum bid and bid step.
+- 2. Experiences: add or edit each experience with a title, description, value, donor business and terms such as expiry and booking. Six starter examples are labelled Example data and can be removed in one tap.
+- 3. Board and share: place bids with the rules enforced (a whole dollar amount, at least the minimum, on the step, and above the current highest). See the highest pledge, a countdown to the close and a bid history. Make a read-only share link with the auction held in the web address, then send it by text, email or copy.
+- 4. Collect and win: guests send their bid by a copyable message, text or email, and the app sends nothing itself. Paste the messages in and the app merges them, ignores duplicates, flags late bids and rejects bids that break the rules. At the closing time, confirm the winners. Highest pledge wins and ties go to the earlier bid.
+- 5. Winner packs: a printable certificate with the Coffeebreak logo, a winner message to copy, text or email, and a calendar file (.ics) for the date of the experience.
+- 6. Results: total pledged, a leaderboard, a printable summary, CSV and JSON downloads, and a two-step clear.
+- Works offline once opened. No accounts, ads or tracking. Your information stays in your browser.
+
+Please read this first, it is an honest description of what the app is
+- The app holds and takes no money. A bid is a pledge only. A winner pays the charity or the organiser directly, outside the app.
+- Organisers must check the local fundraising and charity rules that apply to them, including whether an NSW Fair Trading authority to fundraise is needed, and must check that the charity is registered. Coffeebreak is not a party to any sale. This is not legal advice.
+- There is no server. Guests cannot place a bid straight into the organiser's list. They send the bid by message and the organiser pastes it in. The share link is a snapshot made at the time the link is created, so the highest pledge a guest sees may be out of date.
+- The countdown on a guest's screen uses that device's own clock. The organiser decides which bids count, using the closing time in the organiser's setup.
+- Nobody's profile or photo is collected. Guests use a nickname. No contact details are collected from guests.
+- Some links are marked with an asterisk. Those sites block automatic checking, or could only be confirmed by web search on 23 October 2026. They are real sites. If a page does not open, go to the home page and search from there.
+- On itch.io the page runs inside a frame, so a share link must use the address of the frame itself. The organiser should open the link on another device to test it before sharing. There is an advanced field in Setup for this.
+
+Unofficial. Not affiliated with, endorsed by or sponsored by the ACNC, NSW Fair Trading or any charity, venue or business named in the examples. All businesses, experiences and names in the starter examples are made up.
+
+Karen O'Brien (Coffeebreak) keeps all rights to the app, design, name and logo. People may use the app to run their own fundraiser but may not copy it or make their own versions of the app.
+
+More from Coffeebreak: https://coffeebreaks.itch.io
+
+TAGS
+auction, charity, fundraiser, date night, pledge, certificate, australia, nsw, no-ads, offline, accessible
+
+PRICE SUGGESTION
+Free. No payment option.
+
+DISCLAIMER TEXT (also shown in the app)
+Unofficial. This app holds and takes no money. A bid is a pledge only and payment goes straight from the winner to the charity or the organiser, outside the app. Organisers must check the local fundraising and charity rules that apply to them, including whether an NSW Fair Trading authority to fundraise is needed, and must check that the charity is registered. Coffeebreak is not a party to any sale. Not legal advice.
+Karen O'Brien (Coffeebreak) keeps all rights to the app, design, name and logo. People may use the app to run their own fundraiser but may not copy it or make their own versions of the app.
+
+ITCH.IO SETTINGS (not published)
+Kind of project: HTML. Upload itch-upload.zip and tick This file will be played in the browser.
+Viewport: 420 x 780 or full screen on mobile. Mobile friendly: yes. Fullscreen button: yes. Automatically start on page load: yes.
+Cover image: cover.png (630 x 500). Screenshot: screenshot.png.
+Community: comments off or on, as you prefer. Visibility: Draft until you decide.

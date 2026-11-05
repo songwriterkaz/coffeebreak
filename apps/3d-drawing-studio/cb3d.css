@@ -1,0 +1,24 @@
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#1a0820;color:#ffe6f4;font-family:"Trebuchet MS",Verdana,sans-serif}
+#app{display:flex;flex-direction:column;height:100%}
+header{display:flex;align-items:center;gap:10px;padding:6px 10px;background:linear-gradient(90deg,#ff4fa3,#9b3dd6);color:#fff}
+header img{height:40px;width:40px;border-radius:50%;border:2px solid #fff;object-fit:cover}
+header h1{font-size:18px;margin:0;flex:1}header .demo{background:#fff;color:#9b3dd6;border-radius:8px;padding:2px 8px;font-size:12px;font-weight:bold}
+#main{flex:1;display:flex;min-height:0}
+#side{width:340px;overflow-y:auto;padding:8px 10px 60px;background:#24102e;border-right:3px solid #ff6fb5}
+#view{flex:1;position:relative;min-width:0;min-height:0}
+#dims{position:absolute;left:8px;bottom:8px;background:#000a;padding:3px 8px;border-radius:6px;font-size:12px;pointer-events:none}
+h3{color:#ff8fc8;margin:10px 0 4px;font-size:15px}
+.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:5px 0}
+.row label{min-width:96px;font-size:13px;color:#e6b3ff}
+button,select,input{font:14px "Trebuchet MS",sans-serif;background:#3b1a4a;color:#ffe6f4;border:2px solid #ff6fb5;border-radius:10px;padding:6px 10px;min-height:36px}
+button{cursor:pointer}button.big{background:linear-gradient(90deg,#ff4fa3,#9b3dd6);color:#fff;border-color:#fff;font-weight:bold}
+button.sel{background:#ff6fb5;color:#1a0820}
+input[type=range]{flex:1;min-width:110px;padding:0;accent-color:#ff4fa3}input[type=text],input[type=number]{width:110px}
+input[type=color]{padding:0;width:44px}
+.val{min-width:44px;font-size:12px;text-align:right}
+.note{font-size:12px;background:#33153f;border-left:4px solid #ff6fb5;padding:6px;margin:6px 0;border-radius:4px}
+.warn{background:#4a1030;border-left-color:#ffcc00;color:#fff;font-weight:bold}
+.lock{opacity:.55}
+#cbtoast{position:fixed;left:50%;top:60px;transform:translateX(-50%);background:#ff4fa3;color:#fff;padding:8px 14px;border-radius:10px;opacity:0;transition:.3s;z-index:99;pointer-events:none;max-width:90%;text-align:center}
+#cbtoast.show{opacity:1}
+@media (max-width:760px){#main{flex-direction:column-reverse}#side{width:100%;height:50%;border-right:0;border-top:3px solid #ff6fb5}#view{height:50%;flex:none}header h1{font-size:15px}}

@@ -1,0 +1,15 @@
+*{box-sizing:border-box}body{margin:0;font-family:'Trebuchet MS',system-ui,sans-serif;color:#eee;background:linear-gradient(160deg,#111,#2a2a2a) fixed;min-height:100vh}
+.strip{background:#f5a623;color:#111;text-align:center;padding:6px;font-weight:700;font-size:13px}
+header{text-align:center;padding:16px 12px 8px}header img{width:84px;height:84px;border-radius:50%;border:3px solid #f5a623}header h1{margin:.1em 0;font-size:clamp(1.8em,6vw,2.8em);color:#f5a623;letter-spacing:1px}
+.tag{margin:.2em auto .8em;max-width:640px;opacity:.9}
+button{font:inherit;font-weight:700;border:0;border-radius:999px;padding:9px 16px;cursor:pointer;background:#f5a623;color:#111}button:disabled{opacity:.5}
+nav button{background:#333;color:#eee;margin:3px}nav button.on{background:#f5a623;color:#111}
+main{max-width:1100px;margin:auto;padding:10px}#q{width:100%;padding:10px;border-radius:999px;border:2px solid #f5a623;background:#222;color:#eee;margin-bottom:8px}
+#filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}#filters button{background:#333;color:#eee;padding:6px 12px}#filters button.on{background:#f5a623;color:#111}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.card{background:#1c1c1c;border:1px solid #444;border-radius:14px;padding:10px;display:flex;flex-direction:column}.card img{width:100%;aspect-ratio:1;object-fit:contain;background:#fff;border-radius:10px}
+.card h3{font-size:14px;margin:8px 0 2px;flex:1}.card small{color:#aaa}.price{font-size:20px;font-weight:800;color:#f5a623;margin:6px 0}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#f5a623;color:#111;padding:10px 18px;border-radius:999px;display:none;font-weight:700;z-index:99}
+.note{font-size:13px;opacity:.8;margin-top:16px}#lines>div{border-bottom:1px solid #444;padding:6px 0}#lines p{display:flex;justify-content:space-between;margin:4px 0}#lines button{padding:2px 8px;background:#444;color:#eee}
+.optin,.form input,.form textarea{width:100%;padding:9px;margin:4px 0;border-radius:8px;border:1px solid #666;background:#222;color:#eee;font:inherit}
+.tot{font-size:20px;font-weight:800;color:#f5a623}footer{text-align:center;padding:20px;opacity:.7;font-size:13px}a{color:#f5a623}

@@ -1,0 +1,10 @@
+name = "coffeebreak-deals"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+[[kv_namespaces]]
+binding = "DEALS"
+id = "PUT_YOUR_KV_NAMESPACE_ID_HERE"
+# Secrets are NOT stored here. Set them with:
+#   npx wrangler secret put IP_SALT
+#   npx wrangler secret put ADMIN_PASSWORD

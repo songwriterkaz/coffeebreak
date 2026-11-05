@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#3b2417">
+<title>Coffeebreak QR Phone</title>
+<link rel="stylesheet" href="cbscan-ios.css">
+<script src="cbscan-ios.js" defer></script>
+<script src="cbassist.js" defer></script>
+<script src="peerjs.min.js" defer></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#3b2417;color:#fff6ea;font:16px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overscroll-behavior:none}
+#app{height:100%;height:100dvh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+header{display:flex;align-items:center;gap:10px;padding:6px 12px;min-height:46px}
+header img{height:32px;width:auto;border-radius:6px;background:#fff}
+#st{flex:1;font-weight:600;font-size:16px;line-height:1.2}
+#tm{font:700 18px ui-monospace,Menlo,monospace}
+#stage{flex:1;min-height:0;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+#qr{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+#msg{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#fff6ea;color:#2b1a10;text-align:center;padding:20px}
+#msg.on{display:flex}
+#msg h1{margin:0;font-size:26px}#msg p{margin:0;font-size:17px;max-width:30em}
+#big{font:700 54px ui-monospace,Menlo,monospace}
+bar,#bar{display:flex;gap:10px;padding:8px 12px;justify-content:center}
+.b{flex:1;max-width:200px;height:50px;border:0;border-radius:25px;font:700 17px system-ui;color:#fff;background:#6b4631;touch-action:manipulation}
+.b.r{background:#d23b3b}.b.g{background:#2e9e5b}.b.on{background:#e8a860;color:#2b1a10}
+.b[hidden]{display:none}
+footer{font-size:10.5px;line-height:1.3;color:#cfae8c;padding:0 12px 8px;text-align:center}
+#err{position:fixed;left:10px;right:10px;top:54px;background:#fff6ea;color:#2b1a10;border-radius:12px;padding:10px 14px;z-index:20;display:none;font-size:15px}
+audio{display:none}
+#prox{padding:2px 12px 4px;text-align:center}
+#pst{font-size:15px;font-weight:600;min-height:20px}
+#prow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:4px 0}
+#prow .b{height:42px;font-size:15px;flex:0 1 auto;max-width:none;padding:0 16px;background:#5a3a28}
+#jbox{margin:6px auto 2px;max-width:420px}#jlab{display:block;font-size:13px;color:#e8c9a8;text-align:left;margin-bottom:2px}.jrow{display:flex;gap:8px}.jrow input{flex:1;min-width:0;height:42px;border:0;border-radius:12px;padding:0 12px;font:16px system-ui;background:#fff6ea;color:#2b1a10}.jrow .b{flex:0 0 76px;height:42px;font-size:15px}#jscan{height:42px;font-size:15px;margin-top:6px;max-width:none;padding:0 16px;flex:none}#phelp{font-size:12px;color:#e8c9a8;margin:2px 0 0}
+a{color:#e8c9a8}
+</style></head><body>
+<div id="app">
+<header><img alt="Coffeebreak" src="data:image/png;base64,@@LOGO@@"><div id="st">Starting</div><div id="tm"></div></header>
+<div id="stage"><canvas id="qr" width="10" height="10" aria-label="Call code. Scan with a phone camera to call this phone."></canvas>
+<div id="msg" role="status"><h1 id="mh"></h1><p id="mp"></p><div id="big"></div><button class="b g" id="mb" type="button" style="flex:none;width:220px" hidden></button><button class="b" id="mb2" type="button" style="flex:none;width:220px" hidden></button></div></div>
+<div id="bar"><button class="b" id="mute" type="button" hidden>Mute</button><button class="b r" id="hang" type="button">New code</button></div>
+<div id="prox" hidden><div id="pst" role="status"></div><div id="prow"><button class="b" id="pbt" type="button" hidden>Find my phone</button><button class="b" id="pnr" type="button" hidden>Tap a tag</button><button class="b" id="pnw" type="button" hidden>Write my tag</button><button class="b g" id="psh" type="button" hidden>Send link to it</button></div><div id="jbox"><label for="jin" id="jlab">Link or name</label><div class="jrow"><input id="jin" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Paste a call link or code"><button class="b g" id="jgo" type="button">Join</button></div><button class="b" id="jscan" type="button">Scan a code</button></div><div id="phelp">Nearby pairing only works after you tap a button, and only in Chrome on Android. On iPhone use the QR code.</div></div>
+<footer>Coffeebreak QR Phone. Coffeebreak keeps all rights to this product, its designs, name and logo. Buyers may resell physical products they bought but may not copy it or make their own versions. QR code library by davidshimjs, MIT licence.</footer>
+</div>
+<div id="err" role="alert"></div>
+<audio id="ra" autoplay playsinline></audio>
+<noscript><p style="padding:20px">This app needs JavaScript. Please turn it on and reload.</p></noscript>
+<script>/* qrcode.js, MIT licence, Copyright 2012 davidshimjs */
+@@QRLIB@@
+</script>
+<script>
+(function(){
+"use strict";
+var $=function(i){return document.getElementById(i)};
+var ITCH='https://coffeebreaks.itch.io/coffeebreak-qr-phone';
+var PFX='cbqr-';
+function showErr(m){try{var e=$('err');e.textContent=m;e.style.display='block';clearTimeout(showErr.t);showErr.t=setTimeout(function(){e.style.display='none'},5000)}catch(x){}}
+window.addEventListener('error',function(){showErr('Something went wrong, but the phone is still working.')});
+window.addEventListener('unhandledrejection',function(e){try{e.preventDefault()}catch(x){}});
+function safe(f){return function(){try{return f.apply(this,arguments)}catch(x){showErr('That did not work. Please try again.')}}}
+var mem={},okS=true;
+function sget(k){try{if(okS)return window.localStorage.getItem(k)}catch(x){okS=false}return mem[k]===undefined?null:mem[k]}
+function sset(k,v){mem[k]=v;try{if(okS)window.localStorage.setItem(k,v)}catch(x){okS=false}}
+function rid(n){var a='abcdefghjkmnpqrstuvwxyz23456789',s='',i,b;try{b=new Uint8Array(n);crypto.getRandomValues(b)}catch(x){b=null}for(i=0;i<n;i++)s+=a.charAt((b?b[i]:Math.floor(Math.random()*256))%a.length);return s}
+function setSt(t){$('st').textContent=t}
+function fmt(s){return ('0'+Math.floor(s/60)).slice(-2)+':'+('0'+s%60).slice(-2)}
+var ICE={iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']},{urls:'stun:stun.cloudflare.com:3478'}]};
+/* room from URL */
+function roomFrom(t){t=String(t||'').trim();if(!t)return null;var m=/[?&#]room=([A-Za-z0-9-]{4,40})/.exec(t);if(m)return m[1];if(/^[A-Za-z0-9-]{4,40}$/.test(t)&&!/^https?$/i.test(t))return t.toLowerCase();return null}
+function getRoom(){var r=null;try{var m=/[?&]room=([A-Za-z0-9-]{4,40})/.exec(location.search)||/[#&]room=([A-Za-z0-9-]{4,40})/.exec(location.hash);if(m)return m[1]}catch(x){}
+  try{if(document.referrer&&/(^|\.)itch\.io$/.test(new URL(document.referrer).hostname)){var q=/[?&#]room=([A-Za-z0-9-]{4,40})/.exec(document.referrer);if(q)return q[1]}}catch(x){}
+  return null}
+function baseUrl(){try{if(/^https?:$/.test(location.protocol)&&!/itch\.zone|hwcdn|itch\.io|localhost|127\.0\.0\.1/.test(location.host))return location.origin+location.pathname;if(/localhost|127\.0\.0\.1/.test(location.host))return location.origin+location.pathname}catch(x){}return ITCH}
+function joinUrl(room){return baseUrl()+'?room='+room}
+/* QR drawing */
+var curUrl='';
+function drawQR(text){
+  curUrl=text;var c=$('qr'),stage=$('stage');
+  var q=new QRCode(document.createElement('div'),{text:text,width:64,height:64,correctLevel:QRCode.CorrectLevel.M});
+  var o=q._oQRCode,n=o.getModuleCount(),quiet=4,tot=n+quiet*2;
+  var avail=Math.max(120,Math.min(stage.clientWidth,stage.clientHeight)),dpr=Math.min(window.devicePixelRatio||1,3);
+  var px=Math.max(1,Math.floor(avail*dpr/tot)),size=px*tot;
+  c.width=size;c.height=size;c.style.width=(size/dpr)+'px';c.style.height=(size/dpr)+'px';
+  var g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,size,size);g.fillStyle='#000';
+  for(var r=0;r<n;r++)for(var k=0;k<n;k++)if(o.isDark(r,k))g.fillRect((k+quiet)*px,(r+quiet)*px,px,px);
+  c.setAttribute('data-url',text);
+}
+window.addEventListener('resize',function(){try{if(curUrl&&$('qr').style.display!=='none')drawQR(curUrl)}catch(x){}});
+/* shared call state */
+var peer=null,call=null,stream=null,timer=null,t0=0,muted=false,wl=null,role='';
+function msg(h,p,big){var m=$('msg');$('mh').textContent=h||'';$('mp').textContent=p||'';$('big').textContent=big||'';m.className=h||p||big?'on':'';$('qr').style.display=m.className?'none':'block'}
+function btn(id,txt,fn){var b=$(id);if(!txt){b.hidden=true;b.onclick=null;return}b.hidden=false;b.textContent=txt;b.onclick=safe(fn)}
+function startTimer(){t0=Date.now();clearInterval(timer);timer=setInterval(function(){var s=Math.floor((Date.now()-t0)/1000);$('tm').textContent=fmt(s);if(role==='host')$('big').textContent=fmt(s)},500);$('tm').textContent='00:00'}
+function stopTimer(){clearInterval(timer);timer=null;$('tm').textContent=''}
+function lock(on){try{if(on&&navigator.wakeLock&&!wl){navigator.wakeLock.request('screen').then(function(l){wl=l;l.addEventListener('release',function(){wl=null})}).catch(function(){})}else if(!on&&wl){wl.release();wl=null}}catch(x){}}
+function getMic(){return new Promise(function(res){
+  try{if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){res(null);return}
+  navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}}).then(function(s){res(s)},function(e){res(null)})}catch(x){res(null)}})}
+function silent(){try{var C=window.AudioContext||window.webkitAudioContext,c=new C(),d=c.createMediaStreamDestination();return d.stream}catch(x){return null}}
+function attach(s){try{var a=$('ra');a.srcObject=s;var p=a.play();if(p&&p.catch)p.catch(function(){showErr('Tap anywhere on the screen to hear the call.');document.addEventListener('click',function f(){a.play();document.removeEventListener('click',f)})})}catch(x){}}
+function cleanupCall(){try{if(call)call.close()}catch(x){}call=null;try{if(stream){stream.getTracks().forEach(function(t){t.stop()})}}catch(x){}stream=null;try{$('ra').srcObject=null}catch(x){}muted=false;stopTimer();lock(false);btn('mute','')}
+function setMute(){muted=!muted;try{if(stream)stream.getAudioTracks().forEach(function(t){t.enabled=!muted})}catch(x){}var b=$('mute');b.textContent=muted?'Unmute':'Mute';b.className='b'+(muted?' on':'')}
+
+/* nearby pairing, feature detected, nothing runs until a tap */
+var nfcAbort=null,btDev=null;
+function pst(t){var e=$('pst');if(e)e.textContent=t||''}
+function proxShow(on){var p=$('prox');if(p)p.hidden=!on}
+function shareLink(){
+  var u=joinUrl(room),d={title:'Coffeebreak QR Phone',text:'Join my call',url:u};
+  try{if(navigator.share){navigator.share(d).then(function(){pst('Link sent')},function(e){pst(e&&e.name==='AbortError'?'Sharing cancelled':'Could not share the link')});return}}catch(x){}
+  try{navigator.clipboard.writeText(u).then(function(){pst('Link copied, paste it into a message')},function(){pst('Could not copy the link')})}catch(x){pst('Could not share the link')}
+}
+function findPhone(){
+  pst('Looking for your phone');
+  navigator.bluetooth.requestDevice({acceptAllDevices:true}).then(function(dev){
+    btDev=dev;var nm=dev.name||'your phone';try{sset('cbqr_btname',nm)}catch(x){}
+    pst('Phone found: '+nm);$('psh').hidden=false;
+    try{if(dev.watchAdvertisements){dev.addEventListener('advertisementreceived',function(){if(!call)pst('Phone found and nearby: '+nm)});dev.watchAdvertisements().catch(function(){})}}catch(x){}
+  },function(e){
+    if(e&&e.name==='NotFoundError')pst('No phone chosen. Make sure Bluetooth is on and try again');
+    else if(e&&(e.name==='SecurityError'||e.name==='NotAllowedError'))pst('Bluetooth is blocked here. Open this page in its own browser tab and try again');
+    else pst('Bluetooth did not work. Use the QR code instead')});
+}
+function stopNfc(){try{if(nfcAbort)nfcAbort.abort()}catch(x){}nfcAbort=null}
+function nfcUrl(m){var i,r,dec;try{for(i=0;i<m.records.length;i++){r=m.records[i];if(r.recordType==='url'||r.recordType==='text'||r.recordType==='absolute-url'){dec=new TextDecoder(r.encoding||'utf-8').decode(r.data);var x=/https?:\/\/[^\s]*[?&#]room=[A-Za-z0-9-]{4,40}/.exec(dec);if(x)return x[0]}}}catch(e){}return null}
+function readTag(){
+  stopNfc();pst('Looking for a tag. Hold it to the back of the phone');
+  try{var rd=new NDEFReader();nfcAbort=new AbortController();
+  rd.scan({signal:nfcAbort.signal}).then(function(){},function(e){pst(e&&e.name==='NotAllowedError'?'NFC is blocked. Allow it in the browser and try again':'NFC did not start. Use the QR code instead')});
+  rd.onreading=function(ev){var u=nfcUrl(ev.message);if(u){pst('Phone found');stopNfc();setTimeout(function(){pst('Connecting');joinRoom(roomFrom(u))},300)}else pst('That tag has no call link')};
+  rd.onreadingerror=function(){pst('Could not read that tag')}}catch(x){pst('NFC did not start. Use the QR code instead')}
+}
+function writeTag(){
+  stopNfc();pst('Hold a tag to the back of the phone');
+  try{var rd=new NDEFReader();rd.write({records:[{recordType:'url',data:joinUrl(room)}]}).then(function(){pst('Tag written. Tapping it opens your call link')},function(e){pst(e&&e.name==='NotAllowedError'?'NFC is blocked. Allow it in the browser and try again':'Could not write the tag')})}catch(x){pst('NFC did not start. Use the QR code instead')}
+}
+function initProx(){
+  try{
+    var bt=!!(navigator.bluetooth&&navigator.bluetooth.requestDevice),nf=('NDEFReader' in window);
+    if(bt){$('pbt').hidden=false;$('pbt').onclick=safe(findPhone)}
+    if(nf){$('pnr').hidden=false;$('pnw').hidden=false;$('pnr').onclick=safe(readTag);$('pnw').onclick=safe(writeTag)}
+    $('psh').onclick=safe(shareLink);
+    pst(bt||nf?'Nearby pairing is ready. Tap a button to start':'Nearby pairing is not available in this browser. Use the QR code');
+  }catch(x){}
+}
+/* host */
+var room='';
+function hostWaiting(){
+  call=null;role='host';msg('');btn('mute','');btn('hang','New code',newCode);proxShow(true);
+  setSt('Waiting for someone to scan');drawQR(joinUrl(room));
+}
+function newCode(){try{cleanupCall();if(peer){try{peer.destroy()}catch(x){}peer=null}}catch(x){}sset('cbqr_room','');startHost()}
+function hostHangup(){cleanupCall();hostWaiting()}
+function onIncoming(c){
+  if(call){try{c.close()}catch(x){}return}
+  call=c;stopNfc();proxShow(false);setSt('Someone is joining');msg('Joining','Starting the call. Your phone may ask to use the microphone.','');
+  getMic().then(function(s){
+    stream=s||silent();
+    if(!s)showErr('Microphone is off, so you can hear the other person but they cannot hear you. Allow the microphone in browser settings and scan again.');
+    try{c.answer(stream)}catch(x){showErr('Could not answer the call.');hostHangup();return}
+    c.on('stream',function(rs){attach(rs);role='host';setSt('Connected');msg('Connected','The call is live.','00:00');startTimer();lock(true);btn('mute','Mute',setMute);btn('hang','Hang up',hostHangup)});
+    c.on('close',function(){if(call===c)hostHangup()});
+    c.on('error',function(){if(call===c){showErr('The call dropped.');hostHangup()}});
+    try{var pc=c.peerConnection;pc.addEventListener('iceconnectionstatechange',function(){if(call===c&&pc.iceConnectionState==='failed'){showErr('The connection failed. Please scan again.');hostHangup()}})}catch(x){}
+  });
+}
+function startHost(){
+  role='host';btn('hang','New code',newCode);setSt('Starting');proxShow(true);
+  room=sget('cbqr_room')||rid(8);sset('cbqr_room',room);msg('');try{drawQR(joinUrl(room))}catch(x){}
+  whenPeer(function(){runHost()});
+}
+function whenPeer(f){if(window.Peer||document.readyState==='complete')f();else document.addEventListener('DOMContentLoaded',f)}
+function runHost(){
+  try{peer=new Peer(PFX+room,{config:ICE,debug:0})}catch(x){msg('Cannot start','This browser cannot make calls. Try a recent version of Chrome, Safari or Firefox.','');setSt('Not available');return}
+  peer.on('open',function(){hostWaiting()});
+  peer.on('call',onIncoming);
+  peer.on('disconnected',function(){if(!call)setSt('Reconnecting')});
+  peer.on('error',function(e){
+    var t=e&&e.type;
+    if(t==='unavailable-id'){sset('cbqr_room','');msg('Getting ready','Setting up your call code.','');try{peer.destroy()}catch(x){}setTimeout(startHost,300);return}
+    if(t==='network'||t==='server-error'||t==='socket-error'||t==='socket-closed'){setSt('Offline, trying again');return}
+    showErr('Call service problem: '+(t||'unknown')+'.')});
+  setTimeout(function(){if(peer&&!peer.open){msg('Still connecting','The call service is slow to answer. This page keeps trying. Check your internet connection.','');setSt('Offline, trying again')}},9000);
+}
+function teardown(){try{stopNfc()}catch(x){}try{cleanupCall()}catch(x){}try{if(peer)peer.destroy()}catch(x){}peer=null;try{$('qr').removeAttribute('data-url')}catch(x){}}
+function joinRoom(rm){if(!rm){pst('That is not a call link');return}try{teardown();if(window.CBScanIOS&&CBScanIOS.close)try{CBScanIOS.close()}catch(x){}startGuest(rm)}catch(x){showErr('Could not open that link.')}}
+function showMine(){try{teardown();startHost()}catch(x){showErr('Could not reset the page. Please reload.')}}
+function openScanner(){
+  try{if(!window.CBScanIOS)throw 0;
+    CBScanIOS.open({icon:(document.querySelector('header img')||{}).src||'',subtitle:'QR Phone',jsqr:'jsQR.js',title:function(i){return 'Join the call'},
+      parse:function(t){var r=roomFrom(t);return r&&/[?&#]room=/.test(t)?{name:r,room:r}:null},
+      parsePaste:function(t){var r=roomFrom(t);return r?{name:r,room:r}:null},
+      onConnect:function(i){CBScanIOS.close();joinRoom(i.room||i.name)}})
+  }catch(x){pst('The scanner could not start. Paste a link below instead.')}
+}
+$('jgo').onclick=safe(function(){var r=roomFrom($('jin').value);if(!r){pst('Paste a call link or the code from the other phone');return}joinRoom(r)});
+$('jin').addEventListener('keydown',function(e){if(e.key==='Enter')$('jgo').click()});
+$('jscan').onclick=safe(openScanner);
+/* guest */
+function startGuest(rm){
+  role='guest';proxShow(false);$('hang').hidden=true;var target=PFX+rm;
+  $('hang').hidden=true;btn('mute','');setSt('Ready to join');
+  msg('Join the call','Tap the button, allow the microphone when asked, and you will be connected.','');
+  btn('mb','Join call',function(){doJoin(target)});btn('mb2','');
+  function doJoin(tg){
+    msg('Connecting','Allow the microphone if your phone asks.','');btn('mb','');setSt('Connecting');
+    getMic().then(function(s){
+      stream=s||silent();
+      if(!s)showErr('Microphone is off, so they cannot hear you. Allow the microphone in browser settings to talk.');
+      try{peer=new Peer({config:ICE,debug:0})}catch(x){msg('Cannot start','This browser cannot make calls.','');return}
+      var answered=false;
+      var to=setTimeout(function(){if(!answered){fail('No answer','The other phone did not answer. Ask them to show a fresh code and try again.')}},25000);
+      peer.on('open',function(){
+        try{call=peer.call(tg,stream)}catch(x){fail('Could not call','Please try again.');return}
+        call.on('stream',function(rs){answered=true;clearTimeout(to);attach(rs);setSt('Connected');msg('Connected','The call is live.','00:00');startTimer();lock(true);btn('mute','Mute',setMute);$('hang').hidden=false;btn('hang','Hang up',function(){endGuest()})});
+        call.on('close',function(){if(answered)endGuest()});
+        call.on('error',function(){fail('Call dropped','Please try again.')});
+        try{var pc=call.peerConnection;pc.addEventListener('iceconnectionstatechange',function(){if(pc.iceConnectionState==='failed')fail('Could not connect','Your networks may block direct calls. Try Wi-Fi on both phones, or ask for a fresh code.')})}catch(x){}
+      });
+      peer.on('error',function(e){var t=e&&e.type;clearTimeout(to);
+        if(t==='peer-unavailable')fail('Code not active','This code is not active any more. Ask them to show a fresh code.');
+        else if(t==='network'||t==='server-error'||t==='socket-error')fail('No connection','Check your internet connection and try again.');
+        else fail('Could not connect','Call service problem: '+(t||'unknown')+'.')});
+    });
+  }
+  function fail(h,p){cleanupCall();try{if(peer)peer.destroy()}catch(x){}peer=null;setSt('Not connected');msg(h,p,'');btn('mb','Try again',function(){doJoin(target)});btn('mb2','Show my own code',showMine);$('hang').hidden=true}
+  function endGuest(){cleanupCall();try{if(peer)peer.destroy()}catch(x){}peer=null;setSt('Call ended');msg('Call ended','Thanks for calling.','');btn('mb','Join again',function(){doJoin(target)});btn('mb2','Show my own code',showMine);$('hang').hidden=true}
+}
+$('hang').onclick=null;
+function boot(){
+  try{initProx();
+    var rm=getRoom();
+    if(rm)startGuest(rm);else startHost();
+  }catch(x){msg('Something went wrong','Please reload the page.','');btn('mb','Reload',function(){location.reload()})}
+}
+boot();
+try{if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){window.addEventListener('load',function(){setTimeout(function(){try{navigator.serviceWorker.register('sw.js').catch(function(){})}catch(x){}},1500)})}}catch(x){}
+window.__cbqr={prox:function(){return $('pst').textContent},room:function(){return room},url:function(){return curUrl},role:function(){return role},ready:performance.now()};
+})();
+</script></body></html>

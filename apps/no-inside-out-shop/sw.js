@@ -1,0 +1,2 @@
+const C='nio-v5';self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(['./','index.html','manifest.json','logo.png','icon-192.png','icon-512.png'].concat(["mockups/456.jpg", "mockups/71.jpg", "mockups/713.jpg", "mockups/476.jpg", "mockups/484.jpg", "mockups/146.jpg", "mockups/603.jpg", "mockups/145.jpg", "mockups/882.jpg", "mockups/189.jpg", "mockups/641.jpg", "mockups/449.jpg"])))));
+self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));

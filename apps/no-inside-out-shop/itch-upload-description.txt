@@ -1,0 +1,19 @@
+Title: No Inside Out Shop
+URL: https://coffeebreaks.itch.io
+Price: Free (tips welcome)
+Kind: HTML (play in browser) - works on phone, tablet and computer
+
+Short description:
+No Inside Out Shop by Coffeebreak.
+
+What's new:
+- Cart fixed so it shows and works on phone and computer
+- Help button with how to play, bigger text, calm mode, read aloud, full screen, undo and redo, share and report a problem
+- Works on phone, tablet and computer, and your progress saves itself
+- The Coffeebreak logo is added to downloads
+
+How to pay: Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com
+
+Rights: © Karen O'Brien (Coffeebreak). Karen O'Brien keeps all rights to this app, its designs, name and logo. Buyers may resell the physical item they bought but may not copy it or make their own version. Third-party brands named belong to their owners.
+
+Tags: coffeebreak, app

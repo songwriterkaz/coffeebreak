@@ -1,0 +1,17 @@
+{
+  "name": "Coffeebreak Date Night Auction",
+  "short_name": "Date Night Auction",
+  "description": "A free charity auction app for date night experiences. Pledged bids only. Takes no money. Unofficial planning tool.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fff6ea",
+  "theme_color": "#a3124f",
+  "lang": "en-AU",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

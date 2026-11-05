@@ -1,0 +1,7 @@
+Title: Coffeebreak Music Tool Maker
+Short description: Free music software that makes its own new tools: synths, drums, tuners and more, built in your browser.
+Kind: HTML (play in browser), embed 1000x800, price free
+Tags: music, music-production, synth, drum-machine, tool, generator, anime, songwriting
+Description: Press Make a new tool and the app combines 2 to 4 building blocks into a working music tool with its own name, colours, key, tempo and sound. Save, rename, reopen and download tools. Auto make, Anime mode, and an AI prompt helper. Tools are built from building blocks in your browser, not by a live AI, and nothing is sent anywhere.
+Coffeebreak, songwriter and creator from Newcastle NSW. https://coffeebreaks.itch.io
+Coffeebreak keeps all rights to this software, its design, name and logo. You may use the music you make for your own projects but not copy, resell or make your own version of this software.

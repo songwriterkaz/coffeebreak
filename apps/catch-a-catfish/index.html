@@ -1,11 +1,566 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Catch a Catfish</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Catch a Catfish</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Catch a Catfish - Coffeebreak</title>
+<meta name="description" content="A free fishing game that teaches you the red flags of fake online profiles, plus a private checklist for checking a real profile.">
+<style>
+:root{--bg:#fff6f0;--ink:#3b2a24;--pink:#f4b6c2;--pink2:#e98fa6;--brown:#6b4a3e;--card:#ffffff;--water:#7fc6d9;--water2:#4fa3bf;--good:#2e7d4f;--bad:#b3392f;--warn:#b26a00;--line:#ead4c8}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:10px 12px 28px}
+header{display:flex;align-items:center;gap:10px;padding:6px 2px}
+.logo{width:52px;height:52px;border-radius:50%;flex:none;border:2px solid var(--pink);background:#fff7ef url(cb-logo.jpg) no-repeat;background-size:218px auto;background-position:-28px -8px}
+h1{font-size:22px;line-height:1.1;margin:0}
+header p{margin:2px 0 0;font-size:13px;color:var(--brown)}
+.rm-wrap{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:13px;min-height:48px;cursor:pointer}
+.rm-wrap input{width:24px;height:24px;accent-color:var(--pink2)}
+.tabs{display:flex;gap:8px;margin:8px 0 12px}
+.tab{flex:1;min-height:52px;border:2px solid var(--pink);background:#fff;color:var(--ink);border-radius:14px;font:inherit;font-weight:700;cursor:pointer;padding:6px 8px}
+.tab[aria-selected=true]{background:var(--pink);border-color:var(--pink2)}
+.tab:focus-visible,button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #5b3fd0;outline-offset:2px}
+.panel[hidden]{display:none}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px 10px;font-size:14px}
+.stat b{font-size:17px}
+.pond{border-radius:18px;overflow:hidden;border:2px solid var(--water2);background:var(--water);line-height:0}
+.pond svg{width:100%;height:auto;display:block}
+.ripple{transform-box:fill-box;transform-origin:center;animation:rip 6s ease-in-out infinite}
+.ripple.r2{animation-delay:-2.5s}
+@keyframes rip{0%,100%{transform:scale(.9);opacity:.5}50%{transform:scale(1.12);opacity:.85}}
+.cloud{animation:drift 40s linear infinite alternate}
+@keyframes drift{from{transform:translateX(-14px)}to{transform:translateX(26px)}}
+body.rm .ripple,body.rm .cloud{animation:none}
+body.rm *{scroll-behavior:auto!important;transition:none!important}
+.btn{min-height:52px;min-width:52px;border-radius:14px;border:2px solid var(--brown);background:var(--pink);color:var(--ink);font:inherit;font-weight:800;font-size:17px;padding:10px 16px;cursor:pointer}
+.btn.big{width:100%;margin-top:10px}
+.btn.good{background:#bfe5cb;border-color:var(--good)}
+.btn.bad{background:#f7c9c3;border-color:var(--bad)}
+.btn.alt{background:#fff}
+.btn[disabled]{opacity:.55;cursor:default}
+.msg{margin:10px 2px;font-size:15px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px;margin-top:12px;box-shadow:0 2px 0 var(--line)}
+.prof{display:flex;gap:12px;align-items:flex-start}
+.av{width:96px;height:96px;border-radius:16px;flex:none;overflow:hidden;border:2px solid var(--line);line-height:0}
+.av svg{width:100%;height:100%}
+.pn{font-weight:800;font-size:18px;line-height:1.15}
+.ph{color:var(--brown);font-size:14px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{background:#fdeee6;border:1px solid var(--line);border-radius:999px;font-size:13px;padding:2px 9px}
+.sec{margin-top:10px}
+.sec h3{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--brown);margin:0 0 4px}
+.sec p{margin:0}
+.chat{display:flex;flex-direction:column;gap:6px}
+.bub{background:#f1ecff;border-radius:14px 14px 14px 4px;padding:8px 11px;max-width:92%;font-size:15px}
+.flags{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.flag{min-height:56px;border:2px solid var(--line);background:#fff;border-radius:12px;font:inherit;font-size:14px;font-weight:600;text-align:left;padding:6px 10px;cursor:pointer;color:var(--ink)}
+.flag[aria-pressed=true]{background:#ffe3a8;border-color:var(--warn)}
+.flag[aria-pressed=true]::before{content:"\2691  "}
+.hint{background:#eef7ff;border:1px solid #bcd9f0;border-radius:12px;padding:8px 10px;margin-top:8px;font-size:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.res h2{margin:0 0 4px;font-size:20px}
+.res .fishico{width:84px;height:48px;float:right;margin-left:8px}
+.fl{list-style:none;padding:0;margin:8px 0 0}
+.fl li{padding:8px 10px;border-radius:12px;margin-bottom:6px;font-size:15px;border:1px solid var(--line);background:#fffaf6}
+.fl li.got{border-color:#9fd3b2;background:#f0faf3}
+.fl li.miss{border-color:#f0c48a;background:#fff7e8}
+.fl li.extra{border-color:#e2e2e2;background:#f7f7f7}
+.small{font-size:13px;color:var(--brown)}
+.stars{font-size:28px;letter-spacing:4px}
+.note{background:#fff3cf;border:2px solid #e8c768;border-radius:14px;padding:10px 12px;margin:6px 0 12px;font-size:15px}
+.note ul{margin:6px 0 0 18px;padding:0}
+.step{background:#fff;border:2px solid var(--line);border-radius:18px;padding:12px;margin-bottom:12px}
+.step h2{font-size:18px;margin:0 0 6px}
+.step .n{display:inline-block;background:var(--pink);border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;margin-right:6px;font-weight:800;font-size:15px}
+.q{border-top:1px solid var(--line);padding:10px 0}
+.q:first-of-type{border-top:0}
+.q p{margin:0 0 6px;font-size:15px}
+.opts{display:flex;gap:6px}
+.opts label{flex:1}
+.opts input{position:absolute;opacity:0;width:1px;height:1px}
+.opts span{display:flex;align-items:center;justify-content:center;min-height:48px;border:2px solid var(--line);border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;background:#fff;text-align:center}
+.opts input:checked+span{background:var(--pink);border-color:var(--brown)}
+.opts input:focus-visible+span{outline:3px solid #5b3fd0;outline-offset:2px}
+.links{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.lk{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:52px;padding:8px 12px;border:2px solid var(--brown);border-radius:14px;background:#fff;color:var(--ink);text-decoration:none;font-weight:700;font-size:15px}
+.lk small{display:block;font-weight:400;color:var(--brown);font-size:12px}
+.lk::after{content:"\2197";font-size:18px}
+.risk{border-radius:14px;padding:12px;margin-top:10px;border:2px solid}
+.risk.low{background:#f0faf3;border-color:#9fd3b2}
+.risk.med{background:#fff7e8;border-color:#f0c48a}
+.risk.high{background:#fdecea;border-color:#e59a93}
+.risk h3{margin:0 0 4px;font-size:18px}
+.risk ul{margin:6px 0 0 18px;padding:0}
+footer{margin-top:22px;padding:14px;border-top:2px solid var(--line);text-align:center;font-size:13px;color:var(--brown)}
+footer img{width:min(100%,360px);height:auto;border-radius:12px;display:block;margin:0 auto 8px}
+.sr{position:absolute;left:-9999px}
+@media(min-width:700px){.flags{grid-template-columns:1fr 1fr 1fr}.btn.big{max-width:420px;display:block;margin-left:auto;margin-right:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="logo" role="img" aria-label="Coffeebreak logo"></div>
+<div><h1>Catch a Catfish</h1><p>Spot fake profiles before they hook you</p></div>
+<label class="rm-wrap"><input type="checkbox" id="rm"> Reduce motion</label>
+</header>
+
+<div class="tabs" role="tablist" aria-label="Sections">
+<button class="tab" role="tab" id="t-game" aria-selected="true" aria-controls="p-game" data-tab="game">Play the pond</button>
+<button class="tab" role="tab" id="t-tool" aria-selected="false" aria-controls="p-tool" data-tab="tool">Check a real profile</button>
+</div>
+
+<!-- GAME -->
+<section class="panel" id="p-game" role="tabpanel" aria-labelledby="t-game">
+<div class="stats" aria-live="polite">
+<div class="stat">Level <b id="sLvl">1</b></div>
+<div class="stat">Fish <b id="sFish">0/6</b></div>
+<div class="stat">Score <b id="sScore">0</b></div>
+<div class="stat">Streak <b id="sStreak">0</b></div>
+</div>
+<div class="pond" aria-hidden="true">
+<svg viewBox="0 0 390 190" id="pondSvg">
+<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfeefa"/><stop offset="1" stop-color="#fdf3e6"/></linearGradient>
+<linearGradient id="wat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ed0e0"/><stop offset="1" stop-color="#4a9bb8"/></linearGradient></defs>
+<rect width="390" height="190" fill="url(#sky)"/>
+<g class="cloud"><ellipse cx="90" cy="26" rx="34" ry="10" fill="#fff" opacity=".85"/><ellipse cx="116" cy="20" rx="22" ry="9" fill="#fff" opacity=".85"/></g>
+<g class="cloud" style="animation-duration:55s"><ellipse cx="290" cy="38" rx="30" ry="9" fill="#fff" opacity=".8"/></g>
+<rect y="92" width="390" height="98" fill="url(#wat)"/>
+<ellipse class="ripple" cx="230" cy="150" rx="46" ry="7" fill="none" stroke="#e8f8ff" stroke-width="2"/>
+<ellipse class="ripple r2" cx="120" cy="166" rx="38" ry="6" fill="none" stroke="#e8f8ff" stroke-width="2"/>
+<ellipse cx="330" cy="138" rx="20" ry="6" fill="#6fb36f"/><ellipse cx="352" cy="148" rx="16" ry="5" fill="#5da05d"/>
+<g stroke="#4b7d44" stroke-width="3" stroke-linecap="round"><path d="M372 100v-34M378 100v-26M366 100v-22"/></g>
+<rect x="0" y="96" width="96" height="12" fill="#9a6b4a"/><rect x="10" y="108" width="8" height="40" fill="#7d5438"/><rect x="70" y="108" width="8" height="40" fill="#7d5438"/>
+<g id="angler"><circle cx="46" cy="66" r="11" fill="#f2c9a6"/><path d="M34 62q12-16 24 0z" fill="#f3d36b"/><rect x="36" y="76" width="20" height="20" rx="6" fill="#e98fa6"/></g>
+<path d="M52 82L130 42" stroke="#6b4a3e" stroke-width="3" stroke-linecap="round"/>
+<path id="line" d="M130 42L130 42" stroke="#fff" stroke-width="1.6" fill="none"/>
+<g id="bob" transform="translate(130 42)"><circle r="6" fill="#fff" stroke="#c0392b" stroke-width="2"/><path d="M-6 0a6 6 0 0 1 12 0z" fill="#e0453a"/></g>
+<g id="fish" transform="translate(195 70)" style="display:none">
+<ellipse rx="26" ry="14" fill="#f0a66a"/><path d="M24 0l16-12v24z" fill="#e4894a"/><circle cx="-12" cy="-3" r="3" fill="#3b2a24"/>
+<rect x="-8" y="-6" width="22" height="18" rx="3" fill="#fff" stroke="#6b4a3e" stroke-width="1.5" transform="rotate(-8)"/><text x="3" y="8" font-size="14" font-weight="700" text-anchor="middle" fill="#6b4a3e" transform="rotate(-8)">?</text></g>
+</svg>
+</div>
+<p class="msg" id="gMsg" aria-live="polite">Cast your line and see what bites. Each catch is an invented profile. Decide if it is a real friend or a catfish.</p>
+<div id="gArea"></div>
+</section>
+
+<!-- TOOL -->
+<section class="panel" id="p-tool" role="tabpanel" aria-labelledby="t-tool" hidden>
+<div class="note"><b>Please read first.</b> This is a checklist, not a detective. It cannot unmask anyone and it does not look anyone up. Your answers stay on this page, nothing is uploaded and nothing is saved.
+<ul>
+<li>Do not confront, threaten or shame the person.</li>
+<li>Do not send money, gift cards or crypto, and do not share personal details, ID or bank information.</li>
+<li>Stop contact, keep screenshots, then report.</li>
+<li>Do not post accusations. If you are wrong, a real person can be hurt.</li>
+</ul></div>
+
+<div class="step"><h2><span class="n">1</span>Check the photos</h2>
+<p class="small">Open a reverse image search in a new tab, then upload or paste one of their profile photos. Stock photos and stolen photos often show up under other names.</p>
+<div class="links">
+<a class="lk" href="https://images.google.com" target="_blank" rel="noopener noreferrer"><span>Google Images<small>Tap the camera icon to search by image</small></span></a>
+<a class="lk" href="https://lens.google.com" target="_blank" rel="noopener noreferrer"><span>Google Lens<small>Search with a photo or screenshot</small></span></a>
+<a class="lk" href="https://tineye.com" target="_blank" rel="noopener noreferrer"><span>TinEye<small>Reverse image search, finds where else a photo appears</small></span></a>
+</div>
+<div id="q-photos"></div></div>
+
+<div class="step"><h2><span class="n">2</span>Check the account</h2><div id="q-account"></div></div>
+<div class="step"><h2><span class="n">3</span>Check the chat</h2><div id="q-chat"></div></div>
+
+<div class="step"><h2><span class="n">4</span>Try a video call test</h2>
+<p class="small">A real person is usually happy to say hello on a short live video call. Suggest one on the same app you already use, and keep your phone number and other accounts private.</p>
+<ul class="small" style="margin:4px 0 8px 18px;padding:0">
+<li>Ask for a quick live video call, a few minutes is enough.</li>
+<li>During the call, ask them to do something simple and unscripted, like show their hand next to their face or read out today's date.</li>
+<li>Watch for a pre-recorded look, a frozen picture, a face that does not match the photos, or a lot of excuses.</li>
+<li>A call that goes well does not prove everything is fine. Keep other checks going.</li>
+</ul>
+<div id="q-video"></div></div>
+
+<div class="step"><h2><span class="n">5</span>Money and personal details</h2><div id="q-money"></div></div>
+
+<button class="btn big" id="calc">Work out my risk</button>
+<div id="riskOut" aria-live="polite"></div>
+<button class="btn big alt" id="resetTool" style="margin-bottom:12px">Start again</button>
+
+<div class="step"><h2><span class="n">6</span>Report in Australia</h2>
+<p class="small">Reporting helps stop the person from hurting others. If you are in immediate danger, call 000. If you sent money, call your bank first, using the number on your card.</p>
+<div class="links">
+<a class="lk" href="https://portal.scamwatch.gov.au/report-a-scam/" target="_blank" rel="noopener noreferrer"><span>Scamwatch, report a scam<small>scamwatch.gov.au, National Anti-Scam Centre</small></span></a>
+<a class="lk" href="https://www.scamwatch.gov.au/types-of-scams/relationship-scams" target="_blank" rel="noopener noreferrer"><span>Scamwatch, relationship scams<small>Warning signs and what to do</small></span></a>
+<a class="lk" href="https://www.cyber.gov.au/report-and-recover/report" target="_blank" rel="noopener noreferrer"><span>ReportCyber<small>cyber.gov.au, report cybercrime to police</small></span></a>
+<a class="lk" href="https://www.esafety.gov.au/report" target="_blank" rel="noopener noreferrer"><span>eSafety Commissioner<small>esafety.gov.au, abuse, threats and image-based abuse</small></span></a>
+<a class="lk" href="https://www.idcare.org" target="_blank" rel="noopener noreferrer"><span>IDCARE<small>idcare.org, free help if your identity or details are at risk</small></span></a>
+</div>
+<h3 style="margin:14px 0 2px;font-size:15px">Report the profile to the platform</h3>
+<p class="small">Report first, then block. You can also use the Report option inside any app.</p>
+<div class="links">
+<a class="lk" href="https://www.facebook.com/help/1380418588640631" target="_blank" rel="noopener noreferrer"><span>Facebook<small>Report content and profiles</small></span></a>
+<a class="lk" href="https://help.instagram.com/192435014247952" target="_blank" rel="noopener noreferrer"><span>Instagram<small>Report a post or profile</small></span></a>
+<a class="lk" href="https://www.tiktok.com/safety/en/report" target="_blank" rel="noopener noreferrer"><span>TikTok<small>Trust and safety, reporting</small></span></a>
+<a class="lk" href="https://help.snapchat.com/hc/en-us/articles/7012399221652" target="_blank" rel="noopener noreferrer"><span>Snapchat<small>Report abuse and violations</small></span></a>
+<a class="lk" href="https://faq.whatsapp.com/1142481766359885" target="_blank" rel="noopener noreferrer"><span>WhatsApp<small>Block and report someone</small></span></a>
+</div></div>
+</section>
+
+<footer>
+<img src="cb-logo.jpg" alt="Coffeebreak logo">
+Coffeebreak by Karen O'Brien. Karen keeps all rights to this app, its designs, name and logo. You may not copy it or make your own versions.
+<br><span>All profiles in the game are invented. Any likeness to a real person is by chance.</span>
+</footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+/* guarded storage with in-memory fallback */
+var mem={};
+var store={get:function(k){try{var v=window.localStorage.getItem(k);return v===null?(k in mem?mem[k]:null):v}catch(e){return k in mem?mem[k]:null}},
+set:function(k,v){mem[k]=String(v);try{window.localStorage.setItem(k,String(v))}catch(e){}}};
+
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function rint(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+
+/* reduce motion */
+var rmBox=$('rm');
+var rm=false;
+try{rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+if(store.get('cbcf_rm')==='1')rm=true;
+function applyRm(){document.body.classList.toggle('rm',rm);rmBox.checked=rm}
+rmBox.addEventListener('change',function(){rm=rmBox.checked;store.set('cbcf_rm',rm?'1':'0');applyRm()});
+applyRm();
+
+/* tabs */
+function showTab(t){
+ ['game','tool'].forEach(function(n){var on=n===t;$('p-'+n).hidden=!on;$('t-'+n).setAttribute('aria-selected',on?'true':'false')});
+ if(t!=='game')clearTimers();
+ window.scrollTo(0,0);
+}
+document.querySelectorAll('[data-tab]').forEach(function(b){b.addEventListener('click',function(){showTab(b.getAttribute('data-tab'))})});
+
+/* ---------- red flags ---------- */
+var FLAGS={
+ stock:{label:'Stock-photo look',why:'The photo looks like a glossy modelling or stock picture, with a studio backdrop or a watermark. Scammers often use photos taken from stock sites or from other people. A reverse image search can show where else a photo appears.'},
+ newacct:{label:'Brand new account',why:'The account is only days or weeks old with very few friends. Scammers open fresh accounts all the time after old ones get reported. A new account is not proof on its own, but it is worth noticing.'},
+ novideo:{label:'Will not video call',why:'They always have a reason why they cannot do a live video call. A real person can usually manage a short call. Endless excuses are one of the most common signs of a catfish.'},
+ money:{label:'Asks for money, gift cards or crypto',why:'Asking for money, gift cards, bank transfers or crypto is the biggest red flag. Never send any, however sad or kind the story sounds, and even if they promise to pay you back.'},
+ hurry:{label:'Rushes to private chat',why:'They want to move to a private chat or another app quickly. Scammers do this to get away from the platform that could spot them and remove the account.'},
+ sob:{label:'Sob story',why:'A sad emergency story, often arriving just as the friendship feels close. It is designed to make you feel sorry enough to help with money. A real friend can wait while you check.'},
+ toogood:{label:'Too good to be true',why:'The profile is a bit too perfect, or they declare strong feelings very fast. Fast and flattering is how scammers build trust before they ask for something.'},
+ mismatch:{label:'Details do not match',why:'Parts of the story do not line up, such as where they live, their age or their job. Scammers forget their own details because they are juggling many stories.'}
+};
+var FLAG_ORDER=['stock','newacct','novideo','money','hurry','sob','toogood','mismatch'];
+
+var ADJ=['sunny','quiet','maple','blue','cosy','wild','little','lucky','happy','salty','misty','golden','breezy','plum'];
+var NOUN=['pebble','biscuit','kettle','lantern','otter','button','meadow','teacup','comet','pickle','moth','pine','wombat','daisy'];
+var CITIES=['Hobart','Ballarat','Wagga Wagga','Bunbury','Cairns','Geelong','Toowoomba','Launceston','Albury','Mildura','Bendigo','Darwin'];
+var FAR=['Dubai','Lagos','Lisbon','Kuala Lumpur','Houston','Moscow','Manila','Istanbul'];
+var JOBS=['baker','teacher','gardener','electrician','librarian','chef','carpenter','bus driver'];
+var OTHERJOBS=['pilot','army doctor','oil rig engineer','fashion model','ship captain','investor'];
+var HOBBIES=['gardening','footy','baking','bushwalking','board games','fishing','pottery','knitting'];
+var OPENERS=['Hi, I saw your photo of the sunset at the beach. Gorgeous colours.','Hello, we have a few friends in common so I thought I would say hi.','Hey there, I liked your post about the dog park.','Hi, your garden pictures made my day.'];
+var FRIEND_CHAT=[
+ ['Hey, did you see the footy score last night','We should catch up on a video call on Sunday, I will be free after lunch.'],
+ ['Thanks for the recipe, the scones turned out great','Want to swap more ideas on a call this weekend'],
+ ['Loved your pottery photos. Where did you get that glaze','I can show you mine on a quick video call if you like.'],
+ ['Morning. Are you coming to the market on Saturday','I will bring the plants I promised and we can have a coffee.']
+];
+var DECOYS=[
+ {chat:['I had a rough week, work was flat out. Nothing a good sleep will not fix.','Anyway, how is your week going'],note:'They mentioned a rough week but asked for nothing. Sharing a bad day is normal between friends.'},
+ {chat:['That cafe now charges six dollars for a flat white, can you believe it','Let us try the new place, my shout.'],note:'They talked about money, but only in everyday chat. Nobody was asked to send anything.'},
+ {chat:['I am terrible at posting, only a few photos on here.','Happy to jump on a video call if that is easier.'],note:'Few posts is not a red flag when the person is happy to video call.'},
+ {chat:['I am a bit shy in text, I talk more in person.','Free for a call Thursday evening if you are around.'],note:'A shy person who offers a call is behaving like a real friend.'}
+];
+var LEVELS=[
+ {n:1,fish:6,fmin:3,fmax:4,decoy:0,cat:.6,name:'Easy water'},
+ {n:2,fish:6,fmin:3,fmax:3,decoy:.35,cat:.6,name:'Shallow creek'},
+ {n:3,fish:6,fmin:2,fmax:3,decoy:.5,cat:.6,name:'Reedy bend'},
+ {n:4,fish:6,fmin:2,fmax:2,decoy:.6,cat:.6,name:'Deep pool'},
+ {n:5,fish:6,fmin:1,fmax:2,decoy:.7,cat:.6,name:'Misty lake'}
+];
+
+function mkProfile(isCat,lvl){
+ var L=LEVELS[lvl];
+ var adj=pick(ADJ),noun=pick(NOUN);
+ var p={cat:isCat,flags:[],handle:adj+'_'+noun+rint(11,98),disp:adj.charAt(0).toUpperCase()+adj.slice(1)+' '+noun.charAt(0).toUpperCase()+noun.slice(1)};
+ var city=pick(CITIES),job=pick(JOBS),hob=pick(HOBBIES);
+ p.joined=rint(1,8)+' years ago';p.friends=rint(90,640);p.loc=city;
+ p.bio='Lives in '+city+'. '+job.charAt(0).toUpperCase()+job.slice(1)+' and keen on '+hob+'.';
+ p.posts='Recent posts: '+hob+', local cafe, weekend market.';
+ p.chat=[];p.decoyNote='';
+ var skin=pick(['#f2c9a6','#e0a97d','#c68a5c','#8d5a3b','#f6d6bd']);
+ p.av={bg:pick(['#fde2e4','#e2ece9','#dfe7fd','#fff1d6','#e8def8']),skin:skin,hair:pick(['#3b2a24','#6b4a3e','#d9a441','#222','#a14a2e','#8b8b8b']),hs:rint(0,4),shirt:pick(['#e98fa6','#7fb8d6','#9fd3b2','#f3d36b','#b79ce0']),glam:false};
+ if(!isCat){
+  var fc=pick(FRIEND_CHAT);
+  p.chat=[pick(OPENERS)].concat(fc);
+  if(Math.random()<L.decoy){var d=pick(DECOYS);p.chat=[pick(OPENERS)].concat(d.chat);p.decoyNote=d.note}
+  return p;
+ }
+ var pool=shuffle(FLAG_ORDER);
+ var k=rint(L.fmin,L.fmax);
+ if(k===1){pool=shuffle(['money','novideo','mismatch','hurry'])}
+ p.flags=pool.slice(0,k);
+ var chat=[pick(OPENERS)];
+ p.flags.forEach(function(f){
+  if(f==='stock'){p.av.glam=true}
+  else if(f==='newacct'){p.joined=pick(['3 days ago','6 days ago','2 weeks ago']);p.friends=rint(6,24);p.posts='Recent posts: 2 photos, both added the day they joined.'}
+  else if(f==='novideo'){chat.push(pick(['My camera is broken so no video calls, but I really want to meet you.','I cannot do video, the signal is bad where I work. Maybe next month.','Video calls make me nervous, lets just type.']))}
+  else if(f==='money'){chat.push(pick(['Could you buy me a gift card Just 150 dollars, I will pay you back on Friday.','I need to send money fast. Can you help me with some crypto, I will show you how.','Please transfer 300 dollars to my cousin account, I will return it double.']))}
+  else if(f==='hurry'){chat.push(pick(['This app is so slow. Add me on my other chat app, I will send my number now.','Lets go private right away, I do not like talking where people can see.']))}
+  else if(f==='sob'){chat.push(pick(['My wallet was stolen and my flight home was cancelled. You are the only one who understands me.','My business lost everything this week. I do not know who else to tell.','There is a family emergency and I cannot say more. Please do not leave me.']))}
+  else if(f==='toogood'){p.bio=pick(['Rich investor, part time model, single and ready for my soulmate. Fell in love with your profile.','Handsome pilot, owns three houses, never been in love until I found you.']);chat.push(pick(['I think you are the most perfect person I have ever met. I already love you.','I have never felt this way. We are meant to be together.']))}
+  else if(f==='mismatch'){var far=pick(FAR);var oj=pick(OTHERJOBS);p.posts='Recent posts: tagged in '+far+' for three weeks, mostly '+oj+' work photos.';p.bio='Lives in '+city+'. '+job.charAt(0).toUpperCase()+job.slice(1)+' and keen on '+hob+'. Age 29.';p.extra='Photo caption says: "me on my 50th birthday".'}
+ });
+ p.chat=shuffle(chat.slice(1));p.chat.unshift(chat[0]);
+ return p;
+}
+
+/* avatar */
+function avatarSvg(a,name){
+ var s='<svg viewBox="0 0 120 120" role="img" aria-label="Drawn profile picture of '+esc(name)+'"><rect width="120" height="120" fill="'+(a.glam?'#2b2230':a.bg)+'"/>';
+ if(a.glam){s+='<defs><radialGradient id="gl" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#ffd9e6" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs><rect width="120" height="120" fill="url(#gl)"/>'}
+ var hairBack='';
+ if(a.hs===1)hairBack='<path d="M30 60q-4 40 8 50h44q12-10 8-50q-6-34-30-34t-30 34z" fill="'+a.hair+'"/>';
+ s+=hairBack;
+ s+='<path d="M20 120q0-26 40-26t40 26z" fill="'+(a.glam?'#c2185b':a.shirt)+'"/>';
+ s+='<rect x="52" y="84" width="16" height="14" fill="'+a.skin+'"/>';
+ s+='<ellipse cx="60" cy="58" rx="25" ry="29" fill="'+a.skin+'"/>';
+ if(a.hs===0)s+='<path d="M34 54q2-28 26-28t26 28q-8-12-26-12t-26 12z" fill="'+a.hair+'"/>';
+ else if(a.hs===1)s+='<path d="M34 56q2-30 26-30t26 30q-6-16-26-16t-26 16z" fill="'+a.hair+'"/>';
+ else if(a.hs===2)s+='<circle cx="60" cy="24" r="10" fill="'+a.hair+'"/><path d="M35 52q2-24 25-24t25 24q-8-10-25-10t-25 10z" fill="'+a.hair+'"/>';
+ else if(a.hs===3)s+='<circle cx="40" cy="38" r="10" fill="'+a.hair+'"/><circle cx="52" cy="30" r="10" fill="'+a.hair+'"/><circle cx="66" cy="30" r="10" fill="'+a.hair+'"/><circle cx="79" cy="38" r="10" fill="'+a.hair+'"/>';
+ else s+='<path d="M38 48q4-18 22-18t22 18q-10-6-22-6t-22 6z" fill="'+a.hair+'" opacity=".5"/>';
+ s+='<circle cx="49" cy="58" r="3" fill="#2b1d18"/><circle cx="71" cy="58" r="3" fill="#2b1d18"/>';
+ if(a.glam){s+='<path d="M44 55l-4-2M46 53l-2-3M76 55l4-2M74 53l2-3" stroke="#2b1d18" stroke-width="1.5"/><path d="M50 72q10 8 20 0q-10 3-20 0z" fill="#d81b60"/><circle cx="46" cy="66" r="4" fill="#ff8aa8" opacity=".4"/><circle cx="74" cy="66" r="4" fill="#ff8aa8" opacity=".4"/>';
+  s+='<path d="M96 14l2 5 5 2-5 2-2 5-2-5-5-2 5-2z M18 30l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z" fill="#fff" opacity=".85"/>';
+  s+='<g opacity=".4" fill="#fff" font-family="Arial,sans-serif" font-size="11" font-weight="700"><text x="-6" y="40" transform="rotate(-24 60 60)">stockpix 4821 stockpix</text><text x="-6" y="82" transform="rotate(-24 60 60)">stockpix 4821 stockpix</text></g>'}
+ else s+='<path d="M52 72q8 6 16 0" stroke="#2b1d18" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
+ return s+'</svg>';
+}
+function fishIcon(cat){
+ var s='<svg class="fishico" viewBox="0 0 84 48" aria-hidden="true">';
+ if(cat)s+='<ellipse cx="38" cy="26" rx="26" ry="13" fill="#7c8a9a"/><path d="M62 26l16-11v22z" fill="#66737f"/><circle cx="22" cy="23" r="2.6" fill="#222"/><path d="M14 30q-10 2-12 8M14 28q-12-2-14-9M14 32q-6 6-8 12" stroke="#4d5964" stroke-width="2" fill="none" stroke-linecap="round"/>';
+ else s+='<ellipse cx="38" cy="26" rx="26" ry="13" fill="#f0a66a"/><path d="M62 26l16-11v22z" fill="#e4894a"/><circle cx="22" cy="23" r="2.6" fill="#222"/><path d="M28 31q4 3 8 0" stroke="#a45a25" stroke-width="2" fill="none"/>';
+ return s+'</svg>';
+}
+
+/* ---------- game state ---------- */
+var timers=[];
+function later(fn,ms){var t=setTimeout(fn,ms);timers.push(t)}
+function clearTimers(){timers.forEach(clearTimeout);timers=[];if(raf)cancelAnimationFrame(raf)}
+var raf=0;
+var G={lvl:0,idx:0,score:0,streak:0,right:0,total:0,queue:[],cur:null,marked:{},hinted:false,hintCost:0,phase:'idle',best:+(store.get('cbcf_best')||0)};
+
+function setMsg(t){$('gMsg').textContent=t}
+function updStats(){
+ $('sLvl').textContent=G.lvl+1;$('sFish').textContent=Math.min(G.idx,LEVELS[G.lvl].fish)+'/'+LEVELS[G.lvl].fish;
+ $('sScore').textContent=G.score;$('sStreak').textContent=G.streak;
+}
+function buildQueue(){
+ var L=LEVELS[G.lvl],q=[],nc=Math.round(L.fish*L.cat);
+ for(var i=0;i<L.fish;i++)q.push(i<nc);
+ q=shuffle(q);
+ /* never open with two of the same many times: fine as is */
+ G.queue=q.map(function(c){return mkProfile(c,G.lvl)});
+ G.idx=0;G.right=0;
+}
+
+/* pond animation */
+var ROD=[130,42],BOBX=262,BOBY=128;
+function setLine(x,y,sag){var mx=(ROD[0]+x)/2,my=Math.max(ROD[1],y)+(sag||0);$('line').setAttribute('d','M'+ROD[0]+' '+ROD[1]+' Q'+mx+' '+my+' '+x+' '+y);$('bob').setAttribute('transform','translate('+x+' '+y+')')}
+function tween(from,to,ms,step,done){
+ if(rm){step(to,1);if(done)done();return}
+ var t0=null;
+ function f(t){if(t0===null)t0=t;var k=Math.min(1,(t-t0)/ms);var e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;step(from+(to-from)*e,e);if(k<1)raf=requestAnimationFrame(f);else if(done)done()}
+ raf=requestAnimationFrame(f);
+}
+function pondReset(){clearTimers();$('fish').style.display='none';setLine(ROD[0],ROD[1],0)}
+function cast(){
+ if(G.phase!=='idle')return;
+ G.phase='cast';
+ $('gArea').innerHTML='';
+ pondReset();
+ setMsg('Casting your line.');
+ tween(0,1,900,function(v,e){var x=ROD[0]+(BOBX-ROD[0])*e;var y=ROD[1]+(BOBY-ROD[1])*e-Math.sin(e*Math.PI)*40;setLine(x,y,e<1?18:6)},function(){
+  setMsg('Waiting for a bite.');
+  later(function(){
+   setMsg('A bite.');
+   tween(0,1,500,function(v,e){setLine(BOBX,BOBY+Math.sin(e*Math.PI*3)*4,6)},function(){
+    var fx=$('fish');fx.style.display='';
+    tween(0,1,700,function(v,e){var x=BOBX+(195-BOBX)*e,y=BOBY+(66-BOBY)*e;fx.setAttribute('transform','translate('+x+' '+y+')');setLine(x+22*(1-e),y-6,0)},function(){hooked()});
+   });
+  },rm?250:rint(900,1600));
+ });
+}
+function hooked(){
+ G.cur=G.queue[G.idx];G.marked={};G.hinted=false;G.hintCost=0;G.phase='card';
+ setMsg('You hooked a profile. Read it, tick any red flags you see, then decide.');
+ renderCard();
+ var el=$('cardTop');if(el&&el.scrollIntoView){try{el.scrollIntoView({block:'start',behavior:rm?'auto':'smooth'})}catch(e){}}
+}
+function renderGameIdle(){
+ G.phase='idle';
+ $('gArea').innerHTML='<button class="btn big" data-a="cast">Cast your line</button>';
+ updStats();
+}
+function renderCard(){
+ var p=G.cur;
+ var h='<div class="card" id="cardTop"><div class="prof"><div class="av">'+avatarSvg(p.av,p.disp)+'</div><div><div class="pn">'+esc(p.disp)+'</div><div class="ph">@'+esc(p.handle)+'</div><div class="meta"><span class="tag">Joined '+esc(p.joined)+'</span><span class="tag">'+p.friends+' friends</span><span class="tag">'+esc(p.loc)+'</span></div></div></div>';
+ h+='<div class="sec"><h3>About</h3><p>'+esc(p.bio)+'</p></div>';
+ h+='<div class="sec"><h3>Posts</h3><p>'+esc(p.posts)+(p.extra?' '+esc(p.extra):'')+'</p></div>';
+ h+='<div class="sec"><h3>Their messages to you</h3><div class="chat">'+p.chat.map(function(c){return '<div class="bub">'+esc(c)+'</div>'}).join('')+'</div></div></div>';
+ h+='<div class="card"><b>Tick the red flags you can see</b><div class="small">You do not have to tick any. Real friends have none.</div><div class="flags">'+FLAG_ORDER.map(function(f){return '<button class="flag" data-a="flag" data-f="'+f+'" aria-pressed="'+(G.marked[f]?'true':'false')+'">'+esc(FLAGS[f].label)+'</button>'}).join('')+'</div>';
+ h+='<div id="hintBox"></div><button class="btn alt big" data-a="hint" style="margin-top:8px">Show me a hint (costs 3 points)</button>';
+ h+='<div class="row2"><button class="btn bad" data-a="catch">Reel in<br><span class="small">It is a catfish</span></button><button class="btn good" data-a="release">Let it go<br><span class="small">Real friend</span></button></div></div>';
+ $('gArea').innerHTML=h;
+}
+function hint(){
+ var p=G.cur,t;
+ if(p.cat){
+  var rest=p.flags.filter(function(f){return !G.marked[f]});
+  var f=rest.length?rest[0]:p.flags[0];
+  var where={stock:'Look closely at the profile picture.',newacct:'Check the Joined tag and the friends count.',novideo:'Read their messages about calling.',money:'Read their messages about money.',hurry:'Read their messages about where to chat.',sob:'Read their messages about how they feel.',toogood:'Read the About section and how fast they say they care.',mismatch:'Compare the About section with the Posts line.'};
+  t='Hint: '+where[f]
+ } else t='Hint: take a calm look. Nothing here asks you for anything, and the details line up.';
+ if(!G.hinted){G.hinted=true;G.hintCost=3}
+ $('hintBox').innerHTML='<div class="hint">'+esc(t)+'</div>';
+}
+function decide(sayCat){
+ var p=G.cur,ok=(sayCat===p.cat);
+ var got=[],miss=[],extra=[];
+ FLAG_ORDER.forEach(function(f){
+  var present=p.flags.indexOf(f)>=0,m=!!G.marked[f];
+  if(present&&m)got.push(f);else if(present)miss.push(f);else if(m)extra.push(f);
+ });
+ var pts=0;
+ if(ok){pts=10;if(p.cat)pts+=5*got.length;pts-=2*extra.length;pts-=G.hintCost;if(pts<1)pts=1}
+ else{pts=0}
+ if(ok){G.streak++;G.right++;if(G.streak>=3)pts+=2}else G.streak=0;
+ G.score+=pts;G.total++;G.idx++;
+ if(G.score>G.best){G.best=G.score;store.set('cbcf_best',G.best)}
+ G.phase='result';
+ var h='<div class="card res" id="cardTop">'+fishIcon(p.cat);
+ if(p.cat&&sayCat)h+='<h2>You caught a catfish</h2><p>Nicely done. Plus '+pts+' points.</p>';
+ else if(!p.cat&&!sayCat)h+='<h2>Real friend, safely released</h2><p>Well judged. Plus '+pts+' points.</p>';
+ else if(p.cat&&!sayCat)h+='<h2>That one slipped away</h2><p>It was a catfish. No harm done in the pond. Here is what to look for next time.</p>';
+ else h+='<h2>That was a real friend</h2><p>It is always good to be careful. Here is why this one was fine, and how to tell next time.</p>';
+ h+='<ul class="fl">';
+ if(p.cat){
+  got.forEach(function(f){h+='<li class="got"><b>You spotted: '+esc(FLAGS[f].label)+'.</b> '+esc(FLAGS[f].why)+'</li>'});
+  miss.forEach(function(f){h+='<li class="miss"><b>Also here: '+esc(FLAGS[f].label)+'.</b> '+esc(FLAGS[f].why)+'</li>'});
+  extra.forEach(function(f){h+='<li class="extra"><b>Not on this card: '+esc(FLAGS[f].label)+'.</b> That is a good thing to look for, it just was not here this time.</li>'});
+ } else {
+  h+='<li class="got"><b>No red flags on this card.</b> The account is older, the details agree, and nobody asked for money or rushed you.</li>';
+  if(p.decoyNote)h+='<li class="got"><b>Looks odd, but fine.</b> '+esc(p.decoyNote)+'</li>';
+  extra.forEach(function(f){h+='<li class="extra"><b>You ticked: '+esc(FLAGS[f].label)+'.</b> That was not on this card. Look for the actual sign before ticking.</li>'});
+ }
+ h+='</ul>';
+ var L=LEVELS[G.lvl];
+ h+='<button class="btn big" data-a="next">'+(G.idx>=L.fish?'See how you did':'Next cast')+'</button></div>';
+ $('gArea').innerHTML=h;
+ setMsg(ok?'Good call.':'Not this time, and that is okay.');
+ $('fish').style.display='none';
+ updStats();
+ var el=$('cardTop');if(el&&el.scrollIntoView){try{el.scrollIntoView({block:'start',behavior:rm?'auto':'smooth'})}catch(e){}}
+}
+function levelDone(){
+ var L=LEVELS[G.lvl],r=G.right,st=r>=L.fish-1?3:(r>=L.fish-2?2:1);
+ var last=G.lvl>=LEVELS.length-1;
+ var stars='';for(var i=0;i<3;i++)stars+=i<st?'\u2605':'\u2606';
+ var h='<div class="card res" id="cardTop"><h2>'+(last?'Pond master':'Level '+L.n+' complete')+'</h2><div class="stars" aria-label="'+st+' of 3 stars">'+stars+'</div><p>You got '+r+' of '+L.fish+' right in "'+esc(L.name)+'". Score so far: '+G.score+'. Best this visit: '+G.best+'.</p>';
+ if(last){h+='<p>You have finished every level. In real life the same habits protect you: check the photos, ask for a video call, never send money, and report.</p><button class="btn big" data-a="again">Play again from level 1</button><button class="btn big alt" data-a="gototool">Check a real profile</button>'}
+ else{h+='<p>Next up: level '+(L.n+1)+', "'+esc(LEVELS[G.lvl+1].name)+'". The flags get harder to spot.</p><button class="btn big" data-a="nextlvl">Go to level '+(L.n+1)+'</button><button class="btn big alt" data-a="again">Start over</button>'}
+ h+='</div>';
+ $('gArea').innerHTML=h;G.phase='done';setMsg(st===3?'Great fishing.':'Nice work, keep practising.');updStats();
+}
+document.addEventListener('click',function(e){
+ var b=e.target.closest?e.target.closest('[data-a]'):null;if(!b)return;
+ var a=b.getAttribute('data-a');
+ if(a==='cast')cast();
+ else if(a==='flag'){var f=b.getAttribute('data-f');G.marked[f]=!G.marked[f];b.setAttribute('aria-pressed',G.marked[f]?'true':'false')}
+ else if(a==='hint')hint();
+ else if(a==='catch')decide(true);
+ else if(a==='release')decide(false);
+ else if(a==='next'){pondReset();if(G.idx>=LEVELS[G.lvl].fish)levelDone();else{renderGameIdle();setMsg('Cast again to see who bites next.')}}
+ else if(a==='nextlvl'){G.lvl++;buildQueue();pondReset();renderGameIdle();setMsg('Level '+(G.lvl+1)+'. Cast your line.')}
+ else if(a==='again'){G.lvl=0;G.score=0;G.streak=0;G.total=0;buildQueue();pondReset();renderGameIdle();setMsg('Fresh pond. Cast your line.')}
+ else if(a==='gototool'){showTab('tool')}
+});
+
+/* ---------- real profile checklist ---------- */
+var QS={
+ 'q-photos':[
+  {id:'p1',t:'A reverse image search shows the same photo on other sites under different names.',w:4,crit:true},
+  {id:'p2',t:'The photos all look professional, like modelling or stock pictures.',w:2},
+  {id:'p3',t:'There are no photos with other people, tagged friends or real places.',w:1}],
+ 'q-account':[
+  {id:'a1',t:'The account is new or has very few posts or friends.',w:2},
+  {id:'a2',t:'Details do not match, such as where they live, their age or their job.',w:3},
+  {id:'a3',t:'Their profile seems too good to be true.',w:1}],
+ 'q-chat':[
+  {id:'c1',t:'They declared strong feelings very quickly.',w:2},
+  {id:'c2',t:'They keep asking to move to private chat or another app.',w:2},
+  {id:'c3',t:'They tell you to keep the friendship secret or not to talk to others about it.',w:3},
+  {id:'c4',t:'They tell a sad emergency story and need help urgently.',w:3}],
+ 'q-video':[
+  {id:'v1',t:'They avoid, cancel or make excuses about a live video call.',w:3},
+  {id:'v2',t:'On a call, they looked pre-recorded or did not match their photos.',w:4,crit:true}],
+ 'q-money':[
+  {id:'m1',t:'They asked for money, gift cards, crypto or a bank transfer, or pushed you to invest.',w:5,crit:true},
+  {id:'m2',t:'They asked for personal details, ID, passwords, or private photos or videos of you.',w:5,crit:true},
+  {id:'m3',t:'They got angry or made threats when you said no or asked questions.',w:4,crit:true}]
+};
+var ALLQ=[];
+function renderQs(){
+ Object.keys(QS).forEach(function(k){
+  var h='';
+  QS[k].forEach(function(q){ALLQ.push(q);h+='<div class="q" role="radiogroup" aria-labelledby="l_'+q.id+'"><p id="l_'+q.id+'">'+esc(q.t)+'</p><div class="opts">'+
+   [['y','Yes'],['u','Not sure'],['n','No']].map(function(o){return '<label><input type="radio" name="'+q.id+'" value="'+o[0]+'"><span>'+o[1]+'</span></label>'}).join('')+'</div></div>'});
+  $(k).innerHTML=h;
+ });
+}
+renderQs();
+function calc(){
+ var score=0,crit=[],yes=[],answered=0,moneyYes=false,privYes=false,threat=false;
+ ALLQ.forEach(function(q){
+  var v=document.querySelector('input[name="'+q.id+'"]:checked');
+  if(!v)return;answered++;
+  if(v.value==='y'){score+=q.w;yes.push(q);if(q.crit)crit.push(q);if(q.id==='m1')moneyYes=true;if(q.id==='m2')privYes=true;if(q.id==='m3')threat=true}
+  else if(v.value==='u')score+=q.w*0.4;
+ });
+ var out=$('riskOut');
+ if(answered===0){out.innerHTML='<div class="risk med"><h3>Nothing answered yet</h3><p>Answer a few questions above, then try again. Choosing Not sure is fine.</p></div>';return}
+ var lvl=(crit.length>0||score>=9)?'high':(score>=4?'med':'low');
+ var h='<div class="risk '+lvl+'" tabindex="-1" id="riskBox">';
+ if(lvl==='high'){h+='<h3>High risk: treat this as a likely scam</h3><p>This does not prove who they are, and it is not a reason to confront anyone. It is a reason to stop and protect yourself.</p>'}
+ else if(lvl==='med'){h+='<h3>Medium risk: slow down and keep checking</h3><p>There are some warning signs. Pause the friendship, do not share anything personal, and finish the photo and video checks.</p>'}
+ else{h+='<h3>Low risk so far</h3><p>Nothing worrying came up in your answers. That is not a guarantee. Keep the same rules: no money, no personal details, and stay alert if things change.</p>'}
+ h+='<p class="small">Score '+(Math.round(score*10)/10)+', from '+answered+' answers. Calculated only in this page.</p>';
+ if(yes.length){h+='<p><b>What you ticked yes to:</b></p><ul>'+yes.map(function(q){return '<li>'+esc(q.t)+'</li>'}).join('')+'</ul>'}
+ h+='<p style="margin-top:8px"><b>What to do next</b></p><ul>';
+ if(lvl!=='low'){h+='<li>Stop contact. You do not have to explain or say goodbye.</li><li>Keep screenshots of the profile, messages, usernames, phone numbers and any payment details.</li><li>Report the profile to the platform, then block them.</li><li>Report to Scamwatch, using the links below.</li>'}
+ else{h+='<li>Keep your guard up and repeat the checks if anything changes.</li><li>Report anything that feels wrong to the platform and to Scamwatch.</li>'}
+ if(moneyYes)h+='<li>If you have sent money, call your bank straight away on the number on your card, then lodge a ReportCyber report.</li>';
+ if(privYes||threat)h+='<li>If they are threatening you or have private images of you, do not pay and do not reply. Report to eSafety, and call 000 if you feel unsafe.</li><li>If your details or ID are at risk, IDCARE offers free help.</li>';
+ h+='<li>Talk to someone you trust. Scammers rely on secrecy, and it is never your fault.</li></ul>';
+ h+='<p class="small">Do not post accusations or try to find out who they really are. Leave that to the platforms and authorities.</p></div>';
+ out.innerHTML=h;
+ var bx=$('riskBox');if(bx){try{bx.scrollIntoView({block:'start',behavior:rm?'auto':'smooth'})}catch(e){}}
+}
+$('calc').addEventListener('click',calc);
+$('resetTool').addEventListener('click',function(){document.querySelectorAll('#p-tool input[type=radio]').forEach(function(i){i.checked=false});$('riskOut').innerHTML='';window.scrollTo(0,0)});
+
+buildQueue();renderGameIdle();updStats();
+window.__cf={avatarSvg:avatarSvg,G:G,FLAGS:FLAGS,LEVELS:LEVELS};
+})();
+</script>
+<div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body>
+</html>

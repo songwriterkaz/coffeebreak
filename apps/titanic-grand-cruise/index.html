@@ -1,11 +1,121 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Titanic: Grand Cruise</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Titanic: Grand Cruise</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Coffeebreak Titanic: Grand Cruise</title><link rel="icon" href="logo.png"><link rel="stylesheet" href="common.css">
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}</script></head><body>
+<img id="logo" src="logo.png" alt="Coffeebreak">
+<div id="hud"></div>
+<div id="menu"><img src="logo.png" alt="Coffeebreak"><h1>Coffeebreak Titanic: Grand Cruise</h1>
+<p>Walk a full size 269 metre ocean liner. Explore the decks, the grand staircase, the ballroom with Coffeebreak music, the cabins and the bridge, where you can take the wheel.</p>
+<p>Mac: WASD to walk, mouse to look, E to use the wheel, G to jump to places, Space to jump, Esc to free the mouse.<br>Phone: left pad to walk, drag to look, buttons to act.</p>
+<button class="btn" id="play">Board the ship</button></div>
+<div id="joy"><div id="knob"></div></div>
+<div class="tbtns"><button class="btn" id="go">Go to</button><button class="btn" id="use">Steer</button><button class="btn" id="jump">Jump</button></div>
+<script src="common.js"></script>
+<script type="module">
+import * as THREE from 'three';
+const R=new THREE.WebGLRenderer({antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));R.setSize(innerWidth,innerHeight);document.body.appendChild(R.domElement);
+const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x9fd3ff,200,1800);
+const cam=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,0.1,4000);
+const sun=new THREE.DirectionalLight(0xffffff,1.2);scene.add(sun);const hemi=new THREE.HemisphereLight(0xcfe8ff,0x223344,0.6);scene.add(hemi);
+const ship=new THREE.Group();scene.add(ship);ship.add(cam);
+const M=(c,o={})=>new THREE.MeshLambertMaterial({color:c,...o});
+const box=(w,h,d,c,x,y,z,par=ship)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),typeof c==='number'?M(c):c);m.position.set(x,y,z);par.add(m);return m};
+// hull outline
+const W=x=>x<-120?14*Math.sqrt(Math.max(0,1-((x+120)/14.5)**2)):x>90?14*(134.5-x)/44.5:14;
+const outline=()=>{const s=new THREE.Shape();const pts=[];for(let x=-134.5;x<=134.5;x+=1.5)pts.push([x,W(x)]);pts.push([134.5,0]);
+ s.moveTo(pts[0][0],0);pts.forEach(p=>s.lineTo(p[0],p[1]));for(let i=pts.length-1;i>=0;i--)s.lineTo(pts[i][0],-pts[i][1]);return s};
+const hide=new THREE.MeshBasicMaterial({visible:false});
+const hullPart=(y0,h,c)=>{const g=new THREE.ExtrudeGeometry(outline(),{depth:h,bevelEnabled:false});g.rotateX(-Math.PI/2);g.translate(0,y0,0);
+ const m=new THREE.Mesh(g,[hide,M(c,{side:THREE.DoubleSide})]);ship.add(m)};
+hullPart(-10,10,0x9b1b1b);hullPart(0,9,0x111111);hullPart(9,2.2,0xf4f4f4);
+const floors=[],walls=[];
+const flatShape=(sh,y,c)=>{const g=new THREE.ShapeGeometry(sh);g.rotateX(-Math.PI/2);g.translate(0,y,0);const m=new THREE.Mesh(g,M(c,{side:THREE.DoubleSide}));ship.add(m);floors.push(m);return m};
+flatShape(outline(),5,0x8a5a32);
+const top=outline();const hole=new THREE.Path();hole.moveTo(34,-4);hole.lineTo(46,-4);hole.lineTo(46,4);hole.lineTo(34,4);hole.lineTo(34,-4);top.holes.push(hole);
+flatShape(top,11,0xd8b98a);
+const wall=(x0,x1,z0,z1,y0,y1,c=0xf3e6d4)=>{box(x1-x0,y1-y0,z1-z0,c,(x0+x1)/2,(y0+y1)/2,(z0+z1)/2);walls.push({x0,x1,z0,z1,y0,y1})};
+const floorBox=(w,h,d,c,x,y,z)=>{const m=box(w,h,d,c,x,y,z);floors.push(m);return m};
+// grand staircase y5->11, x34..46
+const wood=M(0x6b3a1e);
+for(let i=0;i<30;i++)floorBox(0.4,0.2*(i+1),8,wood,34.2+i*0.4,5+0.1*(i+1),0);
+wall(34,46,-4.3,-4,5,12.2,0x5a2e15);wall(34,46,4,4.3,5,12.2,0x5a2e15);
+box(0.3,1.2,0.3,0xffd27a,34,5.6,-4.5);box(0.3,1.2,0.3,0xffd27a,34,5.6,4.5);
+const cherub=box(0.6,1.4,0.6,0xc9a24a,46.5,11.7,0);
+// ballroom x -60..-10
+wall(-60.3,-60,-14,-2,5,11);wall(-60.3,-60,2,14,5,11);wall(-10,-9.7,-14,-2,5,11);wall(-10,-9.7,2,14,5,11);
+const dance=box(30,0.06,18,M(0xff7ab8),-35,5.03,0);
+const tiles=[];for(let i=0;i<10;i++)for(let j=0;j<6;j++){const t=box(2.8,0.07,2.8,M((i+j)%2?0xffffff:0xff4fa3,{emissive:0x000000}),-48.5+i*3,5.04,-7.5+j*3);tiles.push(t)}
+box(10,1,5,0x5a2e15,-57,5.5,0);
+const logoTex=new THREE.TextureLoader().load('logo.png');
+const sign=new THREE.Mesh(new THREE.PlaneGeometry(4,4),new THREE.MeshBasicMaterial({map:logoTex,transparent:true}));sign.position.set(-59.8,8.5,0);sign.rotation.y=Math.PI/2;ship.add(sign);
+for(let i=0;i<3;i++){const c=new THREE.Mesh(new THREE.SphereGeometry(0.8,12,8),new THREE.MeshBasicMaterial({color:0xfff2c0}));c.position.set(-50+i*15,10,0);ship.add(c);const pl=new THREE.PointLight(0xffd9a0,40,30);pl.position.copy(c.position);ship.add(pl)}
+for(let i=0;i<8;i++){box(1.4,0.8,1.4,0xffffff,-55+i*6,5.4,10);box(1.4,0.8,1.4,0xffffff,-55+i*6,5.4,-10)}
+// cabins x 60..110
+for(let i=0;i<10;i++){const x0=60+i*5;
+ for(const s of[1,-1]){const zA=s*3,zB=s*Math.min(13,W(x0+5)-0.8);const za=Math.min(zA,zB),zb=Math.max(zA,zB);
+  wall(x0,x0+0.2,za,zb,5,8.5,0xe9d8c0);
+  wall(x0+0.2,x0+3.3,s>0?2.9:-3.1,s>0?3.1:-2.9,5,8.5,0xe9d8c0);
+  box(2.2,0.6,3.5,0xffffff,x0+3.5,5.3,s*(Math.abs(za+zb)/2+1));box(2.2,0.3,3.5,0xff9cc8,x0+3.5,5.65,s*(Math.abs(za+zb)/2+1));
+  box(0.5,1,0.5,0x6b3a1e,x0+1,5.5,s*(Math.abs(za+zb)/2+2.2));}}
+// superstructure slab y15 x -70..60
+floorBox(130,0.4,22,0xd8b98a,-5,14.8,0);
+for(let x=-70;x<=60;x+=10){box(0.4,4,0.4,0xffffff,x,13,-11);box(0.4,4,0.4,0xffffff,x,13,11)}
+box(130,1,0.1,0xffffff,-5,15.5,11);box(130,1,0.1,0xffffff,-5,15.5,-11);
+for(let i=0;i<20;i++)floorBox(0.4,0.2*(i+1),4,wood,-78+i*0.4,11+0.1*(i+1),8);
+const dome=new THREE.Mesh(new THREE.SphereGeometry(5,16,8,0,Math.PI*2,0,Math.PI/2),M(0xbfe6ff,{transparent:true,opacity:0.6}));dome.position.set(40,15,0);ship.add(dome);
+[-50,-22,6,34].forEach(x=>{const f=new THREE.Mesh(new THREE.CylinderGeometry(3,3.4,18,20),M(0xd9a441));f.position.set(x,24,0);f.scale.z=0.75;ship.add(f);
+ const t=new THREE.Mesh(new THREE.CylinderGeometry(3.05,3.05,3,20),M(0x111111));t.position.set(x,31.5,0);t.scale.z=0.75;ship.add(t)});
+for(let i=0;i<8;i++)for(const s of[1,-1]){const b=box(8,1.5,2.4,0xffffff,-62+i*14,16.2,s*9.5);}
+box(0.5,40,0.5,0x6b3a1e,100,30,0);box(0.5,36,0.5,0x6b3a1e,-110,28,0);
+// bridge
+wall(48,48.2,-8,-1.5,15,18.5,0xffffff);wall(48,48.2,1.5,8,15,18.5,0xffffff);wall(48,60,-8.2,-8,15,18.5,0xffffff);wall(48,60,8,8.2,15,18.5,0xffffff);
+wall(59.8,60,-8,8,15,16.2,0xffffff);box(12,0.2,16.4,0xffffff,54,18.6,0);box(0.1,2,16,M(0x88ccff,{transparent:true,opacity:0.4}),59.9,17.3,0);
+const wheel=new THREE.Mesh(new THREE.TorusGeometry(0.7,0.08,8,24),M(0x6b3a1e));wheel.position.set(56,16.5,0);wheel.rotation.y=Math.PI/2;ship.add(wheel);box(0.3,1.5,0.3,0x6b3a1e,56.1,15.75,0);
+box(1,1.2,0.6,0xc9a24a,57,15.6,2.5);
+// ocean
+const og=new THREE.PlaneGeometry(3000,3000,90,90);og.rotateX(-Math.PI/2);const ocean=new THREE.Mesh(og,new THREE.MeshPhongMaterial({color:0x1d6fa5,shininess:80,flatShading:true}));scene.add(ocean);
+const base=og.attributes.position.array.slice();
+const sg=new THREE.BufferGeometry();const sp=[];for(let i=0;i<1500;i++){const v=new THREE.Vector3().randomDirection();v.y=Math.abs(v.y);v.multiplyScalar(2500);sp.push(v.x,v.y,v.z)}
+sg.setAttribute('position',new THREE.Float32BufferAttribute(sp,3));const stars=new THREE.Points(sg,new THREE.PointsMaterial({color:0xffffff,size:3,transparent:true}));scene.add(stars);
+// player
+const P={x:-20,y:11,z:6,vy:0,yaw:Math.PI/2,pitch:0,steer:false},spots={Deck:[-20,11,6],Ballroom:[-30,5,8],Staircase:[30,5,0],Cabins:[62,5,0],Bridge:[54,15,0],'Top deck':[0,15,0]};
+let speed=0,throttle=0,tod=0.3;
+const music=new Audio();const tracks=['music/sweet-juices-cotton-candy.mp3','music/drip-drip-drip-country.mp3'];let ti=0;music.src=tracks[0];music.volume=0;music.onended=()=>{ti=(ti+1)%2;music.src=tracks[ti];music.play()};
+const hud=document.getElementById('hud');const ray=new THREE.Raycaster();
+function where(){if(P.y<10&&P.x>-60&&P.x<-10)return'Ballroom';if(P.y<10&&P.x>=60&&P.x<110)return'Cabins';if(P.x>34&&P.x<46&&Math.abs(P.z)<4&&P.y<11.5)return'Grand staircase';if(P.y>14&&P.x>48&&P.x<60&&Math.abs(P.z)<8)return'Bridge';if(P.y>14)return'Boat deck';if(P.y<10)return'Lower deck';return'Promenade deck'}
+CB.initJoy();CB.initLook(R.domElement);CB.hold(document.getElementById('jump'),'Space');
+document.getElementById('use').onclick=()=>toggleSteer();addEventListener('keydown',e=>{if(e.code==='KeyE')toggleSteer();if(e.code==='KeyG')document.getElementById('go').click()});
+function toggleSteer(){if(P.steer){P.steer=false;return}if(Math.hypot(P.x-56,P.z)<3&&P.y>14)P.steer=true;else{hud.dataset.msg='Walk to the wheel on the bridge to steer';setTimeout(()=>hud.dataset.msg='',2500)}}
+const names=Object.keys(spots);let gi=0;document.getElementById('go').onclick=()=>{const n=names[gi++%names.length];[P.x,P.y,P.z]=spots[n];P.vy=0;P.steer=false};
+document.getElementById('play').onclick=()=>{document.getElementById('menu').style.display='none';music.play().catch(()=>{});if(!('ontouchstart' in window))R.domElement.requestPointerLock?.()};
+R.domElement.addEventListener('click',()=>{if(!('ontouchstart' in window)&&document.getElementById('menu').style.display==='none')R.domElement.requestPointerLock?.()});
+const clk=new THREE.Clock();const sky=new THREE.Color(),dayC=new THREE.Color(0x9fd3ff),duskC=new THREE.Color(0xff8fbf),nightC=new THREE.Color(0x070a1e);
+function floorAt(x,z,y){ray.set(ship.localToWorld(new THREE.Vector3(x,y+0.6,z)),new THREE.Vector3(0,-1,0));ray.far=20;const h=ray.intersectObjects(floors,false);return h.length?h[0].point.y:-99}
+function loop(){requestAnimationFrame(loop);const dt=Math.min(clk.getDelta(),0.05),t=clk.elapsedTime;
+ P.yaw-=CB.look.dx*0.004;P.pitch=Math.max(-1.4,Math.min(1.4,P.pitch-CB.look.dy*0.004));CB.look.dx=CB.look.dy=0;
+ const a=CB.axis();
+ if(P.steer){ship.rotation.y-=a.x*dt*0.06*(0.3+speed/12);throttle=Math.max(-0.3,Math.min(1,throttle-a.y*dt*0.4));P.x=55.3;P.z=0;wheel.rotation.x+=a.x*dt*2}
+ else{const run=CB.keys.ShiftLeft?9:5;const fx=-Math.sin(P.yaw),fz=-Math.cos(P.yaw),rx=Math.cos(P.yaw),rz=-Math.sin(P.yaw);
+  let nx=P.x+(fx*-a.y+rx*a.x)*run*dt,nz=P.z+(fz*-a.y+rz*a.x)*run*dt;
+  const fy=floorAt(nx,nz,P.y);if(fy>P.y+0.5){nx=P.x;nz=P.z}
+  for(const w of walls){if(P.y+1.6<w.y0||P.y>w.y1-0.1)continue;if(nx>w.x0-0.3&&nx<w.x1+0.3&&nz>w.z0-0.3&&nz<w.z1+0.3){if(!(P.x>w.x0-0.3&&P.x<w.x1+0.3))nx=P.x;else nz=P.z}}
+  const lim=Math.max(0.5,W(nx)-0.6);nz=Math.max(-lim,Math.min(lim,nz));nx=Math.max(-133,Math.min(132,nx));P.x=nx;P.z=nz}
+ const fl=floorAt(P.x,P.z,P.y);if(CB.keys.Space&&P.y-fl<0.05)P.vy=5;P.vy-=15*dt;P.y+=P.vy*dt;if(P.y<fl){P.y=fl;P.vy=0}if(P.y<-5){[P.x,P.y,P.z]=spots.Deck}
+ speed+=(throttle*12-speed)*dt*0.1;const dir=new THREE.Vector3(1,0,0).applyAxisAngle(new THREE.Vector3(0,1,0),ship.rotation.y);ship.position.addScaledVector(dir,speed*dt);
+ cam.position.set(P.x,P.y+1.65,P.z);cam.rotation.set(P.pitch,P.yaw,0,'YXZ');
+ // ocean waves
+ ocean.position.set(Math.round(ship.position.x/33.3)*33.3,0,Math.round(ship.position.z/33.3)*33.3);const p=og.attributes.position.array;
+ for(let i=0;i<p.length;i+=3){const wx=base[i]+ocean.position.x,wz=base[i+2]+ocean.position.z;p[i+1]=Math.sin(wx*0.05+t)*0.6+Math.cos(wz*0.07+t*1.3)*0.5}og.attributes.position.needsUpdate=true;og.computeVertexNormals();
+ // day night (4 minute day)
+ tod=(tod+dt/240)%1;const ang=tod*Math.PI*2,sy=Math.sin(ang);sun.position.set(Math.cos(ang)*500+ship.position.x,sy*500,200+ship.position.z);sun.target.position.copy(ship.position);sun.target.updateMatrixWorld();
+ const d=Math.max(0,Math.min(1,sy*3+0.3));sky.copy(nightC).lerp(sy>0.25?dayC:duskC,d);scene.background=sky;scene.fog.color.copy(sky);sun.intensity=0.1+d*1.1;hemi.intensity=0.15+d*0.5;stars.material.opacity=1-d;stars.position.copy(ship.position);
+ const loc=where();music.volume=loc==='Ballroom'?0.8:loc==='Grand staircase'?0.2:0;
+ if(loc==='Ballroom')tiles.forEach((tl,i)=>tl.material.emissive.setHex(((i+Math.floor(t*2))%5===0)?0x661133:0));
+ hud.textContent=(hud.dataset.msg||loc)+'  |  '+(P.steer?'Steering: A/D turn, W/S throttle, E to let go  |  ':'')+Math.abs(speed*1.94).toFixed(1)+' knots  |  '+(d>0.5?'Day':d>0.1?'Sunset':'Night');
+ R.render(scene,cam)}
+loop();
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();R.setSize(innerWidth,innerHeight)});
+</script><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Coffeebreak Titanic Grand Cruise" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

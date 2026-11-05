@@ -1,0 +1,17 @@
+PASS host: QR shown in itch frame 
+PASS host: Link or name box visible 
+PASS host: Scan a code button visible 
+PASS guest: iframe has no query but referrer has room https://coffeebreaks.itch.io/coffeebreak-qr-phone?room=scanroom01
+PASS guest: join screen from referrer Join call
+PASS two-context call via referrer Connected | Connected
+PASS paste link -> guest join screen Join call
+PASS paste bare code -> guest join screen 
+PASS bad paste gives message not join Paste a call link or the code from the other phone
+PASS scanner overlay opens 
+PASS scanner shows banner for room code Join the call
+QR Phone
+PASS scanner text has no exclamation 
+PASS banner tap -> join screen, scanner closed Join call
+PASS scan -> call connected Connected | Connected
+PASS non-room code shows No usable code pill, no banner Code Scanner / No usable code / QR Phone
+15 / 15

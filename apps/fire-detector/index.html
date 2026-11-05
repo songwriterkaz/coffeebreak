@@ -1,11 +1,73 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Fire Detector</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Fire Detector</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Fire Detector</title>
+<style>
+:root{--b:#3b2314;--c:#c8873a;--r:#c0261c;--bg:#fbf6ef}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:#222}
+header{background:var(--b);color:#fff;display:flex;align-items:center;gap:12px;padding:10px 14px}
+header img{height:52px;border-radius:8px;background:#fff}header h1{font-size:1.2rem;margin:0}header small{opacity:.8}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px;background:#ead9c3}nav button{flex:1 1 auto}
+button{background:var(--c);color:#fff;border:0;border-radius:6px;padding:8px 10px;cursor:pointer;font-size:.9rem}
+button.on{background:var(--b)}button.red{background:var(--r)}button.alt{background:#777}
+a.sos{display:block;background:var(--r);color:#fff;text-align:center;font-weight:700;font-size:1.3rem;padding:14px;border-radius:10px;text-decoration:none;margin:10px 14px}
+main{padding:14px;max-width:900px;margin:auto}section{display:none}section.show{display:block}
+.card{background:#fff;border-radius:10px;padding:12px;margin-bottom:12px;box-shadow:0 1px 3px #0002}
+input,select,textarea{padding:7px;border:1px solid #bbb;border-radius:6px;font-size:.9rem;max-width:100%}
+form{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+table{width:100%;border-collapse:collapse;font-size:.88rem}th,td{border-bottom:1px solid #eee;padding:6px;text-align:left}
+.tw{overflow-x:auto}.warn{background:#ffe1d6;color:#8a2500;padding:8px;border-radius:6px;margin:6px 0}
+.ok{background:#e1f5e1;color:#1d5e1d;padding:8px;border-radius:6px;margin:6px 0}
+.note{background:#eef6ff;padding:10px;border-radius:8px;font-size:.88rem}
+#meter{height:18px;background:#eee;border-radius:9px;overflow:hidden}#bar{height:100%;width:0;background:var(--c)}
+body.flash{animation:fl .4s infinite alternate}@keyframes fl{from{background:#fff}to{background:#ff2a1a}}
+footer{text-align:center;font-size:.8rem;color:#666;padding:16px}
+</style></head><body>
+<header><img src="logo.png" alt="Coffeebreak logo"><div><h1>Coffeebreak Fire Detector</h1><small>Your smoke alarm companion. Newcastle NSW</small></div></header>
+<a class="sos" href="tel:000">Emergency: call 000</a>
+<nav><button data-t="alarms">My alarms</button><button data-t="listen">Alarm listener</button><button data-t="rules">NSW checklist</button><button data-t="plan">Escape plan</button><button data-t="pro">Pro and tips</button></nav>
+<main>
+<div class="note">Honest note: a phone or browser cannot detect fire or smoke. This app helps you look after real smoke alarms and can listen for one that is sounding. It supports, but never replaces, working smoke alarms.</div><br>
+
+<section id="alarms"><div class="card"><h3>Add a smoke alarm</h3>
+<form id="fA"><input id="aRoom" placeholder="Room, e.g. Hallway" required><label>Installed <input type="date" id="aInst" required></label><label>Battery changed <input type="date" id="aBat"></label>
+<select id="aType"><option>Photoelectric</option><option>Ionisation</option><option>Hardwired with backup battery</option><option>10-year sealed lithium</option></select><button>Add</button></form>
+<p id="limitMsg" class="warn" style="display:none">The free version tracks up to 3 alarms. Unlock Pro for unlimited alarms.</p></div>
+<div class="card"><h3>Reminders</h3><div id="rem"></div></div>
+<div class="card tw"><h3>Your alarms</h3><table><thead><tr><th>Room</th><th>Type</th><th>Installed</th><th>Replace by</th><th>Battery</th><th>Last test</th><th></th></tr></thead><tbody id="aList"></tbody></table></div>
+<div class="card"><h3>Test log</h3><div id="log"></div><button class="alt" id="exp">Export backup (JSON)</button> <button class="alt" id="csv">Export test log CSV (Pro)</button></div></section>
+
+<section id="listen"><div class="card"><h3>Alarm listener</h3>
+<p>Leave this screen open and it listens through your microphone for the high-pitched beeping (around 3 kHz) of a sounding smoke alarm. If it hears one it flashes the screen and vibrates the phone. Sound is analysed on your device only and never recorded or sent anywhere.</p>
+<div class="warn">This supports, but never replaces, a real smoke alarm. It only works while the screen is open, the phone is awake and close enough to hear. It may miss alarms or react to other high beeps.</div>
+<button id="lStart">Start listening</button> <button class="alt" id="lStop">Stop</button> <button class="alt" id="lTest">Test the flash</button>
+<p>Alarm-pitch level</p><div id="meter"><div id="bar"></div></div><p id="lStat">Not listening.</p>
+<label>Sensitivity <input type="range" id="sens" min="1" max="10" value="5"></label></div></section>
+
+<section id="rules"><div class="card"><h3>NSW smoke alarm checklist</h3>
+<p>General information only. Rules can change, so always check Fire and Rescue NSW (fire.nsw.gov.au) and NSW Fair Trading for the current requirements.</p><div id="chk"></div><p id="chkScore"></p></div></section>
+
+<section id="plan"><div class="card"><h3>Fire escape plan maker</h3>
+<form id="fP" onsubmit="return false" style="flex-direction:column;align-items:stretch">
+<label>Home address (for your own printout) <input id="pAddr"></label>
+<label>Number of people in the home <input type="number" id="pPeople" min="1" value="2"></label>
+<label>Main exit <input id="pExit1" placeholder="Front door"></label>
+<label>Second exit <input id="pExit2" placeholder="Back door or window"></label>
+<label>Meeting place outside <input id="pMeet" placeholder="Letterbox at the front"></label>
+<label>Who helps children, older people or pets <textarea id="pHelp" rows="2"></textarea></label>
+<label>Where keys are kept for deadlocks <input id="pKeys"></label>
+<button id="pMake">Make my plan</button></form></div>
+<div class="card" id="pOut"></div></section>
+
+<section id="pro"><div class="card"><h3>Free, with optional Pro</h3>
+<p>The app is free. Pro is a $4 one-off tip that unlocks unlimited alarms and a CSV export of your test log.</p>
+<p>Pay $4 by PayID to <b>darkokaz@gmx.com</b> with reference FIRE, then email for your unlock code.</p>
+<button id="proMail">Email for my code</button>
+<form id="fPro" style="margin-top:8px"><input id="proCode" placeholder="CB-FIRE-XXXXXX-XXXXXX"><button>Unlock</button></form><p id="proMsg"></p>
+<h3>Just a tip</h3><button class="tip" data-v="2">$2</button> <button class="tip" data-v="5">$5</button> <button class="tip" data-v="10">$10</button>
+<p class="note">Payments are made by you through your own bank using PayID. This app does not take or store any payment details.</p></div></section>
+</main>
+<footer>Made by Coffeebreak, Newcastle NSW. In an emergency call 000.<section id="rights" style="max-width:760px;margin:12px auto;padding:10px 14px;border:1px solid #888;border-radius:8px;font-size:.8rem;line-height:1.4"><strong>Rights and resale</strong><p style="margin:6px 0 0">Karen O'Brien (Coffeebreak) keeps all rights to the products, designs, apps, the Coffeebreak name and logo. Buyers and fans may resell the physical products and phones they bought, but may not copy them or make their own versions.</p></section></footer>
+<script src="app.js"></script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

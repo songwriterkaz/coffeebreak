@@ -1,11 +1,95 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Pink Pinball</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Pink Pinball</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Coffeebreak Pink Pinball</title>
+<style>
+html,body{margin:0;background:#1a0614;color:#ffd6ec;font-family:Georgia,serif;height:100%;overflow:hidden;touch-action:none}
+#wrap{display:flex;flex-direction:column;align-items:center;height:100%}
+#cab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;width:100%}
+#back{display:flex;align-items:center;gap:10px;padding:4px 14px;margin-top:4px;border:3px solid #e8e8f0;border-radius:14px;background:linear-gradient(#ff5fb0,#c2187a);box-shadow:0 0 18px #ff4fc0,inset 0 0 12px #fff6}
+#back img{height:48px}
+#back h1{margin:0;font-size:20px;color:#fff;text-shadow:0 0 8px #ff9ad5,0 0 2px #000}
+#info{font:bold 13px monospace;color:#fff;margin:3px 0;text-shadow:0 0 6px #ff4fc0}
+canvas{max-height:calc(100% - 4px);max-width:100%;border:6px solid #d8d8e4;border-radius:18px;box-shadow:0 0 24px #ff3fb0;background:#2a0820}
+#foot{font-size:10px;padding:4px 8px;text-align:center;opacity:.8}
+</style></head><body><div id="wrap">
+<div id="back"><img src="logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Pink Pinball</h1></div>
+<div id="info"></div>
+<div id="cab"><canvas id="c" width="400" height="700"></canvas></div>
+<div id="foot">&copy; Karen O'Brien / Coffeebreak. Karen O'Brien / Coffeebreak keeps all rights to this game, its name and logo. Please do not copy it or make your own version.</div>
+</div><script>
+const cv=document.getElementById('c'),g=cv.getContext('2d'),info=document.getElementById('info');
+const W=400,H=700,HOUR=3600000,R=9;
+// ---- coins earned over time ----
+function loadCoins(){let c=parseInt(localStorage.getItem('cbpp_coins')),t=parseInt(localStorage.getItem('cbpp_last'));const now=Date.now();
+ if(isNaN(c)||isNaN(t)){c=1;t=now}const n=Math.floor((now-t)/HOUR);if(n>0){c=Math.min(99,c+n);t+=n*HOUR}
+ localStorage.setItem('cbpp_coins',c);localStorage.setItem('cbpp_last',t);return{c,t}}
+function useCoin(){const s=loadCoins();if(s.c<1)return false;localStorage.setItem('cbpp_coins',s.c-1);return true}
+function fmt(ms){ms=Math.max(0,ms);const s=Math.ceil(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+// ---- audio ----
+let ac;function au(){if(!ac)ac=new(window.AudioContext||window.webkitAudioContext)();if(ac.state=='suspended')ac.resume();return ac}
+function tone(f,d,type='square',v=.15,f2){try{const a=au(),o=a.createOscillator(),gn=a.createGain();o.type=type;o.frequency.setValueAtTime(f,a.currentTime);if(f2)o.frequency.exponentialRampToValueAtTime(f2,a.currentTime+d);gn.gain.setValueAtTime(v,a.currentTime);gn.gain.exponentialRampToValueAtTime(.001,a.currentTime+d);o.connect(gn).connect(a.destination);o.start();o.stop(a.currentTime+d)}catch(e){}}
+function clink(){tone(2400,.15,'triangle',.25);setTimeout(()=>tone(3200,.25,'triangle',.2),90);setTimeout(()=>tone(1800,.3,'sine',.15),200)}
+// ---- table ----
+const walls=[[20,690,20,120],[380,690,380,120],[20,120,80,40],[80,40,320,40],[320,40,380,120],[352,690,352,170],
+ [20,560,120,630],[332,560,232,630],[50,470,50,545],[50,545,120,590],[302,470,302,545],[302,545,232,590]];
+const slings=[[52,480,118,585],[300,480,234,585]];
+const bumpers=[{x:130,y:200,r:24},{x:230,y:190,r:24},{x:180,y:280,r:24}].map(b=>({...b,hit:0}));
+const targets=[{x:70,y:330},{x:70,y:370},{x:70,y:410},{x:282,y:330},{x:282,y:370},{x:282,y:410}].map(t=>({...t,on:1}));
+const fl=[{x:120,y:630,side:1,a:0.5,av:0,up:0},{x:232,y:630,side:-1,a:0.5,av:0,up:0}];const FL=58;
+function flEnd(f){const ang=f.side>0?f.a:Math.PI-f.a;return[f.x+Math.cos(ang)*FL,f.y+Math.sin(ang)*FL]}
+let ball=null,state='attract',balls=0,score=0,hi=+localStorage.getItem('cbpp_hi')||0,plunge=0,charging=false,msgT=0,msg='';
+function newBall(){ball={x:366,y:660,vx:0,vy:0};}
+function startGame(){if(!useCoin()){tone(150,.3,'sawtooth');return}clink();state='play';balls=3;score=0;targets.forEach(t=>t.on=1);newBall()}
+function lose(){balls--;tone(300,.6,'sawtooth',.15,60);if(balls>0){newBall()}else{if(score>hi){hi=score;localStorage.setItem('cbpp_hi',hi)}state='over';msgT=180;ball=null}}
+function seg(b,x1,y1,x2,y2,bounce,vx0=0,vy0=0){const dx=x2-x1,dy=y2-y1,L=dx*dx+dy*dy;let t=((b.x-x1)*dx+(b.y-y1)*dy)/L;t=Math.max(0,Math.min(1,t));
+ const px=x1+t*dx,py=y1+t*dy,ex=b.x-px,ey=b.y-py,d=Math.hypot(ex,ey);if(d<R&&d>0){const nx=ex/d,ny=ey/d;b.x=px+nx*R;b.y=py+ny*R;
+ const rvx=b.vx-vx0,rvy=b.vy-vy0,vn=rvx*nx+rvy*ny;if(vn<0){b.vx-=(1+bounce)*vn*nx;b.vy-=(1+bounce)*vn*ny;return true}}return false}
+function step(){for(const f of fl){const tgt=f.up?-0.5:0.5,old=f.a;f.a+=Math.max(-.35,Math.min(.35,tgt-f.a));f.av=f.a-old}
+ if(charging)plunge=Math.min(1,plunge+.02);if(!ball)return;const b=ball;
+ for(let s=0;s<4;s++){b.vy+=.045;b.x+=b.vx/4*1;b.y+=b.vy/4;
+  for(const w of walls)seg(b,...w,.4);
+  slings.forEach(sl=>{if(seg(b,...sl,.4)){const nx=sl[1]-sl[3],ny=sl[2]-sl[0];const l=Math.hypot(nx,ny)||1;const sgn=sl===slings[0]?-1:1;b.vx+=sgn*-ny/l*0;b.vx+= (sl===slings[0]?3:-3);b.vy-=3;score+=10;tone(500,.06)}});
+  for(const bp of bumpers){const dx=b.x-bp.x,dy=b.y-bp.y,d=Math.hypot(dx,dy);if(d<bp.r+R){const nx=dx/d,ny=dy/d;b.x=bp.x+nx*(bp.r+R);b.y=bp.y+ny*(bp.r+R);b.vx=nx*7;b.vy=ny*7;bp.hit=10;score+=100;tone(880,.08)}}
+  for(const t of targets)if(t.on&&Math.abs(b.x-t.x)<R+5&&Math.abs(b.y-t.y)<R+14){t.on=0;b.vx*=-1;score+=250;tone(1200,.1,'triangle');if(targets.every(q=>!q.on)){score+=5000;msg='ALL TARGETS 5000';msgT=120;targets.forEach(q=>q.on=1)}}
+  for(const f of fl){const[ex,ey]=flEnd(f);const w=-f.av*f.side;// angular velocity
+   const mx=(b.x-f.x),my=(b.y-f.y);seg(b,f.x,f.y,ex,ey,.3,-w*my*1.6,w*mx*1.6)}
+  const sp=Math.hypot(b.vx,b.vy);if(sp>16){b.vx*=16/sp;b.vy*=16/sp}}
+ if(b.x>352&&b.y>655){b.y=655;b.vy=0;b.vx=0}
+ if(b.y>H+20)lose()}
+function draw(){g.fillStyle='#3a0a2c';g.fillRect(0,0,W,H);
+ const gr=g.createRadialGradient(200,300,40,200,300,420);gr.addColorStop(0,'#ff8fcf');gr.addColorStop(1,'#a3105f');g.fillStyle=gr;g.fillRect(20,40,360,650);
+ g.strokeStyle='#ffe0f2';g.globalAlpha=.25;for(let i=0;i<12;i++){g.beginPath();g.arc(200,350,30+i*30,0,7);g.stroke()}g.globalAlpha=1;
+ g.lineCap='round';g.lineWidth=6;g.strokeStyle='#e4e4ee';g.shadowColor='#ff5fd0';g.shadowBlur=12;
+ for(const w of walls){g.beginPath();g.moveTo(w[0],w[1]);g.lineTo(w[2],w[3]);g.stroke()}
+ g.strokeStyle='#fff';g.lineWidth=8;for(const s of slings){g.beginPath();g.moveTo(s[0],s[1]);g.lineTo(s[2],s[3]);g.stroke()}
+ for(const bp of bumpers){g.fillStyle=bp.hit>0?'#fff':'#ff2f9a';g.beginPath();g.arc(bp.x,bp.y,bp.r,0,7);g.fill();g.lineWidth=4;g.strokeStyle='#e8e8f0';g.stroke();g.fillStyle='#ffd1ea';g.beginPath();g.arc(bp.x,bp.y,bp.r*.45,0,7);g.fill();if(bp.hit>0)bp.hit--}
+ for(const t of targets){g.fillStyle=t.on?'#ffef5f':'#552244';g.fillRect(t.x-5,t.y-14,10,28)}
+ g.shadowBlur=0;g.lineWidth=14;g.strokeStyle='#ff4fb0';for(const f of fl){const[ex,ey]=flEnd(f);g.beginPath();g.moveTo(f.x,f.y);g.lineTo(ex,ey);g.stroke()}
+ g.fillStyle='#ccc';g.fillRect(356,670+plunge*18,20,30);
+ if(ball){const bg=g.createRadialGradient(ball.x-3,ball.y-3,1,ball.x,ball.y,R);bg.addColorStop(0,'#fff');bg.addColorStop(1,'#8890a0');g.fillStyle=bg;g.beginPath();g.arc(ball.x,ball.y,R,0,7);g.fill()}
+ g.fillStyle='#fff';g.font='bold 16px monospace';g.textAlign='left';g.fillText('SCORE '+score,28,30);g.textAlign='right';g.fillText('HI '+hi,372,30);
+ if(state=='play'){g.textAlign='center';g.fillText('BALLS '+balls,200,30)}
+ const cs=loadCoins(),next=fmt(HOUR-(Date.now()-cs.t));info.textContent='COINS '+cs.c+'   NEXT COIN IN '+next;
+ g.textAlign='center';
+ if(state!='play'){g.fillStyle='rgba(40,0,30,.75)';g.fillRect(40,300,320,140);g.fillStyle='#fff';g.shadowColor='#ff4fc0';g.shadowBlur=14;g.font='bold 26px Georgia';
+  if(state=='over'&&msgT>0){g.fillText('GAME OVER',200,350);g.font='18px Georgia';g.fillText('Score '+score,200,385);msgT--;if(msgT==0)state='attract'}
+  else{state='attract';if(cs.c>0){if((Date.now()/500|0)%2)g.fillText('INSERT COIN',200,355);g.font='15px Georgia';g.fillText('Tap or press C to drop a coin',200,390);g.fillText('Coins '+cs.c,200,415)}
+   else{g.fillText('NO COINS',200,355);g.font='18px Georgia';g.fillText('Next coin in '+next,200,395)}}g.shadowBlur=0}
+ else if(msgT>0){g.fillStyle='#fff';g.font='bold 20px Georgia';g.fillText(msg,200,470);msgT--}
+ if(state=='play'&&ball&&ball.x>352&&ball.y>=650){g.font='12px monospace';g.fillStyle='#fff';g.fillText('Hold SPACE or bottom right to launch',190,520)}}
+function launch(){if(ball&&ball.x>352&&ball.y>=650){ball.vy=-(7+plunge*9);tone(200,.2,'sawtooth',.1,600)}plunge=0;charging=false}
+addEventListener('keydown',e=>{if(e.repeat)return;au();const k=e.key;
+ if(state!='play'&&(k=='c'||k=='C'||k==' '||k=='Enter')){startGame();e.preventDefault();return}
+ if(k=='ArrowLeft'||k=='z'||k=='Z'){fl[0].up=1;tone(120,.05)}if(k=='ArrowRight'||k=='/'){fl[1].up=1;tone(120,.05)}if(k==' '){charging=true;e.preventDefault()}});
+addEventListener('keyup',e=>{const k=e.key;if(k=='ArrowLeft'||k=='z'||k=='Z')fl[0].up=0;if(k=='ArrowRight'||k=='/')fl[1].up=0;if(k==' ')launch()});
+const touches={};
+cv.addEventListener('pointerdown',e=>{au();e.preventDefault();if(state!='play'){startGame();return}const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;
+ let a;if(x>330&&y>560){a='p';charging=true}else{a=x<W/2?0:1;fl[a].up=1;tone(120,.05)}touches[e.pointerId]=a});
+function up(e){const a=touches[e.pointerId];if(a==='p')launch();else if(a!==undefined)fl[a].up=0;delete touches[e.pointerId]}
+cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+function loop(){step();draw();requestAnimationFrame(loop)}loop();
+</script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

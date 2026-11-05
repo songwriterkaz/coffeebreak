@@ -1,11 +1,60 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Shift Notes</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Shift Notes</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Shift Notes</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#f4f1fb;color:#222}
+header{text-align:center;padding:12px}h1{margin:0;font-size:1.6rem;color:#6a3fb5}header p{margin:4px}
+main{max-width:820px;margin:0 auto;padding:6px 12px 130px}
+.card{background:#fff;border-radius:14px;padding:14px;margin:10px 0;box-shadow:0 2px 8px #0001}
+label{display:block;margin:8px 0 2px;font-weight:600}
+input,select,textarea{font:inherit;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:10px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+button{font:inherit;border:0;border-radius:12px;padding:10px 14px;background:#6a3fb5;color:#fff;cursor:pointer;margin:4px 2px}
+button.l{background:#ece6f7;color:#333}
+.chips button{background:#ece6f7;color:#333;font-size:.9rem}
+.note{white-space:pre-wrap;border-left:4px solid #6a3fb5;padding:8px;margin:8px 0;background:#faf8ff}
+small{color:#666}
+@media print{header,button,.chips,#hist,.noprint{display:none}body{background:#fff}.card{box-shadow:none}}
+</style></head><body>
+<header><h1>📝 Coffeebreak Shift Notes</h1><p>Fast, clear shift notes for support workers. Everything stays on this device.</p></header>
+<main>
+<div class=card>
+<div class=row><div><label for=wk>Support worker</label><input id=wk></div><div><label for=pt>Client (initials only)</label><input id=pt maxlength=6 placeholder="e.g. A.B."></div></div>
+<div class=row><div><label for=dt>Date</label><input id=dt type=date></div><div><label for=st>Start</label><input id=st type=time></div><div><label for=en>Finish</label><input id=en type=time></div><div><label for=km>Kilometres</label><input id=km type=number min=0></div></div>
+<label for=ty>Type of support</label><select id=ty><option>Community access</option><option>In-home support</option><option>Personal care</option><option>Transport</option><option>Social and recreation</option><option>Skill building</option><option>Respite</option><option>Other</option></select>
+<label for=ac>What we did</label><textarea id=ac rows=3></textarea>
+<div class=chips id=chA></div>
+<label for=go>Goals worked on</label><textarea id=go rows=2></textarea>
+<div class=chips id=chG></div>
+<div class=row><div><label for=md>Mood and engagement</label><select id=md><option>Happy and engaged</option><option>Calm</option><option>Quiet</option><option>Tired</option><option>Unsettled</option><option>Upset</option></select></div>
+<div><label for=inc>Incident</label><select id=inc><option>No incident</option><option>Yes - incident report needed</option></select></div></div>
+<label for=nt>Other notes and follow up</label><textarea id=nt rows=3></textarea>
+<p class=noprint><button id=sv>Save note</button><button class=l id=cp>Copy text</button><button class=l id=dl>Download</button><button class=l id=pr>Print or save PDF</button><button class=l id=nw>New note</button></p>
+<small>Tip: use initials, not full names. Notes save on this device only and are never sent anywhere.</small>
+</div>
+<div class="card noprint"><b>Saved notes</b> <input id=q placeholder="Search notes" style="margin-top:6px"><div id=hist></div></div>
+</main>
+<script>
+var F=['wk','pt','dt','st','en','km','ty','ac','go','md','inc','nt'],$=function(i){return document.getElementById(i)},N=JSON.parse(localStorage.cbsnN||'[]'),edit=-1;
+var CA=['Went shopping','Cooked a meal together','Went to the park','Attended appointment','Practised budgeting','Used public transport','Cleaned and tidied','Did a craft activity','Went to the library','Had a coffee out'],CG=['Independence','Social skills','Healthy eating','Money skills','Travel training','Daily living skills','Community participation'];
+function chips(id,list,tgt){list.forEach(function(c){var b=document.createElement('button');b.type='button';b.textContent='+ '+c;b.onclick=function(){var t=$(tgt);t.value=(t.value?t.value.replace(/\s*$/,'')+'. ':'')+c;draft()};$(id).appendChild(b)})}
+chips('chA',CA,'ac');chips('chG',CG,'go');
+function get(){var o={};F.forEach(function(f){o[f]=$(f).value});return o}
+function set(o){F.forEach(function(f){$(f).value=o[f]||''})}
+function hrs(o){if(!o.st||!o.en)return '';var a=o.st.split(':'),b=o.en.split(':'),m=(b[0]*60+ +b[1])-(a[0]*60+ +a[1]);if(m<0)m+=1440;return (m/60).toFixed(2)+' hours'}
+function txt(o){return 'SHIFT NOTE\nDate: '+o.dt+'  Time: '+o.st+' to '+o.en+(hrs(o)?' ('+hrs(o)+')':'')+'\nSupport worker: '+o.wk+'\nClient: '+o.pt+'\nSupport type: '+o.ty+(o.km?'\nKilometres: '+o.km:'')+'\n\nWhat we did:\n'+o.ac+'\n\nGoals worked on:\n'+o.go+'\n\nMood and engagement: '+o.md+'\nIncident: '+o.inc+'\n\nOther notes and follow up:\n'+o.nt+'\n\nMade with Coffeebreak Shift Notes · coffeebreaks.itch.io'}
+function draft(){localStorage.cbsnD=JSON.stringify(get())}
+F.forEach(function(f){$(f).addEventListener('input',draft)});
+function fresh(){edit=-1;var w=$('wk').value;set({wk:w||localStorage.cbsnW||'',dt:new Date().toISOString().slice(0,10),ty:'Community access',md:'Happy and engaged',inc:'No incident'})}
+function list(){var q=$('q').value.toLowerCase();$('hist').innerHTML=N.map(function(o,i){return [o,i]}).reverse().filter(function(x){return !q||txt(x[0]).toLowerCase().indexOf(q)>=0}).map(function(x){var o=x[0];return '<div class=note>'+(o.dt+' '+o.pt+' '+o.ty).replace(/</g,'&lt;')+'<br><button class=l data-e='+x[1]+'>Open</button><button class=l data-d='+x[1]+'>Delete</button></div>'}).join('')||'<p><small>No saved notes yet.</small></p>';
+ $('hist').querySelectorAll('[data-e]').forEach(function(b){b.onclick=function(){edit=+b.dataset.e;set(N[edit]);scrollTo(0,0)}});
+ $('hist').querySelectorAll('[data-d]').forEach(function(b){b.onclick=function(){if(confirm('Delete this note?')){N.splice(+b.dataset.d,1);localStorage.cbsnN=JSON.stringify(N);list()}}})}
+$('q').oninput=list;
+$('sv').onclick=function(){var o=get();if(!o.ac&&!o.nt){alert('Please write what you did first.');return}if(edit>=0)N[edit]=o;else{N.push(o);edit=N.length-1}localStorage.cbsnN=JSON.stringify(N);localStorage.cbsnW=o.wk;list();this.textContent='Saved.';var b=this;setTimeout(function(){b.textContent='Save note'},1200)};
+$('cp').onclick=function(){var t=txt(get());(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){prompt('Copy this note:',t)})};
+$('dl').onclick=function(){var o=get(),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt(o)],{type:'text/plain'}));a.download='shift-note-'+(o.dt||'today')+'.txt';a.click()};
+$('pr').onclick=function(){print()};$('nw').onclick=function(){fresh();draft()};
+var D=localStorage.cbsnD;if(D)set(JSON.parse(D));else fresh();list();
+</script><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Shift Notes" data-url="https://coffeebreaks.itch.io/coffeebreak-shift-notes" data-kind="app" data-howto="Fill in the shift details. Use initials, not full names.|Tap the + buttons to add common activities and goals.|Press Save note. Notes stay on this device only.|Copy, Download or Print to share with your manager."></script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

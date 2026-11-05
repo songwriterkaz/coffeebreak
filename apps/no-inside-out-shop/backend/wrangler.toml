@@ -1,0 +1,17 @@
+name = "coffeebreak-orders"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+rules = [{ type = "Text", globs = ["**/*.html"], fallthrough = true }]
+
+[vars]
+ALLOWED_ORIGIN = "*"          # set to the itch.io page origin once known
+CONFIRM_ORDERS = "false"      # "false" = Printful draft (Karen confirms in Printful); "true" = fully confirmed
+DESIGN_BASE_URL = "https://REPLACE-with-public-folder-holding-designs"
+# PRINTFUL_STORE_ID = ""      # only needed for an account-level token
+
+[[kv_namespaces]]
+binding = "ORDERS"
+id = "REPLACE_WITH_KV_ID"     # from: npx wrangler kv namespace create ORDERS
+# Secrets (never put in this file):
+#   npx wrangler secret put ORGANISER_KEY
+#   npx wrangler secret put PRINTFUL_TOKEN

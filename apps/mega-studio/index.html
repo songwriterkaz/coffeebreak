@@ -1,11 +1,107 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Mega Studio</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Mega Studio</h1><p class="price">Free</p><p>A recording booth: record from your mic, hear it back, and download takes, with a live level meter.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><button id=st>Record</button> <button id=sp disabled>Stop</button></p><meter id=lv max=1 style="width:100%"></meter><div id=tk></div><script>
-var mr,ch,n=0;st.onclick=async()=>{var s=await navigator.mediaDevices.getUserMedia({audio:true}),A=new AudioContext(),an=A.createAnalyser();A.createMediaStreamSource(s).connect(an);var b=new Uint8Array(256);(function f(){an.getByteTimeDomainData(b);lv.value=Math.max(...b)/128-1;if(mr&&mr.state=='recording')requestAnimationFrame(f)})();
-ch=[];mr=new MediaRecorder(s);mr.ondataavailable=e=>ch.push(e.data);mr.onstop=()=>{var u=URL.createObjectURL(new Blob(ch));n++;tk.insertAdjacentHTML('beforeend','<p>Take '+n+' <audio controls src='+u+'></audio> <a download=take'+n+'.webm href='+u+'>Download</a></p>');s.getTracks().forEach(t=>t.stop())};mr.start();st.disabled=1;sp.disabled=0};
-sp.onclick=()=>{mr.stop();st.disabled=0;sp.disabled=1}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Mega Studio</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1a0f0a">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{--bg:#120c09;--p:#1f1510;--p2:#2b1d16;--ac:#e8a54b;--ac2:#4bc3e8;--tx:#f3e7da;--mu:#a8927f;--red:#e85b4b;--grn:#5be87a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:14px system-ui,Segoe UI,Roboto,sans-serif}
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--p);border-bottom:2px solid var(--ac);flex-wrap:wrap}
+header img{height:44px;border-radius:8px}header h1{font-size:19px;margin:0}header small{color:var(--mu)}
+nav{display:flex;gap:4px;flex-wrap:wrap;padding:6px 10px;background:var(--p2);position:sticky;top:0;z-index:5}
+nav button{background:transparent;border:1px solid #4a3528;color:var(--tx)}nav button.on{background:var(--ac);color:#1a0f0a;font-weight:700}
+button,select,input[type=file]{background:#3a281e;color:var(--tx);border:1px solid #5a4030;border-radius:6px;padding:6px 9px;font:inherit;cursor:pointer}
+button:hover{border-color:var(--ac)}button.on,button.act{background:var(--ac);color:#1a0f0a}button.rec{background:var(--red);color:#fff}
+input[type=range]{accent-color:var(--ac);width:100%}input[type=text],input[type=number],textarea{background:#0d0806;color:var(--tx);border:1px solid #5a4030;border-radius:6px;padding:6px;font:inherit}
+textarea{width:100%;min-height:120px}
+main{padding:10px}.tab{display:none}.tab.on{display:block}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.card{background:var(--p);border:1px solid #3a281e;border-radius:10px;padding:10px}
+.card h3{margin:0 0 6px;font-size:15px;color:var(--ac)}
+.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:4px 0}
+.k{display:flex;flex-direction:column;font-size:11px;color:var(--mu);min-width:62px;flex:1}
+canvas{width:100%;background:#0b0705;border-radius:6px;display:block}
+.pads{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.pads button{height:54px}
+.strips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}
+.strip{min-width:118px;background:var(--p);border:1px solid #3a281e;border-radius:8px;padding:6px;font-size:11px}
+.strip b{display:block;color:var(--ac);margin-bottom:3px;white-space:nowrap;overflow:hidden}
+.meter{height:8px;background:#000;border-radius:4px;overflow:hidden}.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--grn),var(--ac),var(--red))}
+.lyr{font-size:28px;text-align:center;min-height:44px;color:var(--ac);font-weight:700}.lyrn{text-align:center;color:var(--mu);font-size:18px;min-height:26px}
+.big{font-size:26px;font-weight:700;color:var(--ac2)}
+.list{max-height:420px;overflow:auto}.pr{display:flex;gap:6px;align-items:center;padding:4px;border-bottom:1px solid #2b1d16}.pr span{flex:1}
+.pr small{color:var(--mu)}.lc-red{border-left:4px solid var(--red)}.lc-amber{border-left:4px solid var(--ac)}.lc-green{border-left:4px solid var(--grn)}
+.lcl{padding:4px 8px;margin:3px 0;background:#0d0806}
+.tracks .tr{display:flex;align-items:center;gap:4px;margin:2px 0}.tracks .tr .nm{width:150px;font-size:11px;display:flex;gap:3px;flex-wrap:wrap}
+footer{padding:14px;color:var(--mu);font-size:12px;border-top:1px solid #3a281e;text-align:center}footer a{color:var(--ac)}
+#start{position:fixed;inset:0;background:rgba(10,6,4,.94);display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:20;gap:12px}
+#start img{width:140px;border-radius:16px}#start button{font-size:20px;padding:14px 24px;background:var(--ac);color:#1a0f0a}
+.dropon{outline:3px dashed var(--ac2);outline-offset:-3px;background:#22303a}.coverImg{width:120px;height:120px;object-fit:cover;border-radius:8px;border:1px solid #5a4030;float:right;margin:0 0 6px 8px}.hint{color:var(--mu);font-size:12px}
+.toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:var(--ac);color:#1a0f0a;padding:8px 14px;border-radius:8px;display:none;z-index:30}
+@media(max-width:600px){.lyr{font-size:20px}header h1{font-size:16px}.tracks .tr .nm{width:96px}}
+</style></head><body>
+<div id="start"><img src="logo.png" alt="Coffeebreak logo"><h2>Coffeebreak Mega Studio</h2><p>DJ, karaoke, recording studio, mixer and mastering in one.</p><button id="go">Start the studio</button></div>
+<header><img src="logo.png" alt="Coffeebreak logo"><div><h1>Coffeebreak Mega Studio</h1><small>DJ · Karaoke · Recording · Mixer · Mastering · <span id="toolCountH">10,000+</span> tools</small></div>
+<div style="margin-left:auto" class="row"><span>Master</span><canvas id="mmeter" width="160" height="16" style="width:160px"></canvas><span id="lufsH">-- LUFS</span><button id="recMix">Record mix</button></div></header>
+<nav id="nav"></nav>
+<main>
+<section class="tab" id="t-dj">
+ <div class="row"><button id="deck4">Show 4 decks</button><label>Crossfader curve <select id="xcurve"><option value="smooth">Smooth</option><option value="linear">Linear</option><option value="cut">Scratch cut</option></select></label>
+ <span style="flex:1;min-width:120px">A/C <input type="range" id="xf" min="0" max="1" step="0.01" value="0.5" style="width:60%"> B/D</span><span>Master BPM <b id="mbpm">--</b></span></div>
+ <div class="grid" id="decks"></div>
+ <div class="card" data-drop="pads"><h3>Sampler pads</h3><div class="row"><small>Keys 1 to 8 and Q to R play pads. Load your own sound onto a pad with the file picker or drop any audio or video file here.</small><input type="file" id="padFile"><select id="padSel"></select></div><div class="pads" id="pads"></div></div>
+</section>
+<section class="tab" id="t-kar">
+ <div class="grid">
+ <div class="card" data-drop="kar"><h3>Backing track</h3><div class="hint">Choose or drop any audio or video file. Text files load as lyrics.</div><div class="row"><input type="file" id="karFile"><button id="karDemo">Demo backing</button></div>
+  <div class="row"><button id="karPlay">Play</button><button id="karStop">Stop</button><span id="karTime">0:00</span></div>
+  <canvas id="karWave" height="60"></canvas>
+  <div class="row"><label class="k">Vocal reduce (centre cancel)<select id="karVr"><option value="0">Original</option><option value="1">Vocal reduce</option></select></label><label class="k">Key change <span id="karKeyV">0</span><input type="range" id="karKey" min="-6" max="6" step="1" value="0"></label><label class="k">Backing level<input type="range" id="karVol" min="0" max="1.5" step="0.01" value="1"></label></div></div>
+ <div class="card"><h3>Microphone</h3><div class="row"><button id="micOn">Turn on mic</button><span id="micSt">Off</span></div>
+  <div class="row"><label class="k">Mic level<input type="range" id="micVol" min="0" max="2" step="0.01" value="1"></label><label class="k">Reverb<input type="range" id="micRev" min="0" max="1" step="0.01" value="0.3"></label><label class="k">Echo<input type="range" id="micEcho" min="0" max="1" step="0.01" value="0.15"></label></div>
+  <div class="row"><label class="k">Pitch correction<input type="range" id="atStr" min="0" max="1" step="0.01" value="0"></label><label class="k">Key<select id="atKey"></select></label><label class="k">Scale<select id="atScale"><option value="chrom">Chromatic</option><option value="major">Major</option><option value="minor">Minor</option></select></label></div>
+  <div class="row">Your note: <b id="micNote">--</b></div></div>
+ <div class="card"><h3>Score</h3><div class="big" id="score">0</div><div>In tune: <b id="acc">0%</b> · <span id="grade">Sing to score</span></div><div class="row"><button id="scoreReset">Reset score</button><button id="karRec">Record performance</button></div><div id="karRecOut"></div></div>
+ </div>
+ <div class="card" data-drop="lyr"><h3>Lyrics</h3><img class="coverImg" alt="Cover art" style="display:none"><div class="row"><span class="hint">Import a lyric file (.txt or .lrc), or drop it here</span><input type="file" id="lyrFile"></div><div class="lyr" id="lyrNow">Load lyrics and press play</div><div class="lyrn" id="lyrNext"></div>
+  <textarea id="lyrText" placeholder="Paste lyrics. Timed lines work like [00:12.50] Line here. Untimed lines can be timed with the Tap button while the track plays."></textarea>
+  <div class="row"><button id="lyrLoad">Use these lyrics</button><button id="lyrTap">Tap next line (T)</button><button id="lyrClean">Clean check</button><span id="lyrInfo"></span></div><div id="lyrCleanOut"></div></div>
+</section>
+<section class="tab" id="t-studio">
+ <div class="card" data-drop="studio"><div class="row"><button id="sPlay">Play</button><button id="sStop">Stop</button><button id="sRec" class="">Record</button><span id="sTime" class="big" style="font-size:18px">0:00.0</span>
+ <label>BPM <input type="number" id="sBpm" value="120" min="40" max="240" style="width:64px"></label><button id="sMet">Metronome off</button><button id="sCount">Count-in off</button><button id="sPunch">Punch off</button><label>In <input type="number" id="pIn" value="2" step="0.1" style="width:60px"></label><label>Out <input type="number" id="pOut" value="6" step="0.1" style="width:60px"></label></div>
+ <div class="row"><input type="file" id="sImport"><button id="sTone">Add test tone</button><button id="sSplit">Cut at playhead</button><button id="sCopy">Copy</button><button id="sPaste">Paste</button><button id="sDel">Delete</button><button id="sTrimS">Trim start</button><button id="sTrimE">Trim end</button><button id="sFadeI">Fade in</button><button id="sFadeO">Fade out</button><button id="sAddTr">Add track</button><button id="sZoom">Zoom</button></div>
+ <div class="row"><label><input type="checkbox" id="exMaster" checked> Apply mastering</label><button id="exWav">Export WAV</button><button id="exComp">Export WebM/OGG</button><span id="exOut"></span></div></div>
+ <div class="card tracks" data-drop="studio"><div id="tracks"></div><small>Click a clip to select it, drag to move it, click empty space to move the playhead. Arm a track with R to record onto it. Each recording is kept as a take. Drop any audio or video file here to add it to the selected track.</small></div>
+</section>
+<section class="tab" id="t-mixer"><div class="row"><small>Automation: set a channel to Write and move its fader while the studio plays, then set it to Read to play the moves back.</small></div><div class="strips" id="strips"></div>
+ <div class="grid"><div class="card"><h3>Reverb bus</h3><label class="k">Size<input type="range" id="revSize" min="0.3" max="6" step="0.1" value="2.2"></label><label class="k">Return<input type="range" id="revRet" min="0" max="1.5" step="0.01" value="0.8"></label></div>
+ <div class="card"><h3>Delay bus</h3><label class="k">Time (s)<input type="range" id="dlyTime" min="0.05" max="1.2" step="0.01" value="0.375"></label><label class="k">Feedback<input type="range" id="dlyFb" min="0" max="0.9" step="0.01" value="0.35"></label><label class="k">Return<input type="range" id="dlyRet" min="0" max="1.5" step="0.01" value="0.7"></label></div></div>
+</section>
+<section class="tab" id="t-master"><div class="grid">
+ <div class="card"><h3>Mastering chain</h3><div class="row"><button id="mBypass">Mastering on</button><select id="mPreset"></select></div><div id="mCtl"></div></div>
+ <div class="card"><h3>Loudness</h3><div>Momentary <b id="lufsM">--</b> · Short-term <b id="lufsS">--</b> · Integrated <b id="lufsI" class="big" style="font-size:20px">--</b> LUFS (approx) · Peak <b id="peak">--</b> dBFS</div><canvas id="spec" height="90"></canvas><div class="row"><button id="lufsReset">Reset meter</button></div></div>
+ <div class="card" data-drop="master"><h3>Master a song</h3><div class="hint">Choose or drop any audio or video file.</div><div class="row"><input type="file" id="mFile"><button id="mDemo">Demo song</button><button id="mPlay">Play</button><button id="mStop">Stop</button></div>
+  <div class="row"><button id="mRender">Render mastered WAV</button><button id="mMatch">Match target loudness</button></div><div id="mOut"></div></div>
+ <div class="card" data-drop="ref"><h3>Reference compare</h3><div class="row"><input type="file" id="refFile"><button id="refAB">Listening: Your master</button></div><div id="refInfo">Load a reference song to compare by ear and by loudness.</div></div>
+ <div class="card" data-drop="cover"><h3>Cover art</h3><img class="coverImg" alt="Cover art" style="display:none"><div class="row"><input type="file" id="coverFile"></div><div id="coverInfo" class="hint">No cover yet. Add a picture to use as cover art.</div><div class="hint">PNG, JPG, WebP or GIF. The cover is saved inside your WAV exports from the studio, the mastering card and the DJ mix recorder.</div></div>
+</div></section>
+<section class="tab" id="t-tools"><div class="card"><h3><span id="toolCount">0</span> tools and presets</h3>
+ <div class="row"><input type="text" id="tSearch" placeholder="Search, for example trap vocal warm" style="flex:1"><select id="tCat"><option value="">All types</option><option value="chain">Channel chains</option><option value="master">Mastering</option><option value="djfx">DJ FX</option><option value="voice">Karaoke voice</option><option value="fav">Favourites</option></select>
+ <label>Apply to <select id="tTarget"></select></label></div><div id="tInfo"></div><div class="list" id="tList"></div></div></section>
+<section class="tab" id="t-clean"><div class="card" data-drop="clean"><h3>Lyric Cleaner</h3><p><small>Checks each line. Red needs a rewrite, amber could be misread, green is clear. This is a helper, not legal advice.</small></p>
+ <div class="row"><span class="hint">Import a lyric file (.txt or .lrc), or drop it here</span><input type="file" id="lcFile"></div><textarea id="lcText" placeholder="Paste lyrics here"></textarea><div class="row"><label><input type="checkbox" id="lcRadio"> Radio / Suno mode (swearing and explicit words)</label><button id="lcScan">Check lyrics</button><button id="lcApply">Apply all rewrites</button><button id="lcToKar">Send to karaoke</button></div><div id="lcSum"></div><div id="lcOut"></div></div></section>
+<section class="tab" id="t-about"><div class="card"><h3>About</h3><p>Coffeebreak Mega Studio by Coffeebreak, Newcastle NSW. Everything runs in your browser with Web Audio. Your audio never leaves your device, and the app works offline once loaded.</p>
+<p>Files: choose or drag in any file. Audio and video files load their sound (MP3, WAV, OGG, FLAC, M4A, MP4, WebM, MOV and more). Formats the browser cannot play are converted on your device by a built-in converter, which downloads once (about 32 MB) the first time it is needed. Text and LRC files load as lyrics, and pictures become cover art. Files with no sound show a short message.</p>
+<p>More apps and music: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">https://coffeebreaks.itch.io</a></p>
+<p>Keys: Space plays deck A, 1 to 8 and Q to R play sampler pads, T taps the next karaoke line.</p>
+<p><b>Rights:</b> Coffeebreak (Karen O'Brien) keeps all rights to this app, its sounds, presets and designs. Buyers may resell physical items but may not copy this app or make their own versions of it.</p></div></section>
+</main>
+<footer><img src="logo.png" alt="Coffeebreak" style="height:28px;vertical-align:middle"> Coffeebreak Mega Studio · <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a><br>© Coffeebreak (Karen O'Brien). All rights reserved. Buyers may resell physical items but may not copy this app or make their own versions.<br><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></footer>
+<div class="toast" id="toast"></div>
+<script src="wordlists.js"></script><script src="cleaner.js"></script><script src="presets.js"></script><script src="filein.js"></script><script src="app.js"></script>
+<script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});</script>
+<div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

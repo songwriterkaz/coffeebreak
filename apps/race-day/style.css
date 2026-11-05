@@ -1,0 +1,14 @@
+body{margin:0;font-family:Georgia,serif;color:#3a0a24;background:#fff0f6 url(img/bg.jpg);}
+header{background:linear-gradient(90deg,#ff4fa3,#ffcf4a);padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header img{width:64px;height:64px;border-radius:50%;border:3px solid #fff}header h1{margin:0;color:#fff;text-shadow:1px 1px 0 #b8005a}
+nav a{color:#fff;font-weight:bold;margin-right:12px;text-decoration:none}
+section{max-width:960px;margin:18px auto;background:rgba(255,255,255,.92);border:3px solid #ffd54a;border-radius:16px;padding:16px}
+h2{color:#d4006a;border-bottom:2px dashed #ffcf4a}.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.card{background:#fff;border:2px solid #ff9ac8;border-radius:12px;padding:8px;text-align:center}.card img{width:100%;border-radius:8px}
+.ph{background:repeating-linear-gradient(45deg,#ffe4f0,#ffe4f0 10px,#fff8d6 10px,#fff8d6 20px);min-height:200px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#b8005a}
+a.btn,button{background:#ff4fa3;color:#fff;border:2px solid #ffd54a;border-radius:20px;padding:8px 16px;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block;margin:4px}
+canvas{width:100%;border-radius:10px;border:3px solid #ffd54a}.g-top{display:flex;gap:10px;align-items:center}.caller{width:80px;height:80px;object-fit:cover;border-radius:50%;border:3px solid #ff4fa3}.glogo{width:60px;margin-left:auto;border-radius:50%}
+.call{background:#ffe4f0;border-radius:10px;padding:6px 10px;margin-top:4px;min-height:22px}.g-info{margin:8px 0}
+.field{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;margin:8px 0}.hz{text-align:left;background:#fff;color:#3a0a24;border:2px solid #ff9ac8;border-radius:10px;margin:0}.hz.on{background:#ffd54a}.hz small{display:block;color:#888}
+.silk{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:6px;vertical-align:middle}.trophy{display:flex;gap:12px;background:#fff8d6;border-radius:12px;padding:10px;margin-top:10px}.trophy img{width:120px;border-radius:10px}.fine{font-size:12px;color:#777}
+footer{text-align:center;padding:16px;color:#b8005a}footer img{width:40px;vertical-align:middle;border-radius:50%}

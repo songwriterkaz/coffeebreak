@@ -1,0 +1,23 @@
+Title: Coffeebreak Pay
+Short description: A cheeky Aussie PayPal alternative. Pay buttons, invoices and tip jars, paid bank to bank by PayID.
+Tags: payid, paypal-alternative, invoice, tip-jar, pay-button, bill-splitter, australia, small-business, creators, coffeebreak
+Classification: Tool / Web (HTML, playable in browser). Price: free. AI disclosure: yes (AI-assisted code).
+
+Coffeebreak Pay helps you settle up with mates through your own banking app by PayID. Hit up a mate with a request link and QR code, pay up from a link, split the bill, shout Coffeebreak a coffee, and keep a ledger on your device with CSV export. Starring Beanbot, the coffee mug robot.
+
+Built for sellers and creators:
+- Pay buttons: a copy-paste snippet or pay-button.js for any website, which opens a checkout with the item, amount, PayID, a unique reference and a QR code.
+- Invoices and receipts: business name, optional ABN or a "no ABN yet" note, GST off by default, print to PDF, and a shareable pay link.
+- Your own pay page and tip jar with suggested amounts.
+- Two-way payments: every request and receipt shows both people's PayIDs, with Request back and Pay back buttons, plus a contacts list.
+- Seller dashboard: outstanding and received totals, monthly totals, overdue reminders to copy, and CSV export.
+- Protection: receipts for both sides, a "mark received" step, a PayID name-check reminder, and a dispute helper with steps for your bank, Scamwatch, ReportCyber, IDCARE and AFCA.
+- An honest Coffeebreak Pay vs PayPal comparison.
+
+Please note: Coffeebreak Pay never holds, receives or moves money. Payments go directly between your own bank accounts. Holding or transferring other people's money needs an AFSL or AUSTRAC licence, which this app does not have. No card details are ever asked for. Your PayID and history stay on your device only.
+
+Stay safe: only pay people you know. Your bank shows the account name before you pay by PayID. If it doesn't match, stop.
+
+More from Coffeebreak: https://coffeebreaks.itch.io
+
+© Karen O'Brien (Coffeebreak), Newcastle NSW. Karen keeps all rights to her products, designs, apps, name and logo. You may use this app, but you may not copy it or make your own versions of it.

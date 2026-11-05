@@ -1,11 +1,317 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak WifiPhone Names</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak WifiPhone Names</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><script src="cbreport.js" data-app="Coffeebreak Wifiphone Names" data-version="r1-20261023"></script><meta charset="utf-8"><script src="cbassist.js"></script><script src="cbcode.js"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak WifiPhone Names</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="logo.webp"><meta name="theme-color" content="#3b2418">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font:20px/1.3 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#fff6f0;color:#2a1810}
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#3b2418;color:#fff;min-height:56px}
+header img{width:40px;height:40px;border-radius:50%}header b{flex:1;font-size:19px}
+#st{font-size:16px;font-weight:700;padding:6px 12px;border-radius:20px;background:#e65100;color:#fff}#st.ok{background:#1b5e20}
+#app{height:calc(100dvh - 56px);overflow:auto;padding:12px}
+.s{display:none}.s.on{display:block}
+h1{font-size:30px;margin:8px 0}p{margin:8px 0}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:96px;margin:10px 0;padding:12px 16px;border:0;border-radius:24px;font:inherit;font-size:28px;font-weight:800;color:#fff;background:#6d3a1f;text-align:center}
+.btn:active{transform:scale(.97)}.btn:focus-visible,input:focus-visible{outline:5px solid #ffb300;outline-offset:2px}
+.go{background:#1b5e20}.no{background:#b71c1c}.pk{background:#ad1457}.br{background:#4e342e}
+input{width:100%;min-height:96px;font:inherit;font-size:34px;font-weight:700;padding:12px 16px;border:5px solid #6d3a1f;border-radius:24px;background:#fff;color:#2a1810;text-align:center}
+.row{display:flex;gap:8px;align-items:stretch}.row .btn.nm{flex:1}.row .rm{width:140px;font-size:22px}
+.nm{justify-content:flex-start;text-align:left;font-size:32px;background:#2a1810;overflow:hidden}.nm span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.av{flex:none;width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;color:#fff;border:4px solid #fff}
+.note{font-size:18px;color:#4e342e}#homeMsg.bad{color:#7f0000;font-weight:700}#homeMsg{font-size:20px}
+.card{background:#fff;border:3px solid #e0c9b9;border-radius:20px;padding:12px;margin:10px 0}
+#msg{position:fixed;left:8px;right:8px;bottom:12px;z-index:50;padding:16px;border-radius:18px;font-size:22px;font-weight:700;line-height:1.25;color:#fff;background:#1b5e20;box-shadow:0 4px 14px #0007;display:none;text-align:center}#msg.bad{background:#b71c1c}
+#call{display:none;position:fixed;inset:0;z-index:40;background:#2a1810;color:#fff;padding:16px;text-align:center;overflow:auto}
+#call .av{width:160px;height:160px;font-size:90px;margin:16px auto;border-width:6px}
+#call.ring .av{animation:pulse 1s infinite}@keyframes pulse{50%{transform:scale(1.12)}}
+#ct{font-size:34px;font-weight:800;margin:8px 0}#cs{font-size:24px;margin:8px 0 16px}
+small{font-size:16px;display:block;margin:10px 0;color:#4e342e}
+.logo{display:block;width:120px;height:120px;border-radius:50%;margin:8px auto}
+a{color:#ad1457;font-weight:700}
+.qrbox{background:#fff;border:4px solid #2a1810;border-radius:20px;padding:8px;margin:10px auto;text-align:center;width:fit-content;max-width:100%}
+#qri[hidden]{display:none}
+#qri{display:block;margin:0 auto;image-rendering:pixelated;max-width:100%;height:auto;background:#fff}
+#qrc{display:block;margin:0 auto;image-rendering:pixelated;max-width:100%;height:auto}
+#qrs,#scs{font-size:20px;font-weight:700;padding:10px 14px;border-radius:16px;background:#e8f5e9;color:#1b3d1f;margin:10px 0}#qrs.wait,#scs.wait{background:#fff3e0;color:#7a3b00}#qrs.bad,#scs.bad{background:#ffebee;color:#7f0000}
+#qrl{word-break:break-all;font-size:16px;user-select:all;-webkit-user-select:all;background:#fff;border:2px dashed #c9a98f;border-radius:12px;padding:8px;margin:8px 0}
+#vid{display:block;width:100%;max-height:46vh;object-fit:cover;background:#000;border-radius:20px;border:4px solid #2a1810}
+.btn.sm{min-height:72px;font-size:24px}
+@media(prefers-reduced-motion:reduce){#call.ring .av{animation:none}}
+</style><link rel="stylesheet" href="cbscan-ios.css"></head><body>
+<header><img src="logo.webp" alt="Coffeebreak"><b>Coffeebreak WifiPhone Names</b><span id="st">Getting ready</span></header>
+<div id="msg" role="alert" aria-live="assertive"></div>
+<main id="app">
+<section class="s" id="sPick"><img class="logo" src="logo.webp" alt="Coffeebreak"><p id="pendNote" class="card" hidden></p><h1>Hello. What is your name?</h1><p>This is your name for calls. Your friends type it to ring you.</p>
+<label for="inMe" class="note">Type your name here</label><input id="inMe" maxlength="20" autocomplete="off" autocapitalize="words" placeholder="Your name">
+<button class="btn go" id="bMe">That is me</button>
+<small>Anyone who types your exact name can ring you, so pick a name your friends know, like Nana Jo.</small></section>
+
+<section class="s" id="sTaken"><h1 id="tkH"></h1><p id="tkP"></p><button class="btn go" id="tkYes"></button><button class="btn br" id="tkNo">Pick a different name</button></section>
+
+<section class="s" id="sBusy"><h1 id="bsH"></h1><p id="bsP"></p><button class="btn go" id="bsTry">Try again</button><button class="btn br" id="bsNew">Pick a different name</button></section>
+
+<section class="s" id="sHome"><div id="homeAdd" class="card" hidden><p id="homeAddT"></p><button class="btn pk sm" id="homeAddB">Add this name</button></div><div id="list"></div><p id="empty" class="card" hidden>You have no names yet. Tap the pink button to add a friend.</p>
+<button class="btn pk" id="bAdd">Add a name</button><button class="btn go" id="bQR">Connect by QR code</button><button class="btn br" id="bTidy">Tidy up names</button><button class="btn br" id="bMeP">About me</button>
+<div class="card" id="linkBox"><label for="inHome" class="note">Got a link, or a friend's name? Type or paste it here</label><input id="inHome" autocomplete="off" autocapitalize="off" placeholder="Link or name" style="font-size:22px;min-height:72px"><button class="btn go sm" id="homeGo">Add from link or name</button><p id="homeMsg" class="note" role="status" aria-live="polite"></p></div></section>
+
+<section class="s" id="sAdd"><h1>Who do you want to ring?</h1><label for="inAdd" class="note">Type your friend's name, just as they typed it</label><input id="inAdd" maxlength="20" autocomplete="off" autocapitalize="words" placeholder="Friend's name">
+<button class="btn go" id="bSave">Save this name</button><button class="btn pk" id="bAddScan">Scan a QR code instead</button><button class="btn br" id="bBack">Go back</button></section>
+
+<section class="s" id="sQR"><div id="qCard"></div>
+<div class="card" id="tellMum" style="text-align:center"><p class="note" style="margin:0">Cannot scan? Tell your friend to tap Add a name and type</p><p style="margin:4px 0 0"><b id="tellN" style="font-size:26px;word-break:break-word"></b></p></div>
+<div id="qrs" class="wait" role="status" aria-live="polite">Getting ready</div>
+<button class="btn go sm" id="qCopy">Copy link</button><button class="btn br sm" id="qScan">Scan a friend's QR code</button><button class="btn br sm" id="qBack">Go back</button>
+<small>This is the link inside the QR code. If a camera cannot scan, send this link in a message instead.</small><div id="qrl"></div></section>
+
+<section class="s" id="sScan"><h1>Scan a QR code</h1><video id="vid" playsinline muted></video><canvas id="scv" hidden></canvas>
+<div id="scs" class="wait" role="status" aria-live="polite">Opening the camera</div>
+<label for="inLink" class="note">No camera? Paste a link here instead</label><input id="inLink" autocomplete="off" autocapitalize="off" placeholder="Paste a link" style="font-size:22px;min-height:72px">
+<button class="btn go sm" id="lkAdd">Add from link</button><button class="btn br sm" id="scBack">Go back</button></section>
+
+<section class="s" id="sMe"><h1>About me</h1><div class="card"><p>My name is</p><p><b id="myN" style="font-size:36px"></b></p><p class="note">Friends type this name to ring me. Keep this page open to get calls.</p></div>
+<button class="btn br" id="bChg">Change my name</button><button class="btn br" id="bHome">Go back</button>
+<small><b>Disclaimer.</b> Coffeebreak WifiPhone Names is an app that needs WiFi or internet. It is not a mobile SIM and has no real phone number. It cannot call 000 or any emergency service, so always keep a real phone for emergencies. Calls go device to device and may not connect on some networks.</small>
+<small><b>Rights.</b> &copy; Coffeebreak. Coffeebreak keeps all rights to this product, its designs, app, name and logo. Buyers and fans may resell the items they bought, but may not copy the designs or the app, or make or sell their own versions.</small>
+<p><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">Real Coffeebreak phones available</a></p></section>
+</main>
+<div id="call"><div class="av" id="cav"></div><div id="ct"></div><div id="cs"></div><div id="cb"></div></div>
+<audio id="ra" autoplay playsinline></audio>
+<script src="peerjs.min.js"></script><script src="qrcode.min.js"></script><script src="cbscan-ios.js"></script>
+<script>
+const $=i=>document.getElementById(i);
+/* storage that never breaks when the browser blocks it */
+const mem={},L={blocked:0,g(k,d){try{const v=localStorage.getItem('cbn_'+k);if(v!==null)return JSON.parse(v)}catch(e){}return k in mem?mem[k]:d},s(k,v){mem[k]=v;try{localStorage.setItem('cbn_'+k,JSON.stringify(v));return 1}catch(e){L.blocked=1;return 0}}};
+const PFX='cbnames-v1-';
+/* on screen messages, never pop-ups */
+let mt;function say(t,bad,ms){const m=$('msg');m.textContent=t;m.className=bad?'bad':'';m.style.display='block';clearTimeout(mt);mt=setTimeout(()=>m.style.display='none',ms||(bad?9000:4000))}
+$('msg').onclick=()=>$('msg').style.display='none';
+const esc=s=>String(s).replace(/[&<>"']/g,m=>'&#'+m.charCodeAt(0)+';');
+/* names -> addresses */
+function clean(n){n=String(n).replace(/\s+/g,' ').trim();return n.replace(/(^|\s)(\S)/g,(m,a,b)=>a+b.toUpperCase())}
+function slug(n){n=String(n);let s=n.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+const odd=[...n].filter(c=>c.codePointAt(0)>0x24f&&/\S/.test(c)).map(c=>c.codePointAt(0).toString(16));if(odd.length)s+=(s?'-':'')+'u'+odd.join('-');return s}
+const pid=n=>PFX+slug(n);
+const COL=['#ad1457','#1b5e20','#0d47a1','#e65100','#4a148c','#006064','#b71c1c','#33691e'];
+const col=n=>{let h=0;for(const c of slug(n))h=(h*31+c.charCodeAt(0))>>>0;return COL[h%COL.length]};
+const ini=n=>([...n.trim()][0]||'?').toUpperCase();
+/* screens */
+function show(id){if(id!='sScan'&&window.stopScan)stopScan();document.querySelectorAll('.s').forEach(x=>x.classList.remove('on'));$(id).classList.add('on');$('app').scrollTop=0}
+/* sounds */
+let AC;function ac(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state=='suspended')AC.resume()}catch(e){}return AC}
+function beep(f,t0,d,v){const a=ac();if(!a)return;try{const o=a.createOscillator(),g=a.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,a.currentTime+t0);g.gain.linearRampToValueAtTime(v||.25,a.currentTime+t0+.03);g.gain.linearRampToValueAtTime(0,a.currentTime+t0+d);o.connect(g);g.connect(a.destination);o.start(a.currentTime+t0);o.stop(a.currentTime+t0+d+.05)}catch(e){}}
+const SND={ring(){beep(784,0,.18);beep(988,.22,.18);beep(784,.6,.18);beep(988,.82,.18)},back(){beep(440,0,.5,.15);beep(554,.55,.5,.15)},happy(){beep(523,0,.12);beep(659,.13,.12);beep(784,.26,.2)},sad(){beep(440,0,.2);beep(330,.22,.35)}};
+let tone;function loop(n,ms){stopTone();SND[n]();tone=setInterval(SND[n],ms);try{if(n=='ring'&&navigator.vibrate)navigator.vibrate([300,150,300])}catch(e){}}
+function stopTone(){clearInterval(tone);tone=null}
+/* my identity */
+let me=L.g('me',null),C=L.g('c',[]),peer,online=0,reg=0;
+const ICE={config:{iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun.cloudflare.com:3478']}]}};
+function st(t,ok){const e=$('st');e.textContent=t;e.className=ok?'ok':'';try{qrStat()}catch(x){}}
+function saveC(){if(!L.s('c',C))say('This page cannot save names here, so they may be lost when you close it. Try opening the app in its own tab.',1,12000)}
+/* sign in to the name directory (the free public PeerJS broker) */
+let regMode='saved',regTry=0,regTimer;
+function register(name,mode){clearTimeout(regTimer);regMode=mode;const my=++reg;online=0;st('Getting ready');
+try{peer&&peer.destroy()}catch(e){}
+if(!window.Peer){st('Needs internet');regTimer=setTimeout(()=>register(name,mode),4000);return}
+const p=new Peer(pid(name),ICE);peer=p;
+p.on('open',()=>{if(my!=reg)return;online=1;regTry=0;st('Ready',1);
+ if(mode=='new'){me={n:name};L.s('me',me);toHome();if(PEND)procAdd();else say('Hello '+name+'. Now add a friend to ring.')}else if(!$('sHome').classList.contains('on')&&!S)toHome()});
+p.on('disconnected',()=>{if(my!=reg)return;online=0;st('Getting ready');regTimer=setTimeout(()=>{try{p.reconnect()}catch(e){}},2500)});
+p.on('error',e=>{if(my!=reg)return;
+ if(e.type=='unavailable-id')return taken(name,mode);
+ if(e.type=='peer-unavailable'){if(S&&S.role=='out'&&S.state=='connecting')fail('unavailable');return}
+ if(!p.open){online=0;st('Getting ready');clearTimeout(regTimer);regTimer=setTimeout(()=>register(name,mode),4000)}});
+p.on('connection',dc=>dc.on('data',d=>onData(dc,d)));
+p.on('call',k=>{if(S&&S.role=='in'&&S.state=='answering'&&k.peer==S.id){clearTimeout(S.t);S.call=k;k.answer(S.stream);hookCall(k)}else{try{k.close()}catch(e){}}})}
+let nextN=2,askBase='';
+function taken(name,mode){try{peer.destroy()}catch(e){}
+if(mode=='saved'&&regTry<6){regTry++;regTimer=setTimeout(()=>register(name,'saved'),3000);return}
+if(mode=='saved'){$('bsH').textContent='Your name looks busy';$('bsP').textContent='The name '+name+' is being used right now. This can happen if you have the app open on another phone or tab. Close it there and tap Try again.';show('sBusy');st('Not ready');return}
+const base=askBase||name;const cand=base+' '+nextN;
+$('tkH').textContent='The name '+name+' is taken';$('tkP').textContent='Somebody else is already using the name '+name+'. You could be called '+cand+' instead. Your friends would then type '+cand+' to ring you.';
+$('tkYes').textContent='Yes, call me '+cand;$('tkYes').onclick=()=>{nextN++;register(cand,'new')};show('sTaken');st('Not ready')}
+$('tkNo').onclick=()=>{nextN=2;$('inMe').value='';show('sPick');$('inMe').focus()};
+$('bsTry').onclick=()=>{regTry=0;show('sHome');register(me.n,'saved')};
+$('bsNew').onclick=()=>pickNew();
+function pickNew(){nextN=2;askBase='';$('inMe').value='';show('sPick')}
+$('bMe').onclick=()=>{ac();const n=clean($('inMe').value);if(!n||!/[\p{L}\p{N}]/u.test(n))return say('Please type your name in the box first.',1);askBase=n;nextN=2;register(n,'new')};
+$('inMe').onkeydown=e=>{if(e.key=='Enter')$('bMe').click()};
+/* home */
+let tidy=0,rmT;
+function toHome(){draw();show('sHome')}
+function draw(){const l=$('list');l.innerHTML='';const arr=C.slice().sort((a,b)=>a.n.localeCompare(b.n));
+$('empty').hidden=arr.length>0;
+arr.forEach(c=>{const row=document.createElement('div');row.className='row';const b=document.createElement('button');b.className='btn nm';b.innerHTML='<div class="av" style="background:'+col(c.n)+'">'+esc(ini(c.n))+'</div><span>'+esc(c.n)+'</span>';b.setAttribute('aria-label','Ring '+c.n);
+ b.onclick=()=>{ac();if(tidy)return say('Tap Done tidying first, then tap a name to ring.',1);dial({n:c.n})};row.append(b);
+ if(tidy){const r=document.createElement('button');r.className='btn no rm';r.textContent='Remove';r.onclick=()=>{if(r.dataset.sure!='1'){r.dataset.sure='1';r.textContent='Tap again to remove';clearTimeout(rmT);rmT=setTimeout(()=>{r.dataset.sure='0';r.textContent='Remove'},4000);return}C=C.filter(x=>slug(x.n)!=slug(c.n));saveC();draw();say(c.n+' was removed.')};row.append(r)}
+ l.append(row)});
+$('bTidy').textContent=tidy?'Done tidying':'Tidy up names';$('bTidy').hidden=!arr.length&&!tidy;$('myN').textContent=me?me.n:''}
+$('bTidy').onclick=()=>{tidy=!tidy;draw()};
+$('bAdd').onclick=()=>{tidy=0;draw();$('inAdd').value='';show('sAdd');$('inAdd').focus()};
+$('bBack').onclick=()=>toHome();
+$('bSave').onclick=()=>{ac();const n=clean($('inAdd').value);if(!n||!/[\p{L}\p{N}]/u.test(n))return say('Please type your friend\'s name in the box first.',1);
+if(me&&slug(n)==slug(me.n))return say(n+' is your own name. Type the name of the friend you want to ring.',1);
+if(C.some(x=>slug(x.n)==slug(n)))return say('You already have '+n+' in your list.',1);
+C.push({n});saveC();toHome();say(n+' is added. Tap '+n+' to ring.')};
+$('inAdd').onkeydown=e=>{if(e.key=='Enter')$('bSave').click()};
+$('bMeP').onclick=()=>{$('myN').textContent=me.n;show('sMe')};$('bHome').onclick=()=>toHome();
+$('bChg').onclick=()=>{if($('bChg').dataset.s!='1'){$('bChg').dataset.s='1';$('bChg').textContent='Tap again to change my name';setTimeout(()=>{$('bChg').dataset.s='0';$('bChg').textContent='Change my name'},4000);return}$('bChg').dataset.s='0';$('bChg').textContent='Change my name';try{peer.destroy()}catch(e){}reg++;online=0;st('Not ready');pickNew()};
+/* media */
+function silent(){try{return ac().createMediaStreamDestination().stream}catch(e){return new MediaStream}}
+async function media(){try{return await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){say('Your microphone is off, so they cannot hear you. Please allow the microphone to talk.',1,7000);return silent()}}
+/* calls: a short note over a data link rings the other phone, then the voice call starts once they answer */
+let S=null,lastTarget=null,clock;
+const TXT={connecting:['Calling','Finding {n}',''],ringing:['Ringing {n}','Please wait while it rings','ring'],talking:['Talking to {n}','You can talk now',''],
+unavailable:['{n} is not available','{n} may be away, or the app is closed. Please try again a little later.','bad'],noanswer:['{n} did not answer','Maybe {n} is busy right now. You can try again.','bad'],
+busy:['{n} is on another call','Please try again in a little while.','bad'],declined:['{n} cannot talk right now','Please try again a little later.','bad'],
+lost:['The call did not connect','Something got in the way. Please try again.','bad'],ended:['Call finished','Tap the button to go back.',''],
+notready:['Getting ready','Your phone is still getting ready. Please wait a moment and try again.','bad'],incoming:['{n} is calling','Tap the green button to talk','ring'],missed:['{n} called you','You were not able to answer.','bad'],
+mic:['Microphone needed','Please allow the microphone, then try again.','bad']};
+function btn(cls,t,f){const b=document.createElement('button');b.className='btn '+cls;b.textContent=t;b.onclick=f;return b}
+function panel(state,n,id,btns){const t=TXT[state];$('call').style.display='block';$('call').className=t[2]=='ring'?'ring':'';$('cav').style.background=col(n);$('cav').textContent=ini(n);
+$('ct').textContent=t[0].replace('{n}',n);$('cs').textContent=t[1].replace('{n}',n);const c=$('cb');c.innerHTML='';btns.forEach(b=>c.append(b));document.title=state=='incoming'?n+' is calling':'Coffeebreak WifiPhone Names'}
+function close(){$('call').style.display='none';document.title='Coffeebreak WifiPhone Names'}
+function cleanup(){if(!S)return;const s=S;S=null;s.dead=1;['t','t1','t2'].forEach(k=>clearTimeout(s[k]));clearInterval(clock);stopTone();
+try{s.call&&s.call.close()}catch(e){}try{s.dc&&s.dc.close()}catch(e){}try{s.stream&&s.stream.getTracks().forEach(t=>t.stop())}catch(e){}$('ra').srcObject=null}
+function isFriend(id){return C.some(x=>pid(x.n)==id)}
+function endScreen(state,n,id,sound){stopTone();if(sound)SND[sound]();const bs=[];
+if(state=='missed')bs.push(btn('go','Ring '+n+' back',()=>dial({n,id})));
+else if(state!='ended')bs.push(btn('go','Try again',()=>dial({n,id})));
+if(id&&!isFriend(id)&&n&&n!='Someone')bs.push(btn('pk','Add '+n+' to my names',()=>{if(!C.some(x=>pid(x.n)==id)){C.push({n});saveC()}close();toHome();say(n+' is added.')}));
+bs.push(btn('br','Go back',()=>{close();toHome()}));panel(state,n,id,bs)}
+function fail(state){if(!S)return;const s=S,n=s.name,id=s.id;if(s.dc&&s.state!='incoming'&&state!='missed'){try{s.dc.send({type:'cancel'})}catch(e){}}cleanup();endScreen(state,n,id,state=='missed'?0:'sad')}
+async function dial(c){ac();const n=c.n,id=c.id||pid(n);lastTarget=c;if(S)return;
+if(!peer||!peer.open){S=null;stopTone();return endScreen('notready',n,id,'sad')}
+const s=S={role:'out',name:n,id,state:'connecting'};panel('connecting',n,id,[btn('no','Stop',()=>fail('ended'))]);
+s.stream=await media();if(S!==s){try{s.stream.getTracks().forEach(t=>t.stop())}catch(e){}return}
+const dc=peer.connect(id,{reliable:true});s.dc=dc;s.t1=setTimeout(()=>fail('unavailable'),9000);
+dc.on('open',()=>{if(S!==s)return;clearTimeout(s.t1);s.t1=setTimeout(()=>fail('unavailable'),8000);dc.send({type:'ring',name:me.n})});
+dc.on('data',d=>{if(S!==s||!d)return;
+ if(d.type=='ringing'){clearTimeout(s.t1);s.state='ringing';panel('ringing',n,id,[btn('no','Stop',()=>fail('ended'))]);loop('back',3000);s.t2=setTimeout(()=>fail('noanswer'),45000)}
+ else if(d.type=='busy')fail('busy');else if(d.type=='decline')fail('declined');
+ else if(d.type=='accept'){clearTimeout(s.t2);stopTone();s.state='joining';s.t=setTimeout(()=>fail('lost'),15000);const k=peer.call(id,s.stream);s.call=k;hookCall(k)}
+ else if(d.type=='bye'&&s.state=='talking'){cleanup();endScreen('ended',n,id)}});
+dc.on('close',()=>{if(S===s&&(s.state=='connecting'||s.state=='ringing'))fail('unavailable')});
+dc.on('error',()=>{if(S===s&&(s.state=='connecting'||s.state=='ringing'))fail('unavailable')})}
+function hookCall(k){const s=S;k.on('stream',r=>{if(S!==s||s.state=='talking')return;clearTimeout(s.t);s.state='talking';const a=$('ra');a.srcObject=r;try{a.play()}catch(e){}stopTone();SND.happy();
+ const t0=Date.now(),f=()=>{const x=Math.floor((Date.now()-t0)/1000);$('cs').textContent='You can talk now. '+Math.floor(x/60)+':'+String(x%60).padStart(2,'0')};
+ panel('talking',s.name,s.id,[btn('no','Hang up',()=>hang())]);f();clearInterval(clock);clock=setInterval(f,1000)});
+k.on('close',()=>{if(S===s){if(s.state=='talking'){cleanup();endScreen('ended',s.name,s.id)}else fail('lost')}});k.on('error',()=>{if(S===s)fail('lost')})}
+function hang(){if(!S)return;const s=S;try{s.dc&&s.dc.send({type:'bye'})}catch(e){}cleanup();endScreen('ended',s.name,s.id)}
+/* incoming */
+function onData(dc,d){if(!d)return;
+if(d.type=='ring'){if(S){try{dc.send({type:'busy'})}catch(e){}return}
+ const n=clean(String(d.name||'Someone').slice(0,20))||'Someone',id=dc.peer;const s=S={role:'in',name:n,id,dc,state:'incoming'};
+ try{dc.send({type:'ringing'})}catch(e){}
+ panel('incoming',n,id,[btn('go','Answer',()=>answerIn()),btn('no','No thanks',()=>{try{dc.send({type:'decline'})}catch(e){}cleanup();close();toHome()})]);loop('ring',2200);
+ s.t2=setTimeout(()=>{if(S===s&&s.state=='incoming'){cleanup();endScreen('missed',n,id)}},50000);
+ dc.on('close',()=>{if(S===s&&s.state=='incoming'){cleanup();endScreen('missed',n,id)}})}
+else if(d.type=='cancel'){if(S&&S.role=='in'&&S.dc===dc&&S.state=='incoming'){const s=S;cleanup();endScreen('missed',s.name,s.id)}}
+else if(d.type=='bye'){if(S&&S.role=='in'&&S.dc===dc&&(S.state=='talking'||S.state=='answering')){const s=S;cleanup();endScreen('ended',s.name,s.id)}}}
+async function answerIn(){const s=S;if(!s||s.state!='incoming')return;ac();stopTone();s.state='answering';
+panel('connecting',s.name,s.id,[btn('no','Stop',()=>hang())]);$('ct').textContent='Answering '+s.name;$('cs').textContent='Just a moment';
+s.stream=await media();if(S!==s){try{s.stream.getTracks().forEach(t=>t.stop())}catch(e){}return}
+s.t=setTimeout(()=>fail('lost'),15000);try{s.dc.send({type:'accept'})}catch(e){fail('lost')}}
+
+/* QR to connect: my QR holds a link, and opening or scanning a link adds that name to the list */
+const ITCH='https://coffeebreaks.itch.io/coffeebreak-wifiphone-names';
+let PEND=null;
+function baseUrl(){try{const h=location.hostname;if(/^https?:$/.test(location.protocol)&&!/itch\.zone|hwcdn|itch\.io/.test(h))return location.origin+location.pathname}catch(e){}return ITCH}
+function myLink(){return me&&me.n?baseUrl()+'?add='+encodeURIComponent(me.n):''}
+function addFrom(u){const m=/[?&#]add=([^&#]*)/.exec(String(u||''));if(!m)return '';let n='';try{n=decodeURIComponent(m[1].replace(/\+/g,' '))}catch(e){return ''}
+ n=clean(n.slice(0,20));return n&&/[\p{L}\p{N}]/u.test(n)?n:''}
+function seenAdds(){return L.g('seen',[])}
+function grabAdd(){let n=addFrom(location.search)||addFrom(location.hash);let from='link';
+ if(!n){try{if(document.referrer&&/itch\.io/.test(new URL(document.referrer).hostname))n=addFrom(document.referrer)}catch(e){}}
+ try{history.replaceState(null,'',location.pathname)}catch(e){}
+ if(!n)return;PEND={n,from}}
+function pendNote(){const e=$('pendNote');if(PEND){e.hidden=false;e.textContent=PEND.n+' shared a QR code with you. First pick your own name below, and then '+PEND.n+' will be added to your names.'}else e.hidden=true}
+function addName(n,quiet){n=clean(n);if(!me)return 'none';
+ if(slug(n)==slug(me.n)){say('That QR code is your own name. Ask your friend to show you their QR code.',1,7000);return 'self'}
+ if(C.some(x=>slug(x.n)==slug(n))){say(n+' is already in your list. Tap '+n+' to ring.',0,6000);return 'have'}
+ C.push({n});saveC();toHome();say(n+' is added. Tap '+n+' to ring.',0,7000);return 'added'}
+function homeCard(){const e=$('homeAdd');if(!e)return;if(HOLD){e.hidden=false;$('homeAddT').textContent='You opened a link for '+HOLD+'. They are not in your names. Add them again?'}else e.hidden=true}
+let HOLD=null;
+function procAdd(){if(!PEND||!me)return;const n=PEND.n;PEND=null;
+ const have=C.some(x=>slug(x.n)==slug(n)),seen=seenAdds().indexOf(slug(n))>=0;
+ if(seen&&!have&&slug(n)!=slug(me.n)){HOLD=n;homeCard();say('You opened a link for '+n+' before. Tap Add this name if you want them back.',0,9000);pendNote();return}
+ const r=addName(n);if(r!='self'){const a=seenAdds();a.push(slug(n));L.s('seen',a.slice(-50))}pendNote();HOLD=null;homeCard()}
+/* drawing a big, high contrast QR */
+function qrSvg(o,n,quiet){const t=n+quiet*2;let d='';for(let r=0;r<n;r++){let k=0;while(k<n){if(o.isDark(r,k)){let j=k;while(j<n&&o.isDark(r,j))j++;d+='M'+(k+quiet)+' '+(r+quiet)+'h'+(j-k)+'v1h-'+(j-k)+'z';k=j}else k++}}
+ return 'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+t+' '+t+'" shape-rendering="crispEdges"><rect width="'+t+'" height="'+t+'" fill="#fff"/><path d="'+d+'" fill="#000"/></svg>')}
+function drawQR(text){const c=$('qrc'),im=$('qri');const q=new QRCode(document.createElement('div'),{text,width:64,height:64,correctLevel:QRCode.CorrectLevel.M});
+ const o=q._oQRCode,n=o.getModuleCount(),quiet=4,tot=n+quiet*2;const avail=Math.max(220,Math.min(380,window.innerWidth-82)),dpr=Math.min(window.devicePixelRatio||1,3);
+ const px=Math.max(2,Math.floor(avail*dpr/tot)),size=px*tot;let g=null;try{g=c.getContext('2d')}catch(e){}
+ let drawn=false;
+ if(g){try{c.width=size;c.height=size;c.style.width=(size/dpr)+'px';c.style.height=(size/dpr)+'px';g.fillStyle='#fff';g.fillRect(0,0,size,size);g.fillStyle='#000';
+  for(let r=0;r<n;r++)for(let k=0;k<n;k++)if(o.isDark(r,k))g.fillRect((k+quiet)*px,(r+quiet)*px,px,px);
+  const p=g.getImageData(Math.floor(size/2),Math.floor(size/2),1,1);drawn=p&&p.data&&p.data[3]>0;c.setAttribute('data-url',text)}catch(e){drawn=false}}
+ /* picture version, used when the canvas cannot draw, and kept ready as a backup */
+ im.src=qrSvg(o,n,quiet);im.style.width=(size/dpr)+'px';im.style.height=(size/dpr)+'px';im.setAttribute('data-url',text);
+ c.style.display=drawn?'block':'none';im.hidden=drawn;return drawn}
+function qrStat(){const e=$('qrs');if(!e)return;
+ if(!navigator.onLine){e.className='bad';e.textContent='You are offline. Friends can add you, but calls need the internet.';return}
+ if(online){e.className='';e.textContent='Your phone is ready. People who scan this can add you and ring you.'}else{e.className='wait';e.textContent='Your phone is still getting ready. The QR code already works, but wait for Ready at the top before asking someone to ring you.'}}
+function showQR(){tidy=0;const u=myLink();if(!u)return say('Please pick your name first, then your QR code will appear.',1);
+ try{if(typeof QRCode=='undefined')throw 0;drawQR(u)}catch(e){$('qrc').style.display='none';$('qri').hidden=true;say('The QR picture could not be drawn on this phone. Use Copy link or Share link, or tell your friend to type my name.',1,9000)}
+ $('tellN').textContent=me.n;if(cardR&&cardR.name)cardR.name.textContent=me.n;$('qrl').textContent=u;qrStat();show('sQR')}
+function copyText(t,ok,bad){const fb=()=>{try{const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;left:-999px;top:0';document.body.appendChild(a);a.select();const r=document.execCommand('copy');a.remove();r?ok():bad()}catch(e){bad()}};
+ try{navigator.clipboard.writeText(t).then(ok,fb)}catch(e){fb()}}
+let cardR=null;
+(function(){try{const qc=document.createElement('canvas');qc.id='qrc';qc.width=300;qc.height=300;qc.setAttribute('role','img');qc.setAttribute('aria-label','My QR code. Scan it with a phone camera to add me.');
+ const qi=document.createElement('img');qi.id='qri';qi.alt='My QR code. Scan it with a phone camera to add me.';qi.hidden=true;
+ cardR=CBScanIOS.card($('qCard'),{name:'',sub:'WifiPhone',qr:[qc,qi],onShare:()=>{}});cardR.share.id='qShare';cardR.share.setAttribute('aria-label','Share link');
+ const hb=document.createElement('div');hb.className='cbsi-homebar';hb.appendChild(CBScanIOS.iconButton({label:'Code Scanner',onClick:()=>openIOS()}));hb.firstChild.id='bCodeScan';$('sHome').insertBefore(hb,$('sHome').firstChild)}catch(e){}
+ if(!$('qrc')){const qc=document.createElement('canvas');qc.id='qrc';$('qCard').appendChild(qc);const qi=document.createElement('img');qi.id='qri';qi.hidden=true;$('qCard').appendChild(qi);const sb=document.createElement('button');sb.id='qShare';sb.className='btn pk sm';sb.textContent='Share link';$('qCard').appendChild(sb)}})();
+$('bQR').onclick=showQR;$('qBack').onclick=()=>toHome();
+$('qCopy').onclick=()=>{const u=myLink();copyText(u,()=>say('Link copied. Paste it into a message to send it.',0,6000),()=>{say('Could not copy. Press and hold the link below to copy it.',1,8000);try{const r=document.createRange();r.selectNodeContents($('qrl'));const s=getSelection();s.removeAllRanges();s.addRange(r)}catch(e){}})};
+$('qShare').onclick=()=>{const u=myLink(),d={title:'Ring me on Coffeebreak WifiPhone Names',text:'Tap this link to add '+me.n+' and ring me.',url:u};
+ try{if(navigator.share){navigator.share(d).then(()=>say('Link shared.',0,4000),e=>{if(!e||e.name!='AbortError')copyText(u,()=>say('Sharing did not work here, so the link was copied. Paste it into a message.',0,7000),()=>say('Could not share. Use Copy link instead.',1))});return}}catch(e){}
+ copyText(u,()=>say('Sharing is not available here, so the link was copied. Paste it into a message.',0,7000),()=>say('Could not share. Use Copy link instead.',1))};
+/* scanning a friend's QR with the camera (built in detector, or the bundled jsQR as a fallback) */
+let scanStream,scanTimer,scanBusy=0,detector;
+function scs(t,cls){const e=$('scs');e.textContent=t;e.className=cls||''}
+function stopScan(){clearInterval(scanTimer);scanTimer=null;try{scanStream&&scanStream.getTracks().forEach(t=>t.stop())}catch(e){}scanStream=null;try{$('vid').srcObject=null}catch(e){}}
+function loadJsQR(){return new Promise((res,rej)=>{if(window.jsQR)return res();const s=document.createElement('script');s.src='jsQR.js';s.onload=()=>window.jsQR?res():rej();s.onerror=rej;document.head.appendChild(s)})}
+function gotName(n){if(!me){PEND={n};say('Pick your name first.',1);show('sPick');pendNote();return true}
+ stopScan();const r=addName(n);const a=seenAdds();if(r=='added'||r=='have'){a.push(slug(n));L.s('seen',a.slice(-50))}return true}
+function gotLink(text,fromCam){const n=addFrom(text);if(!n){scs('That does not look like a Coffeebreak WifiPhone Names code. Try the code your friend shows in My QR code.','bad');return false}
+ return gotName(n)}
+/* iPhone style scanner: full screen camera, yellow outline, and a banner you tap to connect */
+function openIOS(){tidy=0;
+ try{if(!window.CBScanIOS)throw 0;
+  CBScanIOS.open({icon:'icon.png',subtitle:'WifiPhone',jsqr:'jsQR.js',title:i=>'Connect to '+i.name,
+   parse:t=>{const n=addFrom(t);return n?{name:n}:null},
+   parsePaste:t=>{const n=parseAny(t);return n?{name:n}:null},
+   onConnect:i=>{CBScanIOS.close();gotName(i.name)}})}
+ catch(e){startScan()}}
+async function startScan(){tidy=0;show('sScan');scs('Opening the camera','wait');$('inLink').value='';
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){scs('This phone cannot open the camera here. Use your phone camera app to scan the code, or paste a link below.','bad');return}
+ try{scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false})}catch(e){scs('The camera is off or not allowed. Please allow the camera, or use your phone camera app to scan the code, or paste a link below.','bad');return}
+ if(!$('sScan').classList.contains('on')){stopScan();return}
+ const v=$('vid');v.srcObject=scanStream;try{await v.play()}catch(e){}
+ detector=null;try{if('BarcodeDetector'in window)detector=new BarcodeDetector({formats:['qr_code']})}catch(e){detector=null}
+ let ok=!!detector;if(!ok){try{await loadJsQR();ok=true}catch(e){}}
+ if(!ok){scs('The scanner could not start. Use your phone camera app to scan the code, or paste a link below.','bad');return}
+ scs('Point the camera at your friend\'s QR code. Hold it steady about a hand length away.','wait');
+ scanTimer=setInterval(async()=>{if(scanBusy||!v.videoWidth)return;scanBusy=1;try{let txt='';
+  if(detector){const r=await detector.detect(v);if(r&&r[0])txt=r[0].rawValue}
+  if(!txt&&window.jsQR){const cv=$('scv'),w=Math.min(640,v.videoWidth),h=Math.round(v.videoHeight*w/v.videoWidth);cv.width=w;cv.height=h;const g=cv.getContext('2d',{willReadFrequently:true});g.drawImage(v,0,0,w,h);const d=g.getImageData(0,0,w,h);const q=jsQR(d.data,w,h,{inversionAttempts:'attemptBoth'});if(q)txt=q.data}
+  if(txt)gotLink(txt,1)}catch(e){}scanBusy=0},300)}
+$('homeAddB').onclick=()=>{const n=HOLD;HOLD=null;if(n){addName(n);const a=seenAdds();a.push(slug(n));L.s('seen',a.slice(-50))}homeCard()};
+function hmsg(t,cls){const e=$('homeMsg');e.textContent=t;e.className='note '+(cls||'')}
+function parseAny(t){t=String(t||'').trim();if(!t)return '';let n=addFrom(t);if(n)return n;if(/^(https?:\/\/|www\.)/i.test(t)||/itch\.io/i.test(t))return '';t=clean(t.slice(0,20));return t&&/[\p{L}\p{N}]/u.test(t)?t:''}
+$('homeGo').onclick=()=>{const t=$('inHome').value.trim();if(!t)return hmsg('Please type or paste a link or a name in the box first.','bad');const n=parseAny(t);if(!n)return hmsg('That link has no name in it. Ask your friend to show their QR code again and tap Copy link, or just type their name.','bad');
+ const r=addName(n);if(r=='added'||r=='have'){const a=seenAdds();a.push(slug(n));L.s('seen',a.slice(-50));$('inHome').value='';hmsg(r=='added'?n+' is added.':n+' is already in your list.')}else if(r=='self')hmsg('That is your own name. Ask your friend for theirs.','bad')};
+$('inHome').onkeydown=e=>{if(e.key=='Enter')$('homeGo').click()};
+$('qScan').onclick=openIOS;$('bAddScan').onclick=openIOS;$('scBack').onclick=()=>{stopScan();toHome()};
+$('lkAdd').onclick=()=>{const t=$('inLink').value.trim();if(!t)return scs('Please paste a link in the box first.','bad');gotLink(t,0)};
+$('inLink').onkeydown=e=>{if(e.key=='Enter')$('lkAdd').click()};
+window.__cbnames={link:myLink,addFrom,get pending(){return PEND},get hold(){return HOLD}};
+/* start */
+function boot(){grabAdd();if(me&&me.n){toHome();register(me.n,'saved');if(PEND)procAdd()}else{show('sPick');pendNote()}}
+window.addEventListener('error',()=>{say('Something went wrong. Tap here to start again.',1,60000);$('msg').onclick=()=>location.reload()});
+try{boot()}catch(e){show('sPick')}
+try{if('serviceWorker'in navigator&&location.protocol.indexOf('http')==0)navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}
+</script><script src="cbreport.js" data-app="Coffeebreak WifiPhone Names" data-version="qr3"></script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

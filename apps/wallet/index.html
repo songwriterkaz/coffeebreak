@@ -1,11 +1,595 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Wallet</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Wallet</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coffeebreak Wallet</title>
+<meta name="description" content="A simple viewing screen for your Bitcoin. See what you have, receive money, and learn how to cash out.">
+<meta name="theme-color" content="#5b3a29">
+<link rel="icon" href="logo.png">
+<style>
+:root{--bg:#f6ede3;--card:#fffaf3;--brown:#5b3a29;--mid:#8a5a3b;--line:#e0cdb8;--green:#1f6f33;--greenbg:#dff0e1;--amber:#8a4b00;--amberbg:#fbe8c8;--btn:#5b3a29;--btntext:#fffaf3}
+*{box-sizing:border-box}
+html{font-size:20px;-webkit-text-size-adjust:100%}
+html.easy{font-size:26px}
+body{margin:0;background:var(--bg);color:var(--brown);font-family:"Trebuchet MS",Verdana,Arial,sans-serif;line-height:1.35}
+a{color:var(--mid);font-weight:bold}
+button{font:inherit;color:inherit;cursor:pointer}
+h1:focus,h2:focus{outline:none}
+:focus-visible{outline:4px solid #c98a4b;outline-offset:3px}
+.wrap{max-width:700px;margin:0 auto;padding:.8rem .9rem 2rem}
+header.top{display:flex;align-items:center;gap:.5rem;justify-content:space-between;flex-wrap:wrap;margin-bottom:.4rem}
+.brand{display:flex;align-items:center;gap:.6rem}
+.brand img{width:2.6rem;height:auto;border-radius:.4rem;display:block}
+.brand span{font-weight:bold;font-size:1.05rem}
+.tools{display:flex;gap:.5rem;flex-wrap:wrap}
+.tool{display:flex;align-items:center;gap:.35rem;min-height:2.8rem;padding:.3rem .7rem;border:2px solid var(--mid);border-radius:1.4rem;background:var(--card);font-weight:bold;font-size:.85rem}
+.tool[aria-pressed="true"]{background:var(--brown);color:var(--btntext)}
+.tool svg{width:1.3rem;height:1.3rem}
+h1{font-size:1.6rem;margin:.4rem 0 .6rem}
+h2{font-size:1.25rem;margin:.2rem 0 .4rem}
+p{margin:.4rem 0}
+.screen{display:none}
+.screen.active{display:block}
+.card{background:var(--card);border:2px solid var(--line);border-radius:1.2rem;padding:1rem;margin:.6rem 0}
+.balance{padding:.7rem 1rem}
+.balance{text-align:center}
+.balance .label{font-size:1rem;color:var(--mid);font-weight:bold}
+.balance .aud{font-size:2.8rem;font-weight:bold;line-height:1.1;margin:.2rem 0;word-break:break-word}
+.balance .btc{font-size:1.4rem;font-weight:bold}
+.balance .sats{font-size:.8rem;color:var(--mid)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.small{font-size:.8rem;color:var(--mid)}
+.note{border-radius:.9rem;padding:.6rem .8rem;margin:.6rem 0;font-size:.9rem;background:var(--amberbg);color:var(--amber);font-weight:bold}
+.note.hide{display:none}
+.big{display:flex;align-items:center;gap:1rem;width:100%;min-height:5.4rem;padding:.7rem 1.1rem;margin:.6rem 0;border:0;border-radius:1.4rem;background:var(--btn);color:var(--btntext);text-align:left;font-size:1.6rem;font-weight:bold;text-decoration:none;box-shadow:0 4px 0 #3b2418}
+.big svg{width:3.4rem;height:3.4rem;flex:none}
+.big small{display:block;font-size:.8rem;font-weight:normal;opacity:.9}
+.big.alt{background:var(--mid);box-shadow:0 4px 0 #5f3c24}
+.big.light{background:var(--card);color:var(--brown);border:3px solid var(--mid);box-shadow:none}
+.big.center{justify-content:center;text-align:center}
+.big:active{transform:translateY(2px)}
+.back{display:flex;align-items:center;gap:.5rem;min-height:3.2rem;padding:.4rem 1rem .4rem .7rem;border:3px solid var(--mid);border-radius:1.6rem;background:var(--card);font-weight:bold;font-size:1.1rem;margin-bottom:.4rem}
+.back svg{width:1.8rem;height:1.8rem}
+.qrbox{background:#fff;border-radius:1rem;padding:.8rem;margin:.6rem auto;width:min(100%,22rem);border:2px solid var(--line)}
+.qrbox svg{display:block;width:100%;height:auto}
+.addr{font-family:"Courier New",monospace;font-size:1.05rem;font-weight:bold;text-align:center;word-break:break-all;letter-spacing:.03em}
+.tick{display:none;align-items:center;justify-content:center;gap:.6rem;font-size:1.5rem;font-weight:bold;color:var(--green);background:var(--greenbg);border-radius:1rem;padding:.6rem;margin:.5rem 0}
+.tick.show{display:flex}
+.tick svg{width:3rem;height:3rem}
+.row{display:flex;align-items:center;gap:.8rem;padding:.8rem 0;border-bottom:2px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .ic{width:2.6rem;height:2.6rem;flex:none}
+.row .amt{font-size:1.4rem;font-weight:bold}
+.row .meta{font-size:.8rem;color:var(--mid)}
+.badge{margin-left:auto;padding:.3rem .7rem;border-radius:1rem;font-weight:bold;font-size:.85rem;white-space:nowrap}
+.badge.ok{background:var(--greenbg);color:var(--green)}
+.badge.wait{background:var(--amberbg);color:var(--amber)}
+.badge.out{background:#ece3d8;color:var(--mid)}
+.empty{text-align:center;padding:1.2rem .4rem}
+.empty svg{width:5rem;height:5rem;margin-bottom:.4rem}
+.empty .t{font-size:1.4rem;font-weight:bold}
+.step{display:flex;gap:.9rem;align-items:flex-start}
+.step .num{flex:none;width:3.2rem;height:3.2rem;border-radius:50%;background:var(--brown);color:var(--btntext);font-weight:bold;font-size:1.8rem;display:flex;align-items:center;justify-content:center}
+.step .pic{flex:none;width:4rem;height:4rem}
+.step .txt{flex:1;min-width:0}
+.step .txt .h{font-size:1.3rem;font-weight:bold}
+.links{display:flex;flex-wrap:wrap;gap:.5rem;margin:.5rem 0}
+.links a{display:inline-block;padding:.5rem .9rem;border:2px solid var(--mid);border-radius:1.2rem;background:#fff;text-decoration:none;color:var(--brown);font-size:.9rem}
+.paybox{font-family:"Courier New",monospace;font-weight:bold;font-size:1.2rem;text-align:center;background:#fff;border:2px dashed var(--mid);border-radius:.8rem;padding:.6rem;word-break:break-all}
+.check{display:flex;align-items:center;gap:.9rem;padding:.7rem 0;border-bottom:2px solid var(--line);font-size:1.1rem;font-weight:bold;cursor:pointer}
+.check:last-child{border-bottom:0}
+.check input{width:2.2rem;height:2.2rem;flex:none;accent-color:var(--green)}
+.warn{background:var(--amberbg);color:var(--amber);border-radius:1rem;padding:.8rem 1rem;font-weight:bold;margin:.6rem 0}
+footer{margin-top:1.4rem;padding-top:1rem;border-top:2px solid var(--line);font-size:.75rem;color:var(--mid)}
+footer p{margin:.4rem 0}
+/* poster */
+.poster{background:#faf3e6;border:6px double var(--mid);text-align:center;padding:1.2rem .8rem;border-radius:.4rem}
+.poster img.logo{width:6rem;height:auto}
+.poster h2{font-size:2.2rem;margin:.4rem 0}
+.poster .sub{font-size:1.1rem;color:var(--mid)}
+.poster .steps{font-weight:bold;font-size:.95rem;margin:.6rem 0}
+.poster .fine{font-size:.7rem;color:var(--mid)}
+@media (prefers-reduced-motion:no-preference){.screen.active{animation:fade .25s ease-out}@keyframes fade{from{opacity:.4}to{opacity:1}}}
+@media print{
+ @page{size:A4;margin:12mm}
+ body{background:#fff}
+ .wrap>header.top,.wrap>footer,.screen:not(#screen-poster),.noprint{display:none}
+ .wrap{max-width:none;padding:0}
+ #screen-poster{display:block}
+ .poster{border:3mm double #5b3a29;min-height:260mm;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:18pt;background:#faf3e6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .poster .qrbox{width:95mm;border:0}
+ .poster h2{font-size:42pt}
+ .poster img.logo{width:40mm}
+ .poster .addr{font-size:17pt}
+ .poster .fine{font-size:11pt;line-height:1.4}
+ .poster .steps{font-size:16pt}
+ .poster .sub{font-size:18pt}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="brand"><img src="logo.png" alt="Coffeebreak logo"><span>Coffeebreak Wallet</span></div>
+  <div class="tools">
+    <button class="tool" id="easyBtn" aria-pressed="false" title="Make everything bigger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 19L8 6l5 13M5 15h6M16 19l3-8 3 8M17 17h4"/></svg><span>Easy mode</span></button>
+    <button class="tool" id="speakBtn" aria-pressed="false" title="Read this screen out loud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4zM17 9a4 4 0 010 6M19.5 6.5a8 8 0 010 11"/></svg><span>Read aloud</span></button>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="screen active" id="screen-home" aria-labelledby="h-home">
+  <h1 id="h-home" class="sr">Your money</h1>
+  <div class="card balance" id="balanceCard">
+    <div class="label">You have</div>
+    <div class="aud" id="balAud">...</div>
+    <div class="btc" id="balBtc">&nbsp;</div>
+    <div class="sats" id="balSats">&nbsp;</div>
+    <div class="small" id="balWait"></div>
+  </div>
+  <div class="note hide" id="netNote" role="status"></div>
+  <div class="small" style="text-align:center" id="updated">&nbsp;</div>
+  <button class="tool" id="refreshBtn" style="margin:.4rem auto;display:flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5v5h-5M4 19v-5h5M5.5 9A7.5 7.5 0 0118 7l2 3M18.5 15A7.5 7.5 0 016 17l-2-3"/></svg><span>Check again</span></button>
+
+  <button class="big" data-go="receive"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 6v24M14 21l10 10 10-10M7 33v7h34v-7"/></svg><span>RECEIVE<small>Get paid</small></span></button>
+  <button class="big alt" data-go="in"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="17"/><path d="M24 14v20M30 18h-8a4 4 0 000 8h4a4 4 0 010 8h-8"/></svg><span>MONEY IN<small>See what arrived</small></span></button>
+  <button class="big" data-go="cashout"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19L24 7l19 12M9 19v16M19 19v16M29 19v16M39 19v16M5 41h38"/></svg><span>CASH OUT<small>To your PayID</small></span></button>
+  <button class="big light" data-go="about"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 5l16 6v12c0 10-7 17-16 20C15 40 8 33 8 23V11z"/><path d="M17 24l5 5 9-10"/></svg><span>STAY SAFE<small>Read this once</small></span></button>
+</section>
+
+<section class="screen" id="screen-receive" aria-labelledby="h-receive">
+  <button class="back" data-go="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back</button>
+  <h1 id="h-receive">Get paid</h1>
+  <p>Show this picture to the person paying you. They scan it with their Bitcoin wallet.</p>
+  <div class="qrbox" id="qrBox" role="img" aria-label="QR code for your Bitcoin address"></div>
+  <p class="small" style="text-align:center">Your Bitcoin address</p>
+  <div class="addr nospeak" id="addrText"></div>
+  <div class="tick" id="tickBox" role="status"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M14 25l7 7 14-15"/></svg><span id="tickText">Copied</span></div>
+  <button class="big center" id="copyBtn"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="15" y="15" width="25" height="28" rx="4"/><path d="M33 15V9a3 3 0 00-3-3H11a3 3 0 00-3 3v26a3 3 0 003 3h4"/></svg><span>COPY ADDRESS</span></button>
+  <button class="big alt center" id="shareBtn"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="35" cy="10" r="5"/><circle cx="12" cy="24" r="5"/><circle cx="35" cy="38" r="5"/><path d="M16.5 21.5l14-9M16.5 26.5l14 9"/></svg><span>SHARE</span></button>
+  <button class="big light center" data-go="poster"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 17V6h22v11M13 35H7V17h34v18h-6M13 28h22v14H13z"/></svg><span>PRINT POSTER</span></button>
+  <p class="small">Only send Bitcoin to this address. Payments cannot be reversed.</p>
+</section>
+
+<section class="screen" id="screen-poster" aria-labelledby="h-poster">
+  <button class="back noprint" data-go="receive"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back</button>
+  <div class="poster">
+    <img class="logo" src="logo.png" alt="Coffeebreak logo">
+    <h2 id="h-poster">Pay with Bitcoin</h2>
+    <div class="sub">Scan the code with your wallet app</div>
+    <div class="qrbox" id="qrBoxPoster"></div>
+    <div class="sub">Or type this address in</div>
+    <div class="addr" id="addrPoster"></div>
+    <div class="steps">1 Open your wallet &nbsp; 2 Scan or paste &nbsp; 3 Press send</div>
+    <div class="fine">Coffeebreak music | coffeebreaks.itch.io<br>Check the address matches before you send. Bitcoin payments cannot be reversed.<br>Karen O'Brien (Coffeebreak) keeps all rights to her songs, designs, name and logo.</div>
+  </div>
+  <div class="noprint">
+    <button class="big center" id="printBtn"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 17V6h22v11M13 35H7V17h34v18h-6M13 28h22v14H13z"/></svg><span>PRINT NOW</span></button>
+    <a class="big light center" href="poster.png" download="coffeebreak-bitcoin-poster.png" style="text-decoration:none"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 6v24M14 21l10 10 10-10M7 33v7h34v-7"/></svg><span>SAVE POSTER PICTURE</span></a>
+    <p class="small"><a href="poster.png" target="_blank" rel="noopener">Open the ready made poster picture</a></p>
+  </div>
+</section>
+
+<section class="screen" id="screen-in" aria-labelledby="h-in">
+  <button class="back" data-go="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back</button>
+  <h1 id="h-in">Money in</h1>
+  <div class="note hide" id="histNote" role="status"></div>
+  <div class="card" id="histCard"><p class="small">Loading...</p></div>
+  <p class="small">Amounts in Australian dollars use today's price, so they can differ from the day you were paid.</p>
+</section>
+
+<section class="screen" id="screen-cashout" aria-labelledby="h-cash">
+  <button class="back" data-go="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back</button>
+  <h1 id="h-cash">Cash out to PayID</h1>
+  <div class="warn">Bitcoin cannot be sent straight to a PayID. It goes through an Australian exchange first. There are 4 steps.</div>
+
+  <div class="card step">
+    <div class="num">1</div>
+    <svg class="pic" viewBox="0 0 48 48" fill="none" stroke="#8a5a3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 24h30M27 14l10 10-10 10"/><rect x="38" y="12" width="6" height="24" rx="2"/></svg>
+    <div class="txt"><div class="h">Send your Bitcoin to an exchange</div>
+      <p>An exchange is a website where you can swap Bitcoin for dollars. You need to sign up and show your ID. It is free to join, but exchanges charge fees for trading and for taking money out.</p>
+      <div class="links">
+        <a href="https://www.coinspot.com.au" target="_blank" rel="noopener">CoinSpot</a>
+        <a href="https://swyftx.com" target="_blank" rel="noopener">Swyftx</a>
+        <a href="https://www.kraken.com" target="_blank" rel="noopener">Kraken</a>
+        <a href="https://www.independentreserve.com" target="_blank" rel="noopener">Independent Reserve</a>
+      </div>
+      <p class="small">Open your real wallet app, press send, and paste the deposit address the exchange gives you. See Stay safe for wallet apps.</p>
+    </div>
+  </div>
+
+  <div class="card step">
+    <div class="num">2</div>
+    <svg class="pic" viewBox="0 0 48 48" fill="none" stroke="#8a5a3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="17" cy="17" r="11"/><path d="M17 11v12M21 14h-6a2.5 2.5 0 000 5h4a2.5 2.5 0 010 5h-6"/><path d="M26 34h16M36 28l6 6-6 6" /></svg>
+    <div class="txt"><div class="h">Sell it for Australian dollars</div>
+      <p>In the exchange, choose Sell Bitcoin and pick AUD. Check the fee before you confirm.</p></div>
+  </div>
+
+  <div class="card step">
+    <div class="num">3</div>
+    <svg class="pic" viewBox="0 0 48 48" fill="none" stroke="#8a5a3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19L24 7l19 12M9 19v16M19 19v16M29 19v16M39 19v16M5 41h38"/></svg>
+    <div class="txt"><div class="h">Take the dollars out to your bank</div>
+      <p>Ask the exchange to withdraw your dollars. Use your PayID if the exchange offers it. If it asks for bank details instead, use those.</p>
+      <div class="paybox nospeak" id="payidText"></div>
+      <div class="tick" id="tickPay" role="status"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M14 25l7 7 14-15"/></svg><span>Copied</span></div>
+    </div>
+  </div>
+
+  <div class="card step">
+    <div class="num">4</div>
+    <svg class="pic" viewBox="0 0 48 48" fill="none" stroke="#8a5a3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="13" y="4" width="22" height="40" rx="4"/><path d="M19 36h10M18 22l5 5 8-10"/></svg>
+    <div class="txt"><div class="h">Check your bank</div>
+      <p>Open your banking app. The dollars should show up soon. Some exchanges take a day or two.</p></div>
+  </div>
+
+  <button class="big center" id="copyPayBtn"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="15" y="15" width="25" height="28" rx="4"/><path d="M33 15V9a3 3 0 00-3-3H11a3 3 0 00-3 3v26a3 3 0 003 3h4"/></svg><span>COPY MY PAYID</span></button>
+
+  <div class="card">
+    <h2>Fees and tax</h2>
+    <p>Each exchange charges fees to sell and to withdraw, and the price of Bitcoin can change while you wait.</p>
+    <p>Crypto you earn or sell can have tax to pay in Australia. Read the <a href="https://www.ato.gov.au/individuals-and-families/investments-and-assets/crypto-asset-investments" target="_blank" rel="noopener">ATO crypto page</a> or ask a tax agent.</p>
+  </div>
+</section>
+
+<section class="screen" id="screen-about" aria-labelledby="h-about">
+  <button class="back" data-go="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back</button>
+  <h1 id="h-about">Stay safe</h1>
+  <div class="card">
+    <h2>What this screen does</h2>
+    <p>This screen only shows your money. It cannot spend or move anything. It never asks for your secret words, a password or a key.</p>
+  </div>
+  <div class="card">
+    <h2>To spend or move money</h2>
+    <p>Open a real wallet app and restore your wallet with your 24 secret recovery words. Choose Native SegWit if it asks. Check that the first address it shows matches the address on the Receive screen.</p>
+    <div class="links">
+      <a href="https://sparrowwallet.com" target="_blank" rel="noopener">Sparrow</a>
+      <a href="https://blockstream.com/app/" target="_blank" rel="noopener">Blockstream Green</a>
+      <a href="https://bluewallet.io" target="_blank" rel="noopener">BlueWallet</a>
+    </div>
+  </div>
+  <div class="warn">
+    Never share your secret words. Never type them into a website, a message or a photo. This website will never ask for them.
+  </div>
+  <div class="warn">If the words are lost, the money cannot be recovered. Nobody can fix that for you.</div>
+  <div class="card">
+    <h2>Back up checklist</h2>
+    <label class="check"><input type="checkbox" data-chk="paper"><span>I wrote my 24 words on paper</span></label>
+    <label class="check"><input type="checkbox" data-chk="safe"><span>The paper is somewhere safe</span></label>
+    <label class="check"><input type="checkbox" data-chk="copy"><span>I keep a second copy in a different place</span></label>
+    <label class="check"><input type="checkbox" data-chk="nobody"><span>I have not shared the words with anyone</span></label>
+    <label class="check"><input type="checkbox" data-chk="test"><span>I tried restoring in a wallet app and the address matched</span></label>
+    <p class="small" id="chkSummary"></p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+  <p>Karen O'Brien (Coffeebreak) keeps all rights to this app, its design, name and logo. People may use the app, but may not copy it or make their own versions of it.</p>
+  <p>This is a viewing screen, not financial advice. The price of Bitcoin moves up and down, and Bitcoin payments cannot be reversed.</p>
+</footer>
+</div>
+
+<script src="qrcode.js"></script>
+<script>
+(function(){
+'use strict';
+/* ---- the one config block ---- */
+var CONFIG = {
+  ADDRESS: 'bc1q9llgxhvf3c3whxw9wr8rsjzenj2pcwsudezcp3',
+  PAYID: 'darkokaz@gmx.com',
+  API: 'https://mempool.space/api'
+};
+var ADDRESS = CONFIG.ADDRESS;
+var $ = function(id){ return document.getElementById(id); };
+var state = { rate:null, bal:null, txs:null, txErr:false, fetchedAt:null };
+
+/* ---- storage helpers (fail quietly) ---- */
+function lsGet(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } }
+function lsSet(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+
+/* ---- formatting ---- */
+var audFmt = new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD'});
+function aud(btc, rate){ return rate ? 'A' + audFmt.format(btc*rate) : '...'; }
+function btcStr(sats){ return (sats/1e8).toFixed(8) + ' BTC'; }
+function satsStr(sats){ return sats.toLocaleString('en-AU') + ' sats'; }
+function dateStr(t){ return new Date(t*1000).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}); }
+function timeAgo(ms){
+  var m = Math.round((Date.now()-ms)/60000);
+  if (m < 1) return 'just now';
+  if (m === 1) return '1 minute ago';
+  if (m < 60) return m + ' minutes ago';
+  var h = Math.round(m/60);
+  if (h < 24) return h + (h === 1 ? ' hour ago' : ' hours ago');
+  return new Date(ms).toLocaleDateString('en-AU');
+}
+
+/* ---- network ---- */
+function getJSON(url){
+  var ctl = ('AbortController' in window) ? new AbortController() : null;
+  var timer = ctl ? setTimeout(function(){ ctl.abort(); }, 12000) : null;
+  return fetch(url, ctl ? {signal:ctl.signal} : {}).then(function(r){
+    if (timer) clearTimeout(timer);
+    if (r.ok) return r.json();
+    throw new Error('http ' + r.status);
+  });
+}
+function fetchRate(){
+  return getJSON('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=aud').then(function(j){
+    var v = j && j.bitcoin && j.bitcoin.aud;
+    if (typeof v === 'number' && v > 0) return v;
+    throw new Error('bad rate');
+  }).catch(function(){
+    return getJSON(CONFIG.API + '/v1/prices').then(function(j){
+      if (j && typeof j.AUD === 'number' && j.AUD > 0) return j.AUD;
+      throw new Error('bad rate 2');
+    });
+  });
+}
+function fetchBalance(){
+  return getJSON(CONFIG.API + '/address/' + ADDRESS).then(function(j){
+    var c = j.chain_stats, m = j.mempool_stats;
+    return {
+      confirmed: c.funded_txo_sum - c.spent_txo_sum,
+      pending: m.funded_txo_sum - m.spent_txo_sum
+    };
+  });
+}
+function fetchTxs(){
+  return getJSON(CONFIG.API + '/address/' + ADDRESS + '/txs');
+}
+
+function refresh(){
+  var cached = lsGet('cbw_cache');
+  if (cached && state.bal === null) {
+    state.bal = cached.bal; state.rate = cached.rate; state.fetchedAt = cached.t; state.txs = cached.txs || null;
+    renderAll(true);
+  }
+  var results = { rateOk:false, balOk:false };
+  var p1 = fetchRate().then(function(r){ state.rate = r; results.rateOk = true; }).catch(function(){});
+  var p2 = fetchBalance().then(function(b){ state.bal = b; results.balOk = true; }).catch(function(){});
+  var p3 = fetchTxs().then(function(t){ state.txs = t; state.txErr = false; }).catch(function(){ state.txErr = true; });
+  return Promise.all([p1,p2,p3]).then(function(){
+    if (results.balOk) state.fetchedAt = Date.now();
+    if (results.balOk || results.rateOk) {
+      lsSet('cbw_cache', { bal: state.bal, rate: state.rate, t: state.fetchedAt || (cached && cached.t) || Date.now(), txs: state.txs ? state.txs.slice(0,25) : null });
+    }
+    renderAll(results.balOk && results.rateOk);
+  });
+}
+
+/* ---- rendering ---- */
+function renderAll(allFresh){
+  renderHome(allFresh);
+  renderHistory();
+}
+function renderHome(allFresh){
+  var note = $('netNote');
+  if (state.bal) {
+    var total = state.bal.confirmed + state.bal.pending;
+    $('balAud').textContent = state.rate ? aud(total/1e8, state.rate) : 'Price loading';
+    $('balBtc').textContent = btcStr(total);
+    $('balSats').textContent = satsStr(total);
+    $('balWait').textContent = state.bal.pending ? ('Some money is still waiting to be confirmed: ' + btcStr(state.bal.pending)) : '';
+    if (total === 0) {
+      $('balWait').textContent = 'Nothing has arrived yet. Press Receive to get paid.';
+    }
+  } else {
+    $('balAud').textContent = '...';
+    $('balBtc').innerHTML = '&nbsp;';
+    $('balSats').innerHTML = '&nbsp;';
+  }
+  if (allFresh) {
+    note.className = 'note hide';
+    $('updated').textContent = 'Updated ' + timeAgo(state.fetchedAt);
+  } else if (state.bal) {
+    note.className = 'note';
+    note.textContent = 'Cannot reach the internet price or balance right now. Showing the last amount we saw (' + timeAgo(state.fetchedAt || Date.now()) + ').';
+    $('updated').textContent = '';
+  } else if (state.attempted) {
+    note.className = 'note';
+    note.textContent = 'Cannot load your balance right now. Please try again in a minute.';
+    $('updated').textContent = '';
+  }
+}
+function svgIcon(kind){
+  if (kind === 'in') return '<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="#1f6f33" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M24 14v18M16 25l8 8 8-8"/></svg>';
+  return '<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="#8a5a3b" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M24 34V16M16 23l8-8 8 8"/></svg>';
+}
+function netFor(tx){
+  var rec = 0, sent = 0, i;
+  for (i = 0; i < tx.vout.length; i++) if (tx.vout[i].scriptpubkey_address === ADDRESS) rec += tx.vout[i].value;
+  for (i = 0; i < tx.vin.length; i++) { var po = tx.vin[i].prevout; if (po && po.scriptpubkey_address === ADDRESS) sent += po.value; }
+  return rec - sent;
+}
+function renderHistory(){
+  var card = $('histCard'), note = $('histNote');
+  card.innerHTML = '';
+  note.className = 'note hide';
+  if (state.txs === null) {
+    if (state.txErr) {
+      note.className = 'note'; note.textContent = 'Cannot load your payments right now. Please try again in a minute.';
+      card.innerHTML = '<p class="small">No list to show yet.</p>';
+    } else {
+      card.innerHTML = '<p class="small">Loading...</p>';
+    }
+    return;
+  }
+  if (state.txErr) { note.className = 'note'; note.textContent = 'Cannot refresh right now. Showing the last list we saw.'; }
+  if (state.txs.length === 0) {
+    card.innerHTML = '<div class="empty"><svg viewBox="0 0 48 48" fill="none" stroke="#8a5a3b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 26l6-16h24l6 16v14H6z"/><path d="M6 26h11a7 7 0 0014 0h11"/></svg><div class="t">No money yet</div><p>When someone pays you, it will show up here.</p></div>';
+    return;
+  }
+  var html = '';
+  state.txs.forEach(function(tx){
+    var net = netFor(tx), confirmed = tx.status && tx.status.confirmed;
+    var when = confirmed ? dateStr(tx.status.block_time) : 'Just now';
+    var kind = net > 0 ? 'in' : 'out';
+    var badge = confirmed ? (kind === 'in' ? '<span class="badge ok">Confirmed</span>' : '<span class="badge out">Moved out</span>') : '<span class="badge wait">Waiting</span>';
+    var abs = Math.abs(net);
+    html += '<div class="row">' + svgIcon(kind) + '<div><div class="amt">' + (kind === 'in' ? '+' : '-') + (state.rate ? aud(abs/1e8, state.rate) : '') + '</div><div class="meta">' + btcStr(abs) + ' &middot; ' + when + '</div></div>' + badge + '</div>';
+  });
+  card.innerHTML = html;
+}
+
+/* ---- QR ---- */
+function makeQR(el){
+  try {
+    var qr = qrcode(0, 'M');
+    qr.addData('bitcoin:' + ADDRESS);
+    qr.make();
+    var n = qr.getModuleCount(), q = 2, size = n + q*2, d = '';
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (qr.isDark(r,c)) d += 'M' + (c+q) + ' ' + (r+q) + 'h1v1h-1z';
+    el.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + size + ' ' + size + '" shape-rendering="crispEdges"><rect width="' + size + '" height="' + size + '" fill="#fff"/><path d="' + d + '" fill="#3b2418"/></svg>';
+  } catch(e) {
+    el.innerHTML = '<p class="small">The picture could not be drawn. Use the address below.</p>';
+  }
+}
+
+/* ---- copy / share ---- */
+function copyText(text){
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text).catch(function(){ return legacyCopy(text); });
+  }
+  return legacyCopy(text);
+}
+function legacyCopy(text){
+  return new Promise(function(res, rej){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(e){}
+    document.body.removeChild(ta);
+    if (ok) res(); else rej(new Error('copy failed'));
+  });
+}
+var tickTimers = {};
+function showTick(id, msg){
+  var box = $(id);
+  var span = box.querySelector('span');
+  if (msg) span.textContent = msg;
+  box.classList.add('show');
+  clearTimeout(tickTimers[id]);
+  tickTimers[id] = setTimeout(function(){ box.classList.remove('show'); }, 4000);
+}
+function doCopy(text, tickId, okMsg){
+  copyText(text).then(function(){ showTick(tickId, okMsg); }).catch(function(){
+    showTick(tickId, 'Press and hold the words to copy them');
+  });
+}
+
+/* ---- routing ---- */
+var screens = ['home','receive','in','cashout','about','poster'];
+var firstRoute = true;
+function route(){
+  var name = (location.hash || '#home').replace('#','');
+  if (screens.indexOf(name) < 0) name = 'home';
+  screens.forEach(function(s){ $('screen-' + s).classList.toggle('active', s === name); });
+  window.scrollTo(0,0);
+  stopSpeaking();
+  var h = $('screen-' + name).querySelector('h1,h2');
+  if (h && firstRoute === false) { h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); }
+  firstRoute = false;
+  document.title = 'Coffeebreak Wallet';
+}
+function go(name){ location.hash = '#' + name; }
+
+/* ---- read aloud ---- */
+var speaking = false;
+function stopSpeaking(){
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  speaking = false; $('speakBtn').setAttribute('aria-pressed','false');
+}
+function toggleSpeak(){
+  if (speaking) { stopSpeaking(); return; }
+  var sec = document.querySelector('.screen.active');
+  var txt = (sec.textContent || '').replace(/\s+/g,' ').trim();
+  var clone = sec.cloneNode(true);
+  Array.prototype.forEach.call(clone.querySelectorAll('.nospeak,.noprint,svg,.tick,.qrbox,.back'), function(n){ n.remove(); });
+  txt = (clone.textContent || '').replace(/\s+/g,' ').trim();
+  if (sec.id === 'screen-home' && state.bal) {
+    var total = state.bal.confirmed + state.bal.pending;
+    txt = 'You have ' + (state.rate ? aud(total/1e8, state.rate) + ', which is ' : '') + (total/1e8).toFixed(8) + ' bitcoin. ' + txt.replace(/^.*?Check again/, '');
+  }
+  var u = new SpeechSynthesisUtterance(txt);
+  u.lang = 'en-AU'; u.rate = 0.9;
+  u.onend = u.onerror = function(){ speaking = false; $('speakBtn').setAttribute('aria-pressed','false'); };
+  speaking = true; $('speakBtn').setAttribute('aria-pressed','true');
+  window.speechSynthesis.speak(u);
+}
+
+/* ---- easy mode ---- */
+function setEasy(on){
+  document.documentElement.classList.toggle('easy', on);
+  $('easyBtn').setAttribute('aria-pressed', on ? 'true' : 'false');
+  lsSet('cbw_easy', on);
+}
+
+/* ---- checklist ---- */
+function initChecklist(){
+  var saved = lsGet('cbw_check') || {};
+  var boxes = document.querySelectorAll('[data-chk]');
+  function summary(){
+    var done = 0;
+    Array.prototype.forEach.call(boxes, function(b){ if (b.checked) done++; });
+    $('chkSummary').textContent = done === boxes.length ? 'All done. Well done.' : (done + ' of ' + boxes.length + ' done');
+  }
+  Array.prototype.forEach.call(boxes, function(b){
+    b.checked = saved[b.getAttribute('data-chk')] === true;
+    b.addEventListener('change', function(){
+      var s = lsGet('cbw_check') || {};
+      s[b.getAttribute('data-chk')] = b.checked;
+      lsSet('cbw_check', s); summary();
+    });
+  });
+  summary();
+}
+
+/* ---- start ---- */
+function init(){
+  $('addrText').textContent = ADDRESS;
+  $('addrPoster').textContent = ADDRESS;
+  $('payidText').textContent = CONFIG.PAYID;
+  makeQR($('qrBox')); makeQR($('qrBoxPoster'));
+  document.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('[data-go]') : null;
+    if (t) { e.preventDefault(); go(t.getAttribute('data-go')); }
+  });
+  $('copyBtn').addEventListener('click', function(){ doCopy(ADDRESS, 'tickBox', 'Copied'); });
+  $('copyPayBtn').addEventListener('click', function(){ doCopy(CONFIG.PAYID, 'tickPay', 'Copied'); });
+  $('shareBtn').addEventListener('click', function(){
+    if (navigator.share) {
+      navigator.share({ title: 'Pay me in Bitcoin', text: 'My Bitcoin address: ' + ADDRESS }).catch(function(){});
+    } else {
+      doCopy(ADDRESS, 'tickBox', 'Copied. Now paste it in a message');
+    }
+  });
+  $('printBtn').addEventListener('click', function(){ window.print(); });
+  $('refreshBtn').addEventListener('click', function(){ $('updated').textContent = 'Checking...'; state.attempted = true; refresh(); });
+  $('easyBtn').addEventListener('click', function(){ setEasy(this.getAttribute('aria-pressed') === 'false'); });
+  if ('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window) {
+    $('speakBtn').addEventListener('click', toggleSpeak);
+  } else {
+    $('speakBtn').style.display = 'none';
+  }
+  setEasy(lsGet('cbw_easy') === true);
+  initChecklist();
+  window.addEventListener('hashchange', route);
+  route();
+  state.attempted = true;
+  refresh();
+  setInterval(function(){ if (document.visibilityState === 'visible') refresh(); }, 90000);
+}
+init();
+})();
+</script>
+<div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body>
+</html>

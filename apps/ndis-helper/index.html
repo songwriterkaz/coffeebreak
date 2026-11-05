@@ -1,11 +1,127 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak NDIS Helper</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak NDIS Helper</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak NDIS Helper</title>
+<style>
+:root{--bg:#fbf3e6;--card:#fff;--ink:#3b2416;--brown:#6b3e26;--pink:#e98aa6;--cream:#f3e1c7;--focus:#d14d78}
+body.hc{--bg:#000;--card:#111;--ink:#fff;--brown:#ffd400;--pink:#ffd400;--cream:#222;--focus:#0ff}
+body.calm{--bg:#eef0ea;--card:#f8f8f4;--ink:#333;--brown:#5d6b5a;--pink:#a9b8a4;--cream:#e2e6dd}
+body.calm *{animation:none!important;transition:none!important}
+*{box-sizing:border-box}body{margin:0;font-family:Verdana,Arial,sans-serif;font-size:20px;line-height:1.5;background:var(--bg);color:var(--ink)}
+body.big{font-size:25px}
+header{background:var(--brown);color:#fff;padding:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+body.hc header{color:#000}
+header h1{margin:0;font-size:1.4em}header small{display:block;font-size:.7em}
+.logo{width:70px;height:70px;animation:bob 3s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-4px)}}
+.tools{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.tools button{font-size:.75em;padding:8px 12px;border-radius:10px;border:2px solid #fff;background:transparent;color:inherit;cursor:pointer}
+.tools button[aria-pressed=true]{background:#fff;color:var(--brown)}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px;background:var(--cream)}
+nav button{flex:1 1 140px;font-size:.9em;padding:12px;border-radius:14px;border:3px solid var(--brown);background:var(--card);color:var(--ink);cursor:pointer}
+nav button.on{background:var(--brown);color:#fff}body.hc nav button.on{color:#000}
+main{max-width:900px;margin:auto;padding:14px}section{display:none}section.on{display:block}
+.card{background:var(--card);border-radius:18px;padding:18px;margin:12px 0;border:3px solid var(--cream)}
+.big-btn{display:block;width:100%;text-align:center;font-size:1.25em;font-weight:bold;padding:24px;margin:12px 0;border-radius:20px;border:none;background:var(--pink);color:#2a1408;text-decoration:none;cursor:pointer}
+.big-btn.alt{background:var(--brown);color:#fff}body.hc .big-btn.alt{color:#000}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1 1 200px}
+label{display:block;font-weight:bold;margin-top:10px}input,textarea{width:100%;font-size:1em;padding:12px;border-radius:12px;border:2px solid var(--brown);background:var(--card);color:var(--ink)}
+:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+.btn{font-size:.9em;padding:12px 16px;border-radius:12px;border:2px solid var(--brown);background:var(--cream);color:var(--ink);cursor:pointer;text-decoration:none;display:inline-block;margin:4px 4px 0 0}
+.warn{padding:14px;border-radius:12px;font-weight:bold;margin-top:10px}.w-ok{background:#d8f0d8;color:#174d17}.w-soon{background:#ffe7a8;color:#5a3d00}.w-exp{background:#ffc9c9;color:#7a0000}
+.count{font-size:2em;font-weight:bold;color:var(--brown)}
+ol.steps li{margin-bottom:10px}details{margin:8px 0;padding:10px;border-radius:12px;background:var(--cream)}summary{font-weight:bold;cursor:pointer;font-size:1.05em}
+.item{border-bottom:2px dashed var(--cream);padding:10px 0}.item.done span{text-decoration:line-through;opacity:.6}
+.note{font-size:.85em;opacity:.85}footer{text-align:center;padding:20px;font-size:.8em}
+</style></head><body>
+<header>
+<svg class="logo" viewBox="0 0 100 100" role="img" aria-label="Coffeebreak logo"><path d="M38 14c-5 6 5 8 0 14M52 12c-5 6 5 8 0 14M66 14c-5 6 5 8 0 14" stroke="#f3e1c7" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M78 48h6a10 10 0 010 20h-7" stroke="#e98aa6" stroke-width="6" fill="none"/><path d="M18 36h62l-6 46a8 8 0 01-8 6H32a8 8 0 01-8-6z" fill="#f3e1c7"/><ellipse cx="49" cy="58" rx="15" ry="19" fill="#6b3e26" transform="rotate(-15 49 58)"/><path d="M44 42c8 8-4 24 6 32" stroke="#3b2416" stroke-width="3" fill="none"/><circle cx="43" cy="56" r="2.6" fill="#fff"/><circle cx="55" cy="54" r="2.6" fill="#fff"/><path d="M44 64q6 5 12-1" stroke="#fff" stroke-width="2.5" fill="none"/><circle cx="39" cy="62" r="2.5" fill="#e98aa6"/><circle cx="59" cy="60" r="2.5" fill="#e98aa6"/></svg>
+<div><h1>Coffeebreak NDIS Helper</h1><small>Easy help for participants and carers</small></div>
+<div class="tools"><button id="tBig" aria-pressed="false">Bigger text</button><button id="tHc" aria-pressed="false">High contrast</button><button id="tCalm" aria-pressed="false">Calm mode</button></div>
+</header>
+<nav id="nav"><button data-s="home" class="on">Home</button><button data-s="guide">Guide</button><button data-s="plan">My Plan</button><button data-s="contacts">Contacts</button><button data-s="notes">Reminders</button><button data-s="data">Save / Load</button></nav>
+<main>
+<section id="home" class="on">
+<div id="homeWarn"></div>
+<a class="big-btn" href="https://my.gov.au" target="_blank" rel="noopener noreferrer">🔑 Sign in with passkey (myGov)</a>
+<p class="note">This opens the real myGov website. Choose "Sign in with passkey", then tap your fingerprint, face or phone. After that, pick NDIS from your linked services. This app never asks for or keeps your password.</p>
+<div class="row"><a class="big-btn alt" href="https://apps.apple.com/au/app/my-ndis/id6443837745" target="_blank" rel="noopener noreferrer">📱 my NDIS app (iPhone)</a><a class="big-btn alt" href="https://play.google.com/store/apps/details?id=au.gov.ndis.mobile" target="_blank" rel="noopener noreferrer">📱 my NDIS app (Android)</a></div>
+<a class="big-btn" href="tel:1800800110">📞 Call the NDIS: 1800 800 110</a>
+<p class="note">Need an interpreter? Call 131 450. Using the National Relay Service? Call 1800 555 677 and ask for 1800 800 110.</p>
+<div class="row"><button class="big-btn alt" data-go="guide">📖 How to use the portal</button><button class="big-btn alt" data-go="plan">🗓️ My plan dates</button></div>
+</section>
+<section id="guide"><h2>The NDIS portal, step by step</h2>
+<details open><summary>1. Sign in</summary><ol class="steps"><li>Tap the big "Sign in with passkey" button on Home.</li><li>On myGov, choose "Sign in with passkey".</li><li>Use your fingerprint, face, or phone when asked.</li><li>On your myGov home page, tap "NDIS" under linked services.</li><li>No NDIS there? Choose "Link a service", then NDIS, and type your NDIS number and the linking code the NDIS gives you.</li></ol></details>
+<details><summary>2. See your plan</summary><ol class="steps"><li>In the portal, tap "My Plan" or "Plans".</li><li>You will see your plan start and end dates and your goals.</li><li>Tap "Download" or "Print" to save a copy for your providers.</li></ol></details>
+<details><summary>3. Check your budgets</summary><ol class="steps"><li>Go to "Budgets" (sometimes called "Funding").</li><li>Each support type shows how much money is in it, what is spent, and what is left.</li><li>Core supports are for everyday help. Capacity Building is for learning and therapy. Capital is for equipment and home changes.</li></ol></details>
+<details><summary>4. Payments and claims</summary><ol class="steps"><li>Go to "Payments" or "Claims".</li><li>You can see what providers have claimed from your plan.</li><li>If something looks wrong, call the NDIS or talk to your plan manager.</li></ol></details>
+<details><summary>5. Service bookings</summary><ol class="steps"><li>Go to "Service bookings".</li><li>A booking sets aside money for one provider.</li><li>You can see, change, or end bookings here. Your provider may make them for you.</li></ol></details>
+<details><summary>6. Agree to (endorse) items</summary><ol class="steps"><li>Sometimes a provider sends something for you to agree to, like a booking or a request.</li><li>Look for "Notifications", "Tasks" or "Endorse" in the portal.</li><li>Read it slowly. Check the provider name, dates and amount.</li><li>Tap "Agree" or "Endorse" only if it is right. If you are unsure, tap "Decline" or ask for help first.</li></ol></details>
+<details><summary>7. Add or choose providers</summary><ol class="steps"><li>Go to "My providers" or "Provider finder".</li><li>Search by name, service or postcode.</li><li>Choose the provider and follow the steps to share or make a service booking.</li><li>Save their phone and email in the Contacts page of this app.</li></ol></details>
+<p class="note">Screens and button names can change. If you get stuck, call 1800 800 110.</p>
+</section>
+<section id="plan"><h2>My Plan</h2>
+<div class="card" id="planView"></div>
+<div class="card"><form id="planForm">
+<label for="pName">Participant name</label><input id="pName" autocomplete="off">
+<label for="pNum">NDIS number</label><input id="pNum" inputmode="numeric" autocomplete="off">
+<div class="row"><div><label for="pStart">Plan start date</label><input type="date" id="pStart"></div><div><label for="pEnd">Plan end date</label><input type="date" id="pEnd"></div></div>
+<label for="pMgr">Plan manager</label><input id="pMgr" autocomplete="off">
+<label for="pMgrPh">Plan manager phone</label><input id="pMgrPh" type="tel">
+<button class="big-btn" type="submit">💾 Save my plan</button></form>
+<p class="note">Saved only on this device. Never put passwords here.</p></div>
+</section>
+<section id="contacts"><h2>Providers and contacts</h2>
+<div class="card"><form id="cForm"><label for="cName">Name</label><input id="cName" required>
+<label for="cRole">What they do</label><input id="cRole" placeholder="e.g. Support worker, OT, Plan manager">
+<div class="row"><div><label for="cPh">Phone</label><input id="cPh" type="tel"></div><div><label for="cEm">Email</label><input id="cEm" type="email"></div></div>
+<button class="big-btn" type="submit">➕ Add contact</button></form></div>
+<div class="card" id="cList"></div></section>
+<section id="notes"><h2>Reminders and notes</h2>
+<div class="card"><form id="nForm"><label for="nText">Reminder or note</label><textarea id="nText" rows="2" required></textarea>
+<label for="nDate">Date (optional)</label><input type="date" id="nDate">
+<button class="big-btn" type="submit">➕ Add reminder</button></form></div>
+<div class="card" id="nList"></div></section>
+<section id="data"><h2>Save or load your information</h2>
+<div class="card"><p>Make a backup file, or move your information to another phone or computer.</p>
+<button class="big-btn" id="exportBtn">⬇️ Download backup file</button>
+<label for="importFile">Load a backup file</label><input type="file" id="importFile" accept=".json,application/json">
+<p id="dataMsg" role="status"></p>
+<button class="btn" id="clearBtn">Clear everything on this device</button></div></section>
+</main>
+<footer>Coffeebreak NDIS Helper. Not an official NDIS app. Your information stays on your device.</footer>
+<script>
+const K='cbNdisHelper';let D=load();
+function load(){try{return Object.assign({plan:{},contacts:[],notes:[],prefs:{}},JSON.parse(localStorage.getItem(K)||'{}'))}catch(e){return{plan:{},contacts:[],notes:[],prefs:{}}}}
+function save(){localStorage.setItem(K,JSON.stringify(D))}
+const $=id=>document.getElementById(id);
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function show(s){document.querySelectorAll('section').forEach(x=>x.classList.toggle('on',x.id===s));document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.s===s));window.scrollTo(0,0)}
+document.querySelectorAll('[data-s],[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.s||b.dataset.go));
+[['tBig','big'],['tHc','hc'],['tCalm','calm']].forEach(([id,c])=>{const b=$(id);b.onclick=()=>{D.prefs[c]=!D.prefs[c];save();applyPrefs()}});
+function applyPrefs(){[['tBig','big'],['tHc','hc'],['tCalm','calm']].forEach(([id,c])=>{document.body.classList.toggle(c,!!D.prefs[c]);$(id).setAttribute('aria-pressed',!!D.prefs[c])})}
+function fmt(d){return d?new Date(d+'T00:00').toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'}):'not set'}
+function status(){const e=D.plan.pEnd;if(!e)return null;const t=new Date();t.setHours(0,0,0,0);const days=Math.round((new Date(e+'T00:00')-t)/864e5);
+if(days<0)return{days,cls:'w-exp',msg:`Your plan ended ${-days} day${days==-1?'':'s'} ago. Call the NDIS on 1800 800 110 to ask about your new plan.`};
+if(days<=90)return{days,cls:'w-soon',msg:`Your plan ends in ${days} day${days==1?'':'s'}. Now is a good time to get ready for your plan check-in.`};
+return{days,cls:'w-ok',msg:`Your plan has ${days} days left.`}}
+function renderPlan(){const p=D.plan,s=status();
+['pName','pNum','pStart','pEnd','pMgr','pMgrPh'].forEach(k=>$(k).value=p[k]||'');
+$('planView').innerHTML=`<h3>${esc(p.pName)||'Your plan'}</h3><p><b>NDIS number:</b> ${esc(p.pNum)||'not set'}</p><p><b>Starts:</b> ${fmt(p.pStart)}<br><b>Ends:</b> ${fmt(p.pEnd)}</p><p><b>Plan manager:</b> ${esc(p.pMgr)||'not set'} ${p.pMgrPh?`<a class="btn" href="tel:${esc(p.pMgrPh.replace(/\s/g,''))}">📞 Call</a>`:''}</p>`+
+(s?`<div class="count">${s.days<0?'Ended':s.days+' days left'}</div><div class="warn ${s.cls}" id="planWarn">${s.msg}</div>`:'<p>Add your plan dates below to see a countdown.</p>');
+$('homeWarn').innerHTML=s&&s.cls!='w-ok'?`<div class="warn ${s.cls}">${s.msg}</div>`:''}
+$('planForm').onsubmit=e=>{e.preventDefault();['pName','pNum','pStart','pEnd','pMgr','pMgrPh'].forEach(k=>D.plan[k]=$(k).value.trim());save();renderPlan()};
+function renderC(){$('cList').innerHTML=D.contacts.length?D.contacts.map((c,i)=>`<div class="item"><b>${esc(c.name)}</b> ${c.role?'– '+esc(c.role):''}<br>${c.ph?`<a class="btn" href="tel:${esc(c.ph.replace(/\s/g,''))}">📞 Call ${esc(c.ph)}</a>`:''}${c.em?`<a class="btn" href="mailto:${esc(c.em)}">✉️ Email</a>`:''}<button class="btn" data-del="${i}">Remove</button></div>`).join(''):'<p>No contacts yet.</p>';
+$('cList').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(confirm('Remove this contact?')){D.contacts.splice(b.dataset.del,1);save();renderC()}})}
+$('cForm').onsubmit=e=>{e.preventDefault();D.contacts.push({name:$('cName').value.trim(),role:$('cRole').value.trim(),ph:$('cPh').value.trim(),em:$('cEm').value.trim()});save();e.target.reset();renderC()};
+function renderN(){const n=[...D.notes].map((x,i)=>({...x,i})).sort((a,b)=>(a.date||'9')<(b.date||'9')?-1:1);
+$('nList').innerHTML=n.length?n.map(x=>`<div class="item ${x.done?'done':''}"><span>${x.date?'<b>'+fmt(x.date)+':</b> ':''}${esc(x.text)}</span><br><button class="btn" data-t="${x.i}">${x.done?'Not done':'Done'}</button><button class="btn" data-d="${x.i}">Remove</button></div>`).join(''):'<p>No reminders yet.</p>';
+$('nList').querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{D.notes[b.dataset.t].done=!D.notes[b.dataset.t].done;save();renderN()});
+$('nList').querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{D.notes.splice(b.dataset.d,1);save();renderN()})}
+$('nForm').onsubmit=e=>{e.preventDefault();D.notes.push({text:$('nText').value.trim(),date:$('nDate').value,done:false});save();e.target.reset();renderN()};
+$('exportBtn').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(D,null,2)],{type:'application/json'}));a.download='coffeebreak_ndis_backup.json';a.click();$('dataMsg').textContent='Backup file made.'};
+$('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{const j=JSON.parse(t);D=Object.assign({plan:{},contacts:[],notes:[],prefs:{}},j);save();all();$('dataMsg').textContent='Your information is loaded.'}).catch(()=>$('dataMsg').textContent='Sorry, that file could not be read.')};
+$('clearBtn').onclick=()=>{if(confirm('Clear all your information from this device?')){D={plan:{},contacts:[],notes:[],prefs:{}};save();all();$('dataMsg').textContent='Cleared.'}};
+function all(){applyPrefs();renderPlan();renderC();renderN()}all();
+</script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

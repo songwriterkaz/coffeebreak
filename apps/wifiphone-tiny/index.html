@@ -1,11 +1,99 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Tiny WiFi Phone</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Tiny WiFi Phone</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><script src="cbreport.js" data-app="Coffeebreak Wifiphone Tiny" data-version="r1-20261023"></script><script src="cbassist.js"></script><script src="cbcode.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak WiFi Phone Tiny</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="logo.webp"><meta name="theme-color" content="#3b2418">
+<style>
+*{box-sizing:border-box}body{margin:0;font:15px system-ui,sans-serif;background:#fff6f0;color:#3b2418}
+header{display:flex;align-items:center;gap:6px;padding:6px;background:#3b2418;color:#ffe9dc}header img{width:32px;height:32px;border-radius:50%}header b{flex:1;font-size:14px}#st{font-size:11px}
+nav{display:flex;position:sticky;bottom:0;background:#3b2418}nav button{flex:1;padding:8px 0;border:0;background:none;color:#ffe9dc;font-size:12px}nav button.on{background:#c2185b}
+main{padding:8px;min-height:calc(100vh - 90px)}.s{display:none}.s.on{display:block}
+.big{width:min(70vw,220px);height:min(70vw,220px);margin:10px auto;border-radius:50%;border:6px solid #c2185b;background:#3b2418 url(logo.webp) center 30%/50% no-repeat;color:#fff;font-size:15px;display:flex;align-items:flex-end;justify-content:center;padding:0 0 min(14vw,44px);line-height:1.1;touch-action:none}
+.big.call{border-color:#2e7d32}.big.talk{border-color:#f9a825}
+.b{padding:8px 10px;margin:2px;border:0;border-radius:10px;background:#c2185b;color:#fff;font-size:14px}.g{background:#2e7d32}.r{background:#b71c1c}.y{background:#6d4c41}
+.c{display:flex;align-items:center;gap:6px;padding:6px;border-bottom:1px solid #e8d5c8}.c img,.av{width:40px;height:40px;border-radius:50%;object-fit:cover;background:#e8d5c8}.c span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+input,textarea,select{width:100%;padding:7px;margin:2px 0;border:1px solid #c9b0a0;border-radius:8px;font:inherit}
+#log{max-height:40vh;overflow:auto;background:#fff;border-radius:8px;padding:4px;font-size:13px}#log p{margin:3px 0}
+video{width:100%;max-height:40vh;background:#000;border-radius:8px}#lv{position:absolute;width:30%;right:12px}
+#call{display:none;position:fixed;inset:0;background:#000d;color:#fff;padding:10px;text-align:center;z-index:9}
+.soc a{display:inline-block;margin:3px;padding:6px 9px;border-radius:14px;background:#3b2418;color:#fff;text-decoration:none;font-size:13px}
+small{font-size:11px;display:block;margin:8px 0;opacity:.85}h3{margin:6px 0}
+#qr{display:block;margin:6px auto;width:160px;max-width:80%;image-rendering:pixelated;background:#fff}
+@media(max-width:300px){body{font-size:13px}.b{padding:6px;font-size:12px}nav button{font-size:10px}.c img,.av{width:30px;height:30px}header b{font-size:11px}}
+</style></head><body>
+<header><img src="logo.webp" alt="Coffeebreak"><b>Coffeebreak WiFi Phone Tiny</b><span id="st">offline</span></header>
+<main>
+<section class="s on" id="s1"><div style="text-align:center">My number <b id="mn"></b></div>
+<button class="big" id="one">Tap to call</button>
+<div style="text-align:center"><select id="fav" style="width:auto"></select><br><small style="display:inline">Tap call / tap hang up / hold to talk</small><br>
+<button class="b y" id="wk">Walkie OFF</button></div></section>
+<section class="s" id="s2"><button class="b" id="add">+ Add contact</button><div id="cl"></div>
+<div id="ed" hidden><h3 id="et">Contact</h3><img id="ep" class="av" style="width:64px;height:64px"><input type="file" id="ef" accept="image/*"><input id="en" placeholder="Name"><input id="eu" placeholder="Coffeebreak number 1234-5678" inputmode="numeric"><input id="eh" placeholder="Phone number (optional)"><button class="b g" id="es">Save</button><button class="b r" id="ex">Delete</button><button class="b y" id="ec">Close</button></div></section>
+<section class="s" id="s3"><select id="to"></select><div id="log"></div><textarea id="tx" rows="2" placeholder="Message"></textarea><button class="b" id="snd">Send</button></section>
+<section class="s" id="s4"><h3>Social</h3><div class="soc" id="soc"></div></section>
+<section class="s" id="s5"><h3>Me</h3><input id="myn" placeholder="My name"><div style="text-align:center">My number <b id="mn2"></b></div><canvas id="qr"></canvas>
+<p><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">Real Coffeebreak phones available</a></p>
+<small><b>Disclaimer.</b> Coffeebreak WiFi Phone Tiny is an app that needs WiFi or internet. It is not a mobile SIM and has no real phone number. It cannot call 000 or any emergency service, so always keep a real phone for emergencies. Calls go device to device and may not connect on some networks. Social buttons just open those apps, which belong to their owners.</small>
+<small><b>Rights.</b> &copy; Coffeebreak. Coffeebreak keeps all rights to this product, its designs, app, name and logo. Buyers and fans may resell the items they bought, but may not copy the designs or the app, or make or sell their own versions.</small></section>
+</main>
+<div id="call"><p id="cw"></p><video id="rv" autoplay playsinline></video><video id="lv" autoplay playsinline muted></video><p><button class="b g" id="ans">Answer</button><button class="b r" id="hup">Hang up</button></p></div>
+<nav><button class="on" data-s="1">Call</button><button data-s="2">People</button><button data-s="3">Chat</button><button data-s="4">Social</button><button data-s="5">Me</button></nav>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script>
+const $=i=>document.getElementById(i),L={g:(k,d)=>{try{return JSON.parse(localStorage['cbt_'+k])}catch(e){return d}},s:(k,v)=>localStorage['cbt_'+k]=JSON.stringify(v)},PFX='coffeebreak-dsim-v1-';
+let me=L.g('num');if(!me){const a=crypto.getRandomValues(new Uint32Array(2));me=(1000+a[0]%9000)+'-'+String(a[1]%1e4).padStart(4,'0');L.s('num',me)}
+let C=L.g('c',[]),M=L.g('m',[]),peer,cur,inc,stream,walk=L.g('w',0),cid=null;
+$('mn').textContent=$('mn2').textContent=me;$('myn').value=L.g('name','');$('myn').onchange=e=>L.s('name',e.target.value);
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.s,nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');$('s'+b.dataset.s).classList.add('on')});
+const st=t=>$('st').textContent=t,pid=n=>PFX+String(n).replace(/\D/g,''),nm=n=>(C.find(c=>c.u==n)||{}).n||n;
+function draw(){$('cl').innerHTML='';let o='';C.sort((a,b)=>a.n.localeCompare(b.n)).forEach((c,i)=>{const d=document.createElement('div');d.className='c';d.innerHTML=`<img src="${c.p||'logo.webp'}" alt=""><span>${esc(c.n)}<br><small style="display:inline">${c.u}</small></span>`;
+[['Call','b g',()=>call(c.u,0)],['Video','b',()=>call(c.u,1)],['Msg','b y',()=>{$('to').value=c.u;document.querySelector('[data-s="3"]').click()}],['Edit','b y',()=>edit(i)]].forEach(([t,k,f])=>{const b=document.createElement('button');b.className=k;b.textContent=t;b.onclick=f;d.append(b)});$('cl').append(d);o+=`<option value="${c.u}">${esc(c.n)}</option>`});
+$('fav').innerHTML=$('to').innerHTML=o||'<option value="">Add a contact first</option>';$('fav').value=L.g('fav','')||$('fav').value;chat()}
+const esc=s=>String(s).replace(/[&<>"]/g,m=>'&#'+m.charCodeAt(0)+';');
+$('fav').onchange=e=>L.s('fav',e.target.value);$('to').onchange=chat;
+function edit(i){cid=i;const c=C[i]||{n:'',u:'',h:'',p:''};$('ed').hidden=0;$('en').value=c.n;$('eu').value=c.u;$('eh').value=c.h||'';$('ep').src=c.p||'logo.webp';$('ex').hidden=i==null}
+$('add').onclick=()=>edit(null);$('ec').onclick=()=>$('ed').hidden=1;
+$('ef').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image;im.onload=()=>{const k=document.createElement('canvas');k.width=k.height=96;const s=Math.min(im.width,im.height);k.getContext('2d').drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,96,96);$('ep').src=k.toDataURL('image/jpeg',.7)};im.src=URL.createObjectURL(f)};
+$('es').onclick=()=>{const c={n:$('en').value.trim()||'Friend',u:$('eu').value.replace(/\D/g,'').replace(/^(\d{4})(\d{4})$/,'$1-$2'),h:$('eh').value,p:$('ep').src.startsWith('data:')?$('ep').src:''};if(!/^\d{4}-\d{4}$/.test(c.u))return alert('Number needs 8 digits');cid==null?C.push(c):C[cid]=c;L.s('c',C);$('ed').hidden=1;draw()};
+$('ex').onclick=()=>{if(confirm('Delete contact?')){C.splice(cid,1);L.s('c',C);$('ed').hidden=1;draw()}};
+function chat(){const t=$('to').value;$('log').innerHTML=M.filter(m=>m.w==t).slice(-80).map(m=>`<p style="text-align:${m.o?'right':'left'}">${esc(m.t)}</p>`).join('')||'<p>No messages yet</p>';$('log').scrollTop=1e6}
+function addM(w,t,o){M.push({w,t,o});M=M.slice(-400);L.s('m',M);chat()}
+$('snd').onclick=()=>{const t=$('tx').value.trim(),w=$('to').value;if(!t||!w||!peer)return;const c=peer.connect(pid(w));c.on('open',()=>{c.send({type:'msg',text:t,from:me,name:L.g('name','')});setTimeout(()=>c.close(),3e3)});addM(w,t,1);$('tx').value=''};
+function start(){if(!window.Peer){st('needs internet');return setTimeout(start,5e3)}
+peer=new Peer(pid(me),{config:{iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun.cloudflare.com:3478']}]}});
+peer.on('open',()=>st('online'));peer.on('disconnected',()=>{st('reconnecting');setTimeout(()=>peer.reconnect(),3e3)});peer.on('error',e=>{if(e.type=='peer-unavailable')alert('That person is not online');else st('offline')});
+peer.on('connection',c=>c.on('data',d=>{if(d&&d.type=='msg'){const w=d.from||c.peer.slice(PFX.length);addM(w,d.text||'',0)}}));
+peer.on('call',k=>{if(cur)return k.close();inc=k;const w=nm(k.peer.slice(PFX.length).replace(/^(\d{4})/,'$1-'));if(walk&&k.metadata&&k.metadata.w)return answer();$('cw').textContent='Call from '+w;$('call').style.display='block';$('ans').hidden=0})}
+async function media(v){return navigator.mediaDevices.getUserMedia({audio:true,video:!!v})}
+async function answer(){const k=inc;inc=null;try{stream=await media(k.metadata&&k.metadata.v)}catch(e){stream=new MediaStream}k.answer(stream);hook(k)}
+$('ans').onclick=answer;
+function hook(k){cur=k;$('ans').hidden=1;$('call').style.display='block';$('lv').srcObject=stream;k.on('stream',s=>{$('rv').srcObject=s;$('cw').textContent='Connected '+nm(k.peer.slice(PFX.length).replace(/^(\d{4})/,'$1-'))});k.on('close',end);k.on('error',end);ui()}
+async function call(n,v,w){if(!n)return alert('Add a contact first');if(!peer||!peer.open)return alert('Not online yet');try{stream=await media(v)}catch(e){return alert('Microphone needed')}$('cw').textContent='Calling '+nm(n);hook(peer.call(pid(n),stream,{metadata:{v,w}}))}
+function end(){if(cur){const k=cur;cur=null;k.close()}if(inc){inc.close();inc=null}stream&&stream.getTracks().forEach(t=>t.stop());stream=null;$('call').style.display='none';ui()}
+$('hup').onclick=end;
+function ui(){const b=$('one');b.className='big'+(cur?' call':'');b.textContent=cur?'Tap to hang up':'Tap to call';$('wk').textContent='Walkie '+(walk?'ON':'OFF');$('wk').className='b '+(walk?'g':'y')}
+$('wk').onclick=()=>{walk=walk?0:1;L.s('w',walk);ui()};
+let ht,held=0;const one=$('one');
+one.onpointerdown=()=>{held=0;ht=setTimeout(async()=>{held=1;if(cur)return;one.className='big talk';one.textContent='Talking';await call($('fav').value,0,1)},500)};
+one.onpointerup=one.onpointercancel=()=>{clearTimeout(ht);if(held){held=0;end();return}};
+one.onclick=()=>{if(held)return;cur?end():call($('fav').value,0)};
+$('soc').innerHTML=[['Telegram','https://t.me'],['TikTok','https://www.tiktok.com'],['YouTube','https://www.youtube.com/@coffeebreakTVSERIES'],['Google Chat','https://chat.google.com'],['WhatsApp','https://wa.me'],['Messenger','https://m.me'],['Instagram','https://instagram.com'],['X','https://x.com'],['Snapchat','https://snapchat.com'],['Discord','https://discord.com/app'],['Facebook','https://facebook.com'],['itch','https://coffeebreaks.itch.io']].map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${n}</a>`).join('');
+/* tiny QR: byte mode, ECC L, versions 1-5, mask 0 */
+function qr(t){const d=[...new TextEncoder().encode(t)],V=[[19,7],[34,10],[55,15],[80,20],[108,26]];let v=V.findIndex(x=>x[0]>=d.length+2);const [D,E]=V[v];v++;const N=17+4*v;
+let b=[];const p=(x,n)=>{for(let i=n;i--;)b.push(x>>i&1)};p(4,4);p(d.length,8);d.forEach(x=>p(x,8));p(0,Math.min(4,D*8-b.length));while(b.length%8)b.push(0);
+let w=[];for(let i=0;i<b.length;i+=8)w.push(parseInt(b.slice(i,i+8).join(''),2));for(let i=0;w.length<D;i++)w.push(i%2?17:236);
+const ex=[],lg=[];for(let i=0,x=1;i<255;i++){ex[i]=x;lg[x]=i;x=x<<1^(x&128?285:0)}const mul=(a,c)=>a&&c?ex[(lg[a]+lg[c])%255]:0;
+let g=[1];for(let i=0;i<E;i++){const n=Array(g.length+1).fill(0);g.forEach((c,j)=>{n[j]^=c;n[j+1]^=mul(c,ex[i])});g=n}
+const r=w.concat(Array(E).fill(0));for(let i=0;i<D;i++){const c=r[i];if(c)g.forEach((q,j)=>r[i+j]^=mul(q,c))}const all=w.concat(r.slice(D));
+const m=[...Array(N)].map(()=>Array(N).fill(null)),F=(x,y,s)=>m[y][x]=s;
+const fp=(x,y)=>{for(let i=-1;i<8;i++)for(let j=-1;j<8;j++){const X=x+i,Y=y+j;if(X<0||Y<0||X>=N||Y>=N)continue;const k=Math.max(Math.abs(i-3),Math.abs(j-3));F(X,Y,k!=2&&k!=4?1:0)}};
+fp(0,0);fp(N-7,0);fp(0,N-7);for(let i=8;i<N-8;i++){F(i,6,i%2^1);F(6,i,i%2^1)}
+if(v>1){const a=N-7;for(let i=-2;i<3;i++)for(let j=-2;j<3;j++)F(a+i,a+j,Math.max(Math.abs(i),Math.abs(j))!=1?1:0)}
+const fb=0x77C4,B=i=>fb>>i&1;for(let i=0;i<6;i++)F(8,i,B(i));F(8,7,B(6));F(8,8,B(7));F(7,8,B(8));for(let i=9;i<15;i++)F(14-i,8,B(i));for(let i=0;i<8;i++)F(N-1-i,8,B(i));for(let i=8;i<15;i++)F(8,N-15+i,B(i));F(8,N-8,1);
+const bits=[];all.forEach(x=>{for(let i=8;i--;)bits.push(x>>i&1)});let k=0;
+for(let x=N-1;x>0;x-=2){if(x==6)x--;for(let q=0;q<N;q++){const y=((x+1)&2)?q:N-1-q;for(let c=0;c<2;c++){const X=x-c;if(m[y][X]!==null)continue;let s=k<bits.length?bits[k++]:0;if((X+y)%2==0)s^=1;m[y][X]=s}}}
+return m}
+function drawQR(){const m=qr('coffeebreak:'+me),n=m.length,cv=$('qr'),z=4;cv.width=cv.height=(n+8)*z;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.width);x.fillStyle='#000';m.forEach((r,y)=>r.forEach((s,X)=>s&&x.fillRect((X+4)*z,(y+4)*z,z,z)))}
+drawQR();draw();ui();start();
+if('serviceWorker'in navigator&&location.protocol!='file:')navigator.serviceWorker.register('sw.js');
+</script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

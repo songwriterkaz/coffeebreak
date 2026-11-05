@@ -1,0 +1,31 @@
+TITLE
+Coffeebreak Wallet
+
+TAGLINE (under 120 characters)
+A very simple screen to see your Bitcoin, get paid and learn how to cash out to PayID.
+
+DESCRIPTION
+Coffeebreak Wallet is a very simple, calm viewing screen for one Bitcoin address. It has huge buttons, big words and pictures, an Easy mode that makes everything even bigger, and a Read aloud button.
+
+What it does
+- Home: shows your balance in Australian dollars and in Bitcoin, with the live price from free public sources.
+- Receive: a big QR code, a Copy address button, a Share button and a printable poster.
+- Money in: a plain list of payments received, marked Confirmed or Waiting.
+- Cash out to PayID: a 4 step picture guide. Bitcoin cannot be sent straight to a PayID, so it goes via an Australian exchange (CoinSpot, Swyftx, Kraken or Independent Reserve). You sign up and verify your ID, which is free to join, but exchanges charge trading and withdrawal fees.
+- Stay safe: how to use a real wallet app (Sparrow, Blockstream Green or BlueWallet) and a back up checklist that saves in your browser.
+
+What it is not
+This is a watch only screen. It shows and receives. It cannot spend or send Bitcoin, and it never asks for or stores a secret recovery phrase, private key or password. To spend or move money you open a real wallet app and restore it with your secret words.
+
+Works on phones and computers, runs in the browser, no account, no sign up, no paid services. Balance and price come from mempool.space and CoinGecko public pages, and the last values are kept in your browser if the internet drops.
+
+TAGS
+bitcoin, wallet, simple, accessibility, easy, qr-code, receive, payid, australia, coffeebreak
+
+DISCLAIMER
+Karen O'Brien (Coffeebreak) keeps all rights to the app, its design, name and logo. People may use the app, but may not copy it or make their own versions of it. This is a viewing screen, not financial advice. The price of Bitcoin moves up and down, and Bitcoin payments cannot be reversed. Crypto can have tax to pay in Australia: see the ATO crypto page.
+
+LINKS CHECKED
+https://www.coinspot.com.au  https://swyftx.com  https://www.kraken.com  https://www.independentreserve.com
+https://sparrowwallet.com  https://blockstream.com/app/  https://bluewallet.io
+https://www.ato.gov.au/individuals-and-families/investments-and-assets/crypto-asset-investments

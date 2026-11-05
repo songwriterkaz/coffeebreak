@@ -1,11 +1,71 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Prosthetic Tattoo Studio</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Prosthetic Tattoo Studio</h1><p class="price">Free</p><p>A recording booth: record from your mic, hear it back, and download takes, with a live level meter.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><button id=st>Record</button> <button id=sp disabled>Stop</button></p><meter id=lv max=1 style="width:100%"></meter><div id=tk></div><script>
-var mr,ch,n=0;st.onclick=async()=>{var s=await navigator.mediaDevices.getUserMedia({audio:true}),A=new AudioContext(),an=A.createAnalyser();A.createMediaStreamSource(s).connect(an);var b=new Uint8Array(256);(function f(){an.getByteTimeDomainData(b);lv.value=Math.max(...b)/128-1;if(mr&&mr.state=='recording')requestAnimationFrame(f)})();
-ch=[];mr=new MediaRecorder(s);mr.ondataavailable=e=>ch.push(e.data);mr.onstop=()=>{var u=URL.createObjectURL(new Blob(ch));n++;tk.insertAdjacentHTML('beforeend','<p>Take '+n+' <audio controls src='+u+'></audio> <a download=take'+n+'.webm href='+u+'>Download</a></p>');s.getTracks().forEach(t=>t.stop())};mr.start();st.disabled=1;sp.disabled=0};
-sp.onclick=()=>{mr.stop();st.disabled=0;sp.disabled=1}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Prosthetic Tattoo Studio</title>
+<style>body{margin:0;font-family:Georgia,serif;background:#fff4f8;color:#1a1013}header{background:#1a1013;color:#ffd6ea;padding:18px;text-align:center}header img{width:110px;border-radius:12px;background:#f5ead6}h1{margin:8px 0 4px}nav a{color:#ff9fcb;margin:0 8px}section{max-width:1150px;margin:auto;padding:18px}.card{background:#fff;border:3px solid #1a1013;border-radius:14px;padding:14px;box-shadow:5px 5px 0 #ff4fa3}
+.svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.svc .card b.p{font-size:20px;color:#c2185b}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.pick{background:#fff;border:3px solid #1a1013;border-radius:12px;padding:6px;text-align:center;cursor:pointer;font-size:13px}.pick.on{outline:4px solid #ff4fa3}.spr{width:150px;height:220px;margin:auto;background-color:#f3e3e8;border-radius:8px}
+button,.btn{background:#ff4fa3;color:#fff;border:2px solid #1a1013;border-radius:20px;padding:8px 14px;font-weight:700;cursor:pointer}.ghost{background:#fff;color:#1a1013}select,input,textarea{width:100%;box-sizing:border-box;padding:7px;border:2px solid #1a1013;border-radius:8px;margin:3px 0}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.bar>*{flex:1;min-width:180px}#pager{display:flex;gap:8px;justify-content:center;align-items:center;margin:12px 0}
+.builder{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.pay{background:#ffe0ee;border-radius:10px;padding:10px;margin:10px 0}.note{background:#fff2c2;border:2px solid #1a1013;border-radius:10px;padding:10px}footer{text-align:center;padding:24px;background:#1a1013;color:#ffd6ea}footer a{color:#ff9fcb}</style></head><body>
+<header><img src="img/logo.jpg" alt="Coffeebreak logo"><h1>Coffeebreak Prosthetic Tattoo Studio</h1><p>Your favourite Coffeebreak flash, tattooed onto your own prosthetic leg cover</p><nav><a href="#welcome">Welcome</a><a href="#services">Services</a><a href="#designs">Designs</a><a href="#builder">Book</a><a href="#send">How to measure and send</a></nav></header>
+<section id="welcome"><div class="card"><h2>Everyone is welcome</h2><p>This is a stigma-free studio. Amputees, limb-different people, people with any health condition, and people of every body, background and identity are welcome. Nobody needs to explain their leg, their history or their health to book. Your details stay private.</p>
+<p class="note"><b>Safety note.</b> We only work on covers, fairings and other non-structural, cosmetic surfaces. We never paint, engrave, heat or alter the socket, pylon, knee, foot, valves, liners or any load-bearing or fitted part. Please check with your prosthetist before booking, and remove the cover from the leg before sending it if that is how it is designed to come off.</p></div></section>
+<section id="services"><h2>Services</h2><div class="svc" id="svc"></div></section>
+<section id="designs"><h2>Choose your flash</h2><p>Every Coffeebreak flash design is available. Tap one to pick it for your booking.</p><div class="bar"><input id="q" placeholder="Search by design id or name"><select id="col"></select></div><div id="count" style="font-size:13px;color:#8a1d55"></div><div class="grid" id="grid"></div><div id="pager"></div></section>
+<section id="builder"><h2>Pick your design, service and placement</h2><div class="builder"><div class="card">
+<label>Design<input id="bd" placeholder="Tap a design above, or type an id such as CBLEG-0042"></label>
+<label>Service<select id="bs"></select></label>
+<label>Placement<select id="bp"><option>Front of the cover (shin)</option><option>Calf or back of the cover</option><option>Outer side</option><option>Inner side</option><option>Full wrap around the cover</option><option>Thigh cover (above knee)</option><option>Foot shell or ankle cover</option><option>Other, described in the notes</option></select></label>
+<label>Size<select id="bz"><option>Small (up to 8 cm)</option><option>Medium (8 to 15 cm)</option><option>Large (15 cm and up)</option></select></label>
+<label>Getting the cover to us<select id="bh"></select></label>
+<label>Which leg or cover<select id="bl"><option>Below knee</option><option>Above knee</option><option>Other or not sure</option></select></label>
+<p><b>Estimated total: <span id="tot"></span></b> <small>(placeholder prices)</small></p></div>
+<div class="card"><h3>Booking request</h3><form id="book"><input name="name" placeholder="Your name" required><input name="email" type="email" placeholder="Email" required><input name="phone" placeholder="Phone (optional)"><input name="when" placeholder="Preferred dates or timing"><textarea name="notes" rows="5" placeholder="Cover measurements in cm, cover material if known, colours, and anything we should know"></textarea>
+<div class="pay"><b>Deposit by PayID</b><ol style="padding-left:20px"><li>Pay by PayID to <b class="payid"></b></li><li>Amount: <b id="dep"></b> deposit (or the full amount)</li><li>Reference: <b class="ref"></b></li><li>Press Send booking request so we get your details.</li></ol><small>We confirm every booking by email before any work starts. The rest is paid when your cover is ready.</small></div>
+<button>Send booking request</button></form></div></div></section>
+<section id="send"><div class="card"><h2>How to measure and send your leg cover</h2><ol>
+<li>If your cover comes off, take it off and measure the cover itself. If it does not come off, please talk to your prosthetist first and book a Newcastle drop-off so we can look together.</li>
+<li><b>Length</b> of the area you want decorated, plus the cover's full length.</li>
+<li><b>Circumference</b> at the top, middle and bottom of the cover.</li>
+<li>Tell us the cover material if you know it (3D printed PETG or PLA, carbon, foam, fabric, silicone skin).</li>
+<li><b>Mail-in</b>: pack the cover in a sturdy box with padding, put your name and booking reference inside, and send it tracked. We email the postal address when your booking is confirmed. Return postage is included in the mail-in fee.</li>
+<li><b>Newcastle drop-off</b>: we arrange a time by email. No charge.</li></ol></div></section>
+<footer><img src="img/logo.jpg" alt="" style="width:50px;border-radius:50%"><br>Coffeebreak Prosthetic Tattoo Studio . Newcastle NSW . stigma free, everyone welcome<br>Questions: <a href="mailto:songwriterkaz@gmail.com">songwriterkaz@gmail.com</a> . <a href="https://coffeebreaks.itch.io">coffeebreaks.itch.io</a></footer>
+<script src="designs.js"></script><script src="viewer.js"></script>
+<script>
+// ===== CONFIG: edit prices and details here (all prices are PLACEHOLDERS, AUD) =====
+const CONFIG={
+ currency:'AUD',payid:'darkokaz@gmx.com',orderEmail:'songwriterkaz@gmail.com',depositPercent:30,
+ services:[
+  {id:'paint',name:'Hand-painted flash on cover',price:180,desc:'Your chosen flash hand painted onto the cover with flexible paints and sealed with a clear coat.'},
+  {id:'vinyl',name:'Vinyl wrap of chosen flash',price:90,desc:'Printed, laminated vinyl of your flash, fitted and trimmed to the cover.'},
+  {id:'hydro',name:'Hydro-dip pattern',price:120,desc:'A full hydro-dipped pattern on the cover, with an optional flash vinyl on top.'},
+  {id:'laser',name:'Laser-engraved flash on cover',price:150,desc:'Flash linework engraved into suitable cover materials only, checked before work starts.'},
+  {id:'consult',name:'Custom design consult',price:60,desc:'A one-on-one chat to adapt a flash or design something new for your cover.'}],
+ handover:[{id:'dropoff',name:'Newcastle drop-off',price:0},{id:'mailin',name:'Mail-in with tracked return post',price:25}]
+};
+// ===== end CONFIG =====
+const $=id=>document.getElementById(id);const money=n=>'$'+n.toFixed(2)+' '+CONFIG.currency;const ref='CBPTS-'+Math.random().toString(36).slice(2,7).toUpperCase();
+document.querySelectorAll('.payid').forEach(e=>e.textContent=CONFIG.payid);document.querySelectorAll('.ref').forEach(e=>e.textContent=ref);
+$('svc').innerHTML=CONFIG.services.map(s=>`<div class="card"><b>${s.name}</b><p>${s.desc}</p><b class="p">${money(s.price)}</b><br><button data-s="${s.id}">Choose this service</button></div>`).join('');
+document.querySelectorAll('#svc button').forEach(b=>b.onclick=()=>{$('bs').value=b.dataset.s;calc();$('builder').scrollIntoView()});
+$('bs').innerHTML=CONFIG.services.map(s=>`<option value="${s.id}">${s.name} . ${money(s.price)}</option>`).join('');
+$('bh').innerHTML=CONFIG.handover.map(s=>`<option value="${s.id}">${s.name}${s.price?' . '+money(s.price):' . free'}</option>`).join('');
+function calc(){const s=CONFIG.services.find(x=>x.id==$('bs').value),h=CONFIG.handover.find(x=>x.id==$('bh').value);const t=s.price+h.price;$('tot').textContent=money(t);$('dep').textContent=money(Math.round(t*CONFIG.depositPercent)/100);return{s,h,t}}
+['bs','bh'].forEach(i=>$(i).onchange=calc);calc();
+const D=window.D,PER=30;let page=0;const cols=[...new Set(D.map(d=>d.col))].sort();$('col').innerHTML='<option value="">All collections</option>'+cols.map(c=>`<option>${c}</option>`).join('');
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.style.backgroundImage=`url(${e.target.dataset.src})`;io.unobserve(e.target)}}),{rootMargin:'300px'});
+function list(){const q=$('q').value.trim().toLowerCase(),c=$('col').value;return D.filter(d=>(!c||d.col==c)&&(!q||d.id.toLowerCase().includes(q)||d.name.toLowerCase().includes(q)))}
+function render(){const L=list(),pages=Math.max(1,Math.ceil(L.length/PER));page=Math.min(page,pages-1);$('count').textContent=L.length+' designs';$('grid').innerHTML='';
+ L.slice(page*PER,page*PER+PER).forEach(d=>{const sh=Math.floor(d.n/60),k=d.n%60;const el=document.createElement('div');el.className='pick'+($('bd').value==d.id?' on':'');
+  el.innerHTML=`<div class="spr" role="img" aria-label="${d.name}" data-src="sprites/s${String(sh).padStart(3,'0')}.jpg" style="background-position:-${(k%10)*150}px -${Math.floor(k/10)*220}px"></div><b>${d.name}</b><br>${d.id}`;
+  el.onclick=()=>{$('bd').value=d.id;document.querySelectorAll('.pick').forEach(p=>p.classList.remove('on'));el.classList.add('on')};$('grid').appendChild(el);const zb=document.createElement('button');zb.className='ghost';zb.textContent='Zoom in';zb.onclick=ev=>{ev.stopPropagation();cbView(d)};el.appendChild(zb);io.observe(el.querySelector('.spr'))});
+ $('pager').innerHTML=`<button class="ghost" ${page==0?'disabled':''} id="pv">Previous</button><span>Page ${page+1} of ${pages}</span><button class="ghost" ${page>=pages-1?'disabled':''} id="nx">Next</button>`;
+ $('pv').onclick=()=>{page--;render()};$('nx').onclick=()=>{page++;render()}}
+['q','col'].forEach(i=>$(i).oninput=()=>{page=0;render()});render();
+$('book').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target),c=calc();const d=D.find(x=>x.id==$('bd').value.trim().toUpperCase());
+ const body=`Booking reference: ${ref}\n\nDesign: ${d?d.id+' '+d.name+' ('+d.col+')':$('bd').value||'not chosen yet'}\nService: ${c.s.name} ${money(c.s.price)}\nPlacement: ${$('bp').value}\nSize: ${$('bz').value}\nLeg: ${$('bl').value}\nHandover: ${c.h.name} ${money(c.h.price)}\nEstimated total: ${money(c.t)}\nDeposit by PayID to ${CONFIG.payid}: ${$('dep').textContent}\n\nName: ${f.get('name')}\nEmail: ${f.get('email')}\nPhone: ${f.get('phone')}\nPreferred timing: ${f.get('when')}\nNotes and measurements: ${f.get('notes')}`;
+ location.href=`mailto:${CONFIG.orderEmail}?subject=${encodeURIComponent('Prosthetic tattoo booking '+ref)}&body=${encodeURIComponent(body)}`};
+</script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

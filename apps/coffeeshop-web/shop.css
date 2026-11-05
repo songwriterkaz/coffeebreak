@@ -1,0 +1,19 @@
+body{margin:0;background:#fff4f7;color:#4a1f2e;font-family:Georgia,serif;padding-bottom:110px}
+#testbar{background:#ffd84d;color:#3a2a00;text-align:center;font:bold 14px sans-serif;padding:6px}
+header{display:flex;align-items:center;gap:14px;padding:14px 20px;background:linear-gradient(#f6e4c6,#fbe0e8);border-bottom:3px solid #e8cea0;flex-wrap:wrap}
+header img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #fff}
+h1{margin:0;color:#b48c46}header p{margin:4px 0 0}
+button{background:#e8cea0;color:#3a1424;border:2px solid #b48c46;border-radius:12px;padding:7px 14px;font:bold 15px Georgia;cursor:pointer}
+button.sel{background:#b48c46;color:#fff}#cartBtn{margin-left:auto}
+#filters{display:flex;gap:8px;justify-content:center;padding:12px;flex-wrap:wrap}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;padding:0 20px;max-width:1200px;margin:auto}
+.card{background:#fff;border:2px solid #f6e4c6;border-radius:18px;padding:14px;box-shadow:0 4px 12px #e8a0b044}
+.card .em{font-size:44px;text-align:center;background:#fbe0e8;border-radius:12px}
+.card h3{margin:8px 0 4px;color:#b48c46}.tag{font-size:12px;background:#f6e4c6;border-radius:8px;padding:2px 8px}
+select,input,textarea{width:100%;box-sizing:border-box;margin:4px 0;padding:7px;border:1.5px solid #e8cea0;border-radius:8px;font:14px Georgia}
+.price{font-size:22px;font-weight:bold;color:#b48c46}
+aside#cart,#done{position:fixed;top:0;right:0;width:400px;max-width:100%;height:100%;overflow:auto;background:#fff;border-left:3px solid #e8cea0;padding:16px;box-sizing:border-box;z-index:50}
+.line{display:flex;justify-content:space-between;gap:6px;border-bottom:1px dashed #f6e4c6;padding:6px 0;font-size:14px}
+#links{text-align:center;padding:20px}#links a{color:#b48c46}
+#mbar{position:fixed;bottom:26px;left:0;right:0;background:#f6e4c6;border-top:2px solid #e8cea0;display:flex;gap:8px;align-items:center;justify-content:center;padding:6px;font-size:13px;z-index:40}
+.page{max-width:760px;margin:auto;padding:20px;line-height:1.6}.page h1{margin-top:10px}

@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Design your own leg . Coffeebreak Prosthetic Leg Store</title>
+<style>body{margin:0;font-family:Georgia,serif;background:#ffe1ee;color:#1a1013}header{background:#1a1013;color:#ffd6ea;padding:10px 16px;display:flex;gap:12px;align-items:center}header img{height:44px;border-radius:6px}header a{color:#ffd6ea;margin-left:auto}
+main{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:16px;padding:16px;max-width:1300px;margin:auto}@media(max-width:800px){main{grid-template-columns:1fr}}
+.card{background:#fff;border:3px solid #1a1013;border-radius:14px;padding:12px;box-shadow:4px 4px 0 #ff4fa3}label{display:block;margin:7px 0;font-size:14px}input[type=range],select{width:100%}
+button,.btn{background:#ff4fa3;color:#fff;border:2px solid #1a1013;border-radius:20px;padding:8px 14px;font-weight:700;cursor:pointer;margin:3px 2px;font-family:inherit}button.g{background:#fff;color:#1a1013}
+.warn{background:#fff2c2;border:2px solid #d18a00;border-radius:8px;padding:8px;font-size:13px;display:none}.note{font-size:12px;color:#8a1d55}
+#layers div{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffd6ea;padding:3px 0;font-size:13px;cursor:pointer}#layers div.on{background:#ffe1ee;font-weight:700}
+.views{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}.stage{position:relative;line-height:0}#leg{width:340px;height:510px;background:#f3e3e8;border-radius:10px;cursor:none;touch-action:none}#flat{width:280px;height:370px;border:2px solid #1a1013;border-radius:6px;cursor:move;touch-action:none;background:#fff}
+#lens{position:absolute;pointer-events:none;border-radius:50%;border:4px solid #1a1013;box-shadow:0 0 0 3px #ff4fa3;display:none}</style></head><body>
+<header><img src="legmaker/logo.jpg" alt="Coffeebreak logo"><b>Design your own leg . Upload your own picture</b><a href="index.html">Back to the store</a></header>
+<main><div class="card">
+<label>Upload your own picture (JPG, PNG or WebP). It stays on your device: nothing is uploaded anywhere.<input id="file" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
+<div id="warn" class="warn"></div>
+<b>Your pictures (top layer last)</b><div id="layers"><div class="note">No pictures yet.</div></div>
+<div id="ctl"><label>Placement <select id="mode"><option value="feature">Feature (one picture)</option><option value="tiled">Tiled repeat</option></select></label>
+<label>Size <input id="sc" type="range" min="5" max="300" value="80"></label>
+<label>Rotate <input id="rot" type="range" min="-180" max="180" value="0"></label>
+<label>Move left and right <input id="px" type="range" min="0" max="100" value="50"></label>
+<label>Move up and down <input id="py" type="range" min="0" max="100" value="50"></label>
+<button class="g" id="up">Move layer up</button><button class="g" id="del">Remove layer</button></div>
+<label>Background <select id="bg"><option value="#ffd6ea">Bubblegum pink</option><option value="#ffffff">White</option><option value="#1a1013">Black</option><option value="#f5ead6">Cream</option></select></label>
+<label>Overlay <select id="ov"><option value="">None</option><option value="fishnet">Pink Fishnet</option><option value="lace">Pink Lace</option><option value="pbfishnet">Pink and Black Fishnet</option></select></label>
+<label><input type="checkbox" id="girl"> Add the Coffeebreak girl</label><label><input type="checkbox" id="bee"> Add the Coffeebreak bee</label>
+<p class="note">The Coffeebreak logo is always shown small at the top.</p>
+<button id="dl">Download my leg design</button><button id="wrap">Download print wrap</button><button class="g" id="pdf">Download print wrap PDF</button>
+<label>Order type <select id="kind"><option value="w">Printable wrap download</option><option value="p">Made-to-order printed cover</option></select></label>
+<label><input type="checkbox" id="rights"> I own the rights to the pictures I uploaded, or have permission to use them.</label>
+<button id="order">Order this design</button><div id="msg" class="note"></div>
+<p class="note">Drag on the flat wrap to move the selected picture. Move over the leg to magnify. Prices are placeholders. After ordering, email your downloaded print wrap with your order code, because the store never uploads your picture.</p>
+</div>
+<div class="card views"><div class="stage"><canvas id="leg" width="680" height="1020"></canvas><canvas id="lens"></canvas></div><div><b>Flat print wrap, 30 x 40 cm</b><br><canvas id="flat" width="1831" height="2421"></canvas></div></div></main>
+<script src="upload.js"></script></body></html>

@@ -1,11 +1,418 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Flix</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Flix</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Flix</title>
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+<script src="cbreport.js" data-app="Coffeebreak Flix" data-version="f1-20261029"></script>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#0d0a08;color:#f3ece4;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overflow-x:hidden}
+a{color:#ffc857}
+button{font:inherit;color:inherit}
+[hidden]{display:none!important}
+header{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px;padding:10px 4vw;background:linear-gradient(rgba(13,10,8,.97),rgba(13,10,8,.85));backdrop-filter:blur(6px)}
+.brand{display:flex;align-items:center;gap:8px;cursor:pointer;background:none;border:0;padding:0}
+.brand img{height:40px;width:auto}
+.brand span{font:800 22px/1 Georgia,serif;color:#ffc857;letter-spacing:.5px;white-space:nowrap}
+nav.main{display:flex;gap:4px;margin-left:8px}
+nav.main button{background:none;border:0;padding:8px 10px;border-radius:8px;cursor:pointer;color:#d8cbbd;font-weight:600}
+nav.main button.on{color:#fff;background:#2a1f18}
+.hright{margin-left:auto;display:flex;align-items:center;gap:8px}
+#searchBox{width:200px;max-width:42vw;padding:9px 12px;border-radius:20px;border:1px solid #4a3a2e;background:#1b1410;color:#fff;font-size:15px}
+.avatar{width:36px;height:36px;border-radius:8px;border:0;cursor:pointer;font-weight:800;color:#1b1410;flex:none}
+.hero{position:relative;min-height:62vh;display:flex;align-items:flex-end;padding:0 4vw 6vh;overflow:hidden}
+.hero .bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:saturate(1.05)}
+.hero .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,10,8,.95) 0%,rgba(13,10,8,.6) 45%,rgba(13,10,8,.15) 100%),linear-gradient(0deg,#0d0a08 0%,rgba(13,10,8,0) 45%)}
+.hero .info{position:relative;max-width:600px}
+.hero .tag{display:inline-block;font:700 12px system-ui;letter-spacing:2px;text-transform:uppercase;color:#ffc857;margin-bottom:6px}
+.hero h1{margin:0 0 8px;font:800 clamp(30px,6vw,58px)/1.02 Georgia,serif;text-shadow:0 3px 14px #000}
+.hero p{margin:0 0 16px;color:#e6dbcf;text-shadow:0 2px 8px #000}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:8px;border:0;font-weight:800;font-size:16px;cursor:pointer}
+.btn.play{background:#ffc857;color:#1b1410}
+.btn.ghost{background:rgba(120,100,85,.55);color:#fff}
+.btn:focus-visible,.tile:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.chips{display:flex;gap:8px;padding:4px 4vw 4px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:7px 14px;border-radius:18px;border:1px solid #4a3a2e;background:#1b1410;cursor:pointer;font-size:14px;font-weight:600}
+.chip.on{background:#ffc857;color:#1b1410;border-color:#ffc857}
+.row{margin:18px 0 4px}
+.row h2{margin:0 4vw 8px;font:700 19px system-ui}
+.track{position:relative}
+.scroller{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4vw 12px;scrollbar-width:thin;scrollbar-color:#4a3a2e transparent}
+.arrow{position:absolute;top:4px;bottom:12px;width:4vw;min-width:34px;border:0;background:rgba(13,10,8,.7);color:#fff;font-size:28px;cursor:pointer;z-index:3;opacity:0;transition:opacity .2s}
+.arrow.l{left:0}.arrow.r{right:0}
+.track:hover .arrow{opacity:1}
+.tile{flex:none;width:240px;scroll-snap-align:start;background:#1b1410;border:0;border-radius:8px;overflow:hidden;cursor:pointer;padding:0;text-align:left;position:relative;transition:transform .18s}
+.tile:hover{transform:scale(1.04);z-index:2}
+.thumb{position:relative;aspect-ratio:16/9;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:8px}
+.thumb .t{font:800 16px/1.15 Georgia,serif;color:#fff;text-shadow:0 2px 6px #000,0 0 2px #000}
+.thumb .badge{position:absolute;top:6px;left:6px;font:800 10px system-ui;letter-spacing:1px;background:#ffc857;color:#1b1410;padding:2px 6px;border-radius:4px}
+.tile .sub{padding:7px 9px 9px;font-size:12.5px;color:#cbbcad;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog{height:4px;background:#3a2e25}.prog i{display:block;height:100%;background:#ffc857}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;padding:6px 4vw}
+.grid .tile{width:auto}
+.empty{padding:6px 4vw;color:#a8998a}
+.panel{margin:22px 4vw;padding:18px;border-radius:12px;background:#1b1410;border:1px solid #3a2e25}
+.panel h2{margin:0 0 8px;font:700 20px Georgia,serif;color:#ffc857}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:12px 0}
+.plan{background:#241b15;border:1px solid #4a3a2e;border-radius:10px;padding:14px}
+.plan b{display:block;font-size:18px}
+.plan .price{font:800 24px Georgia,serif;color:#ffc857}
+.pay{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:linear-gradient(90deg,#ffc857,#f0a83a);color:#1b1410;border-radius:10px;padding:14px}
+.pay p{margin:0;flex:1;min-width:220px;font-weight:700}
+.pay button{padding:10px 14px;border:0;border-radius:8px;background:#1b1410;color:#ffc857;font-weight:800;cursor:pointer}
+#copied{width:100%;font-size:13px;min-height:18px}
+.note{margin:22px 4vw;padding:12px 14px;border:1px dashed #ffc857;border-radius:10px;color:#e6dbcf;background:#16110d}
+footer{margin:28px 4vw 80px;padding-top:14px;border-top:1px solid #3a2e25;font-size:13px;color:#a8998a}
+footer img{height:30px;vertical-align:middle;margin-right:8px}
+/* modal */
+.modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:12px}
+.player{width:min(1100px,100%,calc((100vh - 150px) * 16 / 9));min-width:min(100%,320px);max-height:100%;overflow:auto;background:#120d0a;border-radius:12px;overflow:hidden;box-shadow:0 10px 40px #000}
+.screen{position:relative;aspect-ratio:16/9;background:#000}
+.screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.pbar{display:flex;align-items:center;gap:8px;padding:10px 12px;flex-wrap:wrap}
+.pbar h3{margin:0;flex:1;min-width:160px;font:700 17px system-ui}
+.pbar button{padding:8px 12px;border-radius:8px;border:1px solid #4a3a2e;background:#241b15;cursor:pointer;font-weight:700;font-size:14px}
+.pinfo{padding:0 12px 12px;font-size:13.5px;color:#cbbcad}
+/* profiles */
+.who{position:fixed;inset:0;z-index:90;background:#0d0a08;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.who img{height:70px}
+.who h2{font:700 clamp(24px,5vw,40px) Georgia,serif;margin:12px 0 18px}
+.plist{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;max-width:760px}
+.pf{background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;color:#cbbcad;width:100px}
+.pf .sq{width:92px;height:92px;border-radius:12px;display:flex;align-items:center;justify-content:center;font:800 36px system-ui;color:#1b1410;border:3px solid transparent}
+.pf:hover .sq{border-color:#fff}
+.pf.add .sq{background:#241b15;color:#ffc857;border:2px dashed #4a3a2e}
+.who .manage{margin-top:20px}
+.newp{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;justify-content:center}
+.newp input{padding:10px;border-radius:8px;border:1px solid #4a3a2e;background:#1b1410;color:#fff;font-size:15px}
+.del{font-size:12px;color:#ff9b8a;background:none;border:0;cursor:pointer}
+@media (max-width:700px){
+ nav.main{display:none}
+ .brand span{font-size:18px}
+ .brand img{height:32px}
+ #searchBox{width:130px}
+ .hero{min-height:56vh;padding-bottom:4vh}
+ .tile{width:62vw;max-width:260px}
+ .arrow{display:none}
+ .mnav{display:flex!important}
+ footer{margin-bottom:90px}
+}
+.mnav{display:none;position:fixed;left:0;right:0;bottom:0;z-index:60;background:#120d0a;border-top:1px solid #3a2e25;justify-content:space-around;padding:6px 44px 6px 0;padding-bottom:calc(6px + env(safe-area-inset-bottom))}
+.mnav button{background:none;border:0;color:#cbbcad;font-size:12px;font-weight:700;padding:6px 8px;cursor:pointer}
+.mnav button.on{color:#ffc857}
+</style>
+</head>
+<body>
+<header>
+  <button class="brand" id="home" type="button" aria-label="Coffeebreak Flix home"><img src="logo.png" alt="Coffeebreak logo"><span>Coffeebreak Flix</span></button>
+  <nav class="main" aria-label="Sections">
+    <button type="button" data-go="home" class="on">Home</button>
+    <button type="button" data-go="tv">Coffeebreak TV</button>
+    <button type="button" data-go="films">Classic films</button>
+    <button type="button" data-go="list">My List</button>
+    <button type="button" data-go="subscribe">Subscribe</button>
+    <button type="button" data-go="about">About</button>
+  </nav>
+  <div class="hright">
+    <input id="searchBox" type="search" placeholder="Search" aria-label="Search titles">
+    <button class="avatar" id="avatar" type="button" title="Switch profile" aria-label="Switch profile">K</button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="hero">
+    <div class="bg" id="heroBg"></div>
+    <div class="info">
+      <span class="tag" id="heroTag">Featured</span>
+      <h1 id="heroTitle"></h1>
+      <p id="heroDesc"></p>
+      <div class="btns">
+        <button class="btn play" id="heroPlay" type="button">&#9654; Play</button>
+        <button class="btn ghost" id="heroList" type="button">+ My List</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="chips" id="chips" role="toolbar" aria-label="Categories"></div>
+  <div id="rows"></div>
+  <div id="results" hidden><div class="row"><h2 id="resTitle">Results</h2><div class="grid" id="resGrid"></div></div></div>
+
+  <div class="note" id="licNote"><b>More coming once licensed.</b> Newer studio films will be added once Coffeebreak has permission from their owners. Every classic film here is public domain and streams from the Internet Archive. Coffeebreak TV episodes stream from YouTube.</div>
+
+  <section class="panel" id="subscribe">
+    <h2>Subscribe or buy a ticket</h2>
+    <p>Coffeebreak TV and the classic films are free to watch. To support new episodes and new films, choose a plan and pay by PayID.</p>
+    <div class="plans">
+      <div class="plan"><b>Movie ticket</b><span class="price">$5</span><div>One-off support for a night in.</div></div>
+      <div class="plan"><b>Monthly</b><span class="price">$10</span><div>Supports new Coffeebreak TV episodes each month.</div></div>
+      <div class="plan"><b>Yearly</b><span class="price">$100</span><div>A whole year of Coffeebreak Flix support.</div></div>
+    </div>
+    <div class="pay">
+      <p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+      <button type="button" id="copyPayId">Copy PayID</button>
+      <div id="copied" role="status"></div>
+    </div>
+    <p style="font-size:13px;color:#a8998a">Please add "Coffeebreak Flix" and your plan as the payment description. Prices in AUD.</p>
+  </section>
+
+  <section class="panel" id="about">
+    <h2>About Coffeebreak Flix</h2>
+    <p>Coffeebreak Flix is the streaming home of Coffeebreak, songwriter and creator from Newcastle NSW. Watch the Coffeebreak TV Series and a hand-picked set of public-domain classic films, all in one place. Save titles to My List, pick up where you left off, and keep separate profiles for everyone in the house. Everything is saved on your own device.</p>
+    <p>More Coffeebreak apps, music and games: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a>. Coffeebreak TV on YouTube: <a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">@coffeebreakTVSERIES</a></p>
+    <p class="disc">© Karen O'Brien (Coffeebreak). Karen O'Brien keeps all rights to her products, designs, apps, name and logo, including Coffeebreak Flix. Buyers may resell physical items they bought, but may not copy them or make their own versions. Karen O'Brien claims no ownership of any third-party brands or titles named here; they belong to their owners.</p>
+  </section>
+
+  <footer>
+    <img src="logo.png" alt="Coffeebreak logo">© Karen O'Brien (Coffeebreak). Karen O'Brien keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought, but may not copy them or make their own versions. Karen O'Brien claims no ownership of third-party brands or titles named; they belong to their owners. Classic films are public domain via the Internet Archive; Coffeebreak TV streams from YouTube.
+    <br>More from Coffeebreak: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a>
+  </footer>
+</main>
+
+<nav class="mnav" aria-label="Sections">
+  <button type="button" data-go="home" class="on">Home</button>
+  <button type="button" data-go="tv">TV</button>
+  <button type="button" data-go="films">Films</button>
+  <button type="button" data-go="list">My List</button>
+  <button type="button" data-go="subscribe">Subscribe</button>
+</nav>
+
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="pTitle">
+  <div class="player" id="player">
+    <div class="screen" id="screen"></div>
+    <div class="pbar">
+      <h3 id="pTitle"></h3>
+      <button type="button" id="pList">+ My List</button>
+      <button type="button" id="pFull">Fullscreen</button>
+      <button type="button" id="pClose">Close</button>
+    </div>
+    <div class="pinfo" id="pInfo"></div>
+  </div>
+</div>
+
+<div class="who" id="who" hidden>
+  <img src="logo.png" alt="Coffeebreak logo">
+  <h2>Who's watching</h2>
+  <div class="plist" id="plist"></div>
+  <div class="newp" id="newp" hidden>
+    <input id="newName" maxlength="14" placeholder="Profile name" aria-label="Profile name">
+    <button class="btn play" type="button" id="newSave">Add</button>
+    <button class="btn ghost" type="button" id="newCancel">Cancel</button>
+  </div>
+  <button class="btn ghost manage" type="button" id="manage">Manage profiles</button>
+</div>
+
+<script>
+(function(){
+"use strict";
+var YT="https://www.youtube-nocookie.com/embed/",AR="https://archive.org/embed/";
+var TITLES=[
+ {k:"tv1",type:"tv",v:"nrbqMzh1Cgg",t:"Cinnamon Candy",ep:"Episode 1",cats:["Coffeebreak TV"],d:"Episode 1 of the Coffeebreak TV Series."},
+ {k:"tv2",type:"tv",v:"d5P-cIzvjZA",t:"Coffeebreak Coffee Break",ep:"Episode 2",cats:["Coffeebreak TV"],d:"Episode 2 of the Coffeebreak TV Series."},
+ {k:"tv3",type:"tv",v:"uhxep6OrZDY",t:"Coffeebreak After Dark",ep:"Episode 3",cats:["Coffeebreak TV"],d:"Episode 3 of the Coffeebreak TV Series."},
+ {k:"tv4",type:"tv",v:"6SRTuLdQB9g",t:"The Cream That Went Too Far",ep:"Special",cats:["Coffeebreak TV","Comedy"],d:"A Coffeebreak TV Series special."},
+ {k:"tv5",type:"tv",v:"TOnUE01T3nE",t:"Part 9",ep:"Part 9",cats:["Coffeebreak TV"],d:"Coffeebreak TV Series, part 9."},
+ {k:"tv6",type:"tv",v:"-CCa6DWy2pM",t:"Part 8",ep:"Part 8",cats:["Coffeebreak TV"],d:"Coffeebreak TV Series, part 8."},
+ {k:"tvall",type:"tv",list:"UUNuPovMUFJDrl9fhztDgy4w",thumbv:"nrbqMzh1Cgg",t:"Play the whole channel",ep:"All uploads",cats:["Coffeebreak TV"],d:"Every Coffeebreak TV upload, back to back."},
+ {k:"f1",type:"film",id:"CC_1916_10_02_ThePawnshop",t:"The Pawnshop",y:1916,who:"Charlie Chaplin",len:"25 min",cats:["Comedy","Silent"],c:"#5b4636",d:"Chaplin runs riot as a pawnshop assistant."},
+ {k:"f2",type:"film",id:"CC_1916_12_04_TheRink",t:"The Rink",y:1916,who:"Charlie Chaplin",len:"24 min",cats:["Comedy","Silent"],c:"#3f5560",d:"A waiter by day, a roller skating star by night."},
+ {k:"f3",type:"film",id:"CC_1917_04_16_TheCure",t:"The Cure",y:1917,who:"Charlie Chaplin",len:"24 min",cats:["Comedy","Silent"],c:"#4b5a3a",d:"Chaos at a health spa with Chaplin."},
+ {k:"f4",type:"film",id:"TheGeneral_201312",t:"The General",y:1926,who:"Buster Keaton",len:"Feature",cats:["Silent","Action","Comedy"],c:"#6a4a22",d:"Buster Keaton's runaway train classic."},
+ {k:"f5",type:"film",id:"MyManGodfrey1936",t:"My Man Godfrey",y:1936,who:"William Powell, Carole Lombard",len:"Feature",cats:["Comedy","Romance"],c:"#3b3560",d:"A screwball comedy about a very unusual butler."},
+ {k:"f6",type:"film",id:"his_girl_friday",t:"His Girl Friday",y:1940,who:"Cary Grant, Rosalind Russell",len:"Feature",cats:["Comedy","Romance"],c:"#603537",d:"Fast talk and big headlines in the newsroom."},
+ {k:"f7",type:"film",id:"Detour1945_201808",t:"Detour",y:1945,who:"Tom Neal",len:"Feature",cats:["Noir","Thriller"],c:"#2b2b2b",d:"A hitchhike across America goes very wrong."},
+ {k:"f8",type:"film",id:"The_House_On_Haunted_Hill",t:"House on Haunted Hill",y:1959,who:"Vincent Price",len:"Feature",cats:["Horror","Thriller"],c:"#36254a",d:"One night in a haunted house for a fortune."},
+ {k:"f9",type:"film",id:"The_Little_Shop_of_Horrors.mpeg",t:"The Little Shop of Horrors",y:1960,who:"Roger Corman",len:"Feature",cats:["Horror","Comedy"],c:"#2f5232",d:"A florist's plant with a strange appetite."},
+ {k:"f10",type:"film",id:"charade-1963-cary-grant-audrey-hepburn-comedy-mystery-romance-thriller-full-movie",t:"Charade",y:1963,who:"Cary Grant, Audrey Hepburn",len:"Feature",cats:["Thriller","Romance"],c:"#6b2f46",d:"Romance and suspense on the streets of Paris."},
+ {k:"f11",type:"film",id:"night_of_the_living_dead_dvd",t:"Night of the Living Dead",y:1968,who:"George A. Romero",len:"Feature",cats:["Horror"],c:"#3a3a3a",d:"The original zombie siege classic."}
+];
+var BYK={};TITLES.forEach(function(x){BYK[x.k]=x});
+var CATS=["All","Coffeebreak TV","Comedy","Horror","Thriller","Romance","Silent","Noir","Action"];
+var $=function(id){return document.getElementById(id)};
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function thumbOf(x){if(x.type==="tv")return "https://i.ytimg.com/vi/"+(x.v||x.thumbv)+"/hqdefault.jpg";return "https://archive.org/services/img/"+encodeURIComponent(x.id)}
+function subOf(x){return x.type==="tv"?"Coffeebreak TV Series · "+x.ep:x.y+" · "+x.who+" · Public domain"}
+function srcOf(x,start){
+  if(x.type==="tv"){var s=x.list?YT+"videoseries?list="+x.list+"&autoplay=1":YT+x.v+"?autoplay=1&rel=0";if(start>5&&!x.list)s+="&start="+Math.floor(start);return s}
+  return AR+encodeURIComponent(x.id)+"?autoplay=1";
+}
+/* storage */
+var mem={};
+function sget(k,d){try{var v=localStorage.getItem("cbflix."+k);return v?JSON.parse(v):d}catch(e){return k in mem?mem[k]:d}}
+function sset(k,v){try{localStorage.setItem("cbflix."+k,JSON.stringify(v))}catch(e){mem[k]=v}}
+var COLORS=["#ffc857","#ff8a65","#7fd1b9","#9fa8ff","#f48fb1","#c5e17a"];
+var profiles=sget("profiles",null);
+if(!profiles||!profiles.length){profiles=[{id:"p1",name:"Coffeebreak",c:COLORS[0]},{id:"p2",name:"Guest",c:COLORS[2]},{id:"p3",name:"Kids",c:COLORS[3]}];sset("profiles",profiles)}
+var cur=sget("current",null);
+function prof(){for(var i=0;i<profiles.length;i++)if(profiles[i].id===cur)return profiles[i];return null}
+function myList(){return sget("list."+cur,[])}
+function setList(l){sset("list."+cur,l)}
+function inList(k){return myList().indexOf(k)>=0}
+function toggleList(k){var l=myList(),i=l.indexOf(k);if(i>=0)l.splice(i,1);else l.unshift(k);setList(l);render();syncListBtns()}
+function cw(){return sget("cw."+cur,{})}
+function setCw(o){sset("cw."+cur,o)}
+/* tiles */
+function tile(x,opts){
+  var b=el("button","tile");b.type="button";b.dataset.k=x.k;b.setAttribute("aria-label","Play "+x.t);
+  var th=el("div","thumb");
+  th.style.background=(x.type==="film"?"linear-gradient(160deg,"+x.c+",#140c08)":"linear-gradient(160deg,#7a4a1e,#140c08)");
+  var img=new Image();img.alt="";img.onload=function(){th.style.backgroundImage="linear-gradient(0deg,rgba(0,0,0,.75),rgba(0,0,0,0) 60%),url('"+img.src+"')";th.style.backgroundSize="cover";th.style.backgroundPosition="center"};img.src=thumbOf(x);
+  if(x.type==="tv")th.appendChild(el("span","badge","COFFEEBREAK TV"));
+  th.appendChild(el("span","t",x.t));b.appendChild(th);
+  if(opts&&opts.prog!=null){var p=el("div","prog"),i=el("i");i.style.width=Math.max(4,Math.min(100,opts.prog))+"%";p.appendChild(i);b.appendChild(p)}
+  b.appendChild(el("div","sub",subOf(x)));
+  b.onclick=function(){play(x)};
+  return b;
+}
+function row(title,items,opts){
+  if(!items.length)return null;
+  var r=el("div","row");r.appendChild(el("h2",null,title));
+  var tr=el("div","track"),sc=el("div","scroller");
+  items.forEach(function(x){sc.appendChild(tile(x,opts&&opts.progFor?{prog:opts.progFor(x)}:null))});
+  var l=el("button","arrow l","‹"),rr=el("button","arrow r","›");l.type=rr.type="button";l.setAttribute("aria-label","Scroll left");rr.setAttribute("aria-label","Scroll right");
+  l.onclick=function(){sc.scrollBy({left:-sc.clientWidth*.85,behavior:"smooth"})};rr.onclick=function(){sc.scrollBy({left:sc.clientWidth*.85,behavior:"smooth"})};
+  tr.appendChild(l);tr.appendChild(sc);tr.appendChild(rr);r.appendChild(tr);return r;
+}
+var cat="All",view="home";
+function has(x,c){return c==="All"||x.cats.indexOf(c)>=0}
+function render(){
+  var rows=$("rows");rows.innerHTML="";
+  var pool=TITLES.filter(function(x){return has(x,cat)});
+  if(view==="tv")pool=pool.filter(function(x){return x.type==="tv"});
+  if(view==="films")pool=pool.filter(function(x){return x.type==="film"});
+  var add=function(r){if(r)rows.appendChild(r)};
+  if(view==="list"){
+    var l=myList().map(function(k){return BYK[k]}).filter(Boolean);
+    var h=el("div","row");h.appendChild(el("h2",null,"My List"));
+    if(!l.length)h.appendChild(el("div","empty","Nothing saved yet. Use + My List on any title."));
+    else{var g=el("div","grid");l.forEach(function(x){g.appendChild(tile(x))});h.appendChild(g)}
+    rows.appendChild(h);return;
+  }
+  var c=cw(),ck=Object.keys(c).filter(function(k){return BYK[k]&&has(BYK[k],cat)}).sort(function(a,b){return c[b].at-c[a].at});
+  if(view==="home"&&ck.length){add(row("Continue watching for "+(prof()?prof().name:"you"),ck.map(function(k){return BYK[k]}),{progFor:function(x){var e=c[x.k];return e.pct}}))}
+  if(view==="home"){var ml=myList().map(function(k){return BYK[k]}).filter(function(x){return x&&has(x,cat)});add(row("My List",ml))}
+  add(row("Coffeebreak TV Series",pool.filter(function(x){return x.type==="tv"})));
+  add(row("Trending now",pool.filter(function(x){return ["tv1","f6","f11","tv4","f10","f4","tv3","f8"].indexOf(x.k)>=0})));
+  ["Comedy","Horror","Thriller","Romance","Silent","Noir"].forEach(function(cn){
+    if(cat!=="All"&&cat!==cn)return;
+    add(row(cn==="Silent"?"Silent classics":cn==="Noir"?"Film noir":cn,pool.filter(function(x){return x.type==="film"&&x.cats.indexOf(cn)>=0})));
+  });
+  add(row("Classic Hollywood, oldest first",pool.filter(function(x){return x.type==="film"})));
+  if(!rows.children.length)rows.appendChild(el("div","empty","No titles in this category yet. More coming once licensed."));
+}
+function chips(){
+  var w=$("chips");w.innerHTML="";
+  CATS.forEach(function(c){var b=el("button","chip"+(c===cat?" on":""),c);b.type="button";b.onclick=function(){cat=c;chips();render()};w.appendChild(b)});
+}
+/* hero */
+var heroItems=["tv1","f6","tv3","f11","f4","tv4"],hi=0,heroX;
+function hero(){
+  heroX=BYK[heroItems[hi%heroItems.length]];
+  var bg=$("heroBg");bg.style.backgroundImage="none";
+  bg.style.background=heroX.type==="film"?"linear-gradient(160deg,"+heroX.c+",#0d0a08)":"linear-gradient(160deg,#7a4a1e,#0d0a08)";
+  var img=new Image();img.onload=function(){bg.style.backgroundImage="url('"+img.src+"')";bg.style.backgroundSize="cover";bg.style.backgroundPosition="center"};
+  img.src=heroX.type==="tv"?"https://i.ytimg.com/vi/"+heroX.v+"/maxresdefault.jpg":thumbOf(heroX);
+  $("heroTag").textContent=heroX.type==="tv"?"Coffeebreak TV Series · "+heroX.ep:"Classic film · "+heroX.y;
+  $("heroTitle").textContent=heroX.t;
+  $("heroDesc").textContent=heroX.d+(heroX.type==="film"?" Starring "+heroX.who+".":"");
+  syncListBtns();
+}
+$("heroPlay").onclick=function(){play(heroX)};
+$("heroList").onclick=function(){toggleList(heroX.k)};
+setInterval(function(){if($("modal").hidden&&!document.hidden&&$("results").hidden){hi++;hero()}},9000);
+/* player */
+var playing=null,openedAt=0;
+function play(x){
+  playing=x;openedAt=Date.now();
+  var c=cw(),prev=c[x.k],start=prev?prev.sec:0;
+  var s=$("screen");s.innerHTML="";
+  var f=document.createElement("iframe");
+  f.src=srcOf(x,start);f.title=x.t;f.allow="autoplay; fullscreen; picture-in-picture; encrypted-media";f.setAttribute("allowfullscreen","");f.referrerPolicy="strict-origin-when-cross-origin";
+  s.appendChild(f);
+  $("pTitle").textContent=(x.type==="tv"?"Coffeebreak TV: ":"")+x.t+(x.y?" ("+x.y+")":"");
+  $("pInfo").textContent=x.d+" "+(x.type==="tv"?"Streaming from the Coffeebreak TV YouTube channel.":"Starring "+x.who+". Public domain, streaming from the Internet Archive.");
+  $("modal").hidden=false;document.body.style.overflow="hidden";syncListBtns();
+  $("pClose").focus();
+  c[x.k]={at:Date.now(),sec:start,pct:prev?prev.pct:3};setCw(c);
+}
+function closePlayer(){
+  if(!playing)return;
+  var c=cw(),e=c[playing.k]||{sec:0,pct:3},watched=(Date.now()-openedAt)/1000;
+  var total=playing.type==="tv"?600:(playing.len&&playing.len.indexOf("min")>0?parseInt(playing.len,10)*60:5400);
+  e.sec=(e.sec||0)+watched;e.at=Date.now();e.pct=Math.min(97,Math.max(3,e.sec/total*100));c[playing.k]=e;setCw(c);
+  if(document.fullscreenElement){try{document.exitFullscreen()}catch(er){}}
+  $("screen").innerHTML="";$("modal").hidden=true;document.body.style.overflow="";playing=null;render();
+}
+$("pClose").onclick=closePlayer;
+$("modal").addEventListener("click",function(e){if(e.target===$("modal"))closePlayer()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!$("modal").hidden)closePlayer()});
+$("pFull").onclick=function(){var p=$("player");try{(p.requestFullscreen||p.webkitRequestFullscreen).call(p)}catch(e){}};
+$("pList").onclick=function(){if(playing)toggleList(playing.k)};
+function syncListBtns(){
+  if(heroX)$("heroList").textContent=inList(heroX.k)?"✓ In My List":"+ My List";
+  if(playing)$("pList").textContent=inList(playing.k)?"✓ In My List":"+ My List";
+}
+/* search */
+$("searchBox").addEventListener("input",function(){
+  var q=this.value.trim().toLowerCase();
+  if(!q){$("results").hidden=true;$("rows").hidden=false;$("hero").hidden=false;$("chips").hidden=false;return}
+  var r=TITLES.filter(function(x){return (x.t+" "+(x.who||"")+" "+(x.y||"")+" "+x.cats.join(" ")+" "+(x.ep||"")+" "+x.d).toLowerCase().indexOf(q)>=0});
+  $("resTitle").textContent=r.length?"Results for \u201c"+this.value.trim()+"\u201d":"No match for \u201c"+this.value.trim()+"\u201d. More coming once licensed.";
+  var g=$("resGrid");g.innerHTML="";r.forEach(function(x){g.appendChild(tile(x))});
+  $("results").hidden=false;$("rows").hidden=true;$("hero").hidden=true;$("chips").hidden=true;
+});
+/* nav */
+function go(v){
+  $("searchBox").value="";$("results").hidden=true;$("rows").hidden=false;$("chips").hidden=false;
+  document.querySelectorAll("[data-go]").forEach(function(b){b.classList.toggle("on",b.dataset.go===v)});
+  if(v==="subscribe"||v==="about"){view="home";render();$("hero").hidden=false;try{$(v).scrollIntoView({behavior:"smooth"})}catch(e){}return}
+  view=v;$("hero").hidden=(v==="list");render();window.scrollTo(0,0);
+}
+document.querySelectorAll("[data-go]").forEach(function(b){b.onclick=function(){go(b.dataset.go)}});
+$("home").onclick=function(){go("home")};
+/* PayID */
+$("copyPayId").onclick=function(){
+  var t="darkokaz@gmx.com",done=function(ok){$("copied").textContent=ok?"PayID copied: darkokaz@gmx.com":"PayID: darkokaz@gmx.com"};
+  function fb(){try{var a=document.createElement("textarea");a.value=t;a.style.cssText="position:fixed;left:-999px;top:0";document.body.appendChild(a);a.select();var ok=document.execCommand("copy");a.remove();done(ok)}catch(e){done(false)}}
+  try{navigator.clipboard.writeText(t).then(function(){done(true)},fb)}catch(e){fb()}
+};
+/* profiles */
+var managing=false;
+function who(){
+  var pl=$("plist");pl.innerHTML="";
+  profiles.forEach(function(p){
+    var w=el("div");
+    var b=el("button","pf");b.type="button";var sq=el("span","sq",p.name.charAt(0).toUpperCase());sq.style.background=p.c;b.appendChild(sq);b.appendChild(el("span",null,p.name));
+    b.onclick=function(){if(managing)return;cur=p.id;sset("current",cur);$("who").hidden=true;start()};
+    w.appendChild(b);
+    if(managing&&profiles.length>1){var d=el("button","del","Remove");d.type="button";d.onclick=function(){profiles=profiles.filter(function(q){return q.id!==p.id});sset("profiles",profiles);try{localStorage.removeItem("cbflix.list."+p.id);localStorage.removeItem("cbflix.cw."+p.id)}catch(e){}who()};w.appendChild(d)}
+    pl.appendChild(w);
+  });
+  if(profiles.length<6){var a=el("button","pf add");a.type="button";a.appendChild(el("span","sq","+"));a.appendChild(el("span",null,"Add profile"));a.onclick=function(){$("newp").hidden=false;$("newName").focus()};pl.appendChild(a)}
+  $("manage").textContent=managing?"Done":"Manage profiles";
+  $("who").hidden=false;
+}
+$("manage").onclick=function(){managing=!managing;who()};
+$("newCancel").onclick=function(){$("newp").hidden=true};
+$("newSave").onclick=function(){var n=$("newName").value.trim().slice(0,14);if(!n)return;profiles.push({id:"p"+Date.now(),name:n,c:COLORS[profiles.length%COLORS.length]});sset("profiles",profiles);$("newName").value="";$("newp").hidden=true;who()};
+$("newName").addEventListener("keydown",function(e){if(e.key==="Enter")$("newSave").click()});
+$("avatar").onclick=function(){managing=false;who()};
+function start(){
+  var p=prof();if(!p){who();return}
+  $("avatar").textContent=p.name.charAt(0).toUpperCase();$("avatar").style.background=p.c;
+  chips();hero();go("home");
+}
+window.__cbflix={titles:TITLES,play:play,close:closePlayer};
+start();
+})();
+</script>
+<div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body>
+</html>

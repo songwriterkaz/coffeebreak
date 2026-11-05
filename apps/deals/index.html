@@ -1,11 +1,66 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Deals</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Deals</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Deals</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><meta name="theme-color" content="#3b2416">
+<style>
+:root{--bg:#fff7ea;--card:#fff;--ink:#3b2416;--acc:#d9822b;--acc2:#3b2416;--soft:#f3e2c7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,Segoe UI,Roboto,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--acc2);color:#fff}header img{height:52px;border-radius:8px;background:#fff}header h1{margin:0;font-size:22px}header small{opacity:.8}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 16px;background:var(--soft);position:sticky;top:0;z-index:5}
+nav button{border:0;border-radius:18px;padding:8px 14px;background:#fff;color:var(--ink);font-weight:700;cursor:pointer}nav button.on{background:var(--acc);color:#fff}
+main{max-width:1000px;margin:0 auto;padding:14px}section{display:none}section.on{display:block}
+.card{background:var(--card);border-radius:14px;padding:14px;margin:0 0 12px;box-shadow:0 2px 8px #3b241622}
+label{display:block;margin:6px 0;font-weight:600;font-size:14px}input,select,textarea{font:inherit;padding:7px 9px;border:1px solid #cbb38f;border-radius:8px;width:100%;background:#fffdf8;color:var(--ink)}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px 12px}
+.btn{border:0;border-radius:20px;padding:9px 16px;background:var(--acc);color:#fff;font-weight:700;cursor:pointer;margin:4px 4px 4px 0}.btn.s{background:var(--acc2)}.btn.l{background:#eee;color:var(--ink)}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{border-bottom:1px solid #eadbc2;padding:6px;text-align:left}
+.bean{display:flex;gap:10px;align-items:center;background:#fff3dc;border:2px dashed var(--acc);border-radius:14px;padding:10px;margin:8px 0}.bean b{font-size:34px}
+.ok{color:#1f7a3a;font-weight:700}.bad{color:#b0302a;font-weight:700}.muted{opacity:.75;font-size:13px}
+#cards{display:flex;flex-wrap:wrap;gap:12px}#cards canvas{width:300px;max-width:100%;border-radius:12px;box-shadow:0 2px 10px #0003}
+footer{text-align:center;padding:16px;font-size:12px;opacity:.8}
+.priv{font-size:12px;background:#f6efe2;border-left:4px solid var(--acc);padding:8px;border-radius:6px}
+@media print{header,nav,footer,.noprint{display:none}section{display:none}section#t-cards{display:block}}
+</style></head><body>
+<header><img src="logo.png" alt="Coffeebreak logo"><div><h1>Coffeebreak Deals</h1><small>Vouchers brewed by Beanbot, the coffee robot</small></div></header>
+<nav id="nav"><button data-t="make" class="on">☕ Make codes</button><button data-t="cards">🎟 Coupon cards</button><button data-t="check">🔍 Code checker</button><button data-t="finder">🍯 Deal finder</button><button data-t="org">📊 Organiser</button><button data-t="about">ℹ About</button></nav>
+<main>
+<section id="t-make" class="on"><div class="bean"><b>🤖</b><div id="quip">Beanbot says: a discount a day keeps the grumpy customers away.</div></div>
+<div class="card"><h2>New voucher</h2><div class="g">
+<label>Code<input id="mCode" placeholder="BEAN10"></label>
+<label>Type<select id="mType"><option value="percent">Percent off</option><option value="dollar">Dollars off</option><option value="freeship">Free shipping</option><option value="bundle">Bundle deal</option><option value="firstorder">First order only</option></select></label>
+<label>Value (percent or AUD)<input id="mVal" type="number" value="10" min="0"></label>
+<label>Label shown to shoppers<input id="mLabel" placeholder="10% off your first cuppa"></label>
+<label>Shop or app<input id="mShop" placeholder="No Inside Out shop"></label>
+<label>Starts<input id="mStart" type="date"></label><label>Expires<input id="mExp" type="date"></label>
+<label>Minimum order AUD<input id="mMin" type="number" min="0"></label>
+<label>Total uses allowed<input id="mMax" type="number" min="0" placeholder="blank = unlimited"></label>
+<label>Uses per person<input id="mPer" type="number" min="0" value="1"></label>
+</div><button class="btn" id="mRand">🎲 Random code</button><button class="btn s" id="mSave">Save voucher</button></div>
+<div class="card"><h2>Your vouchers</h2><div id="list"></div>
+<button class="btn" id="exSnip">📋 Copy shop snippet list</button><button class="btn l" id="exJson">⬇ Backup JSON</button><label class="btn l" style="display:inline-block;width:auto">⬆ Restore JSON<input type="file" id="imJson" accept=".json" hidden></label>
+<textarea id="snip" rows="4" class="muted" readonly placeholder="The hashed list for your shop pages appears here"></textarea>
+<p class="muted">Paste it into a shop page with <code>&lt;script src="cb-deals-check.js"&gt;&lt;/script&gt;</code>. Offline lists are hashed but not tamper-proof. A determined person reading the page source could get around them. For real limits use the free backend (Organiser tab).</p></div></section>
+<section id="t-cards"><div class="card noprint"><h2>Printable and shareable coupon cards</h2><p>Every card gets the Coffeebreak logo and a QR code. Scanning the QR opens this app's checker with the code filled in.</p><label>Link the QR opens<input id="qrBase" value="https://coffeebreaks.itch.io/coffeebreak-deals"></label><button class="btn" id="mkCards">Make cards for all vouchers</button><button class="btn s" onclick="print()">🖨 Print</button></div><div id="cards"></div></section>
+<section id="t-check"><div class="card"><h2>Code checker</h2><div class="g"><label>Code<input id="cCode"></label><label>Order total AUD<input id="cTot" type="number" value="50"></label></div>
+<button class="btn" id="cCheck">Check</button><button class="btn s" id="cRedeem">Use it (counts one use)</button><p id="cOut"></p>
+<p class="priv" id="priv"></p></div></section>
+<section id="t-finder"><div class="bean"><b>🍯</b><div>Beanbot's deal finder. Honey is a browser extension that pokes around inside other shops' checkouts. This is a web app, so it cannot do that, and it does not scrape or inject anything into other stores. What it can do is keep your coupons tidy and point you to legit deal sites.</div></div>
+<div class="card"><h2>👛 Coupon wallet</h2><div class="g"><label>Store<input id="wStore"></label><label>Code<input id="wCode"></label><label>Expires<input id="wExp" type="date"></label><label>Notes<input id="wNote"></label></div><button class="btn" id="wAdd">Add to wallet</button><div id="wList"></div></div>
+<div class="card"><h2>📉 Price-drop watch notes</h2><p class="muted">Write down what you paid or saw, then check back. Beanbot reminds you which ones are older than two weeks.</p><div class="g"><label>Item<input id="pItem"></label><label>Link<input id="pLink" type="url"></label><label>Price now AUD<input id="pPrice" type="number"></label><label>Want it at AUD<input id="pWant" type="number"></label></div><button class="btn" id="pAdd">Watch it</button><div id="pList"></div></div>
+<div class="card"><h2>☕ Try these codes at Coffeebreak shops</h2><div id="try"></div></div>
+<div class="card"><h2>🔗 Legit public deal sites</h2><ul>
+<li><a href="https://www.ozbargain.com.au/deals" target="_blank" rel="noopener">OzBargain</a> (Aussie community deals)</li>
+<li><a href="https://www.shopback.com.au" target="_blank" rel="noopener">ShopBack</a> (cashback)</li>
+<li><a href="https://www.cashrewards.com.au" target="_blank" rel="noopener">Cashrewards</a> (cashback)</li>
+<li><a href="https://www.joinhoney.com" target="_blank" rel="noopener">Honey</a> (the official extension, if you want it)</li>
+<li><a href="https://www.retailmenot.com" target="_blank" rel="noopener">RetailMeNot</a></li>
+<li><a href="https://camelcamelcamel.com" target="_blank" rel="noopener">camelcamelcamel</a> (Amazon price history)</li></ul></div></section>
+<section id="t-org"><div class="card"><h2>Organiser (voucher backend)</h2><p>This tracks how many times each person uses each voucher, using a hashed IP plus a device ID. It needs the free Cloudflare Worker in the backend folder. Without it, limits are counted per device only.</p>
+<div class="g"><label>Backend URL<input id="oUrl" placeholder="https://coffeebreak-deals.yourname.workers.dev"></label><label>Organiser password<input id="oPw" type="password" autocomplete="current-password"></label></div>
+<button class="btn" id="oSync">⬆ Send my vouchers to the backend</button><button class="btn s" id="oLogs">Show uses</button><button class="btn l" id="oCsv">⬇ Export CSV</button><p class="muted">The password is kept only for this session and is never saved.</p><div id="oOut"></div></div></section>
+<section id="t-about"><div class="card"><h2>About</h2><p>Coffeebreak Deals is a free tool by Coffeebreak, Newcastle NSW. Make vouchers for Coffeebreak shops and apps, print cards with QR codes, and check codes.</p><p>Support Coffeebreak: Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p><p>More: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p><p class="priv" id="priv2"></p></div></section>
+</main>
+<footer><img src="logo.png" alt="Coffeebreak logo" style="height:36px;vertical-align:middle"> © Coffeebreak, Newcastle NSW. Karen keeps all rights to Coffeebreak Deals and its designs. Please do not copy it or make your own versions. Printed coupon cards are for use, not resale as templates.</footer>
+<script src="qrcode.js"></script><script src="cb-deals-check.js"></script><script src="app.js"></script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

@@ -1,0 +1,16 @@
+Title: Coffeebreak Deals
+Short description: Beanbot's free voucher maker: coupon codes, QR coupon cards, a code checker and a saved coupon wallet.
+Tags: coupons, discount, voucher, qr-code, shop-tools, small-business, australia, coffee, free, tool
+Pricing: Free (no payments)
+Kind: HTML, playable in browser, viewport 1100x800, mobile friendly
+
+Description:
+Coffeebreak Deals is a free voucher maker from Coffeebreak, Newcastle NSW, run by Beanbot the coffee robot.
+- Make codes: percent off, dollars off, free shipping, bundle and first-order deals, with start and expiry dates, minimum orders, total limits and per-person limits.
+- Coupon cards: printable, shareable cards with the Coffeebreak logo and a QR code.
+- Code checker: a small script for shop pages. Without a server it checks a hashed list offline and counts uses on each device. This is not tamper-proof. With the free Cloudflare backend it counts uses per person (hashed IP plus device ID).
+- Deal finder: a coupon wallet, price-drop watch notes, current Coffeebreak codes and links to legit deal sites. It is a web app, not a browser extension, so it does not scrape or change other stores.
+Privacy: to stop vouchers being reused, IP addresses are checked in hashed form only and never stored as is (Australian Privacy Principles).
+Support Coffeebreak: Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com
+More apps: https://coffeebreaks.itch.io
+Rights: Karen keeps all rights. You may not copy this app or make your own versions.

@@ -1,0 +1,7 @@
+# Coffeebreak Tube sharing API - Cloudflare Workers FREE plan (100k requests/day, no card needed)
+name = "coffeebreak-tube-share"
+main = "src/index.mjs"
+compatibility_date = "2025-09-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+# Secret (set with: npx wrangler secret put SANITY_TOKEN < token file). Never put it in this file.

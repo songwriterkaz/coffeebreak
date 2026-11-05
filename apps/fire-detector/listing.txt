@@ -1,0 +1,18 @@
+Title: Coffeebreak Fire Detector
+Tagline: An honest smoke alarm companion for your home
+Kind: HTML (playable in browser)
+Price: Free, or pay what you want
+Description:
+Look after the smoke alarms that keep your home safe.
+- Smoke alarm tracker: rooms, install dates, 10-year replacement reminders, battery dates and a monthly test log, saved on your own device
+- Alarm listener: uses your microphone to listen for the high-pitched beeping of a sounding smoke alarm, then flashes the screen and vibrates your phone. Handy if you are hard of hearing, wearing headphones or in another room
+- NSW smoke alarm checklist with general information and a reminder to check Fire and Rescue NSW for current rules
+- Fire escape plan maker you can print and practise
+- One-tap 000 emergency call button
+Free version tracks up to 3 alarms. Pro is a $4 one-off tip by PayID for unlimited alarms and CSV export of your test log, with your unlock code emailed to you.
+Honest note: a phone cannot detect fire or smoke. This app supports, but never replaces, working smoke alarms. In an emergency call 000.
+Made by Coffeebreak, Newcastle NSW.
+Tags: fire safety, smoke alarm, home, safety, accessibility, tools, nsw, australia, utility
+AI disclosure: Yes (code)
+
+Rights and resale: Karen O'Brien (Coffeebreak) keeps all rights to the products, designs, apps, the Coffeebreak name and logo. Buyers and fans may resell the physical products and phones they bought, but may not copy them or make their own versions.

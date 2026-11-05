@@ -1,11 +1,49 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Titanic: Iceberg Escape</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Titanic: Iceberg Escape</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Coffeebreak Titanic: Iceberg Escape</title><link rel="icon" href="logo.png"><link rel="stylesheet" href="common.css">
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}</script></head><body>
+<img id="logo" src="logo.png" alt="Coffeebreak"><div id="hud"></div>
+<div id="menu"><img src="logo.png" alt="Coffeebreak"><h1>Coffeebreak Titanic: Iceberg Escape</h1>
+<p>Steer the great ship through the icy sea. Dodge the icebergs and collect pink Coffeebreak cups for bonus points. The sea gets faster the further you sail.</p>
+<p>Mac: A and D or arrow keys. Phone: hold the left or right side of the screen.</p><p id="best"></p>
+<button class="btn" id="play">Set sail</button></div>
+<script src="common.js"></script>
+<script type="module">
+import * as THREE from 'three';import {makeShip} from './shipmodel.js';
+const R=new THREE.WebGLRenderer({antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));R.setSize(innerWidth,innerHeight);document.body.appendChild(R.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x0e1a3a);scene.fog=new THREE.Fog(0x0e1a3a,60,260);
+const cam=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,600);cam.position.set(0,18,30);cam.lookAt(0,0,-30);
+scene.add(new THREE.HemisphereLight(0xbcd8ff,0x101830,0.9));const dl=new THREE.DirectionalLight(0xffe0f0,1);dl.position.set(20,40,10);scene.add(dl);
+const sea=new THREE.Mesh(new THREE.PlaneGeometry(400,800,1,1),new THREE.MeshPhongMaterial({color:0x123e6b}));sea.rotation.x=-Math.PI/2;sea.position.y=-1;scene.add(sea);
+const ship=makeShip(THREE);scene.add(ship);
+const bergG=new THREE.DodecahedronGeometry(1,0),bergM=new THREE.MeshLambertMaterial({color:0xe8f6ff,flatShading:true});
+const cupM=new THREE.MeshLambertMaterial({color:0xff4fa3,emissive:0x661133});
+let objs=[],x=0,vx=0,spd,dist,score,alive=false,best=+localStorage.cbIceBest||0;
+document.getElementById('best').textContent=best?'Best score '+best:'';
+const hud=document.getElementById('hud');let L=false,Rt=false;
+addEventListener('touchstart',e=>{for(const t of e.touches){if(t.clientX<innerWidth/2)L=true;else Rt=true}},{passive:true});
+addEventListener('touchend',e=>{L=Rt=false;for(const t of e.touches){if(t.clientX<innerWidth/2)L=true;else Rt=true}});
+function spawn(z){const r=Math.random();if(r<0.75){const m=new THREE.Mesh(bergG,bergM);const s=3+Math.random()*5;m.scale.set(s,s*1.3,s);m.rotation.y=Math.random()*6;m.position.set((Math.random()-0.5)*90,s*0.3,z);m.userData={r:s*0.9,berg:1};scene.add(m);objs.push(m)}
+ else{const m=new THREE.Mesh(new THREE.CylinderGeometry(1.2,0.9,2,12),cupM);m.position.set((Math.random()-0.5)*80,1,z);m.userData={r:2};scene.add(m);objs.push(m)}}
+function start(){objs.forEach(o=>scene.remove(o));objs=[];for(let z=-60;z>-300;z-=14)spawn(z);x=0;vx=0;spd=25;dist=0;score=0;alive=true;document.getElementById('menu').style.display='none'}
+document.getElementById('play').onclick=start;
+const clk=new THREE.Clock();let farZ=-300;
+function loop(){requestAnimationFrame(loop);const dt=Math.min(clk.getDelta(),0.05),t=clk.elapsedTime;
+ if(alive){const a=CB.axis();const dir=a.x+(L?-1:0)+(Rt?1:0);vx+=(dir*30-vx)*dt*3;x=Math.max(-45,Math.min(45,x+vx*dt));
+  spd+=dt*0.6;dist+=spd*dt;const dz=spd*dt;farZ+=dz;
+  for(const o of objs){o.position.z+=dz;if(!o.userData.berg)o.rotation.y+=dt*3;
+   const dx=o.position.x-x,dzz=o.position.z;
+   if(o.visible&&Math.abs(dx)<o.userData.r+2.6&&dzz>-15-o.userData.r&&dzz<11+o.userData.r){if(o.userData.berg){alive=false;end()}else{o.visible=false;score+=50}}}
+  objs=objs.filter(o=>{if(o.position.z>40){scene.remove(o);return false}return true});
+  while(farZ>-286){farZ-=14;spawn(-300);}
+  score+=dz*0.2;hud.textContent='Score '+Math.floor(score)+'  |  '+Math.floor(dist)+' m  |  '+(spd*0.8).toFixed(0)+' knots'}
+ ship.position.x=x;ship.rotation.z=-vx*0.01;ship.rotation.y=-vx*0.008;ship.position.y=Math.sin(t*2)*0.15;const por=innerWidth<innerHeight;cam.position.set(x,por?32:18,por?44:30);cam.lookAt(x,0,por?-20:-30);
+ R.render(scene,cam)}
+function end(){const s=Math.floor(score);if(s>best){best=s;localStorage.cbIceBest=s}const m=document.getElementById('menu');m.style.display='flex';
+ m.querySelector('h1').textContent='The ship touched an iceberg';m.querySelector('p').textContent='Everyone is safe and warm with a cup of Coffeebreak cocoa. Your score was '+s+'.';
+ document.getElementById('best').textContent='Best score '+best;document.getElementById('play').textContent='Sail again'}
+loop();addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();R.setSize(innerWidth,innerHeight)});
+</script><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Coffeebreak Titanic Iceberg Escape" data-url="https://coffeebreaks.itch.io" data-kind="game" data-howto=""></script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

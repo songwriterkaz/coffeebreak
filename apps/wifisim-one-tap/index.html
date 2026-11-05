@@ -1,10 +1,28 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak WifiSIM One-Tap</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak WifiSIM One-Tap</h1><p class="price">Free</p><p>A quick play sample round with scoring and a saved best score.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p>Tap the cup as many times as you can in 10 seconds.</p><p><button id=cup style="font-size:2em">&#9749; Tap</button></p><p>Score <b id=sc>0</b> &middot; Best <b id=bs></b> &middot; <span id=tm>Ready</span></p><script>
-var KEY='cb-best-'+location.pathname,s=0,on=0,end;bs.textContent=localStorage.getItem(KEY)||0;
-cup.onclick=()=>{if(!on){on=1;s=0;end=Date.now()+10000;(function t(){var l=end-Date.now();tm.textContent=(l/1000).toFixed(1)+'s';if(l>0)requestAnimationFrame(t);else{on=0;tm.textContent='Done';if(s>+bs.textContent){bs.textContent=s;localStorage.setItem(KEY,s)}}})()}if(on){s++;sc.textContent=s}}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><script src="cbreport.js" data-app="Coffeebreak Wifisim One Tap" data-version="r1-20261023"></script><script src="cbassist.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Coffeebreak WifiSIM One-Tap</title>
+<meta name="theme-color" content="#000"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="apple-mobile-web-app-title" content="WifiSIM"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="icon.png"><link rel="stylesheet" href="common.css?v=8"><script>window.CB_PRESENCE=1</script><script src="net.js?v=8"></script><script src="url.js?v=8"></script><script src="peerjs.min.js?v=8"></script><script src="core.js?v=8"></script></head><body>
+<header><img src="logo.png" alt="Coffeebreak logo"><h1>WifiSIM One-Tap</h1></header>
+<p class="status off" id="st" role="status" aria-live="polite">Reconnecting…</p>
+<p class="sync" id="sync" aria-live="polite"></p>
+<main id="done" aria-live="polite">
+<p class="note" id="onenum" style="font-size:1.15rem">Your call number is shown inside the phone below. Give that one number to the people who call you.</p><div class="qrbox" id="hubbox" hidden style="display:none"><div id="qr" role="img" aria-label="QR code to connect to this phone"></div><p class="note" style="font-size:1.1rem;margin:6px 0 0">Scan to connect</p><p class="note">Your call ID<br><b id="me" style="font-size:1.5rem;color:#2ee66b"></b></p></div>
+<iframe id="phonepanel" title="Coffeebreak phone" allow="microphone; autoplay; screen-wake-lock" style="width:100%;height:1150px;border:3px solid #2ee66b;border-radius:20px;background:#000"></iframe>
+
+<p class="note">Calls over WiFi between Coffeebreak app users. This is not a mobile carrier SIM and does not give you a real phone number.</p>
+<button id="share" hidden style="display:none" class="big blue" aria-label="Share my call ID with family or friends">Share my call ID</button>
+
+<p class="note">Saved on this device. It goes online by itself every time you open it.</p>
+
+<button id="linkb" class="big grey small" aria-label="Link another device">Link another device</button>
+<button id="testb" class="big grey small" aria-label="Test my connection">Test my connection</button>
+</main>
+<section id="linkov" class="ov hide" aria-label="Link another device"><p class="num" style="color:#ffd84d;font-size:2rem">Link another device</p>
+<p class="note">On your other phone, tablet or computer, scan this code or open the link. Contacts, names and recent calls then stay the same on both, and calls ring on every linked device.</p>
+<div id="lqr" aria-hidden="true" style="display:flex;justify-content:center"></div>
+<button id="lshare" class="big blue small">Send the link</button><button id="lback" class="big grey small">Back</button></section>
+<section id="testov" class="ov hide" aria-live="polite"><p class="num" style="color:#ffd84d;font-size:2rem">Test my connection</p><p class="note" id="testres">Testing…</p><button id="tback" class="big grey small">Back</button></section>
+<footer>© Karen O'Brien (Coffeebreak). All designs, music, art and content remain the property of Karen O'Brien. Your purchase gives you a personal-use licence only. It doesn't transfer ownership or allow resale, copying or redistribution.</footer>
+<script src="qrcode.min.js?v=8"></script><script src="extras.js?v=8"></script><script src="sim.js?v=8"></script><script src="keep.js?v=8"></script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

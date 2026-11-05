@@ -1,0 +1,162 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Tube</title><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png">
+<style>
+:root{--bg:#1b1230;--card:#2a1d47;--acc:#e8a33d;--acc2:#6b3fa0;--tx:#f5eee6;--mu:#bfb3d6}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:linear-gradient(90deg,#3a2163,#1b1230);position:sticky;top:0;z-index:5}
+header img{height:44px;border-radius:10px}header h1{font-size:20px;margin:0;color:var(--acc)}
+#q{flex:1;max-width:420px;padding:8px 12px;border-radius:20px;border:0;background:#fff1;color:var(--tx)}
+nav{display:flex;gap:6px;flex-wrap:wrap;padding:8px 16px;background:#0003}
+button,.btn{background:var(--acc2);color:#fff;border:0;border-radius:8px;padding:7px 12px;cursor:pointer;font-size:14px}
+button.alt{background:#fff2}button.on{background:var(--acc);color:#222}
+main{padding:16px;max-width:1150px;margin:auto}.note{background:#e8a33d22;border-left:4px solid var(--acc);padding:8px 12px;border-radius:6px;margin-bottom:12px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.card{background:var(--card);border-radius:12px;overflow:hidden;cursor:pointer}.thumb{aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center;color:var(--acc);font-size:32px}
+.thumb img{width:100%;height:100%;object-fit:cover}.ci{padding:8px 10px}.ci b{display:block}.mu{color:var(--mu);font-size:13px}
+.pr{display:inline-block;background:#6b3fa055;border:1px solid #9b6fd0;border-radius:10px;padding:0 7px;font-size:12px;margin-left:5px;color:#f0e2ff}
+.av{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#fff2;vertical-align:middle;display:inline-flex;align-items:center;justify-content:center}
+label{display:block;margin:8px 0 3px;font-size:14px}input,select,textarea{width:100%;padding:7px;border-radius:6px;border:1px solid #fff3;background:#fff1;color:var(--tx)}
+option{color:#000}.panel{background:var(--card);padding:14px;border-radius:12px;margin-bottom:14px}video{width:100%;max-height:60vh;background:#000;border-radius:10px}
+footer{padding:16px;text-align:center;font-size:13px;color:var(--mu)}footer a{color:var(--acc)}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.warn{background:#ff6b6b22;border-left:4px solid #ff8a8a}.small{font-size:12px;padding:4px 8px}progress{width:100%;height:14px}.cm{border-top:1px solid #fff1;padding:6px 0}code{background:#0004;padding:2px 6px;border-radius:5px;word-break:break-all}
+</style></head><body>
+<header><img src="logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Tube</h1><input id="q" placeholder="Search videos and channels" aria-label="Search"><span id="who" class="mu"></span><span id="mode" class="pr"></span></header>
+<nav id="nav"></nav><main id="m"></main>
+<footer><img src="logo.png" alt="Coffeebreak logo" style="height:40px"><br>Coffeebreak Tube by Coffeebreak. More apps at <a href="https://coffeebreaks.itch.io" target="_blank">https://coffeebreaks.itch.io</a><br>
+<a href="#" data-go="rules">Community rules</a><br>Karen keeps all rights to her products, designs, apps, name and logo. You may resell physical items you buy, but you may not copy them or make your own versions.</footer>
+<script>
+const API=(new URLSearchParams(location.search).get('api'))||'https://coffeebreak-tube-share.CF_SUBDOMAIN.workers.dev/';
+const CHUNK=4*1024*1024,MAXV=60*1024*1024;
+const GENDERS=["Prefer not to say","Woman","Man","Non-binary","Trans woman","Trans man","Transgender","Genderfluid","Genderqueer","Agender","Bigender","Demigirl","Demiboy","Two-Spirit","Intersex","Questioning","Gender non-conforming","Sistergirl","Brotherboy","Self-describe"];
+const PRON=["Not shown","she/her","he/him","they/them","she/they","he/they","any pronouns","xe/xem","ze/hir","ze/zir","fae/faer","ey/em","it/its","use my name","Custom"];
+const REASONS=["Shares someone's private details","Bullying or harassment","Hate or discrimination","Sexual or violent content","Spam or scam","Copyright problem","Something else"];
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,9);
+const LS={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
+let SHARED=false,S={view:'home',arg:null};
+// Profiles on this device: full details (including private choices) stay here. Only what you choose to show is shared.
+const devProfiles=()=>LS.get('cbtProfiles',[]),saveDev=a=>LS.set('cbtProfiles',a);
+const meId=()=>localStorage.getItem(SHARED?'cbtMeShared':'cbMe');
+const me=()=>devProfiles().find(p=>p.id==meId()&&(!!p.shared)==SHARED)||null;
+const pub=p=>p&&{id:p.id,name:p.name,bio:p.bio,avatar:p.avatar,pronouns:p.showPronouns!==false?p.pronouns:'',gender:p.showGender?p.gender:''};
+const pron=p=>p&&p.pronouns?`<span class="pr" title="Pronouns">${esc(p.pronouns)}</span>`:'';
+const gend=p=>p&&p.gender?`<span class="pr" title="Gender">${esc(p.gender)}</span>`:'';
+const safeImg=s=>typeof s=='string'&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(s)?s:'';
+const av=p=>p&&safeImg(p.avatar)?`<img class="av" src="${safeImg(p.avatar)}" alt="">`:`<span class="av">☕</span>`;
+const nameTag=p=>p?`${av(p)} <a href="#" data-ch="${esc(p.id)}" style="color:inherit"><b style="display:inline">${esc(p.name)}</b></a>${pron(p)}${gend(p)}`:'Unknown';
+const PRIV=/[^\s@]+@[^\s@]+\.[a-z]{2,}|(\+?61|0)[2-478](?:[ -]?\d){8}|\d(?:[ -]?\d){8,}/i;
+const reported=()=>LS.get('cbtReported',[]);
+// ---------- local demo store (IndexedDB, this device only) ----------
+let db;function openDB(){return new Promise((r,j)=>{const q=indexedDB.open('cbtube',1);q.onupgradeneeded=()=>{const d=q.result;d.createObjectStore('profiles',{keyPath:'id'});d.createObjectStore('videos',{keyPath:'id'});d.createObjectStore('lists',{keyPath:'id'})};q.onsuccess=()=>r(q.result);q.onerror=j})}
+const tx=(st,m,f)=>new Promise((r,j)=>{const t=db.transaction(st,m),o=f(t.objectStore(st));t.oncomplete=()=>r(o&&o.result);t.onerror=()=>j(t.error)});
+const all=st=>tx(st,'readonly',s=>s.getAll()),get=(st,k)=>tx(st,'readonly',s=>s.get(k)),put=(st,v)=>tx(st,'readwrite',s=>s.put(v)),del=(st,k)=>tx(st,'readwrite',s=>s.delete(k));
+const Local={
+ async feed({q,ch}={}){const ps=Object.fromEntries((await all('profiles')).map(p=>[p.id,pub(p)]));let V=(await all('videos')).filter(v=>!v.hidden).sort((a,b)=>b.at-a.at).map(v=>({...v,likes:Array.isArray(v.likes)?v.likes.length:(v.likes||0),owner:ps[v.owner]}));
+  if(ch)V=V.filter(v=>v.owner&&v.owner.id==ch);let channels=[];if(q){q=q.toLowerCase();V=V.filter(v=>(v.title+' '+v.desc+' '+(v.owner||{}).name).toLowerCase().includes(q));channels=Object.values(ps).filter(p=>(p.name+' '+p.bio).toLowerCase().includes(q))}return{videos:V,channels}},
+ async video(id){const v=await get('videos',id);if(!v)return null;const ps=Object.fromEntries((await all('profiles')).map(p=>[p.id,pub(p)]));return{...v,likes:Array.isArray(v.likes)?v.likes.length:(v.likes||0),owner:ps[v.owner],cm:(v.cm||[]).map((c,i)=>({_key:String(i),t:c.t,p:pub(c.p)}))}},
+ async profile(id){return pub(await get('profiles',id))},
+ async saveProfile(p){if(!p.id)p.id=uid();await put('profiles',p);return p},
+ async upload(file,meta,prog){const v={id:uid(),owner:me().id,title:meta.title,desc:meta.desc,blob:file,type:file.type,at:Date.now(),views:0,likes:0,comments:meta.comments,cm:[],thumb:meta.thumb};await put('videos',v);prog(1);return v.id},
+ async src(v){return URL.createObjectURL(v.blob)},
+ async view(id){const v=await get('videos',id);v.views=(v.views||0)+1;await put('videos',v)},
+ async like(id,on){const v=await get('videos',id);v.likes=Math.max(0,(Array.isArray(v.likes)?v.likes.length:(v.likes||0))+(on?1:-1));await put('videos',v)},
+ async comment(id,t){const v=await get('videos',id);v.cm=v.cm||[];v.cm.push({p:me(),t});await put('videos',v)},
+ async report(id){const v=await get('videos',id);if(v){v.hidden=true;await put('videos',v)}},
+ async remove(id){await del('videos',id)}};
+// ---------- shared store (Coffeebreak Tube service, free Sanity backend) ----------
+async function api(a,{method='GET',params={},body,headers={}}={}){const u=new URL(API);u.searchParams.set('a',a);for(const k in params)if(params[k])u.searchParams.set(k,params[k]);
+ const r=await fetch(u,{method,headers:body instanceof Blob||body instanceof ArrayBuffer?headers:{'content-type':'application/json',...headers},body:body&&!(body instanceof Blob||body instanceof ArrayBuffer)?JSON.stringify(body):body});
+ const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'The video service did not answer, try again.');return d}
+const auth=()=>{const m=me();return{profile:m.id,key:m.key}};
+const Shared={
+ feed:({q,ch}={})=>api('feed',{params:{q,ch}}),
+ video:id=>api('video',{params:{id}}),
+ profile:id=>api('profile',{params:{id}}),
+ async saveProfile(p){const b={...pub(p),id:p.id||undefined,key:p.key,keepAvatar:!!p.avatar};const d=await api('profile',{method:'POST',body:b});if(!p.id){p.id=d.id;p.key=d.key}p.shared=true;return p},
+ async upload(file,meta,prog){const m=me(),n=Math.ceil(file.size/CHUNK),ids=[];
+  for(let i=0;i<n;i++){const part=file.slice(i*CHUNK,(i+1)*CHUNK);let d,tries=0;
+   while(!d){try{d=await api('chunk',{method:'POST',body:part,headers:{'content-type':'application/octet-stream','x-cb-profile':m.id,'x-cb-key':m.key}})}catch(e){if(++tries>2)throw e}}
+   ids.push(d.asset);prog((i+1)/(n+1))}
+  const d=await api('video',{method:'POST',body:{...auth(),title:meta.title,desc:meta.desc,comments:meta.comments,thumb:meta.thumb,type:file.type,size:file.size,chunks:ids}});prog(1);return d.id},
+ async src(v,prog){const c=v.chunks||[];if(c.length==1)return c[0].url;const parts=[];let i=0;for(const x of c){parts.push(await (await fetch(x.url)).blob());prog&&prog(++i/c.length)}return URL.createObjectURL(new Blob(parts,{type:v.type||'video/mp4'}))},
+ view:id=>api('view',{method:'POST',body:{id}}),
+ like:(id,on)=>api(on?'like':'unlike',{method:'POST',body:{id}}),
+ comment:(id,text)=>api('comment',{method:'POST',body:{...auth(),id,text}}),
+ report:(id,o)=>api('report',{method:'POST',body:{id,...o}}),
+ remove:id=>api('delete',{method:'POST',body:{...auth(),id}})};
+const store=()=>SHARED?Shared:Local;
+// ---------- views ----------
+function go(v,a){S.view=v;S.arg=a;render().catch(err)}
+function err(e){$('#m').insertAdjacentHTML('afterbegin',`<div class="note warn">${esc(e.message||e)}</div>`)}
+function nav(){const m=me();$('#who').innerHTML=m?nameTag(pub(m)):'Not signed in';$('#mode').textContent=SHARED?'Shared':'This device only';
+ $('#nav').innerHTML=[['home','Home'],['upload','Upload'],['profile','My profile'],['mych','My channel'],['later','Watch later'],['lists','Playlists'],['liked','Liked'],['switch','Switch profile'],['data',SHARED?'Use on another device':'Export / import']].map(([k,t])=>`<button class="${S.view==k?'on':'alt'}" data-go="${k}">${t}</button>`).join('')}
+function vcard(v){const p=v.owner;return `<div class="card" data-v="${esc(v.id)}"><div class="thumb">${safeImg(v.thumb)?`<img src="${safeImg(v.thumb)}" alt="">`:'▶'}</div><div class="ci"><b>${esc(v.title)}</b><div class="mu">${p?esc(p.name):''}${pron(p)} · ${v.views||0} views · ${v.likes||0} likes</div></div></div>`}
+const grid=vs=>{vs=vs.filter(v=>!reported().includes(v.id));return vs.length?`<div class="grid">${vs.map(vcard).join('')}</div>`:'<p class="mu">No videos here yet.</p>'};
+const NOTE=()=>SHARED?'<div class="note">Shared: videos you upload here can be watched by everyone using Coffeebreak Tube, on any device. Only share what you are happy for anyone to see, and never post your address, phone number or other private details. Use Report on anything that breaks the <a href="#" data-go="rules" style="color:inherit">community rules</a>.</div>':'<div class="note">This device only: the shared video service could not be reached, so videos are saved on this device for now. <button class="small" id="retry">Try shared again</button></div>';
+const localList=(k)=>LS.get(k,[]);
+async function render(){nav();const m=$('#m'),M=me();let h=NOTE();const st=store();
+const need=()=>{h+='<p>Make or choose a profile first.</p>';S.view='switch'};
+if(S.view=='home')h+=(M?'':'<div class="panel">Make a profile to upload, like and save videos. <button data-go="new">New profile</button></div>')+'<h2>Home</h2>'+grid((await st.feed()).videos);
+if(S.view=='search'){const d=await st.feed({q:S.arg});h+=`<h2>Search: ${esc(S.arg)}</h2>${d.channels.length?'<h3>Channels</h3>'+d.channels.map(p=>`<div class="panel">${nameTag(p)}</div>`).join(''):''}<h3>Videos</h3>`+grid(d.videos)}
+if(S.view=='rules')h+=`<h2>Community rules</h2><div class="panel"><ul><li>Be kind. No bullying, hate or harassment, including about anyone's gender or pronouns.</li><li>Never share private details: no addresses, phone numbers, emails, school names or anything that could locate a person, yours or anyone else's. Text with phone numbers or emails is blocked.</li><li>Only upload videos you made or have permission to share.</li><li>No sexual, violent or dangerous content.</li><li>Anyone can press Report. Reported videos, comments and channels are hidden automatically after a few reports, and Coffeebreak reviews them.</li><li>Your gender and pronouns are only shared if you tick show. Otherwise they stay on your device.</li></ul></div>`;
+if(S.view=='switch'){const ps=devProfiles().filter(p=>(!!p.shared)==SHARED);h+='<h2>Profiles on this device</h2>'+ps.map(p=>`<div class="panel row">${nameTag(pub(p))} <button data-use="${esc(p.id)}">Use this profile</button></div>`).join('')+'<button data-go="new">New profile</button>'}
+if(S.view=='new'||S.view=='profile'){const p=S.view=='profile'&&M?M:{};if(S.view=='profile'&&!M)need();else{
+const gSel=GENDERS.includes(p.gender)?p.gender:(p.gender?'Self-describe':'Prefer not to say'),pSel=PRON.includes(p.pronouns)?p.pronouns:(p.pronouns?'Custom':'Not shown');
+h+=`<h2>${p.id?'Edit profile':'New profile'}</h2><form class="panel" id="pf"><label>Display name (a nickname is fine, no surnames needed)<input name="name" required maxlength="40" value="${esc(p.name)}"></label>
+<label>Avatar image<input type="file" name="avatar" accept="image/*"></label><label>Bio<textarea name="bio" maxlength="300">${esc(p.bio)}</textarea></label>
+<label>Gender (your choice, never guessed)<select name="gender">${GENDERS.map(g=>`<option ${g==gSel?'selected':''}>${g}</option>`).join('')}</select></label>
+<label>Self-describe gender<input name="gself" maxlength="40" value="${gSel=='Self-describe'?esc(p.gender):''}" placeholder="In your own words"></label>
+<label><input type="checkbox" name="showGender" style="width:auto" ${p.showGender?'checked':''}> Show my gender publicly (if not ticked, it stays on this device)</label>
+<label>Pronouns<select name="pronouns">${PRON.map(g=>`<option ${g==pSel?'selected':''}>${g}</option>`).join('')}</select></label>
+<label>Custom or multiple pronouns<input name="pself" maxlength="30" value="${pSel=='Custom'?esc(p.pronouns):''}" placeholder="For example she/they or xe/xyr"></label>
+<label><input type="checkbox" name="showPronouns" style="width:auto" ${p.showPronouns!==false?'checked':''}> Show my pronouns next to my name</label>
+<p class="mu">You can change these at any time. Please do not put phone numbers, emails or addresses in your name or bio.</p><button>Save profile</button></form>`}}
+if(S.view=='upload'){if(!M)need();else h+=`<h2>Upload a video</h2><form class="panel" id="uf"><label>Video file (up to 60 MB, short clips work best)<input type="file" name="file" accept="video/*" required></label><label>Title<input name="title" required maxlength="100"></label><label>Description<textarea name="desc" maxlength="2000"></textarea></label><label><input type="checkbox" name="comments" style="width:auto"> Allow comments (off by default)</label><label><input type="checkbox" name="ok" required style="width:auto"> I made this video or have permission to share it, and it has no private details in it</label><button>Upload</button><div id="up" class="mu"></div></form>`}
+if(S.view=='channel'||S.view=='mych'){const p=S.view=='mych'?(M&&pub(M)):await st.profile(S.arg);if(!p)need();else h+=`<div class="panel"><div style="font-size:22px">${nameTag(p)}</div><p>${esc(p.bio)}</p>${S.view=='channel'&&!(M&&M.id==p.id)?`<button class="alt small" data-rep="${esc(p.id)}" data-kind="channel">Report channel</button>`:''}</div><h3>Videos</h3>`+grid((await st.feed({ch:p.id})).videos)}
+if(S.view=='watch'){const v=await st.video(S.arg);if(!v){h+='<p class="mu">This video is not available.</p>'}else{const p=v.owner,liked=localList('cbtLiked').includes(v.id),mine=M&&p&&M.id==p.id;
+const lists=M?localList('cbtLists').filter(l=>l.owner==M.id):[];
+h+=`<div id="vbox"><p class="mu">Loading video...</p></div><h2>${esc(v.title)}</h2><div class="row">${nameTag(p)}<span class="mu">${(v.views||0)+1} views</span>
+<button data-like="${esc(v.id)}">${liked?'Liked':'Like'} (${v.likes||0})</button><button data-later="${esc(v.id)}">Watch later</button>
+<select id="pl"><option value="">Add to playlist</option>${lists.map(l=>`<option value="${esc(l.id)}">${esc(l.name)}</option>`).join('')}<option value="+">New playlist</option></select>
+${mine?`<button class="alt" data-delv="${esc(v.id)}">Delete</button>`:`<button class="alt" data-rep="${esc(v.id)}" data-kind="video">Report</button>`}</div><p style="white-space:pre-wrap">${esc(v.desc)}</p>`;
+if(v.comments){h+=`<div class="panel"><h3>Comments</h3>${(v.cm||[]).map(c=>`<div class="cm">${nameTag(c.p)}: ${esc(c.t)} ${SHARED?`<button class="alt small" data-rep="${esc(v.id)}" data-comment="${esc(c._key)}">Report</button>`:''}</div>`).join('')||'<p class="mu">No comments yet.</p>'}${M?`<input id="ct" maxlength="500" placeholder="Add a kind comment"><button data-cm="${esc(v.id)}">Post</button>`:''}</div>`}else h+='<p class="mu">Comments are off for this video.</p>';
+S.cur=v}}
+if(S.view=='later'||S.view=='liked'||S.view=='list'){if(!M)need();else{let ids,title;if(S.view=='liked'){ids=localList('cbtLiked');title='Liked'}else if(S.view=='later'){ids=LS.get('cbtLater-'+M.id,[]);title='Watch later'}else{const l=localList('cbtLists').find(l=>l.id==S.arg);ids=l?l.items:[];title=l?l.name:'Playlist'}
+const V=(await st.feed()).videos;h+=`<h2>${esc(title)}</h2>`+grid(V.filter(v=>ids.includes(v.id)))}}
+if(S.view=='lists'){if(!M)need();else{const ls=localList('cbtLists').filter(l=>l.owner==M.id);h+='<h2>Playlists</h2>'+(ls.map(l=>`<div class="panel row"><b>${esc(l.name)}</b><span class="mu">${l.items.length} videos</span><button data-list="${esc(l.id)}">Open</button></div>`).join('')||'<p class="mu">No playlists yet.</p>')}}
+if(S.view=='data'){if(SHARED)h+=`<h2>Use your channel on another device</h2><div class="panel">${M?`<p>This is your private channel code. Anyone with it can post as you, so keep it secret.</p><button id="showcode">Show my channel code</button> <span id="code"></span>`:'<p>Choose a profile first.</p>'}<label>Paste a channel code from your other device<input id="paste" placeholder="Channel code"></label><button id="usecode">Use this code</button></div>`;
+ else h+=`<h2>Export / import</h2><div class="panel"><p>Export your channel (profile, videos and playlists) to a file, or import one.</p><button id="ex">Export my channel</button> <label>Import a channel file<input type="file" id="im" accept=".json"></label></div>`}
+m.innerHTML=h;bind();
+if(S.view=='watch'&&S.cur){const v=S.cur;st.view(v.id).catch(()=>{});const box=$('#vbox');try{const url=await st.src(v,f=>{box.innerHTML=`<p class="mu">Loading video ${Math.round(f*100)}%</p>`});if(S.cur===v)box.innerHTML=`<video src="${esc(url)}" controls autoplay playsinline></video>`}catch(e){box.innerHTML='<p class="mu">The video could not load, try again.</p>'}}}
+const toData=f=>new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsDataURL(f)});
+function small(file){return new Promise(r=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,160/Math.max(i.width,i.height));c.width=i.width*s;c.height=i.height*s;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.8))};i.onerror=()=>r(null);i.src=URL.createObjectURL(file)})}
+function thumbOf(blob){return new Promise(r=>{const v=document.createElement('video');v.muted=true;v.src=URL.createObjectURL(blob);v.onloadeddata=()=>{v.currentTime=Math.min(1,(v.duration||0)/2)};v.onseeked=()=>{try{const c=document.createElement('canvas');c.width=320;c.height=180;c.getContext('2d').drawImage(v,0,0,320,180);r(c.toDataURL('image/jpeg',.6))}catch(e){r(null)}};v.onerror=()=>r(null);setTimeout(()=>r(null),4000)})}
+const privCheck=(...t)=>{if(t.some(x=>PRIV.test(x||'')))throw new Error('Please leave out phone numbers, email addresses and other private details.')};
+function bind(){const M=me(),st=store();const retry=$('#retry');if(retry)retry.onclick=()=>start();
+const pf=$('#pf');if(pf)pf.onsubmit=async e=>{e.preventDefault();try{const f=new FormData(pf),old=S.view=='profile'?{...M}:{};
+let g=f.get('gender');if(g=='Self-describe')g=f.get('gself').trim()||'';if(g=='Prefer not to say')g='';let pr=f.get('pronouns');if(pr=='Custom')pr=f.get('pself').trim();if(pr=='Not shown')pr='';
+const a=f.get('avatar');const p={...old,name:f.get('name').trim(),bio:f.get('bio'),gender:g,pronouns:pr,showGender:!!f.get('showGender'),showPronouns:!!f.get('showPronouns'),avatar:a&&a.size?await small(a):old.avatar};
+privCheck(p.name,p.bio);pf.querySelector('button').disabled=true;const s=await st.saveProfile(p);if(SHARED)s.shared=true;const list=devProfiles().filter(x=>x.id!=s.id);list.push(s);saveDev(list);localStorage.setItem(SHARED?'cbtMeShared':'cbMe',s.id);go('mych')}catch(x){pf.querySelector('button').disabled=false;err(x)}};
+const uf=$('#uf');if(uf)uf.onsubmit=async e=>{e.preventDefault();const f=new FormData(uf),file=f.get('file'),up=$('#up'),btn=uf.querySelector('button');
+try{if(!file||!file.size)throw new Error('Choose a video file.');if(file.size>MAXV)throw new Error('That video is over 60 MB. Try a shorter clip.');privCheck(f.get('title'),f.get('desc'));btn.disabled=true;
+up.innerHTML='<progress value="0" max="1"></progress> Preparing...';const thumb=await thumbOf(file);
+const id=await st.upload(file,{title:f.get('title'),desc:f.get('desc'),comments:!!f.get('comments'),thumb},x=>{up.innerHTML=`<progress value="${x}" max="1"></progress> Uploading ${Math.round(x*100)}%`});go('watch',id)}catch(x){btn.disabled=false;up.textContent='';err(x)}};
+const pl=$('#pl');if(pl)pl.onchange=()=>{let id=pl.value;if(!id)return;const ls=localList('cbtLists');if(id=='+'){const n=prompt('Playlist name');if(!n)return;id=uid();ls.push({id,owner:M.id,name:n.slice(0,60),items:[]})}const l=ls.find(x=>x.id==id);if(!l.items.includes(S.arg))l.items.push(S.arg);LS.set('cbtLists',ls);pl.outerHTML='<span class="mu">Added to '+esc(l.name)+'</span>'};
+const sc=$('#showcode');if(sc)sc.onclick=()=>{$('#code').innerHTML=`<code>${esc(btoa(JSON.stringify({id:M.id,key:M.key})))}</code>`};
+const uc=$('#usecode');if(uc)uc.onclick=async()=>{try{const c=JSON.parse(atob($('#paste').value.trim()));const p=await Shared.profile(c.id);if(!p)throw 0;const full={...p,key:c.key,shared:true,showPronouns:!!p.pronouns,showGender:!!p.gender};const list=devProfiles().filter(x=>x.id!=p.id);list.push(full);saveDev(list);localStorage.setItem('cbtMeShared',p.id);go('mych')}catch(x){err('That channel code did not work.')}};
+const ex=$('#ex');if(ex)ex.onclick=async()=>{if(!M)return err('Choose a profile first.');const vs=(await all('videos')).filter(v=>v.owner==M.id);const out={app:'coffeebreak-tube',profile:M,lists:localList('cbtLists').filter(l=>l.owner==M.id),videos:await Promise.all(vs.map(async v=>({...v,blob:await toData(v.blob)})))};
+const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(out)],{type:'application/json'}));a.download='coffeebreak-tube-'+M.name.replace(/\W+/g,'-')+'.json';a.click()};
+const im=$('#im');if(im)im.onchange=async()=>{try{const d=JSON.parse(await im.files[0].text());if(d.app!='coffeebreak-tube')throw 0;await put('profiles',d.profile);const list=devProfiles().filter(x=>x.id!=d.profile.id);list.push(d.profile);saveDev(list);LS.set('cbtLists',[...localList('cbtLists'),...(d.lists||[]).filter(l=>Array.isArray(l.items))]);for(const v of d.videos){v.blob=await (await fetch(v.blob)).blob();await put('videos',v)}localStorage.setItem('cbMe',d.profile.id);go('mych')}catch(e){err('That file is not a Coffeebreak Tube export.')}}}
+document.addEventListener('click',async e=>{const t=e.target.closest('[data-go],[data-v],[data-ch],[data-use],[data-like],[data-later],[data-list],[data-delv],[data-cm],[data-rep]');if(!t)return;e.preventDefault();const d=t.dataset,M=me(),st=store();
+try{if(d.go)go(d.go);else if(d.v)go('watch',d.v);else if(d.ch)go('channel',d.ch);else if(d.use){localStorage.setItem(SHARED?'cbtMeShared':'cbMe',d.use);go('home')}else if(d.list)go('list',d.list);
+else if(d.rep){const n=prompt('Why are you reporting this?\n'+REASONS.map((r,i)=>(i+1)+'. '+r).join('\n')+'\nType a number, or a few words.');if(n===null)return;const reason=REASONS[parseInt(n)-1]||String(n).slice(0,300);
+ await st.report(d.rep,{kind:d.kind||'video',comment:d.comment,reason});if(!d.comment){const r=reported();r.push(d.rep);LS.set('cbtReported',r)}t.outerHTML='<span class="mu">Thanks, reported. Coffeebreak will review it.</span>'}
+else if(d.like||d.later||d.cm||d.delv){if(!M)return go('switch');const id=d.like||d.later||d.cm||d.delv;
+if(d.like){const L=localList('cbtLiked'),on=!L.includes(id);on?L.push(id):L.splice(L.indexOf(id),1);LS.set('cbtLiked',L);await st.like(id,on);const n=(S.cur&&S.cur.likes||0)+(on?1:-1);S.cur.likes=Math.max(0,n);t.textContent=(on?'Liked':'Like')+' ('+S.cur.likes+')'}
+if(d.later){const k='cbtLater-'+M.id,l=LS.get(k,[]);if(!l.includes(id))l.push(id);LS.set(k,l);t.textContent='Saved to watch later'}
+if(d.cm){const c=$('#ct').value.trim();if(c){privCheck(c);t.disabled=true;await st.comment(id,c);go('watch',id)}}
+if(d.delv&&confirm('Delete this video?')){await st.remove(id);go('mych')}}}catch(x){t.disabled=false;err(x)}});
+$('#q').addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.value.trim())go('search',e.target.value.trim())});
+async function start(){try{const c=new AbortController();setTimeout(()=>c.abort(),8000);const r=await fetch(API+'?a=ping',{signal:c.signal});SHARED=r.ok&&(await r.json()).ok===true}catch(e){SHARED=false}go(S.view||'home')}
+openDB().then(d=>{db=d;start()});if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>
