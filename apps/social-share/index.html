@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Join me on Coffeebreak Social ☕</title>
+<meta name="description" content="Free social app by Coffeebreak. Chat with people, post words, pictures, videos and music, follow friends and use 12,000 free tools. Come say hi!">
+<link rel="canonical" href="https://songwriterkaz.github.io/coffeebreak/apps/social-share/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Coffeebreak">
+<meta property="og:title" content="Join me on Coffeebreak Social ☕">
+<meta property="og:description" content="Free social app: chat with people, post words, pictures, videos and music, and use 12,000 free tools.">
+<meta property="og:url" content="https://songwriterkaz.github.io/coffeebreak/apps/social-share/">
+<meta property="og:image" content="https://songwriterkaz.github.io/coffeebreak/apps/social-share/cb-logo.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Join me on Coffeebreak Social ☕">
+<meta name="twitter:description" content="Free social app: chat, post, share music and use 12,000 free tools.">
+<meta name="twitter:image" content="https://songwriterkaz.github.io/coffeebreak/apps/social-share/cb-logo.jpg">
+<meta name="theme-color" content="#3b2416">
+<link rel="icon" href="cb-logo.jpg">
+<style>
+:root{--pink:#ff5fa2;--pink2:#ffd1e6;--coffee:#3b2416;--latte:#c8a27a;--cream:#fff7f0}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,#ffe3ef,#fff7f0 40%);color:var(--coffee)}
+a{color:#c2185b}.wrap{max-width:760px;margin:auto;padding:16px}
+header{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--coffee);color:#fff}
+header img{width:40px;height:40px;border-radius:50%;border:2px solid var(--pink)}header b{color:var(--pink)}
+.hero{text-align:center;padding:26px 14px 10px}.hero h1{font-size:2rem;margin:.2em 0}.hero h1 span{color:var(--pink)}
+.hero p{font-size:1.05rem;max-width:560px;margin:.4em auto}
+.card{background:#fff;border-radius:18px;box-shadow:0 4px 18px rgba(59,36,22,.12);padding:16px;margin:16px 0}
+.card h2{margin:.1em 0 .5em;font-size:1.25rem}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:10px 16px;font-weight:700;font-size:.95rem;cursor:pointer;background:var(--pink);color:#fff;text-decoration:none;margin:4px}
+.btn.alt{background:var(--coffee)}.btn.ghost{background:var(--pink2);color:var(--coffee)}.btn.sm{padding:6px 11px;font-size:.85rem}
+.row{display:flex;flex-wrap:wrap;justify-content:center}
+.link{display:flex;gap:6px;margin:10px 0}.link input{flex:1;min-width:0;padding:10px;border:2px solid var(--pink2);border-radius:12px;font-size:.95rem}
+#qr{display:block;margin:10px auto;width:180px;height:180px;border-radius:12px;background:#fff;padding:6px;border:2px solid var(--pink2)}
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.feats div{background:var(--cream);border-radius:14px;padding:12px;text-align:center;font-weight:600}
+.feats div span{display:block;font-size:1.8rem}
+textarea,.auth input{width:100%;padding:10px;border:2px solid var(--pink2);border-radius:12px;font:inherit;margin:4px 0}
+textarea{min-height:70px;resize:vertical}
+.post{border-top:1px solid #f3dbe6;padding:12px 2px}.post:first-child{border-top:0}
+.who{font-weight:700}.who small{color:#8a6a55;font-weight:400}.txt{white-space:pre-wrap;word-wrap:break-word;margin:4px 0}
+.post img,.post video{max-width:100%;border-radius:12px;margin-top:6px}.post audio{width:100%;margin-top:6px}
+.reps{margin:6px 0 0 14px;border-left:3px solid var(--pink2);padding-left:10px;font-size:.92rem}
+.reps p{margin:4px 0}.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.acts button{border:0;background:var(--cream);border-radius:999px;padding:5px 10px;cursor:pointer;font-weight:600;color:var(--coffee)}
+.muted{color:#8a6a55;font-size:.9rem}.center{text-align:center}.tabs{display:flex;gap:6px;margin-bottom:8px}
+.tabs button{flex:1;border:0;padding:8px;border-radius:10px;background:var(--cream);font-weight:700;cursor:pointer}.tabs button.on{background:var(--pink);color:#fff}
+.tip{background:var(--coffee);color:#fff}.tip code{background:#fff;color:var(--coffee);padding:3px 8px;border-radius:8px;font-size:1rem}
+footer{font-size:.8rem;color:#6d5242;text-align:center;padding:16px 16px 40px;max-width:760px;margin:auto}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--coffee);color:#fff;padding:10px 16px;border-radius:999px;display:none;z-index:9}
+.live{display:inline-block;width:9px;height:9px;border-radius:50%;background:#2ecc71;margin-right:4px;animation:p 1.5s infinite}@keyframes p{50%{opacity:.3}}
+</style>
+</head>
+<body>
+<header><img src="cb-logo.jpg" alt="Coffeebreak logo"><div>Coffeebreak <b>Social</b></div><a class="btn sm" style="margin-left:auto" href="https://songwriterkaz.github.io/coffeebreak/social/">Open app</a></header>
+<div class="wrap">
+  <section class="hero">
+    <h1>Come hang out on <span>Coffeebreak Social</span> ☕💗</h1>
+    <p id="invite-line">A free, friendly social app. Chat with people, post your words, pictures, videos and music, follow friends and use 12,000 free tools.</p>
+    <div class="row">
+      <a class="btn" href="#chat">💬 Join the chat</a>
+      <a class="btn alt" href="https://songwriterkaz.github.io/coffeebreak/social/">Open full app</a>
+    </div>
+  </section>
+
+  <section class="card" id="share">
+    <h2>📣 Invite your friends</h2>
+    <div class="link"><input id="shareUrl" readonly aria-label="Share link"><button class="btn sm" id="copyBtn">Copy link</button></div>
+    <div class="row">
+      <button class="btn" id="nativeShare">📤 Share</button>
+      <a class="btn ghost sm" id="sWa" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn ghost sm" id="sFb" target="_blank" rel="noopener">Facebook</a>
+      <a class="btn ghost sm" id="sX" target="_blank" rel="noopener">X</a>
+      <a class="btn ghost sm" id="sSms">Text</a>
+      <a class="btn ghost sm" id="sMail">Email</a>
+    </div>
+    <img id="qr" alt="QR code to open Coffeebreak Social">
+    <p class="muted center">Show this QR code so friends can scan it with their phone camera.</p>
+  </section>
+
+  <section class="card" id="chat">
+    <h2><span class="live"></span>Community chat</h2>
+    <p class="muted">Anyone can read. Make a free account to post, reply and like. Same account works in the full app. Be kind 💗</p>
+    <div id="authBox"></div>
+    <div id="composer" hidden>
+      <textarea id="msg" maxlength="500" placeholder="Say hi to everyone..."></textarea>
+      <div class="row" style="justify-content:space-between"><span class="muted" id="meLine"></span><button class="btn" id="postBtn">Post</button></div>
+    </div>
+    <div id="feed"><p class="muted center">Loading chat...</p></div>
+    <div class="center"><button class="btn ghost sm" id="moreBtn" hidden>Load more</button></div>
+  </section>
+
+  <section class="card">
+    <h2>What you can do</h2>
+    <div class="feats">
+      <div><span>💬</span>Public chat and private messages</div>
+      <div><span>📸</span>Post pictures and videos</div>
+      <div><span>🎵</span>Share your music</div>
+      <div><span>💞</span>Follow people</div>
+      <div><span>🧰</span>12,000 free tools</div>
+      <div><span>📱</span>Install on your phone</div>
+    </div>
+    <p class="center"><a class="btn alt" href="https://cb-social-live.coffeebreaks.workers.dev/#tools">🧰 Try the free tools</a></p>
+  </section>
+
+  <section class="card">
+    <h2>🎶 Stream my music</h2>
+    <div class="row">
+      <a class="btn ghost sm" href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">▶ Spotify</a>
+      <a class="btn ghost sm" href="https://music.apple.com/au/album/billionaire/1542958072" target="_blank" rel="noopener">▶ Apple Music</a>
+      <a class="btn ghost sm" href="https://music.youtube.com/channel/UC-JT9WEOQZ2p7Qr6AfypT5w" target="_blank" rel="noopener">▶ YouTube Music</a>
+    </div>
+  </section>
+
+  <section class="card tip center">
+    <h2>☕ Shout me a coffee</h2>
+    <p>Tip with PayID: <code id="payid">darkokaz@gmx.com</code> <button class="btn sm" id="copyPay">Copy</button></p>
+    <p class="muted" style="color:#f3d9c8">Tips are optional gifts and keep the app free.</p>
+  </section>
+
+  <section class="center">
+    <a href="https://songwriterkaz.github.io/coffeebreak/">More Coffeebreak apps</a> ·
+    <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> ·
+    <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>
+  </section>
+</div>
+<footer>
+  <p><b>Community rules:</b> Be kind. No bullying, hate, threats, nudity, illegal content or other people's private details. Only post things you made or have the right to share. You must be 16 or older to join.</p>
+  <p><b>Disclaimer:</b> Provided as is, for general use only. Posts are public and belong to the members who make them. &copy; Karen Elizabeth O'Brien (Coffeebreak). Coffeebreak claims no ownership of third-party brands, names or trademarks (including Tesla and Starlink), which belong to their owners and are linked for reference only. AI tools were used to help make this app.</p>
+</footer>
+<div id="toast" role="status"></div>
+<script>
+(function(){
+var LIVE="https://cb-social-live.coffeebreaks.workers.dev";
+var PAGE="https://songwriterkaz.github.io/coffeebreak/apps/social-share/";
+var $=function(i){return document.getElementById(i)};
+var S={token:localStorage.getItem("cbsl_token")||"",me:null,next:null,posts:[]};
+function toast(t){var e=$("toast");e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(function(){e.style.display="none"},2500)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function linkify(s){return esc(s).replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener nofollow">$1</a>')}
+function ago(t){var s=(Date.now()-t)/1000;if(s<60)return"just now";if(s<3600)return Math.floor(s/60)+"m";if(s<86400)return Math.floor(s/3600)+"h";return Math.floor(s/86400)+"d"}
+function api(path,opt){opt=opt||{};var h={};if(S.token)h.authorization="Bearer "+S.token;var b=opt.body;if(b){h["content-type"]="application/json";b=JSON.stringify(b)}
+ return fetch(LIVE+"/api/"+path,{method:opt.method||(b?"POST":"GET"),headers:h,body:b}).then(function(r){return r.json().catch(function(){return{}}).then(function(d){
+ if(r.status===401&&S.token&&path!=="login"){signOut(true)}if(!r.ok)throw new Error(d.error||"Something went wrong, please try again");return d})})}
+function copy(t,msg){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast(msg)},function(){var i=document.createElement("textarea");i.value=t;document.body.appendChild(i);i.select();try{document.execCommand("copy");toast(msg)}catch(e){prompt("Copy this:",t)}i.remove()})}
+
+/* share */
+var ref=new URLSearchParams(location.search).get("from");ref=ref&&/^[a-z0-9_]{3,20}$/i.test(ref)?ref.toLowerCase():"";
+if(ref)$("invite-line").innerHTML="<b>@"+esc(ref)+"</b> invited you! A free, friendly social app. Chat with people, post your words, pictures, videos and music, and use 12,000 free tools.";
+function shareUrl(){return PAGE+(S.me?"?from="+encodeURIComponent(S.me.handle):"")}
+var TXT="Come hang out with me on Coffeebreak Social ☕ free chat, music and 12,000 tools:";
+function drawShare(){var u=shareUrl();$("shareUrl").value=u;var e=encodeURIComponent;
+ $("sWa").href="https://wa.me/?text="+e(TXT+" "+u);$("sFb").href="https://www.facebook.com/sharer/sharer.php?u="+e(u);
+ $("sX").href="https://x.com/intent/post?text="+e(TXT)+"&url="+e(u);$("sSms").href="sms:?&body="+e(TXT+" "+u);
+ $("sMail").href="mailto:?subject="+e("Join me on Coffeebreak Social")+"&body="+e(TXT+"\n\n"+u);
+ $("qr").src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=6&color=3b2416&data="+e(u)}
+$("copyBtn").onclick=function(){copy(shareUrl(),"Link copied 💗")};
+$("copyPay").onclick=function(){copy("darkokaz@gmx.com","PayID copied ☕")};
+$("nativeShare").onclick=function(){var u=shareUrl();if(navigator.share){navigator.share({title:"Coffeebreak Social",text:TXT,url:u}).catch(function(){})}else copy(u,"Link copied, paste it anywhere 💗")};
+
+/* auth */
+function signOut(q){S.token="";S.me=null;localStorage.removeItem("cbsl_token");drawAuth();drawShare();if(!q)toast("Signed out")}
+function setTok(d){S.token=d.token;localStorage.setItem("cbsl_token",d.token);S.me=d.me;drawAuth();drawShare();renderFeed()}
+var mode="signup";
+function drawAuth(){var a=$("authBox");
+ if(S.me){a.innerHTML="";$("composer").hidden=false;$("meLine").innerHTML="Posting as <b>@"+esc(S.me.handle)+"</b> · <a href='#' id='so'>Sign out</a>";$("so").onclick=function(e){e.preventDefault();signOut()};return}
+ $("composer").hidden=true;
+ a.innerHTML='<div class="tabs"><button data-m="signup" class="'+(mode==="signup"?"on":"")+'">Join free</button><button data-m="login" class="'+(mode==="login"?"on":"")+'">Sign in</button></div>'+
+ '<form class="auth" id="af"><input name="handle" placeholder="Username (letters, numbers, _)" autocomplete="username" required maxlength="20">'+
+ (mode==="signup"?'<input name="name" placeholder="Your name (optional)" maxlength="40">':'')+
+ '<input name="password" type="password" placeholder="Password (8+ characters)" autocomplete="'+(mode==="signup"?"new-password":"current-password")+'" required>'+
+ (mode==="signup"?'<label class="muted"><input type="checkbox" name="agree" style="width:auto"> I am 16+ and agree to the community rules</label>':'')+
+ '<div class="center"><button class="btn" type="submit">'+(mode==="signup"?"Join and chat":"Sign in")+'</button></div></form>';
+ a.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){mode=b.dataset.m;drawAuth()}});
+ $("af").onsubmit=function(e){e.preventDefault();var f=e.target,body={handle:f.handle.value.trim(),password:f.password.value};
+  if(mode==="signup"){body.name=f.name.value.trim();body.agree=f.agree.checked}
+  api(mode,{body:body}).then(function(d){setTok(d);toast(mode==="signup"?"Welcome to Coffeebreak Social 💗":"Signed in")}).catch(function(err){toast(err.message)})}}
+
+/* feed */
+function media(m){var u=LIVE+"/api/media/"+encodeURIComponent(m.id);if(m.kind==="image")return'<img loading="lazy" src="'+u+'" alt="">';if(m.kind==="video")return'<video controls preload="metadata" src="'+u+'"></video>';if(m.kind==="audio")return'<audio controls preload="none" src="'+u+'"></audio>';return""}
+function postHtml(p){var me=S.me&&S.me.handle,liked=me&&(p.likes||[]).indexOf(me)>=0;
+ return'<div class="post" data-id="'+esc(p.id)+'"><div class="who">'+esc(p.name||p.by)+' <small>@'+esc(p.by)+' · '+ago(p.t)+'</small></div>'+
+ (p.text?'<div class="txt">'+linkify(p.text)+'</div>':'')+(p.media||[]).map(media).join("")+
+ ((p.replies||[]).length?'<div class="reps">'+p.replies.slice(-5).map(function(r){return'<p><b>'+esc(r.name||r.by)+'</b> '+linkify(r.text)+' <small class="muted">'+ago(r.t)+'</small></p>'}).join("")+'</div>':'')+
+ '<div class="acts"><button data-a="like">'+(liked?"💗":"🤍")+' '+(p.likes||[]).length+'</button><button data-a="reply">💬 Reply</button></div></div>'}
+function renderFeed(){var f=$("feed");f.innerHTML=S.posts.length?S.posts.map(postHtml).join(""):'<p class="muted center">No posts yet. Be the first to say hi!</p>';$("moreBtn").hidden=!S.next}
+function load(more){var q="posts"+(more&&S.next?"?before="+encodeURIComponent(S.next):"");
+ return api(q).then(function(d){var ps=d.posts||[];if(more){S.posts=S.posts.concat(ps)}else{var keep=S.posts.slice(30);S.posts=ps.concat(keep.filter(function(x){return!ps.some(function(y){return y.id===x.id})}));if(!S.next||!keep.length)S.next=d.next}if(more)S.next=d.next;renderFeed()})
+ .catch(function(){if(!S.posts.length)$("feed").innerHTML='<p class="muted center">Chat is waking up, try again in a moment. <a href="https://songwriterkaz.github.io/coffeebreak/social/">Open full app</a></p>'})}
+$("moreBtn").onclick=function(){load(true)};
+$("feed").onclick=function(e){var b=e.target.closest("button[data-a]");if(!b)return;var id=b.closest(".post").dataset.id;
+ if(!S.me){toast("Join free or sign in first 💗");$("authBox").scrollIntoView({behavior:"smooth"});return}
+ var upd=function(d){S.posts=S.posts.map(function(p){return p.id===id?Object.assign({},p,d.post):p});renderFeed()};
+ if(b.dataset.a==="like")api("posts/"+encodeURIComponent(id)+"/like",{method:"POST",body:{}}).then(upd).catch(function(x){toast(x.message)});
+ else{var t=prompt("Your reply:");if(t&&t.trim())api("posts/"+encodeURIComponent(id)+"/reply",{body:{text:t.trim()}}).then(upd).catch(function(x){toast(x.message)})}};
+$("postBtn").onclick=function(){var t=$("msg").value.trim();if(!t)return toast("Write something first");var b=$("postBtn");b.disabled=true;
+ api("posts",{body:{text:t}}).then(function(d){$("msg").value="";S.posts.unshift(d.post);renderFeed();toast("Posted 💗")}).catch(function(x){toast(x.message)}).then(function(){b.disabled=false})};
+
+drawShare();drawAuth();
+if(S.token)api("me").then(function(d){S.me=d.me;drawAuth();drawShare();renderFeed()}).catch(function(){});
+load();setInterval(function(){if(!document.hidden)load()},15000);
+})();
+</script>
+</body>
+</html>
