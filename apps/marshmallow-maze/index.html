@@ -6,7 +6,8 @@ canvas{background:#f3ece0;max-width:96vw;max-height:72vh;border:3px solid #000}
 #ctl{display:grid;grid-template-columns:60px 60px 60px;gap:6px;margin:8px}
 #ctl button,#mute,#skip{font-size:14px;background:#222;color:#e8a0b0;border:2px solid #e8a0b0;border-radius:10px;padding:4px 10px}#mute{font-size:24px;background:#222;color:#e8a0b0;border:2px solid #e8a0b0;border-radius:10px;height:56px}
 #mute,#skip{font-size:14px;background:#222;color:#e8a0b0;border:2px solid #e8a0b0;border-radius:10px;padding:4px 10px}#mute{height:auto;font-size:14px;padding:4px 10px}
-</style></head><body>
+</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body>
 <div id="hud"><span>Level <b id="lv">1</b></span><span>Score <b id="sc">0</b></span><span>Lives <b id="li">3</b></span><span>Time <b id="tm">0</b></span><span>Best <b id="bs">0</b></span><button id="mute">🔊 Music</button><button id="skip" class="mb">⏭ Skip</button></div><div id="np" style="font-size:12px;color:#e8a0b0">Now playing: —</div>
 <canvas id="c" width="720" height="540"></canvas>
 <div id="ctl"><span></span><button data-d="0,-1">▲</button><span></span><button data-d="-1,0">◀</button><button data-d="0,1">▼</button><button data-d="1,0">▶</button></div>

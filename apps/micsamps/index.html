@@ -13,7 +13,8 @@ button,select,input,textarea{font:inherit;color:var(--fg);background:var(--card)
 footer{text-align:center;opacity:.7;padding:14px;font-size:13px}
 .tabs button.on{background:var(--acc);color:#1e140e}canvas{max-width:100%;border-radius:12px;background:#140d08;touch-action:none}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
 h2,h3{color:var(--acc)}.big{font-size:20px;padding:10px 16px}.muted{opacity:.75;font-size:13px}
-.pad{height:90px;font-size:18px}</style></head><body>
+.pad{height:90px;font-size:18px}</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body>
 <header class="top"><img src="cb-sports-logo.png" alt="Coffeebreak"><h1>Coffeebreak Microphones & Amps</h1></header>
 <div class="wrap"><div class="row card tabs"><button data-tab="studio" class="on">🎤 Studio</button><button data-tab="shop" class="">🛒 Shop</button></div><section id="tab-studio" class="pane" style=""><div class="card"><h3>🎸 Amp sim</h3><button id="ampOn" class="big">🔌 Plug in mic</button> <label>Drive <input type="range" id="drv" min="0" max="400" value="50"></label><label>Volume <input type="range" id="vol" min="0" max="2" step=".05" value=".8"></label><label><input type="checkbox" id="monitor"> Monitor (use headphones)</label><canvas id="vz" width="600" height="120" style="width:100%;max-width:600px"></canvas></div>
 <div class="card"><h3>⏺ Recorder</h3><button id="rec" class="big">⏺ Record</button><div id="takes"></div></div>

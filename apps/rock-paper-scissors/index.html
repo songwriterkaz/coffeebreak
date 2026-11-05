@@ -13,7 +13,8 @@ button,select,input,textarea{font:inherit;color:var(--fg);background:var(--card)
 footer{text-align:center;opacity:.7;padding:14px;font-size:13px}
 .tabs button.on{background:var(--acc);color:#1e140e}canvas{max-width:100%;border-radius:12px;background:#140d08;touch-action:none}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
 h2,h3{color:var(--acc)}.big{font-size:20px;padding:10px 16px}.muted{opacity:.75;font-size:13px}
-.hand{display:inline-block;animation:sh .4s 3}@keyframes sh{50%{transform:translateY(-20px)}}</style><script src="cb-fullscreen.js"></script></head><body>
+.hand{display:inline-block;animation:sh .4s 3}@keyframes sh{50%{transform:translateY(-20px)}}</style><script src="cb-fullscreen.js"></script><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body>
 <header class="top"><img src="cb-sports-logo.png" alt="Coffeebreak"><h1>Coffeebreak Rock Paper Scissors</h1></header>
 <div class="wrap"><div class="row card tabs"><button data-tab="play" class="on">✊ Play</button><button data-tab="shop" class="">🛒 Shop</button></div><section id="tab-play" class="pane" style=""><div class="row card"><label>Mode <select id="mode"><option value="ai">vs Barista Bot (AI)</option><option value="pp">Pass & play 2P</option></select></label><label>Best of <select id="bo"><option>3</option><option>5</option><option>7</option></select></label><label><input type="checkbox" id="bonus"> Bonus mode (Milk Jug + Sugar Cube)</label></div>
 <div id="picks" class="row"></div><div id="arena" style="font-size:80px;text-align:center;min-height:120px"></div><h2 id="msg" style="text-align:center">Pick your move!</h2><p style="text-align:center">Score <b id="score">0 – 0</b> · <span id="stats"></span></p>

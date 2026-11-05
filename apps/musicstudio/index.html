@@ -13,7 +13,8 @@ button,select,input,textarea{font:inherit;color:var(--fg);background:var(--card)
 footer{text-align:center;opacity:.7;padding:14px;font-size:13px}
 .tabs button.on{background:var(--acc);color:#1e140e}canvas{max-width:100%;border-radius:12px;background:#140d08;touch-action:none}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
 h2,h3{color:var(--acc)}.big{font-size:20px;padding:10px 16px}.muted{opacity:.75;font-size:13px}
-</style></head><body>
+</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body>
 <header class="top"><img src="cb-sports-logo.png" alt="Coffeebreak"><h1>Coffeebreak Studio Machine</h1></header>
 <div class="wrap"><div class="row card tabs"><button data-tab="studio" class="on">🎛 Studio Machine</button><button data-tab="shop" class="">🛒 Shop</button></div><section id="tab-studio" class="pane" style=""><div class="card"><button id="play" class="big">▶ Play</button> <label>BPM <input id="bpm" type="range" min="60" max="180" value="100"> <b id="bv">100</b></label> <button id="clr">Clear</button><div id="seq" style="margin-top:10px;display:grid;gap:4px"></div><p class="muted">16-step beat sequencer. Tap squares to make a beat. Your pattern saves automatically.</p></div></section><section id="tab-shop" class="pane" style="display:none"><iframe src="shop/index.html" title="Shop" style="width:100%;height:1600px;border:0;border-radius:10px;background:#fff"></iframe></section></div>
 <!--cb-contact-start-->

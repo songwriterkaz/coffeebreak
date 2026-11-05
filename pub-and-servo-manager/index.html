@@ -40,7 +40,8 @@ footer.cb img{width:40px;height:40px;border-radius:10px;vertical-align:middle;ma
 table{width:100%;border-collapse:collapse;font-size:.85rem}td,th{padding:6px 4px;border-bottom:1px dashed var(--line);text-align:left}th{color:var(--mute);font-weight:600}
 .bar{height:8px;border-radius:9px;background:var(--blush);overflow:hidden;min-width:60px}.bar i{display:block;height:100%;background:var(--pink)}
 .cols{display:grid;grid-template-columns:1fr;gap:12px}@media(min-width:900px){.cols{grid-template-columns:1fr 1fr}}
-#log{max-height:150px;overflow:auto;font-size:.8rem;color:var(--mute)}input.pr{width:70px;padding:4px 6px}</style></head><body><header class="cb"><img src="assets/logo.png" alt="Coffeebreak logo"><div class="t"><h1>Coffeebreak Pub and Servo Manager</h1><small>Run a country servo, a convenience store and the pub next door</small></div></header>
+#log{max-height:150px;overflow:auto;font-size:.8rem;color:var(--mute)}input.pr{width:70px;padding:4px 6px}</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body><header class="cb"><img src="assets/logo.png" alt="Coffeebreak logo"><div class="t"><h1>Coffeebreak Pub and Servo Manager</h1><small>Run a country servo, a convenience store and the pub next door</small></div></header>
 <main><canvas id="cv" width="960" height="380"></canvas>
 <div class="hud"><div>Day<b id="hDay">1</b></div><div>Time<b id="hTime">6:00</b></div><div>Cash<b id="hCash">$0</b></div><div>Reputation<b id="hRep">50</b></div><div>Today's takings<b id="hTake">$0</b></div><div>Customers today<b id="hCust">0</b></div></div>
 <div class="row" style="margin-bottom:12px"><button class="btn" id="play">Open for the day</button><button class="btn alt" id="spd">Speed 1x</button><button class="btn alt" id="saveb">Save</button><button class="btn alt" id="newg">New game</button></div>
