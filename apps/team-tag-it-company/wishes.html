@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Two Wishes - Team Tag It</title>
+<style>body{margin:0;font-family:Georgia,serif;color:#7a1048;background:#ffe4f0 url(img/bg.jpg)}header{background:linear-gradient(90deg,#e0117a,#ff9ac8);padding:10px 16px;display:flex;gap:12px;align-items:center}header img{width:54px;border-radius:50%;border:3px solid #fff}header h1{margin:0;color:#fff;font-size:24px}header i{color:#fff}
+section{max-width:820px;margin:14px auto;background:rgba(255,255,255,.93);border:3px solid #ff9ac8;border-radius:16px;padding:14px}h2{color:#e0117a;margin-top:0}label{display:block;margin:8px 0;font-weight:bold}input,textarea{width:100%;box-sizing:border-box;padding:8px;border:2px solid #ff9ac8;border-radius:10px;font:inherit}
+button,a.btn{background:#ff4fa3;color:#fff;border:2px solid #ffc0dc;border-radius:22px;padding:9px 20px;font-weight:bold;font-size:16px;cursor:pointer;text-decoration:none;display:inline-block;margin:4px}canvas{max-width:100%;border-radius:14px;border:2px solid #ff9ac8}
+#fx{position:fixed;inset:0;pointer-events:none;display:none;z-index:9}.jar div{background:#fff0f7;border-left:5px solid #ff4fa3;border-radius:8px;padding:6px 10px;margin:6px 0}small{color:#a04a78}</style></head><body>
+<header><img src="img/logo.jpg" alt="Coffeebreak logo"><div><h1>One Wish for You, One for Your Friend</h1><i>Team Tag It, a Coffeebreak company</i></div></header>
+<section id="form"><h2>Make your two wishes</h2><p>Write one wish for yourself and one for a friend, then tag them off into the universe. You get one pair of wishes each day.</p>
+<label>My wish<textarea id="mine" rows="2" maxlength="90" placeholder="e.g. to have my music heard"></textarea></label>
+<label>My friend's name<input id="fname" maxlength="24" placeholder="e.g. Sam"></label>
+<label>My wish for my friend<textarea id="theirs" rows="2" maxlength="90" placeholder="e.g. to feel healthy and strong"></textarea></label>
+<button id="tag">Tag it</button> <span id="msg"></span></section>
+<section id="cardsec" style="display:none"><h2>Your wish card</h2><canvas id="card" width="800" height="1000"></canvas><br><button id="dl">Download wish card</button></section>
+<section><h2>Wish Jar</h2><div class="jar" id="jar"></div></section>
+<p style="text-align:center"><a class="btn" href="index.html">Back</a></p>
+<canvas id="fx"></canvas>
+<script>
+const $=i=>document.getElementById(i),K='tti_wishjar',today=new Date().toLocaleDateString('en-CA');let jar=JSON.parse(localStorage.getItem(K)||'[]');
+const logo=new Image();logo.src='img/logo.jpg';const girl=new Image();girl.src='img/girl.png';
+function clean(s){return s.trim().replace(/[!]+/g,'.').replace(/\.+$/,'')}
+function present(w,subj){w=clean(w);let s=w.replace(/^(i want|i wish|i'd like|i would like|wish|to|for|that)\s+/i,'').replace(/^(to|for|that)\s+/i,'').replace(/^(i|he|she|they|my friend)\s+(will|would|could)\s+/i,'');
+ const lw=s.toLowerCase();if(/^(i am|i'm|i have|my |i )/.test(lw)&&subj=='I')return s[0].toUpperCase()+s.slice(1)+'.';
+ if(/^(be|feel)\s/.test(lw))s=s.replace(/^(be|feel)\s/i,m=>m.toLowerCase()=='be '?'':'feeling ');
+ if(/^(have|get|find|win|make|meet|own)\s/.test(lw)){const v=s.split(' ')[0].toLowerCase(),rest=s.slice(v.length);return subj=='I'?'I '+v+rest+'.':subj+' '+(v=='have'?'has':v+'s')+rest+'.';}
+ return (subj=='I'?'I am ':subj+' is ')+s+'.';}
+function render(e){const c=$('card'),x=c.getContext('2d'),g=x.createLinearGradient(0,0,0,1000);g.addColorStop(0,'#ffd1e8');g.addColorStop(1,'#fff5fa');x.fillStyle=g;x.fillRect(0,0,800,1000);
+ x.fillStyle='rgba(255,79,163,.08)';x.font='bold 46px Georgia';for(let y=80;y<1000;y+=140)x.fillText('COFFEEBREAK',(y/140%2)*120-40,y);
+ for(let i=0;i<40;i++){x.fillStyle='rgba(255,255,255,.8)';x.beginPath();x.arc((i*197)%800,(i*131)%1000,2+i%4,0,7);x.fill();}
+ if(logo.complete){x.save();x.beginPath();x.arc(400,90,60,0,7);x.clip();x.drawImage(logo,340,30,120,120);x.restore();}
+ x.textAlign='center';x.fillStyle='#e0117a';x.font='bold 40px Georgia';x.fillText('Two Wishes, Tagged',400,195);x.font='italic 18px Georgia';x.fillStyle='#a0336c';x.fillText(e.date,400,225);
+ function box(y,title,txt){x.fillStyle='rgba(255,255,255,.9)';x.beginPath();x.roundRect(70,y,660,240,24);x.fill();x.strokeStyle='#ff9ac8';x.lineWidth=3;x.stroke();x.fillStyle='#ff4fa3';x.font='bold 24px Georgia';x.fillText(title,400,y+45);
+  x.fillStyle='#7a1048';x.font='28px Georgia';let words=txt.split(' '),line='',ly=y+100;for(const w of words){if(x.measureText(line+w).width>580){x.fillText(line.trim(),400,ly);line='';ly+=40;}line+=w+' ';}x.fillText(line.trim(),400,ly);}
+ box(260,'\u2726 My wish \u2726',e.mineA);box(540,'\u2726 For '+e.fname+' \u2726',e.theirsA);
+ if(girl.complete)x.drawImage(girl,600,800,150,150*girl.height/girl.width);x.fillStyle='#e0117a';x.font='italic 22px Georgia';x.fillText('Tag it forward.',330,860);x.font='18px Georgia';x.fillText('Team Tag It, a Coffeebreak company',330,960);
+ $('cardsec').style.display='block';}
+function showJar(){$('jar').innerHTML=jar.slice().reverse().map(e=>`<div><b>${e.date}</b><br>${esc(e.mineA)}<br>${esc(e.theirsA)}</div>`).join('')||'<small>Your Wish Jar is empty for now.</small>';}
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function used(){return jar.some(e=>e.day==today)}
+function lock(){if(used()){$('tag').disabled=true;$('tag').style.opacity=.5;$('msg').textContent='You have tagged your two wishes for today. Come back tomorrow for a new pair.';}}
+function fx(done){const c=$('fx'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;c.style.display='block';const P=[];const b=$('tag').getBoundingClientRect();
+ for(let i=0;i<160;i++)P.push({x:b.left+b.width/2,y:b.top,vx:(Math.random()-.5)*10,vy:-Math.random()*14-4,r:2+Math.random()*5,h:Math.random()<.5?'255,79,163':'255,215,230'});let t=0;
+ (function f(){x.clearRect(0,0,c.width,c.height);x.globalAlpha=1-t/90;x.fillStyle='#e0117a';x.font='bold 54px Georgia';x.textAlign='center';x.fillText('Tagged',c.width/2,c.height/2-t*2);
+  P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.25;x.fillStyle=`rgba(${p.h},1)`;x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill();});if(++t<90)requestAnimationFrame(f);else{c.style.display='none';done();}})();}
+$('tag').onclick=()=>{if(used())return lock();const m=$('mine').value,n=clean($('fname').value),t=$('theirs').value;if(!clean(m)||!n||!clean(t)){$('msg').textContent='Please write both wishes and your friend\'s name.';return;}
+ const e={day:today,date:new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'}),fname:n,mineA:present(m,'I'),theirsA:present(t,'My friend '+n)};
+ jar.push(e);localStorage.setItem(K,JSON.stringify(jar.slice(-60)));fx(()=>{render(e);showJar();lock();$('cardsec').scrollIntoView({behavior:'smooth'});});};
+$('dl').onclick=()=>{const a=document.createElement('a');a.download='team-tag-it-wish-card.png';a.href=$('card').toDataURL('image/png');a.click();};
+showJar();lock();const last=jar.find(e=>e.day==today);if(last){logo.onload=girl.onload=()=>render(last);if(logo.complete&&girl.complete)render(last);}
+</script></body></html>

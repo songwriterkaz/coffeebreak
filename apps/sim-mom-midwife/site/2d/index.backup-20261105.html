@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MidwifeSim: Virtual Birthing Manikin</title>
+<style>
+:root{
+  --bg:#eef2f7; --card:#ffffff; --ink:#1b2a3a; --muted:#5d6b7c; --line:#dfe5ee;
+  --pri:#0b7a83; --pri2:#0e9aa5; --priSoft:#e3f4f5;
+  --ok:#1f9d63; --okSoft:#e7f7ef; --bad:#d64b3c; --badSoft:#fdeeec; --warn:#b97c00; --warnSoft:#fff5dc;
+  --mon:#0b1622; --mon2:#122238; --monLine:#20385a;
+  --radius:14px; --shadow:0 1px 2px rgba(16,30,54,.06),0 8px 24px rgba(16,30,54,.07);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{overflow-x:clip}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #7cc9cf;outline-offset:2px}
+.app{display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;height:100vh;height:100dvh;overflow:hidden;max-width:100vw}
+
+/* ---------- header ---------- */
+header{display:flex;align-items:center;gap:14px;padding:8px 14px;background:#fff;border-bottom:1px solid var(--line);min-height:54px;min-width:0;max-width:100vw}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:0 0 auto}
+.brand .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--pri),#34b3a0);display:grid;place-items:center;flex:0 0 auto}
+.brand h1{font-size:15px;margin:0;line-height:1.15;white-space:nowrap}
+.brand small{display:block;color:var(--muted);font-weight:500;font-size:11.5px}
+.stepper{display:flex;gap:4px;flex:1 1 auto;justify-content:safe center;min-width:0;overflow:hidden}
+.stepper .st{font-size:11.5px;padding:5px 9px;border-radius:999px;background:#f1f4f8;color:var(--muted);white-space:nowrap;border:1px solid transparent;font-weight:600}
+.stepper .st.done{background:var(--priSoft);color:var(--pri)}
+.stepper .st.active{background:var(--pri);color:#fff}
+.hctl{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.pill{display:flex;align-items:center;gap:6px;background:#f1f4f8;border-radius:999px;padding:5px 10px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.pill b{font-variant-numeric:tabular-nums}
+.seg{display:flex;background:#f1f4f8;border-radius:999px;padding:2px}
+.seg button{border:0;background:transparent;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700;color:var(--muted)}
+.seg button.on{background:#fff;color:var(--pri);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 12px;font-weight:600;font-size:13px}
+.btn:hover{border-color:#c4cfdd;background:#fafcfe}
+.btn.pri{background:var(--pri);border-color:var(--pri);color:#fff}
+.btn.pri:hover{background:#09666e}
+.btn.big{padding:12px 20px;font-size:15px;border-radius:12px}
+.modeBadge{font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;background:#eef6ff;color:#2a5d9f;white-space:nowrap;max-width:210px;overflow:hidden;text-overflow:ellipsis}
+.modeBadge.comp{background:#fff1ec;color:#b2492d}
+.stageMini{display:none;font-size:12px;font-weight:700;color:var(--pri)}
+
+/* ---------- main ---------- */
+.main{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:12px;padding:12px 12px 0;min-height:0}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);min-height:0;position:relative}
+.illus{display:flex;flex-direction:column;overflow:hidden}
+.illusHead{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 0;gap:8px}
+.illusHead h3{margin:0;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.illusHead .note{font-size:11.5px;color:var(--muted)}
+.svgWrap{flex:1 1 auto;min-height:0;position:relative}
+#mainSvg{width:100%;height:100%;display:block}
+.inset{position:absolute;left:10px;top:6px;width:150px;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:12px;padding:6px 6px 4px;box-shadow:0 4px 14px rgba(16,30,54,.08)}
+.inset .t{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:center}
+.inset svg{width:100%;display:block}
+.inset .cap{font-size:11.5px;text-align:center;font-weight:700;color:var(--ink)}
+.drape{position:absolute;right:10px;top:6px;width:118px;background:rgba(255,255,255,.95);border:1px solid var(--line);border-radius:12px;padding:6px 8px;display:none;box-shadow:0 4px 14px rgba(16,30,54,.08)}
+.drape .t{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.drape .gauge{position:relative;height:96px;margin:6px 0 2px 30px;border:2px solid #9fb2c6;border-top:0;border-radius:0 0 10px 10px;background:#f7fafc;overflow:hidden}
+.drape .fill{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(#c8505f,#a83347);height:0;transition:height .4s}
+.drape .ticks{position:absolute;left:-30px;top:0;bottom:0;width:30px;font-size:9px;color:var(--muted)}
+.drape .ticks span{position:absolute;right:4px;transform:translateY(50%)}
+.drape .ticks span::after{content:"";position:absolute;right:-6px;top:50%;width:5px;border-top:1px solid #9fb2c6}
+.drape .rd{font-size:12px;font-weight:700;text-align:center}
+.chips{display:flex;flex-wrap:wrap;gap:4px;padding:6px 12px 10px;justify-content:center}
+.chip{font-size:11px;padding:3px 8px;border-radius:999px;background:#f1f4f8;color:#8592a3;font-weight:600;border:1px solid transparent;transition:all .3s}
+.chip.active{background:#fff6dc;color:#8a6200;border-color:#f0d58a}
+.chip.done{background:var(--okSoft);color:var(--ok)}
+.chip.done::before{content:"✓ "}
+
+/* scenario */
+.scen{display:flex;flex-direction:column;overflow:hidden}
+.scenTop{padding:12px 16px 8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.tag{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--pri);background:var(--priSoft);padding:3px 8px;border-radius:6px}
+.stepNo{font-size:12px;color:var(--muted);margin-left:auto;white-space:nowrap}
+.prog{height:4px;background:#eef2f7;border-radius:4px;overflow:hidden;margin:0 16px}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--pri),#34b3a0);width:0;transition:width .4s}
+.scenBody{padding:12px 16px 16px;overflow:auto;flex:1 1 auto;min-height:0}
+.scenBody h2{margin:2px 0 8px;font-size:19px;line-height:1.25}
+.scenBody p{margin:0 0 10px}
+.narr{color:#2c3b4d}
+.q{font-weight:700;margin:12px 0 8px!important}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opts.grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:9px 11px;transition:border-color .15s,background .15s,transform .05s;font-size:14px;line-height:1.35}
+.opt:hover:not(:disabled){border-color:var(--pri2);background:#f6fcfc}
+.opt:active:not(:disabled){transform:scale(.995)}
+.opt .key{flex:0 0 auto;width:22px;height:22px;border-radius:7px;background:#eef2f7;color:var(--muted);font-size:12px;font-weight:800;display:grid;place-items:center;margin-top:1px}
+.opt:disabled{cursor:default}
+.opt.correct{border-color:var(--ok);background:var(--okSoft)}
+.opt.correct .key{background:var(--ok);color:#fff}
+.opt.wrong{border-color:#efb3aa;background:var(--badSoft);color:#8b3a30}
+.opt.wrong .key{background:var(--bad);color:#fff}
+.opt.missed{border-color:#f0d58a;background:var(--warnSoft)}
+.opt.missed .key{background:var(--warn);color:#fff}
+.opt.sel{border-color:var(--pri);background:var(--priSoft)}
+.opt.sel .key{background:var(--pri);color:#fff}
+.opt.done{border-color:var(--ok);background:var(--okSoft)}
+.opt.done .key{background:var(--ok);color:#fff}
+.opt:disabled:not(.correct):not(.wrong):not(.done):not(.missed):not(.sel){opacity:.55}
+.opt .why{display:block;font-size:12.5px;color:var(--muted);margin-top:3px;font-weight:400}
+.fbBox{margin-top:12px}
+.fb{border-radius:11px;padding:10px 12px;font-size:14px;animation:pop .25s ease-out;border-left:4px solid}
+.fb b.h{display:block;margin-bottom:2px}
+.fb.ok{background:var(--okSoft);border-color:var(--ok)}
+.fb.bad{background:var(--badSoft);border-color:var(--bad)}
+.fb.warn{background:var(--warnSoft);border-color:var(--warn)}
+.fb.info{background:#eef5ff;border-color:#4a7fc1}
+@keyframes pop{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.findings{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+.findings li{background:#f6f9fc;border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:13.5px;animation:pop .25s}
+.findings li::before{content:"✓";color:var(--ok);font-weight:800;margin-right:6px}
+.contBar{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+.contBar .pts{margin-right:auto;align-self:center;font-weight:700;font-size:13px;color:var(--muted)}
+.hintSmall{font-size:12.5px;color:var(--muted)}
+
+/* push */
+.pushPanel{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fbfcfe;margin-top:8px}
+.meterRow{display:flex;gap:12px;align-items:center}
+.meter{flex:1;height:22px;border-radius:11px;background:#e9eef4;position:relative;overflow:hidden}
+.meter i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#7fc6cb,#0b7a83);width:0}
+.meter .thr{position:absolute;top:0;bottom:0;left:30%;border-left:2px dashed rgba(0,0,0,.25)}
+.cstate{font-weight:800;min-width:150px;text-align:right;font-size:14px}
+.cstate.go{color:var(--ok)}
+.pushBtn{margin-top:12px;width:100%;padding:20px;font-size:18px;font-weight:800;border:0;border-radius:14px;background:linear-gradient(135deg,#0b7a83,#18a39a);color:#fff;letter-spacing:.04em;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:0 6px 16px rgba(11,122,131,.25);transition:transform .08s,filter .1s}
+.pushBtn.held{transform:scale(.98);filter:brightness(1.12);box-shadow:0 0 0 6px rgba(24,163,154,.25)}
+.pushBtn.cue{animation:cue 1s infinite}
+@keyframes cue{50%{box-shadow:0 0 0 8px rgba(31,157,99,.3)}}
+.pstats{display:flex;gap:10px;margin-top:10px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.pstats b{color:var(--ink)}
+.descent{height:10px;border-radius:5px;background:#e9eef4;overflow:hidden;margin-top:8px}
+.descent i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f0b37e,#e0795a);transition:width .3s}
+.advBtn{margin-top:6px}
+
+/* apgar */
+.apgar{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:13.5px}
+.apgar td{vertical-align:middle;padding:6px 8px;background:#f8fafc;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.apgar td:first-child{border-left:1px solid var(--line);border-radius:9px 0 0 9px;font-weight:700;width:28%}
+.apgar td:last-child{border-right:1px solid var(--line);border-radius:0 9px 9px 0;width:132px;text-align:right}
+.apgar .obs{color:#2c3b4d}
+.apgar .ans{display:block;font-size:12px;margin-top:3px;font-weight:600}
+.sc{display:inline-flex;gap:3px}
+.sc button{width:34px;height:30px;border-radius:8px;border:1.5px solid var(--line);background:#fff;font-weight:800}
+.sc button.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.sc button.right{background:var(--ok)!important;border-color:var(--ok)!important;color:#fff}
+.sc button.wrongpick{background:var(--bad)!important;border-color:var(--bad)!important;color:#fff}
+.legendTbl{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* ebl */
+.eblRow{display:flex;gap:12px;align-items:center;margin-top:8px}
+.eblRow input[type=range]{flex:1;accent-color:var(--pri)}
+.eblOut{font-weight:800;font-size:18px;min-width:90px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* placenta illustration */
+.placFig{display:block;width:100%;max-width:440px;margin:4px auto 6px;background:#fbf7f7;border-radius:12px;border:1px solid var(--line)}
+
+/* ---------- monitor ---------- */
+.monitor{margin:12px;background:var(--mon);border-radius:var(--radius);color:#d8e6f5;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:10px;padding:10px;box-shadow:var(--shadow)}
+.tiles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.tile{background:var(--mon2);border:1px solid var(--monLine);border-radius:10px;padding:6px 8px;min-width:0;position:relative}
+.tile .tl{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#8fa6c0;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .tv{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.15;white-space:nowrap;overflow:hidden}
+.tile .tv small{font-size:11px;font-weight:600;color:#8fa6c0;margin-left:3px}
+.tile .ts{font-size:10.5px;color:#7f95ae;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile[data-c=g] .tv{color:#5ee08f}.tile[data-c=y] .tv{color:#ffd166}.tile[data-c=c] .tv{color:#5fd4e8}
+.tile[data-c=w] .tv{color:#e8eef6}.tile[data-c=p] .tv{color:#f49ac1}.tile[data-c=o] .tv{color:#ffb36b}
+.tile.na .tv{color:#4f6683!important}
+.tile.alarm{border-color:#ff5d5d;animation:alarm 1s infinite}
+.tile.alarm .tv{color:#ff7a7a!important}
+@keyframes alarm{50%{background:#3a1520}}
+.ctgWrap{background:#fffaf6;border-radius:10px;position:relative;min-height:150px;overflow:hidden}
+.ctgWrap canvas{position:absolute;inset:0;width:100%;height:100%}
+.ctgLbl{position:absolute;right:8px;top:4px;font-size:10.5px;color:#9a6b5f;font-weight:700;z-index:1;background:rgba(255,250,246,.8);padding:0 4px;border-radius:4px}
+footer{font-size:11.5px;color:var(--muted);text-align:center;padding:0 12px 10px}
+
+/* ---------- overlays ---------- */
+.overlay{position:fixed;inset:0;background:rgba(14,26,42,.55);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;z-index:50;overflow:auto;padding:24px 12px}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:18px;max-width:780px;width:100%;padding:24px 26px;box-shadow:0 20px 60px rgba(0,0,0,.25);margin:auto}
+.modal h1{margin:4px 0 6px;font-size:26px}
+.modal .lead{color:#3b4a5c;font-size:15.5px}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 10px}
+.mode{border:2px solid var(--line);border-radius:14px;padding:12px;text-align:left;background:#fff}
+.mode b{display:block;font-size:15px;margin-bottom:3px}
+.mode span{font-size:12.5px;color:var(--muted)}
+.mode.on{border-color:var(--pri);background:var(--priSoft)}
+.comps{display:none;gap:8px;flex-wrap:wrap;margin:4px 0 10px}
+.comps.show{display:flex}
+.comps label{display:flex;align-items:center;gap:7px;border:1.5px solid var(--line);border-radius:10px;padding:8px 11px;font-size:13.5px;font-weight:600;cursor:pointer}
+.comps input{accent-color:var(--pri);width:16px;height:16px}
+.disc{background:#fff8e6;border:1px solid #f0d58a;border-radius:12px;padding:10px 12px;font-size:13px;color:#5e4a12;margin:12px 0}
+.howto{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.howto div{background:#f6f9fc;border-radius:12px;padding:10px;font-size:12.5px;color:#3b4a5c}
+.howto b{display:block;color:var(--ink);font-size:13px;margin-bottom:2px}
+.startRow{display:flex;align-items:center;gap:12px;justify-content:flex-end;flex-wrap:wrap}
+.debrief h2{margin:0 0 4px}
+.scoreRing{display:flex;align-items:center;gap:18px;margin:10px 0 14px;flex-wrap:wrap}
+.ring{width:110px;height:110px;border-radius:50%;display:grid;place-items:center;font-size:26px;font-weight:800;flex:0 0 auto}
+.ring span{background:#fff;width:84px;height:84px;border-radius:50%;display:grid;place-items:center}
+.kv{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 12px}
+.kv div{background:#f6f9fc;border-radius:10px;padding:8px 10px;font-size:12px;color:var(--muted)}
+.kv b{display:block;font-size:16px;color:var(--ink)}
+.res{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+.res li{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13.5px}
+.res li .rh{display:flex;gap:8px;align-items:center;font-weight:700}
+.res li .rh em{margin-left:auto;font-style:normal;font-variant-numeric:tabular-nums}
+.res li.perfect .rh em{color:var(--ok)}
+.res li.partial{background:#fffbf0}
+.res li .lp{color:#3b4a5c;margin-top:3px;font-size:13px}
+.res li .err{color:#8b3a30;font-size:12.5px;margin-top:2px}
+.keypts{padding-left:18px;margin:6px 0 0}
+.keypts li{margin-bottom:4px;font-size:13.5px}
+details.revw summary{cursor:pointer;font-weight:700;margin:12px 0 6px}
+
+/* ---------- svg styles ---------- */
+.lbl{font-size:10px;fill:#6b7b8e;font-weight:600}
+.lbl.strong{fill:#1b2a3a;font-weight:700}
+.fskin{fill:#f3cdb4;stroke:#c9977c;stroke-width:1.5}
+.fline{fill:none;stroke:#a9765d;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.cordS{fill:none;stroke:#b9c7e6;stroke-width:6;stroke-linecap:round}
+.cordE{fill:none;stroke:#8597c2;stroke-width:1.2;stroke-dasharray:3 4}
+.breathe{animation:br 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes br{50%{transform:scale(1.025)}}
+.pulseA{animation:pa 1.2s ease-in-out infinite}
+@keyframes pa{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.breathe,.pulseA,.tile.alarm,.pushBtn.cue{animation:none}}
+
+/* ---------- responsive ---------- */
+@media (max-width:1400px){.brand small{display:none}.rlbl{display:none}.modeBadge{max-width:170px}}
+@media (max-width:1360px){.stepper{gap:3px}.stepper .st{padding:4px 7px;font-size:11px}header{gap:10px}}
+@media (max-width:1040px){.stepper{display:none}.stageMini{display:block;flex:1;text-align:center}}
+@media (max-width:900px),(max-height:620px){
+  .app{display:block;height:auto;overflow:visible}
+  header{position:sticky;top:0;z-index:20;flex-wrap:wrap;gap:8px}
+  .main{grid-template-columns:1fr;padding:10px 10px 0}
+  .illus{height:auto}
+  .svgWrap{height:min(78vw,440px)}
+  .scenBody{overflow:visible}
+  .monitor{grid-template-columns:1fr;margin:10px}
+  .ctgWrap{height:170px}
+}
+@media (max-width:600px){
+  body{font-size:14.5px}
+  .brand h1{font-size:14px}
+  .hctl .pill.clock,.modeBadge{display:none}
+  .stageMini{order:5;flex-basis:100%;text-align:left}
+  .tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tile .tv{font-size:19px}
+  .opts.grid{grid-template-columns:1fr}
+  .inset{width:112px;left:6px;top:4px;padding:4px}
+  .inset .cap{font-size:10px}
+  .drape{width:100px;transform:scale(.9);transform-origin:right top}
+  .modes,.howto{grid-template-columns:1fr}
+  .kv{grid-template-columns:repeat(2,1fr)}
+  .modal{padding:18px 16px}
+  .apgar td:first-child{width:auto}
+  .apgar td:last-child{width:auto}
+  .svgWrap{height:86vw}
+}
+@media print{.overlay{position:static;background:none;backdrop-filter:none;display:block}.app,#startOv{display:none!important}.modal{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/><path d="M8.5 12h2l1-2 1.5 4 1-2h1.5"/></svg></div>
+      <div><h1>MidwifeSim</h1><small>Virtual birthing manikin · training simulation</small></div>
+    </div>
+    <nav class="stepper" id="stepper" aria-label="Stages"></nav>
+    <div class="stageMini" id="stageMini"></div>
+    <div class="hctl">
+      <span class="modeBadge" id="modeBadge">Normal birth</span>
+      <span class="pill clock" title="Scenario clock">🕒 <b id="clock">08:20</b></span>
+      <span class="pill" title="Score">★ <b id="score">0</b><span style="color:var(--muted);font-weight:600">/<span id="scoreMax">0</span></span></span>
+      <div class="seg" id="speedSeg" role="group" aria-label="Simulation speed">
+        <button data-speed="1" class="on">1×</button><button data-speed="2">2×</button><button data-speed="4">4×</button>
+      </div>
+      <button class="btn" id="restartBtn" title="Restart">↺ <span class="rlbl">Restart</span></button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="card illus" aria-label="Schematic illustration">
+      <div class="illusHead"><h3 id="illusTitle">Sagittal schematic: pelvis, uterus &amp; fetus</h3><span class="note">Stylised teaching diagram</span></div>
+      <div class="svgWrap">
+        <svg id="mainSvg" viewBox="-70 -14 490 466" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Schematic cross-section of the maternal pelvis, uterus and fetus">
+          <defs>
+            <path id="utPath" d="M215 286 C180 286 152 270 136 244 C92 196 72 126 102 72 C132 22 236 6 294 44 C348 80 346 192 304 244 C286 268 252 286 215 286 Z"/>
+            <linearGradient id="gBody" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e9e4"/><stop offset="1" stop-color="#efdcd6"/></linearGradient>
+            <radialGradient id="gFluid" cx=".45" cy=".45" r=".6"><stop offset="0" stop-color="#eef7fb"/><stop offset="1" stop-color="#dcecf4"/></radialGradient>
+            <marker id="arT" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0b7a83"/></marker>
+            <marker id="arR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#d64b3c"/></marker>
+            <marker id="arO" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#c98a00"/></marker>
+          </defs>
+          <!-- maternal silhouette (sagittal, facing left) -->
+          <path id="bodyOutline" d="M110 -14 C40 30 20 120 40 210 C52 262 80 298 104 330 C120 352 140 378 158 400 L190 404 C214 424 252 440 300 436 C360 430 396 396 392 330 C390 286 392 252 388 225 C382 180 392 80 410 -14 Z" fill="url(#gBody)" stroke="#e1c7bf" stroke-width="2"/>
+          <!-- lumbar spine hint -->
+          <g opacity=".55">
+            <rect x="366" y="40" width="22" height="26" rx="5" fill="#efe6d6" stroke="#d9cbb3"/>
+            <rect x="364" y="72" width="22" height="26" rx="5" fill="#efe6d6" stroke="#d9cbb3"/>
+            <rect x="362" y="104" width="22" height="26" rx="5" fill="#efe6d6" stroke="#d9cbb3"/>
+            <rect x="360" y="136" width="22" height="26" rx="5" fill="#efe6d6" stroke="#d9cbb3"/>
+            <rect x="358" y="168" width="22" height="26" rx="5" fill="#efe6d6" stroke="#d9cbb3"/>
+          </g>
+          <!-- birth canal (vagina) -->
+          <path id="canal" d="M215 290 Q232 350 172 398" fill="none" stroke="#ecc3c9" stroke-width="50" stroke-linecap="round" opacity=".75"/>
+          <path d="M215 290 Q232 350 172 398" fill="none" stroke="#e2a9b1" stroke-width="1.2" stroke-dasharray="3 5"/>
+
+          <!-- LABOUR SCENE -->
+          <g id="labourScene">
+            <g id="uterusG">
+              <use id="uterusL" href="#utPath" fill="url(#gFluid)" stroke="#d98c9a" stroke-width="10"/>
+              <path id="placentaL" d="M262 42 Q338 70 326 170 Q298 104 262 42 Z" fill="#c2667c" stroke="#a24e64" stroke-width="1.5"/>
+            </g>
+            <text class="lbl" x="352" y="22" text-anchor="middle">Placenta</text>
+            <line id="placLine" x1="345" y1="26" x2="318" y2="70" stroke="#9aa8b8" stroke-width=".8"/>
+            <text class="lbl" id="utLblL" x="150" y="40" text-anchor="middle">Uterus</text>
+          </g>
+
+          <!-- POST-BIRTH SCENE -->
+          <g id="postScene" style="display:none">
+            <use id="uterusP" href="#utPath" fill="#f1c3cb" stroke="#d27f8f" stroke-width="12"/>
+            <path id="cordIn" class="cordS" d=""/>
+            <path id="cordOut1" class="cordS" d="M172 398 C110 444 -40 414 -30 252"/>
+            <path id="cordMid" class="cordS" d="M-30 252 L-28 227"/>
+            <path id="cordOut2" class="cordS" d="M-28 227 C-24 175 0 138 16 110"/>
+            <path id="cordOut1e" class="cordE" d="M172 398 C110 444 -40 414 -30 252"/>
+            <ellipse id="plac3" rx="25" ry="12" fill="#c2667c" stroke="#a24e64" stroke-width="1.5"/>
+            <rect id="clamp1" x="-37" y="224" width="18" height="6" rx="2" fill="#2e9bd6" stroke="#1d6f9c" style="display:none"/>
+            <rect id="clamp2" x="-39" y="250" width="18" height="6" rx="2" fill="#2e9bd6" stroke="#1d6f9c" style="display:none"/>
+            <g id="baby" transform="translate(2 100) rotate(-12)">
+              <g class="breathe">
+                <ellipse id="babyBody" cx="0" cy="8" rx="24" ry="36" fill="#a9b6d6" stroke="#8a96b5" stroke-width="1.5"/>
+                <circle id="babyHead" cx="0" cy="-44" r="21" fill="#a9b6d6" stroke="#8a96b5" stroke-width="1.5"/>
+                <path d="M-8 -44 q3 2 6 0 M4 -44 q3 2 6 0" class="fline"/>
+                <path d="M-3 -35 q3 2 6 0" class="fline"/>
+                <path id="towel" d="M-30 -16 Q0 -26 30 -16 L30 40 Q0 52 -30 40 Z" fill="#e3eef8" stroke="#b9cde0" stroke-width="1.5" style="display:none"/>
+                <path id="hat" d="M-21 -50 Q-20 -70 0 -70 Q20 -70 21 -50 Z" fill="#cfe0ee" stroke="#9fb9cf" stroke-width="1.5" style="display:none"/>
+              </g>
+            </g>
+            <text class="lbl" x="2" y="38" text-anchor="middle" id="babyLbl">Baby skin-to-skin</text>
+            <text class="lbl" x="250" y="96" text-anchor="middle" id="utLblP">Uterus (contracted)</text>
+          </g>
+
+          <!-- cervix -->
+          <g id="cervix">
+            <rect id="cxL" x="0" y="282" width="14" height="22" rx="7" fill="#e3909f" stroke="#c46f80"/>
+            <rect id="cxR" x="0" y="282" width="14" height="22" rx="7" fill="#e3909f" stroke="#c46f80"/>
+            <text class="lbl" x="262" y="300" id="cxLbl">Cervix</text>
+          </g>
+
+          <!-- FETUS -->
+          <g id="fetus">
+            <g id="fBody">
+              <g transform="scale(1.4)">
+              <ellipse class="fskin" cx="0" cy="0" rx="33" ry="47"/>
+              <ellipse class="fskin" cx="30" cy="-18" rx="8" ry="22" transform="rotate(5 30 -18)"/>
+              <ellipse class="fskin" cx="34" cy="-42" rx="9" ry="5"/>
+              <ellipse class="fskin" cx="16" cy="-20" rx="12" ry="25" transform="rotate(-28 16 -20)"/>
+              <ellipse class="fskin" cx="22" cy="26" rx="7" ry="16" transform="rotate(-20 22 26)"/>
+              <circle class="fskin" cx="26" cy="43" r="5"/>
+              <path class="fline" d="M-24 -30 Q-31 0 -24 30" opacity=".5"/>
+              <circle cx="31" cy="6" r="2.4" fill="#c9977c"/>
+              </g>
+              <g id="fHead">
+                <ellipse class="fskin" cx="0" cy="0" rx="30" ry="29"/>
+                <ellipse cx="-4" cy="-6" rx="5" ry="7" fill="#e8b89d" stroke="#c9977c"/>
+                <path class="fline" d="M22 20 Q29 12 29 6 L34 1 L29 -3 Q31 -8 28 -11 Q29 -17 21 -22"/>
+                <path class="fline" d="M17 4 q4 2.5 7 0"/>
+                <path d="M-26 8 Q-20 26 0 29" fill="none" stroke="#c9977c" stroke-width="1" opacity=".6"/>
+              </g>
+              <ellipse id="nuchal" cx="0" cy="62" rx="25" ry="7" fill="none" stroke="#9fb0dd" stroke-width="5" style="display:none"/>
+            </g>
+          </g>
+
+          <!-- maternal bony pelvis (translucent, drawn over fetus) -->
+          <g id="pelvis" opacity=".9">
+            <path d="M352 206 C370 262 364 322 318 362" fill="none" stroke="#ece2cf" stroke-width="24" stroke-linecap="round" opacity=".92"/>
+            <path d="M352 206 C370 262 364 322 318 362" fill="none" stroke="#d6c6a8" stroke-width="1.5" stroke-dasharray="1 15" stroke-linecap="round"/>
+            <path d="M318 362 L298 376" stroke="#e6dac3" stroke-width="12" stroke-linecap="round"/>
+            <ellipse cx="145" cy="314" rx="12" ry="28" transform="rotate(-25 145 314)" fill="#ece2cf" stroke="#d6c6a8" stroke-width="1.5" opacity=".95"/>
+            <line x1="168" y1="318" x2="304" y2="318" stroke="#7d8da1" stroke-width="1" stroke-dasharray="5 4"/>
+            <text class="lbl" x="306" y="322">Spines (0)</text>
+            <text class="lbl" x="112" y="356" text-anchor="end">Symphysis pubis</text>
+            <text class="lbl" x="375" y="292">Sacrum</text>
+            <text class="lbl" x="300" y="394" text-anchor="middle">Coccyx</text>
+            <text class="lbl" x="128" y="418" text-anchor="middle" id="introLbl">Introitus</text>
+          </g>
+          <g id="annot"></g>
+        </svg>
+        <div class="inset" id="inset" aria-label="Fetal head position viewed from below">
+          <div class="t">View from below</div>
+          <svg viewBox="0 0 160 166">
+            <defs><clipPath id="icp"><rect x="2" y="16" width="156" height="132" rx="10"/></clipPath></defs>
+            <text x="80" y="11" text-anchor="middle" style="font-size:9.5px;fill:#6b7b8e;font-weight:700">Anterior (pubis)</text>
+            <text x="80" y="162" text-anchor="middle" style="font-size:9.5px;fill:#6b7b8e;font-weight:700">Posterior (sacrum)</text>
+            <g clip-path="url(#icp)">
+              <rect x="2" y="16" width="156" height="132" fill="#fbeff1"/>
+              <g id="iHead" transform="rotate(45 80 82)">
+                <ellipse cx="80" cy="82" rx="29" ry="37" fill="#f3cdb4" stroke="#c9977c" stroke-width="1.5"/>
+                <line x1="80" y1="50" x2="80" y2="104" stroke="#a9765d" stroke-width="1.6"/>
+                <path d="M80 50 L68 40 M80 50 L92 40" stroke="#a9765d" stroke-width="1.6" fill="none"/>
+                <path d="M80 99 L86 106 L80 113 L74 106 Z" fill="#e8b89d" stroke="#a9765d" stroke-width="1.3"/>
+                <line x1="58" y1="106" x2="74" y2="106" stroke="#a9765d" stroke-width="1.3"/>
+                <line x1="86" y1="106" x2="102" y2="106" stroke="#a9765d" stroke-width="1.3"/>
+                <text x="80" y="64" text-anchor="middle" style="font-size:9px;font-weight:800;fill:#8a5a43">O</text>
+              </g>
+              <path id="iCervix" fill="#e7a2b0" fill-opacity=".9" stroke="#c46f80" stroke-width="1.5" fill-rule="evenodd" d=""/>
+            </g>
+            <text x="8" y="86" style="font-size:10px;font-weight:800;fill:#8592a3">R</text>
+            <text x="146" y="86" style="font-size:10px;font-weight:800;fill:#8592a3">L</text>
+          </svg>
+          <div class="cap" id="insetCap">LOA · Station −2</div>
+        </div>
+        <div class="drape" id="drape">
+          <div class="t">Graduated drape</div>
+          <div class="gauge"><div class="ticks" id="drapeTicks"></div><div class="fill" id="drapeFill"></div></div>
+          <div class="rd" id="drapeRd">0 mL</div>
+        </div>
+      </div>
+      <div class="chips" id="chips"></div>
+    </section>
+
+    <section class="card scen" aria-live="polite">
+      <div class="scenTop"><span class="tag" id="stepTag">Admission</span><span class="stepNo" id="stepNo">Step 1</span></div>
+      <div class="prog"><i id="progBar"></i></div>
+      <div class="scenBody" id="scenBody"></div>
+    </section>
+  </main>
+
+  <section class="monitor" aria-label="Live monitor">
+    <div class="tiles" id="tiles"></div>
+    <div class="ctgWrap" id="ctgWrap"><span class="ctgLbl">CTG · FHR (bpm) / Toco · accelerated display</span><canvas id="ctg"></canvas></div>
+  </section>
+  <footer>Educational simulation only, not medical advice. Always follow your local clinical guidelines and the supervision of qualified clinicians.</footer>
+</div>
+
+<!-- START -->
+<div class="overlay show" id="startOv">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="startTitle">
+    <div class="tag">Midwifery education</div>
+    <h1 id="startTitle">Virtual Birthing Manikin</h1>
+    <p class="lead">You are the midwife. Guide <b>Emma</b> (29, G2 P1, 39+4 weeks) through labour and birth, from admission to the first hour after birth. Choose your actions, time her pushing with contractions, and watch the fetus move through the pelvis.</p>
+    <div class="modes" id="modes">
+      <button class="mode on" data-mode="normal"><b>Normal birth</b><span>Uncomplicated spontaneous vaginal birth with active management of the third stage.</span></button>
+      <button class="mode" data-mode="random"><b>Random complication</b><span>One or two complications appear without warning. Stay alert.</span></button>
+      <button class="mode" data-mode="choose"><b>Choose complications</b><span>Practise specific emergencies.</span></button>
+    </div>
+    <div class="comps" id="compPick">
+      <label><input type="checkbox" value="brady" checked> Fetal bradycardia / decelerations</label>
+      <label><input type="checkbox" value="sd" checked> Shoulder dystocia (HELPERR)</label>
+      <label><input type="checkbox" value="pph" checked> Postpartum haemorrhage (4 Ts)</label>
+    </div>
+    <div class="disc"><b>Disclaimer:</b> This is an educational simulation for students and clinicians in training. It is <b>not medical advice</b> and is not a substitute for accredited training, supervised clinical practice or local guidelines (e.g. RANZCOG, ANZCOR, state health policies). Clinical details are simplified and the timeline is compressed.</div>
+    <div class="startRow">
+      <span class="hintSmall">Tip: keys 1–9 pick options; hold <b>Space</b> to push.</span>
+      <button class="btn pri big" id="startBtn">Begin simulation ▶</button>
+    </div>
+    <div class="howto">
+      <div><b>1 · Assess &amp; decide</b>Pick the best action at each step. Wrong choices cost points but always explain why.</div>
+      <div><b>2 · Watch the monitor</b>Maternal vital signs, contractions and a live CTG respond to events and your actions.</div>
+      <div><b>3 · Debrief</b>Finish with a score, a timeline and personalised learning points.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DEBRIEF -->
+<div class="overlay" id="debriefOv"><div class="modal debrief" id="debrief" role="dialog" aria-modal="true"></div></div>
+<script>
+(function(){
+'use strict';
+/* =========================================================
+   MidwifeSim: engine
+   ========================================================= */
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+function h(tag, attrs, html){ const e = document.createElement(tag); if (attrs) for (const k in attrs){ if (k === 'class') e.className = attrs[k]; else e.setAttribute(k, attrs[k]); } if (html != null) e.innerHTML = html; return e; }
+function shuffle(a){ for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const fmtClock = m => { m = Math.round(m); const hh = Math.floor(m / 60) % 24, mm = m % 60; return String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0'); };
+const STAGES = ['Admission', 'First stage', 'Second stage', 'Birth & newborn', 'Third stage', 'Debrief'];
+
+/* ---------- birth canal geometry (curve of Carus) ---------- */
+const CA = {x:215, y:290}, CC = {x:232, y:350}, CB = {x:172, y:398};
+function canal(s){
+  if (s < 0) return {x: CA.x + s * 2 * (CC.x - CA.x), y: CA.y + s * 2 * (CC.y - CA.y)};
+  if (s > 1){ const t = s - 1; return {x: CB.x + t * 2 * (CB.x - CC.x), y: CB.y + t * 2 * (CB.y - CC.y)}; }
+  const u = 1 - s; return {x: u*u*CA.x + 2*u*s*CC.x + s*s*CB.x, y: u*u*CA.y + 2*u*s*CC.y + s*s*CB.y};
+}
+function stationFromS(s){
+  if (s <= 0) return s / 0.15;
+  if (s <= 0.55) return s / 0.55 * 3;
+  return Math.min(5, 3 + (s - 0.55) / 0.17 * 2);
+}
+
+/* ---------- state ---------- */
+let SIM, P, F, FT, P3;
+const N = 720; // CTG samples (0.1 s each)
+let fhrBuf, tocoBuf, bufHead = 0, bufCount = 0;
+let timers = [];
+function later(fn, ms){ const id = setTimeout(fn, ms); timers.push(id); return id; }
+
+function freshState(){
+  SIM = { mode:'normal', comps:{brady:false, sd:false, pph:false}, compsRevealed:false, steps:[], idx:0,
+          score:0, max:0, results:[], clock: 8*60 + 20, speed: (SIM && SIM.speed) || 1, ff:0,
+          times:{}, apgar1:null, apgar5:null, eblEst:null, eblActual:null, born:false, pphActive:false, pphControlled:false, encountered:[] };
+  P = { mhr:82, sys:118, dia:74, spo2:98, temp:36.8, rr:16, mhrT:82, sysT:118, diaT:74,
+        fhrBase:140, fhrBaseT:140, fhr:140, fhrMode:'normal', varAmp:1, earlyDecels:false, accels:true, accelT:12, accelU:-1,
+        toco:8, bell:0, cT:0, cPeriod:20, cDur:8, cAmp:35, cOn:true,
+        dil:3, ebl:0, eblRate:0, eblCap:1500, pushing:false, ctgOn:false, fhrOn:true, ctgMsg:'Not connected: auscultate the fetal heart to begin',
+        revealed:{}, t:0, bhr:146, uterusTone:'' };
+  F  = { s:-0.42, ha:-6, ins:45, op:1, ox:0, oy:0 };
+  FT = Object.assign({}, F);
+  P3 = { k:0.6, kT:0.6, pp:0, ppT:0, placVis:true, clamp1:false, clamp2:false, cut:false, pink:0.25, pinkT:0.25, towel:false, hat:false, boggy:false, wob:0 };
+  fhrBuf = new Float32Array(N).fill(NaN); tocoBuf = new Float32Array(N).fill(NaN); bufHead = 0; bufCount = 0;
+}
+
+/* ---------- helpers used by scenario steps ---------- */
+function setFT(o){ Object.assign(FT, o); }
+function snapF(){ Object.assign(F, FT); }
+function contr(period, dur, amp){ P.cPeriod = period; P.cDur = dur; P.cAmp = amp; P.cOn = true; }
+function reveal(){ for (const k of arguments) P.revealed[k] = true; renderTiles(true); }
+function addMin(m){ SIM.clock += m; }
+function annot(svg){ $('#annot').innerHTML = svg || ''; }
+const CHIP_NAMES = ['Engagement','Descent','Flexion','Internal rotation','Extension','Restitution','External rotation','Expulsion'];
+let chipState = {};
+function chips(map){ chipState = Object.assign({}, map); renderChips(); }
+function chip(name, st){ chipState[name] = st; renderChips(); }
+function renderChips(){
+  const el = $('#chips'); el.innerHTML = '';
+  CHIP_NAMES.forEach(n => { const c = h('span', {class:'chip ' + (chipState[n] || '')}, n); el.append(c); });
+}
+function setScene(name){
+  const post = name === 'post';
+  $('#labourScene').style.display = post ? 'none' : '';
+  $('#postScene').style.display = post ? '' : 'none';
+  $('#fetus').style.display = post ? 'none' : '';
+  $('#cervix').style.display = post ? 'none' : '';
+  $('#inset').style.display = post ? 'none' : '';
+  $('#illusTitle').textContent = post ? 'Sagittal schematic: third stage & newborn' : 'Sagittal schematic: pelvis, uterus & fetus';
+}
+function showDrape(on){ $('#drape').style.display = on ? 'block' : 'none'; }
+function svgArrow(x1,y1,x2,y2,col){ const m = col === 'r' ? 'arR' : col === 'o' ? 'arO' : 'arT'; const c = col === 'r' ? '#d64b3c' : col === 'o' ? '#c98a00' : '#0b7a83';
+  return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="3" marker-end="url(#${m})" stroke-linecap="round"/>`; }
+function svgLabel(x,y,t,col,anchor){ const c = col || '#0b7a83'; const w = t.length * 5.6 + 12;
+  const ax = anchor === 'end' ? x - w : anchor === 'start' ? x : x - w/2;
+  return `<g><rect x="${ax}" y="${y-11}" width="${w}" height="16" rx="8" fill="#fff" stroke="${c}" stroke-width="1.2" opacity=".96"/><text x="${ax + w/2}" y="${y+1}" text-anchor="middle" style="font-size:9.5px;font-weight:700;fill:${c}">${t}</text></g>`; }
+
+/* ---------- physiology update ---------- */
+function bellAt(t){ if (t < 0) t += P.cPeriod; if (t >= 0 && t < P.cDur){ const u = t / P.cDur; const s = Math.sin(Math.PI * u); return s * s; } return 0; }
+function updatePhys(dt){
+  P.t += dt;
+  let ended = false, started = false;
+  if (P.cOn){
+    const prev = P.cT; P.cT += dt;
+    if (prev < P.cDur && P.cT >= P.cDur) ended = true;
+    if (P.cT >= P.cPeriod){ P.cT -= P.cPeriod; started = true; }
+  }
+  P.bell = P.cOn ? bellAt(P.cT) : 0;
+  P.toco = 8 + P.cAmp * P.bell + 1.2 * Math.sin(P.t * 0.7) + (Math.random() - 0.5) * 0.8;
+  if (ended) stepEvent('cEnd'); if (started) stepEvent('cStart');
+
+  // fetal heart
+  const ftau = Math.min(1, dt * 0.25);
+  P.fhrBaseT = P.fhrMode === 'brady' ? 84 : 140;
+  P.fhrBase += (P.fhrBaseT - P.fhrBase) * ftau;
+  const va = P.fhrMode === 'normal' ? 1 : 0.45;
+  P.varAmp += (va - P.varAmp) * Math.min(1, dt);
+  let tgt = P.fhrBase + P.varAmp * (3.4 * Math.sin(P.t * 1.3 + 1) + 2.4 * Math.sin(P.t * 2.9 + 2) + 1.4 * Math.sin(P.t * 6.1)) + (Math.random() - 0.5) * 2.2 * P.varAmp;
+  if (P.fhrMode === 'normal' && P.accels){
+    P.accelT -= dt;
+    if (P.accelT <= 0 && P.accelU < 0){ P.accelU = 0; P.accelT = 22 + Math.random() * 25; }
+    if (P.accelU >= 0){ P.accelU += dt / 6; tgt += 17 * Math.pow(Math.sin(Math.PI * Math.min(1, P.accelU)), 2); if (P.accelU >= 1) P.accelU = -1; }
+  }
+  if (P.earlyDecels) tgt -= 16 * P.bell;
+  if (P.fhrMode === 'late') tgt -= 42 * bellAt(P.cT - P.cDur * 0.6);
+  P.fhr += (tgt - P.fhr) * Math.min(1, dt * 4);
+  P.bhr = 146 + 5 * Math.sin(P.t * 0.4) + (Math.random() - 0.5) * 2;
+
+  // maternal
+  if (SIM.pphActive){
+    P.ebl = Math.min(P.eblCap, P.ebl + P.eblRate * dt);
+    P.mhrT = 84 + clamp((P.ebl - 380) / 13, 0, 44);
+    P.sysT = 118 - clamp((P.ebl - 450) / 14, 0, 32);
+    P.diaT = 74 - clamp((P.ebl - 450) / 22, 0, 20);
+    if (SIM.pphControlled){ P.mhrT -= 10; P.sysT += 6; P.diaT += 4; }
+  }
+  const mt = P.mhrT + (P.pushing ? 10 : 0) + 5 * P.bell;
+  P.mhr += (mt - P.mhr) * Math.min(1, dt * 0.9);
+  P.sys += (P.sysT + 8 * P.bell - P.sys) * Math.min(1, dt * 0.6);
+  P.dia += (P.diaT + 4 * P.bell - P.dia) * Math.min(1, dt * 0.6);
+  P.rr  += ((P.pushing ? 22 : 16 + (SIM.pphActive ? 4 : 0)) - P.rr) * Math.min(1, dt * 0.5);
+  P.spo2 += ((SIM.pphActive && !SIM.pphControlled ? 96 : 98) - P.spo2) * Math.min(1, dt * 0.3);
+  if (!SIM.pphActive && P.eblRate > 0) P.ebl = Math.min(P.eblCap, P.ebl + P.eblRate * dt);
+}
+
+/* ---------- fetus & scene rendering ---------- */
+const E = {};
+function cacheEls(){
+  ['fetus','fBody','fHead','cxL','cxR','cxLbl','iHead','iCervix','insetCap','uterusL','uterusP','plac3','cordIn','cordOut1','cordOut1e','cordMid','cordOut2','clamp1','clamp2','babyBody','babyHead','towel','hat','drapeFill','drapeRd','utLblP','placentaL','uterusG','placLine','utLblL'].forEach(id => E[id] = document.getElementById(id));
+}
+function mixCol(a, b, t){ const pa = [1,3,5].map(i => parseInt(a.substr(i,2),16)), pb = [1,3,5].map(i => parseInt(b.substr(i,2),16)); return '#' + pa.map((v,i) => Math.round(lerp(v, pb[i], t)).toString(16).padStart(2,'0')).join(''); }
+function posName(th){
+  const names = {'0':'OA','45':'LOA','90':'LOT','135':'LOP','180':'OP','-45':'ROA','-90':'ROT','-135':'ROP'};
+  let a = ((th % 360) + 540) % 360 - 180; const r = Math.round(a / 45) * 45; return names[String(r === -180 ? 180 : r)] || 'OA';
+}
+function renderScene(dt){
+  // tween fetus
+  const k = Math.min(1, dt * 2.4);
+  for (const key in FT) F[key] += (FT[key] - F[key]) * k;
+  // fetus geometry
+  const hp = canal(F.s), ref = canal(F.s - 0.55);
+  let dx = ref.x - hp.x, dy = ref.y - hp.y; const L = Math.hypot(dx, dy) || 1;
+  const bx = hp.x + dx / L * 88, by = hp.y + dy / L * 88;
+  const th = Math.atan2(-(hp.x - bx), (hp.y - by)) * 180 / Math.PI;
+  E.fBody.setAttribute('transform', `translate(${(bx + F.ox).toFixed(2)} ${(by + F.oy).toFixed(2)}) rotate(${th.toFixed(2)})`);
+  E.fHead.setAttribute('transform', `translate(0 88) rotate(${F.ha.toFixed(2)})`);
+  E.fetus.style.opacity = F.op.toFixed(3);
+  // uterus contraction
+  const sc = 1 - 0.018 * P.bell;
+  E.uterusL.setAttribute('transform', `translate(215 160) scale(${sc.toFixed(4)}) translate(-215 -160)`);
+  E.uterusL.setAttribute('stroke-width', (10 + 7 * P.bell).toFixed(2));
+  E.uterusL.setAttribute('stroke', mixCol('#d98c9a', '#c0566d', P.bell));
+  // fundus follows the fetus down during descent
+  const sy = 1 - 0.3 * smooth(0, 1.0, F.s);
+  E.uterusG.setAttribute('transform', `translate(0 ${(286 * (1 - sy)).toFixed(2)}) scale(1 ${sy.toFixed(4)})`);
+  E.placLine.setAttribute('y2', (286 - (286 - 70) * sy).toFixed(1));
+  E.utLblL.setAttribute('y', (286 - (286 - 40) * sy).toFixed(1));
+  // cervix
+  const d = clamp(P.dil, 0, 10), off = 8 + d * 2.6;
+  E.cxL.setAttribute('x', (215 - off - 14).toFixed(1)); E.cxR.setAttribute('x', (215 + off).toFixed(1));
+  const cxo = d >= 10 ? 0.25 : 1; E.cxL.style.opacity = cxo; E.cxR.style.opacity = cxo; E.cxLbl.style.opacity = d >= 10 ? 0 : 1;
+  // inset
+  E.iHead.setAttribute('transform', `rotate(${F.ins.toFixed(2)} 80 82)`);
+  const r = Math.max(1.5, d * 5.0);
+  const ho = d >= 10 ? Math.max(0, 1 - Math.max(0, F.s) * 3) : 1;
+  E.iCervix.setAttribute('d', `M80 82 m-78 0 a78 78 0 1 0 156 0 a78 78 0 1 0 -156 0 Z M80 82 m-${r} 0 a${r} ${r} 0 1 0 ${2*r} 0 a${r} ${r} 0 1 0 -${2*r} 0 Z`);
+  E.iCervix.style.opacity = ho.toFixed(3);
+  const st = stationFromS(F.s);
+  let cap = posName(F.ins) + ' · ';
+  if (F.s > 0.8) cap += 'Head born'; else if (F.s > 0.66) cap += 'Crowning'; else cap += 'Station ' + (st >= 0 ? '+' : '−') + Math.abs(Math.round(st));
+  if (d < 10 && P.revealed.dil) cap += ' · Cx ' + Math.round(d) + ' cm';
+  E.insetCap.textContent = cap;
+
+  // post scene
+  P3.k += (P3.kT - P3.k) * Math.min(1, dt * 1.5);
+  P3.pp += (P3.ppT - P3.pp) * Math.min(1, dt * 1.2);
+  P3.pink += (P3.pinkT - P3.pink) * Math.min(1, dt * 0.6);
+  P3.wob += dt;
+  const kk = P3.k * (P3.boggy ? 1 + 0.02 * Math.sin(P3.wob * 3) : 1);
+  E.uterusP.setAttribute('transform', `translate(215 286) scale(${kk.toFixed(4)}) translate(-215 -286)`);
+  E.uterusP.setAttribute('stroke-dasharray', P3.boggy ? '10 6' : 'none');
+  E.uterusP.setAttribute('fill', P3.boggy ? '#f6d6dc' : '#f1c3cb');
+  E.utLblP.textContent = P3.boggy ? 'Uterus: soft, boggy' : 'Uterus (contracted)';
+  E.utLblP.setAttribute('y', (286 - 270 * kk - 8).toFixed(1));
+  E.utLblP.setAttribute('x', '215');
+  // placenta along path
+  const att = {x: 215 + (296 - 215) * P3.k, y: 286 + (112 - 286) * P3.k};
+  let px, py, rot;
+  const pp = P3.pp;
+  if (pp < 0.4){ const t = pp / 0.4; px = lerp(att.x, 215, t); py = lerp(att.y, 280, t); rot = lerp(-60, -10, t); }
+  else { const c = canal((pp - 0.4) / 0.6 * 1.3); px = c.x; py = c.y; rot = lerp(-10, 40, (pp - 0.4) / 0.6); }
+  E.plac3.setAttribute('transform', `translate(${px.toFixed(1)} ${py.toFixed(1)}) rotate(${rot.toFixed(1)})`);
+  E.plac3.style.display = P3.placVis ? '' : 'none';
+  // inner cord from placenta to introitus
+  let cd = '';
+  if (P3.placVis){
+    if (pp < 0.4) cd = `M${px.toFixed(1)} ${py.toFixed(1)} Q ${((px + 215) / 2).toFixed(1)} ${Math.max(py, 250).toFixed(1)} 215 288 Q232 350 172 398`;
+    else { const s0 = (pp - 0.4) / 0.6 * 1.3; if (s0 < 1){ const pts = []; for (let s = s0; s <= 1.0001; s += 0.05){ const c = canal(Math.min(1, s)); pts.push(c.x.toFixed(1) + ' ' + c.y.toFixed(1)); } cd = 'M' + pts.join(' L'); } }
+  }
+  E.cordIn.setAttribute('d', cd);
+  const showMat = P3.placVis;
+  E.cordOut1.style.display = showMat ? '' : 'none'; E.cordOut1e.style.display = showMat ? '' : 'none';
+  E.clamp2.style.display = (P3.clamp2 && showMat) ? '' : 'none';
+  E.cordMid.style.display = P3.cut ? 'none' : '';
+  E.clamp1.style.display = P3.clamp1 ? '' : 'none';
+  const bc = mixCol('#a3b1d4', '#f2bfa8', clamp(P3.pink, 0, 1)), bs = mixCol('#8592b4', '#d39a83', clamp(P3.pink, 0, 1));
+  E.babyBody.setAttribute('fill', bc); E.babyHead.setAttribute('fill', bc); E.babyBody.setAttribute('stroke', bs); E.babyHead.setAttribute('stroke', bs);
+  E.towel.style.display = P3.towel ? '' : 'none'; E.hat.style.display = P3.hat ? '' : 'none';
+  // drape
+  const pads = SIM.padsVol || 100;
+  const drapeVol = Math.max(0, P.ebl - pads);
+  E.drapeFill.style.height = clamp(drapeVol / 1200 * 100, 0, 100) + '%';
+  E.drapeRd.textContent = 'Drape: ' + (Math.round(drapeVol / 10) * 10) + ' mL';
+}
+
+/* ---------- monitor tiles ---------- */
+const TILES = [
+  {k:'mhr', l:'Maternal HR', u:'bpm', c:'g', v:() => Math.round(P.mhr), a:() => P.mhr > 100 || P.mhr < 50, s:() => P.mhr > 100 ? 'Tachycardia' : 'Pulse'},
+  {k:'bp', l:'BP (mmHg)', u:'', c:'w', v:() => Math.round(P.sys) + '/' + Math.round(P.dia), a:() => P.sys >= 140 || P.sys < 95 || P.dia >= 90, s:() => P.sys < 95 ? 'Hypotension' : 'Non-invasive'},
+  {k:'spo2', l:'SpO₂', u:'%', c:'c', v:() => Math.round(P.spo2), a:() => P.spo2 < 94, s:() => 'Pulse oximetry'},
+  {k:'temp', l:'Temperature', u:'°C', c:'o', v:() => P.temp.toFixed(1), a:() => P.temp >= 37.5, s:() => 'Tympanic'},
+  {k:'rr', l:'Resp rate', u:'/min', c:'y', v:() => Math.round(P.rr), a:() => P.rr > 24, s:() => 'Breaths'},
+  {k:'fhr', l:() => SIM.born ? 'Baby HR' : 'Fetal HR', u:'bpm', c:'p', v:() => SIM.born ? Math.round(P.bhr) : Math.round(P.fhr), a:() => !SIM.born && (P.fhr < 110 || P.fhr > 160), s:() => SIM.born ? 'Newborn' : (P.fhr < 100 ? 'Bradycardia' : P.fhr < 110 ? 'Below normal range' : 'Normal 110–160')},
+  {k:'toco', l:'Toco', u:'', c:'c', v:() => P.cOn ? Math.round(P.toco) : '--', a:() => false, s:() => P.cOn ? Math.max(1, Math.round(600 / (P.cPeriod * 10))) + ' in 10 min' + (P.bell > 0.25 ? ' · ACTIVE' : '') : 'Not monitored'},
+  {k:'dil', l:'Cervix', u:'cm', c:'w', v:() => SIM.born ? '--' : Math.round(P.dil), a:() => false, s:() => SIM.born ? 'n/a' : (P.dil >= 10 ? 'Fully dilated' : 'Dilatation')},
+  {k:'stn', l:'Station', u:'', c:'w', v:() => { if (SIM.born || F.s > 0.8) return '--'; if (F.s > 0.66) return '+5'; const s = Math.round(stationFromS(F.s)); return (s > 0 ? '+' : s < 0 ? '−' : '') + Math.abs(s); }, a:() => false, s:() => F.s > 0.66 && !SIM.born ? 'Crowning/born' : 'vs ischial spines'},
+  {k:'ebl', l:'Blood loss', u:'mL', c:'p', v:() => Math.round(P.ebl / 10) * 10, a:() => P.ebl >= 500, s:() => P.ebl >= 1000 ? 'Major PPH' : P.ebl >= 500 ? 'PPH ≥ 500 mL' : 'Measured'},
+];
+const tileEls = {};
+function buildTiles(){
+  const wrap = $('#tiles'); wrap.innerHTML = '';
+  TILES.forEach(d => { const t = h('div', {class:'tile', 'data-c':d.c}); t.innerHTML = `<div class="tl"></div><div class="tv"></div><div class="ts"></div>`; wrap.append(t);
+    tileEls[d.k] = {el:t, l:t.children[0], v:t.children[1], s:t.children[2]}; });
+}
+let tileAcc = 0;
+function renderTiles(force){
+  TILES.forEach(d => {
+    const e = tileEls[d.k], rev = !!P.revealed[d.k];
+    e.l.textContent = typeof d.l === 'function' ? d.l() : d.l;
+    e.el.classList.toggle('na', !rev);
+    e.v.innerHTML = rev ? (d.v() + (d.u ? `<small>${d.u}</small>` : '')) : '--';
+    e.s.textContent = rev ? d.s() : 'Not yet assessed';
+    e.el.classList.toggle('alarm', rev && d.a());
+  });
+}
+
+/* ---------- CTG ---------- */
+let cv, ctx, DPR = 1;
+function sizeCTG(){ DPR = window.devicePixelRatio || 1; const r = cv.parentElement.getBoundingClientRect(); cv.width = Math.max(10, Math.round(r.width * DPR)); cv.height = Math.max(10, Math.round(r.height * DPR)); }
+function pushSample(){ fhrBuf[bufHead] = (P.ctgOn && P.fhrOn) ? P.fhr : NaN; tocoBuf[bufHead] = P.ctgOn ? P.toco : NaN; bufHead = (bufHead + 1) % N; bufCount++; }
+function drawCTG(){
+  const W = cv.width, H = cv.height, d = DPR; if (W < 20 || H < 20) return;
+  ctx.fillStyle = '#fffaf6'; ctx.fillRect(0, 0, W, H);
+  const padL = 30 * d, fT = 18 * d, fH = H * 0.6 - fT, tT = H * 0.67, tH = H - tT - 6 * d, pw = W - padL - 4 * d;
+  const yF = v => fT + (200 - v) / 140 * fH, yT = v => tT + (100 - v) / 100 * tH;
+  ctx.fillStyle = 'rgba(31,157,99,.10)'; ctx.fillRect(padL, yF(160), pw, yF(110) - yF(160));
+  ctx.lineWidth = 1; ctx.font = `${9.5 * d}px system-ui, sans-serif`; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  for (let v = 60; v <= 200; v += 10){ ctx.strokeStyle = v % 30 === 0 ? 'rgba(214,75,60,.32)' : 'rgba(214,75,60,.13)'; ctx.beginPath(); ctx.moveTo(padL, yF(v)); ctx.lineTo(padL + pw, yF(v)); ctx.stroke(); if (v % 30 === 0){ ctx.fillStyle = '#9a6b5f'; ctx.fillText(v, padL - 4 * d, yF(v)); } }
+  for (let v = 0; v <= 100; v += 25){ ctx.strokeStyle = v % 50 === 0 ? 'rgba(214,75,60,.3)' : 'rgba(214,75,60,.13)'; ctx.beginPath(); ctx.moveTo(padL, yT(v)); ctx.lineTo(padL + pw, yT(v)); ctx.stroke(); if (v % 50 === 0){ ctx.fillStyle = '#9a6b5f'; ctx.fillText(v, padL - 4 * d, yT(v)); } }
+  const i0 = ((N - bufCount) % 60 + 60) % 60;
+  for (let i = i0; i < N; i += 60){ const x = padL + i / (N - 1) * pw; ctx.strokeStyle = 'rgba(214,75,60,.22)'; ctx.beginPath(); ctx.moveTo(x, fT); ctx.lineTo(x, fT + fH); ctx.moveTo(x, tT); ctx.lineTo(x, tT + tH); ctx.stroke(); }
+  const trace = (buf, yf, col, lw) => { ctx.strokeStyle = col; ctx.lineWidth = lw * d; ctx.lineJoin = 'round'; ctx.beginPath(); let pen = false;
+    for (let i = 0; i < N; i++){ const v = buf[(bufHead + i) % N]; const x = padL + i / (N - 1) * pw; if (isNaN(v)){ pen = false; continue; } const y = yf(v); if (!pen){ ctx.moveTo(x, y); pen = true; } else ctx.lineTo(x, y); } ctx.stroke(); };
+  trace(fhrBuf, v => yF(clamp(v, 60, 200)), '#22324a', 1.5);
+  trace(tocoBuf, v => yT(clamp(v, 0, 100)), '#0b7a83', 1.5);
+  ctx.textAlign = 'left'; ctx.fillStyle = '#9a6b5f'; ctx.font = `700 ${9.5 * d}px system-ui, sans-serif`;
+  ctx.fillText('FHR', padL + 4 * d, fT - 8 * d); ctx.fillText('TOCO', padL + 4 * d, tT - 7 * d);
+  if (!P.ctgOn && P.ctgMsg){ ctx.fillStyle = 'rgba(255,250,246,.85)'; ctx.fillRect(padL + pw * 0.15, H * 0.36, pw * 0.7, 24 * d); ctx.fillStyle = '#7a5a50'; ctx.textAlign = 'center'; ctx.font = `600 ${11 * d}px system-ui, sans-serif`; ctx.fillText(P.ctgMsg, padL + pw / 2, H * 0.36 + 12 * d); }
+}
+
+/* ---------- header ---------- */
+function renderHeader(){
+  const st = SIM.steps[SIM.idx]; const stage = SIM.finished ? 5 : (st ? st.stage : 0);
+  const sp = $('#stepper'); sp.innerHTML = '';
+  STAGES.forEach((n, i) => sp.append(h('span', {class:'st ' + (i < stage ? 'done' : i === stage ? 'active' : '')}, n)));
+  $('#stageMini').textContent = 'Stage: ' + STAGES[stage];
+  $('#score').textContent = SIM.score; $('#scoreMax').textContent = SIM.max;
+  $('#clock').textContent = fmtClock(SIM.clock);
+  const mb = $('#modeBadge');
+  if (SIM.mode === 'normal'){ mb.textContent = 'Normal birth'; mb.classList.remove('comp'); }
+  else { mb.classList.add('comp'); mb.textContent = SIM.mode === 'random' && SIM.encountered.length === 0 ? 'Complications: hidden' : 'Complications: ' + (SIM.mode === 'random' ? SIM.encountered : compList()).join(', '); }
+}
+function compList(){ const n = {brady:'FHR', sd:'Shoulder dystocia', pph:'PPH'}; return Object.keys(SIM.comps).filter(k => SIM.comps[k]).map(k => n[k]); }
+function encounter(k){ const n = {brady:'FHR', sd:'Shoulder dystocia', pph:'PPH'}; if (!SIM.encountered.includes(n[k])) SIM.encountered.push(n[k]); renderHeader(); }
+
+/* =========================================================
+   Step engine
+   ========================================================= */
+function cur(){ return SIM.steps[SIM.idx]; }
+function feedback(kind, html, head){
+  const heads = {ok:'✓ Correct', bad:'✗ Not the best choice', warn:'⚠ Not yet', info:'ℹ Note'};
+  const box = $('#fbBox'); if (!box) return;
+  box.innerHTML = `<div class="fb ${kind}"><b class="h">${head || heads[kind]}</b>${html}</div>`;
+  requestAnimationFrame(() => {
+    const sc = $('#scenBody'); if (!sc) return;
+    const internal = getComputedStyle(sc).overflowY !== 'visible' && sc.scrollHeight > sc.clientHeight + 2;
+    if (internal){ const d = box.getBoundingClientRect().bottom - sc.getBoundingClientRect().bottom; if (d > 0) sc.scrollTo({top: sc.scrollTop + d + 12, behavior:'smooth'}); }
+    else { const r = box.getBoundingClientRect(); if (r.bottom > window.innerHeight) window.scrollBy({top: r.bottom - window.innerHeight + 16, behavior:'smooth'}); }
+  });
+}
+function renderStep(){
+  const st = cur(); if (!st) return;
+  st._wrong = 0; st._errors = []; st._done = false; st._completed = false;
+  const body = $('#scenBody'); body.innerHTML = ''; body.scrollTop = 0;
+  $('#stepTag').textContent = st.tag || STAGES[st.stage];
+  $('#stepNo').textContent = `Step ${SIM.idx + 1} of ${SIM.steps.length}`;
+  $('#progBar').style.width = (SIM.idx / SIM.steps.length * 100) + '%';
+  if (st.dt) addMin(st.dt);
+  if (st.enter) st.enter(st);
+  body.append(h('h2', null, st.title));
+  if (st.text) body.append(h('div', {class:'narr'}, typeof st.text === 'function' ? st.text(st) : st.text));
+  const area = h('div', {class:'area'}); body.append(area);
+  body.append(h('div', {class:'fbBox', id:'fbBox'}));
+  body.append(h('div', {class:'contBar', id:'contBar'}));
+  TYPES[st.type].render(st, area);
+  renderHeader(); renderTiles(true);
+}
+function complete(st, got, max, learn){
+  if (st._completed) return; st._completed = true; st._done = true;
+  if (max > 0){
+    SIM.score += got; SIM.max += max;
+    SIM.results.push({title: st.title, stage: st.stage, got, max, learn: st.learn || learn || '', errors: st._errors.slice()});
+  }
+  if (st.onComplete) st.onComplete(st);
+  renderHeader();
+  const cb = $('#contBar'); cb.innerHTML = '';
+  if (max > 0) cb.append(h('span', {class:'pts'}, `+${got} / ${max} points`));
+  const last = SIM.idx >= SIM.steps.length - 1;
+  const b = h('button', {class:'btn pri', id:'contBtn'}, last ? 'View debrief ▶' : 'Continue ▶');
+  b.onclick = next; cb.append(b);
+  setTimeout(() => { try { b.focus({preventScroll:true}); } catch(e){} }, 30);
+}
+function next(){
+  const st = cur(); if (!st || !st._completed) return;
+  if (st.leave) st.leave(st);
+  if (SIM.idx >= SIM.steps.length - 1){ showDebrief(); return; }
+  SIM.idx++; renderStep();
+}
+function stepEvent(name){ const st = SIM && SIM.steps && cur(); if (st && TYPES[st.type].event) TYPES[st.type].event(st, name); }
+function stepTick(sdt, dt){ const st = SIM && SIM.steps && cur(); if (st && TYPES[st.type].tick) TYPES[st.type].tick(st, sdt, dt); }
+function optBtn(i, html){ return h('button', {class:'opt', type:'button'}, `<span class="key">${i + 1}</span><span class="otx">${html}</span>`); }
+
+const APGAR = [
+  {name:'Heart rate', crit:['Absent', '< 100 bpm', '≥ 100 bpm']},
+  {name:'Respiratory effort', crit:['Absent', 'Weak, irregular, gasping', 'Good, strong cry']},
+  {name:'Muscle tone', crit:['Limp', 'Some flexion', 'Active motion, well flexed']},
+  {name:'Reflex irritability', crit:['No response', 'Grimace', 'Cry, cough or pulls away']},
+  {name:'Colour', crit:['Blue or pale all over', 'Body pink, extremities blue', 'Pink all over']},
+];
+
+const TYPES = {
+  info: { render(st){ complete(st, 0, 0); } },
+
+  mcq: { render(st, area){
+    if (st.q) area.append(h('p', {class:'q'}, st.q));
+    const list = h('div', {class:'opts'}); area.append(list);
+    st._opts = st.noShuffle ? st.options.slice() : shuffle(st.options.slice());
+    const max = st.pts || 10;
+    st._opts.forEach((o, i) => {
+      const b = optBtn(i, o.t); list.append(b);
+      b.onclick = () => {
+        if (st._done) return;
+        if (o.ok){
+          b.classList.add('correct'); $$('.opt', list).forEach(x => x.disabled = true);
+          feedback('ok', o.fb); const got = Math.max(0, max - st._wrong * 4);
+          if (st.after) st.after(st);
+          complete(st, got, max, o.fb);
+        } else {
+          st._wrong++; st._errors.push(o.t); b.classList.add('wrong'); b.disabled = true; feedback('bad', o.fb);
+        }
+      };
+    });
+  }},
+
+  tasks: { render(st, area){
+    if (st.q) area.append(h('p', {class:'q'}, st.q));
+    const list = h('div', {class:'opts grid'}); area.append(list);
+    const log = h('ul', {class:'findings'}); area.append(log);
+    st._list = shuffle(st.tasks.slice());
+    const need = st._list.filter(t => t.ok).length; let got = 0; const max = st.pts || 10;
+    st._list.forEach((t, i) => {
+      const b = optBtn(i, t.t); list.append(b);
+      b.onclick = () => {
+        if (st._done || b.disabled) return;
+        b.disabled = true;
+        if (t.ok){
+          b.classList.add('done'); log.append(h('li', null, t.fb)); if (t.act) t.act(st); got++;
+          if (got === need){
+            st._done = true; $$('.opt', list).forEach(x => x.disabled = true);
+            if (st.after) st.after(st);
+            feedback('ok', st.doneFb || 'All required actions completed.', '✓ Complete');
+            complete(st, Math.max(0, max - st._wrong * 3), max, st.doneFb);
+          } else { const fb = $('#fbBox'); if (fb) fb.innerHTML = ''; }
+        } else { st._wrong++; st._errors.push(t.t); b.classList.add('wrong'); feedback('bad', t.fb); }
+      };
+    });
+  }},
+
+  order: { render(st, area){
+    if (st.q) area.append(h('p', {class:'q'}, st.q));
+    const items = st.items.map((it, i) => Object.assign({}, it, {ok:true, grp: it.grp != null ? it.grp : i + 1}));
+    const dis = (st.distractors || []).map(d => Object.assign({}, d, {ok:false}));
+    st._list = shuffle(items.concat(dis));
+    const list = h('div', {class:'opts'}); area.append(list);
+    const log = h('ol', {class:'findings'}); area.append(log);
+    const max = st.pts || 10; let ooo = 0;
+    st._list.forEach((it, i) => {
+      const b = optBtn(i, it.t); list.append(b);
+      b.onclick = () => {
+        if (st._done || b.disabled) return;
+        if (!it.ok){ st._wrong++; st._errors.push(it.t); b.disabled = true; b.classList.add('wrong'); feedback('bad', it.fb); return; }
+        const remaining = st._list.filter(x => x.ok && !x._d);
+        const cg = Math.min.apply(null, remaining.map(x => x.grp));
+        if (it.grp !== cg){ ooo++; st._errors.push('Out of sequence: ' + (it.short || it.t)); feedback('warn', st.hint || 'Think about what needs to happen first.', '⚠ Not yet: sequence matters'); return; }
+        it._d = true; b.disabled = true; b.classList.add('done');
+        log.append(h('li', null, `<b>${it.short || it.t}</b>: ${it.fb}`));
+        const fb = $('#fbBox'); if (fb) fb.innerHTML = '';
+        if (it.act) it.act(st);
+        if (st._list.every(x => !x.ok || x._d)){
+          st._done = true; $$('.opt', list).forEach(x => x.disabled = true);
+          if (st.after) st.after(st);
+          feedback('ok', st.doneFb || 'Sequence complete.', '✓ Sequence complete');
+          complete(st, Math.max(0, max - ooo * 2 - st._wrong * 4), max, st.doneFb);
+        }
+      };
+    });
+  }},
+
+  multi: { render(st, area){
+    if (st.q) area.append(h('p', {class:'q'}, st.q + ' <span class="hintSmall">(select all that apply)</span>'));
+    const list = h('div', {class:'opts'}); area.append(list);
+    st._list = shuffle(st.options.slice()); st._sel = new Set();
+    st._list.forEach((o, i) => {
+      const b = optBtn(i, o.t); b.setAttribute('aria-pressed', 'false'); list.append(b);
+      b.onclick = () => { if (st._done) return; if (st._sel.has(i)){ st._sel.delete(i); b.classList.remove('sel'); b.setAttribute('aria-pressed','false'); } else { st._sel.add(i); b.classList.add('sel'); b.setAttribute('aria-pressed','true'); } };
+    });
+    const sub = h('button', {class:'btn pri', id:'checkBtn', style:'margin-top:10px'}, 'Check answers');
+    area.append(sub);
+    sub.onclick = () => {
+      if (st._done) return;
+      if (st._sel.size === 0){ feedback('warn', 'Select at least one option first.'); return; }
+      st._done = true; sub.disabled = true;
+      const nOk = st._list.filter(o => o.ok).length; let c = 0, w = 0;
+      $$('.opt', list).forEach((b, i) => {
+        const o = st._list[i], s = st._sel.has(i); b.disabled = true; b.classList.remove('sel');
+        if (s && o.ok){ c++; b.classList.add('correct'); }
+        else if (s && !o.ok){ w++; b.classList.add('wrong'); st._errors.push('Selected: ' + o.t); }
+        else if (!s && o.ok){ b.classList.add('missed'); st._errors.push('Missed: ' + o.t); }
+        if (o.fb && (s || o.ok)) b.querySelector('.otx').insertAdjacentHTML('beforeend', `<span class="why">${o.fb}</span>`);
+      });
+      const max = st.pts || 10; const got = Math.round(max * clamp((c - w) / nOk, 0, 1));
+      if (st.after) st.after(st);
+      feedback(got === max ? 'ok' : 'warn', st.doneFb, got === max ? '✓ All correct' : `You identified ${c} of ${nOk}` + (w ? `, with ${w} incorrect selection${w > 1 ? 's' : ''}` : ''));
+      complete(st, got, max, st.doneFb);
+    };
+  }},
+
+  advance: {
+    render(st, area){
+      const b = h('button', {class:'btn pri big advBtn', id:'advBtn'}, st.btn || '▶ Advance labour');
+      const bar = h('div', {class:'descent'}, '<i></i>'); area.append(b, bar); st._bar = bar.firstChild;
+      b.onclick = () => { if (st._run || st._done) return; b.disabled = true; st._run = true; st._t = 0; st._c0 = SIM.clock; SIM.ff = 8; if (st.start) st.start(st); };
+    },
+    tick(st, sdt, dt){
+      if (!st._run) return;
+      st._t += dt * SIM.speed; const t = Math.min(1, st._t / (st.dur || 5));
+      st.prog(t, st); SIM.clock = st._c0 + st.mins * t; st._bar.style.width = (t * 100) + '%';
+      if (t >= 1){ st._run = false; SIM.ff = 0; feedback('info', st.doneText, st.doneHead || 'Labour update'); complete(st, 0, 0); }
+    }
+  },
+
+  push: {
+    render(st, area){
+      Object.assign(st, {prog:0, peak:0, cIn:0, restPush:0, warned:false, good:0, missed:0, badRest:0, cycles:0});
+      area.innerHTML = `<div class="pushPanel">
+        <div class="meterRow"><div class="meter" title="Contraction strength"><i id="pm"></i><span class="thr"></span></div><div class="cstate" id="pcs">Resting</div></div>
+        <button class="pushBtn" id="pushBtn" type="button">HOLD TO PUSH</button>
+        <div class="pstats"><span>Effective pushes <b id="pGood">0</b></span><span>Missed contractions <b id="pMiss">0</b></span><span>Pushing at rest <b id="pBad">0</b></span><span>Station <b id="pSt">0</b></span></div>
+        <div class="hintSmall" style="margin-top:8px">Fetal descent to the perineum</div><div class="descent"><i id="pDesc"></i></div></div>`;
+      const pb = $('#pushBtn', area);
+      const down = e => { e.preventDefault(); if (st._done) return; P.pushing = true; pb.classList.add('held'); try { pb.setPointerCapture(e.pointerId); } catch(_){} };
+      const up = () => { P.pushing = false; pb.classList.remove('held'); };
+      pb.addEventListener('pointerdown', down);
+      ['pointerup','pointercancel','lostpointercapture'].forEach(ev => pb.addEventListener(ev, up));
+      pb.addEventListener('contextmenu', e => e.preventDefault());
+      P.cT = P.cPeriod - 2.5;
+    },
+    tick(st, sdt){
+      if (st._done) return;
+      const inC = P.bell > 0.3;
+      const pm = $('#pm'), pcs = $('#pcs'), pb = $('#pushBtn'); if (!pm) return;
+      pm.style.width = (clamp((P.toco - 8) / P.cAmp, 0, 1) * 100) + '%';
+      pcs.textContent = inC ? 'Contraction: PUSH' : P.bell > 0.02 ? (P.cT < P.cDur / 2 ? 'Contraction building…' : 'Contraction easing…') : 'Resting: breathe';
+      pcs.classList.toggle('go', inC); pb.classList.toggle('cue', inC && !P.pushing);
+      if (P.pushing){
+        if (inC){ st.cIn += sdt; st.prog = Math.min(1, st.prog + sdt * 0.078 * P.bell); st.peak = Math.max(st.peak, st.prog); }
+        else if (P.bell < 0.03){ st.restPush += sdt;
+          if (st.restPush > 0.8 && !st.warned){ st.warned = true; st.badRest++;
+            feedback('warn', 'Encourage Emma to rest and breathe between contractions. Pushing without a contraction is ineffective, tiring and reduces fetal oxygenation. Wait for the next one.', '⚠ Pushing between contractions'); } }
+      } else if (!inC && st.prog < 0.97){ st.prog = Math.max(st.peak - 0.035, st.prog - sdt * 0.004); }
+      FT.s = st.prog * 0.55; FT.ins = 45 * (1 - smooth(0.3, 0.85, st.prog)); FT.ha = -8 - 8 * st.prog;
+      chipState['Descent'] = 'active'; chipState['Flexion'] = st.prog > 0.3 ? 'done' : 'active';
+      chipState['Internal rotation'] = st.prog > 0.85 ? 'done' : st.prog > 0.3 ? 'active' : ''; renderChipsThrottled();
+      $('#pGood').textContent = st.good; $('#pMiss').textContent = st.missed; $('#pBad').textContent = st.badRest;
+      const s = Math.round(stationFromS(F.s)); $('#pSt').textContent = (s > 0 ? '+' : '') + s; $('#pDesc').style.width = (st.prog * 100) + '%';
+      if (st.prog >= 1){
+        st._done = true; P.pushing = false; pb.classList.remove('held', 'cue'); pb.disabled = true; pb.textContent = 'Head on the perineum';
+        chipState['Descent'] = 'done'; chipState['Internal rotation'] = 'done'; renderChips();
+        const got = Math.max(0, 10 - st.badRest * 2 - st.missed);
+        feedback(got >= 8 ? 'ok' : 'warn', `Effective pushing brought the head down to the perineum. During descent the head <b>flexed</b> and <b>rotated internally</b> from LOA to <b>OA</b> as it met the pelvic floor (see the view from below). ${st.badRest ? 'Remember to rest between contractions.' : ''} FHR auscultated after each contraction: early decelerations recovering promptly (normal head compression).`, '✓ Second stage progressing');
+        complete(st, got, 10, 'Push with the urge during contractions and rest in between; the head flexes and internally rotates to OA as it descends onto the pelvic floor.');
+      }
+    },
+    event(st, name){
+      if (st._done) return;
+      if (name === 'cEnd'){
+        st.cycles++; addMin(2.5); renderHeader();
+        if (st.cIn > 1.0){ st.good++; feedback('ok', 'Good, effective push with the contraction. The head advances, then recedes slightly as the contraction eases. Encourage rest.', '✓ Effective push'); }
+        else { st.missed++; feedback('warn', 'That contraction passed without an effective push. Hold PUSH (or Space) while the contraction is active.', '⚠ Missed contraction'); }
+        st.cIn = 0; st.restPush = 0; st.warned = false;
+      }
+    }
+  },
+
+  apgar: {
+    render(st, area){
+      st._pick = [null, null, null, null, null];
+      const tbl = h('table', {class:'apgar'}); const tb = h('tbody'); tbl.append(tb);
+      APGAR.forEach((a, i) => {
+        const tr = h('tr');
+        tr.innerHTML = `<td>${a.name}<div class="legendTbl">0 ${a.crit[0]} · 1 ${a.crit[1]} · 2 ${a.crit[2]}</div></td><td class="obs">${st.obs[i]}<span class="ans"></span></td><td><span class="sc">${[0,1,2].map(v => `<button type="button" data-v="${v}" title="${a.crit[v]}">${v}</button>`).join('')}</span></td>`;
+        $$('.sc button', tr).forEach(b => b.onclick = () => { if (st._done) return; st._pick[i] = +b.dataset.v; $$('.sc button', tr).forEach(x => x.classList.toggle('on', x === b)); sub.disabled = st._pick.some(v => v === null); });
+        tb.append(tr);
+      });
+      area.append(tbl);
+      const sub = h('button', {class:'btn pri', id:'apgarBtn', style:'margin-top:6px'}, 'Submit Apgar score'); sub.disabled = true; area.append(sub);
+      sub.onclick = () => {
+        if (st._done) return; st._done = true; sub.disabled = true;
+        let c = 0; const total = st.vals.reduce((a, b) => a + b, 0);
+        $$('tr', tb).forEach((tr, i) => {
+          const ok = st._pick[i] === st.vals[i]; if (ok) c++; else st._errors.push(`${APGAR[i].name}: scored ${st._pick[i]}, correct ${st.vals[i]}`);
+          $$('.sc button', tr).forEach(b => { const v = +b.dataset.v; b.disabled = true; b.classList.remove('on'); if (v === st.vals[i]) b.classList.add('right'); else if (v === st._pick[i]) b.classList.add('wrongpick'); });
+          $('.ans', tr).innerHTML = ok ? `<span style="color:var(--ok)">✓ ${st.vals[i]}: ${APGAR[i].crit[st.vals[i]]}</span>` : `<span style="color:var(--bad)">✗ Correct: ${st.vals[i]} (${APGAR[i].crit[st.vals[i]]})</span>`;
+        });
+        SIM['apgar' + st.min] = total;
+        if (st.after) st.after(st);
+        feedback(c === 5 ? 'ok' : 'warn', `Apgar at ${st.min} minute${st.min > 1 ? 's' : ''}: <b>${total}/10</b>. ${st.interp}`, c === 5 ? '✓ All five components correct' : `${c} of 5 components correct`);
+        complete(st, c * 2, 10, st.learn);
+      };
+    }
+  },
+
+  ebl: {
+    render(st, area){
+      const wrap = h('div', null, `<p class="q">Your total measured blood loss:</p><div class="eblRow"><input type="range" id="eblIn" min="0" max="2000" step="10" value="0" aria-label="Estimated blood loss in mL"><span class="eblOut" id="eblOut">0 mL</span></div>`);
+      area.append(wrap);
+      const inp = $('#eblIn', wrap), out = $('#eblOut', wrap);
+      inp.oninput = () => out.textContent = inp.value + ' mL';
+      const sub = h('button', {class:'btn pri', id:'eblBtn', style:'margin-top:10px'}, 'Record blood loss'); area.append(sub);
+      sub.onclick = () => {
+        if (st._done) return; st._done = true; sub.disabled = true; inp.disabled = true;
+        const est = +inp.value, ans = st._ans, diff = Math.abs(est - ans);
+        const got = diff <= 50 ? 10 : diff <= 150 ? 6 : diff <= 300 ? 3 : 0;
+        if (got < 10) st._errors.push(`Recorded ${est} mL; measured total was ${ans} mL`);
+        SIM.eblEst = est; SIM.eblActual = ans; reveal('ebl');
+        const cls = ans >= 1000 ? '<b>major PPH (≥ 1000 mL)</b>' : ans >= 500 ? '<b>PPH (≥ 500 mL after vaginal birth)</b>' : '<b>within normal limits (&lt; 500 mL)</b>';
+        feedback(got >= 6 ? 'ok' : 'bad', `Total = drape ${st._drape} mL + pads (${st._padW} g − ${st._padDry} g dry = ${st._pads} mL) = <b>${ans} mL</b>, ${cls}. You recorded ${est} mL. Quantitative measurement (graduated drapes, weighing: 1 g ≈ 1 mL) is more accurate than visual estimation, which typically <i>under</i>estimates larger losses.`, got >= 6 ? '✓ Blood loss quantified' : '✗ Inaccurate estimate');
+        complete(st, got, 10, 'Quantify blood loss: graduated drape + weighed pads (1 g ≈ 1 mL). PPH is ≥ 500 mL after vaginal birth; major PPH ≥ 1000 mL.');
+      };
+    }
+  },
+};
+let chipT = 0; function renderChipsThrottled(){ const n = performance.now(); if (n - chipT > 250){ chipT = n; renderChips(); } }
+
+/* =========================================================
+   Debrief
+   ========================================================= */
+function showDebrief(){
+  SIM.finished = true; renderHeader(); $('#progBar').style.width = '100%';
+  const pct = SIM.max ? Math.round(SIM.score / SIM.max * 100) : 0;
+  const band = pct >= 90 ? ['Excellent', '#1f9d63'] : pct >= 75 ? ['Competent', '#0b7a83'] : pct >= 60 ? ['Developing', '#b97c00'] : ['Needs review', '#d64b3c'];
+  const T = SIM.times;
+  const third = (T.placenta != null && T.birth != null) ? Math.round(T.placenta - T.birth) + ' min' : '--';
+  const comps = SIM.mode === 'normal' ? 'None (normal birth)' : (SIM.encountered.length ? SIM.encountered.join(', ') : 'None encountered');
+  const imperfect = SIM.results.filter(r => r.got < r.max);
+  const key = [
+    'Woman-centred care: introduce yourself, gain informed consent before every examination, and review antenatal risk factors.',
+    'Low-risk labour: intermittent auscultation (every 15–30 min in the active first stage, every 5 min or after each contraction in the second stage), palpating the maternal pulse simultaneously.',
+    'Support mobility, upright positions, hydration and spontaneous pushing with the urge; avoid prolonged directed breath-holding.',
+    'Cardinal movements: engagement, descent, flexion, internal rotation, extension, restitution, external rotation, expulsion.',
+    'Protect the perineum with a slow, controlled birth of the head and hands-on support; avoid routine episiotomy.',
+    'Active third stage: oxytocin 10 IU IM after birth, deferred cord clamping (≥ 1–3 min in a vigorous baby), controlled cord traction with uterine guarding after signs of separation.',
+    'Inspect the placenta and membranes for completeness and count the cord vessels (2 arteries, 1 vein). Quantify blood loss.',
+    'Newborn: skin-to-skin, dry and stimulate, keep warm; Apgar at 1 and 5 minutes; support the first breastfeed.',
+  ];
+  if (SIM.encountered.includes('FHR')) key.push('Abnormal CTG: intrauterine resuscitation (left lateral, check maternal pulse/BP, IV fluids, stop oxytocin if running), exclude cord prolapse, escalate early.');
+  if (SIM.encountered.includes('Shoulder dystocia')) key.push('Shoulder dystocia: call for help, McRoberts + suprapubic pressure first (HELPERR); no fundal pressure, no excessive or lateral traction; document the head-to-body interval.');
+  if (SIM.encountered.includes('PPH')) key.push('PPH: call for help, rub up a contraction, uterotonics, empty the bladder, IV access/bloods/fluids, tranexamic acid; review the 4 Ts (Tone, Trauma, Tissue, Thrombin).');
+  const deg = pct * 3.6;
+  const el = $('#debrief');
+  el.innerHTML = `
+    <div class="tag">Debrief</div>
+    <h2 style="margin-top:6px">Simulation complete: ${band[0]}</h2>
+    <div class="scoreRing">
+      <div class="ring" style="background:conic-gradient(${band[1]} ${deg}deg,#e7edf4 ${deg}deg)"><span>${pct}%</span></div>
+      <div><div style="font-size:15px"><b>${SIM.score}</b> of <b>${SIM.max}</b> points across ${SIM.results.length} assessed decisions.</div>
+      <div class="hintSmall" style="margin-top:4px">Mode: ${SIM.mode === 'normal' ? 'Normal birth' : SIM.mode === 'random' ? 'Random complication' : 'Chosen complications'} · Complications: ${comps}</div>
+      <div class="hintSmall">${imperfect.length ? imperfect.length + ' step(s) to review below.' : 'Every decision scored full marks. Well done!'}</div></div>
+    </div>
+    <div class="kv">
+      <div>Admission<b>${fmtClock(T.admit != null ? T.admit : 500)}</b></div>
+      <div>Fully dilated<b>${T.full != null ? fmtClock(T.full) : '--'}</b></div>
+      <div>Time of birth<b>${T.birth != null ? fmtClock(T.birth) : '--'}</b></div>
+      <div>Third stage<b>${third}</b></div>
+      <div>Blood loss (measured)<b>${SIM.eblActual != null ? SIM.eblActual + ' mL' : '--'}</b></div>
+      <div>Your recorded EBL<b>${SIM.eblEst != null ? SIM.eblEst + ' mL' : '--'}</b></div>
+      <div>Apgar 1 min<b>${SIM.apgar1 != null ? SIM.apgar1 : '--'}</b></div>
+      <div>Apgar 5 min<b>${SIM.apgar5 != null ? SIM.apgar5 : '--'}</b></div>
+    </div>
+    <h3 style="margin:10px 0 6px">Learning points to review</h3>
+    ${imperfect.length ? `<ul class="res">${imperfect.map(r => `<li class="partial"><div class="rh"><span>${r.title}</span><em>${r.got}/${r.max}</em></div><div class="lp">${r.learn}</div>${r.errors.length ? `<div class="err">Your choices: ${r.errors.slice(0, 4).join(' · ')}</div>` : ''}</li>`).join('')}</ul>` : '<p class="hintSmall">No missed points. Try a complication mode next.</p>'}
+    <h3 style="margin:14px 0 4px">Key practice points</h3>
+    <ul class="keypts">${key.map(k => `<li>${k}</li>`).join('')}</ul>
+    <details class="revw"><summary>All decisions (${SIM.results.length})</summary>
+      <ul class="res">${SIM.results.map(r => `<li class="${r.got === r.max ? 'perfect' : 'partial'}"><div class="rh"><span>${r.got === r.max ? '✓' : '△'} ${r.title}</span><em>${r.got}/${r.max}</em></div></li>`).join('')}</ul>
+    </details>
+    <div class="disc" style="margin-top:14px">Educational simulation only, not medical advice. Clinical content is simplified; follow current local guidelines (e.g. RANZCOG, ANZCOR, your health service's policies).</div>
+    <div class="startRow" style="margin-top:6px">
+      <button class="btn" id="dbPrint">🖨 Print / save PDF</button>
+      <button class="btn" id="dbMode">Change mode</button>
+      <button class="btn pri" id="dbAgain">↺ Run again</button>
+    </div>`;
+  $('#debriefOv').classList.add('show');
+  $('#debriefOv').scrollTop = 0;
+  $('#dbPrint').onclick = () => window.print();
+  $('#dbMode').onclick = () => { $('#debriefOv').classList.remove('show'); $('#startOv').classList.add('show'); };
+  $('#dbAgain').onclick = () => startSim(SIM.mode, Object.keys(SIM.comps).filter(k => SIM.comps[k]));
+  // scenario card summary
+  const body = $('#scenBody'); body.innerHTML = `<h2>Simulation complete</h2><p class="narr">Score <b>${SIM.score}/${SIM.max}</b> (${pct}%). Review your debrief for learning points.</p>`;
+  const ob = h('button', {class:'btn pri'}, 'Open debrief'); ob.onclick = () => $('#debriefOv').classList.add('show'); body.append(ob);
+  $('#stepTag').textContent = 'Debrief'; $('#stepNo').textContent = '';
+}
+
+/* =========================================================
+   Scenario content
+   ========================================================= */
+const PLAC_FIG = `<svg class="placFig" viewBox="0 0 440 175" role="img" aria-label="Placenta inspection diagram">
+  <g transform="translate(78 80)">
+    <ellipse rx="64" ry="58" fill="#b9566c" stroke="#8f3a4e" stroke-width="2"/>
+    <path d="M-20 -55 Q-12 -20 -30 0 Q-45 20 -40 52 M-30 0 Q0 6 22 -12 Q34 -30 30 -54 M22 -12 Q40 6 62 4 M0 6 Q6 30 -6 57 M-30 0 Q-50 -6 -62 -16 M6 30 Q30 30 44 44" fill="none" stroke="#7d2f42" stroke-width="2" stroke-linecap="round"/>
+    <text y="76" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#5d4950">Maternal surface</text>
+    <text y="90" text-anchor="middle" style="font-size:10px;fill:#7d6a70">cotyledons complete</text>
+  </g>
+  <g transform="translate(222 80)">
+    <ellipse rx="64" ry="58" fill="#e2b3c0" stroke="#a86a7c" stroke-width="2"/>
+    <ellipse rx="70" ry="64" fill="none" stroke="#cfd8e6" stroke-width="3" stroke-dasharray="2 3"/>
+    <path d="M0 0 Q-20 -20 -44 -30 M0 0 Q14 -26 30 -46 M0 0 Q30 4 54 -6 M0 0 Q20 24 30 46 M0 0 Q-24 18 -50 22 M0 0 Q-6 30 -14 52" fill="none" stroke="#6f86c2" stroke-width="2.4" stroke-linecap="round"/>
+    <circle r="8" fill="#e9eef8" stroke="#8597c2" stroke-width="2"/>
+    <text y="76" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#5d4950">Fetal surface</text>
+    <text y="90" text-anchor="middle" style="font-size:10px;fill:#7d6a70">central cord insertion · membranes</text>
+  </g>
+  <g transform="translate(368 70)">
+    <circle r="36" fill="#eef2fa" stroke="#9fb0dd" stroke-width="2"/>
+    <circle cx="-13" cy="12" r="7" fill="#6f86c2" stroke="#4c639c" stroke-width="2"/>
+    <circle cx="13" cy="12" r="7" fill="#6f86c2" stroke="#4c639c" stroke-width="2"/>
+    <circle cx="0" cy="-11" r="11" fill="#c95b6f" stroke="#9c3f52" stroke-width="1.2"/>
+    <text y="56" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#5d4950">Cord cross-section</text>
+    <text y="70" text-anchor="middle" style="font-size:10px;fill:#7d6a70">1 vein (red) · 2 arteries (blue)</text>
+  </g>
+</svg>`;
+
+function buildSteps(c){
+  const S = []; const add = o => S.push(o);
+  const T = SIM.times;
+
+  /* ---------------- ADMISSION ---------------- */
+  add({ id:'welcome', stage:0, tag:'Admission', title:'Welcome and initial approach', type:'mcq',
+    enter(){ setScene('labour'); setFT({s:-0.42, ha:-6, ins:45, op:1, ox:0, oy:0}); snapF(); P.dil = 3; contr(20, 8, 32); chips({}); annot(''); T.admit = SIM.clock; },
+    text:`<p><b>Emma, 29</b>, G2 P1 (one previous uncomplicated vaginal birth) is <b>39+4 weeks</b>. Low-risk pregnancy; blood group O positive; GBS negative. Contractions began at 04:00 and are now regular. Membranes intact; fetal movements normal. She arrives at the birth suite with her partner at 08:20.</p>`,
+    q:`What is your first priority?`,
+    options:[
+      {t:`Introduce yourself, confirm her identity, gain consent, and review her antenatal record and birth plan`, ok:true, fb:`Woman-centred care starts with an introduction, consent and a review of the antenatal history (risk factors, blood group, GBS status, birth preferences). This guides the rest of your assessment.`},
+      {t:`Perform a vaginal examination straight away to see how far along she is`, ok:false, fb:`A VE is invasive and needs a clear indication and informed consent. Take a history and baseline observations first.`},
+      {t:`Commence continuous CTG monitoring immediately`, ok:false, fb:`An admission CTG is not recommended for low-risk women; it increases intervention without improving outcomes. Assess first, then choose appropriate fetal surveillance.`},
+      {t:`Advise her to go home because multiparous labours are long`, ok:false, fb:`Assess before deciding anything. Multiparous women often progress quickly.`},
+    ]});
+
+  add({ id:'obs', stage:0, tag:'Admission', title:'Baseline maternal observations', type:'tasks', dt:5,
+    text:`<p>Emma consents to an assessment. Select the observations you would do now. Results appear on the live monitor.</p>`,
+    q:`Choose all appropriate assessments:`,
+    tasks:[
+      {t:`Pulse`, ok:true, fb:`Pulse 82 bpm, regular. Normal.`, act(){ reveal('mhr'); }},
+      {t:`Blood pressure`, ok:true, fb:`BP 118/74 mmHg. Normal; screens for hypertensive disorders of pregnancy.`, act(){ reveal('bp'); }},
+      {t:`Temperature`, ok:true, fb:`36.8 °C. Afebrile (pyrexia ≥ 38 °C may indicate infection).`, act(){ reveal('temp'); }},
+      {t:`Respiratory rate and SpO₂`, ok:true, fb:`RR 16/min, SpO₂ 98% on room air.`, act(){ reveal('rr', 'spo2'); }},
+      {t:`Urinalysis`, ok:true, fb:`Urinalysis: no protein, glucose or ketones.`},
+      {t:`Palpate contractions (frequency, duration, strength)`, ok:true, fb:`3 contractions in 10 min, lasting about 45–50 s, moderate strength.`, act(){ reveal('toco'); }},
+      {t:`Insert an IV cannula routinely`, ok:false, fb:`Not routinely indicated for a low-risk woman. It restricts mobility and isn't an assessment.`},
+      {t:`Perform an artificial rupture of membranes`, ok:false, fb:`Routine amniotomy is not recommended and is an intervention, not an assessment.`},
+    ],
+    doneFb:`Baseline observations are within normal limits. Document them, and plot them on the partogram once established labour is confirmed.`,
+    learn:`Baseline observations: pulse, BP, temperature, RR/SpO₂, urinalysis and contraction pattern. Avoid routine interventions such as IV cannulation or amniotomy.`});
+
+  add({ id:'sfh', stage:0, tag:'Abdominal palpation', title:'Symphysis–fundal height', type:'mcq', dt:4,
+    enter(){ annot(`<path d="M150 286 C100 262 74 170 92 100 C108 44 160 14 205 12" fill="none" stroke="#e0a800" stroke-width="4" stroke-dasharray="1 7" stroke-linecap="round"/><circle cx="150" cy="286" r="4" fill="#e0a800"/><circle cx="205" cy="12" r="4" fill="#e0a800"/>` + svgLabel(128, 150, 'SFH 38 cm', '#b97c00')); },
+    text:`<p>With Emma lying semi-recumbent (never flat), you measure from the upper border of the symphysis pubis to the top of the fundus, tape facing down to avoid bias: <b>38 cm</b>.</p>`,
+    q:`At 39+4 weeks, how do you interpret this?`,
+    options:[
+      {t:`Consistent with gestation: within ±2 cm of gestational weeks`, ok:true, fb:`From 24 weeks, SFH in cm roughly equals gestational age in weeks (±2 cm). 38 cm at 39+4 is normal. Plot it on a customised growth chart.`},
+      {t:`Small for dates: arrange an urgent growth scan`, ok:false, fb:`38 cm is within 2 cm of 39 weeks. A single measurement within range doesn't need a scan.`},
+      {t:`Large for dates: suspect macrosomia`, ok:false, fb:`Large for dates would be more than 2 cm above the gestational age.`},
+      {t:`SFH is meaningless at term, so ignore it`, ok:false, fb:`SFH remains a useful screening tool at term, and also confirms the uterus size matches dates.`},
+    ]});
+
+  add({ id:'leopold', stage:0, tag:'Abdominal palpation', title:"Leopold's manoeuvres", type:'order', dt:3,
+    enter(){ annot(''); },
+    text:`<p>Perform the four Leopold's manoeuvres <b>in the correct sequence</b>, between contractions, with warm hands. Each finding appears below.</p>`,
+    q:`Select the manoeuvres in order:`,
+    items:[
+      {t:`Fundal grip`, short:`1 · Fundal grip`, fb:`A soft, broad, irregular mass at the fundus: the fetal <b>breech</b>.`, act(){ annot(`<ellipse cx="205" cy="30" rx="80" ry="22" fill="#0b7a83" opacity=".18" stroke="#0b7a83" stroke-dasharray="4 3"/>` + svgLabel(205, 34, '1 · Fundal grip')); }},
+      {t:`Lateral (umbilical) grip`, short:`2 · Lateral grip`, fb:`Smooth, firm, continuous resistance on the mother's <b>left</b>: the fetal <b>back</b>. Small irregular parts (limbs) on the right.`, act(){ annot(`<ellipse cx="88" cy="150" rx="24" ry="62" fill="#0b7a83" opacity=".18" stroke="#0b7a83" stroke-dasharray="4 3"/>` + svgLabel(150, 150, '2 · Lateral grips (both sides)')); }},
+      {t:`Pawlik's grip`, short:`3 · Pawlik's grip`, fb:`Just above the symphysis: a hard, round presenting part, the <b>head</b>. It is only slightly ballotable.`, act(){ annot(`<ellipse cx="170" cy="262" rx="34" ry="18" fill="#0b7a83" opacity=".18" stroke="#0b7a83" stroke-dasharray="4 3"/>` + svgLabel(110, 236, "3 · Pawlik's grip")); }},
+      {t:`Pelvic (deep) grip`, short:`4 · Pelvic grip`, fb:`Facing her feet, your fingers diverge slightly over the head: <b>3/5 palpable</b> above the brim. Not yet engaged; head well flexed.`, act(){ annot(`<ellipse cx="200" cy="262" rx="46" ry="20" fill="#0b7a83" opacity=".18" stroke="#0b7a83" stroke-dasharray="4 3"/>` + svgArrow(150, 220, 175, 255) + svgArrow(255, 222, 232, 255) + svgLabel(205, 205, '4 · Pelvic grip')); }},
+    ],
+    distractors:[
+      {t:`Deep palpation during a contraction`, fb:`Palpate between contractions. During one, the uterus is hard, findings are unreliable and it is painful for her.`},
+    ],
+    hint:`Leopold's sequence: fundus, then sides, then the presenting part (Pawlik's), then the pelvic grip facing her feet.`,
+    doneFb:`Palpation is complete. Always explain each step and gain consent as you go.`,
+    learn:`Leopold's manoeuvres in order: fundal grip (what is in the fundus), lateral grips (back vs limbs), Pawlik's grip (presenting part), pelvic grip (engagement in fifths palpable, flexion).`});
+
+  add({ id:'lie', stage:0, tag:'Abdominal palpation', title:'Interpreting your findings', type:'mcq', dt:1,
+    enter(){ annot(''); },
+    text:`<p>Breech in the fundus, back on the mother's left, head presenting and flexed, 3/5 palpable.</p>`,
+    q:`What are the lie, presentation and position?`,
+    options:[
+      {t:`Longitudinal lie, cephalic presentation, left occipito-anterior (LOA)`, ok:true, fb:`Back on the left anteriorly with a flexed head presenting: LOA, the most common and favourable position for labour. The inset shows the head as seen from below (occiput toward the mother's left-anterior).`},
+      {t:`Transverse lie`, ok:false, fb:`In a transverse lie the poles are in the flanks and the fundus and pelvis feel empty.`},
+      {t:`Longitudinal lie, breech presentation`, ok:false, fb:`The hard, round, ballotable pole is in the pelvis, so this is cephalic. The breech is in the fundus.`},
+      {t:`Cephalic, right occipito-posterior (ROP)`, ok:false, fb:`In OP positions the back is felt posteriorly, with limbs across the front of the abdomen. Here the back is clearly left-anterior.`},
+    ]});
+
+  add({ id:'fh', stage:0, tag:'Fetal wellbeing', title:'Auscultating the fetal heart', type:'mcq', dt:2,
+    enter(){ annot(`<circle cx="62" cy="214" r="10" fill="#0b7a83" opacity=".25" stroke="#0b7a83"/>` + svgLabel(62, 240, 'Doppler?')); },
+    q:`Where do you place the hand-held Doppler to auscultate the fetal heart?`,
+    options:[
+      {t:`Below the umbilicus on the mother's left, over the fetal back/anterior shoulder`, ok:true, fb:`In LOA the fetal heart is best heard below the umbilicus on the left. Palpate the maternal pulse at the same time to tell the two apart. FHR: <b>140 bpm</b>, regular. The trace now starts on the monitor.`},
+      {t:`Above the umbilicus on the right`, ok:false, fb:`That suits a breech presentation with the back on the right.`},
+      {t:`Directly over the fundus`, ok:false, fb:`The fundus contains the breech; the heart is heard best through the fetal back, near the shoulder.`},
+      {t:`Over the symphysis pubis`, ok:false, fb:`Too low. The fetal head is there, and the heart lies above it, through the back.`},
+    ],
+    after(){ reveal('fhr'); P.ctgOn = true; P.ctgMsg = ''; annot(`<circle cx="62" cy="214" r="10" fill="#1f9d63" opacity=".3" stroke="#1f9d63"/>` + svgLabel(62, 240, 'FH 140 bpm', '#1f9d63')); }});
+
+  add({ id:'ve1', stage:0, tag:'Assessment', title:'Vaginal examination and diagnosing labour', type:'mcq', dt:5,
+    enter(){ annot(''); P.dil = 4; reveal('dil', 'stn'); setFT({s:-0.3}); chips({'Engagement':'active'}); },
+    text:`<p>With Emma's informed consent and privacy, a VE finds the cervix <b>4 cm dilated</b>, fully effaced, soft and well applied to the head. Vertex at station <b>−2</b>, LOA. Membranes intact. Contractions 3 in 10.</p>`,
+    q:`What is your diagnosis?`,
+    options:[
+      {t:`Established (active) first stage of labour`, ok:true, fb:`Regular painful contractions with progressive cervical change from about 4–5 cm mark established labour. Document the findings and start a partogram.`},
+      {t:`Latent phase: send her home`, ok:false, fb:`Regular contractions with 4 cm dilatation and full effacement in a multipara indicates established labour.`},
+      {t:`Second stage of labour`, ok:false, fb:`The second stage begins at full dilatation (10 cm).`},
+      {t:`False (prodromal) labour`, ok:false, fb:`False labour causes no cervical change. Here the cervix is 4 cm and effaced.`},
+    ]});
+
+  /* ---------------- FIRST STAGE ---------------- */
+  add({ id:'monitor', stage:1, tag:'First stage', title:'Fetal monitoring plan', type:'mcq', dt:3,
+    enter(){ contr(15, 8, 50); },
+    text:`<p>Emma has no risk factors.</p>`,
+    q:`Which fetal heart rate monitoring is recommended in the active first stage?`,
+    options:[
+      {t:`Intermittent auscultation for 60 s after a contraction, every 15–30 minutes, palpating the maternal pulse`, ok:true, fb:`Intermittent auscultation is recommended for low-risk women (RANZCOG IFS guideline). <i>The simulator shows a continuous trace so you can watch the patterns.</i>`},
+      {t:`Continuous CTG for every woman in labour`, ok:false, fb:`Continuous CTG is indicated when risk factors are present. In low-risk women it increases caesarean and instrumental birth without improving neonatal outcomes.`},
+      {t:`Auscultate once every 2 hours`, ok:false, fb:`Far too infrequent to detect fetal compromise.`},
+      {t:`No fetal monitoring is needed in a low-risk labour`, ok:false, fb:`All women in labour need fetal heart rate surveillance appropriate to their risk.`},
+    ]});
+
+  add({ id:'support', stage:1, tag:'First stage', title:'Supportive care in labour', type:'multi', dt:5,
+    q:`Which care measures are appropriate for Emma now?`,
+    options:[
+      {t:`Continuous one-to-one support`, ok:true, fb:`Continuous support improves outcomes and satisfaction.`},
+      {t:`Encourage mobility and upright or forward-leaning positions`, ok:true, fb:`Upright positions shorten the first stage and use gravity.`},
+      {t:`Offer oral fluids and a light diet as tolerated`, ok:true, fb:`Prevents dehydration and ketosis in low-risk women.`},
+      {t:`Encourage her to empty her bladder every 2–4 hours`, ok:true, fb:`A full bladder can impede descent and contractions.`},
+      {t:`Discuss pain relief options: water immersion, heat, TENS, nitrous oxide, opioids, epidural`, ok:true, fb:`Informed choice of non-pharmacological and pharmacological options.`},
+      {t:`Keep her lying flat on her back`, ok:false, fb:`The supine position causes aortocaval compression, reducing placental perfusion.`},
+      {t:`Give a routine enema`, ok:false, fb:`No evidence of benefit, and it causes discomfort.`},
+      {t:`Restrict all oral intake`, ok:false, fb:`Unnecessary for low-risk women.`},
+    ],
+    doneFb:`Continuous support, mobility, hydration, bladder care and informed pain relief choices are core midwifery care in the first stage.`});
+
+  add({ id:'adv1', stage:1, tag:'First stage', title:'Labour progressing', type:'advance', dur:5, mins:150,
+    text:`<p>Monitor the contractions and fetal heart while labour progresses. Press <b>Advance labour</b> to fast-forward about 2½ hours of care (4-hourly VEs, hourly pulse, half-hourly contractions, regular FHR auscultation).</p>`,
+    start(){ contr(15, 8.5, 60); },
+    prog(t){ P.dil = lerp(4, 7, t); FT.s = lerp(-0.3, -0.15, t); },
+    doneText:`Contractions are now 4 in 10, strong, lasting about 60 s. VE: cervix <b>7 cm</b>, station <b>−1</b>, LOA. Progress is normal on the partogram (about 1 cm/hour or more).`});
+
+  add({ id:'srom', stage:1, tag:'First stage', title:'Spontaneous rupture of membranes', type:'mcq', dt:10,
+    enter(){ annot(svgLabel(255, 270, 'SROM', '#4a7fc1', 'start')); T.srom = SIM.clock; },
+    text:`<p>During a contraction Emma feels a sudden gush of fluid. Her membranes have ruptured spontaneously.</p>`,
+    q:`What do you assess first?`,
+    options:[
+      {t:`Auscultate the fetal heart, and note the colour, volume and odour of the liquor`, ok:true, fb:`After SROM, listen to the FHR (cord prolapse or compression can cause bradycardia) and inspect the liquor. Clear is reassuring; meconium- or blood-stained liquor needs escalation. Here: <b>clear liquor, FHR 138 bpm</b>.`},
+      {t:`Do a VE immediately in every case`, ok:false, fb:`A VE after SROM is indicated if cord prolapse is suspected (abnormal FHR, high or ill-fitting presenting part), not routinely.`},
+      {t:`Start IV antibiotics`, ok:false, fb:`Antibiotics aren't indicated for SROM in established labour at term without risk factors (she is GBS negative).`},
+      {t:`No action is needed`, ok:false, fb:`Always check the FHR and the liquor after membranes rupture.`},
+    ],
+    after(){ annot(''); }});
+
+  if (c.brady){
+    add({ id:'brady', stage:1, tag:'Complication', title:'Fetal heart rate abnormality', type:'tasks', dt:2,
+      enter(){ encounter('brady'); P.fhrMode = 'late'; P.accels = false; later(() => { if (P.fhrMode === 'late') P.fhrMode = 'brady'; }, 9000);
+        annot(svgLabel(300, 170, 'FHR ↓', '#d64b3c')); },
+      text:`<p>At 8 cm, intermittent auscultation after a contraction finds the FHR dropping to about 90 bpm with slow recovery. You start continuous CTG. It shows <b>late decelerations</b>, then a <b>prolonged deceleration</b> (~85 bpm) with reduced variability. Watch the monitor.</p>`,
+      q:`Select all appropriate immediate actions:`,
+      tasks:[
+        {t:`Call for help: escalate to the obstetric team (emergency bell if prolonged)`, ok:true, fb:`Senior midwife and obstetric registrar attending.`},
+        {t:`Reposition Emma to left lateral`, ok:true, fb:`Left lateral relieves aortocaval and cord compression, improving placental perfusion.`},
+        {t:`Palpate the maternal pulse to confirm the trace is fetal`, ok:true, fb:`Maternal HR 86 bpm, distinct from the FHR, so the trace is fetal.`},
+        {t:`Check maternal BP; IV access and fluids if hypotensive`, ok:true, fb:`BP 112/70 mmHg. IV cannula inserted; fluids given if hypotensive.`},
+        {t:`VE to exclude cord prolapse and assess progress`, ok:true, fb:`No cord felt. Cervix 8 cm, station −1.`},
+        {t:`Lie her flat on her back`, ok:false, fb:`Supine positioning worsens aortocaval compression and fetal hypoxia.`},
+        {t:`Encourage her to push to speed up the birth`, ok:false, fb:`She is not fully dilated. Pushing now risks cervical trauma and worsens fetal compromise.`},
+        {t:`Reassess in 30 minutes`, ok:false, fb:`A prolonged deceleration needs immediate action, not delay.`},
+      ],
+      doneFb:`After intrauterine resuscitation the FHR recovers to a baseline of 140 bpm with normal variability. The registrar reviews: continue continuous CTG with a low threshold for expedited birth if abnormalities recur. Document times and actions.`,
+      learn:`Abnormal FHR: call for help, left lateral position, distinguish maternal from fetal heart rate, check BP and give fluids, exclude cord prolapse, stop oxytocin if running, and prepare for expedited birth if no recovery.`,
+      after(){ P.fhrMode = 'normal'; P.accels = true; P.accelT = 8; annot(''); }});
+    add({ id:'bradQ', stage:1, tag:'Complication', title:'CTG interpretation', type:'mcq', dt:15,
+      q:`Recurrent <b>late</b> decelerations (starting after the peak of the contraction, with the nadir after the peak) are most associated with:`,
+      options:[
+        {t:`Uteroplacental insufficiency and fetal hypoxaemia`, ok:true, fb:`Late decelerations reflect reduced uteroplacental perfusion and need prompt evaluation and escalation, especially with reduced variability or tachycardia.`},
+        {t:`Head compression`, ok:false, fb:`Head compression causes <b>early</b> decelerations that mirror the contraction (nadir at its peak). They are usually benign, especially in the second stage.`},
+        {t:`Umbilical cord compression`, ok:false, fb:`Cord compression typically causes <b>variable</b> decelerations: abrupt drops of varying shape and timing.`},
+        {t:`Fetal sleep cycle`, ok:false, fb:`Fetal sleep causes reduced variability for up to about 40 minutes, not decelerations.`},
+      ]});
+  }
+
+  add({ id:'adv2', stage:1, tag:'First stage', title:'Transition', type:'advance', dur:4, mins:c.brady ? 40 : 55,
+    text:`<p>Contractions intensify. Press <b>Advance labour</b> to continue.</p>`,
+    start(){ contr(13, 8, 72); },
+    prog(t){ P.dil = lerp(7, 10, t); FT.s = lerp(-0.15, 0, t); FT.ha = -6 - 2 * t; if (t > 0.9) chip('Engagement', 'done'); },
+    doneHead:'Transition',
+    doneText:`Emma becomes restless and says she can't do this any more. She feels an involuntary urge to bear down and rectal pressure.`});
+
+  add({ id:'full', stage:1, tag:'Second stage', title:'Confirming the second stage', type:'mcq', dt:3,
+    enter(){ P.dil = 10; T.full = SIM.clock; chips({'Engagement':'done', 'Descent':'active'}); },
+    text:`<p>With consent, a VE confirms the cervix is <b>fully dilated (10 cm)</b>. Vertex at station <b>0</b> (level with the ischial spines), LOA, no caput or moulding.</p>`,
+    q:`What is the most appropriate approach to pushing?`,
+    options:[
+      {t:`Support spontaneous pushing with her urge, in an upright or other position of her choice`, ok:true, fb:`Spontaneous, woman-directed pushing is recommended. Upright and lateral positions widen the pelvic outlet. Auscultate the FHR at least every 5 minutes or after each contraction.`},
+      {t:`Coach sustained breath-holding (10-second Valsalva, three per contraction) regardless of urge`, ok:false, fb:`Prolonged directed Valsalva can reduce fetal oxygenation and increase perineal trauma. Reserve directed pushing for specific situations, such as an epidural with no urge.`},
+      {t:`Lie her flat with legs in stirrups (lithotomy)`, ok:false, fb:`Lithotomy narrows the outlet, increases perineal trauma and aortocaval compression.`},
+      {t:`Tell her not to push until the head is visible`, ok:false, fb:`With full dilatation and a strong urge, suppressing it is distressing and unnecessary.`},
+    ]});
+
+  /* ---------------- SECOND STAGE ---------------- */
+  add({ id:'push', stage:2, tag:'Second stage', title:'Pushing with contractions', type:'push',
+    enter(){ contr(12, 7, 82); P.earlyDecels = true; P.accels = false; },
+    text:`<p>Hold <b>PUSH</b> (or the <b>Space</b> bar) only <b>while a contraction is active</b>: watch the contraction meter and the toco trace. Release and rest between contractions. Watch the fetus descend, flex and rotate (LOA → OA) in the diagrams.</p>`});
+
+  add({ id:'crown', stage:2, tag:'Second stage', title:'Crowning', type:'mcq', dt:2,
+    enter(){ setFT({s:0.72, ha:-14, ins:0}); chip('Extension', 'active'); annot(svgLabel(250, 420, 'Crowning', '#b97c00', 'start')); },
+    text:`<p>The head is <b>crowning</b>: the biparietal diameter is distending the perineum and no longer recedes between contractions. Emma feels intense stinging.</p>`,
+    q:`How do you manage the birth of the head?`,
+    options:[
+      {t:`Encourage her to breathe or pant through contractions with small, gentle pushes so the head is born slowly, with hands-on perineal support and a warm compress`, ok:true, fb:`A slow, controlled birth of the head with hands-on support reduces severe perineal trauma (OASI), in line with Australian perineal protection bundles.`},
+      {t:`Ask her to push as hard as she can to get it over with`, ok:false, fb:`Rapid, uncontrolled birth of the head increases the risk of severe perineal tears.`},
+      {t:`Perform a routine episiotomy`, ok:false, fb:`Routine episiotomy is not recommended. Reserve it for indications such as fetal compromise or an instrumental birth.`},
+      {t:`Apply fundal pressure`, ok:false, fb:`Fundal pressure is not recommended and can cause uterine and perineal trauma.`},
+    ],
+    after(){ annot(''); setFT({s:0.95, ha:36}); later(() => { chip('Extension', 'done'); annot(svgLabel(250, 420, 'Head born by extension', '#1f9d63', 'start')); }, 900); }});
+
+  add({ id:'head', stage:2, tag:'Second stage', title:'After the birth of the head', type:'mcq', dt:1,
+    enter(){ T.head = SIM.clock; },
+    text:`<p>The head is born by <b>extension</b>: the occiput pivots under the symphysis, then the brow, face and chin sweep the perineum. Time noted.</p>`,
+    q:`What do you do now?`,
+    options:[
+      {t:`Note the time, and feel for a nuchal cord around the baby's neck`, ok:true, fb:`Check for a nuchal cord and note the time of birth of the head. This becomes crucial if the shoulders don't follow.`},
+      {t:`Pull the head down firmly to deliver the shoulders straight away`, ok:false, fb:`Wait for restitution and the next contraction. Traction before restitution risks brachial plexus injury.`},
+      {t:`Routinely suction the baby's mouth and nose`, ok:false, fb:`Routine oro- or nasopharyngeal suction is not recommended, even with meconium-stained liquor in a vigorous baby.`},
+      {t:`Clamp and cut the cord now`, ok:false, fb:`There's no indication. The cord is the baby's oxygen supply until breathing is established.`},
+    ]});
+
+  add({ id:'nuchal', stage:2, tag:'Second stage', title:'Nuchal cord', type:'mcq',
+    enter(){ $('#nuchal').style.display = ''; annot(svgLabel(250, 420, 'Loose nuchal cord', '#4a7fc1', 'start')); },
+    text:`<p>You feel a <b>loose loop of cord</b> around the baby's neck.</p>`,
+    q:`What is the best action?`,
+    options:[
+      {t:`Gently slip the loop over the head, or leave it and keep the head close to the perineum as the body is born (somersault manoeuvre)`, ok:true, fb:`Loose nuchal cords are common (about 1 in 4 births). Reduce them gently, or use the somersault manoeuvre. Clamping and cutting is reserved for a tight cord that cannot be reduced.`},
+      {t:`Clamp and cut the cord before the shoulders are born`, ok:false, fb:`Cutting the cord before birth removes the baby's oxygen supply. If shoulder dystocia then occurs, the baby is at much greater risk of hypoxia.`},
+      {t:`Pull on the cord to loosen it`, ok:false, fb:`Traction on the cord can tear it or cause it to spasm.`},
+      {t:`Ignore it and pull the baby out quickly`, ok:false, fb:`Always manage the cord deliberately. Rapid traction risks injury.`},
+    ],
+    after(){ later(() => { $('#nuchal').style.display = 'none'; annot(''); }, 800); }});
+
+  add({ id:'restit', stage:2, tag:'Second stage', title:'Restitution and external rotation', type:'mcq', dt:1,
+    text:`<p>The baby's head is born facing the mother's sacrum (OA). The shoulders are still in the oblique diameter of the pelvis.</p>`,
+    q:`What happens next, and what do you do?`,
+    options:[
+      {t:`Wait, hands off, for the head to restitute and then externally rotate with the next contraction as the shoulders rotate into the anteroposterior diameter`, ok:true, fb:`Restitution untwists the neck (back to LOA); external rotation follows as the shoulders rotate internally. The face then turns to the mother's left thigh.`},
+      {t:`Rotate the head forcefully to face the mother's thigh`, ok:false, fb:`Let rotation happen spontaneously. Forced rotation can injure the neck and brachial plexus.`},
+      {t:`Apply firm downward traction immediately`, ok:false, fb:`Wait for the next contraction and external rotation before gentle axial traction.`},
+      {t:`Ask her to push continuously without stopping`, ok:false, fb:`Await the next contraction; continuous pushing doesn't help rotation.`},
+    ],
+    after(){ if (!c.sd){ chip('Restitution', 'active'); setFT({ins:45}); later(() => { chip('Restitution', 'done'); chip('External rotation', 'active'); setFT({ins:90}); }, 1500); later(() => chip('External rotation', 'done'), 3000); } }});
+
+  if (c.sd){
+    add({ id:'sd', stage:2, tag:'Emergency', title:'Shoulder dystocia: HELPERR', type:'order', pts:15,
+      enter(){ encounter('sd'); setFT({s:0.86}); annot(svgLabel(250, 420, 'Turtle sign', '#d64b3c', 'start') + svgArrow(200, 404, 214, 380, 'r')); P.fhrMode = 'normal'; },
+      text:() => `<p>With the next contraction the head does <b>not</b> restitute. It retracts tightly against the perineum (<b>the turtle sign</b>), and routine axial traction fails to deliver the anterior shoulder. <b>Shoulder dystocia.</b> Head born at ${fmtClock(T.head || SIM.clock)}.</p>`,
+      q:`Act in the right sequence:`,
+      items:[
+        {t:`Call for HELP: emergency bell; senior midwife, obstetrician, neonatal team, anaesthetist`, short:`H · Help`, grp:1, fb:`Help called. Ask Emma to stop pushing; a scribe records times.`},
+        {t:`Evaluate for episiotomy (to make room for internal manoeuvres)`, short:`E · Evaluate for episiotomy`, grp:2, fb:`Episiotomy does not relieve the bony obstruction but may help access for internal manoeuvres. Not needed yet.`},
+        {t:`Legs: McRoberts manoeuvre (lie her flat and hyperflex her thighs onto her abdomen)`, short:`L · Legs (McRoberts)`, grp:2, fb:`McRoberts flattens the lumbosacral angle and rotates the symphysis upward. It resolves about 40% of cases on its own.`,
+          act(){ annot(svgLabel(300, 60, 'McRoberts: thighs hyperflexed', '#0b7a83') + svgLabel(250, 420, 'Turtle sign', '#d64b3c', 'start')); }},
+        {t:`Pressure: suprapubic pressure from the side of the fetal back, with routine axial traction`, short:`P · Suprapubic pressure`, grp:3, fb:`Continuous, then rocking, pressure on the posterior aspect of the anterior shoulder adducts it into the oblique diameter. With McRoberts it resolves most cases.`,
+          act(){ annot(svgLabel(300, 60, 'McRoberts: thighs hyperflexed', '#0b7a83') + svgArrow(70, 240, 128, 290, 'o') + svgLabel(60, 228, 'Suprapubic pressure', '#b97c00')); }},
+      ],
+      distractors:[
+        {t:`Apply fundal pressure`, fb:`<b>Contraindicated.</b> Fundal pressure worsens impaction and risks uterine rupture and brachial plexus injury.`},
+        {t:`Apply strong lateral traction on the head`, fb:`<b>Dangerous.</b> Excessive or lateral traction is a major cause of brachial plexus injury (Erb's palsy). Use routine axial traction only.`},
+        {t:`Clamp and cut the cord to free the baby`, fb:`Cutting the cord removes any remaining oxygen supply and doesn't release the shoulder.`},
+      ],
+      hint:`HELPERR: call for Help first, then Legs (McRoberts) ± Evaluate for episiotomy, then suprapubic Pressure; then Enter, Remove the posterior arm, Roll.`,
+      doneFb:`The anterior shoulder is released with McRoberts and suprapubic pressure. If these had failed you would continue: <b>E</b>nter (internal rotational manoeuvres: Rubin II, Woods' screw), <b>R</b>emove the posterior arm, <b>R</b>oll to all-fours. Head-to-body interval: about 2 minutes. Document everything and debrief the family.`,
+      learn:`Shoulder dystocia (HELPERR): call for help; McRoberts and suprapubic pressure first (most cases resolve); then internal manoeuvres, posterior arm, all-fours. Never use fundal pressure or excessive or lateral traction. Record the head-to-body interval.`,
+      after(){ addMin(2); setFT({s:1.05, ins:90}); chips({'Engagement':'done','Descent':'done','Flexion':'done','Internal rotation':'done','Extension':'done','Restitution':'done','External rotation':'done'}); later(() => annot(svgLabel(250, 420, 'Anterior shoulder released', '#1f9d63', 'start')), 600); }});
+  } else {
+    add({ id:'antsh', stage:2, tag:'Second stage', title:'Birth of the anterior shoulder', type:'mcq',
+      enter(){ annot(''); },
+      text:`<p>External rotation is complete: the baby faces the mother's left thigh. With the next contraction:</p>`,
+      q:`How do you assist the birth of the anterior shoulder?`,
+      options:[
+        {t:`Gentle axial traction downwards (in line with the fetal spine) to free the anterior shoulder under the symphysis`, ok:true, fb:`Gentle axial traction slides the anterior shoulder under the pubic arch. Avoid lateral flexion of the neck.`},
+        {t:`Upward traction towards the mother's abdomen first`, ok:false, fb:`Upward guidance is for the <b>posterior</b> shoulder, after the anterior shoulder is born.`},
+        {t:`Strong traction with lateral flexion of the neck`, ok:false, fb:`Excessive or lateral traction risks brachial plexus injury.`},
+        {t:`Hook a finger into the axilla routinely`, ok:false, fb:`Not routine; axillary traction is an advanced manoeuvre for specific situations.`},
+      ],
+      after(){ setFT({s:1.05, oy:4}); annot(svgArrow(120, 392, 122, 436) + svgLabel(250, 420, 'Gentle axial traction', '#0b7a83', 'start')); }});
+  }
+
+  add({ id:'body', stage:2, tag:'Second stage', title:'Birth of the posterior shoulder and body', type:'mcq',
+    q:`The anterior shoulder is born. Now:`,
+    options:[
+      {t:`Guide the baby upwards towards the mother's abdomen to birth the posterior shoulder; the body follows by lateral flexion. Lift the baby onto her chest`, ok:true, fb:`Following the curve of Carus, upward guidance births the posterior shoulder over the perineum, then the body is born by lateral flexion (<b>expulsion</b>).`},
+      {t:`Keep pulling downwards`, ok:false, fb:`Continued downward traction doesn't follow the curve of the birth canal and increases perineal trauma.`},
+      {t:`Pull the baby out by the head as fast as possible`, ok:false, fb:`Gentle, controlled birth of the body reduces trauma to mother and baby.`},
+      {t:`Wait 10 minutes for the next set of contractions`, ok:false, fb:`The body normally follows the shoulders within the same or the next contraction.`},
+    ],
+    after(){
+      annot(svgArrow(118, 420, 80, 380) + svgLabel(250, 420, 'Expulsion', '#0b7a83', 'start'));
+      setFT({s:1.12, oy:-6}); chip('Expulsion', 'active');
+      later(() => { setFT({s:1.45, op:0}); }, 700);
+      later(() => { addMin(1); T.birth = SIM.clock; SIM.born = true; P.ctgOn = false; P.ctgMsg = 'CTG discontinued: baby born ' + fmtClock(T.birth); P.earlyDecels = false; P.pushing = false;
+        contr(26, 8, 28); setScene('post'); showDrape(true); annot(''); P.ebl = 120; P3.pink = 0.15; P3.pinkT = 0.3;
+        chips({'Engagement':'done','Descent':'done','Flexion':'done','Internal rotation':'done','Extension':'done','Restitution':'done','External rotation':'done','Expulsion':'done'}); renderHeader(); renderTiles(true);
+        const n = $('#scenBody .narr'); if (n) n.insertAdjacentHTML('beforeend', `<p><b>Baby girl born at ${fmtClock(T.birth)}.</b></p>`); }, 1700);
+    }});
+
+  /* ---------------- BIRTH & NEWBORN ---------------- */
+  add({ id:'skin', stage:3, tag:'Newborn', title:'Immediate newborn care', type:'mcq', dt:0.5,
+    enter(){ if (!SIM.born){ SIM.born = true; T.birth = T.birth || SIM.clock; setScene('post'); showDrape(true); P.ctgOn = false; } },
+    text:() => `<p>The baby girl is born at <b>${fmtClock(T.birth)}</b> and lifted straight onto Emma's chest. She is wet and pale-blue, and ${c.brady ? 'slightly floppy with irregular breaths' : 'starting to cry'}.</p>`,
+    q:`What do you do in the first minute?`,
+    options:[
+      {t:`Skin-to-skin on Emma's chest. Dry her thoroughly with a warm towel (stimulating as you dry), remove the wet towel, cover her with a warm dry towel and hat, and assess breathing, tone and heart rate`, ok:true, fb:`Drying provides warmth and tactile stimulation. Skin-to-skin supports thermoregulation, bonding and breastfeeding. Keep assessing breathing, tone and heart rate.`},
+      {t:`Take the baby to the resuscitaire for routine suctioning`, ok:false, fb:`Routine suctioning isn't recommended, and separating mother and baby interrupts thermoregulation and bonding. Vigorous or responsive babies stay skin-to-skin.`},
+      {t:`Bath the baby straight away`, ok:false, fb:`Delay the first bath (ideally 24 hours or more) because of the risk of hypothermia.`},
+      {t:`Hold the baby upside down and pat her back`, ok:false, fb:`Not appropriate. Gentle drying provides adequate stimulation.`},
+    ],
+    after(){ P3.towel = true; P3.hat = true; P3.pinkT = 0.62; }});
+
+  add({ id:'oxy', stage:3, tag:'Third stage', title:'Active management: uterotonic', type:'mcq', dt:0.5,
+    text:`<p>Emma consented antenatally to <b>active management</b> of the third stage. You palpate her abdomen.</p>`,
+    q:`Which uterotonic, and when?`,
+    options:[
+      {t:`Oxytocin 10 IU IM within about 1 minute of the birth, after confirming there is no second baby`, ok:true, fb:`Oxytocin 10 IU IM is first-line prophylaxis and significantly reduces PPH. Always palpate first to exclude an undiagnosed twin. It can be given with the cord intact.`},
+      {t:`Ergometrine IV routinely`, ok:false, fb:`Ergometrine causes vasoconstriction and hypertension. It is contraindicated in hypertension or pre-eclampsia and is not first-line for routine prophylaxis.`},
+      {t:`No uterotonic until the placenta is born`, ok:false, fb:`That describes physiological management, a valid informed choice, but Emma chose active management.`},
+      {t:`Oxytocin 10 IU as a rapid IV push`, ok:false, fb:`Rapid IV bolus can cause hypotension and tachycardia. IM is standard for prophylaxis.`},
+    ]});
+
+  add({ id:'apgar1', stage:3, tag:'Newborn', title:'Apgar score at 1 minute', type:'apgar', min:1,
+    enter(st){ SIM.clock = T.birth + 1; P3.pinkT = c.brady ? 0.5 : 0.65; },
+    text:`<p>Score each component from your observations at 1 minute of age (baby remains skin-to-skin).</p>`,
+    obs: c.brady ? [`Auscultated: 112 bpm`, `Weak, irregular breaths, improving with drying`, `Some flexion of the limbs`, `Grimaces when stimulated`, `Body pink, hands and feet blue`]
+                 : [`Auscultated: 138 bpm`, `Crying, regular breathing`, `Some flexion of the arms and legs`, `Cries vigorously when dried`, `Body pink, hands and feet blue`],
+    vals: c.brady ? [2, 1, 1, 1, 1] : [2, 2, 1, 2, 1],
+    interp: c.brady ? `A score of 6 at 1 minute: keep drying and stimulating, keep her warm and reassess HR and breathing. Call for neonatal review and be ready to move to the resuscitaire if HR &lt; 100 or breathing is inadequate. Resuscitation decisions follow HR, breathing and tone (ANZCOR); don't wait for the Apgar score.` : `A score of 8 at 1 minute is reassuring (7–10 is normal). Peripheral cyanosis (acrocyanosis) is common in the first minutes.`,
+    learn:`Apgar (HR, respiratory effort, tone, reflex irritability, colour) at 1 and 5 minutes; 7–10 is reassuring. Resuscitation decisions follow HR, breathing and tone, not the Apgar.`});
+
+  add({ id:'dcc', stage:3, tag:'Third stage', title:'Timing of cord clamping', type:'mcq', dt:0.5,
+    text:() => `<p>The baby ${c.brady ? 'is now breathing regularly and pinking up with stimulation' : 'is pink, breathing well and crying'}, skin-to-skin.</p>`,
+    q:`When should the cord be clamped?`,
+    options:[
+      {t:`Defer clamping for at least 1–3 minutes (or until pulsation stops) while she stays skin-to-skin`, ok:true, fb:`Deferred cord clamping improves iron stores and haemoglobin in term babies (and survival in preterm babies). It is recommended for vigorous babies, including with active management.`},
+      {t:`Clamp immediately so that the oxytocin can be given`, ok:false, fb:`Oxytocin can be given with the cord intact. Immediate clamping is reserved for situations such as a baby needing resuscitation away from the mother.`},
+      {t:`Clamp at 10 seconds as a routine`, ok:false, fb:`Too early. At least 60 seconds is recommended in a well baby.`},
+      {t:`Clamp only once the placenta has delivered, in every case`, ok:false, fb:`Not required. Clamping after 1–3 minutes achieves the benefit.`},
+    ]});
+
+  add({ id:'cut', stage:3, tag:'Third stage', title:'Clamping and cutting the cord', type:'order',
+    enter(){ SIM.clock = T.birth + 3; },
+    text:`<p>At about 3 minutes the cord has stopped pulsating. Emma's partner would like to cut it.</p>`,
+    q:`Perform these steps in order:`,
+    items:[
+      {t:`Apply the first (plastic) cord clamp about 3–4 cm from the baby's umbilicus`, short:`Clamp 1`, fb:`Secure clamp near the baby, not touching the skin.`, act(){ P3.clamp1 = true; }},
+      {t:`Apply a second clamp a few centimetres further towards the mother`, short:`Clamp 2`, fb:`The second clamp prevents blood spilling from the placental end.`, act(){ P3.clamp2 = true; }},
+      {t:`Shield with gauze and cut between the clamps (guide the partner)`, short:`Cut`, fb:`Cord cut between the clamps.`, act(){ P3.cut = true; }},
+      {t:`Check the clamp is secure and the stump isn't bleeding`, short:`Check`, fb:`Clamp secure, no oozing. Note the number of cord vessels later at placental inspection.`},
+    ],
+    distractors:[
+      {t:`Cut the cord before any clamp is applied`, fb:`This would cause bleeding from both ends.`},
+      {t:`Apply the clamp flush against the baby's skin`, fb:`Clamping against the skin can pinch or injure it. Leave a stump of about 3–4 cm.`},
+    ],
+    hint:`Clamp near the baby first, then the maternal side, cut between them, then check.`,
+    doneFb:`The cord is clamped and cut. The baby stays skin-to-skin.`,
+    learn:`Clamp about 3–4 cm from the umbilicus, apply a second clamp, cut between them under gauze, then check the clamp for security and bleeding.`});
+
+  add({ id:'apgar5', stage:3, tag:'Newborn', title:'Apgar score at 5 minutes', type:'apgar', min:5,
+    enter(){ SIM.clock = T.birth + 5; P3.pinkT = 0.85; },
+    text:`<p>At 5 minutes of age, reassess.</p>`,
+    obs:[`Auscultated: 148 bpm`, `Regular breathing, crying`, `Active movement, well flexed`, `Cries and pulls away when stimulated`, `Body pink, hands and feet still slightly blue`],
+    vals:[2, 2, 2, 2, 1],
+    interp:`A 5-minute Apgar of 9 is reassuring. If the 5-minute score were below 7, you would repeat it every 5 minutes up to 20 minutes.`,
+    learn:`Repeat the Apgar at 5 minutes (and every 5 minutes up to 20 if below 7).`});
+
+  /* ---------------- THIRD STAGE ---------------- */
+  add({ id:'sep', stage:4, tag:'Third stage', title:'Signs of placental separation', type:'multi',
+    enter(){ SIM.clock = T.birth + 8; P3.kT = 0.55; P3.ppT = 0.18; P.ebl = Math.max(P.ebl, 200); annot(svgLabel(250, 420, 'Cord lengthening', '#4a7fc1', 'start')); },
+    text:`<p>You keep a hand lightly on the fundus without massaging it, watching for separation.</p>`,
+    q:`Which signs suggest the placenta has separated?`,
+    options:[
+      {t:`Lengthening of the cord at the introitus`, ok:true, fb:`The placenta has descended into the lower segment.`},
+      {t:`A small gush of blood`, ok:true, fb:`From the retroplacental clot as it separates.`},
+      {t:`The uterus becomes firm, smaller and globular, and rises in the abdomen`, ok:true, fb:`The contracted uterus is displaced upwards by the placenta in the lower segment.`},
+      {t:`Sudden severe abdominal pain with maternal collapse`, ok:false, fb:`This warns of an emergency such as uterine inversion or rupture, not normal separation.`},
+      {t:`Maternal bradycardia`, ok:false, fb:`Not a sign of separation.`},
+      {t:`The fundus becomes soft and boggy`, ok:false, fb:`A soft, boggy uterus suggests atony, a PPH risk, not separation.`},
+    ],
+    doneFb:`Signs of separation: cord lengthening, a small gush of blood, and a firm, globular uterus that rises. Only then apply controlled cord traction.`});
+
+  add({ id:'cct', stage:4, tag:'Third stage', title:'Delivering the placenta', type:'mcq', dt:1,
+    enter(){ annot(''); },
+    q:`How do you deliver the placenta?`,
+    options:[
+      {t:`With a contraction, apply controlled cord traction downwards while guarding the uterus with counter-pressure above the symphysis (Brandt–Andrews)`, ok:true, fb:`CCT with uterine guarding, only after a uterotonic and with signs of separation, reduces blood loss and prevents uterine inversion. Ease the membranes out with a gentle twisting motion.`},
+      {t:`Pull firmly on the cord without supporting the uterus`, ok:false, fb:`This risks cord avulsion or <b>uterine inversion</b>, a life-threatening emergency.`},
+      {t:`Push hard on the fundus to expel the placenta`, ok:false, fb:`Fundal pressure is not recommended and can contribute to inversion.`},
+      {t:`Manual removal straight away`, ok:false, fb:`Manual removal is done under anaesthesia and reserved for retained placenta (for example beyond 30 minutes with active management) or haemorrhage.`},
+    ],
+    after(){ annot(svgArrow(176, 404, 150, 440) + svgArrow(84, 300, 118, 274, 'o') + svgLabel(70, 318, 'Guarding', '#b97c00')); P3.ppT = 1;
+      later(() => { P3.placVis = false; P3.clamp2 = false; T.placenta = SIM.clock; P.ebl = Math.max(P.ebl, 300); annot(svgLabel(250, 420, 'Placenta delivered', '#1f9d63', 'start')); }, 2600); }});
+
+  add({ id:'inspect', stage:4, tag:'Third stage', title:'Inspecting the placenta', type:'multi', dt:3,
+    enter(){ if (P3.placVis){ P3.placVis = false; T.placenta = T.placenta || SIM.clock; P.ebl = Math.max(P.ebl, 300); } annot(''); },
+    text:PLAC_FIG,
+    q:`Which checks make up a thorough placental inspection?`,
+    options:[
+      {t:`Maternal surface: all cotyledons present, none missing or ragged`, ok:true, fb:`Missing cotyledons suggest retained tissue (risk of PPH and infection).`},
+      {t:`Membranes complete (amnion and chorion), with no vessels running to a torn edge`, ok:true, fb:`Vessels to a ragged edge suggest a retained succenturiate lobe.`},
+      {t:`Cord: count the vessels (2 arteries, 1 vein)`, ok:true, fb:`A single umbilical artery is associated with fetal anomalies; inform the paediatric team.`},
+      {t:`Note the cord insertion and length (central, eccentric, marginal, velamentous)`, ok:true, fb:`Velamentous insertion has a risk of vasa praevia and vessel rupture.`},
+      {t:`Skip the inspection if the third stage was quick`, ok:false, fb:`Inspect every placenta, however quick the third stage.`},
+      {t:`Only check the colour`, ok:false, fb:`Colour alone tells you little about completeness.`},
+    ],
+    doneFb:`Findings: complete cotyledons and membranes, 3-vessel cord, central insertion. Retained tissue is one of the 4 Ts of PPH (Tissue). Document findings; dispose of the placenta or return it to the family per their wishes and policy.`});
+
+  add({ id:'perineum', stage:4, tag:'Third stage', title:'Perineal assessment', type:'mcq', dt:4,
+    text:`<p>With consent and adequate analgesia, you inspect the perineum and find a small <b>first-degree tear</b> (perineal skin only), edges well apposed, not bleeding.</p>`,
+    q:`What is your next step?`,
+    options:[
+      {t:`Complete a systematic assessment, including a rectal examination (with consent) to exclude anal sphincter injury, then discuss management (a small, well-apposed first-degree tear may be left unsutured)`, ok:true, fb:`Every woman with perineal trauma should have a systematic examination, including a PR, to exclude obstetric anal sphincter injury (OASI). Document findings and plan care with her.`},
+      {t:`No assessment is needed after a normal birth`, ok:false, fb:`Inspect every perineum after vaginal birth. Missed OASI causes long-term morbidity.`},
+      {t:`Transfer to theatre to suture every tear`, ok:false, fb:`Theatre is for complex tears (such as 3rd/4th degree). First-degree tears are managed in the birth room or left to heal.`},
+      {t:`Apply a tight perineal pad and reassess tomorrow`, ok:false, fb:`Assess and document now; delays risk missed injury and haematoma.`},
+    ]});
+
+  if (c.pph){
+    add({ id:'pph', stage:4, tag:'Emergency', title:'Postpartum haemorrhage', type:'order', pts:15, dt:6,
+      enter(){ encounter('pph'); SIM.pphActive = true; P.ebl = Math.max(P.ebl, 520); P.eblRate = 13; P3.boggy = true; P3.kT = 0.74; showDrape(true); annot(svgLabel(250, 420, 'Heavy bleeding', '#d64b3c', 'start')); SIM._pphN = 0; },
+      text:`<p>Ten minutes after the placenta, Emma has a sudden, steady flow of bright red blood. The fundus is <b>soft, boggy and above the umbilicus</b>. Blood is collecting rapidly in the drape. She feels light-headed. <b>Watch her heart rate and blood pressure.</b></p>`,
+      q:`Act quickly, in a safe sequence:`,
+      items:[
+        {t:`Call for help: PPH emergency (senior midwife, obstetrician, anaesthetist); state "postpartum haemorrhage"`, short:`Call for help`, grp:1, fb:`Team arriving; roles allocated, scribe recording.`, act(){ P.eblRate = 11; }},
+        {t:`Rub up a contraction: fundal massage`, short:`Fundal massage`, grp:2, fb:`The uterus begins to firm under your hand. Expel clots.`, act(){ pphStep(); annot(`<path d="M186 70 A24 15 0 1 1 190 94" fill="none" stroke="#0b7a83" stroke-width="3" marker-end="url(#arT)"/>` + svgLabel(150, 50, 'Fundal massage')); }},
+        {t:`Give further uterotonics (e.g. oxytocin 5 IU slow IV, then infusion; ergometrine 250 micrograms IM if no hypertension)`, short:`Uterotonics`, grp:2, fb:`Uterotonics given per protocol. Escalate to misoprostol or carboprost if needed.`, act(){ pphStep(); }},
+        {t:`Empty the bladder (indwelling catheter)`, short:`Empty bladder`, grp:2, fb:`A full bladder impedes uterine contraction; 300 mL drained.`, act(){ pphStep(); }},
+        {t:`Two large-bore IV cannulas, bloods (FBC, coagulation, group and crossmatch), warmed fluids; tranexamic acid 1 g IV`, short:`IV access, bloods, TXA`, grp:2, fb:`Resuscitation under way. Tranexamic acid within 3 hours of birth reduces death from bleeding (WOMAN trial).`, act(){ pphStep(); }},
+      ],
+      distractors:[
+        {t:`Leave her to rest and reassess in 15 minutes`, fb:`PPH needs immediate action. Delay is a key factor in maternal deaths.`},
+        {t:`Help her walk to the bathroom to freshen up`, fb:`She is haemodynamically compromised and at risk of collapse. Keep her lying flat, warm, and on oxygen if needed.`},
+      ],
+      hint:`Call for help first. Then, simultaneously: rub up a contraction, uterotonics, empty the bladder, IV access/bloods/fluids/TXA.`,
+      doneFb:`The uterus is now firm and well contracted, the bleeding has settled and her observations are improving. Continue close observation (vital signs, fundus, lochia, fluid balance) using a maternal early-warning chart.`,
+      learn:`PPH (≥ 500 mL): call for help; rub up a contraction; uterotonics; empty the bladder; IV access, bloods, fluids and tranexamic acid; then find the cause (the 4 Ts). Bimanual compression and theatre if bleeding continues.`,
+      after(){ P.eblRate = 0; SIM.pphControlled = true; P3.boggy = false; P3.kT = 0.58; annot(''); }});
+    add({ id:'4ts', stage:4, tag:'Emergency', title:'The 4 Ts of PPH', type:'multi', dt:8,
+      q:`Which are the "4 Ts" causes of PPH that you systematically review?`,
+      options:[
+        {t:`Tone: uterine atony (about 70% of cases)`, ok:true, fb:`Most common: massage and uterotonics.`},
+        {t:`Trauma: perineal, vaginal or cervical tears, uterine rupture or inversion`, ok:true, fb:`Inspect the genital tract carefully; repair any bleeding tears.`},
+        {t:`Tissue: retained placenta, membranes or clots`, ok:true, fb:`Re-check the placenta; examination under anaesthesia if tissue is suspected.`},
+        {t:`Thrombin: coagulopathy`, ok:true, fb:`Check coagulation studies and fibrinogen; replace blood products.`},
+        {t:`Temperature`, ok:false, fb:`Not one of the 4 Ts (though keep her warm: hypothermia worsens coagulopathy).`},
+        {t:`Tachycardia`, ok:false, fb:`A sign of hypovolaemia, not a cause of PPH.`},
+      ],
+      doneFb:`Tone, Trauma, Tissue, Thrombin. Here the cause was <b>Tone</b> (atony), which responded to massage and uterotonics. Placenta was complete; no significant trauma.`});
+  }
+
+  add({ id:'ebl', stage:4, tag:'Third stage', title:'Quantifying blood loss', type:'ebl', dt:2,
+    enter(st){
+      showDrape(true);
+      const pads = SIM.padsVol;
+      if (!c.pph) P.ebl = 350;
+      P.eblRate = 0;
+      const total = Math.round(P.ebl / 10) * 10; P.ebl = total;
+      st._pads = pads; st._padDry = c.pph ? 60 : 40; st._padW = st._padDry + pads; st._drape = total - pads; st._ans = total;
+    },
+    text:st => `<p>The graduated under-buttock drape reads <b>${st._drape} mL</b> (see the gauge on the diagram). The soaked pads weigh <b>${st._padW} g</b>; their dry weight is <b>${st._padDry} g</b> (1 g ≈ 1 mL).</p>`});
+
+  add({ id:'care', stage:4, tag:'Postnatal', title:'The first hour after birth', type:'multi', dt:10,
+    enter(){ annot(''); P3.pinkT = 0.95; },
+    q:`Which actions are appropriate during the first hour?`,
+    options:[
+      {t:`Uninterrupted skin-to-skin contact for at least the first hour`, ok:true, fb:`Supports thermoregulation, glucose stability and bonding.`},
+      {t:`Support the first breastfeed when the baby shows feeding cues`, ok:true, fb:`Early initiation within the first hour improves breastfeeding success.`},
+      {t:`Offer vitamin K (with informed consent) and apply identification bands`, ok:true, fb:`Vitamin K prevents vitamin K deficiency bleeding; ID bands before any separation.`},
+      {t:`Monitor maternal vital signs, fundal tone and lochia, and complete documentation`, ok:true, fb:`Early detection of PPH; accurate, contemporaneous records.`},
+      {t:`Weigh and measure the baby immediately, interrupting skin-to-skin`, ok:false, fb:`Routine measurements can wait until after the first feed.`},
+      {t:`Bath the baby at 30 minutes of age`, ok:false, fb:`Delay bathing (ideally 24 hours or more) to prevent hypothermia.`},
+    ],
+    doneFb:`Well done. Emma and her baby are settled, skin-to-skin, and the baby is feeding. Hand over using a structured format (e.g. ISBAR).`});
+
+  return S;
+}
+function pphStep(){
+  SIM._pphN = (SIM._pphN || 0) + 1;
+  const rates = [5, 2, 0.8, 0.3];
+  P.eblRate = rates[Math.min(SIM._pphN - 1, 3)];
+  if (SIM._pphN >= 2){ P3.boggy = false; P3.kT = 0.62; } else { P3.kT = 0.68; }
+}
+
+/* =========================================================
+   Start / loop / init
+   ========================================================= */
+function startSim(mode, comps){
+  timers.forEach(clearTimeout); timers = [];
+  const spd = SIM ? SIM.speed : 1;
+  freshState(); SIM.speed = spd; SIM.mode = mode;
+  if (mode === 'random'){ const ks = shuffle(['brady', 'sd', 'pph']); SIM.comps[ks[0]] = true; if (Math.random() < 0.35) SIM.comps[ks[1]] = true; }
+  else if (mode === 'choose'){ (comps || []).forEach(k => SIM.comps[k] = true); if (!Object.values(SIM.comps).some(Boolean)) SIM.mode = 'normal'; }
+  SIM.padsVol = SIM.comps.pph ? 150 : 100;
+  $('#nuchal').style.display = 'none';
+  annot(''); setScene('labour'); showDrape(false); chips({});
+  SIM.steps = buildSteps(SIM.comps);
+  SIM.finished = false;
+  $('#startOv').classList.remove('show'); $('#debriefOv').classList.remove('show');
+  renderStep(); renderTiles(true);
+}
+
+let last = performance.now(), sAcc = 0;
+function frame(now){
+  const dt = Math.min(0.1, Math.max(0, (now - last) / 1000)); last = now;
+  const mult = SIM.speed * (SIM.ff || 1);
+  let rem = dt * mult;
+  while (rem > 1e-6){ const hs = Math.min(rem, 0.05); updatePhys(hs); sAcc += hs; while (sAcc >= 0.1){ sAcc -= 0.1; pushSample(); } rem -= hs; }
+  stepTick(dt * mult, dt);
+  renderScene(dt * SIM.speed);
+  tileAcc += dt; if (tileAcc > 0.2){ tileAcc = 0; renderTiles(); $('#clock').textContent = fmtClock(SIM.clock); }
+  drawCTG();
+  requestAnimationFrame(frame);
+}
+
+function init(){
+  freshState(); cacheEls(); buildTiles(); renderChips();
+  const ticks = $('#drapeTicks'); [0, 250, 500, 750, 1000].forEach(v => { const s = h('span', null, v); s.style.bottom = (v / 1200 * 100) + '%'; ticks.append(s); });
+  cv = $('#ctg'); ctx = cv.getContext('2d'); sizeCTG();
+  if (window.ResizeObserver) new ResizeObserver(sizeCTG).observe($('#ctgWrap')); else window.addEventListener('resize', sizeCTG);
+  renderHeader(); renderTiles(true);
+  $('#scenBody').innerHTML = `<h2>Ready when you are</h2><p class="narr">Choose a mode on the start screen to begin.</p>`;
+
+  let mode = 'normal';
+  $$('#modes .mode').forEach(b => b.onclick = () => { mode = b.dataset.mode; $$('#modes .mode').forEach(x => x.classList.toggle('on', x === b)); $('#compPick').classList.toggle('show', mode === 'choose'); });
+  $('#startBtn').onclick = () => startSim(mode, $$('#compPick input:checked').map(i => i.value));
+  $('#restartBtn').onclick = () => { P.pushing = false; SIM.ff = 0; $('#debriefOv').classList.remove('show'); $('#startOv').classList.add('show'); };
+  $$('#speedSeg button').forEach(b => b.onclick = () => { SIM.speed = +b.dataset.speed; $$('#speedSeg button').forEach(x => x.classList.toggle('on', x === b)); });
+
+  document.addEventListener('keydown', e => {
+    if ($('#startOv').classList.contains('show') || $('#debriefOv').classList.contains('show')) return;
+    const st = cur(); if (!st) return;
+    if (e.code === 'Space' && st.type === 'push'){ e.preventDefault(); if (!e.repeat && !st._done){ P.pushing = true; const pb = $('#pushBtn'); if (pb) pb.classList.add('held'); } return; }
+    if (/^[1-9]$/.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey){ const o = $$('#scenBody .opt')[+e.key - 1]; if (o && !o.disabled){ e.preventDefault(); o.click(); } }
+    if (e.key === 'Enter' && st._completed && document.activeElement && document.activeElement.tagName !== 'BUTTON'){ e.preventDefault(); next(); }
+  });
+  document.addEventListener('keyup', e => { if (e.code === 'Space'){ P.pushing = false; const pb = $('#pushBtn'); if (pb) pb.classList.remove('held'); } });
+  window.addEventListener('blur', () => { P.pushing = false; });
+  requestAnimationFrame(t => { last = t; requestAnimationFrame(frame); });
+}
+
+/* test / debugging hook (read-only helpers) */
+window.MidwifeSim = {
+  get SIM(){ return SIM; }, get P(){ return P; }, get F(){ return F; },
+  debugCurrent(){
+    const st = cur(); if (!st) return null;
+    const r = {id: st.id, type: st.type, done: !!st._completed, stage: st.stage};
+    const idx = (list, f) => list.map((o, i) => f(o) ? i : -1).filter(i => i >= 0);
+    if (st.type === 'mcq') r.correct = idx(st._opts, o => o.ok);
+    if (st.type === 'tasks' || st.type === 'multi') r.correct = idx(st._list, o => o.ok);
+    if (st.type === 'order') r.correct = st._list.map((o, i) => ({o, i})).filter(x => x.o.ok).sort((a, b) => a.o.grp - b.o.grp).map(x => x.i);
+    if (st.type === 'apgar') r.vals = st.vals.slice();
+    if (st.type === 'ebl') r.answer = st._ans;
+    return r;
+  }
+};
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+</body>
+</html>

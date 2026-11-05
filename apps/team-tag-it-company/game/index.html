@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><title>Team Tag It</title>
+<style>
+body{margin:0;background:#ffe4f0 url(img/bg.jpg);font-family:Georgia,serif;color:#7a1048;display:flex;flex-direction:column;align-items:center}
+#wrap{position:relative;width:min(960px,100vw)}canvas{width:100%;display:block;border-radius:14px;border:3px solid #ff9ac8;touch-action:none;background:#ffd6ea}
+.ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,228,240,.93);border-radius:14px;text-align:center;padding:10px}
+.ov img.l{width:110px;border-radius:50%;border:4px solid #ff4fa3}.ov h1{margin:6px 0 0;font-size:46px;color:#e0117a}.sub{font-style:italic;margin-bottom:8px}
+button{background:#ff4fa3;color:#fff;border:2px solid #ffc0dc;border-radius:22px;padding:10px 22px;font-size:17px;font-weight:bold;cursor:pointer;margin:4px}
+#hud{display:flex;gap:14px;flex-wrap:wrap;margin:6px;font-weight:bold}#board{width:min(960px,96vw);background:rgba(255,255,255,.9);border:3px solid #ff9ac8;border-radius:14px;margin:8px;padding:8px}
+#vb{display:flex;flex-wrap:wrap;gap:6px}#vb span{background:linear-gradient(135deg,#ff9ac8,#ffd1e8);border-radius:10px;padding:6px 10px;color:#fff;text-shadow:0 0 3px #c00060}
+small{color:#a04a78}ol{text-align:left}
+</style></head><body>
+<div id="hud"><img src="img/logo.jpg" width="28" style="border-radius:50%"> Team Tag It &middot; Level <span id="lv">1</span> &middot; Score <span id="sc">0</span> &middot; Wishes <span id="wc">0</span>/<span id="wn">0</span> &middot; Time <span id="tm">0</span> <label><input type="checkbox" id="snd"> Sound</label></div>
+<div id="wrap"><canvas id="c" width="960" height="560"></canvas>
+<div class="ov" id="ov"><img class="l" src="img/logo.jpg" alt="Coffeebreak logo"><h1>Team Tag It</h1><div class="sub">a Coffeebreak company</div>
+<p id="msg">Run with your team through the pink dream field. Tag the glowing wishes to manifest them, tag your teammates to pass a power boost, and dodge the grey doubt clouds.<br><small>Arrow keys or WASD to move. On a phone, touch and drag.</small></p>
+<button id="play">Play</button> <a href="wishes.html"><button type="button">Two Wishes</button></a><h3>High scores</h3><ol id="hs"></ol></div></div>
+<div id="board"><b>My vision board</b> <small>(every wish you manifest lands here)</small><div id="vb"></div></div>
+<script src="game.js"></script></body></html>

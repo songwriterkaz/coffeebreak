@@ -1,0 +1,37 @@
+{
+  "title": "Coffeebreak Teddy Bear",
+  "short_description": "A soft, quiet teddy bear that reacts to touch. Cuddle it, rock it, dress it up, calm down with it or hear a bedtime story.",
+  "long_description": "Meet the Coffeebreak Teddy Bear, a big soft bear in coffee brown and cream with a pink bow, drawn right in your browser.\n\nTap the belly for a heartbeat, a warm hug and a soft purr. Boop the nose, tickle the ears, wave at the paws and wiggle the feet. Drag the bear sideways to rock it and watch it settle back down.\n\nCalm mode brings slow breathing light and a soft hum. Sleep mode dims the screen and plays a gentle lullaby made live with WebAudio. Bedtime story reads a short original story aloud with your device's own voice, and Say hello speaks Hello from Coffeebreak.\n\nDress the bear with a bow, a hat, a scarf, a cowboy hat or headphones. Add phone nearby opens your phone's share sheet so you can pass the bear to a friend (AirDrop on iPhone, Nearby Share on Android).\n\nMade to be sensory friendly: no flashing, no sudden loud sounds, a volume slider and a sound on/off switch.\n\nWorks offline on phones, tablets and TVs, and can be installed to the home screen. No ads, no tracking, nothing to pay, no network calls.\n\nMore from Coffeebreak: https://coffeebreaks.itch.io\n\nRights: Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers and fans may resell the physical products and phones they bought, but may not copy them or make their own versions.",
+  "tags": [
+    "teddy-bear",
+    "cozy",
+    "relaxing",
+    "kids",
+    "sensory-friendly",
+    "offline",
+    "pwa",
+    "html5",
+    "coffeebreak",
+    "lullaby"
+  ],
+  "price": "free or pay what you like",
+  "pricing_note": "Set itch.io pricing to Pay what you want with a minimum of 0 (free).",
+  "kind": "HTML5 (play in browser), upload coffeebreak-teddy.zip with index.html at the root",
+  "embed": {
+    "width": 390,
+    "height": 844,
+    "mobile_friendly": true,
+    "fullscreen_button": true,
+    "orientation": "default"
+  },
+  "cover": "cover.png",
+  "screenshots": [
+    "screenshot-1.png",
+    "screenshot-2.png",
+    "screenshot-3.png"
+  ],
+  "rights_note": "Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers and fans may resell the physical products and phones they bought, but may not copy them or make their own versions.",
+  "bio": "Coffeebreak songwriter and creator from Newcastle NSW",
+  "itch_page_suggested": "https://coffeebreaks.itch.io/coffeebreak-teddy",
+  "pwa_cache_name": "cbsim-teddy-v1"
+}

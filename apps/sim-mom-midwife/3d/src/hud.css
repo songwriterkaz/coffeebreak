@@ -1,0 +1,95 @@
+/* ===== SIM-MOM 3D HUD (overrides) ===== */
+body.three{--bg:#0b131c;--card:rgba(9,19,30,.82);--ink:#dbe9f4;--muted:#89a2b8;--line:rgba(120,210,225,.18);
+  --pri:#19d3c5;--pri2:#3fe6d8;--priSoft:rgba(25,211,197,.13);--ok:#35d28a;--okSoft:rgba(53,210,138,.14);--bad:#ff6b5e;--badSoft:rgba(255,107,94,.13);--warn:#ffc04a;--warnSoft:rgba(255,192,74,.12);
+  background:#0b131c;color:var(--ink);overflow:hidden;height:100vh;height:100dvh}
+#stage3d{position:fixed;inset:0}
+#stage3d canvas{display:block;width:100%!important;height:100%!important;cursor:grab}
+.hud{position:fixed;inset:0;pointer-events:none;display:grid;grid-template-columns:390px 1fr 340px;grid-template-rows:auto auto 1fr auto;gap:10px;padding:0 10px 10px}
+.hud>*{pointer-events:auto}
+.hud header{grid-column:1/-1;margin:0 -10px;background:linear-gradient(180deg,rgba(6,13,21,.92),rgba(6,13,21,.72));border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+.brand .logo{background:linear-gradient(135deg,#19d3c5,#7ef0ff);box-shadow:0 0 14px rgba(25,211,197,.5)}
+.brand h1{letter-spacing:.08em;font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace}
+.stepper .st{background:rgba(255,255,255,.05);color:var(--muted);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;letter-spacing:.03em}
+.stepper .st.done{background:rgba(25,211,197,.12);color:#7ff2e8}
+.stepper .st.active{background:var(--pri);color:#04131a;box-shadow:0 0 12px rgba(25,211,197,.55)}
+.pill,.seg{background:rgba(255,255,255,.06)}
+.pill .dim{color:var(--muted);font-weight:600}
+.seg button{color:var(--muted)} .seg button.on{background:var(--pri);color:#04131a}
+.btn{background:rgba(255,255,255,.05);border-color:var(--line);color:var(--ink)} .btn:hover{background:rgba(25,211,197,.12);border-color:var(--pri)}
+.btn.pri{background:var(--pri);border-color:var(--pri);color:#04131a} .btn.pri:hover{background:#3fe6d8}
+.modeBadge{background:rgba(110,170,255,.14);color:#9cc7ff} .modeBadge.comp{background:rgba(255,120,90,.16);color:#ffb19c}
+.robot{grid-column:1/-1;justify-self:center;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:#aef7f0;background:rgba(4,16,24,.78);border:1px solid rgba(25,211,197,.45);border-radius:999px;padding:6px 14px;box-shadow:0 0 18px rgba(25,211,197,.25);opacity:0;transform:translateY(-4px);transition:opacity .3s,transform .3s;max-width:min(760px,92vw);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+.robot.show{opacity:1;transform:none}
+.robot b{color:#19e3d0;letter-spacing:.05em}
+.robot.go{border-color:#35d28a;color:#b6ffd8}.robot.go b{color:#35d28a}
+.robot.warn{border-color:#ffc04a;color:#ffe3a6}.robot.warn b{color:#ffc04a}
+.robot.alert{border-color:#ff6b5e;color:#ffc4bd}.robot.alert b{color:#ff6b5e}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;backdrop-filter:blur(10px);box-shadow:0 10px 40px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.02);min-height:0;position:relative;overflow:hidden}
+.panel::before{content:"";position:absolute;left:14px;right:14px;top:0;height:2px;background:linear-gradient(90deg,transparent,#19d3c5,transparent);opacity:.7}
+.scen{grid-column:1;grid-row:3;display:flex;flex-direction:column}
+.mon{grid-column:3;grid-row:3;display:flex;flex-direction:column;gap:8px;padding:10px;overflow:auto}
+.ph{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;letter-spacing:.12em;color:#19e3d0}
+.scenTop{border-bottom:1px solid var(--line)}
+.tag{background:rgba(25,211,197,.14);color:#6ff0e5;font-family:ui-monospace,Menlo,Consolas,monospace}
+.prog{background:rgba(255,255,255,.06)}
+.scenBody h2{font-size:18px;color:#f2f8fc}
+.narr{color:#c3d4e2}
+.opt{background:rgba(255,255,255,.035);border-color:var(--line);color:var(--ink)}
+.opt:hover:not(:disabled){background:rgba(25,211,197,.1);border-color:var(--pri)}
+.opt .key{background:rgba(255,255,255,.08);color:var(--muted)}
+.opt.wrong{color:#ffb4aa}
+.findings li{background:rgba(255,255,255,.04);border-color:var(--line)}
+.fb{color:var(--ink)} .fb.info{background:rgba(90,150,255,.12);border-color:#5a96ff}
+.pushPanel{background:rgba(255,255,255,.03);border-color:var(--line)}
+.meter,.descent{background:rgba(255,255,255,.08)}
+.pushBtn{background:linear-gradient(135deg,#0fb3a6,#19e3d0);color:#04131a;box-shadow:0 0 22px rgba(25,211,197,.35)}
+.apgar td{background:rgba(255,255,255,.04);border-color:var(--line)}
+.sc button{background:rgba(255,255,255,.05);border-color:var(--line);color:var(--ink)}
+.placFig{background:#f7f1f2}
+.tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.tile{background:rgba(4,12,20,.75);border-color:rgba(32,56,90,.9)}
+.tile .tv{font-size:20px}
+.ctgWrap{min-height:118px;height:118px;flex:0 0 auto;border-radius:10px}
+.subRow{display:flex;gap:8px;align-items:flex-start}
+.subRow .inset{position:static;width:150px;flex:0 0 auto;background:rgba(240,248,252,.94);box-shadow:none}
+.subRow .drape{position:static;flex:0 0 auto;background:rgba(240,248,252,.94);box-shadow:none;color:#1b2a3a}
+.bottomBar{grid-column:2;grid-row:4;justify-self:center;display:flex;flex-direction:column;align-items:center;gap:6px;max-width:100%}
+.camBar{display:flex;gap:4px;align-items:center;background:rgba(6,14,22,.82);border:1px solid var(--line);border-radius:999px;padding:4px 6px;flex-wrap:wrap;justify-content:center}
+.camBar .cl{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10px;letter-spacing:.12em;color:#19e3d0;padding:0 6px}
+.camBar button{border:0;background:transparent;color:var(--muted);font-weight:700;font-size:12px;padding:5px 10px;border-radius:999px}
+.camBar button.on,.camBar button:hover{background:rgba(25,211,197,.16);color:#bff8f2}
+.camBar .ac{font-size:11px;color:var(--muted);display:flex;gap:4px;align-items:center;padding:0 6px}
+.chips{padding:0}
+.chip{background:rgba(6,14,22,.8);color:#6f879d;border-color:var(--line)}
+.chip.active{background:rgba(255,192,74,.16);color:#ffd27a;border-color:rgba(255,192,74,.5)}
+.chip.done{background:rgba(53,210,138,.15);color:#7cf0b6}
+.disc3d{position:fixed;left:50%;bottom:2px;transform:translateX(-50%);font-size:10.5px;color:#6f879d;pointer-events:none;white-space:nowrap}
+.tip{position:fixed;display:none;z-index:40;pointer-events:none;background:rgba(4,16,24,.92);border:1px solid #19d3c5;color:#bff8f2;font-size:12px;font-weight:600;padding:5px 9px;border-radius:8px;box-shadow:0 0 14px rgba(25,211,197,.35)}
+.overlay{background:rgba(3,8,14,.6)}
+.modal{background:#0d1a27;color:var(--ink);border:1px solid var(--line);box-shadow:0 20px 70px rgba(0,0,0,.6)}
+.modal .lead{color:#b9cddd}
+.mode{background:rgba(255,255,255,.03);border-color:var(--line);color:var(--ink)} .mode.on{background:rgba(25,211,197,.12);border-color:var(--pri)}
+.comps label{border-color:var(--line)}
+.disc{background:rgba(255,192,74,.1);border-color:rgba(255,192,74,.4);color:#ffe2a8}
+.howto div,.kv div{background:rgba(255,255,255,.04);color:var(--muted)} .howto b,.kv b{color:var(--ink)}
+.res li{border-color:var(--line)} .res li.partial{background:rgba(255,192,74,.06)} .res li .lp{color:#c3d4e2} .res li .err{color:#ffaba0}
+.ring span{background:#0d1a27}
+.scoreRing .hintSmall{color:var(--muted)}
+@media (max-width:1180px){.hud{grid-template-columns:340px 1fr 300px}.subRow .inset{width:128px}}
+@media (max-width:900px){
+  body.three{overflow:auto;height:auto}
+  #stage3d{position:relative;height:52vh;height:52dvh}
+  .hud{position:static;display:flex;flex-direction:column;padding:0 8px 24px;pointer-events:auto}
+  .hud header{position:fixed;top:0;left:0;right:0;margin:0;z-index:30;flex-wrap:wrap}
+  .robot{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:29}
+  .robot.show{transform:translateX(-50%)}
+  body.three #stage3d{margin-top:58px}
+  .bottomBar{order:-1;margin-top:-52px;z-index:5}
+  .scen{order:1}.scenBody{overflow:visible}
+  .mon{order:2;overflow:visible}
+  .tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .disc3d{position:static;transform:none;white-space:normal;text-align:center;order:3}
+}
+
+.mon .tile{padding:4px 8px}.mon .tile .ts{display:none}.mon .tile .tv{font-size:18px}
+.mon .ctgWrap{height:112px;min-height:112px}

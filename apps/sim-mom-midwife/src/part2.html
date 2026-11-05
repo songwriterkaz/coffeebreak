@@ -1,0 +1,207 @@
+<body>
+<div class="app" id="app">
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/><path d="M8.5 12h2l1-2 1.5 4 1-2h1.5"/></svg></div>
+      <div><h1>MidwifeSim</h1><small>Virtual birthing manikin · training simulation</small></div>
+    </div>
+    <nav class="stepper" id="stepper" aria-label="Stages"></nav>
+    <div class="stageMini" id="stageMini"></div>
+    <div class="hctl">
+      <span class="modeBadge" id="modeBadge">Normal birth</span>
+      <span class="pill clock" title="Scenario clock">🕒 <b id="clock">08:20</b></span>
+      <span class="pill" title="Score">★ <b id="score">0</b><span style="color:var(--muted);font-weight:600">/<span id="scoreMax">0</span></span></span>
+      <div class="seg" id="speedSeg" role="group" aria-label="Simulation speed">
+        <button data-speed="1" class="on">1×</button><button data-speed="2">2×</button><button data-speed="4">4×</button>
+      </div>
+      <button class="btn" id="restartBtn" title="Restart">↺ <span class="rlbl">Restart</span></button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="card illus" aria-label="Schematic illustration">
+      <div class="illusHead"><h3 id="illusTitle">Sagittal schematic: pelvis, uterus &amp; fetus</h3><span class="note">Stylised teaching diagram</span></div>
+      <div class="svgWrap">
+        <svg id="mainSvg" viewBox="-70 -14 490 466" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Schematic cross-section of the maternal pelvis, uterus and fetus">
+          <defs>
+            <path id="utPath" d="M215 286 C180 286 152 270 136 244 C92 196 72 126 102 72 C132 22 236 6 294 44 C348 80 346 192 304 244 C286 268 252 286 215 286 Z"/>
+            <linearGradient id="gBody" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e9e4"/><stop offset="1" stop-color="#efdcd6"/></linearGradient>
+            <radialGradient id="gFluid" cx=".45" cy=".45" r=".6"><stop offset="0" stop-color="#eef7fb"/><stop offset="1" stop-color="#dcecf4"/></radialGradient>
+            <marker id="arT" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0b7a83"/></marker>
+            <marker id="arR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#d64b3c"/></marker>
+            <marker id="arO" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#c98a00"/></marker>
+          </defs>
+          <!-- maternal silhouette (sagittal, facing left) -->
+          <path id="bodyOutline" d="M110 -14 C40 30 20 120 40 210 C52 262 80 298 104 330 C120 352 140 378 158 400 L190 404 C214 424 252 440 300 436 C360 430 396 396 392 330 C390 286 392 252 388 225 C382 180 392 80 410 -14 Z" fill="url(#gBody)" stroke="#e1c7bf" stroke-width="2"/>
+          <!-- lumbar spine hint -->
+          <g opacity=".55">
+            <rect x="366" y="40" width="22" height="26" rx="5" fill="#efe6d6" stroke="#d9cbb3"/>
+            <rect x="364" y="72" width="22" height="26" rx="5" fill="#efe6d6" stroke="#d9cbb3"/>
+            <rect x="362" y="104" width="22" height="26" rx="5" fill="#efe6d6" stroke="#d9cbb3"/>
+            <rect x="360" y="136" width="22" height="26" rx="5" fill="#efe6d6" stroke="#d9cbb3"/>
+            <rect x="358" y="168" width="22" height="26" rx="5" fill="#efe6d6" stroke="#d9cbb3"/>
+          </g>
+          <!-- birth canal (vagina) -->
+          <path id="canal" d="M215 290 Q232 350 172 398" fill="none" stroke="#ecc3c9" stroke-width="50" stroke-linecap="round" opacity=".75"/>
+          <path d="M215 290 Q232 350 172 398" fill="none" stroke="#e2a9b1" stroke-width="1.2" stroke-dasharray="3 5"/>
+
+          <!-- LABOUR SCENE -->
+          <g id="labourScene">
+            <g id="uterusG">
+              <use id="uterusL" href="#utPath" fill="url(#gFluid)" stroke="#d98c9a" stroke-width="10"/>
+              <path id="placentaL" d="M262 42 Q338 70 326 170 Q298 104 262 42 Z" fill="#c2667c" stroke="#a24e64" stroke-width="1.5"/>
+            </g>
+            <text class="lbl" x="352" y="22" text-anchor="middle">Placenta</text>
+            <line id="placLine" x1="345" y1="26" x2="318" y2="70" stroke="#9aa8b8" stroke-width=".8"/>
+            <text class="lbl" id="utLblL" x="150" y="40" text-anchor="middle">Uterus</text>
+          </g>
+
+          <!-- POST-BIRTH SCENE -->
+          <g id="postScene" style="display:none">
+            <use id="uterusP" href="#utPath" fill="#f1c3cb" stroke="#d27f8f" stroke-width="12"/>
+            <path id="cordIn" class="cordS" d=""/>
+            <path id="cordOut1" class="cordS" d="M172 398 C110 444 -40 414 -30 252"/>
+            <path id="cordMid" class="cordS" d="M-30 252 L-28 227"/>
+            <path id="cordOut2" class="cordS" d="M-28 227 C-24 175 0 138 16 110"/>
+            <path id="cordOut1e" class="cordE" d="M172 398 C110 444 -40 414 -30 252"/>
+            <ellipse id="plac3" rx="25" ry="12" fill="#c2667c" stroke="#a24e64" stroke-width="1.5"/>
+            <rect id="clamp1" x="-37" y="224" width="18" height="6" rx="2" fill="#2e9bd6" stroke="#1d6f9c" style="display:none"/>
+            <rect id="clamp2" x="-39" y="250" width="18" height="6" rx="2" fill="#2e9bd6" stroke="#1d6f9c" style="display:none"/>
+            <g id="baby" transform="translate(2 100) rotate(-12)">
+              <g class="breathe">
+                <ellipse id="babyBody" cx="0" cy="8" rx="24" ry="36" fill="#a9b6d6" stroke="#8a96b5" stroke-width="1.5"/>
+                <circle id="babyHead" cx="0" cy="-44" r="21" fill="#a9b6d6" stroke="#8a96b5" stroke-width="1.5"/>
+                <path d="M-8 -44 q3 2 6 0 M4 -44 q3 2 6 0" class="fline"/>
+                <path d="M-3 -35 q3 2 6 0" class="fline"/>
+                <path id="towel" d="M-30 -16 Q0 -26 30 -16 L30 40 Q0 52 -30 40 Z" fill="#e3eef8" stroke="#b9cde0" stroke-width="1.5" style="display:none"/>
+                <path id="hat" d="M-21 -50 Q-20 -70 0 -70 Q20 -70 21 -50 Z" fill="#cfe0ee" stroke="#9fb9cf" stroke-width="1.5" style="display:none"/>
+              </g>
+            </g>
+            <text class="lbl" x="2" y="38" text-anchor="middle" id="babyLbl">Baby skin-to-skin</text>
+            <text class="lbl" x="250" y="96" text-anchor="middle" id="utLblP">Uterus (contracted)</text>
+          </g>
+
+          <!-- cervix -->
+          <g id="cervix">
+            <rect id="cxL" x="0" y="282" width="14" height="22" rx="7" fill="#e3909f" stroke="#c46f80"/>
+            <rect id="cxR" x="0" y="282" width="14" height="22" rx="7" fill="#e3909f" stroke="#c46f80"/>
+            <text class="lbl" x="262" y="300" id="cxLbl">Cervix</text>
+          </g>
+
+          <!-- FETUS -->
+          <g id="fetus">
+            <g id="fBody">
+              <g transform="scale(1.4)">
+              <ellipse class="fskin" cx="0" cy="0" rx="33" ry="47"/>
+              <ellipse class="fskin" cx="30" cy="-18" rx="8" ry="22" transform="rotate(5 30 -18)"/>
+              <ellipse class="fskin" cx="34" cy="-42" rx="9" ry="5"/>
+              <ellipse class="fskin" cx="16" cy="-20" rx="12" ry="25" transform="rotate(-28 16 -20)"/>
+              <ellipse class="fskin" cx="22" cy="26" rx="7" ry="16" transform="rotate(-20 22 26)"/>
+              <circle class="fskin" cx="26" cy="43" r="5"/>
+              <path class="fline" d="M-24 -30 Q-31 0 -24 30" opacity=".5"/>
+              <circle cx="31" cy="6" r="2.4" fill="#c9977c"/>
+              </g>
+              <g id="fHead">
+                <ellipse class="fskin" cx="0" cy="0" rx="30" ry="29"/>
+                <ellipse cx="-4" cy="-6" rx="5" ry="7" fill="#e8b89d" stroke="#c9977c"/>
+                <path class="fline" d="M22 20 Q29 12 29 6 L34 1 L29 -3 Q31 -8 28 -11 Q29 -17 21 -22"/>
+                <path class="fline" d="M17 4 q4 2.5 7 0"/>
+                <path d="M-26 8 Q-20 26 0 29" fill="none" stroke="#c9977c" stroke-width="1" opacity=".6"/>
+              </g>
+              <ellipse id="nuchal" cx="0" cy="62" rx="25" ry="7" fill="none" stroke="#9fb0dd" stroke-width="5" style="display:none"/>
+            </g>
+          </g>
+
+          <!-- maternal bony pelvis (translucent, drawn over fetus) -->
+          <g id="pelvis" opacity=".9">
+            <path d="M352 206 C370 262 364 322 318 362" fill="none" stroke="#ece2cf" stroke-width="24" stroke-linecap="round" opacity=".92"/>
+            <path d="M352 206 C370 262 364 322 318 362" fill="none" stroke="#d6c6a8" stroke-width="1.5" stroke-dasharray="1 15" stroke-linecap="round"/>
+            <path d="M318 362 L298 376" stroke="#e6dac3" stroke-width="12" stroke-linecap="round"/>
+            <ellipse cx="145" cy="314" rx="12" ry="28" transform="rotate(-25 145 314)" fill="#ece2cf" stroke="#d6c6a8" stroke-width="1.5" opacity=".95"/>
+            <line x1="168" y1="318" x2="304" y2="318" stroke="#7d8da1" stroke-width="1" stroke-dasharray="5 4"/>
+            <text class="lbl" x="306" y="322">Spines (0)</text>
+            <text class="lbl" x="112" y="356" text-anchor="end">Symphysis pubis</text>
+            <text class="lbl" x="375" y="292">Sacrum</text>
+            <text class="lbl" x="300" y="394" text-anchor="middle">Coccyx</text>
+            <text class="lbl" x="128" y="418" text-anchor="middle" id="introLbl">Introitus</text>
+          </g>
+          <g id="annot"></g>
+        </svg>
+        <div class="inset" id="inset" aria-label="Fetal head position viewed from below">
+          <div class="t">View from below</div>
+          <svg viewBox="0 0 160 166">
+            <defs><clipPath id="icp"><rect x="2" y="16" width="156" height="132" rx="10"/></clipPath></defs>
+            <text x="80" y="11" text-anchor="middle" style="font-size:9.5px;fill:#6b7b8e;font-weight:700">Anterior (pubis)</text>
+            <text x="80" y="162" text-anchor="middle" style="font-size:9.5px;fill:#6b7b8e;font-weight:700">Posterior (sacrum)</text>
+            <g clip-path="url(#icp)">
+              <rect x="2" y="16" width="156" height="132" fill="#fbeff1"/>
+              <g id="iHead" transform="rotate(45 80 82)">
+                <ellipse cx="80" cy="82" rx="29" ry="37" fill="#f3cdb4" stroke="#c9977c" stroke-width="1.5"/>
+                <line x1="80" y1="50" x2="80" y2="104" stroke="#a9765d" stroke-width="1.6"/>
+                <path d="M80 50 L68 40 M80 50 L92 40" stroke="#a9765d" stroke-width="1.6" fill="none"/>
+                <path d="M80 99 L86 106 L80 113 L74 106 Z" fill="#e8b89d" stroke="#a9765d" stroke-width="1.3"/>
+                <line x1="58" y1="106" x2="74" y2="106" stroke="#a9765d" stroke-width="1.3"/>
+                <line x1="86" y1="106" x2="102" y2="106" stroke="#a9765d" stroke-width="1.3"/>
+                <text x="80" y="64" text-anchor="middle" style="font-size:9px;font-weight:800;fill:#8a5a43">O</text>
+              </g>
+              <path id="iCervix" fill="#e7a2b0" fill-opacity=".9" stroke="#c46f80" stroke-width="1.5" fill-rule="evenodd" d=""/>
+            </g>
+            <text x="8" y="86" style="font-size:10px;font-weight:800;fill:#8592a3">R</text>
+            <text x="146" y="86" style="font-size:10px;font-weight:800;fill:#8592a3">L</text>
+          </svg>
+          <div class="cap" id="insetCap">LOA · Station −2</div>
+        </div>
+        <div class="drape" id="drape">
+          <div class="t">Graduated drape</div>
+          <div class="gauge"><div class="ticks" id="drapeTicks"></div><div class="fill" id="drapeFill"></div></div>
+          <div class="rd" id="drapeRd">0 mL</div>
+        </div>
+      </div>
+      <div class="chips" id="chips"></div>
+    </section>
+
+    <section class="card scen" aria-live="polite">
+      <div class="scenTop"><span class="tag" id="stepTag">Admission</span><span class="stepNo" id="stepNo">Step 1</span></div>
+      <div class="prog"><i id="progBar"></i></div>
+      <div class="scenBody" id="scenBody"></div>
+    </section>
+  </main>
+
+  <section class="monitor" aria-label="Live monitor">
+    <div class="tiles" id="tiles"></div>
+    <div class="ctgWrap" id="ctgWrap"><span class="ctgLbl">CTG · FHR (bpm) / Toco · accelerated display</span><canvas id="ctg"></canvas></div>
+  </section>
+  <footer>Educational simulation only, not medical advice. Always follow your local clinical guidelines and the supervision of qualified clinicians.</footer>
+</div>
+
+<!-- START -->
+<div class="overlay show" id="startOv">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="startTitle">
+    <div class="tag">Midwifery education</div>
+    <h1 id="startTitle">Virtual Birthing Manikin</h1>
+    <p class="lead">You are the midwife. Guide <b>Emma</b> (29, G2 P1, 39+4 weeks) through labour and birth, from admission to the first hour after birth. Choose your actions, time her pushing with contractions, and watch the fetus move through the pelvis.</p>
+    <div class="modes" id="modes">
+      <button class="mode on" data-mode="normal"><b>Normal birth</b><span>Uncomplicated spontaneous vaginal birth with active management of the third stage.</span></button>
+      <button class="mode" data-mode="random"><b>Random complication</b><span>One or two complications appear without warning. Stay alert.</span></button>
+      <button class="mode" data-mode="choose"><b>Choose complications</b><span>Practise specific emergencies.</span></button>
+    </div>
+    <div class="comps" id="compPick">
+      <label><input type="checkbox" value="brady" checked> Fetal bradycardia / decelerations</label>
+      <label><input type="checkbox" value="sd" checked> Shoulder dystocia (HELPERR)</label>
+      <label><input type="checkbox" value="pph" checked> Postpartum haemorrhage (4 Ts)</label>
+    </div>
+    <div class="disc"><b>Disclaimer:</b> This is an educational simulation for students and clinicians in training. It is <b>not medical advice</b> and is not a substitute for accredited training, supervised clinical practice or local guidelines (e.g. RANZCOG, ANZCOR, state health policies). Clinical details are simplified and the timeline is compressed.</div>
+    <div class="startRow">
+      <span class="hintSmall">Tip: keys 1–9 pick options; hold <b>Space</b> to push.</span>
+      <button class="btn pri big" id="startBtn">Begin simulation ▶</button>
+    </div>
+    <div class="howto">
+      <div><b>1 · Assess &amp; decide</b>Pick the best action at each step. Wrong choices cost points but always explain why.</div>
+      <div><b>2 · Watch the monitor</b>Maternal vital signs, contractions and a live CTG respond to events and your actions.</div>
+      <div><b>3 · Debrief</b>Finish with a score, a timeline and personalised learning points.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DEBRIEF -->
+<div class="overlay" id="debriefOv"><div class="modal debrief" id="debrief" role="dialog" aria-modal="true"></div></div>

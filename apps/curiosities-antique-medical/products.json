@@ -1,0 +1,114 @@
+{
+ "products": [
+  {
+   "sku": "AN-001",
+   "title": "Antique Leather Doctor's Bag (48 x 26 x 33 cm)",
+   "category": "Doctor's & Midwife Bags",
+   "icon": "💼",
+   "supplier": "S3",
+   "supplierUrl": "S3-0",
+   "available": true,
+   "ships": "One-of-a-kind piece – availability and postage confirmed by email",
+   "salePrice": 195.0
+  },
+  {
+   "sku": "AN-002",
+   "title": "Mid-Century Oxblood Leather Gladstone Doctor Bag",
+   "category": "Doctor's & Midwife Bags",
+   "icon": "👜",
+   "supplier": "S4",
+   "supplierUrl": "S4-1",
+   "available": true,
+   "ships": "One-of-a-kind piece – availability and postage confirmed by email",
+   "salePrice": 160.0
+  },
+  {
+   "sku": "AN-003",
+   "title": "Pocket Monaural Stethoscope, English c1870",
+   "category": "Stethoscopes",
+   "icon": "🩺",
+   "supplier": "S2",
+   "supplierUrl": "S2-2",
+   "available": true,
+   "ships": "One-of-a-kind piece – availability and postage confirmed by email",
+   "salePrice": 495.0
+  },
+  {
+   "sku": "AN-004",
+   "title": "Apothecary Scales c.1880",
+   "category": "Scales",
+   "icon": "⚖️",
+   "supplier": "S5",
+   "supplierUrl": "S5-3",
+   "available": true,
+   "ships": "One-of-a-kind piece – availability and postage confirmed by email",
+   "salePrice": 185.0
+  },
+  {
+   "sku": "AN-005",
+   "title": "Antique Amber \"Not To Be Taken\" Poison Bottle (empty)",
+   "category": "Apothecary Bottles",
+   "icon": "🧪",
+   "supplier": "S1",
+   "supplierUrl": "S1-4",
+   "available": true,
+   "ships": "One-of-a-kind piece – availability and postage confirmed by email",
+   "salePrice": 25.0
+  },
+  {
+   "sku": "AN-006",
+   "title": "1930s–40s Blue Glass Eye Bath",
+   "category": "Apothecary Bottles",
+   "icon": "🧪",
+   "supplier": "S1",
+   "supplierUrl": "S1-5",
+   "available": true,
+   "ships": "One-of-a-kind piece – availability and postage confirmed by email",
+   "salePrice": 38.0
+  },
+  {
+   "sku": "AN-007",
+   "title": "Vintage Mercury Sphygmomanometer, Black Case (England)",
+   "category": "Instrument Sets",
+   "icon": "🩸",
+   "supplier": "S1",
+   "supplierUrl": "S1-6",
+   "available": true,
+   "ships": "One-of-a-kind piece – availability and postage confirmed by email",
+   "salePrice": 168.0
+  },
+  {
+   "sku": "AN-008",
+   "title": "Vintage Ophthalmoscope & Retinoscope Set in Case (London)",
+   "category": "Instrument Sets",
+   "icon": "👁️",
+   "supplier": "S1",
+   "supplierUrl": "S1-7",
+   "available": true,
+   "ships": "One-of-a-kind piece – availability and postage confirmed by email",
+   "salePrice": 165.0
+  },
+  {
+   "sku": "AN-009",
+   "title": "Vintage Clinical Thermometer",
+   "category": "Instrument Sets",
+   "icon": "🌡️",
+   "supplier": "S1",
+   "supplierUrl": "S1-8",
+   "available": true,
+   "ships": "One-of-a-kind piece – availability and postage confirmed by email",
+   "salePrice": 135.0
+  },
+  {
+   "sku": "AN-010",
+   "title": "Vintage Silver-Plated Nurse's Belt",
+   "category": "Nursing Memorabilia",
+   "icon": "🎀",
+   "supplier": "S6",
+   "supplierUrl": "S6-9",
+   "available": true,
+   "ships": "One-of-a-kind piece – availability and postage confirmed by email",
+   "salePrice": 120.0
+  }
+ ]
+}

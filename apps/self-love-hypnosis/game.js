@@ -1,0 +1,91 @@
+const c=document.getElementById('c');let x=c.getContext('2d');const $=id=>document.getElementById(id);
+// ---- music playlist (shuffle, mute, skip, now playing) ----
+const music=$('music');let muted=localStorage.hsMuted==='1',musicOK=true,PL=(window.PLAYLIST||[]).slice(),ti=0,bad=0;
+for(let i=PL.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[PL[i],PL[j]]=[PL[j],PL[i]]}
+function load(){if(!PL.length){musicOK=false;$('np').textContent='No music in playlist';return}const t=PL[ti%PL.length];music.src='assets/music/'+t.file;$('np').textContent='Now playing: '+t.title}
+function next(){ti=(ti+1)%Math.max(1,PL.length);load();if(started&&!muted)music.play().catch(()=>{})}
+let started=false;load();
+music.addEventListener('ended',next);music.addEventListener('playing',()=>bad=0);
+music.addEventListener('error',()=>{if(++bad>=PL.length){musicOK=false;$('np').textContent='Music file missing'}else next()});
+$('skip').onclick=e=>{e.stopPropagation();started=true;next()};
+function startMusic(){started=true;if(musicOK&&!muted&&music.paused)music.play().catch(()=>{})}
+$('mute').onclick=e=>{e.stopPropagation();muted=!muted;localStorage.hsMuted=muted?'1':'0';music.muted=muted;$('mute').textContent=muted?'🔇 Muted':'🔊 Music';if(!muted)startMusic()};
+music.muted=muted;if(muted)$('mute').textContent='🔇 Muted';
+// ---- shared canvas helpers ----
+const W=900,H=600;window.HERO_SRC='assets/hero.png';const hero=new Image();hero.src='assets/hero.png';
+const BTN={};let t=0;
+function pos(e){const r=c.getBoundingClientRect(),p=e.touches?e.touches[0]||e.changedTouches[0]:e;return{x:(p.clientX-r.left)*W/r.width,y:(p.clientY-r.top)*H/r.height}}
+function inB(p,b){return b&&p.x>b.x&&p.x<b.x+b.w&&p.y>b.y&&p.y<b.y+b.h}
+function rr(X,Y,w,h,r){x.beginPath();x.roundRect(X,Y,w,h,r)}
+function button(id,X,Y,w,h,label,fn,o={}){BTN[id]={x:X,y:Y,w,h,fn:o.dis?()=>{}:fn};x.globalAlpha=o.dis?.4:1;x.fillStyle=o.sel?(o.ac||'#e8a0b0'):(o.bg||'#3a1424');rr(X,Y,w,h,10);x.fill();x.strokeStyle=o.ac||'#e8a0b0';x.lineWidth=2;x.stroke();
+ x.fillStyle=o.sel?'#1a0a10':(o.fg||'#ffe9c7');x.font='bold '+(o.fs||Math.min(19,h*.42))+'px Georgia';x.textAlign='center';x.textBaseline='middle';x.fillText(label,X+w/2,Y+h/2+1);x.textBaseline='alphabetic';x.globalAlpha=1}
+function wrapT(s,X,Y,mw,lh){const w=String(s).split(' ');let l='';for(const z of w){if(x.measureText(l+z).width>mw&&l){x.fillText(l.trim(),X,Y);Y+=lh;l=''}l+=z+' '}x.fillText(l.trim(),X,Y);return Y+lh}
+function emo(e,X,Y,sz){x.font=sz+'px serif';x.textAlign='center';x.textBaseline='middle';x.fillText(e,X,Y);x.textBaseline='alphabetic'}
+function bindInput(o){c.addEventListener('mousedown',e=>{e.preventDefault();startMusic();const p=pos(e);for(const k of Object.keys(BTN).reverse())if(inB(p,BTN[k])){BTN[k].fn(p);return}o.down&&o.down(p)});
+ addEventListener('mousemove',e=>{o.move&&o.move(pos(e))});addEventListener('mouseup',e=>{o.up&&o.up(pos(e))});
+ c.addEventListener('touchstart',e=>{e.preventDefault();startMusic();const p=pos(e);for(const k of Object.keys(BTN).reverse())if(inB(p,BTN[k])){BTN[k].fn(p);return}o.down&&o.down(p)},{passive:false});
+ c.addEventListener('touchmove',e=>{e.preventDefault();o.move&&o.move(pos(e))},{passive:false});addEventListener('touchend',e=>{o.up&&o.up(pos(e))})}
+function startLoop(){let last=performance.now();function loop(n){const dt=Math.min(.05,(n-last)/1000);last=n;t+=dt;for(const k in BTN)delete BTN[k];update(dt);draw();requestAnimationFrame(loop)}requestAnimationFrame(loop)}
+function T(s,X,Y,sz,col,al,f){x.fillStyle=col||'#fff';x.font=(f===undefined?'bold ':f)+sz+'px '+(window.FONT||'Georgia');x.textAlign=al||'left';x.fillText(s,X,Y);x.textAlign='left'}
+function ent(){x.fillStyle='rgba(255,233,239,.45)';x.font='11px Georgia';x.textAlign='center';x.fillText('For entertainment only.',W/2,594)}
+// ===== Coffeebreak Self Love Hypnosis =====
+const DEMO=!!window.DEMO,SK=DEMO?'selfloveDemo':'selfloveSave';
+let S={done:0,days:[],journal:[],len:1,pad:true,mins:0};try{Object.assign(S,JSON.parse(localStorage.getItem(SK)||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem(SK,JSON.stringify(S))}catch(e){}};
+const G={state:'title',score:0,level:0};window.G=G;
+const NOTE='For relaxation and self-care only. It is not a substitute for professional help, diagnosis or treatment. Never listen while driving or operating machinery. If you are struggling, please reach out: Lifeline 13 11 14 (Australia), or 000 in an emergency.';
+const IND=['Find a comfortable position, sitting or lying down.','Let your eyes rest on the glowing light… or gently close them.','Breathe in slowly through your nose…','…and breathe out through your mouth, a little longer.','With every breath out, your shoulders soften.','Your jaw loosens. Your forehead smooths.','There is nothing to do right now. Nowhere to be.','Just this breath… and this one.'];
+const DEEP=['In a moment I will count down from ten.','With each number, you drift twice as deep into calm.'];
+const RET=['Now, gently, it is time to return.','Bring these feelings with you.','I\'ll count from one to five. On five, you\'ll feel refreshed and kind to yourself.','One… feeling your body again.','Two… wiggling your fingers and toes.','Three… breathing a little deeper.','Four… a small smile.','Five… eyes open, wide awake, feeling wonderful.'];
+const SES=[
+{n:'Body Love',e:'🌸',c:['#ff8ab8','#5a1a4a'],a:['Imagine a warm, soft pink light above your head.','It flows down, gently, through every part of you.','Your body has carried you through every single day of your life.','Thank your heart for every beat.','Thank your lungs for every breath.','Thank your legs for every step.','I am at home in my body.','My body deserves kindness, rest and care.','I speak to my body the way I would speak to someone I love.','I am grateful for all that my body does for me.']},
+{n:'Confidence',e:'✨',c:['#ffd24a','#4a2a10'],a:['Picture yourself standing tall in golden sunlight.','Your feet are steady. Your breath is strong.','Remember a time you did something brave, even something small.','Feel that same courage glowing in your chest.','I trust myself.','My voice matters and I let it be heard.','I can do hard things.','I walk into every room as myself, and that is enough.','Confidence grows every time I show up.']},
+{n:'Releasing Self-Criticism',e:'🍃',c:['#8ae8b8','#10302a'],a:['Notice the harsh voice that sometimes speaks inside.','Imagine its words written on autumn leaves.','A gentle breeze lifts them… and carries them far away.','In their place, a softer voice begins to speak.','I am learning, and learning means making mistakes.','I forgive myself for not knowing what I didn\'t know.','I am allowed to be a work in progress.','I talk to myself like a best friend.','I release what no longer serves me.']},
+{n:'Inner Child',e:'🧸',c:['#b8a0ff','#20104a'],a:['Imagine walking along a quiet path to a sunny garden.','Sitting on a swing is a younger you.','They look up at you. Notice how small and precious they are.','Sit beside them. Tell them what they always needed to hear.','You are safe now.','You are loved exactly as you are.','It was never your fault.','I will look after you.','Give them a warm hug… and let them become part of your heart.']},
+{n:'Worthiness',e:'💎',c:['#7ad0ff','#0a2040'],a:['Imagine a beautiful jewel glowing in the centre of your chest.','It has always been there. Nothing can dim it.','You do not have to earn your worth.','You were worthy the day you were born.','I am worthy of love, rest and joy.','I deserve good things.','I am enough, just as I am.','My worth is not measured by what I achieve.','I receive love with an open heart.']},
+{n:'Sleep & Self-Kindness',e:'🌙',c:['#4a5ab8','#05051a'],a:['Imagine lying on a soft cloud under a sky full of stars.','The cloud holds you completely. You can let go.','Each star is a kind thing you did today.','Every worry can wait until morning.','I did my best today, and that is enough.','I am safe. I am resting. I am loved.','My mind is quiet. My body is heavy and warm.','I drift easily into deep, peaceful sleep…','Sleep well… sleep well…']}];
+const NS=DEMO?2:SES.length,LENS=[['Short',5],['Medium',10],['Long',20]];
+const MIRROR=['I am worthy of love.','I am proud of how far I\'ve come.','I am beautiful inside and out.','I am allowed to take up space.','I choose to be kind to myself today.','I am becoming the person I want to be.','I deserve rest.','My feelings are valid.','I am enough.','I love who I am becoming.','I am my own best friend.','I trust my journey.'];
+const PROMPTS=['What is one thing you love about yourself today?','What would you say to comfort your younger self?','Write 3 things your body did for you today.','What is a compliment you find hard to accept? Accept it here.','What are you proud of this week?','How can you be gentle with yourself tomorrow?'];
+// ---- ambient pad ----
+let pad=null;function startPad(){if(pad||!S.pad)return;try{window._AC=window._AC||new AudioContext();const A=window._AC;A.resume();const g=A.createGain();g.gain.setValueAtTime(0,A.currentTime);g.gain.linearRampToValueAtTime(.07,A.currentTime+4);const lp=A.createBiquadFilter();lp.type='lowpass';lp.frequency.value=900;lp.connect(g);g.connect(A.destination);
+ const os=[130.81,196,261.63,329.63,392].map((f,i)=>{const o=A.createOscillator();o.type=i%2?'sine':'triangle';o.frequency.value=f;o.detune.value=(i-2)*4;const og=A.createGain();og.gain.value=.25;const l=A.createOscillator(),lg=A.createGain();l.frequency.value=.05+i*.03;lg.gain.value=.15;l.connect(lg);lg.connect(og.gain);o.connect(og);og.connect(lp);o.start();l.start();return[o,l]});pad={g,os}}catch(e){}}
+function stopPad(){if(!pad)return;try{const A=window._AC;pad.g.gain.linearRampToValueAtTime(0,A.currentTime+2);const p=pad;setTimeout(()=>p.os.forEach(z=>{z[0].stop();z[1].stop()}),2200)}catch(e){}pad=null}
+let wasPlaying=false;function songsOff(){try{wasPlaying=!music.paused;music.pause()}catch(e){}}function songsOn(){try{if(wasPlaying)music.play().catch(()=>{})}catch(e){}}
+// ---- session ----
+let ses=null,lineT=0,mirI=0,jEdit=null,msg='',msgT=0;
+function buildLines(i){const s=SES[i],L=[];IND.forEach(z=>L.push(z));DEEP.forEach(z=>L.push(z));for(let n=10;n>=1;n--)L.push(n+'… '+(['deeper','calmer','softer','safer','deeper still'][n%5]));s.a.forEach(z=>L.push(z));
+ if(S.len>=1)s.a.forEach(z=>{if(/^I /.test(z))L.push('Repeat silently: '+z)});if(S.len>=2){L.push('Rest here for a while, breathing slowly.');s.a.forEach(z=>{if(/^I /.test(z))L.push(z)})}if(i===5)L.push('…');else RET.forEach(z=>L.push(z));return L}
+function startSes(i){const L=buildLines(i),total=LENS[S.len][1]*60;ses={i,L,k:0,per:Math.max(5,total/L.length),t:0,el:0,total};G.state='session';songsOff();if(S.pad)startPad()}
+function endSes(complete){stopPad();songsOn();if(complete){S.done++;S.mins+=Math.round(ses.el/60);const d=new Date().toISOString().slice(0,10);if(!S.days.includes(d))S.days.push(d);G.score=S.done;G.level=streak();save();G.state='after'}else G.state='menu';if(DEMO&&complete)setTimeout(()=>window.demoEnd&&window.demoEnd('Thank you for taking this time for yourself. The full app has all 6 sessions (including Inner Child, Worthiness and Sleep), 3 session lengths, mirror affirmations, the self-love journal and streaks.'),4000)}
+function streak(){const set=new Set(S.days);let n=0,d=new Date();for(;;){const k=d.toISOString().slice(0,10);if(set.has(k)){n++;d.setDate(d.getDate()-1)}else break}return n}
+// ---- drawing ----
+function sky(c1,c2){const g=x.createRadialGradient(450,300,40,450,300,600);g.addColorStop(0,c1);g.addColorStop(1,c2);x.fillStyle=g;x.fillRect(0,0,900,600);for(let i=0;i<40;i++){x.fillStyle='rgba(255,255,255,'+(.15+.15*Math.sin(t+i))+')';x.fillRect((i*137)%900,(i*91)%600,2,2)}}
+function orb(X,Y,r,col){const g=x.createRadialGradient(X,Y,0,X,Y,r);g.addColorStop(0,'rgba(255,255,255,.95)');g.addColorStop(.4,col);g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.beginPath();x.arc(X,Y,r,0,7);x.fill()}
+function spiral(X,Y,rot,col){x.save();x.translate(X,Y);x.rotate(rot);x.strokeStyle=col;x.globalAlpha=.25;x.lineWidth=3;for(let a=0;a<6;a++){x.beginPath();for(let k=0;k<200;k++){const th=k*.08,r=k*1.3;x.lineTo(Math.cos(th+a*1.05)*r,Math.sin(th+a*1.05)*r)}x.stroke()}x.restore();x.globalAlpha=1}
+function drawTitle(){sky('#5a2a6a','#0a0518');spiral(450,300,t*.1,'#ffb0e0');orb(450,300,120+Math.sin(t)*20,'rgba(255,150,210,.6)');x.save();x.shadowColor='#ff8ac8';x.shadowBlur=25;T('Coffeebreak',450,120,28,'#ffd0ec','center');T('Self Love Hypnosis',450,185,54,'#fff','center');x.restore();
+ T('Breathe. Soften. Remember your worth.',450,225,19,'#ffe0a0','center','italic ');button('go',330,400,240,58,'🌸 Begin',()=>{G.state='menu'},{fs:22,bg:'#8a2a6a',fg:'#fff'});x.fillStyle='rgba(255,233,239,.7)';x.font='12px Georgia';x.textAlign='center';wrapT(NOTE,450,500,700,16);x.textAlign='left'}
+function drawMenu(){sky('#3a1a4a','#0a0518');T('Choose your session',450,45,30,'#fff','center');T('🔥 Streak: '+streak()+' day'+(streak()===1?'':'s')+'  ·  Sessions: '+S.done+'  ·  Minutes: '+S.mins,450,72,15,'#ffd0ec','center','');
+ SES.forEach((s,i)=>{const lock=i>=NS,X=60+(i%3)*270,Y=95+Math.floor(i/3)*120;button('s'+i,X,Y,250,105,'',()=>{if(lock){window.demoEnd&&window.demoEnd();return}startSes(i)},{bg:s.c[1]});emo(lock?'🔒':s.e,X+125,Y+40,36);T(s.n,X+125,Y+85,s.n.length>18?14:18,'#fff','center')});
+ T('Length:',60,375,17,'#ffd0ec');LENS.forEach((l,i)=>button('l'+i,140+i*130,350,120,40,l[0]+' '+l[1]+'m',()=>{S.len=i;save()},{sel:S.len===i,fs:14}));
+ button('pad',560,350,280,40,S.pad?'🎐 Ambient pad: ON':'🎵 Coffeebreak songs',()=>{S.pad=!S.pad;save()},{fs:14});
+ button('mir',60,420,250,54,'🪞 Mirror affirmations',()=>{G.state='mirror';mirI=Math.floor(Math.random()*MIRROR.length)},{fs:16});button('jr',325,420,250,54,'📔 Self-love journal',()=>{if(DEMO){window.demoEnd&&window.demoEnd();return}openJournal()},{fs:16});button('bk',590,420,250,54,'⬅ Back',()=>{G.state='title'},{fs:16});
+ x.fillStyle='rgba(255,233,239,.6)';x.font='11px Georgia';x.textAlign='center';wrapT(NOTE,450,520,780,14);x.textAlign='left'}
+function drawSession(){const s=SES[ses.i];sky(s.c[0]+'66',s.c[1]);spiral(450,280,t*.15,s.c[0]);const cyc=(ses.el%10),k=cyc<4?cyc/4:cyc<5?1:1-(cyc-5)/5;orb(450,280,90+k*90,s.c[0]+'aa');
+ T(cyc<4?'breathe in…':cyc<5?'hold…':'breathe out…',450,470,18,'rgba(255,255,255,.6)','center','italic ');
+ const line=ses.L[ses.k],a=Math.min(1,ses.t/1.5,(ses.per-ses.t)/1.2);x.globalAlpha=Math.max(0,a);x.fillStyle='#fff';x.font='italic 26px Georgia';x.textAlign='center';wrapT(line,450,95,760,34);x.textAlign='left';x.globalAlpha=1;
+ x.fillStyle='rgba(255,255,255,.2)';x.fillRect(150,560,600,4);x.fillStyle='rgba(255,255,255,.7)';x.fillRect(150,560,600*Math.min(1,ses.el/ses.total),4);
+ button('x',800,520,80,30,'End',()=>endSes(false),{fs:12,bg:'rgba(0,0,0,.3)'});button('sk',20,520,80,30,'Skip ▶',()=>{ses.t=ses.per},{fs:12,bg:'rgba(0,0,0,.3)'})}
+function drawAfter(){sky('#7a3a7a','#1a0a2a');orb(450,250,150,'rgba(255,180,220,.5)');T('Welcome back 💗',450,150,40,'#fff','center');T('You gave yourself '+Math.max(1,Math.round(ses.el/60))+' minutes of love.',450,200,20,'#ffd0ec','center','');T('🔥 '+streak()+' day streak',450,240,22,'#ffd24a','center');
+ button('j',200,330,240,54,'📔 Journal about it',()=>{if(DEMO){window.demoEnd&&window.demoEnd();return}openJournal()},{fs:16});button('m',460,330,240,54,'🌸 Another session',()=>{G.state='menu'},{fs:16})}
+function drawMirror(){sky('#5a2a5a','#100818');x.fillStyle='#d8b060';x.beginPath();x.ellipse(450,280,210,250,0,0,7);x.fill();const g=x.createLinearGradient(300,80,600,480);g.addColorStop(0,'#e8f4ff');g.addColorStop(.5,'#c8d8f0');g.addColorStop(1,'#f4e8ff');x.fillStyle=g;x.beginPath();x.ellipse(450,280,190,230,0,0,7);x.fill();
+ x.fillStyle='rgba(255,255,255,.5)';x.beginPath();x.ellipse(380,180,30,90,-.4,0,7);x.fill();x.fillStyle='#5a2a5a';x.font='bold italic 30px Georgia';x.textAlign='center';wrapT(MIRROR[mirI],450,250,320,40);x.font='14px Georgia';x.fillText('Look in a real mirror and say it out loud, 3 times.',450,420);x.textAlign='left';
+ button('sp',150,530,190,50,'🗣️ Hear it',()=>{try{const u=new SpeechSynthesisUtterance(MIRROR[mirI]);u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}},{fs:16});button('nx',355,530,190,50,'✨ Next',()=>{mirI=(mirI+1)%MIRROR.length},{fs:16});button('bk',560,530,190,50,'⬅ Back',()=>{G.state='menu'},{fs:16})}
+// ---- journal (DOM) ----
+const jr=document.createElement('div');jr.style.cssText='display:none;position:fixed;inset:5% 10%;z-index:90;background:#fff6fa;color:#3a1a3a;border-radius:16px;padding:18px;overflow:auto;font:15px Georgia;box-shadow:0 10px 40px #0008';document.body.appendChild(jr);
+function openJournal(){const pr=PROMPTS[S.journal.length%PROMPTS.length];jr.innerHTML='<h2 style="margin:0;color:#8a2a6a">📔 Self-love journal</h2><p><i>'+pr+'</i></p><textarea id="jt" style="width:100%;height:120px;font:15px Georgia;border:1px solid #e8a0c8;border-radius:10px;padding:8px;box-sizing:border-box"></textarea><p><button id="js" style="background:#8a2a6a;color:#fff;border:0;border-radius:10px;padding:8px 16px;font:bold 15px Georgia">Save entry</button> <button id="jc" style="background:#fff;border:2px solid #e8a0c8;border-radius:10px;padding:8px 16px;font:15px Georgia">Close</button></p><p style="font-size:12px;opacity:.7">Saved on this device only.</p>'+S.journal.slice().reverse().map(e=>'<div style="border-top:1px solid #f0d0e0;padding:6px 0"><b>'+e.d+'</b> · <i>'+e.p.replace(/</g,'&lt;')+'</i><br>'+e.t.replace(/</g,'&lt;').replace(/\n/g,'<br>')+'</div>').join('');jr.style.display='block';
+ jr.querySelector('#js').onclick=()=>{const v=jr.querySelector('#jt').value.trim();if(v){S.journal.push({d:new Date().toLocaleDateString('en-AU'),p:pr,t:v});save();openJournal()}};jr.querySelector('#jc').onclick=()=>{jr.style.display='none'}}
+bindInput({});
+function update(dt){if(G.state==='session'&&ses){ses.t+=dt;ses.el+=dt;if(ses.t>=ses.per){ses.t=0;ses.k++;if(ses.k>=ses.L.length)endSes(true)}}}
+function draw(){x.clearRect(0,0,900,600);({title:drawTitle,menu:drawMenu,session:drawSession,after:drawAfter,mirror:drawMirror})[G.state]();x.textAlign='left'}
+window.SL={G,S,SES,startSes,endSes,get ses(){return ses},streak,openJournal};startLoop();

@@ -1,11 +1,60 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak 3D Converter</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak 3D Converter</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak 3D Converter</title><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#ff4fa3"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="CB 3D">
+<style>
+:root{--pink:#ff4fa3;--dark:#1d1220;--card:#2b1b31}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--dark);color:#fff}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#120a15;border-bottom:3px solid var(--pink)}
+header img{width:46px;height:46px;border-radius:50%;object-fit:cover}header h1{font-size:1.2rem;margin:0}header small{opacity:.7}
+main{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:12px;padding:12px}main>div{min-width:0}@media(max-width:800px){main{grid-template-columns:1fr;padding:8px}main>div:last-child{order:-1;position:sticky;top:0;z-index:2;background:var(--dark)}#view{height:36vh!important;min-height:220px!important}}html,body{overflow-x:hidden}
+.card{background:var(--card);border-radius:14px;padding:12px;margin-bottom:12px}h2{font-size:1rem;margin:0 0 8px;color:var(--pink)}
+button,select,input,label.btn{font:inherit;font-size:1.05rem;border-radius:14px;border:0;padding:14px 16px;min-height:50px;margin:4px 2px}
+#install{display:none;position:fixed;left:0;right:0;bottom:0;box-shadow:0 -4px 12px #0008;z-index:5;background:#ff4fa3;padding:10px 14px;text-align:center}#install button{background:#fff;color:#c21d72}
+#view canvas{touch-action:none}
+button,label.btn{background:var(--pink);color:#fff;cursor:pointer;display:inline-block}button.alt{background:#4a3352}
+select,input[type=number]{background:#fff;color:#000;width:100%}input[type=number]{width:90px}
+#draw{width:100%;aspect-ratio:1;background:#fff;border-radius:10px;touch-action:none;display:block}
+#view{width:100%;height:60vh;min-height:320px;border-radius:14px;overflow:hidden;background:#0d070f}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0}.help{font-size:.88rem;opacity:.85;line-height:1.4}
+#status{font-size:.9rem;color:#ffc2e0;min-height:1.2em}a{color:#ffc2e0}
+</style></head><body>
+<header><img src="logo.jpg" alt="Coffeebreak logo"><div><h1>Coffeebreak 3D Converter</h1><small>Draw it or drop it in, then print it on any 3D printer</small></div></header>
+<div id="install"><span id="installTxt">Add Coffeebreak 3D to your home screen</span> <button id="installBtn">Add</button> <button id="installNo" class="alt">Not now</button></div>
+<main><div>
+<div class="card"><h2>1. Draw</h2><canvas id="draw" width="512" height="512"></canvas>
+<div class="row">Brush <input id="brush" type="range" min="4" max="60" value="18">
+<button id="pen" class="alt">Pen</button><button id="eraser" class="alt">Eraser</button><button id="clear" class="alt">Clear</button></div>
+<button id="useDraw">Make 3D from drawing</button></div>
+<div class="card"><h2>2. Or open any file</h2>
+<label class="btn">Take photo<input id="cam" type="file" hidden accept="image/*" capture="environment"></label>
+<label class="btn">Photos<input id="gal" type="file" hidden accept="image/*"></label>
+<label class="btn">Any file<input id="file" type="file" hidden accept=".png,.jpg,.jpeg,.gif,.webp,.svg,.stl,.obj,.3mf,.ply,image/*"></label>
+<div class="help">Pictures (PNG, JPG, SVG) and 3D files (STL, OBJ, 3MF, PLY).</div>
+<div class="row">Picture style <select id="mode" style="width:auto"><option value="outline">Flat cut-out (outline)</option><option value="height">Raised picture (darker is taller)</option></select>
+<label><input id="invert" type="checkbox"> Swap light and dark</label></div></div>
+<div class="card"><h2>3. Size in mm</h2>
+<div class="row">Width <input id="sizeW" type="number" value="80" min="5" max="400"> Thickness <input id="depth" type="number" value="5" min="0.4" max="200" step="0.2"> Base <input id="base" type="number" value="0" min="0" max="20" step="0.2"></div>
+<div class="help">Base adds a solid backing plate, handy for raised pictures. For 3D files, width scales the whole model.</div>
+<button id="apply" class="alt">Update size</button><div id="dims" class="help"></div></div>
+<div class="card"><h2>4. Save for printing</h2>
+<button id="eSTL">STL</button><button id="eOBJ">OBJ</button><button id="e3MF">3MF</button>
+<div class="row">Printer <select id="printer"></select></div>
+<div class="row">Layer height <select id="layer" style="width:auto"><option>0.2</option><option>0.12</option><option>0.28</option></select> mm</div>
+<button id="eG">G-code (basic)</button>
+<p class="help">STL works with every slicer and printer. The G-code here comes from a basic built-in slicer with PLA settings, so it is fine for simple shapes. For best results, open the STL in <a href="https://ultimaker.com/software/ultimaker-cura/" target="_blank">UltiMaker Cura</a> (free), or PrusaSlicer, OrcaSlicer or Bambu Studio. Always watch the first layer.</p>
+<div id="status"></div></div>
+<div class="card"><h2>5. Send to printer</h2>
+<div class="row"><button id="shareSTL">Share STL</button><button id="shareG">Share G-code</button></div>
+<p class="help">Share opens your phone's share menu, so you can send to Files, AirDrop, email or a printer app.</p>
+<div class="row">Printer type <select id="host" style="width:auto"><option value="sd">SD card or USB (save file)</option><option value="octo">OctoPrint</option><option value="moon">Klipper / Moonraker (Mainsail, Fluidd)</option></select></div>
+<div id="wifi" style="display:none"><div class="row">Printer IP <input id="ip" placeholder="192.168.1.50" style="width:100%"></div>
+<div class="row" id="keyRow">API key <input id="key" placeholder="From OctoPrint settings" style="width:100%"></div>
+<label><input id="autoPrint" type="checkbox"> Start printing straight away</label></div>
+<button id="send">Send to printer</button>
+<p class="help">WiFi sending needs the phone and printer on the same network. Most phone browsers block sending from this website to a printer, so if it fails, save the G-code and upload it on your printer's page, or open this app from a file on your computer. SD card: save the G-code, copy it to the card, then pick it on the printer.</p></div>
+</div><div><div id="view"></div><p class="help">Drag to spin, pinch or scroll to zoom.</p></div></main>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="app.js"></script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>
