@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak House Maker Free Demo</title>
+<link rel="icon" href="cb-logo.png">
+<meta name="description" content="Design houses and mansions in 3D, export watertight STL and 3MF, and send to your 3D printer.">
+<link rel="stylesheet" href="style.css"><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+<script>window.CB_FULL=false;window.CB_BUY="../cb-house-maker-buy/";</script>
+</head><body>
+<header><img src="cb-logo.png" alt="Coffeebreak CB logo"><div><h1>Coffeebreak House Maker</h1><div class="sub">Design houses &amp; mansions in 3D, then 3D print a scale model · Free demo</div></div><a class="badge" id="buyBadge" href="../cb-house-maker-buy/">Full version $10</a></header>
+<div class="tabs"><button data-tab="toolsPanel" class="on">Tools</button><button data-tab="planPanel">Plan</button><button data-tab="viewPanel">3D</button><button data-tab="printPanel">Print</button></div>
+<div class="wrap">
+<section class="panel show" id="toolsPanel"><h2>Design</h2>
+ <label>Start from a preset</label><div class="tools"><button data-preset="mansion">Mansion</button><button data-preset="castle">Castle mansion</button><button data-preset="beach">Beach house</button><button data-preset="cottage">Cottage</button><button data-preset="blank">Blank</button></div>
+ <h3>Paint tool</h3><div class="tools" id="tools">
+  <button data-tool="room" class="on">▭ Room</button><button data-tool="2">Wall</button><button data-tool="3">Door</button><button data-tool="4">Window</button><button data-tool="1">Floor</button><button data-tool="5">Stairs</button><button data-tool="6">Pool</button><button data-tool="7">Garden</button><button data-tool="8">Tree</button><button data-tool="9">Path</button><button data-tool="0">Erase</button><button data-tool="pan">✋ Scroll</button></div>
+ <div class="row"><button id="rotStair">Stair dir: ↑</button></div>
+ <p class="small">Room: drag a rectangle to make walls + floor. Pool, garden, tree and path go on the ground floor. Two stair squares in a row climb one storey.</p>
+ <h3>Storey</h3><div class="row"><select id="floorSel"></select></div><div class="row"><button id="addFloor">+ Storey</button><button id="delFloor">− Top storey</button></div>
+ <label>Roof</label><select id="roof"><option value="hip">Hip roof</option><option value="gable">Gable roof</option><option value="flat">Flat with parapet</option><option value="castle">Castle battlements</option></select>
+ <label>Plot size (0.5 m squares)</label><div class="row"><input type="number" id="pw" min="8" max="64"><input type="number" id="ph" min="8" max="64"><button id="resize">Set</button></div>
+ <h3>Print model</h3>
+ <label>Scale</label><select id="scale"><option value="50">1:50</option><option value="100">1:100</option><option value="150">1:150</option><option value="200" selected>1:200</option><option value="300">1:300</option><option value="500">1:500</option></select>
+ <label>Base plate</label><select id="base"><option value="0">None (house only)</option><option value="1.5">1.5 mm</option><option value="2" selected>2 mm</option><option value="3">3 mm</option><option value="5">5 mm</option></select>
+ <label>Wall thickness</label><select id="bold"><option value="0">Standard (0.5 m real)</option><option value="1">Bold (thicker, for small scales)</option></select>
+ <div id="sizeInfo" class="notice ok small"></div>
+ <div class="row"><button id="save">Save design</button><button id="load">Open design</button><input type="file" id="loadFile" accept=".json" hidden></div>
+</section>
+<section class="panel" id="planPanel"><h2>Floor plan <span class="small" id="planLbl"></span></h2>
+ <div class="row"><button id="zout">−</button><button id="zin">+</button><button id="undo">Undo</button></div>
+ <div id="planBox"><canvas id="plan"></canvas></div>
+ <div class="legend small" id="legend"></div></section>
+<section class="panel" id="viewPanel"><h2>3D view</h2>
+ <div class="row"><select id="viewMode"><option value="color">Colour view</option><option value="print">Print preview (exact STL)</option></select><button id="cutaway">Show all storeys</button></div>
+ <div id="view"></div><p class="small">Drag to orbit, pinch or scroll to zoom, right-drag or two fingers to pan.</p></section>
+<section class="panel" id="printPanel"><h2>3D print</h2>
+ <div class="notice red"><b>Safety notice for live printer control.</b> A 3D printer has a hot nozzle (200 °C+), a heated bed and moving parts. Only start a print when you are at the printer, the bed is clear and you will watch it. Never leave a printer unattended. Use Emergency stop if anything looks wrong. Coffeebreak House Maker sends commands exactly as shown; you are responsible for your printer's settings and safety.</div>
+ <div class="pgrid">
+ <div><h3>1. Export for your slicer (recommended)</h3>
+  <label>What to export</label><select id="expWhat"></select>
+  <div class="row"><button class="dark" id="expStl">Download STL</button><button class="dark" id="exp3mf">Download 3MF</button></div>
+  <p class="small">STL and 3MF files are watertight, in millimetres, Z up, ready for PrusaSlicer, Cura, Bambu Studio or OrcaSlicer. <b>Open in slicer:</b> download the file, then drag it into your slicer (or double-click the 3MF). This is the most reliable way to print.</p>
+  <div id="expInfo" class="small"></div></div>
+ <div><h3>2. Built-in basic slicer (experimental)</h3>
+  <div class="notice small">Honest note: the built-in slicer is basic. It makes perimeters and straight-line infill with no supports, no bridging tuning and no printer profiles. Ceilings and window tops print as short bridges, which most printers handle at 1:200 and smaller, but large rooms may sag. For best results use the STL in a real slicer, or print one storey at a time.</div>
+  <div class="row"><div><label>Bed X mm</label><input type="number" id="bedX" value="220"></div><div><label>Bed Y mm</label><input type="number" id="bedY" value="220"></div></div>
+  <div class="row"><div><label>Nozzle °C</label><input type="number" id="tNoz" value="205"></div><div><label>Bed °C</label><input type="number" id="tBed" value="60"></div></div>
+  <div class="row"><div><label>Layer mm</label><select id="lh"><option>0.2</option><option>0.28</option><option>0.12</option></select></div><div><label>Speed mm/s</label><input type="number" id="spd" value="40"></div><div><label>Infill %</label><input type="number" id="inf" value="15"></div></div>
+  <div class="row"><div><label>Nozzle mm</label><input type="number" id="noz" value="0.4" step="0.1"></div><div><label>Filament mm</label><input type="number" id="fil" value="1.75" step="0.05"></div></div>
+  <div class="row"><button class="dark" id="doSlice">Slice to G-code</button><button id="dlG" disabled>Download G-code</button></div>
+  <div id="sliceInfo" class="small"></div>
+  <input type="range" id="layerSlider" min="0" max="0" value="0" style="width:100%"><canvas id="gprev" width="400" height="400"></canvas></div>
+ <div><h3>3. Connect a printer</h3>
+  <label><input type="checkbox" id="safeOk"> I am at the printer and will watch the whole print</label>
+  <h3>USB (Marlin) via Web Serial</h3>
+  <p class="small">Works in desktop Chrome or Edge with the printer plugged in by USB. Not available on iPhone, iPad or Firefox.</p>
+  <div class="row"><select id="baud"><option>115200</option><option>250000</option><option>57600</option></select><button id="usbConnect">Connect USB</button><button id="usbDisc" disabled>Disconnect</button></div>
+  <div id="temps">Not connected</div><div id="pstatus" class="small"></div>
+  <div class="row"><button id="bHome" disabled>Home</button><button id="bPre" disabled>Preheat PLA</button><button id="bCool" disabled>Cool down</button></div>
+  <div class="row"><button class="dark" id="bPrint" disabled>Print sliced G-code</button><button id="bPause" disabled>Pause</button><button id="bCancel" disabled>Cancel</button></div>
+  <div class="row"><button class="warn" id="bStop" disabled>EMERGENCY STOP (M112)</button></div>
+  <div class="row"><input type="text" id="cmd" placeholder="Send a G-code line, e.g. M105"><button id="bSend" disabled>Send</button></div>
+  <div id="log"></div>
+  <h3>Network: OctoPrint or Moonraker/Klipper</h3>
+  <div class="row"><select id="netType"><option value="octo">OctoPrint</option><option value="moon">Moonraker / Klipper (Mainsail, Fluidd)</option></select></div>
+  <label>Printer URL</label><input type="text" id="netUrl" placeholder="http://192.168.1.50 or http://octopi.local">
+  <label>API key (OctoPrint required, Moonraker optional)</label><input type="password" id="netKey" autocomplete="off">
+  <label><input type="checkbox" id="netRemember"> Remember on this device only (saved in this browser, never sent to Coffeebreak)</label>
+  <label><input type="checkbox" id="netStart"> Start printing after upload</label>
+  <div class="row"><button id="netTest">Test connection</button><button class="dark" id="netUp">Upload G-code</button></div>
+  <div id="netInfo" class="small"></div>
+  <p class="small">Browsers block a secure https page from talking to a printer on plain http. If the test fails, download the full app and open it from your computer, give your printer an https address, or allow this site in OctoPrint (Settings → API → Allow Cross Origin) or Moonraker's <code>cors_domains</code>. You can always download the G-code and upload it in your printer's own web page.</p></div>
+ </div></section>
+</div>
+<div id="toast"></div>
+<footer>
+<p><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, games, name and logo. Buyers may resell physical items they bought but may not copy them. No ownership is claimed of any third-party brands named (OctoPrint, Klipper, Moonraker, Marlin, Chrome and others belong to their owners). Models are for hobby scale printing only, not for real construction. Use 3D printers safely and never leave them unattended.</p>
+<p>© Coffeebreak · <a href="../cb-house-maker-buy/">Get the full version $10 USD</a></p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a></p>
+</footer>
+<script src="lib/three.min.js"></script><script src="lib/OrbitControls.js"></script><script src="core.js"></script><script src="app.js"></script>
+</body></html>
