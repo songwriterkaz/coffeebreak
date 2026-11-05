@@ -1,0 +1,90 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Leg Maker</title>
+<style>body{margin:0;font-family:Georgia,serif;background:#fff4f8;color:#1a1013;display:flex;flex-wrap:wrap;height:100vh}#side{width:330px;max-width:100%;overflow:auto;padding:12px;box-sizing:border-box;background:#fff;border-right:3px solid #1a1013;height:100vh}#view{flex:1;min-width:300px;height:100vh;position:relative}h1{font-size:20px;margin:4px 0}label{display:block;font-size:13px;margin-top:8px}input,select{width:100%;box-sizing:border-box;padding:5px;border:2px solid #1a1013;border-radius:6px}button{background:#ff4fa3;color:#fff;border:2px solid #1a1013;border-radius:20px;padding:8px 14px;font-weight:700;cursor:pointer;margin-top:10px;width:100%}.note{font-size:12px;background:#ffe0ee;border-radius:8px;padding:8px;margin-top:10px}#stat{position:absolute;left:10px;bottom:10px;background:#fffc;padding:6px 10px;border-radius:8px;font-size:12px}#dec{width:100%;height:110px;object-fit:contain;background:#f3e3e8;border-radius:8px;margin-top:6px}</style>
+<script type="importmap">{"imports":{"three":"./lib/three.module.min.js"}}</script></head><body>
+<div id="side"><img src="logo.jpg" alt="Coffeebreak logo" style="width:90px;border-radius:8px"><h1>Coffeebreak Leg Maker</h1><small>Free 3D leg cover designer. Enter your measurements, pick a style, export an STL for 3D printing.</small>
+<label>Length (cm) <input id="L" type="number" value="30" min="10" max="60" step="0.5"></label>
+<label>Top circumference (cm) <input id="Ct" type="number" value="38" min="15" max="80" step="0.5"></label>
+<label>Bottom circumference (cm) <input id="Cb" type="number" value="24" min="10" max="60" step="0.5"></label>
+<label>Shell thickness (mm) <input id="T" type="number" value="3" min="1.6" max="6" step="0.2"></label>
+<label>Back opening (degrees, 0 = closed) <input id="O" type="number" value="40" min="0" max="120" step="5"></label>
+<label><input id="S" type="checkbox" checked style="width:auto"> Strap slots beside the opening</label>
+<label>Cut-out pattern <select id="P"><option value="hearts">Hearts</option><option value="stars">Stars</option><option value="bee">Bee honeycomb</option><option value="fishnet">Fishnet lattice</option><option value="plain">Plain</option></select></label>
+<label>Pattern size (mm) <input id="PS" type="number" value="28" min="14" max="60" step="1"></label>
+<label><input id="E" type="checkbox" checked style="width:auto"> Emboss Coffeebreak logo on the front</label>
+<label>Flash decal preview (design id, e.g. CBLEG-0001) <input id="DID" value="CBLEG-0001"></label><img id="dec" alt="decal preview">
+<label>Upload your own picture (stays on your device) <input id="UP" type="file" accept="image/jpeg,image/png,image/webp"></label><label>Picture placement <select id="UPM"><option value="wrap">Wrap all the way around</option><option value="feature">Front only</option><option value="tiled">Tiled repeat</option></select></label><button id="UPX" class="g" type="button">Remove my picture</button><div class="note" id="UPW"></div>
+<button id="go">Update 3D preview</button><button id="stl">Export STL</button>
+<div class="note">This is a decorative cover, not a functional prosthesis or a structural part. Do not load-bear on it. Please check with your prosthetist before fitting anything over your socket or components. The flash decal is a colour preview only; the STL contains the shape, cut-outs and embossed logo. Print in PETG or TPU at your own printer settings.</div>
+<div class="note">Coffeebreak . coffeebreaks.itch.io . <a href="../index.html">Back to the store</a></div></div>
+<div id="view"><div id="stat"></div></div>
+<script src="../designs.js"></script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from './lib/OrbitControls.js';
+import {STLExporter} from './lib/STLExporter.js';
+const $=id=>document.getElementById(id);
+const view=$('view');const R=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});R.setPixelRatio(devicePixelRatio);view.appendChild(R.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#f6e6ef');
+const cam=new THREE.PerspectiveCamera(40,1,1,5000);cam.position.set(0,150,620);
+const ctl=new OrbitControls(cam,R.domElement);ctl.target.set(0,150,0);
+scene.add(new THREE.HemisphereLight(0xffffff,0x886677,1.1));const dl=new THREE.DirectionalLight(0xffffff,1.4);dl.position.set(300,500,400);scene.add(dl);
+function size(){const w=view.clientWidth,h=view.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}addEventListener('resize',size);size();
+// logo bitmap for emboss
+let logoMask=null;{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=128;c.height=98;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,128,98);x.drawImage(im,0,0,128,98);const d=x.getImageData(0,0,128,98).data;logoMask={w:128,h:98,a:new Uint8Array(128*98)};for(let i=0;i<128*98;i++)logoMask.a[i]=(d[i*4]+d[i*4+1]+d[i*4+2])/3<120?1:0;build()};im.src='logo.jpg'}
+function inHeart(x,y){x*=1.25;y=-y*1.25+0.25;const a=x*x+y*y-1;return a*a*a-x*x*y*y*y<0}
+function inStar(x,y){const r=Math.hypot(x,y),t=Math.atan2(y,x);const k=((t+Math.PI*2.5)%(2*Math.PI/5))/(2*Math.PI/5);const lim=0.42+0.48*Math.abs(1-2*k);return r<lim*0.95}
+function hole(p,sx,sy,ps){ // sx,sy mm on unrolled surface
+ if(p=='plain')return false;
+ if(p=='fishnet'){const a=(sx+sy)/ps,b=(sx-sy)/ps;const fa=a-Math.floor(a),fb=b-Math.floor(b);const bar=0.16;return fa>bar&&fb>bar}
+ if(p=='bee'){const w=ps,h=ps*0.866;let row=Math.floor(sy/h),off=(row%2)*w/2;let cx=Math.floor((sx-off)/w)*w+off+w/2,cy=row*h+h/2;let dx=Math.abs(sx-cx),dy=Math.abs(sy-cy);const r=w*0.38;return dy<r*0.866&&dx<r-dy*0.577}
+ const row=Math.floor(sy/ps),off=(row%2)*ps/2,cx=Math.floor((sx-off)/ps)*ps+off+ps/2,cy=row*ps+ps/2,nx=(sx-cx)/(ps*0.4),ny=(sy-cy)/(ps*0.4);
+ return p=='hearts'?inHeart(nx,ny):inStar(nx,ny)}
+let mesh,decal;
+function build(){
+ const L=+$('L').value*10,rt=+$('Ct').value*10/(2*Math.PI),rb=+$('Cb').value*10/(2*Math.PI),T=+$('T').value,O=+$('O').value,S=$('S').checked,P=$('P').value,PS=+$('PS').value,E=$('E').checked;
+ const NU=200,NV=Math.round(L/2.2);const rad=v=>rb+(rt-rb)*v; // v=0 bottom
+ const openU=O/360,margin=12;
+ // cell fill
+ const fill=new Uint8Array(NU*NV);
+ const logoW=70,logoH=54,logoV0=0.58; // front, upper area
+ for(let j=0;j<NV;j++)for(let i=0;i<NU;i++){const u=(i+.5)/NU,v=(j+.5)/NV;const y=v*L;const circ=2*Math.PI*rad(v);let ok=true;
+  const du=Math.abs(u-0.5); // 0 front ... 0.5 back
+  if(openU>0&&du>0.5-openU/2)ok=false;
+  const sx=(u-0.5)*circ,edgeDist=openU>0?((0.5-openU/2)-du)*circ:1e9;
+  const solidBand=y<margin||y>L-margin||edgeDist<10||(Math.abs(sx)<logoW/2+8&&Math.abs(y-logoV0*L)<logoH/2+8);
+  if(ok&&!solidBand&&hole(P,sx+1000,y,PS))ok=false;
+  if(ok&&S&&openU>0&&edgeDist>2&&edgeDist<9){for(const fy of[0.25,0.5,0.75])if(Math.abs(y-fy*L)<12)ok=false}
+  fill[j*NU+i]=ok?1:0}
+ const filled=(i,j)=>{if(j<0||j>=NV)return 0;i=(i+NU)%NU;return fill[j*NU+i]};
+ // emboss height at vertex
+ const emb=(i,j)=>{if(!E||!logoMask)return 0;const u=i/NU,v=j/NV;const circ=2*Math.PI*rad(v);const sx=(u-0.5)*circ,y=v*L;const lx=(sx/logoW+0.5),ly=(0.5-(y-logoV0*L)/logoH);if(lx<0||lx>=1||ly<0||ly>=1)return 0;return logoMask.a[Math.floor(ly*logoMask.h)*logoMask.w+Math.floor(lx*logoMask.w)]?1.2:0};
+ const P3=(i,j,out)=>{const v=j/NV,a=i/NU*2*Math.PI;const r=rad(v)+(out?T+emb(i,j):0);return[Math.sin(a)*-r,v*L,Math.cos(a)*-r]};
+ // note: u=0.5 maps to front (+z)
+ const pos=[];const tri=(a,b,c)=>pos.push(...a,...b,...c);const quad=(a,b,c,d)=>{tri(a,b,c);tri(a,c,d)};
+ for(let j=0;j<NV;j++)for(let i=0;i<NU;i++){if(!filled(i,j))continue;
+  const o00=P3(i,j,1),o10=P3(i+1,j,1),o11=P3(i+1,j+1,1),o01=P3(i,j+1,1),n00=P3(i,j,0),n10=P3(i+1,j,0),n11=P3(i+1,j+1,0),n01=P3(i,j+1,0);
+  quad(o00,o01,o11,o10);quad(n00,n10,n11,n01);
+  if(!filled(i-1,j))quad(n00,n01,o01,o00);if(!filled(i+1,j))quad(n10,o10,o11,n11);
+  if(!filled(i,j-1))quad(n00,o00,o10,n10);if(!filled(i,j+1))quad(n01,n11,o11,o01)}
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.computeVertexNormals();
+ if(mesh){scene.remove(mesh);mesh.geometry.dispose()}
+ mesh=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:'#ff7fb8',roughness:.55,metalness:.05,side:THREE.DoubleSide}));scene.add(mesh);
+ // decal preview
+ if(decal){scene.remove(decal)}
+ if(upimg){const m=$('UPM').value,tex=new THREE.Texture(upimg);tex.colorSpace=THREE.SRGBColorSpace;tex.needsUpdate=true;let arc=2*Math.PI,st=0;if(m=='feature'){arc=1.4;st=Math.PI-0.7}if(m=='tiled'){tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.repeat.set(4,3)}
+  const dg=new THREE.CylinderGeometry(rad(0.97)+T+0.6,rad(0.03)+T+0.6,0.94*L,96,24,true,st,arc);decal=new THREE.Mesh(dg,new THREE.MeshStandardMaterial({map:tex,roughness:.5,side:THREE.DoubleSide}));decal.position.y=0.5*L;decal.rotation.y=Math.PI;scene.add(decal)}
+ else{
+ const e=(window.D||[]).find(x=>x.id==$('DID').value.trim().toUpperCase());
+ if(e){const per=60,sh=Math.floor(e.n/per),k=e.n%per;const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=150;c.height=220;c.getContext('2d').drawImage(img,(k%10)*150,Math.floor(k/10)*220,150,220,0,0,150,220);
+   $('dec').src=c.toDataURL();const cc=document.createElement('canvas');cc.width=64;cc.height=100;cc.getContext('2d').drawImage(c,53,40,44,66,0,0,64,100);
+   const tex=new THREE.CanvasTexture(cc);tex.colorSpace=THREE.SRGBColorSpace;const v0=0.12,v1=0.48,arc=0.5;
+   const dg=new THREE.CylinderGeometry(rad(v1)+T+0.6,rad(v0)+T+0.6,(v1-v0)*L,48,8,true,Math.PI-arc/2*1.0,arc);
+   decal=new THREE.Mesh(dg,new THREE.MeshBasicMaterial({map:tex,transparent:true,opacity:.92,side:THREE.DoubleSide}));decal.position.y=(v0+v1)/2*L;decal.rotation.y=Math.PI;scene.add(decal)};img.src='../sprites/s'+String(sh).padStart(3,'0')+'.jpg'}}
+ ctl.target.set(0,L/2,0);$('stat').textContent=`${(pos.length/9).toLocaleString()} triangles . top dia ${(rt*2).toFixed(0)} mm . bottom dia ${(rb*2).toFixed(0)} mm . length ${L} mm`}
+['go'].forEach(b=>$(b).onclick=build);document.querySelectorAll('#side input,#side select').forEach(i=>i.onchange=build);
+$('stl').onclick=()=>{const data=new STLExporter().parse(mesh,{binary:true});const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'model/stl'}));a.download=`coffeebreak_leg_cover_${$('P').value}.stl`;a.click()};
+let upimg=null;$('UP').onchange=e=>{const f=e.target.files[0];if(!f)return;const i=new Image();i.onload=()=>{upimg=i;$('UPW').textContent=Math.max(i.naturalWidth,i.naturalHeight)<1500?'Low resolution: this picture is under 1500 px and may look soft when printed.':'Picture applied. It is only a colour preview on the 3D leg; the STL holds the shape.';build()};i.src=URL.createObjectURL(f)};$('UPX').onclick=()=>{upimg=null;$('UP').value='';$('UPW').textContent='';build()};
+const q=new URLSearchParams(location.search);for(const k of ['L','Ct','Cb','DID'])if(q.get(k))$(k).value=q.get(k);
+(function loop(){requestAnimationFrame(loop);ctl.update();R.render(scene,cam)})();
+setTimeout(()=>{if(!mesh)build()},800);
+</script></body></html>
