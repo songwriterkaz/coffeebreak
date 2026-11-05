@@ -1,10 +1,111 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Master Studio</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Master Studio</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A recording booth: record from your mic, hear it back, and download takes, with a live level meter.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><button id=st>Record</button> <button id=sp disabled>Stop</button></p><meter id=lv max=1 style="width:100%"></meter><div id=tk></div><script>
-var mr,ch,n=0;st.onclick=async()=>{var s=await navigator.mediaDevices.getUserMedia({audio:true}),A=new AudioContext(),an=A.createAnalyser();A.createMediaStreamSource(s).connect(an);var b=new Uint8Array(256);(function f(){an.getByteTimeDomainData(b);lv.value=Math.max(...b)/128-1;if(mr&&mr.state=='recording')requestAnimationFrame(f)})();
-ch=[];mr=new MediaRecorder(s);mr.ondataavailable=e=>ch.push(e.data);mr.onstop=()=>{var u=URL.createObjectURL(new Blob(ch));n++;tk.insertAdjacentHTML('beforeend','<p>Take '+n+' <audio controls src='+u+'></audio> <a download=take'+n+'.webm href='+u+'>Download</a></p>');s.getTracks().forEach(t=>t.stop())};mr.start();st.disabled=1;sp.disabled=0};
-sp.onclick=()=>{mr.stop();st.disabled=0;sp.disabled=1}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Master Studio</title>
+<link rel="stylesheet" href="style.css"><link rel="icon" href="logo.jpg">
+</head><body>
+<header><img src="logo.jpg" alt="Coffeebreak" class="logo"><div><h1>Coffeebreak Master Studio</h1><small id="sub">Master, mix, edit and record in your browser</small></div>
+<div class="meterbox"><canvas id="meter" width="160" height="18"></canvas><span id="clip" class="clip">CLIP</span></div></header>
+<div id="demoBanner" class="banner hidden">Free demo: mastering preview with 30 second export. The full version unlocks the Mixer, Editor, Quick Recorder and full length export.</div>
+<nav id="tabs">
+<button data-t="master" class="on">Master</button><button data-t="mixer">Mixer</button><button data-t="editor">Editor</button><button data-t="recorder">Quick Recorder <span id="recDot" class="dot hidden"></span></button><button data-t="loops">Loops and Keys</button><button data-t="settings">Settings</button><button data-t="features">Features</button>
+</nav>
+<main>
+<!-- MASTER -->
+<section id="t-master" class="tab on">
+<details open class="panel"><summary>1. Load a track</summary>
+<input type="file" id="mFile" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac,.webm"> <span id="mInfo"></span>
+<div class="row"><button id="mFromEd">Use Editor audio</button><button id="mFromMix">Use Mixer mixdown</button></div></details>
+<details open class="panel"><summary>2. Smart presets</summary>
+<div id="presets" class="chips"></div>
+<div class="grid">
+<label>Low <input type="range" id="eqL" min="-8" max="8" step="0.5" value="0"></label>
+<label>Mid <input type="range" id="eqM" min="-8" max="8" step="0.5" value="0"></label>
+<label>High <input type="range" id="eqH" min="-8" max="8" step="0.5" value="0"></label>
+<label>Compression <input type="range" id="cmp" min="0" max="1" step="0.05" value="0.5"></label>
+<label>Stereo width <input type="range" id="wid" min="0" max="2" step="0.05" value="1"></label>
+<label>Target LUFS <input type="number" id="tgt" min="-24" max="-6" step="0.5" value="-14"></label>
+</div></details>
+<details open class="panel"><summary>3. Listen and compare</summary>
+<div class="row"><button id="mPlay" class="big">Play</button><button id="mAB" class="big">Hearing: Mastered</button><span id="mLufs"></span></div>
+<canvas id="mWave" class="wave" height="90"></canvas></details>
+<details open class="panel"><summary>4. Export</summary>
+<div class="row"><select id="mBits"><option value="16">WAV 16-bit</option><option value="24" selected>WAV 24-bit</option><option value="32">WAV 32-bit float</option><option value="mp3">MP3 192k</option></select>
+<button id="mExport" class="big">Export master</button><span id="mStat"></span></div></details>
+</section>
+<!-- MIXER -->
+<section id="t-mixer" class="tab">
+<div class="row sticky"><button id="xPlay" class="big">Play</button><button id="xStop">Stop</button><button id="xRec" class="rec">Record on selected</button>
+<label>BPM <input type="number" id="bpm" value="100" min="40" max="240" style="width:4em"></label>
+<label><input type="checkbox" id="metro"> Metronome</label><label><input type="checkbox" id="countin" checked> Count-in</label>
+<button id="xAdd">Add track</button><button id="xMix">Mixdown WAV</button><button id="xMaster">Send to Master</button>
+<button id="pSave">Save project</button><button id="pLoad">Load project</button><span id="xTime">0:00.0</span></div>
+<div id="timeline"><div id="playhead"></div><div id="tracks"></div></div>
+<p class="hint">Tap a track to select it. Drag loops from Loops and Keys onto a track, or tap a loop to add it to the selected track. Drag a clip sideways to move it.</p>
+</section>
+<!-- EDITOR -->
+<section id="t-editor" class="tab">
+<div class="row"><input type="file" id="eFile" accept="audio/*,.flac,.m4a,.webm"><button id="ePlay" class="big">Play</button><button id="eStop">Stop</button><button id="eUndo">Undo</button><button id="eRedo">Redo</button><span id="eInfo"></span></div>
+<canvas id="eWave" class="wave" height="160"></canvas>
+<div class="row"><span id="eSel">No selection, effects apply to the whole file</span><button id="eAll">Select all</button><button id="eNone">Clear selection</button></div>
+<details open class="panel"><summary>Edit</summary><div class="chips">
+<button data-e="cut">Cut</button><button data-e="copy">Copy</button><button data-e="paste">Paste</button><button data-e="del">Delete</button><button data-e="trim">Trim to selection</button><button data-e="silence">Silence</button><button data-e="insert">Insert 1s silence</button></div></details>
+<details open class="panel"><summary>Effects</summary><div class="chips">
+<button data-e="fadein">Fade in</button><button data-e="fadeout">Fade out</button><button data-e="norm">Normalise</button><button data-e="autogain">Auto-gain</button><button data-e="amp+">Amplify +3 dB</button><button data-e="amp-">Amplify -3 dB</button><button data-e="rev">Reverse</button>
+<button data-e="echo">Echo</button><button data-e="reverb">Reverb</button><button data-e="eq">EQ (current Master sliders)</button><button data-e="pitchup">Pitch and speed up</button><button data-e="pitchdn">Pitch and speed down</button></div></details>
+<details open class="panel"><summary>Clean-up</summary><div class="chips">
+<button data-e="nr">Noise reduction</button><button data-e="gate">Noise gate</button><button data-e="dehiss">De-hiss</button><button data-e="rumble">Remove rumble</button><button data-e="deess">De-esser</button><button data-e="declick">Click and pop removal</button></div>
+<p class="hint">Noise reduction learns the noise from your selection, or from the quietest parts if nothing is selected.</p></details>
+<div class="row"><select id="eFmt"><option value="16">WAV 16-bit</option><option value="24">WAV 24-bit</option><option value="32">WAV 32-bit float</option><option value="mp3">MP3</option></select><button id="eExport">Export</button><button id="eToMix">Send to Mixer</button><button id="eToMaster">Send to Master</button></div>
+</section>
+<!-- RECORDER -->
+<section id="t-recorder" class="tab">
+<div class="center"><button id="qRec" class="huge">Record</button><div id="qTime" class="timer">00:00</div>
+<div class="row" style="justify-content:center"><label>Auto-stop after <input type="number" id="qAuto" value="0" min="0" style="width:4em"> min (0 = off)</label>
+<select id="qFmt"><option value="wav">WAV</option><option value="webm">WebM/Ogg</option><option value="mp3">MP3</option></select></div>
+<p class="hint">Recording keeps going while you switch tabs.</p></div>
+<h3>Past recordings</h3><div id="qList"></div>
+</section>
+<!-- LOOPS -->
+<section id="t-loops" class="tab">
+<details open class="panel"><summary>Loops (made in your browser, at the Mixer BPM)</summary><div id="loops" class="chips"></div></details>
+<details open class="panel"><summary>Keys and pads</summary>
+<div class="row"><select id="inst"><option value="keys">Soft keys</option><option value="pad">Pink pad</option><option value="bass">Bass</option><option value="pluck">Pluck</option></select>
+<button id="kRec" class="rec">Record keys to selected track</button><span id="midiStat"></span></div>
+<div id="piano"></div><p class="hint">Computer keys A to K play notes. A MIDI keyboard works too where the browser supports it.</p></details>
+</section>
+<!-- SETTINGS -->
+<section id="t-settings" class="tab">
+<details open class="panel"><summary>Devices</summary>
+<label>Input <select id="inDev"><option value="">Default mic</option></select></label>
+<label>Output <select id="outDev"><option value="">Default output</option></select></label><button id="devRefresh">Refresh devices</button>
+<div class="row"><label><input type="checkbox" id="optEC"> Echo cancellation</label><label><input type="checkbox" id="optNS"> Noise suppression</label><label><input type="checkbox" id="optAGC"> Auto gain</label></div>
+<p class="hint">These are off by default so you get the raw, unprocessed mic. Device names show after you allow the mic once.</p></details>
+<details open class="panel"><summary>Look and layout</summary>
+<div class="chips" id="themes"></div>
+<label><input type="checkbox" id="compact"> Compact layout</label>
+<label>Waveform height <input type="range" id="waveH" min="60" max="300" value="160"></label></details>
+<details open class="panel"><summary>Keyboard shortcuts</summary>
+<p>Space play or stop &middot; R record &middot; B before/after &middot; Ctrl+Z undo &middot; Ctrl+Y redo &middot; Ctrl+X/C/V cut, copy, paste &middot; Delete delete &middot; 1 to 7 switch tabs</p></details>
+</section>
+<!-- FEATURES -->
+<section id="t-features" class="tab">
+<div class="panel"><h3>Features</h3><ul>
+<li><b>Easy to use:</b> clear tabs, collapsible panels, pink themes, compact mode, keyboard shortcuts, layout saved on your device.</li>
+<li><b>Audio quality:</b> records at 48 kHz where the device allows, raw mic with echo cancellation, noise suppression and auto gain off by default, 32-bit float processing inside.</li>
+<li><b>Compatibility:</b> choose your USB mic or audio interface, choose the output device where supported, MIDI keyboard input where supported, works in Chrome, Edge, Firefox and Safari on Windows, Mac, Android and iPhone.</li>
+<li><b>Formats:</b> opens mp3, wav, m4a/aac, ogg, flac and webm (whatever your browser can decode). Exports WAV 16-bit, 24-bit and 32-bit float, MP3, and WebM/Ogg recordings.</li>
+<li><b>Clean, crisp sound:</b> level meter with clip warning, auto-gain, noise reduction from a noise profile, noise gate, de-hiss, rumble removal, de-esser, click and pop removal.</li>
+<li><b>Master:</b> smart presets, EQ, three band compression, stereo width, limiter, loudness to a LUFS target, instant before/after.</li>
+<li><b>Mixer:</b> as many tracks as your device handles, record or load on each, volume, pan, mute, solo, echo and reverb per track, metronome, count-in, mixdown and master in one place, projects saved on your device.</li>
+<li><b>Editor:</b> waveform with selection, cut, copy, paste, delete, silence, insert, trim, fades, normalise, amplify, reverse, echo, reverb, EQ, pitch and speed, undo and redo.</li>
+<li><b>Quick Recorder:</b> one big button, keeps recording across tabs, timer, auto-stop, WAV, WebM or MP3, past recordings to play, download, or send to the Mixer or Editor.</li>
+<li><b>Loops and Keys:</b> drum, bass and keys loops made by the app, on-screen piano with four sounds.</li>
+<li>Everything runs on your device. Nothing is uploaded and nothing costs extra. Loudness is an approximate meter.</li>
+</ul><p class="hint">MP3 export uses the free lamejs encoder (LGPL), included with the app.</p></div>
+</section>
+</main>
+<audio id="sinkAudio" class="hidden"></audio>
+<script src="lame.min.js"></script>
+<script src="app.js"></script>
+<div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
+</body></html>

@@ -1,0 +1,24 @@
+*{box-sizing:border-box}body{margin:0;font-family:'Arial Black','Trebuchet MS',system-ui,sans-serif;color:#1a1a1a;background:repeating-linear-gradient(45deg,#ffffff10 0 14px,transparent 14px 28px),linear-gradient(160deg,#d7141a,#f03a2e) fixed;min-height:100vh}
+.strip{background:#ffd400;color:#111;text-align:center;padding:6px;font-weight:700;font-size:13px}
+header{text-align:center;padding:18px 12px 8px;color:#fff}header h1{margin:.1em 0;font-size:clamp(1.9em,6vw,3em);letter-spacing:.5px;text-shadow:0 3px 0 rgba(0,0,0,.35)}
+.tag{margin:.2em auto .8em;max-width:640px;opacity:.92}.float{font-size:42px;animation:bob 2.4s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-8px) rotate(6deg)}}
+button{font:inherit;font-weight:700;border:0;border-radius:999px;padding:9px 16px;cursor:pointer;background:#d7141a;color:#111;margin:3px;transition:transform .15s}button:hover{transform:translateY(-2px)}button:disabled{opacity:.5}
+nav button{background:#ffffffdd}nav button.on{background:#ffd400}
+main{max-width:1120px;margin:auto;padding:10px}#q{display:block;width:100%;max-width:420px;margin:6px auto;padding:10px 14px;border-radius:999px;border:2px solid #d7141a;font:inherit}
+#filters{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:8px 0 14px}#filters button{background:#ffffff;color:#1a1a1a;border:2px solid #d7141a}#filters button.on{background:#d7141a;color:#111}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.card{background:#ffffff;border-radius:18px;padding:12px;display:flex;flex-direction:column;box-shadow:0 6px 18px rgba(0,0,0,.25);border:2px solid transparent;transition:transform .2s,border-color .2s}.card:hover{transform:translateY(-4px) rotate(-.4deg);border-color:#d7141a}
+.card img{width:100%;aspect-ratio:1;object-fit:contain;background:#fff;border-radius:12px}.card h3{font-size:.95em;margin:.6em 0 .2em;flex:1}.card small{opacity:.7}.price{font-size:1.25em;font-weight:800;color:#d7141a;margin:.3em 0;text-shadow:0 1px 0 rgba(0,0,0,.2)}
+.note,#cart{background:#ffffff;border-radius:14px;padding:12px;margin-top:16px}.note{font-size:13px;opacity:.85}
+#lines p{display:flex;justify-content:space-between;gap:8px;align-items:center;border-bottom:1px dashed #8884;padding:6px 0;margin:0}.optin{display:block;width:100%;margin-top:4px}
+.form input,.form textarea,.optin{width:100%;max-width:460px;display:block;margin:6px 0;padding:10px;border-radius:10px;border:1px solid #8886;font:inherit}
+.tot{font-size:1.2em;font-weight:800}#toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#ffd400;color:#111;padding:10px 16px;border-radius:999px;font-weight:700;display:none;z-index:9}
+footer{text-align:center;color:#fff;opacity:.8;padding:20px;font-size:13px}#cb-logo{box-shadow:0 0 0 4px #ffd400}
+@media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr);gap:8px}.card{padding:8px}.card h3{font-size:.8em}}
+
+header h1 span{color:#ffe600}.burst{display:inline-block;background:#ffe600;color:#d7141a;font-weight:900;font-size:15px;line-height:1.05;padding:14px 12px;border-radius:50%;transform:rotate(-12deg);box-shadow:0 3px 0 #0004;animation:bob 2.4s ease-in-out infinite}
+.strip{background:#ffe600}nav button.on{background:#ffe600}#filters button.on{background:#ffe600;color:#d7141a;border-color:#ffe600}
+.card{position:relative;font-family:system-ui,sans-serif}.card h3{font-family:'Trebuchet MS',system-ui}.card button{background:#d7141a;color:#fff}
+.bdg{position:absolute;top:8px;left:8px;background:#d7141a;color:#fff;font-weight:900;font-size:11px;padding:3px 8px;border-radius:6px;z-index:1}
+.tagp{display:flex;align-items:stretch;margin:.4em 0;border-radius:8px;overflow:hidden;box-shadow:0 2px 0 #0003;width:max-content}.tagp b{background:#d7141a;color:#ffe600;padding:6px 8px;font-size:12px;display:flex;align-items:center;letter-spacing:.5px}.tagp span{background:#ffe600;color:#d7141a;font-weight:900;font-size:1.35em;padding:2px 10px}
+.card{min-width:0}.tagp{max-width:100%}@media(max-width:520px){.tagp b{font-size:9px;padding:4px 5px}.tagp span{font-size:1.05em;padding:2px 6px}}

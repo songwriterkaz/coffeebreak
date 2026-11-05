@@ -1,0 +1,10 @@
+Brew Brawl Arena - Audience Vote with YouTube Live Chat (optional)
+
+By default the crowd vote is simulated, and you can also press 1 or 2 on the keyboard.
+To let real YouTube live viewers vote by typing 1 or 2 in chat:
+1. In Google Cloud Console, create a free API key with "YouTube Data API v3" enabled.
+2. Find your stream's liveChatId (YouTube API "videos.list?part=liveStreamingDetails&id=VIDEO_ID" -> activeLiveChatId).
+3. Open the game as:  index.html?ytkey=YOUR_KEY&live=LIVE_CHAT_ID
+   Then capture the browser window in OBS.
+The key is only in your own URL. Never put it in the game files or show it on stream.
+Other tools (Streamer.bot etc.) can call window.CB_VOTE(0) or window.CB_VOTE(1) from a browser source.

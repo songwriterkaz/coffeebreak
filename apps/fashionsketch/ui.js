@@ -1,0 +1,12 @@
+(function(){const $=id=>document.getElementById(id),K=CBSketch,S=K.S;
+CBFashion.init();
+document.querySelectorAll('#tools button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#tools button').forEach(x=>x.classList.toggle('on',x==b));S.tool=b.dataset.t});
+$('size').oninput=e=>{S.size=+e.target.value;$('sizeV').textContent=S.size};
+$('op').oninput=e=>{S.opacity=e.target.value/100;$('opV').textContent=e.target.value};
+$('col').oninput=e=>{S.color=e.target.value;S.pattern=null;document.querySelectorAll('.pat').forEach(p=>p.classList.remove('on'))};
+['#1a1a1a','#ffffff','#d62828','#f77f00','#fcbf49','#2a9d8f','#1d3557','#457b9d','#6a4c93','#8d5524','#2b9348','#adb5bd'].forEach(c=>{const b=document.createElement('button');b.className='sw';b.style.background=c;b.title=c;b.onclick=()=>{S.color=c;S.pattern=null;$('col').value=c};$('sws').appendChild(b)});
+$('undo').onclick=K.undo;$('redo').onclick=K.redo;$('clr').onclick=K.clearLayer;$('addL').onclick=()=>K.addLayer();
+$('imp').onchange=e=>{if(e.target.files[0])K.importImage(e.target.files[0])};$('noBg').onclick=()=>{S.bg=null;K.render()};
+$('bgOp').oninput=e=>{S.bgOp=e.target.value/100;K.render()};
+$('png').onclick=()=>K.savePNG(window.CB_NAME);$('gal').onclick=K.saveGallery;
+K.drawGallery();K.render();})();

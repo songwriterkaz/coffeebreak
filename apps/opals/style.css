@@ -1,0 +1,13 @@
+body{margin:0;font-family:Georgia,serif;background:#0d1424 radial-gradient(circle at 20% 10%,#22335a,#0a0f1c 70%);color:#eef4ff;padding-bottom:90px}
+.test{background:linear-gradient(90deg,#7ee8fa,#c3a6ff,#ff9ecd,#ffe29f);color:#10172a;text-align:center;padding:6px;font:bold 14px sans-serif}
+#bar{display:flex;gap:8px;align-items:center;padding:6px;flex-wrap:wrap;justify-content:center;background:#0a0f1c}#np{font-size:12px;color:#9fe3ff}
+header{text-align:center;padding:20px}h1{font-size:2.6em;margin:.2em;background:linear-gradient(90deg,#7ee8fa,#80ff72,#c3a6ff,#ff9ecd,#ffe29f,#7ee8fa);background-size:300%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sh 8s linear infinite}
+@keyframes sh{to{background-position:300% 0}}
+.gem{width:80px;height:56px;margin:auto;border-radius:50%;background:conic-gradient(from 0deg,#7ee8fa,#80ff72,#ffe29f,#ff9ecd,#c3a6ff,#7ee8fa);box-shadow:0 0 25px #7ee8fa88;animation:sp 10s linear infinite}@keyframes sp{to{filter:hue-rotate(360deg)}}
+button{background:linear-gradient(135deg,#7ee8fa,#c3a6ff,#ff9ecd);color:#10172a;border:0;border-radius:20px;padding:8px 16px;font:bold 15px Georgia;cursor:pointer;margin:3px}button:disabled{opacity:.5;cursor:default}nav button.on{outline:2px solid #fff}
+main{max-width:1050px;margin:auto;padding:10px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.card{background:rgba(255,255,255,.05);border:1px solid transparent;border-radius:18px;padding:14px;text-align:center;background-image:linear-gradient(#141d33,#141d33),linear-gradient(135deg,#7ee8fa,#c3a6ff,#ff9ecd,#ffe29f);background-origin:border-box;background-clip:padding-box,border-box;transition:transform .2s}.card:hover{transform:translateY(-4px)}
+.card h3{font-size:1em}.note{background:#141d33;padding:10px;border-radius:10px;font-size:14px}#reveal{margin:12px;text-align:center;color:#c3a6ff}
+a{color:#9fe3ff}input,textarea{display:block;width:100%;max-width:420px;margin:6px 0;padding:8px;border-radius:8px;border:0}footer{text-align:center;font-size:13px;padding:14px}
+.pimg{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;background:#fff}.price{font-weight:700;font-size:1.1em;color:#ffe29f}
+#filters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}#filters button.on{outline:2px solid #fff}

@@ -1,10 +1,41 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Rag Doll (pre-order)</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Rag Doll (pre-order)</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Try the sample entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Rag Doll</title>
+<style>
+body{margin:0;font:18px/1.6 Verdana,Arial,sans-serif;background:#fbf3ea;color:#3a2a2a}
+header{display:flex;align-items:center;gap:14px;padding:14px 18px;flex-wrap:wrap;background:#b3262e;color:#fff}header img{width:64px;height:64px;border-radius:12px;background:#fff}
+h1{font-size:26px;margin:0}h2{margin:24px 18px 6px}main{max-width:1100px;margin:auto}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;padding:0 18px}
+.c{background:#fff;border:1px solid #e3cfc0;border-radius:14px;padding:12px}.c img{width:100%;border-radius:10px}
+.t{font-size:12px;opacity:.75}button,input,textarea{font:inherit;padding:8px 12px;border-radius:8px;border:1px solid #888}
+button{background:#b3262e;color:#fff;cursor:pointer}.n{padding:10px 18px;font-size:15px}
+#cart{margin:18px;padding:14px;border:2px solid #b3262e;border-radius:14px;background:#fff}input,textarea{width:100%;box-sizing:border-box;margin:4px 0}
+.safe{margin:18px;padding:12px;background:#fff6d8;border:1px dashed #b38b26;border-radius:10px;font-size:15px}
+</style></head><body>
+<header><img src="logo.png" alt="Coffeebreak logo"><div><h1>Coffeebreak Rag Doll</h1><div>A soft rag doll of the Coffeebreak blonde pin-up girl, with yarn victory rolls and a polka-dot dress.</div></div></header>
+<main>
+<h2>Concept renders</h2>
+<div class="g"><div class="c"><img src="img/doll-front.jpg" alt="Rag doll front, concept render"><div class="t">Front, concept render</div></div><div class="c"><img src="img/doll-side.jpg" alt="Rag doll side, concept render"><div class="t">Side, concept render</div></div><div class="c"><img src="img/doll-accessories.jpg" alt="Rag doll with accessories, concept render"><div class="t">With accessories and outfits, concept render</div></div><div class="c"><img src="img/doll-giftbox.jpg" alt="Rag doll in gift box, concept render"><div class="t">In the gift box, concept render</div></div></div>
+<p class="n">Every doll here is a pre-order, made by a plush manufacturing partner. Pictures are concept renders, not photos of the final product. Final details may change slightly during sampling.</p>
+<div class="safe"><b>Safety</b><br>Designed to meet Australian toy safety standards before sale. Embroidered eyes on child versions. Not for children under 3 if small parts (the keyring doll and outfit accessories contain small parts).</div>
+<h2>Shop the dolls</h2><div class="g" id="shop"></div>
+<div id="cart"><h2 style="margin:0">Your pre-order</h2><div id="lines">Nothing added yet.</div>
+<label>Optional donation to Coffeebreak (AU$) <input id="don" type="number" min="0" step="1" value="0" oninput="draw()"></label><p class="n">Pre-order: full refund if the production run does not go ahead.</p><form id="f"><input id="cName" placeholder="Your name" required><input id="cEmail" type="email" placeholder="Your email" required><textarea id="cAddr" placeholder="Delivery address" required></textarea><button>Place pre-order with PayID</button></form><div id="pay"></div></div>
+<h2>Free printable colouring page</h2><div class="n"><a href="colouring-page.png" download><img src="colouring-page.png" alt="Rag doll colouring page" style="max-width:260px;border:1px solid #ccc"></a><br><a href="colouring-page.png" download>Download the colouring page</a></div>
+<p class="n">Payment by PayID to darkokaz@gmx.com. Orders go to songwriterkaz@gmail.com. Coffeebreak, Karen O'Brien.</p>
+</main><footer><section id="rights" style="max-width:760px;margin:12px auto;padding:10px 14px;border:1px solid #888;border-radius:8px;font-size:.8rem;line-height:1.4"><strong>Rights and resale</strong><p style="margin:6px 0 0">Karen O'Brien (Coffeebreak) keeps all rights to the products, designs, apps, name and logo. Buyers may resell the physical products they bought but may not copy them or make their own versions.</p></section></footer>
+<script>
+const PAYID='darkokaz@gmx.com',EMAIL='songwriterkaz@gmail.com';
+const P=[['Classic 30cm rag doll',49,'doll-front','Embroidered eyes, yarn hair, polka-dot dress'],['Big 50cm cuddle doll',89,'doll-side','Extra soft, embroidered eyes, made for hugs'],['Mini 15cm keyring doll',19,'doll-giftbox','Keyring clip. Contains small parts, not for children under 3'],['Collector\'s edition, numbered, with mini outfit set',129,'doll-accessories','Numbered tag, gift box and mini outfit set. Collector item, not for children under 3'],['Outfit pack',25,'doll-accessories','Sailor dress, gingham dress and cardigan for the 30cm doll']];
+document.getElementById('shop').innerHTML=P.map((p,i)=>`<div class="c"><img src="img/${p[2]}.jpg" alt="${p[0]}, concept render"><b>${p[0]}</b><div>AU$${p[1]} pre-order</div><div class="t">${p[3]}. Made by a plush manufacturing partner.</div><button onclick="buy(${i})">Buy It Now</button> <button onclick="add(${i})">Add to cart</button></div>`).join('');
+const cart={};
+function don(){return Math.max(0,Math.round(+document.getElementById("don").value||0))}
+function tot(){return Object.keys(cart).reduce((a,i)=>a+P[i][1]*cart[i],0)+don()}
+function buy(i){add(i);document.getElementById("cart").scrollIntoView({behavior:"smooth"})}
+function add(i){cart[i]=(cart[i]||0)+1;draw()}function rem(i){if(--cart[i]<=0)delete cart[i];draw()}
+function draw(){const k=Object.keys(cart);document.getElementById('lines').innerHTML=k.length?k.map(i=>`${cart[i]} x ${P[i][0]} AU$${P[i][1]*cart[i]} <button onclick="add(${i})">+</button> <button onclick="rem(${i})">-</button> <button onclick="delete cart[${i}];draw()">Remove</button>`).join('<br>')+(don()?`<br>Donation AU$${don()}`:'')+`<p><b>Total AU$${tot()}</b></p>`:'Nothing added yet.'}
+const v=id=>document.getElementById(id).value;
+document.getElementById('f').onsubmit=e=>{e.preventDefault();if(!tot()){alert('Add something first.');return}
+const r='RD'+Date.now().toString(36).toUpperCase(),t=tot(),items=Object.keys(cart).map(i=>cart[i]+' x '+P[i][0]+' AU$'+P[i][1]*cart[i]).join('\n')+(don()?'\nDonation AU$'+don():'');
+const body=`Rag doll pre-order ${r}\n${items}\nTotal AU$${t}\n\nName: ${v('cName')}\nEmail: ${v('cEmail')}\nAddress: ${v('cAddr')}\n\nI will pay by PayID to ${PAYID}, reference ${r}, amount AU$${t}. Receipt attached.\nPre-order: full refund if the production run does not go ahead.`;
+document.getElementById('pay').innerHTML=`<p><b>PayID (bank transfer)</b><br>PayID: <b>${PAYID}</b><br>Amount: <b>AU$${t}</b><br>Reference: <b>${r}</b></p><p><a href="mailto:${EMAIL}?subject=${encodeURIComponent('Coffeebreak rag doll pre-order '+r+' - '+v('cName'))}&body=${encodeURIComponent(body)}">Email your order and receipt</a></p>`};
+</script></body></html>
+<script defer src="https://static.itch.io/htmlgame.js" type="text/javascript"></script>

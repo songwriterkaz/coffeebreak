@@ -1,0 +1,16 @@
+body{margin:0;font-family:Georgia,serif;background:#3a0d24 radial-gradient(circle at 30% 20%,#7a5a23,#2a0a1a);color:#f3e8ff;padding-bottom:90px}
+.test{background:#e7b155;color:#fff;text-align:center;padding:6px;font:bold 14px sans-serif}
+#bar{display:flex;gap:8px;align-items:center;padding:6px;flex-wrap:wrap;justify-content:center;background:#2a0a1a}#np{font-size:12px;color:#f3d8aa}
+header{text-align:center;padding:20px}h1{font-family:'Arial Black',serif;font-size:2.6em;margin:.2em;color:#efcb8e;text-shadow:3px 3px #000}
+.gem{width:70px;height:70px;margin:auto;background:linear-gradient(135deg,#faefdb,#c8a2ff,#efcb8e);clip-path:polygon(50% 0,100% 35%,80% 100%,20% 100%,0 35%)}
+button{background:#efcb8e;color:#1b0f2e;border:0;border-radius:10px;padding:8px 14px;font:bold 15px Georgia;cursor:pointer;margin:3px}nav button.on{background:#faefdb}
+main{max-width:1000px;margin:auto;padding:10px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card{background:#4a1530;border:2px solid #efcb8e;border-radius:16px;padding:14px;text-align:center}.bag{font-size:50px;background:var(--c);border-radius:50% 50% 20% 20%;padding:16px}
+.note{background:#4a1530;padding:8px;border-radius:8px;font-size:14px}#reveal{margin:12px;text-align:center;color:#faefdb}
+.sup{background:#4a1530;margin:8px 0;padding:10px;border-radius:10px}.tag{background:#ffd166;color:#000;padding:2px 6px;border-radius:6px;font-size:12px}a{color:#faefdb}
+input,textarea{display:block;width:100%;max-width:420px;margin:6px 0;padding:8px;border-radius:8px;border:0}footer{text-align:center;font-size:13px;padding:14px}
+.cert{font-size:13px;color:#faefdb}
+.pimg{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;background:#fff}
+.price{font-weight:700;font-size:1.1em}
+#filters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}
+#filters button.on{outline:2px solid currentColor}

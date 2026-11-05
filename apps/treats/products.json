@@ -1,0 +1,622 @@
+{
+ "delivery": {
+  "fee_aud": 9.99,
+  "slots": [
+   "11:00-12:00",
+   "12:00-13:00",
+   "15:00-16:00",
+   "17:00-18:00",
+   "18:00-19:00",
+   "19:00-20:00"
+  ],
+  "area": "Newcastle NSW"
+ },
+ "products": [
+  {
+   "sku": "BT-K1",
+   "title": "DIY Thai Milk Bubble Tea Kit, 8 serves",
+   "category": "Bubble Tea",
+   "mode": "posted",
+   "supplier": "S3",
+   "allergens": [
+    "Milk"
+   ],
+   "example": false,
+   "ships_from": "us posts kit to customer",
+   "supplierUrl": "S1-0",
+   "salePrice": 40.25
+  },
+  {
+   "sku": "BT-K2",
+   "title": "DIY Taro Milk Bubble Tea Kit, 8 serves",
+   "category": "Bubble Tea",
+   "mode": "posted",
+   "supplier": "S3",
+   "allergens": [
+    "Milk"
+   ],
+   "example": false,
+   "ships_from": "us posts kit to customer",
+   "supplierUrl": "S1-0",
+   "salePrice": 40.25
+  },
+  {
+   "sku": "BT-L1",
+   "title": "EXAMPLE – Fresh Brown Sugar Pearl Milk Tea (local)",
+   "category": "Bubble Tea",
+   "mode": "local",
+   "supplier": "S3",
+   "allergens": [
+    "Milk"
+   ],
+   "example": true,
+   "ships_from": "Coffeebreak makes & delivers (Newcastle)",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "SU-K1",
+   "title": "EXAMPLE – Sushi Making Kit – rice, nori, vinegar, soy, wasabi (posted)",
+   "category": "Sushi Kits",
+   "mode": "posted",
+   "supplier": "S3",
+   "allergens": [
+    "Gluten (wheat)",
+    "Soy",
+    "Mustard"
+   ],
+   "example": true,
+   "ships_from": "Shelf-stable kit, us posts",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "SU-K2",
+   "title": "Sushi Making Kit – 2 Pack (rolling mat + sushi bazooka)",
+   "category": "Sushi Kits",
+   "mode": "posted",
+   "supplier": "S3",
+   "allergens": [],
+   "example": false,
+   "ships_from": "Non-food, us posts",
+   "supplierUrl": "S2-4",
+   "salePrice": 24
+  },
+  {
+   "sku": "DE-P1",
+   "title": "EXAMPLE – Pink Gift Box of Gourmet Cookies (posted)",
+   "category": "Desserts",
+   "mode": "posted",
+   "supplier": "S3",
+   "allergens": [
+    "Gluten (wheat)",
+    "Milk",
+    "Egg",
+    "Soy"
+   ],
+   "example": true,
+   "ships_from": "us posts",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "DE-P2",
+   "title": "EXAMPLE – Chocolate & Sweets Hamper (posted)",
+   "category": "Desserts",
+   "mode": "posted",
+   "supplier": "S3",
+   "allergens": [
+    "Milk",
+    "Soy",
+    "Tree nuts (may contain)"
+   ],
+   "example": true,
+   "ships_from": "Dropship hamper us posts",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "DE-L1",
+   "title": "Mochi Variety 6 Pack",
+   "category": "Desserts",
+   "mode": "local",
+   "supplier": "S3",
+   "allergens": [
+    "Milk",
+    "Soy"
+   ],
+   "example": false,
+   "ships_from": "Coffeebreak makes & delivers (Newcastle)",
+   "supplierUrl": "S3-7",
+   "salePrice": 40
+  },
+  {
+   "sku": "DE-L2",
+   "title": "EXAMPLE – Strawberry Cake Jar (local)",
+   "category": "Desserts",
+   "mode": "local",
+   "supplier": "S3",
+   "allergens": [
+    "Gluten (wheat)",
+    "Milk",
+    "Egg"
+   ],
+   "example": true,
+   "ships_from": "Coffeebreak makes & delivers (Newcastle)",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "SU-L1",
+   "title": "EXAMPLE – Fresh Sushi Box",
+   "category": "Sushi Kits",
+   "mode": "local",
+   "supplier": "S4",
+   "allergens": [
+    "Fish",
+    "Crustacea",
+    "Soy",
+    "Gluten (wheat)",
+    "Sesame",
+    "Egg"
+   ],
+   "example": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "SU-L2",
+   "title": "EXAMPLE – Fresh Sushi Platter",
+   "category": "Sushi Kits",
+   "mode": "local",
+   "supplier": "S5",
+   "allergens": [
+    "Fish",
+    "Crustacea",
+    "Soy",
+    "Gluten (wheat)",
+    "Sesame",
+    "Egg"
+   ],
+   "example": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "SU-L3",
+   "title": "EXAMPLE – Sushi Rolls Box",
+   "category": "Sushi Kits",
+   "mode": "local",
+   "supplier": "S6",
+   "allergens": [
+    "Fish",
+    "Crustacea",
+    "Soy",
+    "Gluten (wheat)",
+    "Sesame",
+    "Egg"
+   ],
+   "example": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "SU-L4",
+   "title": "EXAMPLE – Family Sushi Pack",
+   "category": "Sushi Kits",
+   "mode": "local",
+   "supplier": "S7",
+   "allergens": [
+    "Fish",
+    "Crustacea",
+    "Soy",
+    "Gluten (wheat)",
+    "Sesame",
+    "Egg"
+   ],
+   "example": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "IC-L1",
+   "title": "EXAMPLE – Handmade Gelato 1L",
+   "category": "Ice Cream",
+   "mode": "local",
+   "supplier": "S8",
+   "allergens": [
+    "Milk",
+    "Egg (some flavours)",
+    "Tree nuts / peanut (some flavours)",
+    "Gluten (some flavours)"
+   ],
+   "example": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "IC-L2",
+   "title": "EXAMPLE – Artisan Gelato Tub",
+   "category": "Ice Cream",
+   "mode": "local",
+   "supplier": "S9",
+   "allergens": [
+    "Milk",
+    "Egg (some flavours)",
+    "Tree nuts / peanut (some flavours)",
+    "Gluten (some flavours)"
+   ],
+   "example": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "IC-L3",
+   "title": "EXAMPLE – Gelato Pack",
+   "category": "Ice Cream",
+   "mode": "local",
+   "supplier": "S10",
+   "allergens": [
+    "Milk",
+    "Egg (some flavours)",
+    "Tree nuts / peanut (some flavours)",
+    "Gluten (some flavours)"
+   ],
+   "example": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "PZ-L1",
+   "title": "EXAMPLE – Roman-style Pizza Box",
+   "category": "Pizza",
+   "mode": "local",
+   "supplier": "S11",
+   "allergens": [
+    "Gluten (wheat)",
+    "Milk",
+    "Soy (may contain)"
+   ],
+   "example": true,
+   "ships_from": "72-hr dough; pre-order delivery or collection",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "PZ-L2",
+   "title": "EXAMPLE – Woodfired Neapolitan Pizza",
+   "category": "Pizza",
+   "mode": "local",
+   "supplier": "S12",
+   "allergens": [
+    "Gluten (wheat)",
+    "Milk",
+    "Soy (may contain)"
+   ],
+   "example": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "FV-L1",
+   "title": "EXAMPLE – Seasonal Fruit & Veg Box",
+   "category": "Fruit & Veg",
+   "mode": "local",
+   "supplier": "S13",
+   "allergens": [],
+   "example": true,
+   "ships_from": "Packed in Tighes Hill; delivered Mon/Fri across Newcastle & Lake Mac",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "FV-L2",
+   "title": "EXAMPLE – Mix Fruit & Veg Box",
+   "category": "Fruit & Veg",
+   "mode": "local",
+   "supplier": "S14",
+   "allergens": [
+    "Egg (if eggs added)"
+   ],
+   "example": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "FV-L3",
+   "title": "EXAMPLE – Certified Organic Box",
+   "category": "Fruit & Veg",
+   "mode": "local",
+   "supplier": "S15",
+   "allergens": [],
+   "example": true,
+   "ships_from": "Newcastle delivery Wednesdays",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "CH-L1",
+   "title": "PROPOSED – Honey chicken & special fried rice",
+   "category": "Chinese Food",
+   "mode": "local",
+   "supplier": "S16",
+   "allergens": [
+    "Gluten (wheat)",
+    "Soy",
+    "Egg",
+    "Sesame"
+   ],
+   "example": true,
+   "proposed": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "moq": "None (restaurant S3)",
+   "model": "S3 cooks & delivers",
+   "abn_needed": "Not published – S3 agreement needed",
+   "contact": "187 Pacific Hwy, S16",
+   "url": "S16-21",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "CH-L2",
+   "title": "PROPOSED – Chinese takeaway banquet",
+   "category": "Chinese Food",
+   "mode": "local",
+   "supplier": "S16",
+   "allergens": [
+    "Gluten (wheat)",
+    "Soy",
+    "Egg",
+    "Crustacean (some dishes)"
+   ],
+   "example": true,
+   "proposed": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "moq": "None (restaurant S3)",
+   "model": "S3 cooks & delivers (own staff)",
+   "abn_needed": "Not published – S3 agreement needed",
+   "contact": "193 Union St, S16",
+   "url": "S16-22",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "CH-L3",
+   "title": "PROPOSED – Chinese dinner – mains & entrees",
+   "category": "Chinese Food",
+   "mode": "local",
+   "supplier": "S16",
+   "allergens": [
+    "Gluten (wheat)",
+    "Soy",
+    "Egg"
+   ],
+   "example": true,
+   "proposed": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "moq": "None (restaurant S3)",
+   "model": "S3 cooks & delivers",
+   "abn_needed": "Not published – S3 agreement needed",
+   "contact": "14/16 Beaumont St, S16",
+   "url": "S16-23",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "CH-L4",
+   "title": "PROPOSED – Rainbow beef / sweet & sour pork",
+   "category": "Chinese Food",
+   "mode": "local",
+   "supplier": "S16",
+   "allergens": [
+    "Gluten (wheat)",
+    "Soy",
+    "Egg",
+    "Fish/Crustacean (some dishes)"
+   ],
+   "example": true,
+   "proposed": true,
+   "ships_from": "Local Newcastle partner – delivered to your door",
+   "moq": "None (restaurant S3)",
+   "model": "S3 cooks & delivers",
+   "abn_needed": "Not published – S3 agreement needed",
+   "contact": "77 Maitland Rd, S16",
+   "url": "S16-24",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "LO-P1",
+   "title": "PROPOSED – Custom printed jumbo marshmallows (your logo/name)",
+   "category": "Lollies",
+   "mode": "posted",
+   "supplier": "S17",
+   "allergens": [
+    "May contain gelatine – check label"
+   ],
+   "example": true,
+   "proposed": true,
+   "ships_from": "Maker prints & ships to customer",
+   "moq": "Not published – quote",
+   "model": "White-label (custom printed); ships to customer",
+   "abn_needed": "Not published",
+   "contact": "Via website",
+   "url": "S17-25",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "LO-P2",
+   "title": "Custom printed marshmallows – 15 pieces",
+   "category": "Lollies",
+   "mode": "posted",
+   "supplier": "S18",
+   "allergens": [
+    "Gelatine – check label"
+   ],
+   "example": false,
+   "proposed": true,
+   "ships_from": "Maker prints & ships",
+   "moq": "Per pack (from $104.25 retail)",
+   "model": "Custom printed, made to order & shipped",
+   "abn_needed": "Not needed to buy retail",
+   "contact": "Via website (S18)",
+   "url": "S18-26",
+   "supplierUrl": "S18-26",
+   "salePrice": 114.25
+  },
+  {
+   "sku": "LO-P3",
+   "title": "PROPOSED – Branded gourmet marshmallow gift box",
+   "category": "Lollies",
+   "mode": "posted",
+   "supplier": "S19",
+   "allergens": [
+    "Gelatine – check label"
+   ],
+   "example": true,
+   "proposed": true,
+   "ships_from": "Ships individually to recipients",
+   "moq": "170 pcs",
+   "model": "White-label; ships individually to recipients (closest to dropship)",
+   "abn_needed": "Not published",
+   "contact": "Via website (WA)",
+   "url": "S19-27",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "LO-P4",
+   "title": "PROPOSED – Branded marshmallow box",
+   "category": "Lollies",
+   "mode": "posted",
+   "supplier": "S20",
+   "allergens": [
+    "Gelatine – check label"
+   ],
+   "example": true,
+   "proposed": true,
+   "ships_from": "Maker packs & ships",
+   "moq": "Varies – quote",
+   "model": "White-label branded packaging",
+   "abn_needed": "Not published",
+   "contact": "Via website",
+   "url": "S20-28",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "LO-P5",
+   "title": "PROPOSED – Custom logo/name candy & caramel-style sweets",
+   "category": "Lollies",
+   "mode": "posted",
+   "supplier": "S21",
+   "allergens": [
+    "Check label (may contain milk)"
+   ],
+   "example": true,
+   "proposed": true,
+   "ships_from": "Maker ships Australia-wide",
+   "moq": "Not published – quote",
+   "model": "Custom/white-label candy",
+   "abn_needed": "Not published",
+   "contact": "Tullamarine VIC, via website",
+   "url": "S21-29",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "LO-P6",
+   "title": "PROPOSED – Branded Extra chewing gum sleeve (min 50)",
+   "category": "Lollies",
+   "mode": "posted",
+   "supplier": "S22",
+   "allergens": [
+    "Contains sweeteners – check label"
+   ],
+   "example": true,
+   "proposed": true,
+   "ships_from": "us ships",
+   "moq": "50 + $70 setup",
+   "model": "White-label branded gum, 2–3 wk",
+   "abn_needed": "Not published",
+   "contact": "Via website",
+   "url": "S22-30",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "LO-P7",
+   "title": "PROPOSED – Retro old-fashioned lollies (Black Cats, Humbugs, Minties)",
+   "category": "Lollies",
+   "mode": "posted",
+   "supplier": "S23",
+   "allergens": [
+    "Gluten (wheat)",
+    "Milk",
+    "Soy",
+    "Gelatine – varies"
+   ],
+   "example": true,
+   "proposed": true,
+   "ships_from": "us ships Australia-wide",
+   "moq": "Not published",
+   "model": "Retail/wholesale; dropship not published – ask",
+   "abn_needed": "Not published",
+   "contact": "sales@S23, 4/47 Hawkins St S23",
+   "url": "S23-31",
+   "supplierUrl": null,
+   "salePrice": null
+  },
+  {
+   "sku": "LO-P8",
+   "title": "PROPOSED – Retro bulk lollies & gift jars",
+   "category": "Lollies",
+   "mode": "posted",
+   "supplier": "S24",
+   "allergens": [
+    "Varies – check label"
+   ],
+   "example": true,
+   "proposed": true,
+   "ships_from": "us ships, overnight Syd/Mel/Bris",
+   "moq": "Not published",
+   "model": "Wholesale; dropship not published",
+   "abn_needed": "Likely (registered retailers only)",
+   "contact": "admin@S24",
+   "url": "S24-32",
+   "supplierUrl": null,
+   "salePrice": null
+  }
+ ],
+ "partners_sushi": [
+  {
+   "name": "S4",
+   "url": "S25-0",
+   "phone": "S4"
+  },
+  {
+   "name": "S5",
+   "url": "S26-1",
+   "phone": "S5"
+  },
+  {
+   "name": "Sushika",
+   "url": "S16-2"
+  },
+  {
+   "name": "S7",
+   "url": "S16-3"
+  }
+ ],
+ "fee_note": "flat local delivery fee"
+}

@@ -1,0 +1,13 @@
+*{box-sizing:border-box}body{margin:0;font-family:'Trebuchet MS',system-ui,sans-serif;color:#10233a;background:linear-gradient(170deg,#0b3d6b,#1b7fb3 55%,#7fd3e8) fixed;min-height:100vh}
+.strip{background:#ffd400;color:#111;text-align:center;padding:6px;font-weight:700;font-size:13px}
+header{text-align:center;padding:18px 12px 8px;color:#fff}header h1{margin:.1em 0;font-size:clamp(1.9em,6vw,3em);text-shadow:0 3px 0 rgba(0,0,0,.35)}.tag{max-width:640px;margin:.2em auto .8em}
+#cb-logo{height:64px;width:64px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 6px;box-shadow:0 0 0 4px #ffd400}
+button,.btn{font:inherit;font-weight:700;border:0;border-radius:999px;padding:9px 16px;cursor:pointer;background:#00a8cc;color:#fff;margin:3px;text-align:center;text-decoration:none;display:inline-block}
+nav button{background:#ffffffdd;color:#10233a}nav button.on{background:#ffd400}
+main{max-width:1120px;margin:auto;padding:10px}#filters{display:flex;gap:4px;justify-content:center;margin:8px 0 14px}#filters button{background:#fff;color:#10233a}#filters button.on{background:#ffd400}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.card{background:#fff;border-radius:18px;padding:14px;display:flex;flex-direction:column;box-shadow:0 6px 18px rgba(0,0,0,.25)}.ico{font-size:34px}.card h3{font-size:1em;margin:.4em 0;flex:1}.card small{opacity:.75}
+.price{font-size:1.25em;font-weight:800;color:#0b3d6b;margin:.4em 0}
+.note{background:#fff;border-radius:14px;padding:12px;margin-top:16px;font-size:13px}
+.form input,.form textarea{width:100%;max-width:460px;display:block;margin:6px 0;padding:10px;border-radius:10px;border:1px solid #8886;font:inherit}
+footer{text-align:center;color:#fff;padding:20px;font-size:13px}

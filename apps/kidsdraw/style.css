@@ -1,0 +1,29 @@
+*{box-sizing:border-box}body{margin:0;font-family:"Trebuchet MS",Arial,sans-serif;background:#eef6f3;color:#1f3b3f}
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#2a7f8f;color:#fff;flex-wrap:wrap}
+header img{width:52px;height:52px;border-radius:50%;object-fit:cover}header h1{font-size:20px;margin:0;flex:1}
+#calmBtn{background:#fff;color:#2a7f8f;border:0;border-radius:20px;padding:8px 14px;font-weight:700;font-size:15px}
+nav{display:flex;gap:4px;flex-wrap:wrap;padding:6px 8px;background:#d6ece5}
+nav button{border:0;border-radius:12px;padding:10px 14px;font-size:16px;background:#fff;color:#1f3b3f;font-weight:700}
+nav button.on{background:#ffd400}
+.tab{display:none;padding:8px}.tab.on{display:block}
+#tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+.tb{border:2px solid #9cc;border-radius:12px;background:#fff;padding:8px 10px;font-size:16px;min-width:46px}
+.tb.on{border-color:#2a7f8f;background:#cfeee6}
+.sw{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px #999}.sw.on{box-shadow:0 0 0 3px #2a7f8f}
+#stage{position:relative;width:100%;max-width:1000px;aspect-ratio:4/3;background:#fff;border-radius:14px;box-shadow:0 2px 8px #0002;touch-action:none;overflow:hidden}
+#stage canvas{position:absolute;inset:0;width:100%;height:100%}#lines,#guide{pointer-events:none}
+#prompt{font-size:18px;margin:6px 0;min-height:24px}
+#picks{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}#picks button{font-size:22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.card{background:#fff;border-radius:14px;padding:10px;text-align:center;border:0;font-size:16px;box-shadow:0 1px 4px #0002;cursor:pointer}
+.card canvas{width:100%;border:1px solid #ddd;border-radius:8px}
+.note{background:#fff7d1;border-radius:12px;padding:10px;margin:8px 0;font-size:15px}
+.big{font-size:18px;padding:12px 16px;border-radius:14px;border:0;background:#2a7f8f;color:#fff;font-weight:700;margin:4px}
+#breath{position:absolute;left:50%;top:50%;width:40%;aspect-ratio:1;border-radius:50%;border:6px solid #7cc6a4;transform:translate(-50%,-50%) scale(.6);transition:transform 4s ease-in-out;pointer-events:none;display:none}
+#breathTxt{position:absolute;top:8px;width:100%;text-align:center;font-size:22px;color:#2a7f8f;pointer-events:none;display:none}
+#box{position:absolute;right:10px;bottom:10px;font-size:46px;display:none;pointer-events:none}
+#journal li{background:#fff;border-radius:10px;padding:8px;margin:4px 0;list-style:none}
+footer{padding:20px 12px 70px;font-size:13px;color:#456}
+body.calm{background:#f1f1ec;color:#333}body.calm header{background:#6f8f8a}body.calm nav{background:#e4e6e0}body.calm nav button.on{background:#d8d2b8}
+body.calm *{transition:none!important;animation:none!important}body.calm .sw{opacity:.85}
+body.calm #breath{transition:transform 4s ease-in-out!important}

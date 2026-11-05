@@ -1,10 +1,142 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak NDIS Invoice Maker</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak NDIS Invoice Maker</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Try the sample entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coffeebreak NDIS Invoice Maker</title>
+<style>
+:root{--bg:#f3f5fb;--ink:#1f2540;--muted:#66708f;--accent:#5b3fa8;--line:#dde1ee}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header img{width:46px;height:46px;border-radius:50%;object-fit:cover}
+header h1{font-size:1.2rem;margin:0;flex:1}
+button{background:var(--accent);color:#fff;border:0;border-radius:10px;padding:9px 14px;font:600 .9rem system-ui;cursor:pointer}
+button.alt{background:#fff;color:var(--accent);border:1px solid var(--accent)}
+button.del{background:#c0392b}
+.wrap{display:grid;grid-template-columns:minmax(320px,1fr) minmax(360px,1.1fr);gap:16px;padding:16px;max-width:1500px;margin:0 auto}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+.panel h2{font-size:1.05rem;margin:4px 0 10px}
+fieldset{border:1px solid var(--line);border-radius:10px;margin:0 0 12px;padding:10px}
+legend{font-weight:700;padding:0 6px}
+label{display:block;font-size:.82rem;color:var(--muted);margin-top:6px}
+input,select,textarea{width:100%;padding:8px;border:1px solid #cfd5e6;border-radius:8px;font:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.line{display:grid;grid-template-columns:1.1fr 2fr .9fr .6fr .8fr auto;gap:6px;align-items:end;border-top:1px dashed var(--line);padding-top:6px;margin-top:6px}
+@media(max-width:600px){.line{grid-template-columns:1fr 1fr}}
+.note{font-size:.82rem;color:var(--muted)}
+#inv{background:#fff;color:#000;padding:28px;border:1px solid var(--line);border-radius:6px;min-height:600px}
+#inv table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.9rem}
+#inv th,#inv td{border-bottom:1px solid #ddd;padding:6px;text-align:left;vertical-align:top}
+#inv td.n,#inv th.n{text-align:right}
+.invhead{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.invhead h2{margin:0;font-size:1.6rem;letter-spacing:.05em}
+.tot{margin-left:auto;width:min(300px,100%);margin-top:10px}
+.tot div{display:flex;justify-content:space-between;padding:3px 0}
+.tot .g{font-weight:800;font-size:1.1rem;border-top:2px solid #000}
+.saved li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid var(--line)}
+.cbfoot{text-align:center;color:var(--muted);font-size:.82rem;padding:16px;max-width:900px;margin:0 auto}
+.cbfoot a{color:var(--accent)}
+@media print{header,.edit,.cbfoot,.noprint{display:none}.wrap{display:block;padding:0}#inv{border:0;padding:0}body{background:#fff}}
+</style>
+</head>
+<body>
+<header><img src="img/logo.webp" alt="Coffeebreak logo"><h1>Coffeebreak NDIS Invoice Maker</h1>
+<button onclick="window.print()">Print or save PDF</button></header>
+<div class="wrap">
+<div class="edit">
+<div class="panel">
+<h2>Make an invoice</h2>
+<p class="note">For self-managed NDIS plans. Everything you type stays on this device only. Nothing is sent anywhere.</p>
+<fieldset><legend>Provider (you)</legend>
+<label>Business or provider name</label><input id="pName">
+<div class="row"><div><label>ABN</label><input id="pAbn" placeholder="11 digit ABN"></div><div><label>Phone</label><input id="pPhone"></div></div>
+<label>Email</label><input id="pEmail">
+<label>Address</label><input id="pAddr">
+<label>Payment details shown on invoice</label><textarea id="pPay" rows="2" placeholder="eg Pay by PayID: your PayID, or BSB and account number"></textarea>
+<label><input type="checkbox" id="pGst" style="width:auto"> I am registered for GST (most NDIS supports are GST free)</label>
+</fieldset>
+<fieldset><legend>Participant</legend>
+<label>Participant name</label><input id="cName">
+<div class="row"><div><label>NDIS number</label><input id="cNdis" placeholder="Participant NDIS number"></div><div><label>Plan type</label><select id="cPlan"><option>Self-managed</option><option>Plan-managed</option></select></div></div>
+<label>Bill to (participant or nominee, address or email)</label><input id="cBill">
+</fieldset>
+<fieldset><legend>Invoice</legend>
+<div class="row"><div><label>Invoice number</label><input id="iNum"></div><div><label>Invoice date</label><input type="date" id="iDate"></div></div>
+<div class="row"><div><label>Due date</label><input type="date" id="iDue"></div><div><label>Service period</label><input id="iPeriod" placeholder="eg 1 Oct to 14 Oct"></div></div>
+</fieldset>
+<fieldset><legend>Supports delivered</legend>
+<div id="lines"></div>
+<button class="alt" onclick="addLine()" style="margin-top:8px">Add a line</button>
+<p class="note">Type the support item number from the current NDIS Pricing Arrangements, and check your rate is within the price limit.</p>
+</fieldset>
+<label>Notes</label><textarea id="iNotes" rows="2" placeholder="eg Thank you"></textarea>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+<button onclick="saveInv()">Save on this device</button>
+<button class="alt" onclick="newInv()">New invoice</button>
+<button class="alt" onclick="dup()">Copy as next invoice</button>
+</div>
+</div>
+<div class="panel" style="margin-top:16px">
+<h2>Saved invoices</h2>
+<ul class="saved" id="saved" style="list-style:none;padding:0;margin:0"></ul>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+<button class="alt" onclick="exportAll()">Back up to a file</button>
+<label class="alt" style="display:inline-block;margin:0;padding:9px 14px;border:1px solid var(--accent);border-radius:10px;color:var(--accent);font-weight:600;cursor:pointer">Restore from file<input type="file" accept=".json" onchange="importAll(this)" style="display:none"></label>
+</div>
+</div>
+<div class="panel" style="margin-top:16px">
+<h2>Support Coffeebreak</h2>
+<p class="note">This tool is free. If it helps you, you can tip Coffeebreak.<br><b>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</b></p>
+</div>
+</div>
+<div id="inv"></div>
+</div>
+<footer class="cbfoot">
+<p><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">More from Coffeebreak at coffeebreaks.itch.io</a></p>
+<p>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell the physical products they bought, but may not copy them or make their own versions. Coffeebreak claims no ownership of third-party brands or products named; those trademarks belong to their owners and are used only to describe items.</p>
+</footer>
+<datalist id="cats"><option>Assistance with daily life</option><option>Transport</option><option>Consumables</option><option>Assistance with social and community participation</option><option>Assistive technology</option><option>Home modifications</option><option>Coordination of supports</option><option>Improved living arrangements</option><option>Increased social and community participation</option><option>Finding and keeping a job</option><option>Improved relationships</option><option>Improved health and wellbeing</option><option>Improved learning</option><option>Improved life choices</option><option>Improved daily living</option></datalist>
+<script>
+const $=id=>document.getElementById(id);
+const F=['pName','pAbn','pPhone','pEmail','pAddr','pPay','cName','cNdis','cPlan','cBill','iNum','iDate','iDue','iPeriod','iNotes'];
+let lines=[];
+const money=n=>'$'+(Number(n)||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=()=>new Date().toISOString().slice(0,10);
+const plus=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)};
+function store(){return JSON.parse(localStorage.getItem('cbNdisInv')||'[]')}
+function put(a){localStorage.setItem('cbNdisInv',JSON.stringify(a))}
+function nextNum(){const a=store();let m=0;a.forEach(i=>{const k=parseInt(String(i.iNum).replace(/\D/g,''))||0;if(k>m)m=k});return 'INV-'+String(m+1).padStart(4,'0')}
+function addLine(l){lines.push(l||{item:'',desc:'',date:today(),qty:1,rate:0});drawLines();render()}
+function drawLines(){$('lines').innerHTML=lines.map((l,i)=>`<div class="line">
+<div><label>Support item no.</label><input value="${esc(l.item)}" oninput="lines[${i}].item=this.value;render()"></div>
+<div><label>Description</label><input list="cats" value="${esc(l.desc)}" oninput="lines[${i}].desc=this.value;render()"></div>
+<div><label>Date</label><input type="date" value="${esc(l.date)}" oninput="lines[${i}].date=this.value;render()"></div>
+<div><label>Hrs or qty</label><input type="number" step="0.25" min="0" value="${l.qty}" oninput="lines[${i}].qty=this.value;render()"></div>
+<div><label>Rate $</label><input type="number" step="0.01" min="0" value="${l.rate}" oninput="lines[${i}].rate=this.value;render()"></div>
+<div><button class="del" title="Remove" onclick="lines.splice(${i},1);drawLines();render()">x</button></div></div>`).join('')}
+function data(){const d={};F.forEach(f=>d[f]=$(f).value);d.gst=$('pGst').checked;d.lines=JSON.parse(JSON.stringify(lines));return d}
+function load(d){F.forEach(f=>$(f).value=d[f]||'');$('pGst').checked=!!d.gst;lines=d.lines||[];drawLines();render()}
+function render(){const d=data();let sub=0;
+const rows=d.lines.map(l=>{const t=(+l.qty||0)*(+l.rate||0);sub+=t;return `<tr><td>${esc(l.date)}</td><td>${esc(l.item)}</td><td>${esc(l.desc)}</td><td class="n">${esc(l.qty)}</td><td class="n">${money(l.rate)}</td><td class="n">${money(t)}</td></tr>`}).join('');
+$('inv').innerHTML=`<div class="invhead"><div><h2>${d.gst?'TAX INVOICE':'INVOICE'}</h2><p><b>${esc(d.pName)||'Your business name'}</b><br>${d.pAbn?'ABN '+esc(d.pAbn)+'<br>':''}${esc(d.pAddr)}${d.pAddr?'<br>':''}${esc(d.pPhone)} ${esc(d.pEmail)}</p></div>
+<div style="text-align:right"><p>Invoice no. <b>${esc(d.iNum)}</b><br>Date ${esc(d.iDate)}<br>Due ${esc(d.iDue)}${d.iPeriod?'<br>Service period '+esc(d.iPeriod):''}</p></div></div>
+<p><b>Bill to</b><br>${esc(d.cName)||'Participant name'}<br>NDIS number: ${esc(d.cNdis)}<br>Plan: ${esc(d.cPlan)}${d.cBill?'<br>'+esc(d.cBill):''}</p>
+<table><thead><tr><th>Date</th><th>Support item</th><th>Description</th><th class="n">Qty</th><th class="n">Rate</th><th class="n">Amount</th></tr></thead><tbody>${rows||'<tr><td colspan="6">Add a support line</td></tr>'}</tbody></table>
+<div class="tot"><div><span>Subtotal</span><span>${money(sub)}</span></div><div><span>GST</span><span>${d.gst?'$0.00 (GST free supports)':'Not registered for GST'}</span></div><div class="g"><span>Total due</span><span>${money(sub)}</span></div></div>
+${d.pPay?'<p><b>How to pay</b><br>'+esc(d.pPay).replace(/\n/g,'<br>')+'<br>Please use invoice number '+esc(d.iNum)+' as the reference.</p>':''}
+${d.iNotes?'<p>'+esc(d.iNotes)+'</p>':''}`}
+function saveInv(){const d=data();d.saved=new Date().toISOString();const a=store().filter(x=>x.iNum!==d.iNum);a.unshift(d);put(a);keepProvider(d);list();alert('Saved on this device')}
+function keepProvider(d){localStorage.setItem('cbNdisProv',JSON.stringify({pName:d.pName,pAbn:d.pAbn,pPhone:d.pPhone,pEmail:d.pEmail,pAddr:d.pAddr,pPay:d.pPay,gst:d.gst}))}
+function list(){const a=store();$('saved').innerHTML=a.length?a.map((d,i)=>{const t=(d.lines||[]).reduce((s,l)=>s+(+l.qty||0)*(+l.rate||0),0);return `<li><span><b>${esc(d.iNum)}</b> ${esc(d.cName)} ${esc(d.iDate)} ${money(t)}</span><span><button class="alt" onclick="load(store()[${i}])">Open</button> <button class="del" onclick="if(confirm('Delete this saved invoice')){const a=store();a.splice(${i},1);put(a);list()}">Delete</button></span></li>`}).join(''):'<li class="note">No saved invoices yet</li>'}
+function newInv(){const p=JSON.parse(localStorage.getItem('cbNdisProv')||'{}');load(Object.assign({},p,{iNum:nextNum(),iDate:today(),iDue:plus(today(),14),cPlan:'Self-managed',lines:[{item:'',desc:'',date:today(),qty:1,rate:0}]}))}
+function dup(){const d=data();d.iNum=nextNum();d.iDate=today();d.iDue=plus(today(),14);d.lines.forEach(l=>l.date=today());load(d)}
+function exportAll(){const b=new Blob([JSON.stringify({invoices:store(),provider:JSON.parse(localStorage.getItem('cbNdisProv')||'{}')},null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ndis-invoices-backup.json';a.click()}
+function importAll(inp){const f=inp.files[0];if(!f)return;f.text().then(t=>{try{const j=JSON.parse(t);if(j.invoices)put(j.invoices);if(j.provider)localStorage.setItem('cbNdisProv',JSON.stringify(j.provider));list();alert('Restored')}catch(e){alert('That file could not be read')}})}
+F.forEach(f=>$(f).addEventListener('input',render));$('pGst').addEventListener('change',render);
+newInv();list();
+</script>
+<!--cb-ytsub--><footer id="cbYtFoot" style="display:block;clear:both;position:static;width:100%;box-sizing:border-box;margin:24px 0 0;padding:18px 12px 150px;text-align:center;font:15px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;background:transparent"><style>#cbYtFoot a{text-decoration:none;box-sizing:border-box}#cbYtFoot .m{display:block;width:100%;max-width:420px;margin:8px auto;padding:16px 14px;border-radius:14px;font-weight:700;font-size:18px;color:#fff}#cbYtFoot .m:active{transform:scale(.98)}#cbYtFoot h3{margin:0 0 6px;font-size:17px;color:inherit}</style><h3>&#127925; Stream my music</h3><a class="m" style="background:#c4302b" href="https://www.youtube.com/@coffeebreakTVSERIES/streams" target="_blank" rel="noopener">&#128251; Coffeebreak Radio 24/7 (YouTube)</a><a class="m" style="background:#1db954" href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">Listen on Spotify</a><a class="m" style="background:#fa2d48" href="https://music.apple.com/au/artist/karen-obrien/535470355" target="_blank" rel="noopener">Listen on Apple Music</a><a class="m" style="background:#212121" href="https://music.youtube.com/channel/UCbI7BchGrNInUgjm0YqB_hg" target="_blank" rel="noopener">Listen on YouTube Music</a><div style="margin-top:14px"><a href="https://www.youtube.com/channel/UCNuPovMUFJDrl9fhztDgy4w?sub_confirmation=1" target="_blank" rel="noopener" style="display:inline-block;background:#ff0000;color:#fff;font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px">&#9654; Subscribe to Coffeebreak TV Series on YouTube</a></div><div style="margin-top:10px;font-size:12px;opacity:.75"><a href="https://www.tesla.com" target="_blank" rel="noopener" style="color:inherit">Tesla</a> &middot; <a href="https://www.starlink.com" target="_blank" rel="noopener" style="color:inherit">Starlink</a></div></footer></body>
+</html>

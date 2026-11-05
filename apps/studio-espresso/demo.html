@@ -1,0 +1,21 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Studio Espresso</title><link rel="icon" href="logo.jpg"><link rel="stylesheet" href="style.css">
+</head><body>
+<header><img src="logo.jpg" alt="Coffeebreak" class="logo"><div class="ttl"><h1>Coffeebreak Studio Espresso</h1><small id="sub">Pro music studio in your browser</small></div>
+<div class="transport">
+<button id="bPlay" class="big" title="Play / stop (Space)">Play</button><button id="bStop" title="Stop and go to start (Home)">Stop</button><button id="bRec" class="rec" title="Record (R)">Rec</button>
+<button id="bLoop" class="tg" title="Loop (L)">Loop</button><button id="bMetro" class="tg" title="Metronome (M)">Click</button><button id="bCount" class="tg" title="Count-in">Count-in</button><button id="bPunch" class="tg" title="Punch in and out at the loop region">Punch</button>
+<span id="pos" class="pos">1.1.00</span>
+<label class="mini">BPM <input type="number" id="iBpm" min="30" max="300" value="120"></label>
+<label class="mini">Sig <select id="iSig"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option></select>/4</label>
+<label class="mini">Snap <select id="iSnap"><option value="0">Off</option><option value="0.25">1/16</option><option value="0.5">1/8</option><option value="1" selected>Beat</option><option value="4">Bar</option><option value="0.3333">Triplet</option></select></label>
+<button id="bUndo" title="Undo (Ctrl+Z)">Undo</button><button id="bRedo" title="Redo (Ctrl+Y)">Redo</button><button id="bSave" title="Save to browser (Ctrl+S)">Save</button>
+<canvas id="mMeter" width="120" height="16"></canvas></div></header>
+<div id="demoBanner" class="banner hidden">Free demo: up to 2 tracks and 30 second exports. The full version removes both limits.</div>
+<nav id="tabs"></nav>
+<main id="main"></main>
+<div id="toast" class="toast hidden"></div>
+<script>window.CB_DEMO=true</script><script src="lame.min.js"></script><script src="dsp.js"></script><script src="engine.js"></script><script src="fx2.js"></script><script src="ui.js"></script><script src="ui2.js"></script><script src="ui3.js"></script><script src="radio.js"></script>
+<script src="grainy.js"></script>
+</body></html>

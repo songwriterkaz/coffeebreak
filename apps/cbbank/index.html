@@ -1,10 +1,88 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Cbbank</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Cbbank</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Try the sample entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><!--cb-frame-fix--><style id="cb-frame-fix-css">html{height:100%!important;overflow:hidden!important}body{height:100%!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:auto!important;margin-top:0}</style>
+<script>/*cb-frame-fix: storage + dialogs safe inside itch's sandboxed, cross-origin iframe*/(function(){function mem(){var d={};return{getItem:function(k){k=String(k);return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[String(k)]=String(v)},removeItem:function(k){delete d[String(k)]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}}
+function px(st){return new Proxy(st,{get:function(t,k){if(k in t)return typeof t[k]=='function'?t[k].bind(t):t[k];return t.getItem(k)===null?undefined:t.getItem(k)},set:function(t,k,v){t.setItem(k,v);return true},deleteProperty:function(t,k){t.removeItem(k);return true},has:function(t,k){return k in t||t.getItem(k)!==null},ownKeys:function(t){var a=[];for(var i=0;i<t.length;i++)a.push(t.key(i));return a},getOwnPropertyDescriptor:function(t,k){var v=t.getItem(k);return v===null?undefined:{value:v,writable:true,enumerable:true,configurable:true}}})}
+['localStorage','sessionStorage'].forEach(function(n){var ok=false;try{var s=window[n];s.setItem('__cbt','1');s.removeItem('__cbt');ok=true}catch(e){}if(!ok){try{Object.defineProperty(window,n,{value:px(mem()),configurable:true})}catch(e){}}});
+function toast(m){try{var t=document.createElement('div');t.textContent=String(m);t.style.cssText='position:fixed;left:50%;top:16px;transform:translateX(-50%);max-width:90%;background:#2a1d14;color:#fff;padding:12px 18px;border-radius:10px;z-index:2147483647;font:15px system-ui,sans-serif;box-shadow:0 4px 14px #0006';(document.body||document.documentElement).appendChild(t);setTimeout(function(){t.remove()},4500)}catch(e){}}
+var A=window.alert,C=window.confirm;window.alert=function(m){var t=Date.now();try{A.call(window,m)}catch(e){}if(Date.now()-t<30)toast(m)};window.confirm=function(m){var t=Date.now(),r=false;try{r=C.call(window,m)}catch(e){}if(!r&&Date.now()-t<30)return true;return r};
+window.__cbNav=function(u){var w=null;try{w=window.open(u,'_blank')}catch(e){}if(!w){var a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}};})();</script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Bank - Pretend Money Game</title>
+<style>
+:root{--pink:#e0568f;--pinkd:#b8346c;--pinkl:#ffd9e6;--cream:#fff6f1;--latte:#f4e1d2;--coffee:#6b4429;--coffeed:#3d2415;--ok:#2e7d4f;--warn:#9a5b00;--card:#ffffff;--line:#ecd3c4}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:linear-gradient(180deg,#ffe3ec,#fbeadf 60%,#f4dccb);color:var(--coffeed);font-size:16px;line-height:1.4}
+#app{max-width:480px;margin:0 auto;min-height:100%;background:var(--cream);box-shadow:0 0 40px #6b44292e;position:relative;padding-bottom:96px}
+.strip{position:sticky;top:0;z-index:20;background:var(--coffeed);color:#fff;text-align:center;font-weight:700;font-size:13px;letter-spacing:.3px;padding:7px 56px 7px 10px}
+header.top{display:flex;align-items:center;gap:12px;padding:12px 16px;background:linear-gradient(135deg,var(--pink),#f08aa9)}
+header.top img{width:48px;height:48px;border-radius:12px;background:#fff;border:2px solid #fff}
+header.top h1{margin:0;font-size:21px;color:#fff;line-height:1.1}header.top small{display:block;color:#fff;font-size:12px;opacity:.95}
+main{padding:14px 14px 8px}
+.gamebanner{background:#fff3c9;border:3px solid #e0a000;border-radius:18px;padding:14px;margin-bottom:14px;text-align:center}
+.gamebanner b{display:block;font-size:19px;color:#5a3a00;letter-spacing:.3px}.gamebanner span{font-size:14px;color:#5a3a00}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:0 2px 8px #6b44291a}
+.card h2{margin:0 0 8px;font-size:18px;color:var(--coffee)}.card h3{margin:10px 0 4px;font-size:15px;color:var(--coffee)}
+.muted{color:#7b5a45;font-size:14px}.small{font-size:13px}
+button,.btn{font:inherit;font-weight:700;min-height:48px;padding:10px 16px;border-radius:14px;border:0;background:var(--pinkd);color:#fff;cursor:pointer;touch-action:manipulation}
+button:hover{background:#9f2a5c}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:4px solid #2a6df4;outline-offset:2px}
+button.alt{background:var(--latte);color:var(--coffeed);border:2px solid var(--line)}button.alt:hover{background:#ecd0bc}
+button.coffee{background:var(--coffee)}button.big{width:100%;min-height:56px;font-size:18px}
+button:disabled{opacity:.55;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}.row>*{flex:1 1 auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input[type=text],textarea,select{font:inherit;width:100%;min-height:48px;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:#fff;color:var(--coffeed)}
+textarea{min-height:92px;font-size:13px;word-break:break-all}
+label{display:block;font-weight:700;font-size:14px;margin:8px 0 4px}
+.hero{background:linear-gradient(135deg,var(--coffee),#8a5a3a);color:#fff;border-radius:22px;padding:18px;margin-bottom:14px}
+.hero .lbl{font-size:13px;opacity:.9}.hero .num{font-size:38px;font-weight:800;line-height:1.1}
+.pill{display:inline-block;background:#ffffff2e;border-radius:999px;padding:4px 12px;font-weight:700;font-size:14px}
+.acct{border-radius:18px;padding:14px;color:#fff}.acct.sp{background:var(--pinkd)}.acct.sv{background:#2f7a5a}
+.acct .n{font-size:24px;font-weight:800}.acct .l{font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chips button{flex:0 0 auto;min-height:44px;padding:8px 14px}
+.chips button.on{background:var(--coffeed);color:#fff}
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;display:flex;background:#fff;border-top:2px solid var(--line);z-index:30;padding-bottom:env(safe-area-inset-bottom)}
+.tabbar button{flex:1;background:transparent;color:var(--coffee);border-radius:0;min-height:62px;padding:6px 2px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.tabbar button .ic{font-size:22px;line-height:1}.tabbar button.on{background:var(--pinkl);color:var(--pinkd);border-top:4px solid var(--pinkd)}
+#toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--coffeed);color:#fff;padding:12px 18px;border-radius:14px;font-weight:700;max-width:92%;text-align:center;z-index:40;opacity:0;pointer-events:none;transition:opacity .35s}
+#toast.show{opacity:1}
+.tx{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.tx:last-child{border-bottom:0}.tx .amt{font-weight:800;white-space:nowrap}.in{color:var(--ok)}.out{color:var(--pinkd)}
+.tx small{display:block;color:#7b5a45;font-size:12px}
+.ringwrap{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ringwrap:last-child{border-bottom:0}.ring{flex:0 0 84px;position:relative;width:84px;height:84px}
+.ring svg{transform:rotate(-90deg)}.ring circle{fill:none;stroke-width:10}.ring .bg{stroke:var(--latte)}.ring .fg{stroke:var(--pink);stroke-linecap:round;transition:stroke-dashoffset .8s}
+.ring .t{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
+.bar{height:16px;background:var(--latte);border-radius:8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--pink);transition:width .5s}
+.mgr{display:flex;gap:10px;align-items:flex-start}.mgr .av{flex:0 0 78px}
+.bubble{position:relative;background:#fff;border:2px solid var(--line);border-radius:18px;padding:10px 12px;font-size:15px;flex:1}
+.bubble:before{content:"";position:absolute;left:-10px;top:22px;border:8px solid transparent;border-right-color:var(--line);border-left:0}
+.badge{display:inline-block;font-weight:800;font-size:13px;border-radius:999px;padding:3px 10px}
+.badge.yes{background:#d6f0df;color:#17603a}.badge.no{background:#ffe6c2;color:#7a4600}
+.office{background:linear-gradient(180deg,#f9d7e3 0,#f9d7e3 58%,#a8714a 58%,#8a5a3a 100%);border-radius:22px;padding:12px 12px 0;margin-bottom:14px;text-align:center;border:2px solid var(--line);overflow:hidden}
+.plate{display:inline-block;background:#d4af37;color:#3d2415;font-weight:800;padding:5px 14px;border-radius:8px;margin:6px 0 10px;font-size:14px}
+.shopg{display:grid;grid-template-columns:1fr 1fr;gap:10px}.item{border:2px solid var(--line);border-radius:16px;padding:10px;text-align:center;background:#fff}
+.item .e{font-size:38px;line-height:1.1}.item .p{font-weight:800;color:var(--pinkd)}.item button{width:100%;margin-top:6px;min-height:44px}
+.dc{border-radius:20px;padding:16px;color:#fff;position:relative;aspect-ratio:1.586;max-width:340px;margin:0 auto 10px;box-shadow:0 6px 18px #3d241555}
+.dc .b{font-weight:800;font-size:17px}.dc .f{position:absolute;top:14px;right:14px;background:#000a;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:700}
+.dc .nu{position:absolute;left:16px;bottom:52px;font-family:ui-monospace,monospace;font-size:19px;letter-spacing:2px}.dc .nm{position:absolute;left:16px;bottom:16px;text-transform:uppercase;font-size:13px}
+.dc img{position:absolute;right:14px;bottom:12px;width:46px;border-radius:8px}.chip{width:40px;height:30px;border-radius:6px;background:#d9b45a;margin-top:12px}
+.sw{width:48px;height:48px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--line);padding:0;min-height:48px}.sw.on{box-shadow:0 0 0 4px var(--coffeed)}
+.menu button{width:100%;text-align:left;display:flex;gap:12px;align-items:center;margin-bottom:10px;background:#fff;color:var(--coffeed);border:2px solid var(--line);min-height:60px}
+.menu .ic{font-size:26px}
+.switch{display:flex;align-items:center;gap:12px;justify-content:space-between}.switch button{min-width:92px}
+.tip{border-left:6px solid var(--pink);background:#fff;border-radius:12px;padding:10px 12px;margin-bottom:10px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.badges{display:grid;grid-template-columns:1fr 1fr;gap:8px}.bdg{border:2px dashed var(--line);border-radius:14px;padding:10px;text-align:center;font-size:13px;opacity:.65}.bdg.got{opacity:1;border:2px solid var(--pink);background:var(--pinkl)}
+footer.rights{text-align:center;font-size:12px;color:#5a3d2b;padding:10px 14px 18px}footer.rights img{width:40px;border-radius:8px;display:block;margin:0 auto 6px}
+#cbfs-btn{top:6px!important;bottom:auto!important;right:max(6px,calc(50% - 234px))!important;width:34px!important;height:34px!important;font-size:16px!important;line-height:30px!important}
+.rm *,.rm{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (min-width:700px){body{padding:12px 0}#app{border-radius:26px;overflow:hidden}}
+</style><script src="cb-fullscreen.js"></script></head><body>
+<div id="app"><div class="strip" role="note">PRETEND MONEY GAME - NOT A REAL BANK</div>
+<header class="top"><img src="cb-logo.jpg" alt="Coffeebreak logo"><div><h1>Coffeebreak Bank</h1><small>A pretend money game</small></div></header>
+<main id="main"></main>
+<footer class="rights"><img src="cb-logo.jpg" alt="Coffeebreak logo">Coffeebreak by Karen O'Brien. Karen keeps all rights to this app, its designs, name and logo. You may not copy it or make your own versions.</footer>
+<nav class="tabbar" id="tabbar" aria-label="Main"></nav></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="game.js"></script>
+<div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
+</body></html>

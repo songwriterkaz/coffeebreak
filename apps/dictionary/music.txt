@@ -1,0 +1,184 @@
+Theory|note|A single sound of a particular pitch and duration.
+Theory|pitch|How high or low a sound is.
+Theory|interval|The distance in pitch between two notes.
+Theory|semitone|The smallest interval in Western music; one piano key to the next.
+Theory|tone|An interval of two semitones; also called a whole step.
+Theory|octave|An interval of eight scale steps; the higher note has double the frequency.
+Theory|scale|A series of notes in ascending or descending order.
+Theory|major scale|A seven-note scale with the pattern tone-tone-semitone-tone-tone-tone-semitone.
+Theory|minor scale|A seven-note scale with a darker sound; natural minor flattens the 3rd, 6th and 7th of major.
+Theory|chromatic scale|A scale using all twelve semitones.
+Theory|pentatonic scale|A five-note scale common in folk, blues and rock.
+Theory|blues scale|A minor pentatonic scale with an added flattened fifth.
+Theory|key|The tonal centre and scale a piece is based on.
+Theory|key signature|Sharps or flats at the start of a staff showing the key.
+Theory|time signature|Numbers showing beats per bar and the note value of each beat.
+Theory|bar|A segment of music containing a set number of beats; also called a measure.
+Theory|beat|The basic pulse of music.
+Theory|downbeat|The first beat of a bar.
+Theory|upbeat|The beat before the downbeat; also called the anacrusis or pickup.
+Theory|syncopation|Accenting off-beats or weak beats.
+Theory|rhythm|The pattern of sounds and silences in time.
+Theory|metre|The grouping of beats into regular patterns.
+Theory|chord|Three or more notes sounded together.
+Theory|triad|A three-note chord built of a root, third and fifth.
+Theory|root|The note a chord is built on and named after.
+Theory|inversion|A chord with a note other than the root in the bass.
+Theory|seventh chord|A triad with an added seventh above the root.
+Theory|diminished|A chord or interval made a semitone smaller than minor or perfect.
+Theory|augmented|A chord or interval made a semitone larger than major or perfect.
+Theory|suspended chord|A chord where the third is replaced by the second or fourth.
+Theory|chord progression|A sequence of chords.
+Theory|cadence|A chord progression that ends a phrase.
+Theory|perfect cadence|A V to I cadence that sounds finished.
+Theory|plagal cadence|A IV to I cadence, the "Amen" cadence.
+Theory|imperfect cadence|A cadence ending on chord V that sounds unfinished.
+Theory|interrupted cadence|A V to vi cadence that surprises the ear.
+Theory|tonic|The first note of a scale; the home note.
+Theory|dominant|The fifth note of a scale, or the chord built on it.
+Theory|subdominant|The fourth note of a scale, or the chord built on it.
+Theory|relative minor|The minor key sharing a key signature with a major key.
+Theory|modulation|Changing from one key to another within a piece.
+Theory|transpose|To move music into a different key.
+Theory|harmony|Notes sounded together, and how chords relate.
+Theory|melody|A sequence of single notes heard as a tune.
+Theory|counterpoint|Two or more independent melodies played together.
+Theory|consonance|Notes that sound stable together.
+Theory|dissonance|Notes that sound tense together and want to resolve.
+Theory|sharp|A symbol raising a note by a semitone.
+Theory|flat|A symbol lowering a note by a semitone.
+Theory|natural|A symbol cancelling a sharp or flat.
+Theory|accidental|A sharp, flat or natural not in the key signature.
+Theory|staff|The five lines on which music is written; also stave.
+Theory|treble clef|A clef for higher notes; the G clef.
+Theory|bass clef|A clef for lower notes; the F clef.
+Theory|ledger line|A short line above or below the staff for extra notes.
+Theory|rest|A symbol showing silence.
+Theory|tie|A curved line joining two notes of the same pitch into one.
+Theory|dotted note|A note lengthened by half its value.
+Theory|triplet|Three notes played in the time of two.
+Theory|mode|A scale type such as Dorian, Phrygian, Lydian or Mixolydian.
+Theory|circle of fifths|A diagram showing how keys relate by fifths.
+Theory|arpeggio|Playing the notes of a chord one after another.
+Theory|ostinato|A short pattern repeated persistently.
+Theory|motif|A short musical idea that is repeated and developed.
+Theory|timbre|The tone colour or quality of a sound.
+Theory|texture|How layers of sound combine, such as monophonic or polyphonic.
+Italian Tempo|tempo|The speed of the music.
+Italian Tempo|largo|Very slow and broad.
+Italian Tempo|lento|Slow.
+Italian Tempo|adagio|Slow and at ease.
+Italian Tempo|andante|At a walking pace.
+Italian Tempo|andantino|Slightly faster than andante.
+Italian Tempo|moderato|At a moderate speed.
+Italian Tempo|allegretto|Moderately fast.
+Italian Tempo|allegro|Fast and lively.
+Italian Tempo|vivace|Lively and fast.
+Italian Tempo|presto|Very fast.
+Italian Tempo|prestissimo|As fast as possible.
+Italian Tempo|accelerando|Gradually getting faster.
+Italian Tempo|ritardando|Gradually getting slower.
+Italian Tempo|rallentando|Gradually slowing down.
+Italian Tempo|a tempo|Return to the original speed.
+Italian Tempo|rubato|Flexible tempo for expression.
+Italian Tempo|fermata|A pause; hold the note longer.
+Italian Tempo|ritenuto|Immediately slower.
+Italian Tempo|tempo primo|Return to the first tempo.
+Italian Dynamics|dynamics|How loud or soft music is played.
+Italian Dynamics|pianissimo|Very soft (pp).
+Italian Dynamics|piano|Soft (p).
+Italian Dynamics|mezzo piano|Moderately soft (mp).
+Italian Dynamics|mezzo forte|Moderately loud (mf).
+Italian Dynamics|forte|Loud (f).
+Italian Dynamics|fortissimo|Very loud (ff).
+Italian Dynamics|crescendo|Gradually getting louder.
+Italian Dynamics|diminuendo|Gradually getting softer.
+Italian Dynamics|decrescendo|Gradually getting softer.
+Italian Dynamics|sforzando|A sudden strong accent (sfz).
+Italian Dynamics|fortepiano|Loud then immediately soft (fp).
+Italian Expression|legato|Smooth and connected.
+Italian Expression|staccato|Short and detached.
+Italian Expression|accent|Emphasis on a particular note.
+Italian Expression|dolce|Sweetly.
+Italian Expression|cantabile|In a singing style.
+Italian Expression|espressivo|Expressively.
+Italian Expression|con brio|With vigour.
+Italian Expression|sotto voce|In an undertone, very quietly.
+Italian Expression|pizzicato|Plucking the strings of a bowed instrument.
+Italian Expression|arco|Play with the bow.
+Italian Expression|tremolo|Rapid repetition of a note.
+Italian Expression|vibrato|A slight, regular wavering of pitch.
+Italian Expression|glissando|A slide from one pitch to another.
+Italian Expression|da capo|From the beginning (D.C.).
+Italian Expression|dal segno|From the sign (D.S.).
+Italian Expression|coda|A closing section of a piece.
+Italian Expression|fine|The end.
+Italian Expression|a cappella|Singing without instrumental accompaniment.
+Recording & Production|DAW|Digital Audio Workstation; software for recording and mixing, such as Ableton or Logic.
+Recording & Production|track|A single recorded part in a session; also a song.
+Recording & Production|stem|A grouped submix, such as all drums, exported separately.
+Recording & Production|mixing|Balancing and processing tracks into a stereo mix.
+Recording & Production|mastering|Final processing to make a mix ready for release.
+Recording & Production|EQ|Equalisation; boosting or cutting frequencies.
+Recording & Production|compression|Reducing dynamic range so quiet and loud parts are closer.
+Recording & Production|limiter|A compressor that stops audio going above a set level.
+Recording & Production|reverb|The reflections that give a sense of space.
+Recording & Production|delay|An effect that repeats sound like an echo.
+Recording & Production|chorus|An effect that thickens sound by layering slightly detuned copies.
+Recording & Production|panning|Placing a sound left or right in the stereo field.
+Recording & Production|gain|The input level of a signal.
+Recording & Production|headroom|The space between the signal level and clipping.
+Recording & Production|clipping|Distortion when a signal exceeds the maximum level.
+Recording & Production|latency|Delay between input and hearing the output.
+Recording & Production|overdub|Recording a new part over existing tracks.
+Recording & Production|punch in|Re-recording a section of a track.
+Recording & Production|comping|Combining the best parts of several takes.
+Recording & Production|take|One recording attempt.
+Recording & Production|click track|A metronome played to performers while recording.
+Recording & Production|BPM|Beats per minute; the tempo.
+Recording & Production|MIDI|A digital protocol that sends note and control data.
+Recording & Production|sample|A recorded sound snippet reused in a new work.
+Recording & Production|loop|A section of audio repeated continuously.
+Recording & Production|quantise|Snapping notes to a rhythmic grid.
+Recording & Production|sidechain|Using one signal to control a processor on another, like ducking bass under a kick.
+Recording & Production|condenser microphone|A sensitive mic often used for vocals in studios.
+Recording & Production|dynamic microphone|A rugged mic good for loud sources and live use.
+Recording & Production|pop filter|A screen that reduces plosive sounds on vocals.
+Recording & Production|phantom power|48V power supplied to condenser mics.
+Recording & Production|audio interface|Hardware connecting mics and instruments to a computer.
+Recording & Production|bounce|To export or render audio to a file.
+Recording & Production|LUFS|Loudness Units relative to Full Scale; a loudness measure for streaming.
+Recording & Production|auto-tune|Software that corrects or effects vocal pitch.
+Recording & Production|reference track|A commercial song used to compare your mix.
+Recording & Production|bus|A channel that combines several tracks for group processing.
+Recording & Production|fader|A slider controlling level.
+Recording & Production|monitors|Studio speakers for accurate listening.
+Songwriting|verse|Section that tells the story; lyrics usually change each time.
+Songwriting|chorus (song)|The repeated main section with the hook.
+Songwriting|pre-chorus|A section building from the verse into the chorus.
+Songwriting|bridge|A contrasting section, usually once, before the final chorus.
+Songwriting|hook|The catchiest part of a song.
+Songwriting|intro|The opening section of a song.
+Songwriting|outro|The ending section of a song.
+Songwriting|middle eight|A contrasting eight-bar bridge section.
+Songwriting|refrain|A repeated line, often at the end of verses.
+Songwriting|topline|The vocal melody and lyrics over a track.
+Songwriting|rhyme scheme|The pattern of rhymes, such as ABAB.
+Songwriting|internal rhyme|A rhyme within a single line.
+Songwriting|slant rhyme|A near rhyme with similar but not identical sounds.
+Songwriting|prosody|How well lyrics, melody and rhythm fit together.
+Songwriting|song form|The structure of a song, such as verse-chorus.
+Songwriting|AABA|A song form with three similar sections and a bridge.
+Songwriting|demo|A rough recording to present a song.
+Songwriting|co-write|A song written with other writers.
+Songwriting|split sheet|An agreement listing each writer's share of a song.
+Songwriting|publishing|Rights and income from the composition itself.
+Songwriting|royalties|Payments to writers and rights holders when music is used.
+Songwriting|APRA AMCOS|Australia's organisation collecting songwriter royalties.
+Songwriting|PRO|Performing rights organisation that collects performance royalties.
+Songwriting|ISRC|International Standard Recording Code identifying a recording.
+Songwriting|sync|Licensing music for film, TV, ads or games.
+Songwriting|lead sheet|Melody, lyrics and chords written on one page.
+Songwriting|key change|Moving up a key, often for the last chorus.
+Songwriting|tag|A repeated ending line or phrase.
+Songwriting|vamp|A repeated chord pattern, often while waiting or ending.

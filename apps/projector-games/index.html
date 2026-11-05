@@ -1,9 +1,217 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Projector Games</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Projector Games</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A quick play sample round with scoring and a saved best score.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p>Tap the cup as many times as you can in 10 seconds.</p><p><button id=cup style="font-size:2em">&#9749; Tap</button></p><p>Score <b id=sc>0</b> &middot; Best <b id=bs></b> &middot; <span id=tm>Ready</span></p><script>
-var KEY='cb-best-'+location.pathname,s=0,on=0,end;bs.textContent=localStorage.getItem(KEY)||0;
-cup.onclick=()=>{if(!on){on=1;s=0;end=Date.now()+10000;(function t(){var l=end-Date.now();tm.textContent=(l/1000).toFixed(1)+'s';if(l>0)requestAnimationFrame(t);else{on=0;tm.textContent='Done';if(s>+bs.textContent){bs.textContent=s;localStorage.setItem(KEY,s)}}})()}if(on){s++;sc.textContent=s}}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Projector Games</title><link rel="icon" href="logo.png">
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#000;font-family:system-ui,-apple-system,sans-serif;color:#fff;user-select:none}
+#stage{position:absolute;left:0;top:0;transform-origin:0 0;background:#12001a;overflow:hidden}
+#cv{position:absolute;left:0;top:0;width:100%;height:100%}
+#ui{position:fixed;inset:0;z-index:10;pointer-events:none}
+.pan{pointer-events:auto;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#2a0830f2;border:4px solid #ff4fa3;border-radius:24px;padding:22px;width:min(92vw,900px);max-height:92vh;overflow:auto;box-sizing:border-box;display:none}
+h1{margin:0 0 8px;font-size:42px;color:#ff8cc6}h2{margin:12px 0 6px;color:#ff8cc6}
+.b{background:#ff2e93;border:3px solid #ffc2e2;color:#fff;font-weight:800;border-radius:16px;padding:12px 18px;font-size:20px;cursor:pointer;margin:4px}
+.b.on{background:#fff;color:#c4006a}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.card{background:#ff2e93;border:3px solid #ffc2e2;border-radius:18px;padding:14px;font-size:22px;font-weight:800;cursor:pointer;color:#fff;text-align:left}
+.card small{display:block;font-weight:500;font-size:15px;margin-top:4px}
+label{font-size:18px;display:block;margin:8px 0}input[type=range]{width:260px;vertical-align:middle}
+.h{position:fixed;width:44px;height:44px;margin:-22px;border-radius:50%;background:#ff4fa3;border:4px solid #fff;z-index:20;cursor:grab;display:none;pointer-events:auto}
+#bar{position:fixed;right:10px;bottom:10px;z-index:15;pointer-events:auto;opacity:.35;transition:opacity .3s}#bar:hover{opacity:1}
+#room{position:fixed;left:12px;bottom:12px;z-index:15;background:#fff;color:#12001a;border-radius:16px;padding:10px;display:none;text-align:center;font-weight:900;pointer-events:auto}
+#room #qr img{width:150px;height:150px;display:block}#room div{font-size:30px;letter-spacing:4px}
+#camv{position:fixed;right:10px;bottom:70px;width:160px;z-index:15;border:3px solid #ff4fa3;border-radius:10px;display:none;transform:scaleX(-1)}
+</style></head><body>
+<div id="stage"><canvas id="cv" width="1600" height="900"></canvas></div>
+<div id="ui">
+<div class="pan" id="home"><div style="display:flex;align-items:center;gap:16px"><img src="logo.png" width="96" style="border-radius:50%"><h1>Coffeebreak Projector Games</h1></div>
+<p style="font-size:20px">Big screen party games for a wall or the floor. Wave at the camera, join with phones, or use the mouse.</p>
+<div class="grid" id="games"></div>
+<h2>Controls</h2><button class="b" id="bCam">Webcam motion: off</button><button class="b" id="bPhones">Phones: off</button><button class="b" id="bSetup">Projector setup</button>
+<h2>Comfort</h2><button class="b" id="bCalm">Calm mode: off</button><label>Volume <input type="range" id="vol" min="0" max="100"></label>
+<p style="font-size:15px">There is no flashing in any game. Calm mode slows everything down, softens the colours and makes sounds quieter.</p></div>
+<div class="pan" id="setup"><h1>Projector setup</h1>
+<p style="font-size:18px">Drag the four pink corner dots to line up the picture with your wall or floor.</p>
+<label>Size <input type="range" id="size" min="50" max="100"></label>
+<label>Brightness <input type="range" id="bright" min="50" max="150"></label><label>Contrast <input type="range" id="contr" min="50" max="150"></label>
+<button class="b" id="mWall">Wall mode</button><button class="b" id="mFloor">Floor mode</button><button class="b" id="bTest">Brightness test</button><button class="b" id="bReset">Reset corners</button>
+<h2>Webcam</h2><button class="b" id="bCal">Calibrate webcam</button><button class="b" id="bMirror">Mirror: on</button><label>Motion sensitivity <input type="range" id="sens" min="1" max="100"></label><span id="calmsg" style="font-size:18px"></span>
+<br><button class="b" id="bDone">Done</button></div>
+</div>
+<div class="h" id="h0"></div><div class="h" id="h1"></div><div class="h" id="h2"></div><div class="h" id="h3"></div>
+<div id="room"><div id="qr"></div><div id="code"></div><span>Scan to join</span></div>
+<video id="camv" playsinline muted></video>
+<div id="bar"><button class="b" id="bHome">Menu</button><button class="b" id="bFull">Full screen</button></div>
+<script src="peerjs.min.js"></script><script src="qrcode.js"></script>
+<script>
+const $=id=>document.getElementById(id),cv=$('cv'),ctx=cv.getContext('2d'),W=1600,H=900;
+const S=Object.assign({corners:null,size:100,bright:100,contr:100,floor:false,calm:false,vol:70,mirror:true,sens:40,crop:[0,0,1,1]},JSON.parse(localStorage.cbProj||'{}'));
+const save=()=>localStorage.cbProj=JSON.stringify(S);
+// ---------- keystone ----------
+function defCorners(){const s=S.size/100,w=innerWidth*s,h=Math.min(innerHeight*s,w*9/16),ww=h*16/9,x=(innerWidth-ww)/2,y=(innerHeight-h)/2;return[[x,y],[x+ww,y],[x+ww,y+h],[x,y+h]]}
+function adj(m){return[m[4]*m[8]-m[5]*m[7],m[2]*m[7]-m[1]*m[8],m[1]*m[5]-m[2]*m[4],m[5]*m[6]-m[3]*m[8],m[0]*m[8]-m[2]*m[6],m[2]*m[3]-m[0]*m[5],m[3]*m[7]-m[4]*m[6],m[1]*m[6]-m[0]*m[7],m[0]*m[4]-m[1]*m[3]]}
+function mul(a,b){const c=[];for(let i=0;i<3;i++)for(let j=0;j<3;j++){let s=0;for(let k=0;k<3;k++)s+=a[3*i+k]*b[3*k+j];c[3*i+j]=s}return c}
+function mv(m,v){return[m[0]*v[0]+m[1]*v[1]+m[2]*v[2],m[3]*v[0]+m[4]*v[1]+m[5]*v[2],m[6]*v[0]+m[7]*v[1]+m[8]*v[2]]}
+function basis(p){const m=[p[0][0],p[1][0],p[2][0],p[0][1],p[1][1],p[2][1],1,1,1];const v=mv(adj(m),[p[3][0],p[3][1],1]);return mul(m,[v[0],0,0,0,v[1],0,0,0,v[2]])}
+let Hm=null;
+function applyKey(){const c=S.corners||defCorners();const s=basis([[0,0],[W,0],[W,H],[0,H]]),d=basis(c);let t=mul(d,adj(s));t=t.map(x=>x/t[8]);Hm=t;
+ $('stage').style.width=W+'px';$('stage').style.height=H+'px';
+ $('stage').style.transform='matrix3d('+[t[0],t[3],0,t[6],t[1],t[4],0,t[7],0,0,1,0,t[2],t[5],0,t[8]].join(',')+')';
+ $('stage').style.filter='brightness('+S.bright/100+') contrast('+S.contr/100+')';c.forEach((p,i)=>{$('h'+i).style.left=p[0]+'px';$('h'+i).style.top=p[1]+'px'})}
+function toStage(x,y){const inv=adj(Hm);const v=mv(inv,[x,y,1]);return[v[0]/v[2],v[1]/v[2]]}
+[0,1,2,3].forEach(i=>{const h=$('h'+i);h.onpointerdown=e=>{h.setPointerCapture(e.pointerId);h.onpointermove=ev=>{if(!S.corners)S.corners=defCorners();S.corners[i]=[ev.clientX,ev.clientY];applyKey()};h.onpointerup=()=>{h.onpointermove=null;save()}}});
+addEventListener('resize',applyKey);
+// ---------- audio ----------
+let AC=null,master=null;function ac(){if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.connect(AC.destination)}master.gain.value=S.vol/100*(S.calm?0.5:1);return AC}
+function tone(f,d=0.15,type='sine'){const a=ac();const o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0.2,a.currentTime);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+d);o.connect(g);g.connect(master);o.start();o.stop(a.currentTime+d)}
+const music=new Audio();music.loop=true;const setVol=()=>{music.volume=S.vol/100*(S.calm?0.5:1);if(master)master.gain.value=S.vol/100*(S.calm?0.5:1)};
+// ---------- inputs ----------
+const hits=[];// {x,y,src}
+const players={};// id -> {name,color,x,y,jx,jy,score,ans,conn}
+const PCOL=['#ff4fa3','#39ffcf','#ffe36e','#8ab4ff','#ff9a3c','#c38bff','#7dff6a','#ffffff'];
+let mouse={x:-99,y:-99,down:false};
+cv.addEventListener('pointerdown',e=>{const[p,q]=toStage(e.clientX,e.clientY);mouse={x:p,y:q,down:true};hits.push({x:p,y:q,src:'mouse'});G&&G.down&&G.down(p,q,'mouse')});
+cv.addEventListener('pointermove',e=>{const[p,q]=toStage(e.clientX,e.clientY);mouse.x=p;mouse.y=q;if(mouse.down){G&&G.drag&&G.drag(p,q,'mouse');if(G&&G.wave)hits.push({x:p,y:q,src:'mouse'})}});
+addEventListener('pointerup',()=>{mouse.down=false;G&&G.up&&G.up('mouse')});
+const keys={};addEventListener('keydown',e=>{keys[e.code]=true;if(e.code==='Escape')showHome();G&&G.key&&G.key(e.code)});addEventListener('keyup',e=>keys[e.code]=false);
+// webcam
+let cam=null,camOn=false,prev=null,motion=null,noise=0;const MW=64,MH=36,mc=document.createElement('canvas');mc.width=MW;mc.height=MH;const mx=mc.getContext('2d',{willReadFrequently:true});
+async function startCam(){try{const st=await navigator.mediaDevices.getUserMedia({video:{width:320,height:180}});$('camv').srcObject=st;await $('camv').play();cam=st;camOn=true;$('camv').style.display='block';$('bCam').textContent='Webcam motion: on';return true}
+ catch(e){$('bCam').textContent='Webcam not available';camOn=false;return false}}
+function stopCam(){if(cam)cam.getTracks().forEach(t=>t.stop());cam=null;camOn=false;$('camv').style.display='none';$('bCam').textContent='Webcam motion: off'}
+function readMotion(){if(!camOn)return null;mx.save();if(S.mirror){mx.translate(MW,0);mx.scale(-1,1)}mx.drawImage($('camv'),0,0,MW,MH);mx.restore();const d=mx.getImageData(0,0,MW,MH).data;
+ const g=new Float32Array(MW*MH);for(let i=0;i<MW*MH;i++)g[i]=d[i*4]*0.3+d[i*4+1]*0.59+d[i*4+2]*0.11;const m=new Uint8Array(MW*MH);
+ const th=12+(100-S.sens)*0.5+noise;if(prev)for(let i=0;i<g.length;i++)m[i]=Math.abs(g[i]-prev[i])>th?1:0;prev=g;return m}
+function camHits(m){const[cx0,cy0,cx1,cy1]=S.crop;const out=[];for(let y=0;y<MH;y+=2)for(let x=0;x<MW;x+=2){const s=m[y*MW+x]+m[y*MW+x+1]+m[(y+1)*MW+x]+m[(y+1)*MW+x+1];if(s>=3){
+ const u=(x/MW-cx0)/(cx1-cx0),v=(y/MH-cy0)/(cy1-cy0);if(u>=0&&u<=1&&v>=0&&v<=1)out.push({x:u*W,y:v*H,src:'cam'})}}return out}
+async function calibrate(){if(!camOn&&!(await startCam())){$('calmsg').textContent='The webcam is not available.';return}
+ $('setup').style.display='none';let n=0,acc=0;const steps=[['Please stand still for a moment',null],['Wave in front of the TOP LEFT pink circle',[150,150]],['Now wave in front of the BOTTOM RIGHT pink circle',[W-150,H-150]]];const res=[];noise=0;
+ for(const[msg,pt]of steps){let sx=0,sy=0,cnt=0;calib={msg,pt};const t0=performance.now();
+  await new Promise(r=>{const it=setInterval(()=>{const m=readMotion();if(m){let s=0;for(let i=0;i<m.length;i++)if(m[i]){s++;if(pt){sx+=i%MW;sy+=Math.floor(i/MW);cnt++}}if(!pt)acc+=s,n++}if(performance.now()-t0>3500){clearInterval(it);r()}},80)});
+  if(!pt)noise=Math.min(30,acc/n/50);else res.push(cnt>20?[sx/cnt/MW,sy/cnt/MH]:null)}
+ calib=null;if(res[0]&&res[1]&&res[1][0]-res[0][0]>0.15&&res[1][1]-res[0][1]>0.15){const dx=(res[1][0]-res[0][0])/(W-300)*W,dy=(res[1][1]-res[0][1])/(H-300)*H;
+  S.crop=[res[0][0]-dx*150/W,res[0][1]-dy*150/H,res[0][0]-dx*150/W+dx,res[0][1]-dy*150/H+dy];$('calmsg').textContent='Calibration done.'}else{S.crop=[0,0,1,1];$('calmsg').textContent='Could not see waving clearly, so the whole camera view is used.'}
+ save();$('setup').style.display='block'}
+let calib=null;
+// phones
+let peer=null,code='';
+function startPhones(){if(peer)return;code=Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(Math.random()*24)]).join('');
+ peer=new Peer('cbproj-'+code,{config:{iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]}});
+ peer.on('open',()=>{const url=location.href.replace(/index\.html.*$/,'').replace(/[?#].*$/,'').replace(/\/?$/,'/')+'controller.html?room='+code;
+  const q=qrcode(0,'M');q.addData(url);q.make();$('qr').innerHTML=q.createImgTag(5,4);$('code').textContent=code;$('room').style.display='block';$('room').title=url;window.joinURL=url;$('bPhones').textContent='Phones: room '+code});
+ peer.on('error',e=>{$('bPhones').textContent='Phones: could not connect ('+(e.type||'error')+')';peer=null});
+ peer.on('connection',c=>{c.on('data',d=>onPhone(c,d));c.on('close',()=>{delete players[c.peer]})})}
+function onPhone(c,d){let p=players[c.peer];
+ if(d.t==='hello'){if(!p){const n=Object.keys(players).length;if(n>=8){c.send({t:'full'});return}p=players[c.peer]={name:(d.name||'Player').slice(0,12),color:PCOL[n],x:W/2,y:H/2,jx:0,jy:0,score:0,ans:null,conn:c}}c.send({t:'mode',ui:G?G.ui:'menu',color:p.color});tone(660);return}
+ if(!p)return;
+ if(d.t==='joy'){p.jx=d.x;p.jy=d.y}else if(d.t==='btn'){if(d.b==='A')hits.push({x:p.x,y:p.y,src:c.peer,big:true});G&&G.phoneBtn&&G.phoneBtn(p,d.b)}
+ else if(d.t==='draw'){G&&G.phoneDraw&&G.phoneDraw(p,d)}}
+function broadcast(m){for(const k in players)try{players[k].conn.send(m)}catch(e){}}
+// ---------- games ----------
+let G=null,last=performance.now();const calmC=c=>S.calm?c.replace(/^#ff2e93|#ff4fa3/,'#d98cb3'):c;
+const sp=()=>S.calm?0.5:1;
+function pops(arr,x,y,r){for(const b of arr)if(!b.dead&&Math.hypot(b.x-x,b.y-y)<b.r+r)return b}
+function text(t,x,y,sz,col='#fff',al='center'){ctx.save();if(S.floor&&false)0;ctx.font='900 '+sz+'px system-ui,sans-serif';ctx.textAlign=al;ctx.textBaseline='middle';ctx.lineWidth=sz/7;ctx.strokeStyle='#12001a';ctx.strokeText(t,x,y);ctx.fillStyle=col;ctx.fillText(t,x,y);ctx.restore()}
+const logo=new Image();logo.src='logo.png';
+const GAMES={
+bubbles:{name:'Bubble Pop Wall',desc:'Wave to pop the pink bubbles.',ui:'pointer',wave:true,
+ start(){this.b=[];this.score=0;this.t=90;this.pf=[]},
+ step(dt,hs){if(Math.random()<dt*(S.calm?0.8:1.8))this.b.push({x:100+Math.random()*(W-200),y:H+80,r:50+Math.random()*50,v:(60+Math.random()*80)*sp(),w:Math.random()*6});
+  for(const b of this.b){b.y-=b.v*dt;b.x+=Math.sin(b.y/80+b.w)*30*dt;if(b.y<-120)b.dead=true}
+  for(const h of hs){const b=pops(this.b,h.x,h.y,h.big?40:10);if(b){b.dead=true;this.score++;tone(500+Math.random()*400);this.pf.push({x:b.x,y:b.y,r:b.r,a:1});if(players[h.src])players[h.src].score++}}
+  this.b=this.b.filter(b=>!b.dead);this.pf.forEach(p=>{p.a-=dt*1.5;p.r+=dt*80});this.pf=this.pf.filter(p=>p.a>0);this.t-=dt;if(this.t<=0)endGame('Bubbles popped: '+this.score)},
+ draw(){bg('#1a0228');for(const b of this.b){ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,7);ctx.fillStyle=S.calm?'#d98cb355':'#ff4fa366';ctx.fill();ctx.lineWidth=8;ctx.strokeStyle=S.calm?'#e8b8d0':'#ffc2e2';ctx.stroke();ctx.beginPath();ctx.arc(b.x-b.r*0.35,b.y-b.r*0.35,b.r*0.18,0,7);ctx.fillStyle='#fff';ctx.fill()}
+  for(const p of this.pf){ctx.globalAlpha=p.a*0.6;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.strokeStyle='#fff';ctx.lineWidth=4;ctx.stroke();ctx.globalAlpha=1}
+  text('Popped '+this.score,30,50,54,'#fff','left');text(Math.ceil(this.t)+'s',W-30,50,54,'#ffe36e','right')}},
+splash:{name:'Floor Splash',desc:'Step on coffee beans and splash the puddles. Best in floor mode.',ui:'pointer',wave:true,
+ start(){this.o=[];this.score=0;this.t=90;this.s=[]},
+ step(dt,hs){if(this.o.length<(S.calm?5:9)&&Math.random()<dt*2){const bean=Math.random()<0.6;this.o.push({x:120+Math.random()*(W-240),y:120+Math.random()*(H-240),r:bean?55:80,bean,life:6/sp(),a:Math.random()*6})}
+  for(const o of this.o){o.life-=dt;if(o.life<0)o.dead=true}
+  for(const h of hs){const o=pops(this.o,h.x,h.y,h.big?40:10);if(o){o.dead=true;this.score+=o.bean?1:2;tone(o.bean?300:200,0.25,'triangle');for(let i=0;i<10;i++)this.s.push({x:o.x,y:o.y,vx:Math.cos(i*0.63)*200,vy:Math.sin(i*0.63)*200,a:1,c:o.bean?'#a0603a':'#8ab4ff'});if(players[h.src])players[h.src].score++}}
+  this.o=this.o.filter(o=>!o.dead);this.s.forEach(s=>{s.x+=s.vx*dt;s.y+=s.vy*dt;s.a-=dt*1.4});this.s=this.s.filter(s=>s.a>0);this.t-=dt;if(this.t<=0)endGame('Splashes: '+this.score)},
+ draw(){bg('#2a0830');for(const o of this.o){ctx.save();ctx.translate(o.x,o.y);ctx.rotate(o.a);if(o.bean){ctx.beginPath();ctx.ellipse(0,0,o.r,o.r*0.7,0,0,7);ctx.fillStyle='#7a4424';ctx.fill();ctx.lineWidth=6;ctx.strokeStyle='#ffc2e2';ctx.stroke();ctx.beginPath();ctx.moveTo(-o.r*0.8,0);ctx.bezierCurveTo(-o.r*0.3,-20,o.r*0.3,20,o.r*0.8,0);ctx.strokeStyle='#3a1c0c';ctx.lineWidth=8;ctx.stroke()}
+  else{ctx.beginPath();for(let i=0;i<12;i++){const a=i/12*6.283,rr=o.r*(0.85+0.15*Math.sin(i*2.3));ctx.lineTo(Math.cos(a)*rr,Math.sin(a)*rr)}ctx.closePath();ctx.fillStyle=S.calm?'#7f9cc9':'#4fa3ff';ctx.fill();ctx.lineWidth=6;ctx.strokeStyle='#fff';ctx.stroke()}ctx.restore()}
+  for(const s of this.s){ctx.globalAlpha=Math.max(0,s.a);ctx.beginPath();ctx.arc(s.x,s.y,14,0,7);ctx.fillStyle=s.c;ctx.fill()}ctx.globalAlpha=1;
+  text('Splashes '+this.score,30,50,54,'#fff','left');text(Math.ceil(this.t)+'s',W-30,50,54,'#ffe36e','right')}},
+dance:{name:'Coffeebreak Dance Party',desc:'Copy the dance poses to Coffeebreak songs.',ui:'arrows',
+ POSES:[['Arms up','up'],['Left arm out','left'],['Right arm out','right'],['Crouch down','down']],
+ start(){this.score=0;this.t=0;this.next=3;this.pose=null;this.ok=0;const tr=['sweet-juices-cotton-candy','drip-drip-drip-country','im-weak'];music.src='music/'+tr[Math.floor(Math.random()*3)]+'.mp3';setVol();music.play().catch(()=>{});this.left=90},
+ step(dt,hs,m){this.t+=dt;this.left-=dt;if(this.t>this.next){this.pose=this.POSES[Math.floor(Math.random()*4)];this.next=this.t+(S.calm?6:4);this.ok=0;this.got=false}
+  if(this.pose&&!this.got){const z={up:[0.3,0,0.7,0.35],left:[0,0.2,0.33,0.7],right:[0.67,0.2,1,0.7],down:[0.2,0.6,0.8,1]}[this.pose[1]];
+   let c=0;for(const h of hs)if(h.src==='cam'&&h.x>z[0]*W&&h.x<z[2]*W&&h.y>z[1]*H&&h.y<z[3]*H)c++;this.ok+=c*dt;
+   if(this.ok>3||this.keyHit){this.got=true;this.score+=10;tone(880,0.3);this.keyHit=false}}
+  if(this.left<=0){music.pause();endGame('Dance score: '+this.score)}},
+ key(c){const m={ArrowUp:'up',ArrowLeft:'left',ArrowRight:'right',ArrowDown:'down'}[c];if(m&&this.pose&&m===this.pose[1])this.keyHit=true},
+ phoneBtn(p,b){if(this.pose&&b===this.pose[1]&&!this.got){this.keyHit=true;p.score+=10}},
+ draw(){bg('#1a0228');if(this.pose){const[n,d]=this.pose;drawPose(W/2,H/2+60,d,Math.sin(this.t*3));text(n,W/2,110,90,this.got?'#7dff6a':'#ffe36e');if(this.got)text('Nice moves',W/2,H-80,70,'#7dff6a')}else text('Get ready to dance',W/2,H/2,90);
+  text('Score '+this.score,30,50,50,'#fff','left');text(Math.ceil(this.left)+'s',W-30,50,50,'#ffe36e','right')},
+ stop(){music.pause()}},
+quiz:{name:'Party Quiz',desc:'Up to 8 phone players answer music and fun questions.',ui:'quiz',
+ Q:[['How many strings does a normal guitar have','4','6','8','12',1],['Which of these is a drink made from beans','Coffee','Milk','Lemonade','Water',0],['What do you call 4 beats in a bar of music','A loop','A measure','A chorus','A solo',1],['Which instrument has black and white keys','Drum','Flute','Piano','Violin',2],['What colour do you get mixing red and white','Pink','Green','Blue','Orange',0],
+  ['How many legs does a spider have','6','8','10','4',1],['Which is the loudest dynamic','Piano','Mezzo','Forte','Fortissimo',3],['What is a group of singers called','Choir','Flock','Team','Pack',0],['Which planet is known as the red planet','Venus','Mars','Jupiter','Saturn',1],['What does a DJ use to play music','Turntables','Oven','Bicycle','Tent',0],
+  ['Which animal is famous for its long neck','Zebra','Giraffe','Lion','Koala',1],['How many minutes are in an hour','30','60','90','100',1],['What is the top part of a song that repeats called','Verse','Bridge','Chorus','Intro',2],['Which of these is a sweet fluffy treat','Cotton candy','Toast','Celery','Rice',0],['Where do kangaroos come from','Canada','Australia','Brazil','Japan',1]],
+ start(){this.order=this.Q.map((_,i)=>i).sort(()=>Math.random()-0.5).slice(0,8);this.qi=-1;this.nextQ()},
+ nextQ(){this.qi++;if(this.qi>=this.order.length){const s=Object.values(players).sort((a,b)=>b.score-a.score);endGame(s.length?'Winner: '+s[0].name+' with '+s[0].score:'Quiz finished. Host score '+(this.host||0));return}
+  this.q=this.Q[this.order[this.qi]];this.left=S.calm?25:15;this.reveal=0;for(const k in players)players[k].ans=null;this.hostAns=null;broadcast({t:'mode',ui:'quiz',q:this.q[0],a:this.q.slice(1,5)})},
+ phoneBtn(p,b){const i='ABCD'.indexOf(b);if(i>=0&&p.ans===null&&!this.reveal){p.ans=i;tone(520,0.1)}},
+ key(c){const i=['Digit1','Digit2','Digit3','Digit4'].indexOf(c);if(i>=0&&this.hostAns===null&&!this.reveal)this.hostAns=i},
+ down(x,y){if(this.reveal)return;for(let i=0;i<4;i++){const[bx,by]=this.box(i);if(x>bx&&x<bx+740&&y>by&&y<by+160)this.hostAns=i}},
+ box(i){return[40+(i%2)*780,330+Math.floor(i/2)*190]},
+ step(dt){if(!this.reveal){this.left-=dt;const all=Object.values(players);if(this.left<=0||(all.length&&all.every(p=>p.ans!==null))){this.reveal=4;const ok=this.q[5];all.forEach(p=>{if(p.ans===ok)p.score+=10});if(this.hostAns===ok)this.host=(this.host||0)+10;tone(700,0.4)}}
+  else{this.reveal-=dt;if(this.reveal<=0)this.nextQ()}},
+ draw(){bg('#1a0228');if(!this.q)return;const C=['#ff2e93','#3a8bff','#e0a400','#18a86b'],SH=['A','B','C','D'];text('Question '+(this.qi+1)+' of '+this.order.length,30,50,40,'#ffc2e2','left');
+  wrap(this.q[0],W/2,170,70);
+  for(let i=0;i<4;i++){const[x,y]=this.box(i);const ok=this.reveal&&i===this.q[5];ctx.globalAlpha=this.reveal&&!ok?0.3:1;ctx.fillStyle=C[i];rr(x,y,740,160,30);ctx.fill();if(ok){ctx.lineWidth=12;ctx.strokeStyle='#fff';ctx.stroke()}
+   text(SH[i],x+70,y+80,80);text(this.q[1+i],x+400,y+80,60);if(this.hostAns===i){ctx.beginPath();ctx.arc(x+700,y+40,20,0,7);ctx.fillStyle='#fff';ctx.fill()}ctx.globalAlpha=1}
+  text(this.reveal?'Answer: '+SH[this.q[5]]:Math.ceil(this.left)+'s',W/2,H-50,50,'#ffe36e');
+  const ps=Object.values(players);ps.forEach((p,i)=>{text(p.name+' '+p.score+(p.ans!==null&&!this.reveal?' (in)':''),20+i*195,H-110,28,p.color,'left')});if(!ps.length)text('No phones joined. Use keys 1 to 4 or click an answer.',W/2,H-110,30,'#ffc2e2')}},
+paint:{name:'Paint the Wall',desc:'Everyone paints together from their phones. Save the picture at the end.',ui:'paint',wave:true,
+ start(){this.layer=document.createElement('canvas');this.layer.width=W;this.layer.height=H;this.l=this.layer.getContext('2d');this.l.fillStyle='#fff';this.l.fillRect(0,0,W,H);this.last={};this.mc='#ff2e93'},
+ line(id,x,y,col,sz,down){const l=this.l,p=this.last[id];l.strokeStyle=col;l.lineWidth=sz;l.lineCap='round';l.beginPath();if(p&&!down){l.moveTo(p[0],p[1])}else l.moveTo(x,y);l.lineTo(x+0.1,y);l.stroke();this.last[id]=[x,y]},
+ phoneDraw(p,d){if(d.end){delete this.last[p.conn.peer];return}this.line(p.conn.peer,d.x*W,d.y*H,d.c||p.color,d.s||24,d.down)},
+ down(x,y,id){if(y<110&&x>W-540){this.btns(x);return}this.line(id,x,y,this.mc,26,true)},drag(x,y,id){if(y>110||x<W-540)this.line(id,x,y,this.mc,26,false)},up(id){delete this.last[id]},
+ btns(x){const i=Math.floor((x-(W-540))/90);const cs=['#ff2e93','#3a8bff','#ffe36e','#18a86b','#12001a'];if(i<5)this.mc=cs[i];else this.saveImg()},
+ key(c){if(c==='KeyS')this.saveImg()},phoneBtn(p,b){if(b==='save')this.saveImg()},
+ step(dt,hs){for(const h of hs)if(h.src==='cam'){this.l.fillStyle=S.calm?'#e8b8d066':'#ff4fa344';this.l.beginPath();this.l.arc(h.x,h.y,18,0,7);this.l.fill()}},
+ saveImg(){const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.drawImage(this.layer,0,0);x.drawImage(logo,W-150,H-150,130,130);const a=document.createElement('a');a.download='coffeebreak-wall-painting.png';a.href=c.toDataURL('image/png');a.click();tone(880,0.3);this.saved=2},
+ draw(){ctx.drawImage(this.layer,0,0);const cs=['#ff2e93','#3a8bff','#ffe36e','#18a86b','#12001a'];cs.forEach((c,i)=>{ctx.fillStyle=c;rr(W-540+i*90,20,78,78,20);ctx.fill();if(c===this.mc){ctx.lineWidth=6;ctx.strokeStyle='#888';ctx.stroke()}});
+  ctx.fillStyle='#ff2e93';rr(W-90,20,78,78,20);ctx.fill();text('Save',W-51,59,24);if(this.saved>0){this.saved-=1/60;text('Picture saved',W/2,60,50,'#ff2e93')}
+  Object.values(players).forEach((p,i)=>text(p.name,20,H-30-i*36,30,p.color,'left'))}}};
+function bg(c){ctx.fillStyle=S.calm?'#1d1022':c;ctx.fillRect(0,0,W,H)}
+function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect?ctx.roundRect(x,y,w,h,r):ctx.rect(x,y,w,h)}
+function wrap(t,x,y,sz){const ws=t.split(' ');let line='',lines=[];ctx.font='900 '+sz+'px system-ui';for(const w of ws){if(ctx.measureText(line+' '+w).width>W-100){lines.push(line);line=w}else line=(line?line+' ':'')+w}lines.push(line);lines.forEach((l,i)=>text(l,x,y+i*sz*1.1-(lines.length-1)*sz*0.5,sz))}
+function drawPose(x,y,d,b){ctx.save();ctx.translate(x,y);ctx.strokeStyle=S.calm?'#e8b8d0':'#ff4fa3';ctx.lineWidth=36;ctx.lineCap='round';const cr=d==='down'?80:0;
+ ctx.beginPath();ctx.arc(0,-230+cr,60,0,7);ctx.fillStyle=ctx.strokeStyle;ctx.fill();const L=(a,b2,c,e)=>{ctx.beginPath();ctx.moveTo(a,b2);ctx.lineTo(c,e);ctx.stroke()};
+ L(0,-160+cr,0,40+cr*0.5);const arms={up:[[-120,-330],[120,-330]],left:[[-260,-140],[60,0]],right:[[-60,0],[260,-140]],down:[[-130,40],[130,40]]}[d];
+ L(0,-130+cr,arms[0][0],arms[0][1]+cr+b*10);L(0,-130+cr,arms[1][0],arms[1][1]+cr-b*10);
+ if(d==='down'){L(0,80,-120,140);L(-120,140,-100,230);L(0,80,120,140);L(120,140,100,230)}else{L(0,40,-80,230);L(0,40,80,230)}ctx.restore()}
+function endGame(msg){if(G&&G.stop)G.stop();G={name:'',ui:'menu',step(){},draw(){bg('#1a0228');ctx.drawImage(logo,W/2-110,120,220,220);text(msg,W/2,450,80,'#ffe36e');
+  Object.values(players).sort((a,b)=>b.score-a.score).forEach((p,i)=>text(p.name+'  '+p.score,W/2,560+i*44,36,p.color));text('Press Menu to play again',W/2,H-60,40,'#ffc2e2')}};broadcast({t:'mode',ui:'menu'});tone(523,0.3);setTimeout(()=>tone(659,0.3),200);setTimeout(()=>tone(784,0.5),400)}
+function play(k){$('home').style.display='none';$('room').style.transform='scale(.6)';$('room').style.transformOrigin='0 100%';const g=GAMES[k];g.start();G=g;for(const id in players)players[id].score=0;if(k!=='quiz')broadcast({t:'mode',ui:g.ui});ac()}
+function showHome(){$('room').style.transform='';if(G&&G.stop)G.stop();G=null;$('setup').style.display='none';$('home').style.display='block';broadcast({t:'mode',ui:'menu'})}
+// brightness test
+let testOn=false;function drawTest(){for(let i=0;i<10;i++){ctx.fillStyle='hsl(0,0%,'+i*11+'%)';ctx.fillRect(i*W/10,0,W/10,H/2)}const cs=['#ff2e93','#3a8bff','#ffe36e','#18a86b','#fff'];cs.forEach((c,i)=>{ctx.fillStyle=c;ctx.fillRect(i*W/5,H/2,W/5,H/4)});ctx.fillStyle='#12001a';ctx.fillRect(0,H*0.75,W,H/4);
+ text('Can you read this from the back of the room',W/2,H*0.82,56);text('You should see all 10 grey steps',W/2,H*0.93,40,'#ffc2e2')}
+// ---------- loop ----------
+function frame(now){requestAnimationFrame(frame);const dt=Math.min(0.05,(now-last)/1000);last=now;
+ const m=readMotion();const ch=m?camHits(m):[];
+ for(const id in players){const p=players[id];p.x=Math.max(0,Math.min(W,p.x+p.jx*900*dt));p.y=Math.max(0,Math.min(H,p.y+p.jy*900*dt))}
+ const hs=hits.splice(0).concat(G&&G.wave?ch:G&&G.name==='Coffeebreak Dance Party'?ch:[]);
+ if(testOn)drawTest();else if(calib){bg('#12001a');text(calib.msg,W/2,H/2,64,'#ffe36e');if(calib.pt){ctx.beginPath();ctx.arc(calib.pt[0],calib.pt[1],110,0,7);ctx.fillStyle='#ff4fa3';ctx.fill()}}
+ else if(G){G.step(dt,hs,m);G.draw();if(camOn)for(const h of ch.slice(0,300)){ctx.fillStyle='#ffffff33';ctx.fillRect(h.x-12,h.y-12,24,24)}
+  if(G.ui==='pointer'||G.ui==='paint')for(const id in players){const p=players[id];if(G.ui==='pointer'){ctx.beginPath();ctx.arc(p.x,p.y,34,0,7);ctx.lineWidth=10;ctx.strokeStyle=p.color;ctx.stroke();text(p.name,p.x,p.y-60,28,p.color)}}}
+ else{bg('#12001a');for(let i=0;i<14;i++){const a=now/1000*0.2*sp()+i;ctx.beginPath();ctx.arc(W/2+Math.cos(a*0.7)*600,H/2+Math.sin(a)*330,60+i*4,0,7);ctx.fillStyle=i%2?'#ff4fa322':'#ffc2e222';ctx.fill()}ctx.drawImage(logo,W/2-140,H/2-140,280,280)}
+ if(G&&G.name)ctx.drawImage(logo,W/2-45,8,90,90);
+ if(S.floor&&G&&G.name&&G.ui!=='quiz'&&G.ui!=='paint'){ctx.save();ctx.translate(W,H);ctx.rotate(Math.PI);ctx.drawImage(cv,0,0,W,100,0,0,W,100);ctx.restore()}}
+// ---------- wiring ----------
+for(const k in GAMES){const d=document.createElement('div');d.className='card';d.innerHTML=GAMES[k].name+'<small>'+GAMES[k].desc+'</small>';d.onclick=()=>play(k);$('games').appendChild(d)}
+$('bCam').onclick=()=>camOn?stopCam():startCam();$('bPhones').onclick=()=>startPhones();
+$('bSetup').onclick=()=>{$('home').style.display='none';$('setup').style.display='block';[0,1,2,3].forEach(i=>$('h'+i).style.display='block')};
+$('bDone').onclick=()=>{testOn=false;$('setup').style.display='none';[0,1,2,3].forEach(i=>$('h'+i).style.display='none');showHome()};
+$('bTest').onclick=()=>{testOn=!testOn;$('bTest').classList.toggle('on',testOn)};$('bReset').onclick=()=>{S.corners=null;save();applyKey()};
+$('bCal').onclick=calibrate;const upd=()=>{$('bMirror').textContent='Mirror: '+(S.mirror?'on':'off');$('bCalm').textContent='Calm mode: '+(S.calm?'on':'off');$('mWall').classList.toggle('on',!S.floor);$('mFloor').classList.toggle('on',S.floor);$('stage').style.rotate='';setVol()};
+$('bMirror').onclick=()=>{S.mirror=!S.mirror;save();upd()};$('bCalm').onclick=()=>{S.calm=!S.calm;save();upd()};
+$('mWall').onclick=()=>{S.floor=false;save();upd()};$('mFloor').onclick=()=>{S.floor=true;save();upd()};
+[['size','size'],['bright','bright'],['contr','contr'],['vol','vol'],['sens','sens']].forEach(([id,k])=>{$(id).value=S[k];$(id).oninput=()=>{S[k]=+$(id).value;if(k==='size')S.corners=null;save();applyKey();setVol()}});
+$('bHome').onclick=showHome;$('bFull').onclick=()=>{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.().catch(()=>{})};
+upd();applyKey();showHome();requestAnimationFrame(frame);
+window.__cb={play,players,startPhones,get code(){return code},get url(){return window.joinURL},get game(){return G&&G.name}};
+</script><div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
+</body></html>

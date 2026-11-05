@@ -1,10 +1,43 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Diary</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Diary</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Try the sample entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Diary</title><style>
+body{margin:0;font-family:Georgia,serif;background:#f5ebe0;color:#2b1a0f}
+header{background:#4a2c1a;color:#f5ebe0;display:flex;align-items:center;gap:12px;padding:12px 16px}
+header img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid #d9b38c}
+h1{font-size:1.5em;margin:0}main{max-width:720px;margin:auto;padding:12px}
+.card{background:#fff8f0;border:1px solid #d9b38c;border-radius:12px;padding:14px;margin:12px 0}
+h2{color:#4a2c1a;margin:0 0 8px}.nav{display:flex;justify-content:space-between;align-items:center}
+button{background:#4a2c1a;color:#f5ebe0;border:0;border-radius:8px;padding:8px 14px;font-size:1em}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px;text-align:center}
+.dow{font-weight:bold;font-size:.8em;color:#4a2c1a}.d{padding:10px 0;border-radius:8px;background:#f0e0cf;cursor:pointer;position:relative}
+.d.today{background:#4a2c1a;color:#fff}.d.sel{outline:2px solid #b5651d}.d.has::after{content:"";position:absolute;bottom:3px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#b5651d}
+textarea{width:100%;box-sizing:border-box;min-height:180px;font:inherit;padding:8px;border-radius:8px;border:1px solid #d9b38c}
+#news{white-space:pre-wrap}</style></head><body>
+<header><img src="logo.jpg" alt="Coffeebreak logo"><h1>Coffeebreak Diary</h1></header><main>
+<section class="card"><h2>Latest news</h2><div id="newsDate"></div><div id="news"></div></section>
+<section class="card"><div class="nav"><button id="prev">&lt;</button><h2 id="mon"></h2><button id="next">&gt;</button></div><div class="grid" id="grid"></div></section>
+<section class="card"><h2 id="dayT"></h2><textarea id="txt" placeholder="Dear Diary..."></textarea><p><button id="save">Save</button> <span id="msg"></span></p></section>
+</main><script>
+const K='cbDiary',seed={'2026-10-22':`Latest news (21-22 Oct 2026)
+
+- The WifiPhone family grew: Lite, a fun Kids version with a HELP CALL MUM button and flashing siren, an iPhone "Call Mum" home-screen version, and Android apps for all of them.
+- The 000 buttons now start switched off, with a tick and cross switch to change them.
+- The Call Mum Phone pre-order page has its $10 Buy Now button working.
+- 22 new YouTube Shorts on @coffeebreakTVSERIES, including the pink Shorts, Juicy Chocolate clips and 3 Dreadlock Store ads.
+- The Dreadlock Store is getting a "Join Coffeebreak as a supplier" form.
+- No new customer orders yet.`};
+let db=JSON.parse(localStorage.getItem(K)||'{}');for(const k in seed)if(!(k in db))db[k]=seed[k];localStorage.setItem(K,JSON.stringify(db));
+const p=n=>String(n).padStart(2,'0'),key=d=>d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+const now=new Date();let view=new Date(now.getFullYear(),now.getMonth(),1),sel=key(now);
+function showNews(){const ks=Object.keys(db).filter(k=>db[k].trim()).sort();const k=ks[ks.length-1];
+newsDate.textContent=k?new Date(k+'T00:00').toDateString():'';document.getElementById("news").textContent=k?db[k]:'No entries yet.'}
+function cal(){mon.textContent=view.toLocaleString('en-AU',{month:'long',year:'numeric'});grid.innerHTML='';
+['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(x=>grid.innerHTML+=`<div class="dow">${x}</div>`);
+const off=(view.getDay()+6)%7;for(let i=0;i<off;i++)grid.innerHTML+='<div></div>';
+const n=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();
+for(let i=1;i<=n;i++){const k=key(new Date(view.getFullYear(),view.getMonth(),i));const e=document.createElement('div');
+e.className='d'+(k===key(now)?' today':'')+(k===sel?' sel':'')+(db[k]&&db[k].trim()?' has':'');e.textContent=i;e.onclick=()=>{sel=k;cal();day()};grid.appendChild(e)}}
+function day(){dayT.textContent=new Date(sel+'T00:00').toDateString();txt.value=db[sel]||'';msg.textContent=''}
+prev.onclick=()=>{view.setMonth(view.getMonth()-1);cal()};next.onclick=()=>{view.setMonth(view.getMonth()+1);cal()};
+save.onclick=()=>{db[sel]=txt.value;localStorage.setItem(K,JSON.stringify(db));msg.textContent='Saved.';cal();showNews()};
+showNews();cal();day();</script><div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
+</body></html>

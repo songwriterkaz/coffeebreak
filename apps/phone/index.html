@@ -1,10 +1,77 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Phone</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Phone</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Try the sample entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Phone</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 30% 20%,#ffd6ec,#3a0d2b 70%);font-family:system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;color:#fff}
+header{text-align:center;padding:10px}header h1{margin:4px;font-size:22px;color:#ff7ac0;text-shadow:0 0 8px #fff}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;font-size:13px;margin-bottom:8px}
+button{background:#ff4fa3;color:#fff;border:0;border-radius:14px;padding:7px 11px;font-weight:600;cursor:pointer}
+.phone{position:relative;width:min(340px,92vw);aspect-ratio:9/19;border-radius:44px;border:3px solid rgba(255,255,255,.7);background:rgba(255,240,250,var(--glass,.18));backdrop-filter:blur(2px);box-shadow:0 0 40px rgba(255,120,190,.6),inset 0 0 30px rgba(255,255,255,.4);overflow:hidden}
+.guts{position:absolute;inset:0;opacity:var(--guts,.6);pointer-events:none}
+.screen{position:absolute;inset:14px;border-radius:32px;background:rgba(20,0,15,var(--scr,.55));overflow:hidden;display:flex;flex-direction:column}
+.bar{display:flex;justify-content:space-between;font-size:12px;padding:8px 18px}
+.view{flex:1;overflow:auto;padding:10px;display:none}.view.on{display:block}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:10px}
+.app{display:flex;flex-direction:column;align-items:center;font-size:10px;cursor:pointer;background:none;padding:0}
+.app span{width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,#ff8cc8,#c2187a);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:3px}
+.lock{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(40,0,30,.6);cursor:pointer}
+.lock .t{font-size:56px;font-weight:200}
+.note{position:absolute;top:30px;left:10px;right:10px;background:rgba(255,255,255,.92);color:#5a0a3c;border-radius:14px;padding:8px 10px;font-size:12px;z-index:6;transform:translateY(-140%);transition:.4s}.note.show{transform:none}
+input,textarea,select{width:100%;padding:7px;border-radius:9px;border:0;margin:3px 0;font:inherit}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.keys button{font-size:20px;padding:12px}
+video{width:100%;border-radius:12px;background:#000}h3{margin:4px 0;color:#ffb3da}
+.logo{font-weight:800;color:#ff4fa3}a{color:#ffb3da}
+.back{margin-bottom:6px;background:#7a1450}
+</style><style id="cbscroll">html{height:100%;overflow:hidden}body{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch}</style></head><body>
+<header><h1>☕ Coffeebreak Phone</h1><div style="font-size:12px">Concept simulator · transparent wifi-calling phone</div></header>
+<div class="ctl"><label>Transparency <input id="tr" type="range" min="0" max="100" value="60" style="width:120px"></label>
+<select id="th" style="width:auto"><option value="#ff4fa3">Hot pink</option><option value="#ff9ad5">Blush</option><option value="#c2187a">Berry</option><option value="#ff6f91">Rose</option></select>
+<button id="b2">$2 back</button></div>
+<div class="phone" id="ph">
+<svg class="guts" viewBox="0 0 90 190" preserveAspectRatio="none">
+<g stroke="#ffd700" stroke-width=".4" fill="none" opacity=".8"><path d="M10 20h30v15h20M15 60h50v10h10M12 150h40v-20h25M70 30v60M20 100h45"/></g>
+<rect x="20" y="70" width="50" height="70" rx="5" fill="rgba(120,200,120,.35)" stroke="#9f9" stroke-width=".5"/><text x="45" y="108" font-size="5" text-anchor="middle" fill="#cfc">BATTERY</text>
+<rect x="55" y="12" width="22" height="16" rx="2" fill="rgba(60,60,60,.5)" stroke="#aaa" stroke-width=".4"/><circle cx="66" cy="20" r="4" fill="#223" stroke="#88f" stroke-width=".5"/>
+<rect x="15" y="150" width="20" height="12" fill="rgba(80,80,120,.5)"/><text x="25" y="157" font-size="3" text-anchor="middle" fill="#ddd">CPU</text>
+<text x="45" y="180" font-size="7" text-anchor="middle" fill="#ff4fa3" font-weight="bold">☕ COFFEEBREAK</text></svg>
+<div class="screen">
+<div class="bar"><span id="clk"></span><span>Wi-Fi Calling 📶 🔋</span></div>
+<div class="note" id="note"></div>
+<div class="view on" id="home"><div style="text-align:center"><div class="logo" style="font-size:20px">☕ Coffeebreak</div><div id="dt" style="font-size:12px"></div></div>
+<div class="grid">
+<button class="app" data-v="dial"><span>📞</span>Phone</button><button class="app" data-v="msg"><span>💬</span>Messages</button>
+<button class="app" data-v="cam"><span>📷</span>Camera</button><button class="app" data-v="music"><span>🎵</span>Radio</button>
+<button class="app" data-v="apps"><span>🎮</span>Apps</button><button class="app" data-v="tarot"><span>🔮</span>Tarot</button>
+<button class="app" data-v="reg"><span>📝</span>Pre-register</button><button class="app" id="lk"><span>🔒</span>Lock</button></div></div>
+<div class="view" id="dial"><button class="back">‹ Home</button><h3>Wi-Fi Calling</h3><input id="num" readonly placeholder="Number"><div class="keys" id="keys"></div><button id="call" style="width:100%;margin-top:8px;background:#2a2">Call over Wi-Fi</button><div id="cs" style="text-align:center;margin-top:6px"></div></div>
+<div class="view" id="msg"><button class="back">‹ Home</button><h3>Messages</h3><div id="ml" style="font-size:13px"></div><input id="mi" placeholder="Type a message"><button id="ms">Send (simulated)</button></div>
+<div class="view" id="cam"><button class="back">‹ Home</button><h3>Camera</h3><video id="vd" autoplay playsinline muted></video><div id="cmsg" style="font-size:12px"></div><button id="cst">Start camera</button></div>
+<div class="view" id="music"><button class="back">‹ Home</button><h3>Coffeebreak Radio</h3><p style="font-size:13px">Now playing: Coffeebreak TV Series</p><button id="pl">▶ Play</button><p><a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Open Coffeebreak on YouTube</a></p></div>
+<div class="view" id="apps"><button class="back">‹ Home</button><h3>Coffeebreak Apps</h3><p style="font-size:13px">300+ apps and games by Coffeebreak.</p><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener"><button>Open coffeebreaks.itch.io</button></a></div>
+<div class="view" id="tarot"><button class="back">‹ Home</button><h3>Tarot of the Day</h3><div id="tc" style="font-size:40px;text-align:center"></div><p id="tm" style="text-align:center"></p></div>
+<div class="view" id="reg"><button class="back">‹ Home</button><h3>Pre-register interest</h3><input id="rn" placeholder="Your name"><input id="re" placeholder="Your email"><textarea id="rt" placeholder="Why you want a Coffeebreak Phone"></textarea><button id="rs">Pre-register</button></div>
+</div>
+<div class="lock" id="lock"><div class="t" id="lt"></div><div>☕ Coffeebreak Phone</div><div style="font-size:12px;margin-top:20px">Tap to unlock</div></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+function tick(){const d=new Date(),t=d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});$('clk').textContent=t;$('lt').textContent=t;$('dt').textContent=d.toDateString()}tick();setInterval(tick,10000);
+function show(v){document.querySelectorAll('.view').forEach(e=>e.classList.toggle('on',e.id==v))}
+document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>show(b.dataset.v));
+document.querySelectorAll('.back').forEach(b=>b.onclick=()=>show('home'));
+$('lock').onclick=()=>{$('lock').style.display='none';setTimeout(()=>notify('💬 New message from Coffeebreak Radio'),1200)};
+$('lk').onclick=()=>$('lock').style.display='flex';
+function notify(t){const n=$('note');n.textContent=t;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),3000)}
+$('tr').oninput=e=>{const v=e.target.value/100;$('ph').style.setProperty('--glass',(.4-.35*v).toFixed(2));$('ph').style.setProperty('--guts',v);$('ph').style.setProperty('--scr',(.9-.6*v).toFixed(2))};$('tr').oninput({target:$('tr')});
+$('th').onchange=e=>document.querySelectorAll('button:not(.app),.app span').forEach(b=>b.style.background=e.target.value);
+'123456789*0#'.split('').forEach(k=>{const b=document.createElement('button');b.textContent=k;b.onclick=()=>$('num').value+=k;$('keys').appendChild(b)});
+$('call').onclick=()=>{if(!$('num').value){$('cs').textContent='Enter a number';return}$('cs').textContent='Connecting over Wi-Fi… (simulated)';setTimeout(()=>$('cs').textContent='Connected · HD Voice (simulated)',1500)};
+const msgs=['Coffeebreak: Welcome to your new phone ☕','Radio: New song out today'];function rm(){$('ml').innerHTML=msgs.map(m=>'<p>'+m.replace(/</g,'&lt;')+'</p>').join('')}rm();
+$('ms').onclick=()=>{if($('mi').value){msgs.push('You: '+$('mi').value);$('mi').value='';rm();setTimeout(()=>{msgs.push('Coffeebreak: Got it ❤️');rm();notify('💬 Coffeebreak replied')},1000)}};
+$('cst').onclick=async()=>{try{if(!navigator.mediaDevices)throw 0;$('vd').srcObject=await navigator.mediaDevices.getUserMedia({video:true})}catch(e){$('cmsg').textContent='Camera not available or permission denied.'}};
+$('pl').onclick=()=>window.open('https://www.youtube.com/@coffeebreakTVSERIES','_blank');
+const cards=[['☀️','The Sun – joy and success'],['⭐','The Star – hope'],['🌙','The Moon – trust your intuition'],['💕','The Lovers – connection'],['🎡','Wheel of Fortune – change'],['👑','The Empress – creativity'],['🪄','The Magician – make it happen']];
+const c=cards[new Date().getDate()%cards.length];$('tc').textContent=c[0];$('tm').textContent=c[1];
+$('rs').onclick=()=>{location.href='mailto:songwriterkaz@gmail.com?subject='+encodeURIComponent('Coffeebreak Phone pre-registration')+'&body='+encodeURIComponent('Name: '+$('rn').value+'\nEmail: '+$('re').value+'\n'+$('rt').value)};
+$('b2').onclick=()=>{location.href='mailto:songwriterkaz@gmail.com?subject='+encodeURIComponent('Coffeebreak $2 back claim')};
+</script><div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
+</body></html>

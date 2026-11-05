@@ -1,0 +1,1 @@
+window.CFG={paypalClientId:'AeNu47WcydcDLElIey76JK3GzTuiRntC6M9CZDoClmQuVYaL5bVqCoZGq0UDOOCjHDbW6xwsDdfTxhR-',currency:'AUD',orderEmail:'songwriterkaz@gmail.com'};

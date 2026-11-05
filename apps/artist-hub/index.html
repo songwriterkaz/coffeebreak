@@ -1,10 +1,104 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Artist Hub</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Artist Hub</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Try the sample entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coffeebreak Artist Hub</title>
+<style>
+:root{--bg:#101418;--card:#1a2027;--ink:#eef3f7;--muted:#9fb0bf;--accent:#3ddc97;--line:#2b343d}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#0a0d10;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;flex-wrap:wrap}
+header img{width:46px;height:46px;border-radius:50%;object-fit:cover}
+header h1{font-size:1.2rem;margin:0;flex:1}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav button{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font:600 .85rem system-ui;cursor:pointer}
+nav button.on{background:var(--accent);color:#06251a;border-color:var(--accent)}
+button{background:var(--accent);color:#06251a;border:0;border-radius:10px;padding:9px 14px;font:700 .9rem system-ui;cursor:pointer}
+button.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+main{max-width:1300px;margin:0 auto;padding:16px}
+.tab{display:none}.tab.on{display:block}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:850px){.cols{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:16px}
+.panel h2{font-size:1.05rem;margin:2px 0 10px}
+label{display:block;font-size:.8rem;color:var(--muted);margin-top:8px}
+input,select,textarea{width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#12171c;color:var(--ink)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.kpi b{display:block;font-size:1.7rem;color:var(--accent)}
+.kpi span{color:var(--muted);font-size:.85rem}
+table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{padding:7px;border-bottom:1px solid var(--line);text-align:left}
+canvas{width:100%;height:260px;background:#12171c;border-radius:10px}
+.chk label{display:flex;gap:8px;align-items:flex-start;font-size:.92rem;color:var(--ink)}.chk input{width:auto;margin-top:3px}
+.prev{background:#fff;color:#111;border-radius:14px;padding:20px;text-align:center}
+.prev img{width:96px;height:96px;border-radius:50%;object-fit:cover}
+.prev a{display:block;margin:8px auto;max-width:360px;padding:11px;border-radius:999px;background:#111;color:#fff;text-decoration:none;font-weight:600}
+.note{color:var(--muted);font-size:.84rem}
+.cbfoot{text-align:center;color:var(--muted);font-size:.82rem;padding:16px;max-width:900px;margin:0 auto}
+.cbfoot a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header><img src="img/logo.webp" alt="Coffeebreak logo"><h1>Coffeebreak Artist Hub</h1>
+<nav id="nav"><button data-t="dash" class="on">Dashboard</button><button data-t="music">Music</button><button data-t="stats">Stats</button><button data-t="plan">Release plan</button><button data-t="pitch">Pitch</button><button data-t="page">Artist page</button></nav></header>
+<main>
+<section class="tab on" id="dash">
+<div class="kpis"><div class="kpi"><b id="kStreams">0</b><span>Total plays logged</span></div><div class="kpi"><b id="kListen">0</b><span>Latest monthly listeners</span></div><div class="kpi"><b id="kFollow">0</b><span>Latest followers</span></div><div class="kpi"><b id="kSongs">0</b><span>Songs in your catalogue</span></div></div>
+<div class="cols"><div class="panel"><h2>Plays over time</h2><canvas id="chart" width="700" height="260"></canvas></div>
+<div class="panel"><h2>Top songs</h2><table><thead><tr><th>Song</th><th>Plays</th></tr></thead><tbody id="top"></tbody></table><p class="note">Copy your numbers in from your music stores and distributor each week. Everything is saved on this device only.</p></div></div>
+</section>
+<section class="tab" id="music"><div class="cols">
+<div class="panel"><h2>Add a song or release</h2>
+<label>Song title</label><input id="sT"><div class="row"><div><label>Release date</label><input type="date" id="sD"></div><div><label>Genre</label><input id="sG" placeholder="eg Country"></div></div>
+<label>Listen link (optional)</label><input id="sL" placeholder="https://"><label>ISRC (optional)</label><input id="sI">
+<div class="row"><div><label>Status</label><select id="sS"><option>Released</option><option>Coming soon</option><option>Writing</option><option>Recording</option></select></div><div><label>Plays so far</label><input type="number" id="sP" value="0" min="0"></div></div>
+<p><button onclick="addSong()">Add to catalogue</button></p></div>
+<div class="panel"><h2>Your catalogue</h2><table><thead><tr><th>Song</th><th>Date</th><th>Status</th><th>Plays</th><th></th></tr></thead><tbody id="cat"></tbody></table></div></div></section>
+<section class="tab" id="stats"><div class="cols">
+<div class="panel"><h2>Log this week</h2><label>Week ending</label><input type="date" id="wD"><div class="row"><div><label>Plays this week</label><input type="number" id="wP" min="0"></div><div><label>Monthly listeners</label><input type="number" id="wL" min="0"></div></div><label>Followers</label><input type="number" id="wF" min="0"><p><button onclick="addWeek()">Save week</button></p></div>
+<div class="panel"><h2>History</h2><table><thead><tr><th>Week</th><th>Plays</th><th>Listeners</th><th>Followers</th><th></th></tr></thead><tbody id="hist"></tbody></table></div></div></section>
+<section class="tab" id="plan"><div class="panel"><h2>Release checklist</h2><label>Song being released</label><input id="pSong" oninput="saveAll()"><div class="chk" id="chk"></div></div></section>
+<section class="tab" id="pitch"><div class="cols"><div class="panel"><h2>Pitch your song</h2>
+<label>Song</label><input id="ptS"><div class="row"><div><label>Genre</label><input id="ptG"></div><div><label>Mood</label><input id="ptM" placeholder="eg uplifting"></div></div>
+<label>What the song is about</label><textarea id="ptA" rows="3"></textarea><label>Sounds like (other artists)</label><input id="ptLike"><label>Who it is for</label><input id="ptFor" placeholder="eg playlists, radio, blogs">
+<p><button onclick="pitch()">Write pitch</button></p></div>
+<div class="panel"><h2>Your pitch</h2><textarea id="ptOut" rows="14"></textarea><p><button onclick="navigator.clipboard.writeText(ptOut.value)">Copy</button></p></div></div></section>
+<section class="tab" id="page"><div class="cols"><div class="panel"><h2>Artist page details</h2>
+<label>Artist name</label><input id="aN" value="Coffeebreak"><label>Short bio</label><textarea id="aB" rows="3">Songwriter and creator from Newcastle NSW, making country songs, stories, games and handmade goods.</textarea>
+<label>Links, one per line as Name | https://link</label><textarea id="aLinks" rows="6">Coffeebreak on itch.io | https://coffeebreaks.itch.io</textarea>
+<label>Support line</label><input id="aPay" value="Support my music: Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com">
+<p><button onclick="drawPage()">Update preview</button> <button class="alt" onclick="dlPage()">Download page as HTML</button></p></div>
+<div class="panel"><h2>Preview</h2><div class="prev" id="prev"></div></div></div></section>
+</main>
+<footer class="cbfoot">
+<p><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">More from Coffeebreak at coffeebreaks.itch.io</a></p>
+<p>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell the physical products they bought, but may not copy them or make their own versions. Coffeebreak claims no ownership of third-party brands or products named; those trademarks belong to their owners and are used only to describe items.</p>
+</footer>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S=JSON.parse(localStorage.getItem('cbArtistHub')||'null')||{songs:[],weeks:[],chk:{},pSong:''};
+const STEPS=['Final mix and master done','Cover art ready (3000 x 3000)','Song uploaded to your distributor at least 4 weeks before release','Lyrics, credits and songwriter splits entered','ISRC code recorded','Song registered with your music rights organisation','Pitch sent to playlists, radio and blogs','Short video clips made for Reels, Shorts and TikTok','Pre-save or coming soon post shared','Release day post shared with links','Thank you post a week after release','Week 1 numbers logged in Stats'];
+function saveAll(){S.pSong=$('pSong').value;localStorage.setItem('cbArtistHub',JSON.stringify(S));draw()}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.id===b.dataset.t));if(b.dataset.t==='dash')chart()});
+function addSong(){if(!$('sT').value.trim())return;S.songs.push({t:$('sT').value.trim(),d:$('sD').value,g:$('sG').value,l:$('sL').value,i:$('sI').value,s:$('sS').value,p:+$('sP').value||0});['sT','sL','sI'].forEach(i=>$(i).value='');$('sP').value=0;saveAll()}
+function addWeek(){if(!$('wD').value)return;S.weeks=S.weeks.filter(w=>w.d!==$('wD').value);S.weeks.push({d:$('wD').value,p:+$('wP').value||0,l:+$('wL').value||0,f:+$('wF').value||0});S.weeks.sort((a,b)=>a.d<b.d?-1:1);saveAll()}
+function draw(){const n=x=>Number(x).toLocaleString('en-AU');const last=S.weeks[S.weeks.length-1]||{};
+$('kStreams').textContent=n(S.weeks.reduce((s,w)=>s+w.p,0)+S.songs.reduce((s,x)=>s+x.p,0));$('kListen').textContent=n(last.l||0);$('kFollow').textContent=n(last.f||0);$('kSongs').textContent=S.songs.length;
+const top=[...S.songs].sort((a,b)=>b.p-a.p).slice(0,8);$('top').innerHTML=top.length?top.map(s=>`<tr><td>${esc(s.t)}</td><td>${n(s.p)}</td></tr>`).join(''):'<tr><td colspan="2" class="note">Add songs in Music</td></tr>';
+$('cat').innerHTML=S.songs.map((s,i)=>`<tr><td>${s.l?`<a style="color:var(--accent)" href="${esc(s.l)}" target="_blank" rel="noopener">${esc(s.t)}</a>`:esc(s.t)}</td><td>${esc(s.d)}</td><td>${esc(s.s)}</td><td><input type="number" value="${s.p}" style="width:90px" onchange="S.songs[${i}].p=+this.value;saveAll()"></td><td><button class="alt" onclick="if(confirm('Remove this song'))S.songs.splice(${i},1),saveAll()">x</button></td></tr>`).join('')||'<tr><td colspan="5" class="note">No songs yet</td></tr>';
+$('hist').innerHTML=S.weeks.map((w,i)=>`<tr><td>${w.d}</td><td>${n(w.p)}</td><td>${n(w.l)}</td><td>${n(w.f)}</td><td><button class="alt" onclick="S.weeks.splice(${i},1);saveAll()">x</button></td></tr>`).join('')||'<tr><td colspan="5" class="note">No weeks logged yet</td></tr>';
+$('pSong').value=S.pSong||'';$('chk').innerHTML=STEPS.map((t,i)=>`<label><input type="checkbox" ${S.chk[i]?'checked':''} onchange="S.chk[${i}]=this.checked;saveAll()"> ${t}</label>`).join('')+`<p class="note">${Object.values(S.chk).filter(Boolean).length} of ${STEPS.length} done</p>`;chart()}
+function chart(){const c=$('chart'),x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);const w=S.weeks;x.fillStyle='#9fb0bf';x.font='14px system-ui';if(w.length<1){x.fillText('Log a week in Stats to see your chart',20,130);return}
+const m=Math.max(...w.map(a=>a.p),1),W=c.width-60,H=c.height-50;x.strokeStyle='#2b343d';for(let i=0;i<=4;i++){const y=20+H*i/4;x.beginPath();x.moveTo(40,y);x.lineTo(40+W,y);x.stroke();x.fillText(Math.round(m*(1-i/4)),2,y+4)}
+x.strokeStyle='#3ddc97';x.lineWidth=3;x.beginPath();w.forEach((a,i)=>{const px=40+(w.length<2?W/2:W*i/(w.length-1)),py=20+H*(1-a.p/m);i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke();
+x.fillStyle='#3ddc97';w.forEach((a,i)=>{const px=40+(w.length<2?W/2:W*i/(w.length-1)),py=20+H*(1-a.p/m);x.beginPath();x.arc(px,py,4,0,7);x.fill()})}
+function pitch(){const v=i=>$(i).value.trim();$('ptOut').value=`Hello,\n\nI would love you to hear my song "${v('ptS')}", a ${v('ptM')} ${v('ptG')} track.\n\n${v('ptA')}\n\n${v('ptLike')?'For fans of '+v('ptLike')+'.\n\n':''}I think it suits ${v('ptFor')||'your listeners'}.\n\nAbout me: Coffeebreak is a songwriter and creator from Newcastle NSW, Australia, making country songs, stories, games and handmade goods.\n\nMore of my work: https://coffeebreaks.itch.io\n\nThank you for listening,\nCoffeebreak`}
+function pageHTML(inner){return inner}
+function drawPage(){const links=$('aLinks').value.split('\n').map(l=>l.split('|').map(s=>s.trim())).filter(a=>a[1]);$('prev').innerHTML=`<img src="img/logo.webp" alt="logo"><h2>${esc($('aN').value)}</h2><p>${esc($('aB').value)}</p>${links.map(a=>`<a href="${esc(a[1])}" target="_blank" rel="noopener">${esc(a[0])}</a>`).join('')}<p style="font-size:.9rem">${esc($('aPay').value)}</p>`}
+function dlPage(){drawPage();const html=`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc($('aN').value)}</title><style>body{font-family:system-ui;background:#f4f4f4;margin:0;padding:30px;text-align:center}img{width:96px;height:96px;border-radius:50%}a{display:block;margin:10px auto;max-width:360px;padding:12px;border-radius:999px;background:#111;color:#fff;text-decoration:none}</style></head><body>${$('prev').innerHTML.replace('src="img/logo.webp"','src="logo.webp"')}</body></html>`;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='artist-page.html';a.click()}
+$('wD').value=new Date().toISOString().slice(0,10);draw();drawPage();
+</script>
+<!--cb-ytsub--><footer id="cbYtFoot" style="display:block;clear:both;position:static;width:100%;box-sizing:border-box;margin:24px 0 0;padding:18px 12px 150px;text-align:center;font:15px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;background:transparent"><style>#cbYtFoot a{text-decoration:none;box-sizing:border-box}#cbYtFoot .m{display:block;width:100%;max-width:420px;margin:8px auto;padding:16px 14px;border-radius:14px;font-weight:700;font-size:18px;color:#fff}#cbYtFoot .m:active{transform:scale(.98)}#cbYtFoot h3{margin:0 0 6px;font-size:17px;color:inherit}</style><h3>&#127925; Stream my music</h3><a class="m" style="background:#c4302b" href="https://www.youtube.com/@coffeebreakTVSERIES/streams" target="_blank" rel="noopener">&#128251; Coffeebreak Radio 24/7 (YouTube)</a><a class="m" style="background:#1db954" href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">Listen on Spotify</a><a class="m" style="background:#fa2d48" href="https://music.apple.com/au/artist/karen-obrien/535470355" target="_blank" rel="noopener">Listen on Apple Music</a><a class="m" style="background:#212121" href="https://music.youtube.com/channel/UCbI7BchGrNInUgjm0YqB_hg" target="_blank" rel="noopener">Listen on YouTube Music</a><div style="margin-top:14px"><a href="https://www.youtube.com/channel/UCNuPovMUFJDrl9fhztDgy4w?sub_confirmation=1" target="_blank" rel="noopener" style="display:inline-block;background:#ff0000;color:#fff;font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px">&#9654; Subscribe to Coffeebreak TV Series on YouTube</a></div><div style="margin-top:10px;font-size:12px;opacity:.75"><a href="https://www.tesla.com" target="_blank" rel="noopener" style="color:inherit">Tesla</a> &middot; <a href="https://www.starlink.com" target="_blank" rel="noopener" style="color:inherit">Starlink</a></div></footer></body>
+</html>

@@ -1,0 +1,50 @@
+:root{
+  --cb-bg:#1b1410;--cb-bg2:#3a2418;--cb-accent:#ebbf73;--cb-card:rgba(255,255,255,.06);
+  --cb-mv:#2a1d14;--cb-text:#f3ece4;--cb-dice:#ebbf73;
+}
+body{margin:0;font-family:system-ui,sans-serif;background:var(--cb-bg);color:var(--cb-text);transition:background .6s,color .4s}
+header{text-align:center;padding:16px;background:linear-gradient(var(--cb-bg2),var(--cb-bg));transition:background .6s}
+header h1{margin:4px;color:var(--cb-accent)}
+main{max-width:1000px;margin:auto;padding:12px}
+.card{background:var(--cb-card);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:14px;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.mv{background:var(--cb-mv);border-radius:12px;overflow:hidden;cursor:pointer;transition:outline .25s,transform .25s,box-shadow .25s}
+.mv img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.mv div{padding:8px;font-size:14px}.mv .k{color:var(--cb-accent);font-size:12px}
+.mv.picked{outline:3px solid var(--cb-dice);transform:scale(1.04);box-shadow:0 0 24px color-mix(in srgb,var(--cb-dice) 55%,transparent);z-index:2}
+.done{outline:2px solid #6c6}
+button,.btn{background:var(--cb-accent);color:#1b1410;border:0;border-radius:20px;padding:9px 16px;font-weight:700;cursor:pointer;margin:3px}
+input{padding:8px;border-radius:8px;border:1px solid #777;margin:3px;min-width:220px}
+video{width:100%;max-height:60vh;background:#000;border-radius:10px}
+.big{font-size:28px;color:var(--cb-accent);font-weight:800}
+.small{font-size:12px;opacity:.8}.lock{opacity:.45}
+table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #555;padding:5px;text-align:left;font-size:13px}
+
+/* Dice bar */
+.dice-bar{display:flex;flex-direction:column;align-items:center;gap:12px;margin:8px 0 18px;padding:18px 12px;border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,var(--cb-dice) 22%,transparent),rgba(0,0,0,.25));border:1px solid color-mix(in srgb,var(--cb-dice) 45%,transparent);box-shadow:0 8px 28px rgba(0,0,0,.35)}
+.dice-btn{display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--cb-dice);color:#1a120c;border:0;border-radius:28px;padding:18px 36px 16px;font-weight:800;cursor:pointer;margin:0;min-width:min(100%,320px);box-shadow:0 6px 0 color-mix(in srgb,var(--cb-dice) 55%,#000),0 12px 28px rgba(0,0,0,.4);transition:transform .15s,box-shadow .15s;position:relative;overflow:visible}
+.dice-btn:hover{transform:translateY(-2px)}.dice-btn:active{transform:translateY(3px);box-shadow:0 2px 0 color-mix(in srgb,var(--cb-dice) 55%,#000)}
+.dice-btn:disabled{opacity:.75;cursor:wait;transform:none}
+.dice-label{font-size:22px;letter-spacing:.02em;line-height:1.1}
+.dice-sub{font-size:12px;font-weight:600;opacity:.75}
+.dice-result{font-size:15px;font-weight:700;color:var(--cb-dice);text-align:center;text-shadow:0 0 12px color-mix(in srgb,var(--cb-dice) 50%,transparent)}
+
+/* 3D dice cube */
+.dice-cube{width:64px;height:64px;margin:4px 0 8px;position:relative;transform-style:preserve-3d;perspective:400px;transform:rotateX(-18deg) rotateY(28deg)}
+.dice-cube .face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:42px;line-height:1;background:linear-gradient(145deg,#fff8ee,#e8d4a8);color:#1a120c;border-radius:10px;border:2px solid #c9a66b;box-shadow:inset 0 0 12px rgba(0,0,0,.12);backface-visibility:hidden}
+.dice-cube .f1{transform:rotateY(0deg) translateZ(32px)}
+.dice-cube .f2{transform:rotateY(90deg) translateZ(32px)}
+.dice-cube .f3{transform:rotateY(180deg) translateZ(32px)}
+.dice-cube .f4{transform:rotateY(-90deg) translateZ(32px)}
+.dice-cube .f5{transform:rotateX(90deg) translateZ(32px)}
+.dice-cube .f6{transform:rotateX(-90deg) translateZ(32px)}
+.dice-cube.rolling{animation:dice-rattle 1.15s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes dice-rattle{
+  0%{transform:rotateX(-18deg) rotateY(28deg) scale(1)}
+  12%{transform:rotateX(120deg) rotateY(-80deg) rotateZ(40deg) scale(1.08)}
+  28%{transform:rotateX(-200deg) rotateY(160deg) rotateZ(-60deg) scale(.95)}
+  45%{transform:rotateX(280deg) rotateY(-220deg) rotateZ(90deg) scale(1.1)}
+  62%{transform:rotateX(-90deg) rotateY(310deg) rotateZ(-30deg) scale(1)}
+  80%{transform:rotateX(40deg) rotateY(-40deg) rotateZ(20deg) scale(1.05)}
+  100%{transform:rotateX(-18deg) rotateY(28deg) scale(1)}
+}

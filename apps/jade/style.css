@@ -1,0 +1,14 @@
+*{box-sizing:border-box}body{margin:0;font-family:Georgia,'Times New Roman',serif;background:radial-gradient(circle at 20% 0,#2f6b4f,#0d2a1f 60%,#07170f);color:#eef7ef;min-height:100vh}
+.test{background:#c9a94e;color:#10251a;text-align:center;padding:6px;font:bold 13px sans-serif}
+header{text-align:center;padding:26px 12px 10px}h1{font-size:2.6em;margin:.1em 0;color:#bfe8c8;letter-spacing:2px;text-shadow:0 2px 12px #000}
+header p{color:#d6c48a;margin:4px}.gem{width:46px;height:46px;margin:0 auto 6px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#d9ffe4,#3fae6e 45%,#0f4d2c);box-shadow:0 0 22px #5fd38b}
+nav button,#filters button,.card button,#cart button{background:#173d2b;color:#e9f7ec;border:1px solid #c9a94e;border-radius:20px;padding:8px 16px;margin:4px;cursor:pointer;font-family:inherit}
+nav button.on,#filters button.on{background:#c9a94e;color:#0d2a1f;font-weight:bold}
+main{max-width:1150px;margin:auto;padding:10px}h2{color:#d6c48a;text-align:center}.note{color:#cfe3d4;text-align:center}
+#filters{text-align:center;margin:10px 0}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.card{background:rgba(16,52,36,.85);border:1px solid #3c7a57;border-radius:14px;padding:12px;text-align:center;transition:transform .2s}.card:hover{transform:translateY(-4px);box-shadow:0 8px 24px #000a}
+.pimg{width:100%;height:210px;object-fit:cover;border-radius:10px;background:#fff}.card h3{font-size:1em;min-height:2.6em;margin:8px 0 2px}.card small{color:#a9cdb4}
+.price{font-size:1.2em;color:#f1d98a;font-weight:bold}.card button:disabled{opacity:.5;cursor:default}
+#cart input,#cart textarea{display:block;width:100%;max-width:520px;margin:6px auto;padding:9px;border-radius:8px;border:1px solid #3c7a57;background:#0f2a1e;color:#fff;font-family:inherit}
+#cart label{display:block;max-width:520px;margin:8px auto}#lines{text-align:center}.tot{text-align:center;font-size:1.2em;color:#f1d98a}#paypal-buttons{max-width:520px;margin:auto}#reveal{text-align:center;color:#bfe8c8;margin:12px}
+footer{text-align:center;color:#8fb59b;padding:20px;font-size:.9em}

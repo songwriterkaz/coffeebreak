@@ -1,10 +1,109 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Laptop - repairable laptop concept with Studio and Solar editions</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Laptop - repairable laptop concept with Studio and Solar editions</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Try the sample entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!--cb-frame-fix--><style id="cb-frame-fix-css">html{height:100%!important;overflow:hidden!important}body{height:100%!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:auto!important;margin-top:0}</style>
+<script>/*cb-frame-fix: storage + dialogs safe inside itch's sandboxed, cross-origin iframe*/(function(){function mem(){var d={};return{getItem:function(k){k=String(k);return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[String(k)]=String(v)},removeItem:function(k){delete d[String(k)]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}}
+function px(st){return new Proxy(st,{get:function(t,k){if(k in t)return typeof t[k]=='function'?t[k].bind(t):t[k];return t.getItem(k)===null?undefined:t.getItem(k)},set:function(t,k,v){t.setItem(k,v);return true},deleteProperty:function(t,k){t.removeItem(k);return true},has:function(t,k){return k in t||t.getItem(k)!==null},ownKeys:function(t){var a=[];for(var i=0;i<t.length;i++)a.push(t.key(i));return a},getOwnPropertyDescriptor:function(t,k){var v=t.getItem(k);return v===null?undefined:{value:v,writable:true,enumerable:true,configurable:true}}})}
+['localStorage','sessionStorage'].forEach(function(n){var ok=false;try{var s=window[n];s.setItem('__cbt','1');s.removeItem('__cbt');ok=true}catch(e){}if(!ok){try{Object.defineProperty(window,n,{value:px(mem()),configurable:true})}catch(e){}}});
+function toast(m){try{var t=document.createElement('div');t.textContent=String(m);t.style.cssText='position:fixed;left:50%;top:16px;transform:translateX(-50%);max-width:90%;background:#2a1d14;color:#fff;padding:12px 18px;border-radius:10px;z-index:2147483647;font:15px system-ui,sans-serif;box-shadow:0 4px 14px #0006';(document.body||document.documentElement).appendChild(t);setTimeout(function(){t.remove()},4500)}catch(e){}}
+var A=window.alert,C=window.confirm;window.alert=function(m){var t=Date.now();try{A.call(window,m)}catch(e){}if(Date.now()-t<30)toast(m)};window.confirm=function(m){var t=Date.now(),r=false;try{r=C.call(window,m)}catch(e){}if(!r&&Date.now()-t<30)return true;return r};
+window.__cbNav=function(u){var w=null;try{w=window.open(u,'_blank')}catch(e){}if(!w){var a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}};})();</script>
+<title>Coffeebreak Laptop - pink 15.6 inch everyday laptop, pre-order</title>
+<meta name="description" content="A pink 15.6 inch everyday laptop with the Coffeebreak logo on the lid. AU$1000 pre-order, pay by PayID.">
+<link rel="stylesheet" href="cb-ui.css">
+<style>
+.hero{padding:40px 0 20px}
+.hero .cb-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:36px;align-items:center}
+.gal{display:grid;gap:12px}
+.gal .main{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:22px;background:#fff;box-shadow:var(--cb-shadow);border:1px solid var(--cb-line)}
+.thumbs{display:flex;gap:10px}.thumbs button{padding:0;border:2px solid transparent;border-radius:14px;overflow:hidden;background:#fff;cursor:pointer;width:96px;height:72px}
+.thumbs button.on{border-color:var(--cb-pink)}.thumbs img{width:100%;height:100%;object-fit:cover;display:block}
+.price{font:700 40px Georgia,serif;color:var(--cb-pink2);margin:8px 0 2px}
+.lead{font-size:19px;color:var(--cb-soft)}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:16px;border:1.5px solid var(--cb-line);border-radius:14px;background:#fff;margin:16px 0;cursor:pointer}
+.opt input{width:22px;height:22px;margin-top:3px;accent-color:var(--cb-pink)}
+.qty{display:inline-flex;align-items:center;border:1.5px solid var(--cb-line);border-radius:999px;background:#fff;overflow:hidden}
+.qty button{width:46px;height:46px;border:0;background:transparent;font-size:22px;cursor:pointer;color:var(--cb-ink)}.qty span{min-width:34px;text-align:center;font-weight:700}
+.buy{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.specs{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.specs li{background:#fff;border:1px solid var(--cb-line);border-radius:14px;padding:14px 16px}.specs b{display:block;font-size:13px;letter-spacing:.4px;text-transform:uppercase;color:var(--cb-soft)}
+.apps a{display:block;padding:14px 16px;border-radius:14px;background:#fff;border:1px solid var(--cb-line);text-decoration:none;color:var(--cb-ink);font-weight:600}
+.apps a:hover{border-color:var(--cb-pink)}
+.checkout{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.sumline{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--cb-line)}
+.total{display:flex;justify-content:space-between;font:700 22px Georgia,serif;padding:14px 0}
+#o .cb-payid{background:#fff}
+@media(max-width:820px){.hero .cb-wrap,.checkout{grid-template-columns:1fr}.hero{padding:20px 0 0}.price{font-size:34px}}
+</style></head><body>
+<header class="cb-top"><div class="cb-wrap"><a class="cb-brand" href="#top"><img src="cb-logo.png" alt="Coffeebreak logo" width="54" height="48">Coffeebreak Laptop</a>
+<nav class="cb-nav" aria-label="Page sections"><a href="#specs">Specs</a><a href="#apps">Free apps</a><a href="#checkout">Cart (<span id="cnt">0</span>)</a><a href="#cb-contact">Contact</a></nav></div></header>
+<main id="top">
+<section class="hero"><div class="cb-wrap">
+<div class="gal"><img id="mainImg" class="main" src="m1.jpg" alt="Pink Coffeebreak laptop with the logo on the lid">
+<div class="thumbs"><button type="button" class="on" data-src="m1.jpg" aria-label="Show lid photo"><img src="m1.jpg" alt=""></button><button type="button" data-src="m2.jpg" aria-label="Show laptop with solar kit"><img src="m2.jpg" alt=""></button></div>
+<p class="cb-muted" style="margin:0">Mockups shown. The final unit may look slightly different.</p></div>
+<div><span class="cb-pill">Pre-order</span>
+<h1 style="margin-top:12px">The pink Coffeebreak Laptop</h1>
+<p class="lead">A pink 15.6 inch everyday laptop with the Coffeebreak logo on the lid, set up with links to the free Coffeebreak apps so they are ready to open on day one.</p>
+<p class="price">AU$1000</p><p class="cb-muted">Pre-order price, delivery within Australia included. 12 month warranty.</p>
+<label class="opt"><input type="checkbox" id="sol"><span><b>Add the solar charger kit, AU$60</b><br><span class="cb-muted">Charges phones and slowly tops up the laptop in the sun.</span></span></label>
+<div class="buy"><div class="qty" aria-label="Quantity"><button type="button" id="minus" aria-label="One less">−</button><span id="qv">1</span><button type="button" id="plus" aria-label="One more">+</button></div>
+<button type="button" class="cb-btn" id="add">Add to cart</button><button type="button" class="cb-btn ghost" id="buy">Buy now</button></div>
+<p id="addmsg" class="cb-muted" role="status" style="min-height:1.5em;margin-top:10px"></p>
+</div></div></section>
+
+<section class="cb-sec" id="specs"><div class="cb-wrap"><h2>What you get</h2>
+<ul class="specs"><li><b>Processor</b>Intel N100 quad-core, up to 3.4 GHz</li><li><b>Memory</b>16 GB RAM</li><li><b>Storage</b>512 GB SSD</li><li><b>Screen</b>15.6 inch Full HD 1920x1080 IPS</li><li><b>Connections</b>Wi-Fi 5, Bluetooth, webcam, USB 3.0, USB-C, HDMI</li><li><b>Software</b>Genuine Windows 11 licence included</li><li><b>Design</b>Pink lid and body, Coffeebreak logo on the lid</li><li><b>Warranty</b>12 months</li></ul>
+<p class="cb-muted" style="margin-top:16px">Built for web, email, music apps and everyday use. It is not a gaming laptop.</p></div></section>
+
+<section class="cb-sec" id="apps" style="background:#fff;border-top:1px solid var(--cb-line);border-bottom:1px solid var(--cb-line)"><div class="cb-wrap"><h2>Free Coffeebreak apps, ready to open</h2>
+<div class="cb-grid apps"><a href="https://coffeebreaks.itch.io/coffeebreak-wifiphone" target="_blank" rel="noopener">Coffeebreak WifiPhone</a><a href="https://coffeebreaks.itch.io/coffeebreak-musicstudio" target="_blank" rel="noopener">Coffeebreak Music Studio</a><a href="https://coffeebreaks.itch.io/coffeebreak-musicgear" target="_blank" rel="noopener">Coffeebreak Music Gear</a><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">Lost-person GPS map app and more</a></div></div></section>
+
+<section class="cb-sec" id="checkout"><div class="cb-wrap"><h2>Your cart</h2>
+<div class="checkout"><div class="cb-card"><div id="lines"></div><div class="total"><span>Total</span><span>AU$<span id="tot">0.00</span></span></div>
+<p class="cb-muted">Pre-order: if the production run does not go ahead, you get a full refund. Expected shipping is about 8 to 12 weeks after the run is confirmed.</p></div>
+<div class="cb-card"><h3>Your details</h3>
+<label class="cb-field">Full name<input id="n" autocomplete="name"></label><label class="cb-field">Email<input id="e" type="email" autocomplete="email"></label><label class="cb-field">Postal address<textarea id="a" rows="2" autocomplete="street-address"></textarea></label>
+<button type="button" class="cb-btn" id="pay" style="width:100%">Pay by PayID</button><div id="o" role="status"></div></div></div></div></section>
+
+<section class="cb-sec" style="padding-top:0"><div class="cb-wrap"><div class="cb-card" style="display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+<div style="flex:1 1 280px"><h3>Support Coffeebreak</h3><p class="cb-muted" style="margin:0">Like the free apps? A small gift helps keep them free.</p></div>
+<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><label class="cb-field" style="margin:0">Amount AU$<input id="dv" type="number" min="1" value="5" style="width:120px"></label><button type="button" class="cb-btn ghost" id="don" style="margin-top:22px">Gift by PayID</button></div>
+<div id="dd" style="flex-basis:100%"></div></div></div></section>
+</main>
+<section id="cb-contact" class="cb-sec" aria-label="Email me"><div class="cb-wrap"><div class="cb-card" style="max-width:640px;margin:0 auto">
+<h2>Email me</h2><p class="cb-muted">Questions, custom orders or anything else? Send me a message and I will reply by email.</p>
+<form id="cbc-form" novalidate><input type="hidden" name="_subject" value="Coffeebreak Laptop enquiry"><input type="hidden" name="_captcha" value="false"><input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+<label class="cb-field">Name<input name="name" required maxlength="100" autocomplete="name"></label>
+<label class="cb-field">Email<input name="email" type="email" required maxlength="150" autocomplete="email"></label>
+<label class="cb-field">Message<textarea name="message" required rows="4" maxlength="3000"></textarea></label>
+<button type="submit" class="cb-btn" id="cbc-send">Send message</button><p id="cbc-status" role="status" class="cb-muted" style="margin-top:10px;min-height:1.4em"></p></form></div></div></section>
+<script>(function(){var form=document.getElementById('cbc-form'),st=document.getElementById('cbc-status'),btn=document.getElementById('cbc-send');form.addEventListener('submit',function(e){e.preventDefault();if(form._honey.value)return;if(!form.checkValidity()){st.textContent='Please fill in your name, a valid email and a message.';return}btn.disabled=true;st.textContent='Sending…';var d={};new FormData(form).forEach(function(v,k){d[k]=v});fetch('https://formsubmit.co/ajax/songwriterkaz@gmail.com',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(d)}).then(function(r){return r.json()}).then(function(j){if(j&&(j.success===true||j.success==='true')){form.reset();st.textContent='Thank you. Your message has been sent. I will get back to you soon.'}else throw 0}).catch(function(){st.textContent='Sorry, that did not send. Please try again in a moment, or email songwriterkaz@gmail.com.'}).then(function(){btn.disabled=false})})})();</script>
+
+<footer class="cb-foot" id="cb-foot"><div class="cb-wrap"><img src="cb-logo.png" alt="Coffeebreak logo" width="84" height="75"><div>
+<p><b style="color:var(--cb-ink)">Coffeebreak</b> · songwriter and creator from Newcastle NSW · <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+<p class="cb-payid-line">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+<p class="cb-disc">© Karen O'Brien (Coffeebreak). Karen O'Brien keeps all rights to this product, its designs, name and logo. Buyers may resell the physical item they bought but may not copy it or make their own version. Coffeebreak claims no ownership of third-party brands or products named; they belong to their owners.</p>
+<div class="cb-row"><button type="button" class="cb-btn ghost" onclick="if(window.cbreport&&cbreport.open)cbreport.open();else location.href='mailto:coffeebreakhq@mail.grokbot.com?subject='+encodeURIComponent('Report: '+document.title)">Report a problem</button><a class="cb-btn ghost" href="#cb-contact">Email me</a></div>
+</div></div></footer>
+
+<script src="payid.js"></script>
+<script>
+(function(){var PRICE=1000,SOL=60,K='cbLapCart',MAX=5;function $(i){return document.getElementById(i)}
+var q=0,pick=1;try{q=Math.max(0,Math.min(MAX,+localStorage.getItem(K)||0));if(localStorage.getItem(K+'s')=='1')$('sol').checked=true}catch(e){}
+function sol(){return $('sol').checked}function each(){return PRICE+(sol()?SOL:0)}
+function save(){try{localStorage.setItem(K,q);localStorage.setItem(K+'s',sol()?'1':'0')}catch(e){}render()}
+function render(){$('cnt').textContent=q;$('qv').textContent=pick;$('tot').textContent=(q*each()).toFixed(2);
+$('lines').innerHTML=q?'<div class="sumline"><span><b>Coffeebreak Laptop, pre-order</b>'+(sol()?'<br>with solar charger kit':'')+'<br><span class="cb-muted">AU$'+each().toFixed(2)+' each</span></span><span style="text-align:right"><span class="qty"><button type="button" data-d="-1" aria-label="One less">−</button><span>'+q+'</span><button type="button" data-d="1" aria-label="One more">+</button></span><br><button type="button" id="rm" style="border:0;background:none;color:var(--cb-pink2);cursor:pointer;margin-top:6px;font:600 14px system-ui">Remove</button></span></div>':'<p class="cb-muted">Your cart is empty. Add the laptop above.</p>';
+[].forEach.call($('lines').querySelectorAll('[data-d]'),function(b){b.onclick=function(){q=Math.max(0,Math.min(MAX,q+(+b.dataset.d)));save()}});if($('rm'))$('rm').onclick=function(){q=0;save()}}
+[].forEach.call(document.querySelectorAll('.thumbs button'),function(b){b.onclick=function(){$('mainImg').src=b.dataset.src;[].forEach.call(document.querySelectorAll('.thumbs button'),function(x){x.classList.toggle('on',x===b)})}});
+$('minus').onclick=function(){pick=Math.max(1,pick-1);render()};$('plus').onclick=function(){pick=Math.min(MAX,pick+1);render()};
+function add(){var before=q;q=Math.min(MAX,q+pick);save();$('addmsg').textContent=q>before?'Added to your cart. You have '+q+' in your cart.':'The most per order is '+MAX+'.'}
+$('add').onclick=add;$('buy').onclick=function(){if(!q)add();$('checkout').scrollIntoView({behavior:'smooth'});setTimeout(function(){$('n').focus({preventScroll:true})},500)};
+$('sol').onchange=save;
+$('pay').onclick=function(){if(!q){$('o').innerHTML='<p class="cb-muted" style="margin-top:12px">Add the laptop to your cart first.</p>';return}
+if(!$('n').value.trim()||!/\S+@\S+\.\S+/.test($('e').value)||!$('a').value.trim()){$('o').innerHTML='<p class="cb-muted" style="margin-top:12px">Please add your name, email and postal address.</p>';return}
+var r=cbRef('CBLAP'),t=(q*each()).toFixed(2),b=['Coffeebreak Laptop pre-order '+r,'Qty '+q+(sol()?' with solar kit':'')+' = AU$'+t,'Paid by PayID darkokaz@gmx.com, reference '+r,'Name '+$('n').value,'Email '+$('e').value,'Address '+$('a').value,'Pre-order: full refund if the run does not happen.'].join('\n');
+$('o').innerHTML='<div class="cb-payid">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com<small>Amount AU$'+t+' · Reference '+r+'</small></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="cb-btn ghost" onclick="cbCopy(\'darkokaz@gmx.com\',this)">Copy PayID</button><button type="button" class="cb-btn ghost" onclick="cbCopy(\''+r+'\',this)">Copy reference</button><a class="cb-btn" href="mailto:songwriterkaz@gmail.com?subject='+encodeURIComponent('Coffeebreak Laptop order '+r)+'&body='+encodeURIComponent(b)+'">Email my order</a></div><p class="cb-muted" style="margin-top:10px">Open your banking app, pay to the PayID above with the reference, then email your order so I can confirm it.</p>'};
+$('don').onclick=function(){var v=Math.max(1,+$('dv').value||5).toFixed(2),r=cbRef('GIFT');$('dd').innerHTML='<div class="cb-payid">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com<small>Amount AU$'+v+' · Reference '+r+' · Thank you.</small></div>'};
+render()})();
+</script>
+<script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Laptop" data-url="https://coffeebreaks.itch.io/coffeebreak-laptop" data-kind="product" data-howto=""></script></body></html>

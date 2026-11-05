@@ -1,10 +1,87 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak WifiPhone Lite</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak WifiPhone Lite</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Try the sample entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#3b2417"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<link rel="preload" href="peerjs.min.js" as="script"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon.png"><link rel="icon" href="icon.png">
+<title>Coffeebreak WifiPhone Lite</title>
+<style>
+*{box-sizing:border-box}html{background:#2a180e}
+body{margin:0 auto;max-width:480px;min-height:100vh;background:#fff4ec;color:#3b2417;font-family:system-ui,sans-serif;font-size:18px;padding:12px 14px calc(20px + env(safe-area-inset-bottom));overflow-x:hidden}
+.top{display:flex;align-items:center;gap:10px;background:#3b2417;color:#fff;margin:-12px -14px 12px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
+.top img{width:56px;height:56px;border-radius:8px;background:#fff}
+.num{font-size:24px;font-weight:800;color:#f48fb1;word-break:break-all}
+#st{font-weight:700;font-size:16px}#st.ok{color:#7CFC00}#st.wait{color:#ffb74d}
+#qr{display:flex;justify-content:center;margin:8px auto}#qr img,#qr canvas{background:#fff;padding:8px;max-width:100%}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:16px;font-size:20px;font-weight:700;color:#fff;background:#e91e63;margin:8px 0;cursor:pointer;text-align:center;text-decoration:none}
+.btn.brown{background:#6b4226}.btn.green{background:#2e7d32}.btn.red{background:#c62828}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.row3 .btn{font-size:22px;padding:22px 4px;margin:0}
+input{width:100%;font-size:22px;padding:14px;border:3px solid #f48fb1;border-radius:14px;margin:6px 0}
+#err{display:none;background:#c62828;color:#fff;font-weight:700;padding:12px;border-radius:12px;margin:8px 0;font-size:18px}
+#msgs{display:flex;flex-direction:column;gap:6px;margin:10px 0;min-height:40px}
+.m{max-width:80%;padding:10px 14px;border-radius:18px;background:#fff;align-self:flex-start;box-shadow:0 1px 2px #0002}.m.me{align-self:flex-end;background:#f48fb1}.m small{display:block;font-size:11px;opacity:.7}
+#call{position:fixed;inset:0;background:#3b2417;color:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:9;text-align:center;padding:20px}
+#call.show{display:flex}#rv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}#lv{position:absolute;right:10px;top:10px;width:30%;border-radius:10px;display:none;z-index:2}
+#call .in{z-index:2;width:100%;max-width:420px}#cwho{font-size:28px;font-weight:800}#cstate{font-size:20px;margin:10px 0}
+.note{font-size:13px;opacity:.8}
+#lock,#set{position:fixed;inset:0;max-width:480px;margin:auto;background:#3b2417;color:#fff;z-index:8;display:none;flex-direction:column;align-items:center;padding:20px;overflow:auto;text-align:center}
+#lock.show,#set.show{display:flex}#set{background:#fff4ec;color:#3b2417;z-index:7}
+.kp{display:grid;grid-template-columns:repeat(3,72px);gap:12px;margin:12px auto}.kp button{height:72px;border-radius:50%;border:0;font-size:28px;background:#fff;color:#3b2417;cursor:pointer}
+#pinshow{font-size:34px;letter-spacing:10px;min-height:44px}
+#kiosk{position:fixed;inset:0;max-width:480px;margin:auto;background:#3b2417;z-index:6;display:none;flex-direction:column;gap:10px;padding:calc(12px + env(safe-area-inset-top)) 14px 14px;overflow:auto}
+#kiosk.show{display:flex}#kiosk .btn{margin:0}#kmum{font-size:40px;padding:40px 10px;background:#e91e63}.kf{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kf .btn{font-size:22px;padding:26px 6px}
+#kq{display:none;flex-direction:column;gap:8px}#kq.show{display:flex}#kst{color:#fff;text-align:center;font-weight:700}
+#guide{position:fixed;inset:0;max-width:480px;margin:auto;background:#fff4ec;z-index:10;display:none;padding:16px;overflow:auto}#guide.show{display:block}#guide li{margin:10px 0}
+</style></head><body>
+<div class="top"><img src="logo.png" alt="Coffeebreak"><div><div style="font-size:14px">Coffeebreak WifiPhone Lite</div><div>Your number: <span class="num" id="me">...</span></div><div id="st" class="wait">Connecting…</div></div><button id="gear" aria-label="Settings" style="margin-left:auto;background:none;border:0;font-size:28px;color:#fff;cursor:pointer">⚙️</button></div>
+<div id="err" role="alert"></div>
+<div id="full" style="display:none"><a class="btn green" id="fulla" target="_blank" rel="noopener">Tap to open full app for calls</a></div>
+<div id="qr"></div>
+<button class="btn brown" id="share">Share my link</button>
+<input id="to" placeholder="Their number or link" autocomplete="off" inputmode="text">
+<div class="row3"><button class="btn green" id="bcall">📞<br>CALL</button><button class="btn" id="bvid">🎥<br>VIDEO</button><button class="btn brown" id="btext">💬<br>TEXT</button></div>
+<button class="btn" id="mum" style="background:#ad1457">📞 Call Mum</button>
+<div id="msgs"></div>
+<div style="display:flex;gap:6px"><input id="txt" placeholder="Type a message" style="flex:1"><button class="btn" id="send" style="width:auto;padding:0 18px">Send</button></div>
+<p class="note">Free calls and texts between Coffeebreak WifiPhone users. Not a phone company SIM. Normal phone numbers open your own phone app. It cannot call 000.</p>
+<div id="lock" role="dialog" aria-label="SIM PIN"><img src="logo.png" style="width:70px;border-radius:8px;background:#fff" alt=""><h2>Enter SIM PIN</h2><div id="pinshow"></div><div id="pinmsg" style="min-height:24px;color:#ffb74d"></div>
+<div class="kp" id="kp"></div>
+<div style="display:flex;gap:8px;width:100%;max-width:340px"><button class="btn" id="lmum" style="background:#ad1457">📞 Call Mum</button><a class="btn red" href="tel:000">000</a></div>
+<button id="forgot" style="background:none;border:0;color:#f48fb1;font-size:16px;text-decoration:underline;margin-top:10px;cursor:pointer">Forgot PIN</button></div>
+<div id="set" role="dialog" aria-label="Settings"><h2>Settings</h2><div id="getapp" style="margin:10px 0;padding:10px;border:2px solid #4a2c1a;border-radius:12px;background:#fff8f0;color:#4a2c1a;text-align:center">
+<button type="button" id="getappbtn" style="font-size:18px;padding:12px 16px;border-radius:10px;border:0;background:#4a2c1a;color:#fff;cursor:pointer;width:100%">📲 Get the Android app</button>
+<div style="display:flex;gap:10px;align-items:center;justify-content:center;margin-top:8px"><img src="getapp-qr.png" alt="QR code to download the app" style="width:120px;height:120px;background:#fff;border-radius:8px"><span style="font-size:13px;text-align:left">Scan with another phone to get the app</span></div>
+<div id="getappios" style="display:none;font-size:14px;text-align:left;margin-top:8px"><b>iPhone and iPad:</b> open this page in Safari, tap the Share button, then tap Add to Home Screen, then tap Add.</div>
+<script>(function(){var u="https://coffeebreaks.itch.io/coffeebreak-wifiphone-lite",g=document.getElementById("getapp"),ua=navigator.userAgent;
+if(/CoffeebreakApp/.test(ua)){g.style.display="none";return}
+var ios=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+document.getElementById("getappbtn").onclick=function(){if(ios){document.getElementById("getappios").style.display="block"}else{window.open(u,"_blank")}};
+if(ios)document.getElementById("getappbtn").textContent="📲 Add to Home Screen (iPhone)";})();</script></div><h3>SIM PIN</h3><p id="pinstate"></p>
+<input id="p1" type="password" inputmode="numeric" maxlength="8" placeholder="New PIN (4 to 8 digits)" style="max-width:320px"><input id="p2" type="password" inputmode="numeric" maxlength="8" placeholder="Enter it again" style="max-width:320px">
+<input id="pcur" type="password" inputmode="numeric" maxlength="8" placeholder="Current PIN" style="max-width:320px">
+<button class="btn" id="pinon" style="max-width:320px">Turn on SIM PIN</button><button class="btn brown" id="pinchg" style="max-width:320px">Change PIN</button><button class="btn red" id="pinoff" style="max-width:320px">Turn off SIM PIN</button>
+<h3 id="e000anchor">Call Mum Phone</h3><p class="note">Turns this phone into a simple phone that only calls Mum and a few favourites. Needs the SIM PIN above to leave this mode.</p>
+<div id="favset" style="width:100%;max-width:340px"></div>
+<button class="btn" id="kon" style="max-width:320px;background:#ad1457">Make this a Call Mum Phone</button>
+<button class="btn brown" id="guideb" style="max-width:320px">Set up this phone (guide)</button>
+<div id="setmsg" style="font-weight:700;min-height:24px"></div><button class="btn brown" id="setx" style="max-width:320px">Close</button>
+<p class="note">Only a scrambled code of your PIN is kept on this phone, never the PIN itself.</p></div>
+<div id="kiosk"><div id="kst">Connecting…</div>
+<button class="btn" id="kmum">📞 CALL MUM</button>
+<div class="kf" id="kfav"></div>
+<button class="btn brown" id="kmsg" style="font-size:24px;padding:22px">💬 Message Mum</button>
+<div id="kq"><button class="btn green" data-q="I'm OK">I'm OK</button><button class="btn" style="background:#ef6c00" data-q="Come get me">Come get me</button><button class="btn red" data-q="I need you" data-loc="1">I need you + my location</button></div>
+<a class="btn red" href="tel:000" style="font-size:26px;padding:20px">000</a>
+<button id="kexit" style="background:none;border:0;color:#8d6e63;font-size:13px;margin-top:6px">Parent: exit</button></div>
+<div id="guide" role="dialog"><button class="btn brown" id="guidex" style="width:auto;float:right">Close</button><img src="logo.png" alt="Coffeebreak" style="width:70px"><h2>Set up a Call Mum Phone</h2><ol>
+<li>Connect the old phone or tablet to wifi. No SIM card is needed.</li>
+<li>Open the WifiPhone Lite link, or scan its QR code with the camera.</li>
+<li>Add it to the Home Screen. iPhone: Share, then Add to Home Screen. Android: menu, then Install app or Add to Home screen.</li>
+<li>Pair with Mum's phone: on Mum's phone, scan this phone's QR code (or type its CB number), then save Mum here in Call Mum.</li>
+<li>Lock it to this app only. Android: Settings, Security, App pinning (Screen pinning). iPhone or iPad: Settings, Accessibility, Guided Access, then triple-click the side or home button to start.</li>
+<li>Keep it on the charger. The screen stays on while the app is open.</li></ol>
+<p class="note">Works over wifi or a data eSIM. It calls only other Coffeebreak WifiPhone users. The 000 button uses the phone's own emergency calling, which works on a phone with no SIM only if that phone supports emergency calls without a SIM.</p></div>
+<div id="call"><video id="rv" autoplay playsinline></video><video id="lv" autoplay playsinline muted></video><audio id="ra" autoplay></audio>
+<div class="in"><div id="cwho"></div><div id="cstate"></div>
+<button class="btn green" id="ans" style="font-size:28px;padding:24px">ANSWER</button><button class="btn red" id="dec" style="font-size:28px;padding:24px">DECLINE</button><button class="btn red" id="hang" style="font-size:24px">End call</button></div></div>
+<script src="peerjs.min.js" defer></script><script src="app.js" defer></script>
+<script src="e000.js" data-key="cbl_e000" data-anchor="#e000anchor"></script><script src="qrcode.min.js"></script><script src="cbcall.js"></script><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Wifiphone Lite" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><!--cb-ytsub--><footer id="cbYtFoot" style="display:block;clear:both;position:static;width:100%;box-sizing:border-box;margin:24px 0 0;padding:18px 12px 150px;text-align:center;font:15px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;background:transparent"><style>#cbYtFoot a{text-decoration:none;box-sizing:border-box}#cbYtFoot .m{display:block;width:100%;max-width:420px;margin:8px auto;padding:16px 14px;border-radius:14px;font-weight:700;font-size:18px;color:#fff}#cbYtFoot .m:active{transform:scale(.98)}#cbYtFoot h3{margin:0 0 6px;font-size:17px;color:inherit}</style><h3>&#127925; Stream my music</h3><a class="m" style="background:#c4302b" href="https://www.youtube.com/@coffeebreakTVSERIES/streams" target="_blank" rel="noopener">&#128251; Coffeebreak Radio 24/7 (YouTube)</a><a class="m" style="background:#1db954" href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">Listen on Spotify</a><a class="m" style="background:#fa2d48" href="https://music.apple.com/au/artist/karen-obrien/535470355" target="_blank" rel="noopener">Listen on Apple Music</a><a class="m" style="background:#212121" href="https://music.youtube.com/channel/UCbI7BchGrNInUgjm0YqB_hg" target="_blank" rel="noopener">Listen on YouTube Music</a><div style="margin-top:14px"><a href="https://www.youtube.com/channel/UCNuPovMUFJDrl9fhztDgy4w?sub_confirmation=1" target="_blank" rel="noopener" style="display:inline-block;background:#ff0000;color:#fff;font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px">&#9654; Subscribe to Coffeebreak TV Series on YouTube</a></div><div style="margin-top:10px;font-size:12px;opacity:.75"><a href="https://www.tesla.com" target="_blank" rel="noopener" style="color:inherit">Tesla</a> &middot; <a href="https://www.starlink.com" target="_blank" rel="noopener" style="color:inherit">Starlink</a></div></footer><div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
+</body></html>

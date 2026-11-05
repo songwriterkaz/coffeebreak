@@ -1,0 +1,41 @@
+/* Coffeebreak UI 2026 - shared look */
+:root{--cb-bg:#fff7f9;--cb-card:#ffffff;--cb-ink:#3b2230;--cb-soft:#7d5a6a;--cb-line:#f1d6e0;--cb-pink:#e04f86;--cb-pink2:#c23a6f;--cb-blush:#ffe3ee;--cb-cream:#fff3e6;--cb-brown:#5b3a29;--cb-r:18px;--cb-shadow:0 6px 24px rgba(91,34,60,.08)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cb-bg);color:var(--cb-ink);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+h1,h2,h3{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;line-height:1.2;color:var(--cb-ink);margin:0 0 .5em}
+h1{font-size:clamp(30px,5vw,48px);letter-spacing:-.5px}h2{font-size:clamp(22px,3.2vw,30px)}h3{font-size:19px}
+p{margin:0 0 1em}a{color:var(--cb-pink2)}
+img{max-width:100%;height:auto}
+.cb-wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.cb-top{background:#fff;border-bottom:1px solid var(--cb-line);position:sticky;top:0;z-index:50}
+.cb-top .cb-wrap{display:flex;align-items:center;gap:14px;min-height:68px;flex-wrap:wrap}
+.cb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--cb-ink);font:700 18px Georgia,serif}
+.cb-brand img{width:54px;height:48px;object-fit:contain}
+.cb-nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.cb-nav a,.cb-nav button{font:600 15px system-ui,sans-serif;color:var(--cb-ink);text-decoration:none;padding:10px 14px;border-radius:999px;border:0;background:transparent;cursor:pointer;min-height:44px}
+.cb-nav a:hover,.cb-nav button:hover{background:var(--cb-blush)}
+.cb-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 22px;border-radius:999px;border:0;background:var(--cb-pink);color:#fff;font:700 16px system-ui,sans-serif;text-decoration:none;cursor:pointer;box-shadow:0 4px 14px rgba(224,79,134,.28);transition:transform .12s,background .12s}
+.cb-btn:hover{background:var(--cb-pink2)}.cb-btn:active{transform:translateY(1px)}
+.cb-btn.ghost{background:#fff;color:var(--cb-pink2);border:2px solid var(--cb-pink);box-shadow:none}
+.cb-btn.ghost:hover{background:var(--cb-blush)}
+.cb-btn:disabled{opacity:.55;cursor:not-allowed}
+.cb-card{background:var(--cb-card);border:1px solid var(--cb-line);border-radius:var(--cb-r);padding:24px;box-shadow:var(--cb-shadow)}
+.cb-sec{padding:44px 0}
+.cb-grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.cb-muted{color:var(--cb-soft);font-size:15px}
+.cb-pill{display:inline-block;padding:5px 12px;border-radius:999px;background:var(--cb-blush);color:var(--cb-pink2);font:700 13px system-ui,sans-serif;letter-spacing:.3px}
+.cb-payid{display:block;margin:14px 0;padding:16px 18px;border-radius:14px;background:var(--cb-cream);border:1px dashed #e8b98f;font-weight:700;word-break:break-word}
+.cb-payid small{display:block;font-weight:400;color:var(--cb-soft);margin-top:4px}
+.cb-field{display:block;margin:0 0 12px;font-weight:600;font-size:15px}
+.cb-field input,.cb-field textarea,.cb-field select{display:block;width:100%;margin-top:6px;padding:12px 14px;border:1.5px solid var(--cb-line);border-radius:12px;font:16px system-ui,sans-serif;background:#fff;color:var(--cb-ink)}
+.cb-field input:focus,.cb-field textarea:focus{outline:3px solid #f7b6cf;border-color:var(--cb-pink)}
+:focus-visible{outline:3px solid #f7b6cf;outline-offset:2px}
+.cb-foot{background:#fff;border-top:1px solid var(--cb-line);padding:34px 0 90px;margin-top:30px;font-size:14px;color:var(--cb-soft)}
+.cb-foot .cb-wrap{display:grid;gap:18px;grid-template-columns:auto 1fr;align-items:start}
+.cb-foot img{width:84px}
+.cb-foot p{margin:0 0 10px}
+.cb-foot .cb-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.cb-foot .cb-btn{min-height:44px;padding:10px 18px;font-size:14px}
+@media(max-width:640px){body{font-size:16px}.cb-wrap{padding:0 16px}.cb-sec{padding:30px 0}.cb-card{padding:18px}.cb-foot .cb-wrap{grid-template-columns:1fr}.cb-nav{margin-left:0;width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:6px}.cb-nav a,.cb-nav button{white-space:nowrap}.cb-top{position:static}}
+#cbc-float{display:none!important}

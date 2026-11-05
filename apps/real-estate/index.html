@@ -1,10 +1,173 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Real Estate</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Real Estate</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Try the sample entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html><html lang="en-AU"><head><!--cb-frame-fix--><style id="cb-frame-fix-css">html{height:100%!important;overflow:hidden!important}body{height:100%!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:auto!important;margin-top:0}</style>
+<script>/*cb-frame-fix: storage + dialogs safe inside itch's sandboxed, cross-origin iframe*/(function(){function mem(){var d={};return{getItem:function(k){k=String(k);return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[String(k)]=String(v)},removeItem:function(k){delete d[String(k)]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}}
+function px(st){return new Proxy(st,{get:function(t,k){if(k in t)return typeof t[k]=='function'?t[k].bind(t):t[k];return t.getItem(k)===null?undefined:t.getItem(k)},set:function(t,k,v){t.setItem(k,v);return true},deleteProperty:function(t,k){t.removeItem(k);return true},has:function(t,k){return k in t||t.getItem(k)!==null},ownKeys:function(t){var a=[];for(var i=0;i<t.length;i++)a.push(t.key(i));return a},getOwnPropertyDescriptor:function(t,k){var v=t.getItem(k);return v===null?undefined:{value:v,writable:true,enumerable:true,configurable:true}}})}
+['localStorage','sessionStorage'].forEach(function(n){var ok=false;try{var s=window[n];s.setItem('__cbt','1');s.removeItem('__cbt');ok=true}catch(e){}if(!ok){try{Object.defineProperty(window,n,{value:px(mem()),configurable:true})}catch(e){}}});
+function toast(m){try{var t=document.createElement('div');t.textContent=String(m);t.style.cssText='position:fixed;left:50%;top:16px;transform:translateX(-50%);max-width:90%;background:#2a1d14;color:#fff;padding:12px 18px;border-radius:10px;z-index:2147483647;font:15px system-ui,sans-serif;box-shadow:0 4px 14px #0006';(document.body||document.documentElement).appendChild(t);setTimeout(function(){t.remove()},4500)}catch(e){}}
+var A=window.alert,C=window.confirm;window.alert=function(m){var t=Date.now();try{A.call(window,m)}catch(e){}if(Date.now()-t<30)toast(m)};window.confirm=function(m){var t=Date.now(),r=false;try{r=C.call(window,m)}catch(e){}if(!r&&Date.now()-t<30)return true;return r};
+window.__cbNav=function(u){var w=null;try{w=window.open(u,'_blank')}catch(e){}if(!w){var a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}};})();</script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Real Estate – Newcastle NSW</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,"Segoe UI",sans-serif;background:#fff4f8;color:#3b2418;overflow-x:hidden}
+.hero{position:relative;overflow:hidden;color:#fff;text-align:center;padding:48px 16px 70px;background:linear-gradient(-45deg,#e9b965,#f1d29d,#8a5a3c,#bf831b);background-size:400% 400%;animation:grad 12s ease infinite}
+@keyframes grad{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+.hero .logo{width:150px;height:150px;border-radius:50%;border:6px solid #fff;object-fit:cover;box-shadow:0 8px 30px rgba(0,0,0,.3);animation:bob 3s ease-in-out infinite;position:relative;z-index:2}
+@keyframes bob{50%{transform:translateY(-10px) rotate(-3deg)}}
+.hero h1{font-size:clamp(1.8rem,5vw,3.2rem);margin:16px 0 6px;text-shadow:0 3px 12px rgba(0,0,0,.25);position:relative;z-index:2;animation:pop .9s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.hero p{font-size:1.1rem;position:relative;z-index:2;margin:0 0 18px}
+.float{position:absolute;opacity:.35;z-index:1;animation:fly linear infinite}
+@keyframes fly{0%{transform:translateY(110%) rotate(0)}100%{transform:translateY(-140%) rotate(360deg)}}
+.wave{position:absolute;bottom:-1px;left:0;width:100%;height:50px}
+nav.jump{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;position:relative;z-index:2}
+nav.jump a{background:rgba(255,255,255,.25);color:#fff;padding:8px 14px;border-radius:20px;text-decoration:none;font-weight:700;backdrop-filter:blur(4px);transition:.2s}
+nav.jump a:hover{background:#fff;color:#bf831b}
+main{max-width:1000px;margin:auto;padding:12px 14px}
+section{margin:34px 0}
+h2{color:#bf831b;font-size:1.6rem;margin:0 0 6px}h2 span{display:inline-block;animation:bob 2.5s ease-in-out infinite}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{background:#fff;border:2px solid #f7e6c9;border-radius:20px;padding:18px;transition:transform .25s,box-shadow .25s,border-color .25s}
+.card:hover{transform:translateY(-6px) rotate(-.5deg);box-shadow:0 14px 28px rgba(191,131,27,.18);border-color:#e9b965}
+a.btn,button{display:inline-block;background:linear-gradient(135deg,#e9b965,#bf831b);color:#fff;border:0;border-radius:26px;padding:11px 18px;text-decoration:none;font-weight:700;cursor:pointer;margin:4px 4px 4px 0;font:inherit;font-weight:700;transition:transform .15s,box-shadow .15s}
+a.btn:hover,button:hover{transform:scale(1.06);box-shadow:0 6px 16px rgba(233,185,101,.45)}
+a.btn.alt{background:linear-gradient(135deg,#a8734f,#6d4128)}
+input,select,textarea{width:100%;padding:10px;margin:5px 0;border:2px solid #f7e6c9;border-radius:12px;font:inherit;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#e9b965;box-shadow:0 0 0 3px #faefdb}
+.note{font-size:.88em;color:#6d4c41}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{background:#ffe3ef;color:#bf831b;border:2px solid #f7e6c9;border-radius:20px;padding:7px 14px;font-weight:700;cursor:pointer;margin:0;font-size:.95em}
+.chip.on,.chip:hover{background:#e9b965;color:#fff;transform:scale(1.05)}
+.results{display:none;margin-top:10px;animation:pop .4s}
+.quiz .opts{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.big{font-size:2rem;font-weight:800;color:#bf831b;margin:6px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+label.lbl{font-weight:700;font-size:.92em}
+footer{background:#3b2418;color:#faefdb;text-align:center;padding:22px;font-size:.9em;margin-top:30px}
+footer img{width:46px;height:46px;border-radius:50%;vertical-align:middle;object-fit:cover}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:99}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(120px);background:#bf831b;color:#fff;padding:12px 20px;border-radius:24px;font-weight:700;z-index:100;transition:.4s}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style><script src="cb-fullscreen.js"></script></head><body>
+<header class="hero" id="hero">
+<img class="logo" src="cb-logo.jpg" alt="Coffeebreak logo">
+<h1>Find your dream home with Coffeebreak 🏡☕</h1>
+<p>Newcastle &amp; Hunter home searches · loans · conveyancing · moving</p>
+<nav class="jump"><a href="#find">🔎 Search</a><a href="#quiz">✨ Dream Home Quiz</a><a href="#calc">🧮 Repayments</a><a href="#sell">🏷️ Selling?</a></nav>
+<svg class="wave" viewBox="0 0 1440 50" preserveAspectRatio="none"><path fill="#fff4f8" d="M0 30C240 0 480 50 720 30S1200 0 1440 30V50H0Z"/></svg>
+</header>
+<main>
+<section id="find"><h2><span>🔎</span> Find a home</h2><p class="note">We don't list properties ourselves. These open live searches on the real listing sites.</p>
+<div class="card"><b>Pick a suburb:</b><div class="chips" id="chips"></div>
+<div class="row"><input id="sub" placeholder="Or type any NSW suburb, e.g. Adamstown"><select id="mode" style="max-width:160px"><option value="buy">Buy</option><option value="rent">Rent</option></select></div>
+<button id="go">Search it! 🚀</button>
+<div class="results" id="res"></div></div></section>
+
+<section id="quiz" class="quiz"><h2><span>✨</span> Dream Home Quiz</h2><p class="note">Three quick picks and we'll build your search.</p>
+<div class="card">
+<label class="lbl">1. What's your budget?</label><div class="opts" data-q="price">
+<button class="chip" data-v="0-500000">Under $500k</button><button class="chip" data-v="500000-800000">$500k–$800k</button><button class="chip" data-v="800000-1200000">$800k–$1.2m</button><button class="chip" data-v="1200000-any">$1.2m+</button></div>
+<label class="lbl">2. How many bedrooms?</label><div class="opts" data-q="beds">
+<button class="chip" data-v="1">1+</button><button class="chip" data-v="2">2+</button><button class="chip" data-v="3">3+</button><button class="chip" data-v="4">4+</button></div>
+<label class="lbl">3. What's your vibe?</label><div class="opts" data-q="vibe">
+<button class="chip" data-v="Merewether">🏄 Beachy</button><button class="chip" data-v="Cooks Hill">☕ Café culture</button><button class="chip" data-v="Lake Macquarie">🚤 Lakeside</button><button class="chip" data-v="Maitland">🌾 Country calm</button><button class="chip" data-v="Port Stephens">🐬 Holiday mode</button></div>
+<div id="qres" class="results"></div></div></section>
+
+<section id="calc"><h2><span>🧮</span> Mortgage repayment calculator</h2>
+<div class="card"><div class="row">
+<div><label class="lbl">Loan amount ($)</label><input id="L" type="number" value="600000" min="0"></div>
+<div><label class="lbl">Interest rate (% p.a.)</label><input id="R" type="number" value="6.2" step="0.05" min="0"></div>
+<div><label class="lbl">Term (years)</label><input id="Y" type="number" value="30" min="1" max="40"></div>
+<div><label class="lbl">Frequency</label><select id="F"><option value="12">Monthly</option><option value="26">Fortnightly</option><option value="52">Weekly</option></select></div></div>
+<div class="big" id="out">–</div><div class="note" id="out2"></div>
+<p class="note">Estimate only (principal &amp; interest, fixed rate, no fees). Not financial advice – speak to a licensed lender or broker.</p></div></section>
+
+<section id="sell"><h2><span>🏷️</span> Selling? Get a free agent comparison</h2>
+<div class="grid"><div class="card">
+<input id="n" placeholder="Your name"><input id="e" type="email" placeholder="Email"><input id="p" placeholder="Phone"><input id="a" placeholder="Property address / suburb">
+<select id="t"><option>House</option><option>Unit / Apartment</option><option>Townhouse</option><option>Land</option></select>
+<select id="w"><option>Selling within 3 months</option><option>3–6 months</option><option>6+ months</option><option>Just curious</option></select>
+<textarea id="m" placeholder="Anything else?"></textarea>
+<label class="note"><input type="checkbox" id="ok" style="width:auto"> I understand Coffeebreak is not a real estate agent and may receive referral fees from partner services.</label><br>
+<button id="send">Send my request 💌</button></div>
+<div class="card"><b>Or compare agents yourself now:</b><div id="agentCompare"></div></div></div></section>
+<section id="loans" style="scroll-margin-top:0"><h2><span>💰</span> Home Loans</h2><p class="note">Compare rates and talk to a licensed broker – free for you.</p><div class="grid" id="homeLoan"></div><p class="note" style="margin-top:12px;border-left:4px solid #e9b965;padding-left:10px"><b>Important:</b> Coffeebreak is not a lender or credit provider. Links go to licensed providers, and we may earn a referral fee. This is general information, not advice.</p></section>
+<section><h2><span>📜</span> Conveyancing</h2><div class="grid" id="conveyancing"></div></section>
+<section><h2><span>🚚</span> Moving</h2><div class="grid" id="moving"></div></section>
+</main>
+<footer><img src="cb-logo.jpg" alt="Coffeebreak logo"> <b>Coffeebreak is not a licensed real estate agent; we may receive referral fees.</b><br>Information only – not financial or legal advice. Listings belong to the sites linked.</footer>
+<canvas id="confetti"></canvas><div class="toast" id="toast"></div>
+<script src="config.js"></script>
+<script>
+(function(){
+var C=window.CB_RE||{},$=function(i){return document.getElementById(i)};
+// floating icons
+var icons=['🏠','☕','🏡','🔑','☕','🏘️','💖','🏠'],hero=$('hero');
+icons.forEach(function(ic,i){var s=document.createElement('span');s.className='float';s.textContent=ic;
+s.style.left=(5+i*12)+'%';s.style.bottom='0';s.style.fontSize=(24+(i%3)*14)+'px';s.style.animationDuration=(9+i%4*3)+'s';s.style.animationDelay=(-i*1.7)+'s';hero.appendChild(s)});
+// affiliate cards
+function link(o){var u=(o.url&&o.url.indexOf('PASTE_')!==0)?o.url:(o.fallback||o.url);return '<div class="card"><b>'+o.name+'</b><br><a class="btn" target="_blank" rel="noopener sponsored" href="'+u+'">Visit</a></div>'}
+['homeLoan','conveyancing','moving','agentCompare'].forEach(function(k){if(C[k])$(k).innerHTML=C[k].map(link).join('')});
+// suburbs
+var PC={'Merewether':'2291','Hamilton':'2303','Cooks Hill':'2300','Charlestown':'2290','The Junction':'2291','Lake Macquarie':'','Maitland':'2320','Port Stephens':''};
+function slug(s){return s.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function rea(mode,s,beds,price){var pc=PC[s]||'',loc=encodeURIComponent(s.trim().toLowerCase()).replace(/%20/g,'+')+',+nsw'+(pc?'+'+pc:'');
+var f='';if(beds||price){f='property-house-'+(beds?'with-'+beds+'-bedrooms-':'')+(price?'between-'+price+'-':'')}
+return 'S10-L4cd985'+mode+'/'+f+'in-'+loc+'/list-1'}
+function dom(mode,s,beds,price){var pc=PC[s];var base='S11-Le7ee1a'+(mode==='buy'?'sale':'rent')+'/';
+var q=[];if(beds)q.push('bedrooms='+beds+'-any');if(price)q.push('price='+price);
+var path=pc?slug(s)+'-nsw-'+pc+'/':'';if(!pc)q.push('suburb='+encodeURIComponent(slug(s)+'-nsw'));
+return base+path+(q.length?'?'+q.join('&'):'')}
+function show(el,s,mode,beds,price,title){el.innerHTML='<b>'+title+'</b><br><a class="btn" target="_blank" rel="noopener" href="'+rea(mode,s,beds,price)+'">realestate.com.au</a><a class="btn alt" target="_blank" rel="noopener" href="'+dom(mode,s,beds,price)+'">Domain</a>';el.style.display='block'}
+var chips=$('chips');Object.keys(PC).forEach(function(s){var b=document.createElement('button');b.className='chip';b.textContent=s;
+b.onclick=function(){[].forEach.call(chips.children,function(c){c.classList.remove('on')});b.classList.add('on');$('sub').value=s;search()};chips.appendChild(b)});
+function search(){var s=$('sub').value.trim();if(!s){toast('Type or pick a suburb first 🙂');return}var m=$('mode').value;show($('res'),s,m,0,'',(m==='buy'?'Homes for sale':'Rentals')+' in '+s+':')}
+$('go').onclick=search;$('sub').onkeydown=function(e){if(e.key==='Enter')search()};
+// quiz
+var ans={};[].forEach.call(document.querySelectorAll('.opts'),function(g){[].forEach.call(g.children,function(b){b.onclick=function(){[].forEach.call(g.children,function(c){c.classList.remove('on')});b.classList.add('on');ans[g.dataset.q]=b.dataset.v;
+if(ans.price&&ans.beds&&ans.vibe){show($('qres'),ans.vibe,'buy',ans.beds,ans.price,'🎉 Your dream home search: '+ans.beds+'+ bed houses in '+ans.vibe);burst(60)}}})});
+// calculator
+function calc(){var P=+$('L').value,r=+$('R').value/100,y=+$('Y').value,f=+$('F').value,n=y*f,i=r/f;
+if(!(P>0&&y>0)){$('out').textContent='–';$('out2').textContent='';return}
+var pay=i>0?P*i/(1-Math.pow(1+i,-n)):P/n,fq={12:'month',26:'fortnight',52:'week'}[f];
+$('out').textContent='$'+Math.round(pay).toLocaleString('en-AU')+' / '+fq;
+$('out2').textContent='Total repaid ≈ $'+Math.round(pay*n).toLocaleString('en-AU')+' · Total interest ≈ $'+Math.round(pay*n-P).toLocaleString('en-AU')}
+['L','R','Y','F'].forEach(function(k){$(k).oninput=calc});calc();
+// confetti
+var cv=$('confetti'),cx=cv.getContext('2d'),parts=[],run=false;
+function size(){cv.width=innerWidth;cv.height=innerHeight}size();addEventListener('resize',size);
+function burst(k){var cols=['#e9b965','#f7e6c9','#8a5a3c','#ffd700','#bf831b','#fff'];for(var j=0;j<k;j++)parts.push({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*16,vy:Math.random()*-16-4,s:4+Math.random()*6,c:cols[j%cols.length],r:Math.random()*6,life:0});if(!run){run=true;requestAnimationFrame(tick)}}
+function tick(){cx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(function(p){p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.r+=.2;p.life++;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*1.6);cx.restore();return p.y<cv.height+20&&p.life<240});
+if(parts.length)requestAnimationFrame(tick);else{run=false;cx.clearRect(0,0,cv.width,cv.height)}}
+function toast(t){var el=$('toast');el.textContent=t;el.classList.add('show');setTimeout(function(){el.classList.remove('show')},2600)}
+// lead form
+$('send').onclick=function(){if(!$('ok').checked){toast('Please tick the box first 🙂');return}
+if(!$('n').value.trim()||!$('e').value.trim()){toast('Please add your name and email');return}
+var b='Name: '+$('n').value+'\nEmail: '+$('e').value+'\nPhone: '+$('p').value+'\nProperty: '+$('a').value+'\nType: '+$('t').value+'\nTiming: '+$('w').value+'\nNotes: '+$('m').value;
+burst(180);toast('Opening your email app… thank you! 💖');
+setTimeout(function(){location.href='mailto:'+(C.leadEmail||'songwriterkaz@gmail.com')+'?subject='+encodeURIComponent('Agent comparison request – '+$('n').value)+'&body='+encodeURIComponent(b)},700)};
+})();
+</script><!-- cb-radio -->
+<div id="cbRadio" style="position:fixed;left:12px;bottom:12px;z-index:9999;font-family:sans-serif;max-width:320px">
+<button onclick="var p=document.getElementById('cbRadioP');p.style.display=p.style.display!=='block'?'block':'none'" style="background:#222;color:#fff;border:0;border-radius:20px;padding:8px 14px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3)">&#9835; Coffeebreak Radio</button>
+<div id="cbRadioP" style="display:none;margin-top:6px;background:#fff;color:#222;padding:8px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.3);font-size:13px;width:304px">
+<div style="display:flex;gap:6px;margin-bottom:6px"><button onclick="cbRT('s')" id="cbRTs" style="flex:1;border:0;border-radius:8px;padding:6px;cursor:pointer;background:#1db954;color:#fff">Spotify</button><button onclick="cbRT('y')" id="cbRTy" style="flex:1;border:0;border-radius:8px;padding:6px;cursor:pointer;background:#eee;color:#222">&#9654; Shorts</button><button onclick="cbRT('m')" id="cbRTm" style="flex:1;border:0;border-radius:8px;padding:6px;cursor:pointer;background:#eee;color:#222">YouTube Music</button></div>
+<div id="cbRadioS" style="color:#666;padding:10px;text-align:center">Tap a tab to play</div><div id="cbRadioY" style="display:none"></div><div id="cbRadioM" style="display:none"></div>
+<div style="margin-top:6px">Listen on <a href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">Spotify</a> / <a href="https://music.apple.com/au/album/billionaire/1542958072" target="_blank" rel="noopener">Apple Music</a> / <a href="https://www.youtube.com/@coffeebreakTVSERIES/shorts" target="_blank" rel="noopener">YouTube</a><br><a href="https://music.youtube.com/channel/UC-JT9WEOQZ2p7Qr6AfypT5w" target="_blank" rel="noopener">Listen on YouTube Music</a></div>
+</div></div>
+<script>function cbRT(t){var P={s:['cbRadioS','<iframe style="border-radius:10px" src="https://open.spotify.com/embed/artist/05R0I9sslP9GnbSg6KzEr7?utm_source=generator" width="300" height="152" frameborder="0" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>','#1db954'],y:['cbRadioY','<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UUSHNuPovMUFJDrl9fhztDgy4w&rel=0&playsinline=1" style="width:216px;aspect-ratio:9/16;height:384px;border:0;border-radius:10px;display:block;margin:auto" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy" title="Coffeebreak TV Shorts"></iframe>','#f00'],m:['cbRadioM','<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU-JT9WEOQZ2p7Qr6AfypT5w&rel=0&playsinline=1" style="width:100%;aspect-ratio:16/9;border:0;border-radius:10px;display:block" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy" title="Coffeebreak on YouTube Music"></iframe>','#c00']};for(var k in P){var e=document.getElementById(P[k][0]),b=document.getElementById('cbRT'+k);if(k==t){if(!e.dataset.l){e.dataset.l=1;if(k=='s')e.style.padding=0;e.innerHTML=P[k][1];}e.style.display='block';b.style.background=P[k][2];b.style.color='#fff';}else{e.style.display='none';b.style.background='#eee';b.style.color='#222';}}}</script>
+<!-- /cb-radio -->
+<script src="cb-earnings.js"></script>
+<!--cb-contact-start-->
+<section id="cb-contact" aria-label="Email me"><h2>✉ Email me</h2><p class="cbc-sub">Questions, custom orders or anything else? Send me a message.</p>
+<form id="cbc-form" novalidate><input type="hidden" name="_subject" value="Coffeebreak Real Estate enquiry"><input type="hidden" name="_captcha" value="false"><input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+<label>Name<input name="name" required maxlength="100" autocomplete="name"></label><label>Email<input name="email" type="email" required maxlength="150" autocomplete="email"></label><label>Message<textarea name="message" required rows="4" maxlength="3000"></textarea></label>
+<button type="submit" id="cbc-send">Send</button><p id="cbc-status" role="status"></p></form></section>
+<a id="cbc-float" href="#cb-contact">✉ Email me</a>
+<style>#cb-contact{max-width:560px;margin:32px auto 24px;padding:20px 22px;border-radius:14px;background:var(--cbc-bg);color:var(--cbc-fg);border:1px solid var(--cbc-line);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;box-sizing:border-box}#cb-contact *{box-sizing:border-box}#cb-contact h2{margin:0 0 4px;font-size:1.3em;color:var(--cbc-fg)}.cbc-sub{margin:0 0 14px;opacity:.8}#cbc-form label{display:block;margin:0 0 10px;font-weight:600;font-size:.92em}#cbc-form input,#cbc-form textarea{display:block;width:100%;margin-top:4px;padding:9px 11px;border-radius:9px;border:1px solid var(--cbc-line);background:var(--cbc-in);color:var(--cbc-fg);font:inherit}#cbc-send,#cbc-float{background:var(--cbc-acc);color:var(--cbc-accfg);border:0;border-radius:999px;font:600 15px system-ui,sans-serif;cursor:pointer;text-decoration:none}#cbc-send{padding:10px 26px}#cbc-send:disabled{opacity:.6}#cbc-status{margin:10px 0 0;min-height:1.2em}#cbc-float{position:fixed;left:14px;bottom:14px;z-index:99998;padding:10px 16px;box-shadow:0 3px 10px #0005}</style>
+<script>(function(){var r=document.documentElement,b=document.body;function rgb(s){var m=(s||'').match(/[\d.]+/g);return m&&m.length>=3&&(m[3]===undefined||+m[3]>0)?m.slice(0,3).map(Number):null}function bgOf(e){while(e){var c=rgb(getComputedStyle(e).backgroundColor);if(c)return c;e=e.parentElement}return[255,255,255]}function lum(c){return(.299*c[0]+.587*c[1]+.114*c[2])/255}function hue(c){var R=c[0]/255,G=c[1]/255,B=c[2]/255,mx=Math.max(R,G,B),mn=Math.min(R,G,B),d=mx-mn;if(!d)return{h:0,s:0};var h=mx==R?((G-B)/d)%6:mx==G?(B-R)/d+2:(R-G)/d+4;return{h:(h*60+360)%360,s:d/(1-Math.abs(mx+mn-1)||1)}}function pinkish(c){var x=hue(c);return x.s>.25&&(x.h>=290||x.h<=12)&&lum(c)>.45}var sec=document.getElementById('cb-contact'),bg=bgOf(sec.parentElement),dark=lum(bg)<.5,acc=null;var cands=document.querySelectorAll('button,.btn,a.button,[class*=btn]');for(var i=0;i<cands.length&&!acc;i++){if(cands[i].id&&cands[i].id.indexOf('cbc')==0)continue;var c=rgb(getComputedStyle(cands[i]).backgroundColor);if(c&&hue(c).s>.2&&!pinkish(c))acc=c}if(!acc)acc=dark?[201,155,92]:[111,74,46];function css(c){return'rgb('+c.join(',')+')'}var s=sec.style,f=document.getElementById('cbc-float').style;[s,f].forEach(function(t){t.setProperty('--cbc-acc',css(acc));t.setProperty('--cbc-accfg',lum(acc)>.6?'#1b1410':'#fff')});s.setProperty('--cbc-bg',dark?'rgba(255,255,255,.06)':'rgba(0,0,0,.035)');s.setProperty('--cbc-fg',dark?'#f3ece4':'#2a1d14');s.setProperty('--cbc-line',dark?'rgba(255,255,255,.18)':'rgba(0,0,0,.15)');s.setProperty('--cbc-in',dark?'rgba(0,0,0,.25)':'#fff');document.getElementById('cbc-float').addEventListener('click',function(e){e.preventDefault();sec.scrollIntoView({behavior:'smooth'});setTimeout(function(){var n=sec.querySelector('input[name=name]');n&&n.focus({preventScroll:true})},500)});var form=document.getElementById('cbc-form'),st=document.getElementById('cbc-status'),btn=document.getElementById('cbc-send');form.addEventListener('submit',function(e){e.preventDefault();if(form._honey.value)return;if(!form.checkValidity()){st.textContent='Please fill in your name, a valid email and a message.';return}btn.disabled=true;st.textContent='Sending…';var d={};new FormData(form).forEach(function(v,k){d[k]=v});fetch('https://formsubmit.co/ajax/songwriterkaz@gmail.com',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(d)}).then(function(r){return r.json()}).then(function(j){if(j&&(j.success===true||j.success==='true')){form.reset();st.textContent='Thank you! Your message has been sent. I\u2019ll get back to you soon.'}else throw 0}).catch(function(){st.textContent='Sorry, that didn\u2019t send. Please try again in a moment.'}).then(function(){btn.disabled=false})})})();</script>
+<!--cb-contact-end-->
+<!--cb-bar-fix--><style>#cbBar{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;background:#000;border-top:3px solid #d4af37;border-bottom:3px solid #d4af37;padding:12px;position:relative;z-index:5}#cbBar>*{position:static!important;left:auto!important;right:auto!important;bottom:auto!important;top:auto!important;transform:none!important;margin:0!important}#cbBar #cbc-float{display:inline-block;background:#d4af37!important;color:#000!important;font:700 17px system-ui,sans-serif!important;padding:12px 22px!important;border-radius:999px}</style>
+<script>/*cb-bar-fix: move overlapping floating buttons into a clear bar under the header*/(function(){function fx(e){var s=getComputedStyle(e),r=e.getBoundingClientRect();return s.position=='fixed'&&s.display!='none'&&r.width>0&&r.height>0}function ov(a,b){a=a.getBoundingClientRect();b=b.getBoundingClientRect();return a.left<b.right-4&&b.left<a.right-4&&a.top<b.bottom-4&&b.top<a.bottom-4}function go(){var em=document.getElementById('cbc-float');if(!em||em.closest('#cbBar'))return;var others=[].filter.call(document.querySelectorAll('body *'),function(e){return e!==em&&!e.contains(em)&&!em.contains(e)&&fx(e)&&e.getBoundingClientRect().width<700&&ov(e,em)});if(!others.length)return;var bar=document.getElementById('cbBar');if(!bar){bar=document.createElement('nav');bar.id='cbBar';bar.setAttribute('aria-label','Listen and contact');var h=document.querySelector('body > header, header');if(h&&h.getBoundingClientRect().top<200&&getComputedStyle(h).position!='fixed')h.parentNode.insertBefore(bar,h.nextSibling);else document.body.insertBefore(bar,document.body.firstChild)}others.forEach(function(o){if(/radio|suno|listen|music|♫|📻/i.test(o.innerText||o.id||''))bar.appendChild(o)});bar.appendChild(em)}function run(){[300,1500,4000].forEach(function(t){setTimeout(go,t)})}if(document.readyState=='complete')run();else addEventListener('load',run)})();</script>
+<div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
+</body></html>

@@ -1,0 +1,61 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Join as a cleaner – Coffeebreak Cleaning</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Arial,sans-serif;background:#f4fbfd;color:#123}
+header{background:linear-gradient(135deg,#0ea5a4,#38bdf8);color:#fff;text-align:center;padding:26px 14px}header h1{margin:4px 0;font-size:2rem}
+main{max-width:980px;margin:auto;padding:14px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 10px #0ea5a422;border:1px solid #d6f1f3}.card h3{margin:0 0 6px;font-size:1rem}
+.price{font-weight:800;color:#0b7a79;font-size:1.2rem}.card button{margin-top:8px;background:#0ea5a4;color:#fff;border:0;border-radius:20px;padding:8px 14px;cursor:pointer;font-weight:700}
+.card.sel{outline:3px solid #38bdf8}form label{display:block;margin:8px 0 2px;font-weight:600}input,textarea,select{width:100%;padding:9px;border:1px solid #b9e3e8;border-radius:8px;font:inherit}
+.box{background:#fff;border-radius:14px;padding:16px;margin:16px 0;border:1px solid #d6f1f3}.small{font-size:.85rem;color:#456}footer{text-align:center;padding:20px;font-size:.8rem;color:#567}
+.warn{color:#b45309;font-weight:700}.err{color:#b91c1c;font-weight:700}.ok{color:#0b7a79}fieldset{border:1px solid #d6f1f3;border-radius:10px;margin:12px 0}.chk label{display:inline;font-weight:400}.chk input{width:auto}button.go{background:#0ea5a4;color:#fff;border:0;border-radius:20px;padding:12px 22px;font-weight:700;font-size:1rem;cursor:pointer;margin-top:12px}</style></head><body>
+<header><img src="cb-logo.jpg" alt="Coffeebreak logo" style="height:72px;width:72px;border-radius:50%;object-fit:cover"><h1>Coffeebreak Cleaning</h1><div>Sparkling homes across Newcastle, Lake Macquarie, Maitland, Port Stephens & the Hunter</div></header><nav style="background:#0b7a79;text-align:center;padding:8px"><a href="index.html" style="color:#fff;margin:0 10px;font-weight:700;text-decoration:none">Book a clean</a><a href="join.html" style="color:#fff;margin:0 10px;font-weight:700;text-decoration:none">Join as a cleaner</a></nav>
+<main>
+<div class="box"><h2>Join as a cleaner</h2><p><b>Applications are reviewed and approved by Coffeebreak before any jobs are offered.</b></p><p class="small">You'll need an ABN, photo ID, an NSW National Police Check (under 12 months old) and a current public liability certificate (minimum $5M, $10M recommended).</p></div>
+<form class="box" id="joinForm" action="https://formsubmit.co/songwriterkaz@gmail.com" method="POST" enctype="multipart/form-data">
+<input type="hidden" name="_subject" value="New cleaner application – Coffeebreak Cleaning"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="true"><input type="text" name="_honey" style="display:none">
+<input type="hidden" name="Warnings" id="warnField">
+<fieldset><legend>About you</legend>
+<label>Full name *</label><input name="Full name" required>
+<label>Business name</label><input name="Business name">
+<label>ABN * <a href="https://abr.business.gov.au/" target="_blank" rel="noopener" class="small">Look up your ABN</a></label><input name="ABN" id="abn" required inputmode="numeric" placeholder="11 digits"><div id="abnMsg" class="small"></div>
+<label>Phone *</label><input name="Phone" type="tel" required>
+<label>Email *</label><input name="Email" type="email" required>
+<label>Suburbs served *</label><textarea name="Suburbs served" rows="2" required placeholder="e.g. Merewether, Charlestown, Maitland"></textarea>
+<label>Services offered *</label><div class="chk">
+<input type="checkbox" name="Services[]" value="Regular clean" id="s1"> <label for="s1">Regular</label> &nbsp; <input type="checkbox" name="Services[]" value="Deep clean" id="s2"> <label for="s2">Deep</label> &nbsp; <input type="checkbox" name="Services[]" value="End of lease" id="s3"> <label for="s3">End of lease</label> &nbsp; <input type="checkbox" name="Services[]" value="Carpet" id="s4"> <label for="s4">Carpet</label> &nbsp; <input type="checkbox" name="Services[]" value="Windows" id="s5"> <label for="s5">Windows</label> &nbsp; <input type="checkbox" name="Services[]" value="Other" id="s6"> <label for="s6">Other</label></div>
+<label>Years of experience *</label><input name="Years of experience" type="number" min="0" max="60" required>
+</fieldset>
+<fieldset><legend>ID & police check</legend>
+<label>Photo ID (licence or passport) *</label><input type="file" name="Photo ID" accept="image/*,.pdf" required>
+<label>NSW National Police Check *</label><input type="file" name="Police check" accept="image/*,.pdf" required>
+<label>Police check issue date *</label><input type="date" name="Police check date" id="pcDate" required><div id="pcMsg" class="small"></div>
+</fieldset>
+<fieldset><legend>Public liability insurance</legend>
+<label>Certificate of currency *</label><input type="file" name="Insurance certificate" accept="image/*,.pdf" required>
+<label>Insurer *</label><input name="Insurer" required>
+<label>Policy number *</label><input name="Policy number" required>
+<label>Cover amount (AUD) *</label><select name="Cover amount" id="cover" required><option value="">Choose…</option><option value="Under $5M">Under $5M</option><option>$5M</option><option>$10M (recommended)</option><option>$20M</option></select><div id="coverMsg" class="small"></div>
+<label>Expiry date *</label><input type="date" name="Insurance expiry" id="insExp" required><div id="insMsg" class="small"></div>
+</fieldset>
+<fieldset><legend>Workers compensation (optional)</legend>
+<label>Workers comp insurer / policy number</label><input name="Workers comp policy">
+<label>Workers comp certificate</label><input type="file" name="Workers comp certificate" accept="image/*,.pdf">
+</fieldset>
+<fieldset><legend>Declaration</legend><div class="chk"><input type="checkbox" id="decl" name="Declaration" value="Agreed" required> <label for="decl">I declare the information and documents I've provided are true and current. I'll tell Coffeebreak straight away if my insurance lapses or my police check status changes. I understand I'm an independent contractor, not an employee.</label></div>
+<label>Type your full name as your signature *</label><input name="Signature" id="sig" required>
+<input type="hidden" name="Signed on" id="signedOn"></fieldset>
+<div id="formMsg" class="err"></div>
+<button class="go" type="submit">Submit application</button>
+<p class="small">Your documents are emailed securely to Coffeebreak for review only.</p>
+</form></main><footer>Coffeebreak Cleaning · Newcastle NSW & Hunter Region · <a href="index.html">Book a clean</a> · <a href="join.html">Join as a cleaner</a></footer>
+<script src="cb-order.js"></script><script src="join.js"></script><!-- cb-radio -->
+<div id="cbRadio" style="position:fixed;left:12px;bottom:12px;z-index:9999;font-family:sans-serif;max-width:320px">
+<button onclick="var p=document.getElementById('cbRadioP');p.style.display=p.style.display!=='block'?'block':'none'" style="background:#222;color:#fff;border:0;border-radius:20px;padding:8px 14px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3)">&#9835; Coffeebreak Radio</button>
+<div id="cbRadioP" style="display:none;margin-top:6px;background:#fff;color:#222;padding:8px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.3);font-size:13px;width:304px">
+<div style="display:flex;gap:6px;margin-bottom:6px"><button onclick="cbRT('s')" id="cbRTs" style="flex:1;border:0;border-radius:8px;padding:6px;cursor:pointer;background:#1db954;color:#fff">Spotify</button><button onclick="cbRT('y')" id="cbRTy" style="flex:1;border:0;border-radius:8px;padding:6px;cursor:pointer;background:#eee;color:#222">&#9654; Shorts</button><button onclick="cbRT('m')" id="cbRTm" style="flex:1;border:0;border-radius:8px;padding:6px;cursor:pointer;background:#eee;color:#222">YouTube Music</button></div>
+<div id="cbRadioS" style="color:#666;padding:10px;text-align:center">Tap a tab to play</div><div id="cbRadioY" style="display:none"></div><div id="cbRadioM" style="display:none"></div>
+<div style="margin-top:6px">Listen on <a href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">Spotify</a> / <a href="https://music.apple.com/au/album/billionaire/1542958072" target="_blank" rel="noopener">Apple Music</a> / <a href="https://www.youtube.com/@coffeebreakTVSERIES/shorts" target="_blank" rel="noopener">YouTube</a><br><a href="https://music.youtube.com/channel/UC-JT9WEOQZ2p7Qr6AfypT5w" target="_blank" rel="noopener">Listen on YouTube Music</a></div>
+</div></div>
+<script>function cbRT(t){var P={s:['cbRadioS','<iframe style="border-radius:10px" src="https://open.spotify.com/embed/artist/05R0I9sslP9GnbSg6KzEr7?utm_source=generator" width="300" height="152" frameborder="0" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>','#1db954'],y:['cbRadioY','<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UUSHNuPovMUFJDrl9fhztDgy4w&rel=0&playsinline=1" style="width:216px;aspect-ratio:9/16;height:384px;border:0;border-radius:10px;display:block;margin:auto" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy" title="Coffeebreak TV Shorts"></iframe>','#f00'],m:['cbRadioM','<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU-JT9WEOQZ2p7Qr6AfypT5w&rel=0&playsinline=1" style="width:100%;aspect-ratio:16/9;border:0;border-radius:10px;display:block" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy" title="Coffeebreak on YouTube Music"></iframe>','#c00']};for(var k in P){var e=document.getElementById(P[k][0]),b=document.getElementById('cbRT'+k);if(k==t){if(!e.dataset.l){e.dataset.l=1;if(k=='s')e.style.padding=0;e.innerHTML=P[k][1];}e.style.display='block';b.style.background=P[k][2];b.style.color='#fff';}else{e.style.display='none';b.style.background='#eee';b.style.color='#222';}}}</script>
+<!-- /cb-radio -->
+</body></html>

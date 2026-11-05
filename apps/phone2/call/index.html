@@ -1,0 +1,195 @@
+<!doctype html><html lang="en"><head><link rel="stylesheet" href="../cb-mobile.css"><script src="../cb-mobile.js"></script><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Phone</title>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#ff4fa3">
+<link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="CB Phone">
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#1a0a12;color:#fff;font:16px system-ui,-apple-system,Segoe UI,sans-serif;overscroll-behavior:none}
+button{font:inherit;cursor:pointer;border:0;color:inherit}input{font:inherit}
+#app{display:flex;flex-direction:column;height:100%;height:100dvh;max-width:100%}
+header{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top) + 8px) 14px 8px;background:#2a0f1e;border-bottom:1px solid #4a1c35}
+header img{width:40px;height:40px;border-radius:10px}header .t{flex:1}header b{display:block;color:#ff8cc6}header small{color:#d9a9c3}
+#oops{display:none;background:#ff4fa3;color:#1a0a12;padding:8px;text-align:center;font-weight:700}
+.main{flex:1;display:flex;min-height:0}
+#side{display:flex;flex-direction:column;flex:1;min-height:0}
+.panel{display:none;flex:1;overflow:auto;padding:14px}.panel.on{display:block}
+nav.tabs{display:flex;background:#2a0f1e;border-top:1px solid #4a1c35;padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs button{flex:1;background:none;padding:10px 0 8px;font-size:12px;color:#d9a9c3}nav.tabs button span{display:block;font-size:22px}nav.tabs button.on{color:#ff8cc6}
+#detail{display:none}body.incall #detail{display:block}
+.num{font-size:34px;text-align:center;min-height:48px;letter-spacing:2px;word-break:break-all}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:330px;margin:10px auto}
+.pad button{aspect-ratio:1;border-radius:50%;background:#3a1529;font-size:30px;max-height:88px}.pad button small{display:block;font-size:10px;color:#d9a9c3}
+.pad button:active{background:#ff4fa3}
+.row{display:flex;gap:12px;justify-content:center;align-items:center;margin:10px 0}
+.call{background:#2ecc71;width:72px;height:72px;border-radius:50%;font-size:30px}.vid{background:#3a1529;width:56px;height:56px;border-radius:50%;font-size:22px}
+.end{background:#e74c3c}
+.btn{background:#ff4fa3;color:#1a0a12;padding:10px 16px;border-radius:12px;font-weight:700}.btn.g{background:#3a1529;color:#fff}
+.note{font-size:12px;color:#c99ab4;text-align:center;margin:8px}
+.li{display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid #3a1529}.li .x{flex:1}.li small{color:#c99ab4}.li button{background:#3a1529;border-radius:10px;padding:6px 10px}
+input.f{width:100%;padding:10px;border-radius:10px;border:1px solid #4a1c35;background:#120610;color:#fff;margin:4px 0}
+#callScr{position:fixed;inset:0;background:linear-gradient(#3a1529,#120610);display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 30px) 20px calc(env(safe-area-inset-bottom) + 30px);z-index:10}
+#callScr.on{display:flex}#callScr img.av{width:110px;height:110px;border-radius:50%;border:3px solid #ff4fa3}
+#cName{font-size:28px;margin-top:10px}#cState{color:#ff8cc6;margin-top:6px;text-align:center}
+#vids{position:relative;width:100%;flex:1;display:none;margin:10px 0}#vids.on{display:block}
+#rv{width:100%;height:100%;object-fit:cover;border-radius:16px;background:#000}#lv{position:absolute;right:8px;bottom:8px;width:28%;border-radius:10px;background:#000}
+.cb{display:grid;grid-template-columns:repeat(3,72px);gap:16px}.cb button{width:72px;height:72px;border-radius:50%;background:#3a1529;font-size:24px}.cb button.act{background:#ff4fa3}.cb button small{display:block;font-size:10px}
+#offline{display:none;background:#2a0f1e;border:1px solid #ff4fa3;border-radius:14px;padding:12px;margin:10px 0;text-align:center}
+#chatBox{display:flex;flex-direction:column;height:100%}#msgs{flex:1;overflow:auto;padding:6px}
+.m{max-width:75%;padding:8px 12px;border-radius:14px;margin:4px 0;background:#3a1529;word-wrap:break-word}.m.me{margin-left:auto;background:#ff4fa3;color:#1a0a12}
+#guest{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;flex:1;padding:20px;text-align:center}
+@media (min-width:900px){body.incall #detail{display:flex}
+ .main{padding:0}#side{flex:0 0 360px;border-right:1px solid #4a1c35}
+ #detail{display:flex;flex:1;flex-direction:column;min-width:0;padding:20px;overflow:auto}
+ #callScr{position:static;flex:1;border-radius:0}
+ #callScr.on~#detailIdle{display:none}
+}
+</style><script src="cb-fullscreen.js"></script></head><body>
+<div id="app">
+<header><img src="logo.jpg" alt="Coffeebreak Games"><div class="t"><b>Coffeebreak Phone</b><small>Your number: <span id="myNum">...</span> <span id="net">connecting</span></small></div><button class="btn g" id="openTab" style="display:none">Open in its own tab</button></header>
+<div id="oops"></div>
+<div class="main">
+<div id="side">
+ <div id="guest"><img src="logo.jpg" style="width:120px;border-radius:24px"><div style="font-size:22px"><span id="gWho"></span> is calling you on Coffeebreak Phone</div><div class="note">No app or sign-up needed. Tap below and allow the microphone.</div><button class="call" id="gCall">📞</button><button class="btn g" id="gVid">Join with video</button><div class="note" id="gNote"></div></div>
+ <section class="panel on" id="p-keypad">
+  <div class="num" id="dial"></div>
+  <div class="pad" id="pad"></div>
+  <div class="row"><button class="vid" id="vidCall" title="Video call">🎥</button><button class="call" id="callBtn" title="Call">📞</button><button class="vid" id="del" title="Delete">⌫</button></div>
+  <div id="offline"><div id="offTxt"></div><div class="row" style="flex-wrap:wrap"><button class="btn" id="sendSms">Send call link by text</button><button class="btn g" id="shareLink">Share call link</button><button class="btn g" id="copyLink">Copy link</button></div><div class="row"><input class="f" id="smsTo" placeholder="Their mobile number for the text"></div></div>
+  <div class="note">Dial a Coffeebreak number like CB-123456. Calls to normal phone numbers need a paid calling service. You can still text them a free call link.</div>
+ </section>
+ <section class="panel" id="p-recents"><h3>Recent calls</h3><div id="recents"></div></section>
+ <section class="panel" id="p-contacts"><h3>Contacts</h3><input class="f" id="cN" placeholder="Name"><input class="f" id="cNum" placeholder="CB-123456"><button class="btn" id="cAdd">Add contact</button><div id="contacts"></div></section>
+ <section class="panel" id="p-chats"><h3>Chats</h3><div id="chatList"></div><div class="note">Open a contact and tap Chat to start one.</div></section>
+ <section class="panel" id="p-me"><h3>My Coffeebreak number</h3><input class="f" id="meNum"><button class="btn" id="meSave">Save number</button><p><button class="btn" id="invite">Invite someone to call me</button></p><div class="note" id="inviteNote"></div><div class="note">Calls go over WiFi or mobile data, phone to phone, computer to computer, or a mix. Calls to normal phone numbers need a paid calling service.</div></section>
+ <nav class="tabs" id="tabs"><button data-t="keypad" class="on"><span>⌨️</span>Keypad</button><button data-t="recents"><span>🕘</span>Recents</button><button data-t="contacts"><span>👥</span>Contacts</button><button data-t="chats"><span>💬</span>Chats</button><button data-t="me"><span>☕</span>Me</button></nav>
+</div>
+<div id="detail">
+ <div id="callScr">
+  <div style="text-align:center"><img class="av" src="logo.jpg"><div id="cName"></div><div id="cState"></div><div id="cTime"></div></div>
+  <div id="vids"><video id="rv" autoplay playsinline></video><video id="lv" autoplay playsinline muted></video></div>
+  <audio id="ra" autoplay playsinline></audio>
+  <div><div class="cb" id="inCtl"><button id="bMute"><span>🎤</span><small>Mute</small></button><button id="bSpk"><span>🔈</span><small>Speaker</small></button><button id="bCam"><span>🎥</span><small>Video</small></button><button id="bChat"><span>💬</span><small>Chat</small></button><button class="end" id="bEnd"><span>📞</span><small>End</small></button><button id="bKey" style="visibility:hidden"></button></div>
+  <div class="row" id="ringCtl" style="display:none;gap:40px"><button class="call end" id="bDecline">✖</button><button class="call" id="bAccept">📞</button><button class="vid" id="bAcceptV" title="Answer with video">🎥</button></div></div>
+ </div>
+ <div id="detailIdle" style="flex:1;display:flex;flex-direction:column;min-height:0"><div id="chatBox" style="display:none"><h3 id="chatWith"></h3><div id="msgs"></div><div class="row"><input class="f" id="msgIn" placeholder="Message"><button class="btn" id="msgSend">Send</button><button class="btn g" id="chatCall">📞</button></div></div>
+ <div id="idleMsg" style="margin:auto;text-align:center"><img src="logo.jpg" style="width:160px;border-radius:30px;opacity:.9"><p>Pick a contact or dial a number.</p><p class="note">Keyboard: type digits, Backspace to delete, Enter to call.</p></div></div>
+</div>
+</div></div>
+<script src="peerjs.min.js"></script>
+<script>
+(function(){
+var CALL_URL=window.CB_CALL_URL||'S1-L38d4d4';
+var PFX='coffeebreak-phone-',ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]};
+var S=(function(){try{var s=window.localStorage;s.setItem('_t','1');s.removeItem('_t');return s}catch(e){var d={};return{getItem:function(k){return k in d?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]}}}})();
+function J(k,v){if(v===undefined){try{return JSON.parse(S.getItem('cbp_'+k))}catch(e){return null}}S.setItem('cbp_'+k,JSON.stringify(v))}
+var $=function(i){return document.getElementById(i)};
+function norm(n){n=String(n||'').toUpperCase().replace(/[^0-9A-Z]/g,'');if(n.indexOf('CB')===0)n=n.slice(2);return n}
+function fmt(d){return 'CB-'+d}
+var Q=new URLSearchParams(location.search),GUEST=Q.get('call')?norm(Q.get('call')):null;
+var me=J('num');if(!me){me=String(100000+Math.floor(Math.random()*900000));J('num',me)}
+var contacts=J('contacts')||[],recents=J('recents')||[],chats=J('chats')||{};
+function nameOf(d){var c=contacts.find(function(c){return c.num===d});return c?c.name:fmt(d)}
+var peer,cur=null,curConn=null,local=null,timer=null,t0=0,ringOsc=null,waitingFor=null,lastDial=null;
+var conns={};
+function oops(m){$('oops').textContent=m;$('oops').style.display=m?'block':'none'}
+if(window.top!==window){$('openTab').style.display='';$('openTab').onclick=function(){window.open(CALL_URL+(GUEST?'?call='+fmt(GUEST):''),'_blank')}}
+function startPeer(){
+ if(peer)try{peer.destroy()}catch(e){}
+ var id=GUEST?PFX+'g'+Math.random().toString(36).slice(2,10):PFX+me;
+ $('myNum').textContent=GUEST?'guest':fmt(me);$('net').textContent='connecting';
+ peer=new Peer(id,{config:ICE,debug:0});
+ peer.on('open',function(){$('net').textContent='online';oops('')});
+ peer.on('disconnected',function(){$('net').textContent='reconnecting';setTimeout(function(){try{peer.reconnect()}catch(e){}},1500)});
+ peer.on('error',function(e){
+  if(e.type==='peer-unavailable'){var m=String(e.message).match(/coffeebreak-phone-([0-9a-z]+)/i);var who=m?m[1]:lastDial;
+   if(cur&&cur.__out){endUI(true)}showOffline(who)}
+  else if(e.type==='unavailable-id'){oops('That Coffeebreak number is already in use on another device. Pick a different one in Me.')}
+  else if(e.type==='network'||e.type==='server-error'||e.type==='socket-error'){$('net').textContent='offline';oops('Can\'t reach the call service. Check WiFi.')}
+ });
+ peer.on('call',onIncoming);
+ peer.on('connection',setupConn);
+}
+function setupConn(c){conns[c.peer]=c;c.on('data',function(d){var from=d.from||c.peer.replace(PFX,'');
+  if(d.t==='msg'){addMsg(from,{me:0,text:d.text,ts:Date.now()})}
+  if(d.t==='bye'&&cur&&cur.peer===c.peer)endUI()});}
+function getConn(d,cb){var pid=PFX+d,c=conns[pid];if(c&&c.open)return cb(c);c=peer.connect(pid,{reliable:true});setupConn(c);c.on('open',function(){cb(c)})}
+function media(video){return navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true},video:video?{facingMode:'user'}:false})}
+function micErr(e){oops(window.top!==window?'The microphone is blocked in this window. Tap Open in its own tab.':'Allow the microphone to make calls ('+(e&&e.name||'error')+').')}
+function dial(d,video){d=norm(d);if(!d)return;lastDial=d;$('offline').style.display='none';
+ media(video).then(function(s){local=s;var c=peer.call(PFX+d,s,{metadata:{from:GUEST?null:me,video:!!video}});if(!c){showOffline(d);stopLocal();return}
+  c.__out=true;c.__num=d;bind(c);showCall(d,'Calling...',false);addRecent(d,'out');startTone('back')}).catch(micErr)}
+function onIncoming(c){var from=c.metadata&&c.metadata.from;c.__num=from||'guest';
+ if(cur){c.close();return}
+ cur=c;c.on('close',function(){if(cur===c)endUI()});
+ var label=from?nameOf(from):'Guest from your call link';
+ showCall(from,(waitingFor?'They opened your link, ':'')+'Incoming '+(c.metadata&&c.metadata.video?'video ':'')+'call',true,label);
+ addRecent(from||'guest','in');startTone('ring');waitingFor=null;$('offline').style.display='none';
+ if(window.Notification&&Notification.permission==='granted'&&document.hidden)try{new Notification('Coffeebreak Phone',{body:label+' is calling',icon:'icon-192.png'})}catch(e){}}
+function answer(video){var c=cur;stopTone();media(video).then(function(s){local=s;c.answer(s);bind(c);$('ringCtl').style.display='none';$('inCtl').style.display='';$('cState').textContent='Connecting...'}).catch(function(e){micErr(e);c.close();endUI()})}
+function bind(c){cur=c;
+ c.on('stream',function(rs){stopTone();$('ra').srcObject=rs;$('ra').play().catch(function(){});
+  if(rs.getVideoTracks().length){$('vids').classList.add('on');$('rv').srcObject=rs;$('lv').srcObject=local}
+  $('cState').textContent='Connected';t0=Date.now();clearInterval(timer);timer=setInterval(tick,1000);tick();window.CB_STATE='connected'});
+ c.on('close',function(){if(cur===c)endUI()});
+ var watch=setInterval(function(){var pc=c.peerConnection;if(!pc)return;if(cur!==c){clearInterval(watch);return}
+  if(['failed','closed','disconnected'].indexOf(pc.iceConnectionState)>=0&&t0){setTimeout(function(){if(cur===c&&pc.iceConnectionState!=='connected'&&pc.iceConnectionState!=='completed')endUI()},3000)}},1000);}
+function tick(){var s=Math.floor((Date.now()-t0)/1000);$('cTime').textContent=Math.floor(s/60)+':'+('0'+s%60).slice(-2)}
+function showCall(d,state,ringing,label){document.body.classList.add('incall');$('callScr').classList.add('on');$('cName').textContent=label||(d?nameOf(d):'Guest');$('cState').textContent=state;$('cTime').textContent='';
+ $('ringCtl').style.display=ringing?'flex':'none';$('inCtl').style.display=ringing?'none':'';$('idleMsg').style.display='none';$('chatBox').style.display='none';window.CB_STATE=ringing?'ringing':'calling'}
+function hangup(){if(cur){var pid=cur.peer;try{if(conns[pid]&&conns[pid].open)conns[pid].send({t:'bye'});else if(!GUEST||true){var c=peer.connect(pid);c.on('open',function(){c.send({t:'bye'});setTimeout(function(){c.close()},500)})}}catch(e){}try{cur.close()}catch(e){}}endUI()}
+function stopLocal(){if(local)local.getTracks().forEach(function(t){t.stop()});local=null}
+function endUI(silent){stopTone();clearInterval(timer);if(cur&&t0){var r=recents[0];if(r)r.dur=Math.floor((Date.now()-t0)/1000);J('recents',recents);drawRecents()}
+ cur=null;t0=0;stopLocal();$('ra').srcObject=null;$('rv').srcObject=null;$('vids').classList.remove('on');
+ if(!silent){$('cState').textContent='Call ended';window.CB_STATE='ended'}setTimeout(function(){if(!cur){$('callScr').classList.remove('on');document.body.classList.remove('incall');$('idleMsg').style.display=''}},silent?0:1200);
+ ['bMute','bSpk','bCam'].forEach(function(b){$(b).classList.remove('act')})}
+var AC;function startTone(kind){stopTone();try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume();var g=AC.createGain();g.gain.value=0;g.connect(AC.destination);var o=AC.createOscillator(),o2=AC.createOscillator();o.frequency.value=kind==='ring'?880:425;o2.frequency.value=kind==='ring'?660:450;o.connect(g);o2.connect(g);o.start();o2.start();var on=0,iv=setInterval(function(){on=!on;g.gain.value=on?(kind==='ring'?.15:.06):0},kind==='ring'?500:1000);ringOsc={o:o,o2:o2,iv:iv}}catch(e){}if(kind==='ring'&&navigator.vibrate)navigator.vibrate([400,200,400])}
+function stopTone(){if(ringOsc){clearInterval(ringOsc.iv);try{ringOsc.o.stop();ringOsc.o2.stop()}catch(e){}ringOsc=null}}
+function link(){return CALL_URL+'?call='+fmt(me)}
+function showOffline(d){waitingFor=d;var looksPhone=/^[0-9]{8,}$/.test(d||'');$('offline').style.display='block';
+ $('offTxt').textContent=(looksPhone?'That looks like a normal phone number. ':fmt(d)+' isn\'t online right now. ')+'Send them a free call link. When they open it, your phone rings here. Waiting for them to open the link...';
+ if(looksPhone)$('smsTo').value=d;window.CB_STATE='waiting-link'}
+function msgText(){return 'Call me free on Coffeebreak Phone, no app needed. Tap: '+link()}
+$('sendSms').onclick=function(){var to=$('smsTo').value.replace(/[^0-9+]/g,'');var sep=/iPhone|iPad|Mac/.test(navigator.userAgent)?'&':'?';location.href='sms:'+to+sep+'body='+encodeURIComponent(msgText())};
+$('shareLink').onclick=$('invite').onclick=function(){if(navigator.share)navigator.share({title:'Coffeebreak Phone',text:msgText(),url:link()}).catch(function(){});else window.open('S2-L2f62fc'+encodeURIComponent(msgText()),'_blank');$('inviteNote').textContent=link()};
+$('copyLink').onclick=function(){(navigator.clipboard?navigator.clipboard.writeText(link()):Promise.reject()).then(function(){$('copyLink').textContent='Copied'},function(){prompt('Copy this link',link())})};
+function addRecent(d,dir){recents.unshift({num:d,dir:dir,ts:Date.now()});recents=recents.slice(0,50);J('recents',recents);drawRecents()}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function drawRecents(){$('recents').innerHTML=recents.map(function(r){return '<div class="li"><div class="x">'+(r.dir==='in'?'↙ ':'↗ ')+esc(r.num==='guest'?'Guest':nameOf(r.num))+'<br><small>'+new Date(r.ts).toLocaleString()+(r.dur?' · '+Math.floor(r.dur/60)+'m '+r.dur%60+'s':'')+'</small></div>'+(r.num!=='guest'?'<button data-c="'+r.num+'">📞</button>':'')+'</div>'}).join('')||'<p class="note">No calls yet.</p>'}
+function drawContacts(){$('contacts').innerHTML=contacts.map(function(c,i){return '<div class="li"><div class="x">'+esc(c.name)+'<br><small>'+fmt(c.num)+'</small></div><button data-c="'+c.num+'">📞</button><button data-v="'+c.num+'">🎥</button><button data-m="'+c.num+'">💬</button><button data-r="'+i+'">✖</button></div>'}).join('')||'<p class="note">No contacts yet.</p>';
+ $('chatList').innerHTML=Object.keys(chats).map(function(d){var l=chats[d][chats[d].length-1];return '<div class="li"><div class="x">'+esc(nameOf(d))+'<br><small>'+esc(l?l.text:'')+'</small></div><button data-m="'+d+'">Open</button></div>'}).join('')}
+document.body.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var d=b.dataset;
+ if(d.c)dial(d.c);if(d.v)dial(d.v,true);if(d.m)openChat(d.m);if(d.r){contacts.splice(+d.r,1);J('contacts',contacts);drawContacts()}
+ if(d.t){[].forEach.call($('tabs').children,function(x){x.classList.toggle('on',x===b)});[].forEach.call(document.querySelectorAll('.panel'),function(p){p.classList.toggle('on',p.id==='p-'+d.t)})}});
+$('cAdd').onclick=function(){var n=norm($('cNum').value);if(!n)return;contacts.push({name:$('cN').value||fmt(n),num:n});J('contacts',contacts);$('cN').value=$('cNum').value='';drawContacts()};
+var chatWith=null;function openChat(d){chatWith=d;$('chatWith').textContent='Chat with '+nameOf(d);$('idleMsg').style.display='none';$('chatBox').style.display='flex';
+ if(innerWidth<900){$('detail').style.cssText='display:flex;position:fixed;inset:0;background:#1a0a12;z-index:5;padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 10px)';if(!$('chatBack')){var x=document.createElement('button');x.id='chatBack';x.className='btn g';x.textContent='Back';x.onclick=function(){$('detail').style.cssText='';$('chatBox').style.display='none'};$('chatBox').prepend(x)}}drawMsgs()}
+function drawMsgs(){if(!chatWith)return;$('msgs').innerHTML=(chats[chatWith]||[]).map(function(m){return '<div class="m'+(m.me?' me':'')+'">'+esc(m.text)+'</div>'}).join('');$('msgs').scrollTop=1e9}
+function addMsg(d,m){(chats[d]=chats[d]||[]).push(m);chats[d]=chats[d].slice(-200);J('chats',chats);drawMsgs();drawContacts();if(!m.me&&chatWith!==d&&innerWidth>=900)openChat(d)}
+$('msgSend').onclick=function(){var t=$('msgIn').value.trim();if(!t||!chatWith)return;var d=chatWith;$('msgIn').value='';getConn(d,function(c){c.send({t:'msg',text:t,from:me});addMsg(d,{me:1,text:t,ts:Date.now()})})};
+$('msgIn').onkeydown=function(e){if(e.key==='Enter')$('msgSend').click()};$('chatCall').onclick=function(){if(chatWith)dial(chatWith)};
+$('bChat').onclick=function(){if(cur&&cur.__num&&cur.__num!=='guest')openChat(cur.__num)};
+$('bMute').onclick=function(){if(!local)return;var on=$('bMute').classList.toggle('act');local.getAudioTracks().forEach(function(t){t.enabled=!on})};
+$('bSpk').onclick=function(){var on=$('bSpk').classList.toggle('act');var a=$('ra');a.volume=on?1:.6;if(a.setSinkId&&navigator.mediaDevices.enumerateDevices)navigator.mediaDevices.enumerateDevices().then(function(ds){var o=ds.filter(function(x){return x.kind==='audiooutput'});if(o.length>1)a.setSinkId(on?o[o.length-1].deviceId:'default').catch(function(){})})};
+$('bCam').onclick=function(){if(!cur||!local)return;var on=$('bCam').classList.toggle('act');var vt=local.getVideoTracks();
+ if(vt.length){vt.forEach(function(t){t.enabled=on});return}
+ if(on)navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}}).then(function(s){var t=s.getVideoTracks()[0];local.addTrack(t);$('lv').srcObject=local;$('vids').classList.add('on');var pc=cur.peerConnection;var snd=pc.getSenders().find(function(x){return x.track&&x.track.kind==='video'});if(snd)snd.replaceTrack(t);else{var tr=pc.getTransceivers().find(function(x){return x.receiver.track.kind==='video'});if(tr&&tr.sender){tr.sender.replaceTrack(t)}}}).catch(function(){$('bCam').classList.remove('act')})};
+$('bEnd').onclick=hangup;$('bAccept').onclick=function(){answer(false)};$('bAcceptV').onclick=function(){answer(true)};$('bDecline').onclick=function(){try{cur.close()}catch(e){}hangup()};
+// keypad
+var keys=[['1',''],['2','ABC'],['3','DEF'],['4','GHI'],['5','JKL'],['6','MNO'],['7','PQRS'],['8','TUV'],['9','WXYZ'],['*',''],['0','+'],['#','']];
+keys.forEach(function(k){var b=document.createElement('button');b.innerHTML=k[0]+'<small>'+(k[1]||'&nbsp;')+'</small>';b.onclick=function(){press(k[0])};$('pad').appendChild(b)});
+var dialStr='';function press(k){if(dialStr.length<16)dialStr+=k;$('dial').textContent=dialStr}
+$('del').onclick=function(){dialStr=dialStr.slice(0,-1);$('dial').textContent=dialStr};
+$('callBtn').onclick=function(){dial(dialStr)};$('vidCall').onclick=function(){dial(dialStr,true)};
+document.addEventListener('keydown',function(e){if(e.target.tagName==='INPUT')return;if(cur&&e.key==='Escape'){hangup();return}
+ if(/^[0-9*#]$/.test(e.key))press(e.key);else if(e.key==='Backspace')$('del').click();else if(e.key==='Enter'){if(cur&&$('ringCtl').style.display!=='none')answer(false);else if(!cur)dial(dialStr)}});
+$('meNum').value=fmt(me);$('meSave').onclick=function(){var n=norm($('meNum').value);if(n.length<4){oops('Use at least 4 digits or letters.');return}me=n;J('num',me);$('meNum').value=fmt(me);startPeer()};
+// guest
+if(GUEST){$('tabs').style.display='none';[].forEach.call(document.querySelectorAll('.panel'),function(p){p.classList.remove('on')});$('guest').style.display='flex';$('gWho').textContent=fmt(GUEST);
+ $('gCall').onclick=function(){dial(GUEST)};$('gVid').onclick=function(){dial(GUEST,true)}}
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(function(){});
+drawRecents();drawContacts();startPeer();
+window.CB={dial:dial,answer:answer,hangup:hangup,me:function(){return me},state:function(){return window.CB_STATE},link:link,peer:function(){return peer}};
+})();
+</script></body></html>

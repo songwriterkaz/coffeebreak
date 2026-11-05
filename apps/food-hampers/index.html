@@ -1,10 +1,119 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Community Food Hampers</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Community Food Hampers</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A recording booth: record from your mic, hear it back, and download takes, with a live level meter.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><button id=st>Record</button> <button id=sp disabled>Stop</button></p><meter id=lv max=1 style="width:100%"></meter><div id=tk></div><script>
-var mr,ch,n=0;st.onclick=async()=>{var s=await navigator.mediaDevices.getUserMedia({audio:true}),A=new AudioContext(),an=A.createAnalyser();A.createMediaStreamSource(s).connect(an);var b=new Uint8Array(256);(function f(){an.getByteTimeDomainData(b);lv.value=Math.max(...b)/128-1;if(mr&&mr.state=='recording')requestAnimationFrame(f)})();
-ch=[];mr=new MediaRecorder(s);mr.ondataavailable=e=>ch.push(e.data);mr.onstop=()=>{var u=URL.createObjectURL(new Blob(ch));n++;tk.insertAdjacentHTML('beforeend','<p>Take '+n+' <audio controls src='+u+'></audio> <a download=take'+n+'.webm href='+u+'>Download</a></p>');s.getTracks().forEach(t=>t.stop())};mr.start();st.disabled=1;sp.disabled=0};
-sp.onclick=()=>{mr.stop();st.disabled=0;sp.disabled=1}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coffeebreak Community Food Hampers</title>
+<meta name="description" content="Free, charity-based food hamper requests for the Newcastle and Hunter area.">
+<style>
+:root{--bg:#fbf6ee;--card:#fff;--ink:#3b2a1f;--muted:#6f5b4b;--accent:#b5562b;--accent2:#5f7a4a;--line:#e9dccb}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent)}
+header{background:linear-gradient(135deg,#7a3e22,#b5562b 60%,#d98b4f);color:#fff;padding:22px 16px 30px;text-align:center}
+header img{width:84px;height:84px;object-fit:cover;border-radius:50%;border:3px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+header h1{margin:10px 0 4px;font-size:clamp(1.5rem,5vw,2.3rem);font-family:Georgia,serif}
+header p{margin:0 auto;max-width:640px;opacity:.95}
+nav{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);display:flex;gap:4px;overflow-x:auto;padding:6px}
+nav a{flex:1 0 auto;text-align:center;padding:10px 12px;border-radius:10px;text-decoration:none;color:var(--ink);font-weight:600;white-space:nowrap}
+nav a:hover{background:var(--bg)}
+main{max-width:920px;margin:0 auto;padding:16px}
+section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0;box-shadow:0 2px 8px rgba(80,50,20,.05)}
+h2{font-family:Georgia,serif;margin:0 0 8px;color:#7a3e22}
+.note{background:#fff4e5;border-left:4px solid var(--accent);padding:10px 12px;border-radius:8px;color:var(--muted)}
+label{display:block;font-weight:600;margin:12px 0 4px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d8c7b2;border-radius:10px;font:inherit;background:#fffdfa}
+textarea{min-height:80px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.row{grid-template-columns:1fr}}
+button,.btn{display:inline-block;background:var(--accent);color:#fff;border:0;border-radius:12px;padding:13px 18px;font:600 1rem system-ui;cursor:pointer;text-decoration:none;margin-top:14px}
+button.alt{background:var(--accent2)}
+.err{color:#a32020;font-weight:600;min-height:1.2em}
+.ok{color:var(--accent2);font-weight:600}
+.help{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.help li{border:1px solid var(--line);border-radius:12px;padding:12px}
+.help b{display:block}
+.pay{font-size:1.1rem;font-weight:700;background:#f2f7ee;border:1px dashed var(--accent2);padding:12px;border-radius:10px;word-break:break-word}
+pre{white-space:pre-wrap;background:#f7f1e8;padding:10px;border-radius:8px;font-size:.9rem}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:20px 16px 40px;max-width:900px;margin:0 auto}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header>
+  <img src="img/logo.webp" alt="Coffeebreak logo">
+  <h1>Coffeebreak Community Food Hampers</h1>
+  <p>Free, charity-based food hampers for people doing it tough in Newcastle and the Hunter. No cost, no judgement, just neighbours looking after neighbours.</p>
+</header>
+<nav>
+  <a href="#request">Request a hamper</a><a href="#help">Get help now</a><a href="#donate">Donate</a><a href="#volunteer">Volunteer</a>
+</nav>
+<main>
+  <section id="request">
+    <h2>Request a free hamper</h2>
+    <p class="note">Hampers are free and depend on donations and what we have available in the Newcastle and Hunter area, so we cannot promise a hamper or a delivery time. This is not an emergency service. If you need food today, please use the services in <a href="#help">Get help now</a>. In an emergency call 000.</p>
+    <form id="reqForm" novalidate>
+      <div class="row">
+        <div><label for="r-name">Your name</label><input id="r-name" autocomplete="name" required></div>
+        <div><label for="r-suburb">Suburb or postcode</label><input id="r-suburb" placeholder="eg Mayfield or 2304" required></div>
+      </div>
+      <div class="row">
+        <div><label for="r-size">Household size</label>
+          <select id="r-size" required><option value="">Choose</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7 or more</option></select></div>
+        <div><label for="r-contact">Best contact (phone or email)</label><input id="r-contact" autocomplete="email" required></div>
+      </div>
+      <label for="r-diet">Dietary needs (optional)</label>
+      <textarea id="r-diet" placeholder="eg vegetarian, halal, gluten free, no nuts, baby food needed"></textarea>
+      <p class="err" id="r-err" role="alert"></p>
+      <button type="submit">Send my request</button>
+      <button type="button" class="alt" id="r-copy">Copy request instead</button>
+      <p class="ok hidden" id="r-ok"></p>
+      <pre class="hidden" id="r-pre"></pre>
+    </form>
+    <p style="color:var(--muted);font-size:.9rem">Sending opens your email app with the request filled in, addressed to songwriterkaz@gmail.com. If it does not open, tap Copy request and paste it into an email to that address. Your details are only used to arrange your hamper.</p>
+  </section>
+
+  <section id="help">
+    <h2>Get help now</h2>
+    <p>These established services can help with food and other support right now.</p>
+    <ul class="help">
+      <li><b>Foodbank NSW &amp; ACT</b>Food relief through local charities and community partners. <a href="https://www.foodbank.org.au/nsw-act/" target="_blank" rel="noopener">foodbank.org.au/nsw-act</a></li>
+      <li><b>OzHarvest</b>Rescued food shared through charities across Australia. <a href="https://www.ozharvest.org/" target="_blank" rel="noopener">ozharvest.org</a></li>
+      <li><b>St Vincent de Paul NSW (Vinnies)</b>Food, bills and emergency relief help. <a href="https://www.vinnies.org.au/nsw" target="_blank" rel="noopener">vinnies.org.au/nsw</a></li>
+      <li><b>The Salvation Army</b>Emergency relief, food and support services. <a href="https://www.salvationarmy.org.au/" target="_blank" rel="noopener">salvationarmy.org.au</a></li>
+      <li><b>Ask Izzy</b>Find free food, housing, health and support services near you. <a href="https://askizzy.org.au/" target="_blank" rel="noopener">askizzy.org.au</a></li>
+    </ul>
+  </section>
+
+  <section id="donate">
+    <h2>Donate food or funds</h2>
+    <p>Every can, packet and dollar goes into hampers for local families and individuals. Donations of food can be arranged by email to songwriterkaz@gmail.com.</p>
+    <p class="pay">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+    <p style="color:var(--muted);font-size:.9rem">Please add "Hamper donation" as the payment description. Coffeebreak Community Food Hampers is a community effort and is not a registered charity, so donations are not tax deductible.</p>
+    <button type="button" class="alt" id="d-copy">Copy PayID</button> <span class="ok" id="d-ok"></span>
+  </section>
+
+  <section id="volunteer">
+    <h2>Volunteer</h2>
+    <p>Help pack or deliver hampers, collect donations or spread the word.</p>
+    <form id="volForm" novalidate>
+      <div class="row">
+        <div><label for="v-name">Your name</label><input id="v-name" required></div>
+        <div><label for="v-contact">Phone or email</label><input id="v-contact" required></div>
+      </div>
+      <label for="v-help">How you would like to help</label>
+      <select id="v-help"><option>Packing hampers</option><option>Delivering hampers (own car)</option><option>Collecting donations</option><option>Sharing on social media</option><option>Something else</option></select>
+      <label for="v-avail">Availability (optional)</label><input id="v-avail" placeholder="eg weekends, Tuesday mornings">
+      <p class="err" id="v-err" role="alert"></p>
+      <button type="submit">Sign me up</button>
+      <p class="ok hidden" id="v-ok"></p>
+    </form>
+  </section>
+</main>
+<footer>
+  <p><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">More from Coffeebreak at coffeebreaks.itch.io</a></p>
+  <p>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers and fans may resell the physical products and phones they bought, but may not copy them or make their own versions. Coffeebreak claims no ownership of third-party brands or products named; those trademarks belong to their owners and are used only to describe items.</p>
+</footer>
+<script src="app.js"></script>
+<!--cb-ytsub--><footer id="cbYtFoot" style="display:block;clear:both;position:static;width:100%;box-sizing:border-box;margin:24px 0 0;padding:18px 12px 150px;text-align:center;font:15px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;background:transparent"><style>#cbYtFoot a{text-decoration:none;box-sizing:border-box}#cbYtFoot .m{display:block;width:100%;max-width:420px;margin:8px auto;padding:16px 14px;border-radius:14px;font-weight:700;font-size:18px;color:#fff}#cbYtFoot .m:active{transform:scale(.98)}#cbYtFoot h3{margin:0 0 6px;font-size:17px;color:inherit}</style><h3>&#127925; Stream my music</h3><a class="m" style="background:#c4302b" href="https://www.youtube.com/@coffeebreakTVSERIES/streams" target="_blank" rel="noopener">&#128251; Coffeebreak Radio 24/7 (YouTube)</a><a class="m" style="background:#1db954" href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">Listen on Spotify</a><a class="m" style="background:#fa2d48" href="https://music.apple.com/au/artist/karen-obrien/535470355" target="_blank" rel="noopener">Listen on Apple Music</a><a class="m" style="background:#212121" href="https://music.youtube.com/channel/UCbI7BchGrNInUgjm0YqB_hg" target="_blank" rel="noopener">Listen on YouTube Music</a><div style="margin-top:14px"><a href="https://www.youtube.com/channel/UCNuPovMUFJDrl9fhztDgy4w?sub_confirmation=1" target="_blank" rel="noopener" style="display:inline-block;background:#ff0000;color:#fff;font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px">&#9654; Subscribe to Coffeebreak TV Series on YouTube</a></div><div style="margin-top:10px;font-size:12px;opacity:.75"><a href="https://www.tesla.com" target="_blank" rel="noopener" style="color:inherit">Tesla</a> &middot; <a href="https://www.starlink.com" target="_blank" rel="noopener" style="color:inherit">Starlink</a></div></footer></body>
+</html>

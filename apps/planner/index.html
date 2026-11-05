@@ -1,10 +1,97 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Planner</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Planner</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Try the sample entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Planner</title>
+<style>
+:root{--bg:#fff4f9;--card:#fff;--ink:#3a1a2c;--acc:#e0559b;--soft:#ffd9ec;--line:#f1c2dc}
+body.dark{--bg:#2a1220;--card:#3a1a2c;--ink:#ffe9f4;--acc:#ff9fcf;--soft:#5a2a46;--line:#6e3456}
+*{box-sizing:border-box}body{margin:0;font-family:Verdana,sans-serif;font-size:16px;background:var(--bg);color:var(--ink)}
+header{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px;background:var(--soft);position:sticky;top:0;z-index:5}
+header img{width:44px;border-radius:50%}h1{font-size:19px;margin:0;color:var(--acc);flex:1;min-width:140px}
+button,select,input,textarea{font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:10px;padding:9px 12px;min-height:44px}
+button{background:var(--acc);color:#fff;border:0;font-weight:bold;cursor:pointer}button.alt{background:var(--card);color:var(--acc);border:2px solid var(--acc)}
+.bar{display:flex;flex-wrap:wrap;gap:6px;padding:8px}.bar button.on{outline:3px solid var(--ink)}
+main{padding:8px}.grp{background:var(--card);border-radius:12px;margin:8px 0;padding:8px;border-left:8px solid var(--acc)}
+.grp h3{margin:4px 0;display:flex;gap:6px;align-items:center}
+.tbl{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:760px}td,th{border-bottom:1px solid var(--line);padding:4px;text-align:left}td input,td select{width:100%;min-height:38px;padding:4px}
+.st{border-radius:8px;color:#fff;font-weight:bold}.kan{display:flex;gap:8px;overflow-x:auto}.col{min-width:220px;flex:1;background:var(--soft);border-radius:12px;padding:6px;min-height:120px}
+.card{background:var(--card);border-radius:10px;padding:8px;margin:6px 0;cursor:grab;border-left:6px solid var(--acc)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}.day{background:var(--card);min-height:70px;border-radius:6px;padding:3px;font-size:12px}.day b{display:block}
+.gantt div.row{display:flex;align-items:center;gap:6px;margin:3px 0}.gantt .lab{width:130px;font-size:13px;overflow:hidden;white-space:nowrap}.gantt .trk{flex:1;position:relative;height:24px;background:var(--soft);border-radius:6px}.gantt .bx{position:absolute;top:2px;height:20px;border-radius:5px}
+.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px}.dash .grp canvas{width:100%;height:200px}
+.help{font-size:14px;opacity:.85}.drag{opacity:.4}dialog{border-radius:14px;border:2px solid var(--acc);background:var(--card);color:var(--ink);max-width:95vw}
+footer{padding:10px;font-size:12px}
+</style></head><body>
+<header><img src="cb-logo.jpg" alt="Coffeebreak"><h1>Coffeebreak Planner</h1>
+<select id="boardSel" aria-label="Choose board"></select><button onclick="newBoard()">New board</button><button class="alt" onclick="theme()">Pink / Dark</button></header>
+<div class="bar" id="views"></div>
+<div class="bar"><input id="q" placeholder="Search" oninput="draw()" style="flex:1;min-width:150px"><select id="fs" onchange="draw()"><option value="">All status</option></select>
+<button onclick="addGroup()">Add group</button><button class="alt" onclick="autoDlg()">Automations</button><button class="alt" onclick="tplDlg()">Templates</button><button class="alt" onclick="ioDlg()">Save / Load</button></div>
+<main id="main"></main>
+<dialog id="dlg"><div id="dlgBody"></div><p><button onclick="dlg.close()">Close</button></p></dialog>
+<footer>Saves on this device only. Free, made by Coffeebreak. Donations welcome by PayID darkokaz@gmx.com.<br>Karen O'Brien / Coffeebreak keeps all rights to the Coffeebreak products, designs, apps, name and logo. You may not copy this app or make your own version.</footer>
+<script>
+var STAT=[['Not started','#9a8a94'],['Working on it','#e8a33c'],['Stuck','#d9534f'],['Done','#3bb07a']],PRI=['Low','Medium','High','Urgent'];
+var K='cbPlanner1',D=JSON.parse(localStorage.getItem(K)||'null'),view='table';
+function uid(){return Math.random().toString(36).slice(2,9)}
+function it(n,s,p,d,e,pr,num,no){return{id:uid(),name:n,status:s||'Not started',person:p||'',start:d||'',end:e||d||'',priority:pr||'Medium',num:num||0,notes:no||''}}
+function day(o){var t=new Date();t.setDate(t.getDate()+o);return t.toISOString().slice(0,10)}
+var TPL={
+'Music release':{'To do':[it('Write and record song','Working on it','Me',day(0),day(7),'High'),it('Register song with APRA','Not started','Me',day(7),day(8),'Urgent'),it('Make cover art','Not started','Me',day(3),day(6))],Promote:[it('Post teaser video','Not started','Me',day(9),day(10)),it('Radio and playlist pitch','Not started','Me',day(10),day(14))],Done:[]},
+'Store launch':{Build:[it('Product photos','Working on it','Me',day(0),day(3)),it('Write store page','Not started','Me',day(2),day(4)),it('Test cart','Not started','Me',day(4),day(5),'High')],Launch:[it('Publish store','Not started','Me',day(5),day(5),'Urgent',0,''),it('Share on socials','Not started','Me',day(6),day(7))],Done:[]},
+'NDIS appointments':{'Coming up':[it('Support worker visit','Not started','',day(1),day(1),'Medium',0,'Bring list'),it('Plan review meeting','Not started','',day(10),day(10),'High')],Paperwork:[it('Send receipts','Not started','',day(3),day(3))],Done:[]},
+'School':{Homework:[it('Maths sheet','Not started','',day(1),day(2)),it('Reading 20 minutes','Working on it','',day(0),day(0))],Projects:[it('Science poster','Not started','',day(2),day(9),'High')],Done:[]}};
+function fromTpl(name){var g=TPL[name],b={id:uid(),name:name,groups:[],autos:[{when:'Done',move:'Done'}]};for(var k in g)b.groups.push({id:uid(),name:k,items:JSON.parse(JSON.stringify(g[k])).map(function(x){x.id=uid();return x})});return b}
+if(!D){D={boards:[fromTpl('Music release')],cur:0,dark:false}}
+function B(){return D.boards[D.cur]}
+function save(){localStorage.setItem(K,JSON.stringify(D))}
+function esc(s){return String(s==null?'':s).replace(/[<>&"]/g,function(x){return'&#'+x.charCodeAt(0)+';'})}
+function col(s){var f=STAT.find(function(x){return x[0]==s});return f?f[1]:'#999'}
+function all(){var r=[];B().groups.forEach(function(g){g.items.forEach(function(i){r.push([g,i])})});return r}
+function match(i){var q=$('q').value.toLowerCase(),f=$('fs').value;return(!f||i.status==f)&&(!q||JSON.stringify(i).toLowerCase().indexOf(q)>=0)}
+function $(i){return document.getElementById(i)}
+function runAuto(g,i){B().autos.forEach(function(a){if(i.status==a.when){var t=B().groups.find(function(x){return x.name==a.move});if(t&&t!==g){g.items.splice(g.items.indexOf(i),1);t.items.push(i)}}})}
+function setF(gid,iid,f,v){var g=B().groups.find(function(x){return x.id==gid}),i=g.items.find(function(x){return x.id==iid});i[f]=f=='num'?+v:v;if(f=='status')runAuto(g,i);save();draw()}
+function addItem(gid){var g=B().groups.find(function(x){return x.id==gid});var n=prompt('Item name');if(n){g.items.push(it(n,'Not started','',day(0),day(1)));save();draw()}}
+function delItem(gid,iid){var g=B().groups.find(function(x){return x.id==gid});if(confirm('Remove this item?')){g.items=g.items.filter(function(x){return x.id!=iid});save();draw()}}
+function addGroup(){var n=prompt('Group name');if(n){B().groups.push({id:uid(),name:n,items:[]});save();draw()}}
+function newBoard(){var n=prompt('Board name');if(n){D.boards.push({id:uid(),name:n,groups:[{id:uid(),name:'To do',items:[]},{id:uid(),name:'Done',items:[]}],autos:[{when:'Done',move:'Done'}]});D.cur=D.boards.length-1;save();draw()}}
+function theme(){D.dark=!D.dark;save();draw()}
+var drag=null;
+function dstart(e,gid,iid){drag=[gid,iid];e.dataTransfer.setData('text','x')}
+function drop(e,gid,st){e.preventDefault();if(!drag)return;var g=B().groups.find(function(x){return x.id==drag[0]}),i=g.items.find(function(x){return x.id==drag[1]});
+ if(st){i.status=st;runAuto(g,i)}else{var t=B().groups.find(function(x){return x.id==gid});g.items.splice(g.items.indexOf(i),1);t.items.push(i)}drag=null;save();draw()}
+function sel(o,v,gid,iid,f){return '<select onchange="setF(\''+gid+'\',\''+iid+'\',\''+f+'\',this.value)"'+(f=='status'?' class="st" style="background:'+col(v)+'"':'')+'>'+o.map(function(x){return'<option'+(x==v?' selected':'')+'>'+x+'</option>'}).join('')+'</select>'}
+function inp(t,v,gid,iid,f){return '<input type="'+t+'" value="'+esc(v)+'" onchange="setF(\''+gid+'\',\''+iid+'\',\''+f+'\',this.value)">'}
+function table(){return B().groups.map(function(g){return '<div class="grp" ondragover="event.preventDefault()" ondrop="drop(event,\''+g.id+'\')"><h3>'+esc(g.name)+' <small>('+g.items.length+')</small></h3><div class="tbl"><table><tr><th></th><th>Item</th><th>Status</th><th>Person</th><th>Start</th><th>End</th><th>Priority</th><th>Number</th><th>Notes</th><th></th></tr>'+
+ g.items.filter(match).map(function(i){return '<tr draggable="true" ondragstart="dstart(event,\''+g.id+'\',\''+i.id+'\')"><td>&#9776;</td><td>'+inp('text',i.name,g.id,i.id,'name')+'</td><td>'+sel(STAT.map(function(s){return s[0]}),i.status,g.id,i.id,'status')+'</td><td>'+inp('text',i.person,g.id,i.id,'person')+'</td><td>'+inp('date',i.start,g.id,i.id,'start')+'</td><td>'+inp('date',i.end,g.id,i.id,'end')+'</td><td>'+sel(PRI,i.priority,g.id,i.id,'priority')+'</td><td>'+inp('number',i.num,g.id,i.id,'num')+'</td><td>'+inp('text',i.notes,g.id,i.id,'notes')+'</td><td><button class="alt" onclick="delItem(\''+g.id+'\',\''+i.id+'\')">X</button></td></tr>'}).join('')+'</table></div><button onclick="addItem(\''+g.id+'\')">Add item</button></div>'}).join('')}
+function kanban(){return '<p class="help">Drag a card to change its status.</p><div class="kan">'+STAT.map(function(s){return '<div class="col" ondragover="event.preventDefault()" ondrop="drop(event,null,\''+s[0]+'\')"><b style="color:'+s[1]+'">'+s[0]+'</b>'+all().filter(function(p){return p[1].status==s[0]&&match(p[1])}).map(function(p){return '<div class="card" style="border-color:'+s[1]+'" draggable="true" ondragstart="dstart(event,\''+p[0].id+'\',\''+p[1].id+'\')"><b>'+esc(p[1].name)+'</b><br><small>'+esc(p[0].name)+' | '+esc(p[1].priority)+(p[1].end?' | '+p[1].end:'')+'</small></div>'}).join('')+'</div>'}).join('')+'</div>'}
+var calM=new Date();calM.setDate(1);
+function calendar(){var y=calM.getFullYear(),m=calM.getMonth(),f=(new Date(y,m,1).getDay()+6)%7,n=new Date(y,m+1,0).getDate(),h='';
+ for(var i=0;i<f;i++)h+='<div></div>';for(var d=1;d<=n;d++){var ds=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');h+='<div class="day"><b>'+d+'</b>'+all().filter(function(p){return p[1].end==ds&&match(p[1])}).map(function(p){return '<div style="background:'+col(p[1].status)+';color:#fff;border-radius:4px;padding:1px 3px;margin:1px 0">'+esc(p[1].name)+'</div>'}).join('')+'</div>'}
+ return '<div class="bar"><button class="alt" onclick="calM.setMonth(calM.getMonth()-1);draw()">Back</button><b style="align-self:center">'+calM.toLocaleString('en-AU',{month:'long',year:'numeric'})+'</b><button class="alt" onclick="calM.setMonth(calM.getMonth()+1);draw()">Next</button></div><div class="cal">'+['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(function(x){return'<b>'+x+'</b>'}).join('')+h+'</div>'}
+function timeline(){var r=all().filter(function(p){return p[1].start&&match(p[1])});if(!r.length)return '<p>Add start and end dates to see the timeline.</p>';
+ var a=Math.min.apply(0,r.map(function(p){return+new Date(p[1].start)})),z=Math.max.apply(0,r.map(function(p){return+new Date(p[1].end||p[1].start)}))+864e5,w=z-a;
+ return '<div class="grp gantt"><p class="help">'+new Date(a).toLocaleDateString('en-AU')+' to '+new Date(z-864e5).toLocaleDateString('en-AU')+'</p>'+r.map(function(p){var s=+new Date(p[1].start),e=+new Date(p[1].end||p[1].start)+864e5;return '<div class="row"><span class="lab">'+esc(p[1].name)+'</span><span class="trk"><span class="bx" style="left:'+((s-a)/w*100)+'%;width:'+Math.max(2,(e-s)/w*100)+'%;background:'+col(p[1].status)+'"></span></span></div>'}).join('')+'</div>'}
+function dashboard(){var r=all().map(function(p){return p[1]}),done=r.filter(function(i){return i.status=='Done'}).length,sum=r.reduce(function(s,i){return s+(+i.num||0)},0);
+ setTimeout(function(){bars('c1',STAT.map(function(s){return[s[0],r.filter(function(i){return i.status==s[0]}).length,s[1]]}));bars('c2',PRI.map(function(p,k){return[p,r.filter(function(i){return i.priority==p}).length,['#9be3d6','#ff9fcf','#e8a33c','#d9534f'][k]]}));bars('c3',B().groups.map(function(g){return[g.name,g.items.length,'#e0559b']}))},0);
+ return '<div class="dash"><div class="grp"><h3>Progress</h3><p style="font-size:40px;margin:6px 0">'+(r.length?Math.round(done/r.length*100):0)+'%</p><p>'+done+' of '+r.length+' done. Numbers total: '+sum+'</p></div><div class="grp"><h3>By status</h3><canvas id="c1" width="520" height="400"></canvas></div><div class="grp"><h3>By priority</h3><canvas id="c2" width="520" height="400"></canvas></div><div class="grp"><h3>By group</h3><canvas id="c3" width="520" height="400"></canvas></div></div>'}
+function bars(id,d){var c=$(id);if(!c)return;var x=c.getContext('2d'),mx=Math.max(1,Math.max.apply(0,d.map(function(v){return v[1]}))),w=c.width/d.length;x.clearRect(0,0,c.width,c.height);x.font='22px Verdana';
+ d.forEach(function(v,i){var h=(c.height-80)*v[1]/mx;x.fillStyle=v[2];x.fillRect(i*w+10,c.height-50-h,w-20,h);x.fillStyle=D.dark?'#fff':'#3a1a2c';x.fillText(v[1],i*w+w/2-8,c.height-56-h);x.fillText(String(v[0]).slice(0,10),i*w+8,c.height-18)})}
+function autoDlg(){var b=B(),h='<h3>Automations</h3><p class="help">When an item gets a status, move it to a group.</p>'+b.autos.map(function(a,k){return '<p>When status is <b>'+esc(a.when)+'</b>, move to <b>'+esc(a.move)+'</b> <button class="alt" onclick="B().autos.splice('+k+',1);save();autoDlg()">Remove</button></p>'}).join('')+
+ '<p>When status is <select id="aw">'+STAT.map(function(s){return'<option>'+s[0]+'</option>'}).join('')+'</select> move to <select id="am">'+b.groups.map(function(g){return'<option>'+esc(g.name)+'</option>'}).join('')+'</select> <button onclick="B().autos.push({when:$(\'aw\').value,move:$(\'am\').value});save();autoDlg()">Add rule</button></p>';show(h)}
+function tplDlg(){show('<h3>Templates</h3><p class="help">Start a new board from a ready-made plan.</p>'+Object.keys(TPL).map(function(t){return'<p><button onclick="D.boards.push(fromTpl(\''+t+'\'));D.cur=D.boards.length-1;save();dlg.close();draw()">'+t+'</button></p>'}).join(''))}
+function ioDlg(){show('<h3>Save and load</h3><p><button onclick="dl(\'coffeebreak-planner.json\',JSON.stringify(D,null,1),\'application/json\')">Export all (JSON)</button></p><p><button onclick="dl(B().name+\'.csv\',csv(),\'text/csv\')">Export this board (CSV)</button></p><p>Import JSON or CSV: <input type="file" accept=".json,.csv" onchange="imp(this.files[0])"></p><p><button class="alt" onclick="if(confirm(\'Delete this board?\')&&D.boards.length>1){D.boards.splice(D.cur,1);D.cur=0;save();dlg.close();draw()}">Delete this board</button></p>')}
+var F=['group','name','status','person','start','end','priority','num','notes'];
+function cq(v){v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+function csv(){return [F.join(',')].concat(all().map(function(p){return F.map(function(f){return cq(f=='group'?p[0].name:p[1][f])}).join(',')})).join('\n')}
+function pcsv(t){var R=[],r=[],c='',q=false;for(var i=0;i<t.length;i++){var ch=t[i];if(q){if(ch=='"'&&t[i+1]=='"'){c+='"';i++}else if(ch=='"')q=false;else c+=ch}else if(ch=='"')q=true;else if(ch==','){r.push(c);c=''}else if(ch=='\n'){r.push(c);R.push(r);r=[];c=''}else if(ch!='\r')c+=ch}if(c||r.length){r.push(c);R.push(r)}return R}
+function imp(f){if(!f)return;f.text().then(function(t){try{if(/\.json$/i.test(f.name)){var o=JSON.parse(t);if(!o.boards)throw 0;D=o}else{var R=pcsv(t),h=R.shift(),b={id:uid(),name:f.name.replace(/\.csv$/i,''),groups:[],autos:[{when:'Done',move:'Done'}]};
+ R.forEach(function(r){if(r.length<2)return;var o={};h.forEach(function(k,j){o[k]=r[j]});var g=b.groups.find(function(x){return x.name==o.group});if(!g){g={id:uid(),name:o.group||'Imported',items:[]};b.groups.push(g)}g.items.push(it(o.name,o.status,o.person,o.start,o.end,o.priority,+o.num,o.notes))});D.boards.push(b);D.cur=D.boards.length-1}save();dlg.close();draw()}catch(e){alert('Sorry, that file could not be read.')}})}
+function dl(n,t,m){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:m}));a.download=n;a.click()}
+function show(h){$('dlgBody').innerHTML=h;if(!dlg.open)dlg.showModal()}
+var dlg=$('dlg');
+function draw(){document.body.classList.toggle('dark',D.dark);$('boardSel').innerHTML=D.boards.map(function(b,i){return'<option value="'+i+'"'+(i==D.cur?' selected':'')+'>'+esc(b.name)+'</option>'}).join('');
+ var fv=$('fs').value;$('fs').innerHTML='<option value="">All status</option>'+STAT.map(function(s){return'<option'+(s[0]==fv?' selected':'')+'>'+s[0]+'</option>'}).join('');
+ $('views').innerHTML=[['table','Table'],['kanban','Cards'],['calendar','Calendar'],['timeline','Timeline'],['dashboard','Dashboard']].map(function(v){return'<button class="alt'+(v[0]==view?' on':'')+'" onclick="view=\''+v[0]+'\';draw()">'+v[1]+'</button>'}).join('');
+ $('main').innerHTML={table:table,kanban:kanban,calendar:calendar,timeline:timeline,dashboard:dashboard}[view]()}
+$('boardSel').onchange=function(){D.cur=+this.value;save();draw()};
+draw();
+</script></body></html>

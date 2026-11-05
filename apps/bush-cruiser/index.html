@@ -1,10 +1,193 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Bush Cruiser</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Bush Cruiser</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Try the sample entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Coffeebreak Bush Cruiser</title><link rel="icon" href="logo.jpg"><link rel="manifest" href="manifest.json">
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#000;font-family:system-ui,sans-serif;color:#fff;touch-action:none}
+#hud{position:fixed;top:8px;left:8px;right:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;pointer-events:none}
+#hud>*{pointer-events:auto}
+#logo{width:44px;height:44px;border-radius:50%;border:2px solid #ff69b4}
+.b{background:#d63384dd;color:#fff;border:0;border-radius:18px;padding:8px 12px;font-weight:700;font-size:13px}
+.b.on{background:#ff8cc6;color:#4a0f33}
+select{background:#fff;color:#4a0f33;border-radius:12px;border:0;padding:6px;font-weight:700}
+@media(max-width:600px){#info{max-width:40%!important;font-size:11px}}
+#info{position:fixed;left:8px;bottom:8px;background:#0008;border-radius:12px;padding:8px 12px;font-size:13px;max-width:60%}
+#touch{position:fixed;right:10px;bottom:10px;display:grid;grid-template-columns:repeat(3,58px);gap:6px}
+#touch button{height:58px;border-radius:50%;border:0;background:#d63384aa;color:#fff;font-size:22px}
+#title{position:fixed;inset:0;background:radial-gradient(#ff8cc6,#b0126a);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:9}
+#title img{width:120px;border-radius:50%;border:4px solid #fff}#title h1{margin:10px}
+</style></head><body>
+<div id="title"><img src="logo.jpg" alt="Coffeebreak logo"><h1>Coffeebreak Bush Cruiser</h1>
+<p>A self-driving car through the Aussie bush, stopping at stations.</p>
+<p><button class="b" id="startRail">Rail line</button> <button class="b" id="startBush">Bush route (no rail)</button></p>
+<small>Arrows or WASD to drive in Manual. C changes camera.</small></div>
+<div id="hud"><img id="logo" src="logo.jpg" alt="Coffeebreak">
+<button class="b" id="mode">Mode: Rail line</button>
+<button class="b on" id="auto">Autopilot</button>
+<button class="b" id="cam">Camera: Chase</button>
+<select id="dest" title="Destination station"></select>
+<button class="b" id="call">Call car</button>
+<button class="b" id="ride">Get on</button>
+<button class="b" id="build">Build station</button>
+<button class="b" id="paint">Paint</button>
+<button class="b" id="time">Night</button>
+<button class="b" id="radio">Radio off</button></div>
+<div id="info"></div>
+<div id="touch"><span></span><button data-k="up">&#9650;</button><span></span><button data-k="left">&#9664;</button><button data-k="down">&#9660;</button><button data-k="right">&#9654;</button></div>
+<audio id="aud" preload="none"></audio>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+const $=id=>document.getElementById(id);
+const TRACKS=[['Coffee Break','coffee-break'],['Drip Drip Drip Country','drip-drip-drip-country'],["I'm Weak",'im-weak'],['Knee Deep Mashup','knee-deep-mashup'],['Sweet Juices Cotton Candy','sweet-juices-cotton-candy']];
+const PAINTS=[['Coffeebreak Pink',0xff69b4],['Hot Magenta',0xd63384],['Fairy Floss',0xffb6d9],['Pink and Black',0x222222],['Rose Gold',0xe8a0a0]];
+const r=new THREE.WebGLRenderer({antialias:true});r.setPixelRatio(Math.min(devicePixelRatio,2));r.setSize(innerWidth,innerHeight);r.shadowMap.enabled=true;document.body.prepend(r.domElement);
+const scene=new THREE.Scene();const cam=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,900);
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();r.setSize(innerWidth,innerHeight)});
+const hemi=new THREE.HemisphereLight(0xcfe8ff,0x8a5a2b,0.8);scene.add(hemi);
+const sun=new THREE.DirectionalLight(0xfff1d0,1.4);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-80,right:80,top:80,bottom:-80,far:400});scene.add(sun,sun.target);
+// terrain
+const creekX=z=>30*Math.sin(z/45)+10;
+function H(x,z){let h=6*Math.sin(x/37)*Math.cos(z/41)+3*Math.sin((x+z)/19)+1.2*Math.sin(x/7.3+z/9.1);const d=Math.abs(x-creekX(z));if(d<12)h=h*(d/12)-2.2*(1-d/12);return h}
+const S=420,N=140,tg=new THREE.PlaneGeometry(S,S,N,N);tg.rotateX(-Math.PI/2);const p=tg.attributes.position,col=[];
+for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i),h=H(x,z);p.setY(i,h);const c=new THREE.Color(h<-1?0x8b6b3a:(h>5?0x9a8f4a:0xb59a5a)).lerp(new THREE.Color(0x7d8f3a),Math.random()*0.35);col.push(c.r,c.g,c.b)}
+tg.setAttribute('color',new THREE.Float32BufferAttribute(col,3));tg.computeVertexNormals();
+const ground=new THREE.Mesh(tg,new THREE.MeshLambertMaterial({vertexColors:true}));ground.receiveShadow=true;scene.add(ground);
+const wpts=[];for(let z=-S/2;z<=S/2;z+=6)wpts.push(new THREE.Vector3(creekX(z),-1.1,z));
+const water=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(wpts),200,7,6,false),new THREE.MeshLambertMaterial({color:0x4fa3c7,transparent:true,opacity:0.8}));water.scale.y=0.08;water.position.y=-1.0;scene.add(water);
+// sky stars
+const stars=new THREE.Points(new THREE.BufferGeometry().setAttribute('position',new THREE.Float32BufferAttribute(Array.from({length:1500},()=>(Math.random()-0.5)*800).map((v,i)=>i%3==1?Math.abs(v)/2+80:v),3)),new THREE.PointsMaterial({color:0xffffff,size:1.2}));scene.add(stars);
+// trees
+function gum(x,z,s){const g=new THREE.Group();const t=new THREE.Mesh(new THREE.CylinderGeometry(0.25*s,0.45*s,6*s,6),new THREE.MeshLambertMaterial({color:0xe8dfd0}));t.position.y=3*s;t.castShadow=true;g.add(t);
+for(let k=0;k<3;k++){const l=new THREE.Mesh(new THREE.IcosahedronGeometry(2.2*s,0),new THREE.MeshLambertMaterial({color:[0x6f8f4e,0x8aa36a,0x587a45][k]}));l.position.set((Math.random()-0.5)*3*s,6*s+Math.random()*1.5*s,(Math.random()-0.5)*3*s);l.castShadow=true;g.add(l)}g.position.set(x,H(x,z),z);scene.add(g);return g}
+// route
+let mode='rail';const BASE=[[-90,-60],[-20,-110],[70,-90],[110,-10],[80,80],[0,110],[-80,70],[-115,0]];
+let ctrl=BASE.map(a=>a.slice());let curve,len,trackObj=new THREE.Group();scene.add(trackObj);let stations=[];
+const NAMES=['Coffee Cup Creek','Gum Tree Gully','Kangaroo Flat','Pink Ridge','Billabong Bend','Cotton Candy Camp','Knee Deep Crossing','Drip Drip Hill','Sweet Juice Siding','Sunset Lookout'];
+function rh(x,z){const h=H(x,z);return mode=='rail'?Math.max(h,-0.4):h}
+function sign(text){const c=document.createElement('canvas');c.width=512;c.height=128;const g=c.getContext('2d');g.fillStyle='#d63384';g.fillRect(0,0,512,128);g.fillStyle='#fff';g.font='bold 40px sans-serif';g.textAlign='center';g.fillText(text,286,78);g.drawImage(logoImg,8,14,100,100);return new THREE.CanvasTexture(c)}
+const logoImg=new Image();logoImg.src='logo.jpg';
+function buildRoute(){trackObj.clear();curve=new THREE.CatmullRomCurve3(ctrl.map(([x,z])=>new THREE.Vector3(x,rh(x,z),z)),true);len=curve.getLength();
+const n=Math.floor(len/1.5),dirt=[],rail=[];const sl=new THREE.BoxGeometry(2.4,0.15,0.35),slm=new THREE.MeshLambertMaterial({color:0x6b4423});
+const sleepers=new THREE.InstancedMesh(sl,slm,mode=='rail'?n:1);const m=new THREE.Matrix4();
+for(let i=0;i<n;i++){const u=i/n,pt=curve.getPointAt(u),tn=curve.getTangentAt(u);const side=new THREE.Vector3(-tn.z,0,tn.x).normalize();const y=rh(pt.x,pt.z);
+const W=mode=='rail'?2.2:4;dirt.push(pt.x+side.x*W,H(pt.x+side.x*W,pt.z+side.z*W)+0.08,pt.z+side.z*W,pt.x-side.x*W,H(pt.x-side.x*W,pt.z-side.z*W)+0.08,pt.z-side.z*W);
+if(mode=='rail'){m.makeRotationY(Math.atan2(tn.x,tn.z));m.setPosition(pt.x,y+0.1,pt.z);sleepers.setMatrixAt(i,m);
+if(y>H(pt.x,pt.z)+0.6){const post=new THREE.Mesh(new THREE.BoxGeometry(0.3,y-H(pt.x,pt.z)+2,0.3),slm);post.position.set(pt.x,(y+H(pt.x,pt.z))/2-1,pt.z);trackObj.add(post)}}}
+const idx=[];for(let i=0;i<n;i++){const a=i*2,b=((i+1)%n)*2;idx.push(a,b,a+1,b,b+1,a+1)}
+const dg=new THREE.BufferGeometry();dg.setAttribute('position',new THREE.Float32BufferAttribute(dirt,3));dg.setIndex(idx);dg.computeVertexNormals();
+const dm=new THREE.Mesh(dg,new THREE.MeshLambertMaterial({color:0xa0522d,side:THREE.DoubleSide}));dm.receiveShadow=true;trackObj.add(dm);
+if(mode=='rail'){trackObj.add(sleepers);for(const o of[-0.75,0.75]){const pts=[];for(let i=0;i<=n;i++){const u=(i%n)/n,pt=curve.getPointAt(u),tn=curve.getTangentAt(u);pts.push(new THREE.Vector3(pt.x-tn.z*o,rh(pt.x,pt.z)+0.3,pt.z+tn.x*o))}
+trackObj.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),n,0.08,4,false),new THREE.MeshLambertMaterial({color:0xcccccc})))}}
+stations.forEach(s=>scene.remove(s.obj));stations=stations.map(s=>s);
+const ns=Math.max(stations.length,5);const old=stations.length;stations=[];for(let i=0;i<ns;i++)addStation(i/ns,NAMES[i%NAMES.length]);
+fillDest()}
+function addStation(u,name){const pt=curve.getPointAt(u),tn=curve.getTangentAt(u);const side=new THREE.Vector3(-tn.z,0,tn.x).normalize();const g=new THREE.Group();
+const pl=new THREE.Mesh(new THREE.BoxGeometry(10,0.8,3),new THREE.MeshLambertMaterial({color:0xffb6d9}));pl.position.y=0.4;g.add(pl);
+const roof=new THREE.Mesh(new THREE.BoxGeometry(6,0.25,3.4),new THREE.MeshLambertMaterial({color:0xd63384}));roof.position.y=3.6;g.add(roof);
+for(const x of[-2.7,2.7]){const po=new THREE.Mesh(new THREE.CylinderGeometry(0.1,0.1,3.2),new THREE.MeshLambertMaterial({color:0xffffff}));po.position.set(x,2,1.2);g.add(po)}
+const sg=new THREE.Mesh(new THREE.PlaneGeometry(5,1.25),new THREE.MeshBasicMaterial({map:sign(name),side:THREE.DoubleSide}));sg.position.set(0,4.5,0);g.add(sg);
+const off=mode=='rail'?3.6:5.6;g.position.set(pt.x+side.x*off,H(pt.x+side.x*off,pt.z+side.z*off),pt.z+side.z*off);g.rotation.y=Math.atan2(tn.x,tn.z)+Math.PI/2;
+const people=[];for(let k=0;k<2+Math.floor(Math.random()*3);k++){const pp=new THREE.Mesh(new THREE.CapsuleGeometry(0.3,0.9,3,6),new THREE.MeshLambertMaterial({color:[0xff69b4,0x4a0f33,0xffd24d,0x66ccff][k%4]}));pp.position.set(-3+k*1.5,1.5,0.3);g.add(pp);people.push(pp)}
+scene.add(g);stations.push({u,name,obj:g,people});stations.sort((a,b)=>a.u-b.u)}
+function fillDest(){$('dest').innerHTML=stations.map((s,i)=>`<option value="${i}">${s.name}</option>`).join('')}
+// scenery
+const _c=new THREE.CatmullRomCurve3(BASE.map(([x,z])=>new THREE.Vector3(x,0,z)),true).getSpacedPoints(300);const nearRoute=(x,z)=>_c.some(q=>(q.x-x)**2+(q.z-z)**2<100);
+for(let i=0;i<260;i++){const x=(Math.random()-0.5)*S*0.95,z=(Math.random()-0.5)*S*0.95;if(Math.abs(x-creekX(z))<9||nearRoute(x,z))continue;if(Math.hypot(x,z)>60&&Math.hypot(x,z)<140&&Math.random()<0.6)continue;gum(x,z,0.8+Math.random()*0.7)}
+// kangaroos
+const roos=[];function roo(){const g=new THREE.Group(),m=new THREE.MeshLambertMaterial({color:0xb5764a});const b=new THREE.Mesh(new THREE.SphereGeometry(0.6,8,6),m);b.scale.set(0.8,1.2,1);b.position.y=1.1;g.add(b);
+const h=new THREE.Mesh(new THREE.SphereGeometry(0.3,8,6),m);h.position.set(0,2.1,0.3);g.add(h);for(const s of[-0.12,0.12]){const e=new THREE.Mesh(new THREE.ConeGeometry(0.08,0.35,4),m);e.position.set(s,2.45,0.25);g.add(e)}
+const t=new THREE.Mesh(new THREE.ConeGeometry(0.18,1.4,5),m);t.rotation.x=-1.9;t.position.set(0,0.6,-0.8);g.add(t);scene.add(g);return{g,u:Math.random(),side:(Math.random()<0.5?-1:1)*14,dir:0,t:Math.random()*10}}
+for(let i=0;i<14;i++)roos.push(roo());
+// rocks (bush route obstacles)
+const rocks=[];
+function placeRocks(){rocks.forEach(k=>scene.remove(k.m));rocks.length=0;if(mode!='bush')return;for(let i=0;i<10;i++){const u=Math.random(),pt=curve.getPointAt(u),tn=curve.getTangentAt(u),o=(Math.random()<0.5?-1:1)*1.6;
+const m=new THREE.Mesh(new THREE.DodecahedronGeometry(0.9,0),new THREE.MeshLambertMaterial({color:0x8a7f74}));m.position.set(pt.x-tn.z*o,H(pt.x-tn.z*o,pt.z+tn.x*o)+0.4,pt.z+tn.x*o);m.castShadow=true;scene.add(m);rocks.push({m,u,o})}}
+// car
+const car=new THREE.Group();scene.add(car);const paintMat=new THREE.MeshStandardMaterial({color:PAINTS[0][1],metalness:0.4,roughness:0.4});
+(function(){const body=new THREE.Mesh(new THREE.BoxGeometry(2.2,0.9,4.2),paintMat);body.position.y=1.1;body.castShadow=true;car.add(body);
+const cage=new THREE.MeshStandardMaterial({color:0x111111});for(const x of[-1,1])for(const z of[-1.3,1.1]){const b=new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.07,1.5),cage);b.position.set(x,2.2,z);car.add(b)}
+const roof=new THREE.Mesh(new THREE.BoxGeometry(2.3,0.12,2.8),paintMat);roof.position.set(0,2.95,-0.1);car.add(roof);
+const lt=new THREE.Mesh(new THREE.BoxGeometry(0.4,0.3,0.4),new THREE.MeshBasicMaterial({color:0x66ccff}));lt.position.set(0,3.15,0.5);car.add(lt);
+const lc=document.createElement('canvas');lc.width=lc.height=128;const lb=new THREE.CanvasTexture(lc);logoImg.onload=()=>{lc.getContext('2d').drawImage(logoImg,0,0,128,128);lb.needsUpdate=true;buildRoute()};
+for(const x of[-1.11,1.11]){const d=new THREE.Mesh(new THREE.PlaneGeometry(0.9,0.9),new THREE.MeshBasicMaterial({map:lb}));d.position.set(x,1.15,0);d.rotation.y=x>0?Math.PI/2:-Math.PI/2;car.add(d)}
+car.wheels=[];for(const x of[-1.15,1.15])for(const z of[-1.4,1.4]){const w=new THREE.Mesh(new THREE.CylinderGeometry(0.6,0.6,0.5,12),new THREE.MeshStandardMaterial({color:0x1a1a1a}));w.rotation.z=Math.PI/2;w.position.set(x,0.6,z);car.add(w);car.wheels.push(w)}
+const hl=new THREE.SpotLight(0xfff2cc,0,60,0.6,0.5);hl.position.set(0,1.4,2);hl.target.position.set(0,0,12);car.add(hl,hl.target);car.hl=hl;
+const seat=new THREE.Mesh(new THREE.CapsuleGeometry(0.3,0.7,3,6),new THREE.MeshLambertMaterial({color:0xffd24d}));seat.position.set(0.5,2,0);seat.visible=false;car.add(seat);car.rider=seat})();
+// state
+let u=0,v=0,lat=0,auto=true,camMode=0,paint=0,night=false,dayT=0.25,dwell=0,target=null,goal=null,player={at:0,riding:false},msg='',free={x:0,z:0,yaw:0};
+const keys={};addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=1;if(e.key.toLowerCase()=='c')$('cam').click()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=0);
+document.querySelectorAll('#touch button').forEach(b=>{const k=b.dataset.k;b.addEventListener('pointerdown',e=>{keys[k]=1;e.preventDefault()});for(const ev of['pointerup','pointerleave','pointercancel'])b.addEventListener(ev,()=>keys[k]=0)});
+const K=k=>keys[k]||keys['arrow'+k]||keys[{up:'w',down:'s',left:'a',right:'d'}[k]];
+function start(m){$('title').style.display='none';setMode(m)}
+$('startRail').onclick=()=>start('rail');$('startBush').onclick=()=>start('bush');
+function setMode(m){mode=m;stations.forEach(s=>scene.remove(s.obj));const keep=Math.max(stations.length,5);stations=new Array(keep).fill(0);stations=[];buildRoute();placeRocks();u=0;v=0;lat=0;
+$('mode').textContent='Mode: '+(m=='rail'?'Rail line':'Bush route (no rail)');player.at=Math.floor(stations.length/2);player.riding=false;car.rider.visible=false;target=null;goal=null}
+$('mode').onclick=()=>setMode(mode=='rail'?'bush':'rail');
+$('auto').onclick=()=>{auto=!auto;$('auto').classList.toggle('on',auto);$('auto').textContent=auto?'Autopilot':'Manual';if(!auto&&mode=='bush'){const p=car.position;free={x:p.x,z:p.z,yaw:car.rotation.y}}};
+const CAMS=['Chase','Driver','Sky','Station'];$('cam').onclick=()=>{camMode=(camMode+1)%4;$('cam').textContent='Camera: '+CAMS[camMode]};
+$('paint').onclick=()=>{paint=(paint+1)%PAINTS.length;paintMat.color.setHex(PAINTS[paint][1]);flash('Paint: '+PAINTS[paint][0])};
+$('time').onclick=()=>{night=!night;dayT=night?0.75:0.25;$('time').textContent=night?'Day':'Night'};
+let tr=-1;$('radio').onclick=()=>{const a=$('aud');tr++;if(tr>=TRACKS.length){tr=-1;a.pause();$('radio').textContent='Radio off';return}a.src='tracks/'+TRACKS[tr][1]+'.mp3';a.play().catch(()=>{});$('radio').textContent='Radio: '+TRACKS[tr][0]};
+$('aud').onended=()=>$('radio').click();
+$('call').onclick=()=>{auto=true;$('auto').classList.add('on');$('auto').textContent='Autopilot';target=player.at;flash('Car called to '+stations[player.at].name)};
+$('ride').onclick=()=>{if(player.riding){player.riding=false;car.rider.visible=false;player.at=nearest();flash('You got off at '+stations[player.at].name);return}
+if(atStation()===player.at&&Math.abs(v)<0.5){player.riding=true;car.rider.visible=true;goal=+$('dest').value;target=goal;flash('On board. Next stop '+stations[goal].name)}else flash('Call the car to your station first')};
+$('dest').onchange=()=>{if(player.riding){goal=+$('dest').value;target=goal;flash('Heading to '+stations[goal].name)}};
+$('build').onclick=()=>{// extend the line outwards near the car and add a station there
+const i=Math.floor(u*ctrl.length)%ctrl.length,a=ctrl[i],b=ctrl[(i+1)%ctrl.length];const mx=(a[0]+b[0])/2,mz=(a[1]+b[1])/2,d=Math.hypot(mx,mz)||1;const ex=Math.min(165,d+35)/d;
+ctrl.splice(i+1,0,[mx*ex,mz*ex]);const names=stations.map(s=>s.name);stations.forEach(s=>scene.remove(s.obj));const cnt=names.length+1;stations=[];
+curve=null;trackObj.clear();const keepU=u;buildRouteN(cnt);placeRocks();u=keepU;flash('Track extended and '+stations[stations.length-1].name+' built')};
+function buildRouteN(cnt){const f=stations;buildRoute();stations.forEach(s=>scene.remove(s.obj));stations=[];for(let i=0;i<cnt;i++)addStation(i/cnt,NAMES[i%NAMES.length]+(i>=NAMES.length?' 2':''));fillDest();if(player.at>=cnt)player.at=0}
+function flash(t){msg=t;clearTimeout(flash.h);flash.h=setTimeout(()=>msg='',4000)}
+function du(a,b){let d=b-a;d-=Math.floor(d);return d}
+function atStation(){for(let i=0;i<stations.length;i++){if(Math.min(du(u,stations[i].u),du(stations[i].u,u))*len<2.5)return i}return -1}
+function nearest(){let bi=0,bd=9;stations.forEach((s,i)=>{const d=Math.min(du(u,s.u),du(s.u,u));if(d<bd){bd=d;bi=i}});return bi}
+// loop
+const clock=new THREE.Clock();let t=0,errors=0;
+function frame(){const dt=Math.min(clock.getDelta(),0.05);t+=dt;
+// day/night
+dayT+=dt/600;const ang=dayT*Math.PI*2;const sunUp=Math.sin(ang);sun.position.set(Math.cos(ang)*150+car.position.x,Math.max(sunUp,-0.2)*150+10,60+car.position.z);sun.target.position.copy(car.position);
+const k=THREE.MathUtils.clamp(sunUp*2+0.3,0,1);sun.intensity=1.4*k;hemi.intensity=0.15+0.7*k;const sky=new THREE.Color(0x0b1030).lerp(new THREE.Color(0x9fd3ff),k).lerp(new THREE.Color(0xff9ec9),Math.max(0,0.5-Math.abs(sunUp))*0.6);scene.background=sky;scene.fog=new THREE.Fog(sky,80,360);stars.visible=k<0.3;car.hl.intensity=k<0.4?40:0;
+// roos
+let blocked=false;for(const R of roos){R.t+=dt;const hop=Math.abs(Math.sin(R.t*4));if(R.dir==0&&Math.random()<0.002)R.dir=-Math.sign(R.side);if(R.dir){R.side+=R.dir*dt*3;if(Math.abs(R.side)>14){R.side=14*Math.sign(R.side);R.dir=0}}
+const pt=curve.getPointAt(R.u),tn=curve.getTangentAt(R.u);const x=pt.x-tn.z*R.side,z=pt.z+tn.x*R.side;R.g.position.set(x,H(x,z)+hop*0.6,z);R.g.rotation.y=R.dir?Math.atan2(-tn.z*R.dir,tn.x*R.dir):Math.atan2(tn.x,tn.z);
+if(Math.abs(R.side)<3.5){const ahead=du(u,R.u)*len;if(ahead>0&&ahead<22)blocked=true}}
+if(auto||mode=='rail'){
+ let want=mode=='rail'?14:11;const si=atStation();
+ if(dwell>0){dwell-=dt;want=0}else{ // next station handling
+  let next=-1,nd=1;stations.forEach((s,i)=>{const d=du(u,s.u);if(d>0.0005&&d<nd){nd=d;next=i}});const dist=nd*len;
+  const stopHere=target==null||target===next;if(next>=0&&dist<30&&stopHere&&auto)want=Math.min(want,Math.max(0.6,dist*0.5));
+  if(si>=0&&Math.abs(v)<1.2&&auto&&(target==null||target===si)&&dwell<=0&&!stations[si].served){dwell=target===si?3:4;stations.forEach(s=>s.served=false);stations[si].served=true;v=0;
+   if(target===si){if(player.riding&&si===goal){flash('Arrived at '+stations[si].name+'. Tap Get on to get off, or pick a new stop');target=null}else if(!player.riding&&si===player.at){flash('Car is here at '+stations[si].name+'. Tap Get on');target=null;dwell=8}}else flash('Stopped at '+stations[si].name)}
+ }
+ if(si<0)stations.forEach(s=>s.served=false);
+ if(blocked){want=0;if(auto)msg=msg||'Kangaroo on the track, waiting'}
+ if(!auto){want=K('up')?16:0;if(K('down'))want=-5}
+ // rock avoidance (bush)
+ let wantLat=0;for(const R of rocks){const a=du(u,R.u)*len;if(a<18&&a>-2)wantLat=-Math.sign(R.o)*2.2}
+ lat+=(wantLat-lat)*Math.min(1,dt*2);
+ v+=THREE.MathUtils.clamp(want-v,-12*dt,5*dt);u=(u+v*dt/len+1)%1;
+ const pt=curve.getPointAt(u),tn=curve.getTangentAt(u);const x=pt.x-tn.z*lat,z=pt.z+tn.x*lat;
+ car.position.set(x,(mode=='rail'?rh(x,z)+0.3:H(x,z)),z);car.rotation.set(0,Math.atan2(tn.x,tn.z),0);
+}else{ // free manual in bush mode
+ if(K('left'))free.yaw+=dt*1.6*Math.sign(v||1);if(K('right'))free.yaw-=dt*1.6*Math.sign(v||1);
+ v+=(K('up')?8:0)*dt-(K('down')?10:0)*dt;v*=0.985;v=THREE.MathUtils.clamp(v,-6,18);
+ free.x+=Math.sin(free.yaw)*v*dt;free.z+=Math.cos(free.yaw)*v*dt;free.x=THREE.MathUtils.clamp(free.x,-200,200);free.z=THREE.MathUtils.clamp(free.z,-200,200);
+ car.position.set(free.x,H(free.x,free.z),free.z);car.rotation.set(0,free.yaw,0);
+ // snap back to route parameter for autopilot resume
+ let bu=u,bd=1e9;for(let i=0;i<200;i++){const q=i/200,pp=curve.getPointAt(q),d=(pp.x-free.x)**2+(pp.z-free.z)**2;if(d<bd){bd=d;bu=q}}u=bu;lat=0;
+}
+car.wheels.forEach(w=>w.rotation.x+=v*dt/0.6);
+// people bob
+stations.forEach((s,i)=>s.people.forEach((pp,j)=>pp.position.y=1.5+Math.abs(Math.sin(t*2+j))*0.05));
+// camera
+const fw=new THREE.Vector3(Math.sin(car.rotation.y),0,Math.cos(car.rotation.y));const cp=car.position;
+if(camMode==0){cam.position.lerp(new THREE.Vector3(cp.x-fw.x*10,cp.y+5,cp.z-fw.z*10),0.1);cam.lookAt(cp.x+fw.x*4,cp.y+1.5,cp.z+fw.z*4)}
+else if(camMode==1){cam.position.set(cp.x+fw.x*2.4,cp.y+2.6,cp.z+fw.z*2.4);cam.lookAt(cp.x+fw.x*20,cp.y+1.8,cp.z+fw.z*20)}
+else if(camMode==2){cam.position.set(cp.x,cp.y+70,cp.z+30);cam.lookAt(cp)}
+else{const s=stations[player.at].obj.position;cam.position.set(s.x+6,s.y+5,s.z+6);cam.lookAt(cp)}
+$('info').innerHTML=`<b>${mode=='rail'?'Rail line':'Bush route, no rail'}</b> | ${Math.round(Math.abs(v)*3.6)} km/h | ${auto?'Autopilot':'Manual'}<br>You: ${player.riding?'riding':'waiting at '+stations[player.at].name}${target!=null?' | going to '+stations[target].name:''}<br>${msg}`;
+r.render(scene,cam);requestAnimationFrame(frame)}
+buildRoute();placeRocks();requestAnimationFrame(frame);window.__cb={get u(){return u},get v(){return v},start,setMode};
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script><div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
+</body></html>

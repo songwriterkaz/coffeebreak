@@ -1,10 +1,130 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Film Studio</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Film Studio</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A recording booth: record from your mic, hear it back, and download takes, with a live level meter.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><button id=st>Record</button> <button id=sp disabled>Stop</button></p><meter id=lv max=1 style="width:100%"></meter><div id=tk></div><script>
-var mr,ch,n=0;st.onclick=async()=>{var s=await navigator.mediaDevices.getUserMedia({audio:true}),A=new AudioContext(),an=A.createAnalyser();A.createMediaStreamSource(s).connect(an);var b=new Uint8Array(256);(function f(){an.getByteTimeDomainData(b);lv.value=Math.max(...b)/128-1;if(mr&&mr.state=='recording')requestAnimationFrame(f)})();
-ch=[];mr=new MediaRecorder(s);mr.ondataavailable=e=>ch.push(e.data);mr.onstop=()=>{var u=URL.createObjectURL(new Blob(ch));n++;tk.insertAdjacentHTML('beforeend','<p>Take '+n+' <audio controls src='+u+'></audio> <a download=take'+n+'.webm href='+u+'>Download</a></p>');s.getTracks().forEach(t=>t.stop())};mr.start();st.disabled=1;sp.disabled=0};
-sp.onclick=()=>{mr.stop();st.disabled=0;sp.disabled=1}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Coffeebreak Film Studio</title>
+<meta name="description" content="Free film editing in your browser by Coffeebreak. Multi-track timeline, titles, voice converter, characters and export to MP4 or WebM.">
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="top">
+  <div class="brand"><img src="logo.png" alt="Coffeebreak logo"><div><b>Coffeebreak</b><span>Film Studio</span></div></div>
+  <input id="projName" class="pname" value="My Film" aria-label="Project name" data-tip="Project name">
+  <div class="grp">
+    <button id="btnNew" data-tip="Start a new project">New</button>
+    <button id="btnOpen" data-tip="Open a saved project file">Open</button>
+    <button id="btnSave" data-tip="Save now and download a project file (Ctrl+S)">Save</button>
+    <button id="btnTemplates" data-tip="Start from a ready-made template">Templates</button>
+  </div>
+  <div class="grp">
+    <select id="selAspect" data-tip="Picture shape, including cinema 1.85:1 and 2.39:1">
+      <option value="16:9">16:9 YouTube</option><option value="9:16">9:16 TikTok / Reels</option><option value="1:1">1:1 Square</option><option value="4:3">4:3 Classic</option><option value="1.85:1">1.85:1 Cinema flat</option><option value="2.39:1">2.39:1 Cinemascope</option></select>
+    <label class="chk" data-tip="Adds coffeebreaks.itch.io in the corner of your film"><input type="checkbox" id="chkWm"> Watermark</label>
+  </div>
+  <div class="grp">
+    <button id="btnUndo" data-tip="Undo (Ctrl+Z)" aria-label="Undo">&#8630;</button>
+    <button id="btnRedo" data-tip="Redo (Ctrl+Shift+Z)" aria-label="Redo">&#8631;</button>
+    <button id="btnTour" data-tip="Take a quick tour">Tour</button>
+  </div>
+  <div class="grp right">
+    <span id="saveState" class="savestate" data-tip="Your work saves itself in this browser">Saved</span>
+    <button id="btnExport" class="primary" data-tip="Export your film and download it straight away">Export</button>
+    <button id="btnExportOpts" data-tip="Export settings: format and quality" aria-label="Export settings">&#9881;</button>
+  </div>
+</header>
+
+<main id="main">
+  <aside id="left" class="panel">
+    <div class="tabs">
+      <button class="tab on" data-pane="media" data-tip="Your imported video, audio and pictures">Media</button>
+      <button class="tab" data-pane="chars" data-tip="Characters and outfit sketches">Characters</button>
+      <button class="tab" data-pane="grade" data-tip="Film looks, colour wheels, curves, grain and lens effects">Grade</button>
+      <button class="tab" data-pane="add" data-tip="Titles, credits, backgrounds and more">Add</button>
+    </div>
+    <div class="pane on" id="pane-media">
+      <button id="btnImport" class="wide primary" data-tip="Choose video, audio or pictures from this device">Import media</button>
+      <div class="hint">Drag files here too. Click a clip to add it at the playhead, or drag it onto the timeline.</div>
+      <div id="mediaList" class="mlist"></div>
+    </div>
+    <div class="pane" id="pane-chars">
+      <button id="btnCharUpload" class="wide primary" data-tip="Add your own drawing or photo as a new character">Upload a character</button>
+      <div class="hint">Drag an outfit onto the timeline, or press Add. Each character is linked to a voice preset.</div>
+      <div id="charList"></div>
+    </div>
+    <div class="pane" id="pane-grade"><div id="gradeBox"></div></div>
+    <div class="pane" id="pane-add">
+      <div class="addgrid">
+        <button class="addbtn" id="addCine" data-tip="Wide-spaced capitals in an epic serif font, fades in slowly"><b>C</b>Cinematic title</button>
+        <button class="addbtn" id="addRoll" data-tip="Scrolling end credits. Use # for headings and Role | Name for two columns"><b>&#8593;</b>Credit roll</button>
+        <button class="addbtn" id="addEnd" data-tip="Closing card with a thank you line"><b>&#9733;</b>End card</button>
+        <button class="addbtn" id="addSub" data-tip="Subtitle style caption at the bottom of the picture"><b>&#8213;</b>Subtitle</button>
+        <button class="addbtn" id="addTitle" data-tip="Big title text at the playhead"><b>T</b>Title</button>
+        <button class="addbtn" id="addLower" data-tip="Small caption near the bottom"><b>Aa</b>Lower third</button>
+        <button class="addbtn" id="addBg" data-tip="A plain pink and dark background"><b>&#9632;</b>Background</button>
+        <button class="addbtn" id="addLyric" data-tip="Lyric line in a pink script font"><b>&#9835;</b>Lyric line</button>
+      </div>
+      <div class="hint">Add goes at the playhead on the top video track.</div>
+    </div>
+  </aside>
+
+  <section id="stage">
+    <div id="stageWrap"><canvas id="preview" width="1280" height="720" aria-label="Preview"></canvas><div id="dropHint">Import a video to begin, or pick a template</div></div>
+    <div id="transport">
+      <button id="btnPrev" data-tip="Back one frame (Left arrow)" aria-label="Back one frame">&#9664;</button>
+      <button id="btnPlay" class="primary round" data-tip="Play or pause (Space)" aria-label="Play">&#9654;</button>
+      <button id="btnNext" data-tip="Forward one frame (Right arrow)" aria-label="Forward one frame">&#9654;</button>
+      <span id="timeLabel" class="time">00:00.00 / 00:00.00</span>
+      <input id="scrub" type="range" min="0" max="1000" value="0" data-tip="Drag to scrub through your film" aria-label="Scrub">
+      <span class="vol" data-tip="Preview volume">&#128266;<input id="vol" type="range" min="0" max="100" value="100" aria-label="Volume"></span>
+    </div>
+  </section>
+
+  <aside id="right" class="panel"><div class="ptitle">Inspector</div><div id="inspector"></div></aside>
+</main>
+
+<section id="tlbox">
+  <div id="tlbar">
+    <button id="tlSplit" data-tip="Split at the playhead (S)">&#9986; Split</button>
+    <button id="tlDel" data-tip="Delete the selected clip (Delete)">Delete</button>
+    <button id="tlRipple" data-tip="Delete and close the gap (Shift+Delete)">Ripple delete</button>
+    <button id="tlDup" data-tip="Duplicate the selected clip (Ctrl+D)">Duplicate</button>
+    <button id="tlSnap" class="on" data-tip="Snap clips to edges and the playhead">Snap</button>
+    <span class="sp"></span>
+    <button id="tlAddV" data-tip="Add another video track">+ Video track</button>
+    <button id="tlAddA" data-tip="Add another audio track">+ Audio track</button>
+    <span class="sp"></span>
+    <button id="tlZoomOut" data-tip="Zoom out (-)" aria-label="Zoom out">&#8722;</button>
+    <input id="tlZoom" type="range" min="0" max="100" value="40" data-tip="Zoom the timeline (Ctrl + mouse wheel)" aria-label="Timeline zoom">
+    <button id="tlZoomIn" data-tip="Zoom in (+)" aria-label="Zoom in">+</button>
+    <button id="tlFit" data-tip="Fit the whole film on screen">Fit</button>
+  </div>
+  <div id="tlwrap">
+    <div id="tlHeads"></div>
+    <div id="tlScroll"><canvas id="tl"></canvas><div id="tlSpacer"></div></div>
+  </div>
+</section>
+
+<footer id="foot">&copy; Karen O'Brien (Coffeebreak). Karen O'Brien keeps all rights to this app, its design, name and logo. You may not copy this app or make your own version of it. <a href="#" id="aboutLink">About and limits</a></footer>
+
+<input type="file" id="fileMedia" accept="video/*,audio/*,image/*,.mp4,.mov,.m4v,.webm,.mkv,.mp3,.wav,.m4a,.aac,.ogg,.png,.jpg,.jpeg,.gif,.webp" multiple hidden>
+<input type="file" id="fileChar" accept="image/*" multiple hidden>
+<input type="file" id="fileProj" accept=".json,application/json" hidden>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="modal" hidden></div>
+<div id="tour" hidden></div>
+<script src="js/util.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/grade.js"></script>
+<script src="js/state.js"></script>
+<script src="js/render.js"></script>
+<script src="js/timeline.js"></script>
+<script src="js/panels.js"></script>
+<script src="js/gradeui.js"></script>
+<script src="js/export.js"></script>
+<script src="js/main.js"></script>
+<script src="cb-fullscreen.js"></script><div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
+</body>
+</html>

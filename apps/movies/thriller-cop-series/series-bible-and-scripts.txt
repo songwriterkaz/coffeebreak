@@ -1,0 +1,128 @@
+Coffeebreak Blue Line: Port Calder
+Every city keeps a secret. Port Calder keeps a map of them.
+
+In the fog-bound harbour city of Port Calder, Detective Sergeant Ruby Vance returns from a year on desk duty to lead a tiny night squad. When a string of break-ins leaves nothing stolen but a hand-drawn map at every scene, she realises someone is charting the city's hidden corruption, and the next mark on the map is her own station.
+
+Det. Sgt. Ruby Vance: Lead detective. Blonde, quick-witted, a songwriter on the side who hums when she thinks. Back after a year on desk duty following a case that went wrong. Trusts her gut and her notebook, in that order.
+Constable Theo Marsh: Rookie, twenty-four, former bike courier who knows every laneway in the city. Talks too fast, notices everything, terrible at poker.
+Inspector Lena Okafor: Ruby's boss and oldest friend. Calm, precise, under pressure from City Hall to close cases quietly.
+Wes Duggan: Forensic tech who runs his lab from a converted shipping container. Loves old maps, bad puns and his cactus, Sergeant Prickles.
+Mira Solace: Night-market food truck owner and Ruby's informant. Hears every rumour in Port Calder before the newspapers do.
+Councillor Grant Pellow: Charming city councillor pushing a huge harbour redevelopment. Always smiling, always one step from the cameras.
+The Cartographer: Unknown figure who leaves hand-drawn maps at crime scenes. Each map marks a hidden wrong in the city. Hero or villain, the squad cannot decide.
+
+EPISODE 1: The First Map
+A break-in at the shipyard leaves nothing stolen, only a hand-drawn map pinned to the wall.
+COLD OPEN: Rain. A security guard finds a shipyard office door open. Inside, every drawer is neat, nothing is missing, and a map of the harbour is pinned to the corkboard with a red pin through the old lighthouse.
+ACT 1: Ruby's first night back. Lena hands her the shipyard case and a rookie, Theo, as punishment for both of them.
+ACT 2: Wes dates the map paper to a stationery shop that closed ten years ago. Theo spots a tiny compass rose signed with a C.
+ACT 3: At the lighthouse the squad finds a locked tin box full of shipping invoices with forged signatures.
+ACT 4: Ruby realises the invoices tie to the harbour redevelopment. A second map is waiting on her own desk.
+KEY SCENE:
+  INT. HARBOUR STREET STATION - NIGHT
+  LENA  You wanted back on the street. This is the street.
+  RUBY  A break-in where nothing is taken is not a crime, Lena. It is a message.
+  THEO  Or a really polite burglar.
+  RUBY  Polite people do not pick locks, Constable. Get your coat.
+TAG: Somebody is drawing the city's secrets. And they know where Ruby sits.
+
+EPISODE 2: Night Market
+Mira's food truck is torched, and a map in the ashes points to a gambling den under the market.
+COLD OPEN: The night market glows. A pop, a flash, and Mira's truck is burning. Firefighters pull a scorched map from the glovebox, untouched by the flames.
+ACT 1: Ruby questions Mira, who swears she owes nobody money.
+ACT 2: Theo goes undercover as a delivery rider and finds a trapdoor behind a dumpling stall.
+ACT 3: Below the market is a card room where shop owners are pressured to pay protection fees.
+ACT 4: The squad busts the room, but the boss escapes through a storm drain marked on the map before anyone else knew it existed.
+KEY SCENE:
+  EXT. NIGHT MARKET - NIGHT
+  MIRA  Fire does not burn paper that neatly, Ruby.
+  RUBY  Unless somebody put the paper there after.
+  MIRA  So your map maker was here. Watching my truck burn.
+  RUBY  Or watching who lit it.
+TAG: The Cartographer knew the tunnels. Which means the Cartographer has been underground.
+
+EPISODE 3: Cable Car
+A city inspector is stuck in a cable car over the bay with a briefcase someone desperately wants.
+COLD OPEN: The cable car stops halfway across the bay. Inside, a nervous building inspector clutches a briefcase. On the seat beside him, a folded map.
+ACT 1: The cable car has been stopped on purpose. A voice on the radio demands the briefcase be dropped into the water.
+ACT 2: Theo climbs the maintenance ladder while Ruby talks to the voice and keeps it busy.
+ACT 3: Wes traces the radio to the control booth, where a contractor has locked himself in.
+ACT 4: The briefcase holds safety reports for the redevelopment, all marked FAILED, all signed off as passed.
+KEY SCENE:
+  INT. CABLE CAR - NIGHT
+  INSPECTOR  They told me to sign. I did not sign. So they changed the name.
+  RUBY  (over radio) Then you are the most important man in Port Calder. Stay on the floor and do not look down.
+  INSPECTOR  I am already looking down.
+TAG: Councillor Pellow smiles on the evening news. Ruby turns the TV off.
+
+EPISODE 4: Low Tide
+A body of evidence surfaces at low tide: a sunken van full of shredded city files.
+COLD OPEN: Dawn. The tide goes out further than anyone remembers. Rising from the mud is a white van, its back doors open, full of shredded paper.
+ACT 1: Wes and Theo spend a sleepless night taping shreds back together in the shipping container lab.
+ACT 2: The rebuilt pages show payments to a company called Grey Gull Holdings.
+ACT 3: Lena is ordered by City Hall to hand the files over. She gives Ruby one hour.
+ACT 4: Ruby copies the key page into her songwriting notebook, disguised as lyrics, just before the files are taken.
+KEY SCENE:
+  INT. WES'S LAB - NIGHT
+  WES  Four thousand pieces. Sergeant Prickles is not helping.
+  THEO  Is the cactus supposed to help?
+  WES  He provides moral support. Like you, but spikier.
+TAG: Grey Gull Holdings has one listed director, and nobody has ever met them.
+
+EPISODE 5: Lights Out
+A citywide blackout traps the squad inside Harbour Street Station with someone who should not be there.
+COLD OPEN: Every light in Port Calder goes out at once. In the station, the backup generator coughs, and a door that should be locked creaks open.
+ACT 1: In the dark, the evidence room is opened. Only one item is taken: Ruby's notebook.
+ACT 2: The squad searches the station by torchlight. Theo finds wet boot prints leading to the old ferry ticket booth.
+ACT 3: Inside the booth, a hidden hatch leads down to the old ferry terminal and a wall covered in maps.
+ACT 4: The Cartographer's lair is empty, but one map is new. It shows the station, and the words: Look closer to home.
+KEY SCENE:
+  INT. FERRY TERMINAL - NIGHT
+  THEO  They have been under our feet the whole time.
+  RUBY  Every case, every map. Somebody here has been feeding them.
+  LENA  Choose your next words carefully, Ruby.
+TAG: Trust inside the squad cracks.
+
+EPISODE 6: Inside Job
+Ruby suspects someone in her own station is working with the Cartographer, or against them.
+COLD OPEN: Ruby sits alone, listing names on a whiteboard: Lena, Theo, Wes. She rubs out her own name, then writes it back.
+ACT 1: Internal affairs arrives. Ruby's past case is reopened, and she is suspended for forty-eight hours.
+ACT 2: Off duty, Ruby follows Councillor Pellow's driver to a warehouse full of model city plans.
+ACT 3: Theo, working the case alone, discovers Wes once mapped the old ferry tunnels for a university project.
+ACT 4: Wes admits he has been helping the Cartographer, believing they were exposing corruption. He has never seen their face.
+KEY SCENE:
+  INT. SHIPPING CONTAINER LAB - NIGHT
+  THEO  You lied to us.
+  WES  I left out a chapter. There is a difference.
+  THEO  Not in a police station there is not.
+TAG: Wes hands over a phone number. It rings once, then a map arrives by text.
+
+EPISODE 7: The Lighthouse
+The Cartographer invites Ruby to the dead lighthouse to trade the final map for her notebook.
+COLD OPEN: Fog so thick the harbour vanishes. A single light flickers on at the top of the lighthouse for the first time in thirty years.
+ACT 1: Ruby goes alone, against orders, with Theo following at a distance.
+ACT 2: At the top she meets the Cartographer: a retired city surveyor, Edith Crane, who lost her job for refusing to fake land reports.
+ACT 3: Edith has mapped every crooked deal behind the redevelopment, but someone else is coming to silence her.
+ACT 4: Pellow's hired men arrive. Ruby, Theo and Edith escape down the spiral stairs as the lamp room is set alight.
+KEY SCENE:
+  INT. LIGHTHOUSE LAMP ROOM - NIGHT
+  EDITH  Maps do not lie, Sergeant. People draw them wrong on purpose.
+  RUBY  Then help me draw this one right.
+  EDITH  Only if you promise it ends in a courtroom, not a cover-up.
+TAG: Ruby makes the promise. Below them, engines roar in the fog.
+
+EPISODE 8: True North
+With the full map in hand, the squad races to expose the redevelopment scheme before the city signs it into law.
+COLD OPEN: City Hall. Councillor Pellow rehearses his speech in a mirror. Across town, Ruby lays every map out on the ticket hall floor. Together they form one picture.
+ACT 1: The joined maps reveal Grey Gull Holdings owns every block marked for demolition, bought cheap through forged safety reports.
+ACT 2: Lena must choose: obey City Hall or back her squad. She chooses the squad.
+ACT 3: Theo rides the laneways to deliver the evidence to a judge before the vote, while Ruby stalls Pellow on live TV.
+ACT 4: Pellow is arrested on camera. Edith gives a statement. Wes keeps his job, on probation, cactus included.
+KEY SCENE:
+  INT. CITY HALL CHAMBER - DAY
+  PELLOW  Sergeant, this is a council meeting, not a crime scene.
+  RUBY  Funny. I have a map that says otherwise.
+  LENA  Councillor Pellow, you are under arrest.
+TAG: Final shot: a new map on Ruby's desk. A different city. Season two.
+© Karen Elizabeth O'Brien (Coffeebreak). Karen keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought but may not copy them or make their own versions. Third-party brands named belong to their owners and are used only to describe items.
+https://coffeebreaks.itch.io

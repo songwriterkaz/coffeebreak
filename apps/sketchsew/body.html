@@ -1,0 +1,20 @@
+<style>
+:root{--bg:#1e140e;--card:#2e2018;--cream:#f3e6d3;--latte:#c8a27a;--crema:#d9b48a;--mocha:#6b4a33;--accent:#e0b062}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--cream);font:16px system-ui,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:8px 14px;background:#140d09;border-bottom:2px solid var(--mocha)}
+header img{height:46px}header h1{font-size:20px;margin:0;flex:1;color:var(--crema)}
+button{background:var(--mocha);color:var(--cream);border:0;border-radius:10px;padding:9px 14px;font-size:15px;cursor:pointer;margin:3px}
+button.on,button:hover{background:var(--latte);color:#1e140e}
+.wrap{display:flex;gap:14px;padding:12px;flex-wrap:wrap;justify-content:center}
+.panel{background:var(--card);border-radius:14px;padding:12px;max-width:430px;flex:1 1 300px}
+canvas#c{background:#f3e6d3;border-radius:14px;touch-action:none;max-width:100%;height:auto}
+h2{margin:4px 0 8px;color:var(--accent);font-size:18px}.sw{width:30px;height:30px;border-radius:50%;display:inline-block;margin:3px;cursor:pointer;border:3px solid transparent}.sw.on{border-color:#fff}
+.steps{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;padding:6px}.steps span{padding:4px 10px;border-radius:20px;background:#2e2018;font-size:13px}.steps span.on{background:var(--latte);color:#1e140e}
+#msg{min-height:44px;font-size:17px}.gal{display:flex;flex-wrap:wrap;gap:6px}.gal img{width:90px;border-radius:8px;background:#f3e6d3}
+a{color:var(--accent)}.stars{font-size:34px;color:var(--accent)}
+</style>
+<header><img src="cb-sports-logo.png" alt="Coffeebreak"><h1>Coffeebreak Sketch, Sew &amp; Print</h1><button id="mute">🔊 Sound on</button><button onclick="go('gallery')">Gallery</button><button onclick="go('real')">Get it made for real</button></header>
+<div class="steps" id="steps"></div>
+<div class="wrap"><canvas id="c" width="440" height="560"></canvas><div class="panel" id="p"></div></div>
+<script src="game.js"></script>
+<!-- CB-VALUE-WATERMARK:START --><div id="cb-value-wm" aria-hidden="true" style="position:fixed;right:6px;bottom:4px;z-index:1;pointer-events:none;user-select:none;opacity:.3;font:11px/1.2 sans-serif;color:#000;text-shadow:0 0 2px #fff;background:transparent;white-space:nowrap">Coffeebreak catalogue value AU$47,094</div><!-- CB-VALUE-WATERMARK:END -->

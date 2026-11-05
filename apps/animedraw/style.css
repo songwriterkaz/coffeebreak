@@ -1,0 +1,16 @@
+*{box-sizing:border-box}body{margin:0;font-family:'Trebuchet MS',system-ui,sans-serif;background:linear-gradient(160deg,#1b2a3a,#2d5d6e);color:#f3efe6;min-height:100vh}
+header{display:flex;align-items:center;gap:12px;padding:10px 14px}header img{width:52px;height:52px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px #f4b43c}header h1{margin:0;font-size:1.5em}header p{margin:0;opacity:.8;font-size:13px}
+.wrap{display:flex;gap:10px;padding:0 10px 10px;flex-wrap:wrap}
+.panel{background:#0f1c27cc;border-radius:14px;padding:10px;width:250px;flex:0 0 250px;font-size:14px}
+.panel h3{margin:.6em 0 .3em;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#f4b43c}
+.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+button{font:inherit;border:0;border-radius:9px;padding:7px 6px;cursor:pointer;background:#2a4152;color:#f3efe6}button.on,button:hover{background:#f4b43c;color:#111}
+.row{display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin:4px 0}input[type=range]{width:100%}
+.sw{width:24px;height:24px;border-radius:50%;border:2px solid #fff3;cursor:pointer;padding:0}
+#stageWrap{flex:1;min-width:300px}#view{width:100%;max-width:1200px;aspect-ratio:4/3;background:#fff;border-radius:12px;box-shadow:0 8px 24px #0007;display:block;cursor:crosshair}
+.layer{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:8px;background:#2a4152;margin:3px 0;cursor:pointer}.layer.on{outline:2px solid #f4b43c}.layer span{flex:1}.layer button{padding:2px 7px}
+#gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;padding:10px}.gi{background:#0f1c27cc;border-radius:10px;padding:6px}.gi img{width:100%;border-radius:6px;background:#fff}.gi div{display:flex;gap:4px;margin-top:4px}
+.muted{opacity:.7}footer{text-align:center;opacity:.75;font-size:13px;padding:16px 16px 70px}
+.pat{width:38px;height:38px;border-radius:8px;border:2px solid #fff3;cursor:pointer;background-size:cover}.pat.on{border-color:#f4b43c}
+@media(max-width:700px){.panel{flex:1 1 100%;width:auto}}
+select,input#btxt{width:100%;background:#2a4152;color:#f3efe6;border:0;border-radius:8px;padding:6px;margin:3px 0}

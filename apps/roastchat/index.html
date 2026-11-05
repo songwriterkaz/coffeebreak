@@ -1,10 +1,252 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Roast Chat</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Roast Chat</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A post feed on your device: write posts, like them, and keep a local community board.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=nm placeholder="Your name" value="Guest"></p><textarea id=tx placeholder="Write a post"></textarea><p><button id=po>Post</button></p><div id=fd></div><script>
-var KEY='cb-feed-'+location.pathname,F=JSON.parse(localStorage.getItem(KEY)||'null')||[{n:'Coffeebreak',t:'Welcome to the board. Say hi.',l:3}];
-function r(){localStorage.setItem(KEY,JSON.stringify(F));fd.innerHTML=F.map((p,i)=>'<div class=item><b>'+p.n.replace(/</g,'')+'</b><p>'+p.t.replace(/</g,'')+'</p><button data-i='+i+'>Like '+p.l+'</button></div>').join('')}r();
-po.onclick=()=>{if(tx.value){F.unshift({n:nm.value,t:tx.value,l:0});tx.value='';r()}};fd.onclick=e=>{var i=e.target.dataset.i;if(i){F[i].l++;r()}}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Coffeebreak Roast Chat</title>
+<style>
+:root{
+  --bg:#1b130e;--panel:#241913;--txt:#f3e6d6;--mut:#b49c88;--brand:#4a2c1a;
+  --sent:#7a4e30;--recv:#3a2a1f;--line:#3a2a1f;--cream:#f6efe6;--fire:#e85d04;
+  --fire2:#f48c06;--ok:#6a994e;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);
+  font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body{min-height:100%;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--brand);
+  border-bottom:2px solid var(--fire);position:sticky;top:0;z-index:20}
+header img{width:36px;height:36px;border-radius:8px;object-fit:cover;background:#2a1d14}
+header .t{flex:1;min-width:0}
+header h1{margin:0;font-size:15px;font-weight:700;letter-spacing:.2px;color:var(--cream)}
+header p{margin:0;font-size:11px;color:var(--mut)}
+.heat{display:flex;gap:4px}
+.heat button{border:0;background:#2a1d14;color:var(--mut);font-size:11px;font-weight:700;
+  padding:6px 8px;border-radius:999px;cursor:pointer}
+.heat button.on{background:var(--fire);color:#fff}
+main{flex:1;display:flex;flex-direction:column;min-height:0}
+#chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;
+  -webkit-overflow-scrolling:touch}
+.bubble{max-width:86%;padding:10px 12px;border-radius:16px;white-space:pre-wrap;word-break:break-word}
+.bubble.them{align-self:flex-start;background:var(--recv);border-bottom-left-radius:4px}
+.bubble.me{align-self:flex-end;background:var(--sent);border-bottom-right-radius:4px;color:#fff}
+.bubble .tag{display:block;font-size:10px;color:var(--fire2);font-weight:700;margin-bottom:3px;text-transform:uppercase;letter-spacing:.4px}
+.bubble.me .tag{color:#ffd6a5}
+.sys{align-self:center;font-size:11px;color:var(--mut);text-align:center;max-width:92%;padding:4px 8px}
+.actions{display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px;border-top:1px solid var(--line);background:var(--panel)}
+.actions button,.composer button{border:0;border-radius:10px;padding:9px 11px;font-weight:700;font-size:12px;cursor:pointer;background:#2a1d14;color:var(--cream)}
+.actions button.pri{background:var(--fire);color:#fff}
+.actions button:active,.composer button:active{opacity:.85}
+.composer{display:flex;gap:6px;padding:8px 10px 10px;background:var(--panel);border-top:1px solid var(--line)}
+.composer textarea{flex:1;min-height:44px;max-height:110px;resize:vertical;border:1px solid var(--line);
+  border-radius:12px;padding:10px;background:#1b130e;color:var(--txt);font:inherit}
+.composer .send{background:var(--fire);color:#fff;min-width:64px}
+.note{font-size:10px;color:var(--mut);text-align:center;padding:4px 10px 10px;background:var(--panel)}
+.favs{display:none;padding:10px;background:var(--bg);border-top:1px solid var(--line);max-height:180px;overflow:auto}
+.favs.show{display:block}
+.favs h3{margin:0 0 6px;font-size:12px;color:var(--fire2)}
+.fav{background:var(--recv);padding:8px 10px;border-radius:10px;margin-bottom:6px;font-size:13px}
+.fav button{float:right;border:0;background:transparent;color:var(--mut);cursor:pointer;font-size:12px}
+.empty{opacity:.7;padding:24px 16px;text-align:center;color:var(--mut)}
+.empty strong{color:var(--cream);display:block;margin-bottom:6px}
+</style>
+<!--cb-frame-fix--><style id="cb-frame-fix-css">html{height:100%!important;overflow:hidden!important}body{height:100%!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:auto!important;margin-top:0}</style>
+<script>/*cb-frame-fix: storage + dialogs safe inside itch's sandboxed, cross-origin iframe*/(function(){function mem(){var d={};return{getItem:function(k){k=String(k);return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[String(k)]=String(v)},removeItem:function(k){delete d[String(k)]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}}
+function px(st){return new Proxy(st,{get:function(t,k){if(k in t)return typeof t[k]=='function'?t[k].bind(t):t[k];return t.getItem(k)===null?undefined:t.getItem(k)},set:function(t,k,v){t.setItem(k,v);return true},deleteProperty:function(t,k){t.removeItem(k);return true},has:function(t,k){return k in t||t.getItem(k)!==null},ownKeys:function(t){var a=[];for(var i=0;i<t.length;i++)a.push(t.key(i));return a},getOwnPropertyDescriptor:function(t,k){var v=t.getItem(k);return v===null?undefined:{value:v,writable:true,enumerable:true,configurable:true}}})}
+['localStorage','sessionStorage'].forEach(function(n){var ok=false;try{var s=window[n];s.setItem('__cbt','1');s.removeItem('__cbt');ok=true}catch(e){}if(!ok){try{Object.defineProperty(window,n,{value:px(mem()),configurable:true})}catch(e){}}});
+function toast(m){try{var t=document.createElement('div');t.textContent=String(m);t.style.cssText='position:fixed;left:50%;top:16px;transform:translateX(-50%);max-width:90%;background:#2a1d14;color:#fff;padding:12px 18px;border-radius:10px;z-index:2147483647;font:15px system-ui,sans-serif;box-shadow:0 4px 14px #0006';(document.body||document.documentElement).appendChild(t);setTimeout(function(){t.remove()},4500)}catch(e){}}
+var A=window.alert,C=window.confirm;window.alert=function(m){var t=Date.now();try{A.call(window,m)}catch(e){}if(Date.now()-t<30)toast(m)};window.confirm=function(m){var t=Date.now(),r=false;try{r=C.call(window,m)}catch(e){}if(!r&&Date.now()-t<30)return true;return r};
+window.__cbNav=function(u){var w=null;try{w=window.open(u,'_blank')}catch(e){}if(!w){var a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}};})();</script>
+
+<script src="cb-fullscreen.js"></script></head>
+<body>
+<header>
+  <img src="cb-sports-logo.png" alt="Coffeebreak"/>
+  <div class="t"><h1>Roast Chat</h1><p>Paste a tease · get a comeback</p></div>
+  <div class="heat" id="heat" role="group" aria-label="Heat level">
+    <button type="button" data-h="m" class="on">Mild</button>
+    <button type="button" data-h="d">Med</button>
+    <button type="button" data-h="s">Savage</button>
+  </div>
+</header>
+<main>
+  <div id="chat" aria-live="polite">
+    <div class="sys">Coffeebreak Roast Chat · all in good fun</div>
+    <div class="empty" id="empty"><strong>Got roasted?</strong>Paste what they said below and hit Send. Or tap Roast Me for a playful dig at yourself.</div>
+  </div>
+  <div class="actions">
+    <button type="button" class="pri" id="btnAnother" disabled>Another one</button>
+    <button type="button" id="btnCopy" disabled>Copy</button>
+    <button type="button" id="btnFav" disabled>★ Save</button>
+    <button type="button" id="btnRoastMe">Roast Me</button>
+    <button type="button" id="btnFavs">Favourites</button>
+    <button type="button" id="btnClear">Clear</button>
+  </div>
+  <div class="favs" id="favBox"><h3>Favourites</h3><div id="favList"></div></div>
+  <div class="composer">
+    <textarea id="inp" placeholder="Paste the tease or roast they sent you…" maxlength="500" rows="2"></textarea>
+    <button type="button" class="send" id="btnSend">Send</button>
+  </div>
+  <div class="note">all in good fun · no slurs · no body-weight digs · keep it cheeky</div>
+</main>
+<script src="data.js"></script>
+<script>
+(function(){
+var heat='m', lastIn='', lastOut='', lastKey='', used={};
+var chat=document.getElementById('chat'), empty=document.getElementById('empty');
+var inp=document.getElementById('inp');
+var btnAnother=document.getElementById('btnAnother'), btnCopy=document.getElementById('btnCopy');
+var btnFav=document.getElementById('btnFav'), btnRoastMe=document.getElementById('btnRoastMe');
+var btnFavs=document.getElementById('btnFavs'), btnClear=document.getElementById('btnClear');
+var favBox=document.getElementById('favBox'), favList=document.getElementById('favList');
+var heatEl=document.getElementById('heat');
+
+function lsGet(k,fb){try{var v=localStorage.getItem(k);return v==null?fb:v}catch(e){return fb}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function getFavs(){try{return JSON.parse(lsGet('cb_roast_favs','[]'))||[]}catch(e){return[]}}
+function setFavs(a){lsSet('cb_roast_favs',JSON.stringify(a.slice(0,40)))}
+
+heat=lsGet('cb_roast_heat','m');
+if(!/^[mds]$/.test(heat))heat='m';
+heatEl.querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b.dataset.h===heat)});
+heatEl.addEventListener('click',function(e){
+  var b=e.target.closest('button[data-h]');if(!b)return;
+  heat=b.dataset.h;lsSet('cb_roast_heat',heat);
+  heatEl.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});
+});
+
+function bubble(cls,text,tag){
+  if(empty){empty.remove();empty=null}
+  var d=document.createElement('div');d.className='bubble '+cls;
+  if(tag){var t=document.createElement('span');t.className='tag';t.textContent=tag;d.appendChild(t)}
+  d.appendChild(document.createTextNode(text));
+  chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d;
+}
+function sys(t){var d=document.createElement('div');d.className='sys';d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
+
+var CAT_ORDER=['looks','age','height','smart','job','music','cooking','driving','late','single','gaming','fashion','generic'];
+var LABELS={looks:'Looks',age:'Age',height:'Height',smart:'Smarts',job:'Work',music:'Music',cooking:'Cooking',driving:'Driving',late:'Late',single:'Single',gaming:'Gaming',fashion:'Fashion',generic:'Generic'};
+var HEAT_LABEL={m:'Mild',d:'Medium',s:'Savage'};
+
+function matchCat(s){
+  s=(' '+String(s).toLowerCase()+' ').replace(/[^a-z0-9\s]/g,' ');
+  var best='generic',score=0;
+  CAT_ORDER.forEach(function(k){
+    if(k==='generic')return;
+    var kw=(CB.D[k].kw||'').split(/\s+/),sc=0;
+    for(var i=0;i<kw.length;i++){if(kw[i]&&s.indexOf(' '+kw[i]+' ')>=0)sc++}
+    if(sc>score){score=sc;best=k}
+  });
+  return best;
+}
+
+function pickLine(pool,key){
+  if(!pool||!pool.length)return "Cute try. I'll take that as a compliment.";
+  var u=used[key]||[];
+  var avail=pool.filter(function(x){return u.indexOf(x)<0});
+  if(!avail.length){u=[];avail=pool.slice()}
+  var line=avail[Math.floor(Math.random()*avail.length)];
+  u.push(line);if(u.length>Math.min(8,pool.length))u.shift();
+  used[key]=u;return line;
+}
+
+function replyTo(text){
+  lastIn=String(text||'').trim();
+  if(!lastIn)return;
+  bubble('them',lastIn,'They said');
+  var cat=matchCat(lastIn);
+  var pool=CB.D[cat][heat]||CB.D.generic[heat];
+  var key=cat+'|'+heat;
+  lastOut=pickLine(pool,key);
+  lastKey=key;
+  bubble('me',lastOut,HEAT_LABEL[heat]+' · '+LABELS[cat]);
+  btnAnother.disabled=false;btnCopy.disabled=false;btnFav.disabled=false;
+}
+
+function roastMe(){
+  var pool=CB.R[heat]||CB.R.m;
+  lastIn='[roast me]';
+  lastOut=pickLine(pool,'me|'+heat);
+  lastKey='me|'+heat;
+  bubble('them',"Roast me, Coffeebreak.",'You');
+  bubble('me',lastOut,HEAT_LABEL[heat]+' · Roast Me');
+  btnAnother.disabled=false;btnCopy.disabled=false;btnFav.disabled=false;
+}
+
+function another(){
+  if(!lastIn)return;
+  if(lastIn==='[roast me]'){
+    var pool=CB.R[heat]||CB.R.m;
+    lastOut=pickLine(pool,'me|'+heat);
+    bubble('me',lastOut,HEAT_LABEL[heat]+' · Roast Me');
+  }else{
+    var cat=matchCat(lastIn);
+    var pool=CB.D[cat][heat]||CB.D.generic[heat];
+    lastOut=pickLine(pool,cat+'|'+heat);
+    bubble('me',lastOut,HEAT_LABEL[heat]+' · '+LABELS[cat]);
+  }
+  btnCopy.disabled=false;btnFav.disabled=false;
+}
+
+function copyOut(){
+  if(!lastOut)return;
+  function ok(){sys('Copied ✓')}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(lastOut).then(ok).catch(function(){
+      try{var t=document.createElement('textarea');t.value=lastOut;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();ok()}catch(e){sys('Copy failed')}
+    });
+  }else{
+    try{var t=document.createElement('textarea');t.value=lastOut;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();ok()}catch(e){sys('Copy failed')}
+  }
+}
+
+function saveFav(){
+  if(!lastOut)return;
+  var a=getFavs();
+  if(a.indexOf(lastOut)>=0){sys('Already saved');return}
+  a.unshift(lastOut);setFavs(a);sys('Saved to favourites ★');renderFavs();
+}
+
+function renderFavs(){
+  var a=getFavs();favList.innerHTML='';
+  if(!a.length){favList.innerHTML='<div class="sys">No favourites yet</div>';return}
+  a.forEach(function(line,i){
+    var d=document.createElement('div');d.className='fav';
+    var b=document.createElement('button');b.type='button';b.textContent='✕';b.title='Remove';
+    b.onclick=function(){var x=getFavs();x.splice(i,1);setFavs(x);renderFavs()};
+    d.appendChild(b);d.appendChild(document.createTextNode(line));favList.appendChild(d);
+  });
+}
+
+btnSend.addEventListener('click',function(){var v=inp.value.trim();if(!v)return;inp.value='';replyTo(v)});
+inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();btnSend.click()}});
+btnAnother.addEventListener('click',another);
+btnCopy.addEventListener('click',copyOut);
+btnFav.addEventListener('click',saveFav);
+btnRoastMe.addEventListener('click',roastMe);
+btnFavs.addEventListener('click',function(){favBox.classList.toggle('show');if(favBox.classList.contains('show'))renderFavs()});
+btnClear.addEventListener('click',function(){
+  chat.innerHTML='<div class="sys">Coffeebreak Roast Chat · all in good fun</div>';
+  empty=document.createElement('div');empty.className='empty';empty.id='empty';
+  empty.innerHTML='<strong>Got roasted?</strong>Paste what they said below and hit Send. Or tap Roast Me for a playful dig at yourself.';
+  chat.appendChild(empty);
+  lastIn=lastOut='';btnAnother.disabled=btnCopy.disabled=btnFav.disabled=true;
+});
+
+renderFavs();
+})();
+</script>
+<!--cb-contact-start-->
+<section id="cb-contact" aria-label="Email me"><h2>✉ Email me</h2><p class="cbc-sub">Questions, custom orders or anything else? Send me a message.</p>
+<form id="cbc-form" novalidate><input type="hidden" name="_subject" value="Coffeebreak Roast Chat enquiry"><input type="hidden" name="_captcha" value="false"><input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+<label>Name<input name="name" required maxlength="100" autocomplete="name"></label><label>Email<input name="email" type="email" required maxlength="150" autocomplete="email"></label><label>Message<textarea name="message" required rows="4" maxlength="3000"></textarea></label>
+<button type="submit" id="cbc-send">Send</button><p id="cbc-status" role="status"></p></form></section>
+<a id="cbc-float" href="#cb-contact">✉ Email me</a>
+<style>#cb-contact{max-width:560px;margin:32px auto 24px;padding:20px 22px;border-radius:14px;background:var(--cbc-bg);color:var(--cbc-fg);border:1px solid var(--cbc-line);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;box-sizing:border-box}#cb-contact *{box-sizing:border-box}#cb-contact h2{margin:0 0 4px;font-size:1.3em;color:var(--cbc-fg)}.cbc-sub{margin:0 0 14px;opacity:.8}#cbc-form label{display:block;margin:0 0 10px;font-weight:600;font-size:.92em}#cbc-form input,#cbc-form textarea{display:block;width:100%;margin-top:4px;padding:9px 11px;border-radius:9px;border:1px solid var(--cbc-line);background:var(--cbc-in);color:var(--cbc-fg);font:inherit}#cbc-send,#cbc-float{background:var(--cbc-acc);color:var(--cbc-accfg);border:0;border-radius:999px;font:600 15px system-ui,sans-serif;cursor:pointer;text-decoration:none}#cbc-send{padding:10px 26px}#cbc-send:disabled{opacity:.6}#cbc-status{margin:10px 0 0;min-height:1.2em}#cbc-float{position:fixed;left:14px;bottom:14px;z-index:99998;padding:10px 16px;box-shadow:0 3px 10px #0005}</style>
+<script>(function(){var r=document.documentElement,b=document.body;function rgb(s){var m=(s||'').match(/[\d.]+/g);return m&&m.length>=3&&(m[3]===undefined||+m[3]>0)?m.slice(0,3).map(Number):null}function bgOf(e){while(e){var c=rgb(getComputedStyle(e).backgroundColor);if(c)return c;e=e.parentElement}return[255,255,255]}function lum(c){return(.299*c[0]+.587*c[1]+.114*c[2])/255}function hue(c){var R=c[0]/255,G=c[1]/255,B=c[2]/255,mx=Math.max(R,G,B),mn=Math.min(R,G,B),d=mx-mn;if(!d)return{h:0,s:0};var h=mx==R?((G-B)/d)%6:mx==G?(B-R)/d+2:(R-G)/d+4;return{h:(h*60+360)%360,s:d/(1-Math.abs(mx+mn-1)||1)}}function pinkish(c){var x=hue(c);return x.s>.25&&(x.h>=290||x.h<=12)&&lum(c)>.45}var sec=document.getElementById('cb-contact'),bg=bgOf(sec.parentElement),dark=lum(bg)<.5,acc=null;var cands=document.querySelectorAll('button,.btn,a.button,[class*=btn]');for(var i=0;i<cands.length&&!acc;i++){if(cands[i].id&&cands[i].id.indexOf('cbc')==0)continue;var c=rgb(getComputedStyle(cands[i]).backgroundColor);if(c&&hue(c).s>.2&&!pinkish(c))acc=c}if(!acc)acc=dark?[201,155,92]:[111,74,46];function css(c){return'rgb('+c.join(',')+')'}var s=sec.style,f=document.getElementById('cbc-float').style;[s,f].forEach(function(t){t.setProperty('--cbc-acc',css(acc));t.setProperty('--cbc-accfg',lum(acc)>.6?'#1b1410':'#fff')});s.setProperty('--cbc-bg',dark?'rgba(255,255,255,.06)':'rgba(0,0,0,.035)');s.setProperty('--cbc-fg',dark?'#f3ece4':'#2a1d14');s.setProperty('--cbc-line',dark?'rgba(255,255,255,.18)':'rgba(0,0,0,.15)');s.setProperty('--cbc-in',dark?'rgba(0,0,0,.25)':'#fff');document.getElementById('cbc-float').addEventListener('click',function(e){e.preventDefault();sec.scrollIntoView({behavior:'smooth'});setTimeout(function(){var n=sec.querySelector('input[name=name]');n&&n.focus({preventScroll:true})},500)});var form=document.getElementById('cbc-form'),st=document.getElementById('cbc-status'),btn=document.getElementById('cbc-send');form.addEventListener('submit',function(e){e.preventDefault();if(form._honey.value)return;if(!form.checkValidity()){st.textContent='Please fill in your name, a valid email and a message.';return}btn.disabled=true;st.textContent='Sending…';var d={};new FormData(form).forEach(function(v,k){d[k]=v});fetch('https://formsubmit.co/ajax/songwriterkaz@gmail.com',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(d)}).then(function(r){return r.json()}).then(function(j){if(j&&(j.success===true||j.success==='true')){form.reset();st.textContent='Thank you! Your message has been sent. I\u2019ll get back to you soon.'}else throw 0}).catch(function(){st.textContent='Sorry, that didn\u2019t send. Please try again in a moment.'}).then(function(){btn.disabled=false})})})();</script>
+<!--cb-contact-end-->
+<!--cb-bar-fix--><style>#cbBar{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;background:#000;border-top:3px solid #d4af37;border-bottom:3px solid #d4af37;padding:12px;position:relative;z-index:5}#cbBar>*{position:static!important;left:auto!important;right:auto!important;bottom:auto!important;top:auto!important;transform:none!important;margin:0!important}#cbBar #cbc-float{display:inline-block;background:#d4af37!important;color:#000!important;font:700 17px system-ui,sans-serif!important;padding:12px 22px!important;border-radius:999px}</style>
+<script>/*cb-bar-fix: move overlapping floating buttons into a clear bar under the header*/(function(){function fx(e){var s=getComputedStyle(e),r=e.getBoundingClientRect();return s.position=='fixed'&&s.display!='none'&&r.width>0&&r.height>0}function ov(a,b){a=a.getBoundingClientRect();b=b.getBoundingClientRect();return a.left<b.right-4&&b.left<a.right-4&&a.top<b.bottom-4&&b.top<a.bottom-4}function go(){var em=document.getElementById('cbc-float');if(!em||em.closest('#cbBar'))return;var others=[].filter.call(document.querySelectorAll('body *'),function(e){return e!==em&&!e.contains(em)&&!em.contains(e)&&fx(e)&&e.getBoundingClientRect().width<700&&ov(e,em)});if(!others.length)return;var bar=document.getElementById('cbBar');if(!bar){bar=document.createElement('nav');bar.id='cbBar';bar.setAttribute('aria-label','Listen and contact');var h=document.querySelector('body > header, header');if(h&&h.getBoundingClientRect().top<200&&getComputedStyle(h).position!='fixed')h.parentNode.insertBefore(bar,h.nextSibling);else document.body.insertBefore(bar,document.body.firstChild)}others.forEach(function(o){if(/radio|suno|listen|music|♫|📻/i.test(o.innerText||o.id||''))bar.appendChild(o)});bar.appendChild(em)}function run(){[300,1500,4000].forEach(function(t){setTimeout(go,t)})}if(document.readyState=='complete')run();else addEventListener('load',run)})();</script>
+<!-- CB-VALUE-WATERMARK:START --><div id="cb-value-wm" aria-hidden="true" style="position:fixed;right:6px;bottom:4px;z-index:1;pointer-events:none;user-select:none;opacity:.3;font:11px/1.2 sans-serif;color:#000;text-shadow:0 0 2px #fff;background:transparent;white-space:nowrap">Coffeebreak catalogue value AU$47,094</div><!-- CB-VALUE-WATERMARK:END --><div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
+</body>
+</html>

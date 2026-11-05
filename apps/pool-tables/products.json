@@ -1,0 +1,141 @@
+{
+ "markup": 0,
+ "products": [
+  {
+   "sku": "PT1",
+   "title": "7ft Horizon English-Profile Pool Table (25mm MDF bed)",
+   "size": "7ft x 4ft",
+   "finish_options": [
+    "As pictured"
+   ],
+   "felt_options": [
+    "As pictured"
+   ],
+   "supplier": "S1",
+   "example": false,
+   "delivery": "Freight to your door (MDF table). Delivery to Newcastle NSW confirmed before your order is placed.",
+   "supplierUrl": "S1-p1",
+   "image": "img/pt1.jpg",
+   "salePrice": 2116.05
+  },
+  {
+   "sku": "PT2",
+   "title": "7ft MDF Pool Table \u2013 Great Northern Edition (branded felt)",
+   "size": "7ft",
+   "finish_options": [
+    "Branded cabinet"
+   ],
+   "felt_options": [
+    "Great Northern branded felt"
+   ],
+   "supplier": "S2",
+   "example": false,
+   "delivery": "Freight to your door (MDF table). Delivery to Newcastle NSW confirmed before your order is placed.",
+   "supplierUrl": "S2-p2",
+   "image": "img/pt2.jpg",
+   "salePrice": 2116.05
+  },
+  {
+   "sku": "PT3",
+   "title": "7ft MDF Pool Table \u2013 Victoria Bitter Edition (branded felt)",
+   "size": "7ft",
+   "finish_options": [
+    "Branded cabinet"
+   ],
+   "felt_options": [
+    "VB branded felt"
+   ],
+   "supplier": "S2",
+   "example": false,
+   "delivery": "Freight to your door (MDF table). Delivery to Newcastle NSW confirmed before your order is placed.",
+   "supplierUrl": "S2-p3",
+   "image": "img/pt3.jpg",
+   "salePrice": 2116.05
+  },
+  {
+   "sku": "PT4",
+   "title": "8ft Walnut Slate Pool Table \u2013 Blue Felt",
+   "size": "8ft",
+   "finish_options": [
+    "Walnut"
+   ],
+   "felt_options": [
+    "Blue"
+   ],
+   "supplier": "S2",
+   "example": false,
+   "delivery": "Slate table: freight plus professional install may be quoted extra. Delivery to Newcastle NSW confirmed before your order is placed.",
+   "supplierUrl": "S2-p4",
+   "image": "img/pt4.jpg",
+   "salePrice": 3091.05
+  },
+  {
+   "sku": "PT5",
+   "title": "Hepburn 7ft 3-in-1 Dining Pool Table",
+   "size": "7ft",
+   "finish_options": [
+    "Black"
+   ],
+   "felt_options": [
+    "Green"
+   ],
+   "supplier": "S6",
+   "example": false,
+   "delivery": "Freight to your door (MDF table). Delivery to Newcastle NSW confirmed before your order is placed.",
+   "supplierUrl": "S6-p5",
+   "image": "img/pt5.jpg",
+   "salePrice": 1808.05
+  },
+  {
+   "sku": "PT6",
+   "title": "7ft 4-in-1 Convertible Pool Table (pool, dining, table tennis, air hockey)",
+   "size": "7ft",
+   "finish_options": [
+    "Standard"
+   ],
+   "felt_options": [
+    "Standard"
+   ],
+   "supplier": "S6",
+   "example": false,
+   "delivery": "Freight to your door (MDF table). Delivery to Newcastle NSW confirmed before your order is placed.",
+   "supplierUrl": "S6-p6",
+   "image": "img/pt6.jpg",
+   "salePrice": 2013.05
+  },
+  {
+   "sku": "PT7",
+   "title": "Cambridge 7ft Slate Pool Table \u2013 Solid Timber",
+   "size": "7ft",
+   "finish_options": [
+    "Solid timber"
+   ],
+   "felt_options": [
+    "Green"
+   ],
+   "supplier": "S6",
+   "example": false,
+   "delivery": "Slate table: freight plus professional install may be quoted extra. Delivery to Newcastle NSW confirmed before your order is placed.",
+   "supplierUrl": "S6-p7",
+   "image": "img/pt7.jpg",
+   "salePrice": 4323.05
+  },
+  {
+   "sku": "PT8",
+   "title": "Odyssey Outdoor Slate Pool Table \u2013 Australian Made",
+   "size": "8ft",
+   "finish_options": [
+    "Outdoor"
+   ],
+   "felt_options": [
+    "Outdoor felt"
+   ],
+   "supplier": "S6",
+   "example": false,
+   "delivery": "Slate table: freight plus professional install may be quoted extra. Delivery to Newcastle NSW confirmed before your order is placed.",
+   "supplierUrl": "S6-p8",
+   "image": "img/pt8.jpg",
+   "salePrice": 5606.05
+  }
+ ]
+}

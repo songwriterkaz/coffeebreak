@@ -1,0 +1,235 @@
+arvo|afternoon|See you this arvo at the beach.
+avo|avocado|I'll have smashed avo on toast.
+ambo|ambulance or paramedic|The ambos got there in five minutes.
+ankle biter|small child|We've got three ankle biters at home.
+aussie salute|waving flies away from your face|It's so hot the flies have everyone doing the Aussie salute.
+bail|to leave or cancel plans|Sorry, I've got to bail on tonight.
+barbie|barbecue|Chuck another snag on the barbie.
+barrack|to cheer for a team|Who do you barrack for?
+bathers|swimsuit|Grab your bathers, we're going swimming.
+battler|someone working hard against the odds|He's a real Aussie battler.
+beaut|great, excellent|You little beaut!
+bevvy|a drink, usually alcoholic|Fancy a bevvy after work?
+bikie|member of a motorcycle gang|The bikies rolled into town.
+billabong|a waterhole or pond left by a river|We camped by the billabong.
+billy|tin pot for boiling water over a fire|Put the billy on for a cuppa.
+bingle|minor car accident|I had a bit of a bingle in the car park.
+bitzer|mixed-breed dog|Our dog's a bitzer, bits of this and that.
+bloke|man|He's a good bloke.
+bludger|lazy person who avoids work|Stop being a bludger and help out.
+bluey|a person with red hair; also a blue heeler dog|We called him Bluey because of his red hair.
+bogan|uncultured or unsophisticated person|He's a bit of a bogan with that mullet.
+bonza|great, excellent|That was a bonza day out.
+booze bus|police vehicle for breath testing|There's a booze bus on the highway.
+bottle-o|bottle shop, liquor store|I'll stop at the bottle-o on the way.
+brekkie|breakfast|What's for brekkie?
+brolly|umbrella|Take a brolly, it looks like rain.
+buckley's|no chance at all|You've got Buckley's of getting tickets now.
+budgie smugglers|tight men's swimming briefs|He turned up in budgie smugglers.
+bush|the countryside, outback|They live out in the bush.
+bush telly|a campfire|We sat around watching the bush telly.
+cark it|to die or break down|My old car finally carked it.
+chockers|completely full|The train was chockers this morning.
+chook|chicken|Feed the chooks before school.
+chrissie|Christmas|What are you doing for Chrissie?
+chuck a sickie|take a day off work pretending to be sick|He chucked a sickie on Friday.
+chuck a u-ey|do a U-turn|Chuck a u-ey, we missed the turn.
+chinwag|a chat|We had a good chinwag over coffee.
+choccy|chocolate|Grab me a choccy biccy.
+biccy|biscuit|Want a biccy with your tea?
+clucky|wanting to have a baby|She's been clucky since her sister had a baby.
+coldie|a cold beer|Nothing beats a coldie on a hot day.
+cozzie|swimsuit|Don't forget your cozzie.
+crack the sads|to sulk or get upset|Don't crack the sads, it's only a game.
+crikey|expression of surprise|Crikey, look at the size of that croc!
+crook|sick or unwell|I'm feeling a bit crook today.
+cuppa|cup of tea or coffee|Sit down and have a cuppa.
+dag|a nerdy or unfashionable person, often endearing|You're such a dag, Dad.
+daggy|unfashionable, uncool|I love my daggy old trackies.
+dacks|trousers or pants|Pull your dacks up.
+dead set|truly, honestly|Dead set, that's what happened.
+dero|derelict, a homeless or down-and-out person|He looked like a dero after camping a week.
+devo|devastated|I was devo when they cancelled the gig.
+dinkum|genuine, real|Is that fair dinkum?
+fair dinkum|honestly, truly genuine|Fair dinkum, I didn't touch it.
+dob in|to tell on someone|Who dobbed me in?
+docket|a receipt|Keep the docket in case you return it.
+doona|duvet, quilt|It's cold, grab the doona.
+drongo|idiot, fool|Don't be a drongo.
+dunny|toilet|The dunny's out the back.
+durry|cigarette|He went out for a durry.
+esky|portable cooler box|Fill the esky with ice.
+exy|expensive|Rent's getting really exy.
+fair go|a fair chance|Give him a fair go.
+fairy floss|cotton candy|The kids got fairy floss at the show.
+footy|football (AFL or rugby league)|Are you watching the footy tonight?
+fresh as|very fresh|The prawns are fresh as.
+furphy|a rumour or false story|That's just a furphy, don't believe it.
+g'day|hello|G'day mate, how ya going?
+galah|a fool; also a pink and grey cockatoo|Stop acting like a galah.
+garbo|garbage collector|The garbos come on Tuesday.
+give it a burl|give it a try|I've never surfed, but I'll give it a burl.
+gobsmacked|amazed, astonished|I was gobsmacked by the view.
+good on ya|well done|You finished it? Good on ya!
+grog|alcohol|Bring your own grog.
+grouse|great, excellent|That's a grouse car.
+gutful|had enough of something|I've had a gutful of this rain.
+hard yakka|hard work|Building that fence was hard yakka.
+heaps|a lot, very|Thanks heaps!
+hoon|reckless driver or loud show-off|Some hoon was doing burnouts.
+hooroo|goodbye|Hooroo, see you next week.
+how ya going|how are you|How ya going, mate?
+icy pole|ice block on a stick|The kids want icy poles.
+jumbuck|sheep|The jumbuck from Waltzing Matilda.
+jumper|sweater, pullover|Put a jumper on, it's cold.
+kindy|kindergarten|She starts kindy next year.
+knackered|exhausted|I'm knackered after that shift.
+lappy|laptop|I left my lappy at home.
+larrikin|a mischievous but good-hearted person|He's a bit of a larrikin.
+legend|a great person|Thanks for the lift, you're a legend.
+lollies|sweets, candy|Don't eat all the lollies.
+London to a brick|absolutely certain|It's London to a brick he'll be late.
+maccas|McDonald's|Let's grab Maccas on the way.
+mate|friend|Thanks, mate.
+mozzie|mosquito|The mozzies are bad tonight.
+muster|to round up livestock|They mustered the cattle.
+middy|a medium beer glass (NSW)|I'll have a middy, thanks.
+schooner|a large beer glass|Two schooners please.
+no worries|it's fine, no problem|No worries, happy to help.
+no wuckas|no worries (short for no wuckin' furries)|No wuckas, mate.
+nuddy|naked|The kids ran around in the nuddy.
+ocker|a stereotypically uncultured Australian|He put on an ocker accent.
+outback|remote inland Australia|They drove through the outback.
+owyagoin|how are you going|Owyagoin, mate?
+pash|a passionate kiss|They had a pash at the party.
+parma|chicken parmigiana|Parma and a pot at the pub.
+piker|someone who leaves early or won't join in|Don't be a piker, stay for one more.
+pissed|drunk|He got pissed at the wedding.
+pokies|poker machines|He lost his pay on the pokies.
+pom|English person|The poms won the cricket.
+postie|postman|The postie's been.
+pot|a medium beer glass (VIC, QLD)|A pot of lager, thanks.
+prezzie|present, gift|Thanks for the prezzie!
+pozzy|position, spot|Get a good pozzy for the fireworks.
+quid|money (from old pounds)|He's making a few quid.
+rack off|go away|Rack off, I'm busy.
+rapt|delighted|I'm rapt with how it turned out.
+ratbag|a rascal or troublemaker|You little ratbag!
+reckon|to think or believe|I reckon it'll rain.
+rego|vehicle registration|My rego's due next month.
+rellies|relatives|The rellies are coming for Christmas.
+ripper|excellent|That was a ripper of a game.
+roo|kangaroo|Watch out for roos on the road at night.
+ropeable|very angry|She was ropeable when she saw the dent.
+rort|a scam or rip-off|That parking fee is a rort.
+rug up|dress warmly|Rug up, it's freezing.
+sanger|sandwich|I packed a ham sanger.
+sausage sizzle|charity barbecue selling sausages|Bunnings has a sausage sizzle.
+servo|service station, petrol station|Fill up at the servo.
+she'll be right|it will be okay|Don't stress, she'll be right.
+sheila|woman (old-fashioned)|My grandad still says sheila.
+shout|to buy a round or pay for someone|It's my shout.
+sickie|a day off work claiming to be sick|He took a sickie.
+skull|to drink quickly in one go|He skulled his drink.
+slab|a carton of 24 beers|Bring a slab to the barbie.
+smoko|a short work break|We'll finish this after smoko.
+snag|sausage|Grab a snag in bread.
+sook|a crybaby, someone who sulks|Don't be a sook.
+spit the dummy|throw a tantrum|He spat the dummy when he lost.
+spunk|attractive person|He's a real spunk.
+stoked|very pleased|I'm stoked with my new board.
+straya|Australia|Happy Straya Day!
+strewth|exclamation of surprise|Strewth, that's hot!
+stubby|small bottle of beer|Grab a stubby from the fridge.
+stubby holder|insulated beer holder|Keep your drink cold in a stubby holder.
+sunnies|sunglasses|Don't forget your sunnies.
+swag|a bedroll for camping|We slept in swags under the stars.
+ta|thank you|Ta for that.
+tea|the evening meal|What's for tea tonight?
+thongs|flip-flops|Wear thongs to the beach.
+tinnie|a can of beer; also a small aluminium boat|Took the tinnie out fishing.
+togs|swimsuit (QLD)|Pack your togs.
+too right|definitely|Too right, I'll be there.
+tradie|tradesperson|The tradie fixed the leak.
+trackies|tracksuit pants|I'm living in my trackies.
+true blue|genuine, loyal Australian|He's true blue.
+tucker|food|Good tucker at this place.
+uni|university|She's at uni studying law.
+unit|apartment|They rent a two-bedroom unit.
+ute|utility vehicle, pick-up truck|Throw it in the back of the ute.
+vego|vegetarian|Is there a vego option?
+whinge|complain|Stop whingeing.
+whinger|someone who complains a lot|He's such a whinger.
+woop woop|a remote place in the middle of nowhere|They live out woop woop.
+wag|skip school|They wagged school to go to the beach.
+yobbo|a loud, uncouth person|A bunch of yobbos at the pub.
+yakka|work|It's hard yakka.
+yeah nah|no (polite refusal)|Yeah nah, I'm right thanks.
+nah yeah|yes|Nah yeah, that sounds good.
+yewy|U-turn|Do a yewy at the lights.
+zonked|very tired|I'm zonked after that.
+arse|backside; also luck|He arsed his way into the final.
+arvo tea|afternoon tea|Come round for arvo tea.
+as|very (intensifier at end of phrase)|It's hot as today.
+bush tucker|native Australian food|We tried bush tucker on the tour.
+bushie|someone who lives in the bush|He's a real bushie.
+cactus|broken, dead or useless|The fridge is cactus.
+cark|to break down|The washing machine carked.
+cheers|thanks; also goodbye|Cheers for that.
+chucking a wobbly|having a tantrum|The toddler's chucking a wobbly.
+come a gutser|fall over or fail badly|He came a gutser off his bike.
+dunno|don't know|Dunno, ask your mum.
+fang it|drive fast|He fanged it down the highway.
+flat out|very busy|I've been flat out all week.
+flat out like a lizard drinking|extremely busy|I'm flat out like a lizard drinking.
+fly wire|insect screen|Shut the fly wire door.
+full as a goog|very full, or drunk|I'm full as a goog after that lunch.
+good onya|well done|Good onya for trying.
+goon|cheap cask wine|They drank goon at the party.
+hit the frog and toad|hit the road, leave|Time to hit the frog and toad.
+journo|journalist|The journos were waiting outside.
+kero|kerosene|Fill the lamp with kero.
+lippy|lipstick|Let me put my lippy on.
+mad as a cut snake|very angry or crazy|He was mad as a cut snake.
+mongrel|a nasty person; also a mixed-breed dog|That mongrel stole my bike.
+muppet|a fool|You muppet!
+nong|idiot|Don't be a nong.
+op shop|charity second-hand shop|Found this jacket at the op shop.
+pash rash|redness from kissing|Is that pash rash?
+pressie|present (variant)|Got you a pressie.
+sandgroper|person from Western Australia|He's a sandgroper from Perth.
+banana bender|person from Queensland|My cousin's a banana bender.
+cockroach|person from New South Wales (State of Origin)|The cockroaches won the Origin.
+cane toad|Queenslander (State of Origin)|The cane toads are on fire this year.
+scratchie|scratch lottery ticket|I won ten bucks on a scratchie.
+shonky|dodgy, unreliable|That's a shonky builder.
+dodgy|suspicious, poor quality|That deal sounds dodgy.
+sparky|electrician|Call a sparky to fix it.
+chippy|carpenter|The chippy built our deck.
+brickie|bricklayer|The brickies start Monday.
+truckie|truck driver|Truckies keep the country moving.
+speccy|spectacular; a high mark in AFL|What a speccy!
+spud|potato|Peel the spuds.
+stickybeak|nosy person|Our neighbour's a stickybeak.
+suss|suspicious; or to figure out|That's a bit suss. Let me suss it out.
+tassie|Tasmania|We're going to Tassie for holidays.
+the Gong|Wollongong|He's from the Gong.
+Brissie|Brisbane|Moving to Brissie next year.
+Melbs|Melbourne|Coffee's great in Melbs.
+tea towel|dish towel|Grab a tea towel and dry up.
+technicolour yawn|vomit|He did a technicolour yawn after the ride.
+thingo|thingamajig, whatsit|Pass me that thingo.
+tomato sauce|ketchup|Pie with tomato sauce.
+bunnings snag|sausage from a Bunnings sausage sizzle|Grabbed a Bunnings snag.
+wrapped|very pleased|She was wrapped with her present.
+wuss|coward|Don't be a wuss.
+yonks|a long time|Haven't seen you in yonks.
+chuck|throw|Chuck us the keys.
+hang on|wait a moment|Hang on, I'm coming.
+jackaroo|young male trainee on a station|He worked as a jackaroo.
+jillaroo|young female trainee on a station|She worked as a jillaroo.
+station|a large farm|A cattle station in the NT.
+selfie|self-portrait photo (Australian-coined)|Take a selfie at the Opera House.
+bush bash|drive or walk through dense bush off-track|We went for a bush bash.
+mate's rates|a discount for friends|He did it at mate's rates.
+spew|vomit; also to be very angry|I was spewing when I missed the bus.

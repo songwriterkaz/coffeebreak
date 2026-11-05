@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Coffeebreak – Admin</title><link rel="stylesheet" href="style.css"></head><body>
+<header><img src="cb-logo.jpg" alt="Coffeebreak logo" style="height:56px;width:56px;border-radius:50%"><h1>Payouts admin</h1></header><main>
+<div class="card small">1. Paste the <b>account_json</b> values from your "Coffeebreak log" emails (one per line, newest wins) – accounts on this device load automatically. 2. Pick the month. 3. Tick only people whose $10 you can SEE in PayPal/bank. 4. Download the CSV, check it, then pay with PayPal Payouts or Send money.</div>
+<textarea id="paste" style="width:100%;height:120px" placeholder='{"code":"CB...","name":"..."}'></textarea>
+<div>Month <input id="mon" type="month"> <button id="go">Build list</button> <button id="csv">Download payout CSV</button> <button id="all">Export all data (JSON)</button></div>
+<table id="t"></table></main>
+<script src="rewards.js"></script><script>
+var R=CBR,ok=JSON.parse(localStorage.getItem('cbMoviesConfirmed')||'{}');document.getElementById('mon').value=R.month();
+function accounts(){var m={},d=R.db();Object.keys(d.accounts).forEach(function(k){m[k]=d.accounts[k]});
+ document.getElementById('paste').value.split('\n').forEach(function(l){l=l.trim();if(!l)return;try{var a=JSON.parse(l);if(a.code)m[a.code]=a}catch(e){}});return m}
+function rows(){var A=accounts(),mon=document.getElementById('mon').value,out=[];
+ Object.keys(A).forEach(function(k){var a=A[k],c=!!ok[k+'|'+mon],w=(a.watches||[]).filter(function(x){return x.m===mon}).length;
+  var cash=c?Math.round(Math.min(w*R.PTS_PER_WATCH/100,R.CAP)*100)/100:0;
+  // single-level referral: direct friends whose FIRST confirmed paid month is this month
+  var refs=Object.keys(A).filter(function(f){var b=A[f];if((b.referredBy||'')!==k||f===k)return false;var first=(b.paidMonths||[]).slice().sort()[0];return first===mon&&ok[f+'|'+mon]}).length;
+  var ref=c?Math.round(refs*R.REF*100)/100:0;out.push({k:k,a:a,c:c,w:w,cash:cash,refs:refs,ref:ref,amt:Math.round((cash+ref)*100)/100})});return out}
+function draw(){var mon=document.getElementById('mon').value,r=rows();document.getElementById('t').innerHTML='<tr><th>Paid confirmed</th><th>Name</th><th>PayPal</th><th>Watched</th><th>Cashback</th><th>Friends</th><th>Amount</th></tr>'+r.map(function(x){return '<tr><td><input type="checkbox" data-k="'+x.k+'"'+(x.c?' checked':'')+'></td><td>'+x.a.name+'</td><td>'+(x.a.paypal||'<i>missing</i>')+'</td><td>'+x.w+'</td><td>$'+x.cash.toFixed(2)+'</td><td>'+x.refs+'</td><td><b>$'+x.amt.toFixed(2)+'</b></td></tr>'}).join('');
+ [].forEach.call(document.querySelectorAll('[data-k]'),function(b){b.onchange=function(){ok[b.dataset.k+'|'+mon]=b.checked;localStorage.setItem('cbMoviesConfirmed',JSON.stringify(ok));draw()}})}
+function dl(name,text,type){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:type}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
+function q(s){return '"'+String(s==null?'':s).replace(/"/g,'""')+'"'}
+document.getElementById('go').onclick=draw;
+document.getElementById('csv').onclick=function(){var mon=document.getElementById('mon').value,r=rows().filter(function(x){return x.amt>=0.5&&x.a.paypal});
+ dl('coffeebreak-movies-payouts-'+mon+'.csv',['name,paypal_email,amount_aud'].concat(r.map(function(x){return [q(x.a.name),q(x.a.paypal),x.amt.toFixed(2)].join(',')})).join('\n'),'text/csv')};
+document.getElementById('all').onclick=function(){dl('coffeebreak-movies-data.json',JSON.stringify({accounts:accounts(),confirmed:ok},null,1),'application/json')};
+draw();
+</script><!-- CB-VALUE-WATERMARK:START --><div id="cb-value-wm" aria-hidden="true" style="position:fixed;right:6px;bottom:4px;z-index:1;pointer-events:none;user-select:none;opacity:.3;font:11px/1.2 sans-serif;color:#000;text-shadow:0 0 2px #fff;background:transparent;white-space:nowrap">Coffeebreak catalogue value AU$47,094</div><!-- CB-VALUE-WATERMARK:END --></body></html>

@@ -1,0 +1,24 @@
+(function(){
+var gate=document.getElementById('gate');
+if(localStorage.getItem('cbsw18')==='1')gate.remove();
+document.getElementById('yes').onclick=function(){localStorage.setItem('cbsw18','1');gate.remove()};
+document.getElementById('no').onclick=function(){document.getElementById('nomsg').hidden=false};
+var SK='#e9d3b8',IN='#cfe3ee',T='#b9c7d6';
+var SVG={
+vulva:'<svg viewBox="0 0 400 420"><ellipse data-p="outer" cx="200" cy="210" rx="120" ry="180" fill="'+SK+'"/><ellipse data-p="inner" cx="200" cy="215" rx="55" ry="140" fill="#d7b48e"/><path data-p="hood" d="M175 95 Q200 55 225 95 Q200 110 175 95Z" fill="#c99d74"/><circle data-p="glans" cx="200" cy="108" r="10" fill="#b8865c"/><circle data-p="urethra" cx="200" cy="170" r="6" fill="#7a5a44"/><ellipse data-p="vopen" cx="200" cy="245" rx="22" ry="38" fill="#6b4a38"/><circle data-p="anus" cx="200" cy="395" r="11" fill="#8a6a54"/><text x="245" y="105">Clitoral glans</text><text x="235" y="75">Hood</text><text x="215" y="172">Urethral opening</text><text x="228" y="250">Vaginal opening</text><text x="263" y="200">Inner labia</text><text x="300" y="330">Outer labia</text><text x="218" y="400">Anus</text></svg>',
+internal:'<svg viewBox="0 0 400 420"><path data-p="tubes" d="M140 120 Q90 80 50 130 M260 120 Q310 80 350 130" fill="none" stroke-width="10"/><ellipse data-p="ovaries" cx="60" cy="150" rx="26" ry="16" fill="#e6c88a"/><ellipse data-p="ovaries" cx="340" cy="150" rx="26" ry="16" fill="#e6c88a"/><path data-p="uterus" d="M130 100 Q200 70 270 100 Q260 220 220 250 L180 250 Q140 220 130 100Z" fill="'+IN+'"/><rect data-p="cervix" x="178" y="250" width="44" height="28" rx="10" fill="#9fc1d6"/><rect data-p="vagina" x="182" y="278" width="36" height="100" rx="12" fill="'+T+'"/><path data-p="clit" d="M200 300 Q140 330 150 400 M200 300 Q260 330 250 400" fill="none" stroke-width="8"/><text x="10" y="185">Ovary</text><text x="40" y="95">Fallopian tube</text><text x="175" y="160">Uterus</text><text x="230" y="270">Cervix</text><text x="225" y="340">Vagina</text><text x="255" y="405">Internal clitoris</text></svg>',
+penis:'<svg viewBox="0 0 400 420"><ellipse data-p="prostate" cx="110" cy="150" rx="28" ry="20" fill="#cfe3ee"/><path data-p="uret" d="M110 170 Q120 230 300 230" fill="none" stroke-width="5"/><rect data-p="shaft" x="140" y="205" width="160" height="50" rx="22" fill="'+SK+'"/><rect data-p="foreskin" x="285" y="205" width="35" height="50" rx="12" fill="#d7b48e"/><ellipse data-p="pglans" cx="340" cy="230" rx="28" ry="24" fill="#c99d74"/><ellipse data-p="scrotum" cx="165" cy="315" rx="55" ry="45" fill="#d7b48e"/><ellipse data-p="testes" cx="165" cy="318" rx="24" ry="18" fill="#e6c88a"/><text x="60" y="120">Prostate</text><text x="60" y="195">Urethra</text><text x="190" y="195">Shaft</text><text x="282" y="195">Foreskin</text><text x="325" y="275">Glans</text><text x="230" y="320">Scrotum</text><text x="120" y="380">Testis</text></svg>'};
+var nav=document.getElementById('nav'),main=document.getElementById('main');
+function srcs(a){return '<div class="src">Sources: '+a.map(function(k){return '<a href="'+S[k][1]+'" target="_blank" rel="noopener">'+S[k][0]+'</a>'}).join(' · ')+'</div>'}
+function fetus(sz){var r=sz*1.1;return '<svg viewBox="0 0 120 110"><circle cx="60" cy="55" r="52" fill="#cfe3ee" stroke="#335"/><circle cx="'+(60-r*0.2)+'" cy="'+(55-r*0.45)+'" r="'+(r*0.45)+'" fill="#e6c88a" stroke="#335"/><ellipse cx="60" cy="'+(55+r*0.2)+'" rx="'+(r*0.45)+'" ry="'+(r*0.6)+'" fill="#e6c88a" stroke="#335"/></svg>'}
+function show(id){var s=SEC.filter(function(x){return x.id===id})[0];[].forEach.call(nav.children,function(b){b.className=b.dataset.id===id?'on':''});
+ var h='<h2>'+s.t+'</h2>'+s.h;
+ if(s.anat){h+='<div class="anat"><div>'+Object.keys(ANAT).map(function(k){return '<h3>'+ANAT[k].title+'</h3>'+SVG[k].replace('<svg','<svg data-k="'+k+'"')}).join('')+'</div><div id="info" class="card"><h3>Tap a part</h3><p>Select any shape in a diagram.</p></div></div>'}
+ if(s.preg)h+=PREG;
+ main.innerHTML='<div class="card">'+h+srcs(s.src)+'</div>';
+ if(s.preg)document.getElementById('months').innerHTML=MONTHS.map(function(m){return '<div class="card">'+fetus(m[2])+'<b>'+m[0]+'</b><p style="font-size:.85rem">'+m[1]+'</p></div>'}).join('');
+ if(s.anat)[].forEach.call(main.querySelectorAll('[data-p]'),function(el){el.addEventListener('click',function(){var k=el.closest('svg').dataset.k,p=ANAT[k].parts[el.dataset.p];main.querySelectorAll('.sel').forEach(function(e){e.classList.remove('sel')});el.classList.add('sel');document.getElementById('info').innerHTML='<h3>'+p[0]+'</h3><p>'+p[1]+'</p>'})});
+ scrollTo(0,0)}
+SEC.forEach(function(s){var b=document.createElement('button');b.textContent=s.t;b.dataset.id=s.id;b.onclick=function(){show(s.id)};nav.appendChild(b)});
+show('anatomy');window.CBSW={show:show};
+})();

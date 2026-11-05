@@ -1,0 +1,18 @@
+window.CB_SERVICES=[
+{id:'reg',name:'Regular clean (up to 3 bedrooms)',price:360.05,desc:'Kitchen, bathrooms, dusting, vacuum & mop throughout.'},
+{id:'reg4',name:'Regular clean (4+ bedrooms)',desc:'Larger homes.'},
+{id:'deep',name:'Deep clean (up to 3 bedrooms)',price:463.05,desc:'Skirtings, sills, oven, detailed bathrooms.'},
+{id:'deep4',name:'Deep clean (4+ bedrooms)',desc:'Larger homes.'},
+{id:'eol1',name:'End-of-lease clean – Studio / 1 bed',price:442.05,desc:'Bond-back standard checklist.'},
+{id:'eol2',name:'End-of-lease clean – 2 bed',price:493.05,desc:'Bond-back standard checklist.'},
+{id:'eol3',name:'End-of-lease clean – 3 bed',price:596.05,desc:'Bond-back standard checklist.'},
+{id:'eol4',name:'End-of-lease clean – 4 bed',price:699.05,desc:'Bond-back standard checklist.'},
+{id:'cp1',name:'Carpet steam clean – 1 bed + lounge',price:205.05,desc:'Furnished home, carpets pre-vacuumed.'},
+{id:'cp2',name:'Carpet steam clean – 2 bed + lounge',price:226.05,desc:'Furnished home, carpets pre-vacuumed.'},
+{id:'cp3',name:'Carpet steam clean – 3 bed + lounge',price:257.05,desc:'Furnished home, carpets pre-vacuumed.'},
+{id:'cp4',name:'Carpet steam clean – 4 bed + lounge',price:288.05,desc:'Furnished home, carpets pre-vacuumed.'},
+{id:'w23',name:'Windows – single storey, 2–3 bed',price:564.05,desc:'Inside & out, one-off clean. Tracks extra.'},
+{id:'w34',name:'Windows – single storey, 3–4 bed',price:714.05,desc:'Inside & out, one-off clean. Tracks extra.'},
+{id:'w2s34',name:'Windows – double storey, 3–4 bed',price:667.05,desc:'Inside & out, one-off clean. Tracks extra.'},
+{id:'w2s45',name:'Windows – double storey, 4–5 bed',price:817.05,desc:'Inside & out, one-off clean. Tracks extra.'},
+{id:'w5',name:'Windows – 5+ bed / commercial',desc:'Large or high windows.'}];

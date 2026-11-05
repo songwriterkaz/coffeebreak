@@ -1,0 +1,11 @@
+body{margin:0;background:#0d0d0f;color:#eee;font-family:Georgia,serif}a{color:#d4af37}
+header{text-align:center;padding:24px;background:linear-gradient(#17140c,#0d0d0f);border-bottom:2px solid #d4af37}
+h1{color:#d4af37;letter-spacing:3px;margin:6px}h2{color:#d4af37;border-bottom:1px solid #4a3d14;padding-bottom:6px}
+.banner{background:#d4af37;color:#111;text-align:center;font-weight:bold;padding:12px;font-size:18px}
+nav{text-align:center;padding:10px}nav a{margin:0 10px;text-decoration:none}
+section{max-width:900px;margin:24px auto;padding:0 16px}
+.box{background:#18160f;border:1px solid #4a3d14;border-radius:10px;padding:16px}
+input,textarea,select{width:100%;box-sizing:border-box;margin:4px 0 10px;padding:9px;background:#0d0d0f;color:#eee;border:1px solid #6b5a1e;border-radius:6px}
+button{background:#d4af37;color:#111;border:0;border-radius:20px;padding:10px 18px;font-weight:bold;cursor:pointer}button:disabled{background:#555;color:#999}
+.ph{color:#e6c766;font-style:italic}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+footer{text-align:center;font-size:12px;color:#999;padding:24px;border-top:1px solid #4a3d14}

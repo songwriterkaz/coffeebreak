@@ -1,0 +1,24 @@
+*{box-sizing:border-box}body{margin:0;font-family:'Trebuchet MS',system-ui,sans-serif;color:#2b2a22;background:#f6f0e1 linear-gradient(180deg,#e9e0c8,#f6f0e1 320px);min-height:100vh}
+.strip{background:#2f4a2c;color:#f3ead2;text-align:center;padding:7px;font-weight:700;font-size:13px}
+header{text-align:center;padding:18px 12px 10px;background:linear-gradient(160deg,#5b3f28,#8a6240);color:#f8f1df}
+#cb-logo{width:130px;border-radius:16px;box-shadow:0 4px 14px #0005}header h1{margin:.2em 0 0;font-size:clamp(1.9em,6vw,3em);text-shadow:0 3px 0 #0004}.tag{margin:.3em auto;max-width:640px;opacity:.92}
+button{font:inherit;font-weight:700;border:0;border-radius:999px;padding:9px 16px;cursor:pointer;background:#4f7a3a;color:#fff;margin:3px;transition:transform .15s}button:hover{transform:translateY(-2px)}button:disabled{opacity:.5}
+#tabs{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:12px;background:#efe6cf;border-bottom:2px solid #d9c9a3}#tabs button{background:#fffaf0;color:#3a2a1a;border:2px solid #8a6240;font-size:16px}#tabs button.on{background:#4f7a3a;color:#fff;border-color:#4f7a3a}
+main{max-width:1120px;margin:auto;padding:12px}h2,h3{color:#3d5a2f}
+.sp{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}.sp button{display:flex;flex-direction:column;align-items:center;gap:4px;background:#fffaf0;color:#2b2a22;border:2px solid #b89a6a;border-radius:16px;padding:16px;font-size:30px}.sp b{font-size:18px;color:#3d5a2f}.sp small{font-size:13px;font-weight:400}
+.gwrap{display:flex;flex-wrap:wrap;gap:16px;margin-top:12px;align-items:flex-start}#gc{width:100%;max-width:760px;border-radius:16px;border:4px solid #8a6240;box-shadow:0 6px 18px #5b3f2840;background:#f8f3e6;cursor:crosshair;touch-action:manipulation}
+#play{flex:1 1 300px}.bars label{display:flex;align-items:center;gap:8px;margin:5px 0;font-weight:700}.bars i{flex:1;height:14px;background:#e3d8bd;border-radius:9px;overflow:hidden}.bars b{display:block;height:100%;transition:width .4s}
+#nums{font-size:13px;color:#6b5a40}.acts button{background:#8a6240}.acts button.on{background:#4f7a3a;outline:3px solid #b8862f}.acts .day{background:#2f4a2c}
+.ghost{background:#fffaf0;color:#3d5a2f;border:2px solid #4f7a3a}.hint{font-size:13px;color:#6b5a40}#log{padding-left:18px;font-size:14px;max-height:150px;overflow:auto}
+#ach{display:flex;flex-wrap:wrap;gap:6px}#ach span{padding:5px 10px;border-radius:999px;background:#e6dcc4;color:#9a8b70;font-size:13px}#ach span.got{background:#b8862f;color:#fff}
+#dead{background:#f3dccb;padding:10px;border-radius:10px}
+#q{display:block;width:100%;max-width:420px;margin:6px auto;padding:10px 14px;border-radius:999px;border:2px solid #8a6240;font:inherit;background:#fffaf0}
+#filters{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:8px 0 14px}#filters button{background:#fffaf0;color:#3a2a1a;border:2px solid #8a6240}#filters button.on{background:#4f7a3a;color:#fff;border-color:#4f7a3a}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card{position:relative;background:#fffaf0;border:1px solid #d9c9a3;border-radius:16px;padding:10px;text-align:center;box-shadow:0 3px 10px #5b3f2822;display:flex;flex-direction:column}.card img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;background:#efe6cf}.card h3{font-size:15px;margin:8px 0 2px;color:#2b2a22}.card small{display:none}.card .cat{position:absolute;top:16px;left:16px;background:#2f4a2cdd;color:#fff;font-size:11px;padding:3px 8px;border-radius:999px}.card .price{font-size:20px;font-weight:800;color:#3d5a2f;margin:6px 0;margin-top:auto}
+#toast{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2f4a2c;color:#fff;padding:10px 18px;border-radius:999px;z-index:50}
+.note{font-size:13px;color:#6b5a40;max-width:800px;margin:18px auto}
+#lines p{display:flex;justify-content:space-between;border-bottom:1px solid #d9c9a3;padding:6px 0;margin:0}.optin{width:100%;padding:6px;margin:4px 0;border-radius:8px;border:1px solid #b89a6a}.tot{font-size:20px;font-weight:800}
+.form{display:grid;gap:8px;max-width:520px}.form input,.form textarea{padding:10px;border-radius:10px;border:1px solid #b89a6a;font:inherit;background:#fffaf0}
+footer{text-align:center;padding:24px;color:#6b5a40;font-size:13px}.flogo{width:70px;border-radius:12px}
+:root{--cbc-bg:#fffaf0;--cbc-fg:#2b2a22}

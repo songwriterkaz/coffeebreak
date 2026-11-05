@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Coffeebreak Projector Controller</title><link rel="icon" href="logo.png">
+<style>html,body{margin:0;height:100%;background:#12001a;color:#fff;font-family:system-ui,-apple-system,sans-serif;touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden}
+.v{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;padding:14px;box-sizing:border-box;gap:12px;text-align:center}
+.b{background:#ff2e93;border:3px solid #ffc2e2;color:#fff;font-weight:900;border-radius:20px;padding:18px;font-size:24px}
+input{font-size:24px;padding:12px;border-radius:14px;border:3px solid #ff4fa3;width:80%;text-align:center}
+#joy{width:220px;height:220px;border-radius:50%;background:#ff4fa333;border:4px solid #ff4fa3;position:relative}#knob{position:absolute;left:70px;top:70px;width:80px;height:80px;border-radius:50%;background:#ff4fa3}
+.qa{width:100%;flex:1;font-size:26px}#pad{width:100%;flex:1;background:#fff;border-radius:16px;touch-action:none}
+.ar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:420px}.ar .b{font-size:40px;padding:26px 0}
+#top{position:fixed;top:8px;left:8px;right:8px;display:flex;align-items:center;gap:10px;z-index:5;font-weight:800}</style></head><body>
+<div id="top"><img src="logo.png" width="44" style="border-radius:50%"><span id="st">Coffeebreak Projector Games</span></div>
+<div class="v" id="vJoin" style="display:flex"><h2>Join the big screen</h2><input id="room" placeholder="Room code" maxlength="4" autocapitalize="characters"><input id="name" placeholder="Your name" maxlength="12"><button class="b" id="go">Join</button><p id="msg"></p></div>
+<div class="v" id="vmenu"><h2>You are in</h2><p style="font-size:22px">Wait for a game to start on the big screen.</p></div>
+<div class="v" id="vpointer"><p>Move the circle, then tap Pop</p><div id="joy"><div id="knob"></div></div><button class="b" id="pop" style="width:80%;font-size:34px;padding:30px">Pop</button></div>
+<div class="v" id="varrows"><p>Copy the pose on the big screen</p><div class="ar"><span></span><button class="b" data-b="up">&#9650;</button><span></span><button class="b" data-b="left">&#9664;</button><span></span><button class="b" data-b="right">&#9654;</button><span></span><button class="b" data-b="down">&#9660;</button><span></span></div></div>
+<div class="v" id="vquiz"><p id="qq" style="font-size:20px"></p><button class="b qa" data-b="A" style="background:#ff2e93">A</button><button class="b qa" data-b="B" style="background:#3a8bff">B</button><button class="b qa" data-b="C" style="background:#e0a400">C</button><button class="b qa" data-b="D" style="background:#18a86b">D</button></div>
+<div class="v" id="vpaint" style="padding-top:60px"><canvas id="pad"></canvas><div><button class="b" data-c="#ff2e93" style="background:#ff2e93">&nbsp;</button><button class="b" data-c="#3a8bff" style="background:#3a8bff">&nbsp;</button><button class="b" data-c="#ffe36e" style="background:#ffe36e">&nbsp;</button><button class="b" data-c="#18a86b" style="background:#18a86b">&nbsp;</button><button class="b" id="big">Big</button><button class="b" id="sv">Save</button></div></div>
+<script src="peerjs.min.js"></script><script>
+const $=id=>document.getElementById(id);let conn=null,col='#ff2e93',size=24;
+const q=new URLSearchParams(location.search);if(q.get('room'))$('room').value=q.get('room');$('name').value=localStorage.cbName||'';
+function show(v){document.querySelectorAll('.v').forEach(e=>e.style.display='none');($('v'+v)||$('vmenu')).style.display='flex';if(v==='paint')sizePad()}
+$('go').onclick=()=>{const r=$('room').value.trim().toUpperCase(),n=$('name').value.trim()||'Player';localStorage.cbName=n;if(r.length!==4){$('msg').textContent='Type the 4 letter room code';return}$('msg').textContent='Connecting';
+ const peer=new Peer({config:{iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]}});
+ peer.on('open',()=>{conn=peer.connect('cbproj-'+r,{reliable:true});conn.on('open',()=>{conn.send({t:'hello',name:n});$('st').textContent=n+' in room '+r});
+  conn.on('data',d=>{if(d.t==='mode'){if(d.color)col=d.color,$('st').style.color=d.color;show(d.ui);if(d.q){$('qq').textContent=d.q;document.querySelectorAll('.qa').forEach((b,i)=>{b.textContent='ABCD'[i]+'  '+d.a[i];b.disabled=false;b.style.opacity=1})}}if(d.t==='full')$('msg').textContent='The room is full'});
+  conn.on('close',()=>{show('Join');$('msg').textContent='Disconnected'})});
+ peer.on('error',e=>{$('msg').textContent='Could not join. Check the room code.'})};
+const send=m=>conn&&conn.open&&conn.send(m);
+// joystick
+(()=>{const j=$('joy'),k=$('knob');let id=null,lt=0;const mv=t=>{const r=j.getBoundingClientRect();let x=(t.clientX-r.left-110)/90,y=(t.clientY-r.top-110)/90;const l=Math.hypot(x,y);if(l>1){x/=l;y/=l}k.style.left=70+x*70+'px';k.style.top=70+y*70+'px';const n=performance.now();if(n-lt>40){send({t:'joy',x,y});lt=n}};
+ j.addEventListener('pointerdown',e=>{id=e.pointerId;j.setPointerCapture(id);mv(e)});j.addEventListener('pointermove',e=>{if(e.pointerId===id)mv(e)});j.addEventListener('pointerup',()=>{id=null;k.style.left=k.style.top='70px';send({t:'joy',x:0,y:0})})})();
+$('pop').onpointerdown=()=>{send({t:'btn',b:'A'});navigator.vibrate&&navigator.vibrate(20)};
+document.querySelectorAll('[data-b]').forEach(b=>b.onpointerdown=()=>{send({t:'btn',b:b.dataset.b});if(b.classList.contains('qa')){document.querySelectorAll('.qa').forEach(x=>{x.disabled=true;x.style.opacity=x===b?1:0.4})}});
+// paint pad
+const pad=$('pad'),px=pad.getContext('2d');function sizePad(){const r=pad.getBoundingClientRect();pad.width=r.width;pad.height=r.width*9/16>r.height?r.height:r.width*9/16;pad.style.height=pad.height+'px';px.fillStyle='#fff';px.fillRect(0,0,pad.width,pad.height)}
+let drawing=false,lt=0,lp=null;const seg=(x,y)=>{px.strokeStyle=col;px.lineWidth=size/3;px.lineCap='round';px.beginPath();const p=lp||[x,y];px.moveTo(p[0]*pad.width,p[1]*pad.height);px.lineTo(x*pad.width+0.1,y*pad.height);px.stroke();lp=[x,y]};const pt=e=>{const r=pad.getBoundingClientRect();return[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]};
+pad.addEventListener('pointerdown',e=>{drawing=true;pad.setPointerCapture(e.pointerId);const[x,y]=pt(e);send({t:'draw',x,y,down:true,c:col,s:size});lp=null;seg(x,y)});
+pad.addEventListener('pointermove',e=>{if(!drawing)return;const[x,y]=pt(e);const n=performance.now();if(n-lt>16){send({t:'draw',x,y,c:col,s:size});lt=n}seg(x,y)});
+pad.addEventListener('pointerup',()=>{drawing=false;send({t:'draw',end:true})});
+document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>col=b.dataset.c);$('big').onclick=()=>{size=size===24?60:24;$('big').textContent=size===24?'Big':'Small'};$('sv').onclick=()=>send({t:'btn',b:'save'});
+</script></body></html>

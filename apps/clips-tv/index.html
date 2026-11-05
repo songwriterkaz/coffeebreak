@@ -1,16 +1,341 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Clips TV</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Clips TV</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A 4-track, 16-step drum sequencer: tap pads to program kick, snare, hat and clap, set tempo and play your loop live in the browser.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><div id=g></div><p>Tempo <input id=bpm type=range min=60 max=180 value=100> <button id=pl>Play</button></p><script>
-var A,T=['Kick','Snare','Hat','Clap'],S=T.map(()=>Array(16).fill(0)),st=0,iv;S[0][0]=S[0][8]=S[1][4]=S[1][12]=1;for(var i=0;i<16;i+=2)S[2][i]=1;
-g.innerHTML=T.map((t,r)=>'<div>'+t.padEnd(6)+S[r].map((v,c)=>'<span class=pad data-r='+r+' data-c='+c+'></span>').join('')+'</div>').join('');
-function up(){document.querySelectorAll('.pad').forEach(p=>p.classList.toggle('on',S[p.dataset.r][p.dataset.c]==1))}up();
-g.onclick=e=>{var d=e.target.dataset;if(d.r){S[d.r][d.c]^=1;up()}};
-function hit(r){var t=A.currentTime,o=A.createOscillator(),v=A.createGain();o.connect(v);v.connect(A.destination);
-o.type=r==0?'sine':'square';o.frequency.setValueAtTime([150,220,8000,1200][r],t);if(r==0)o.frequency.exponentialRampToValueAtTime(40,t+.15);
-v.gain.setValueAtTime(r==2?.05:.4,t);v.gain.exponentialRampToValueAtTime(.001,t+(r==2?.05:.2));o.start(t);o.stop(t+.25)}
-pl.onclick=()=>{A=A||new AudioContext();if(iv){clearInterval(iv);iv=0;pl.textContent='Play';return}pl.textContent='Stop';
-(function loop(){iv=setTimeout(()=>{for(var r=0;r<4;r++)if(S[r][st])hit(r);document.querySelectorAll('.pad').forEach(p=>p.style.outline=p.dataset.c==st?'2px solid #4a1030':'');st=(st+1)%16;if(iv)loop()},15000/bpm.value)})()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Clips TV · Pink Edition</title><link rel="icon" href="logo.jpg"><meta name="theme-color" content="#ff4fa3">
+<link rel="preconnect" href="https://www.youtube-nocookie.com"><link rel="preconnect" href="https://i.ytimg.com">
+<style>
+:root{--pk:#ff4fa3;--pk2:#ff8cc6;--lt:#ffd6ec;--bg:#2b0a1e;--card:#3d1030}
+*{box-sizing:border-box;margin:0}html,body{height:100%}
+body{background:radial-gradient(circle at 30% 0,#5c1640,#2b0a1e 60%);color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;height:100dvh;overflow:hidden}
+button{font:inherit;cursor:pointer}
+header{position:fixed;top:0;left:0;right:0;z-index:5;padding:8px 10px 6px;background:linear-gradient(#2b0a1ef0,#2b0a1e00);display:flex;flex-direction:column;gap:6px}
+.top{display:flex;align-items:center;gap:6px}.top img{width:36px;height:36px;border-radius:50%;border:2px solid var(--pk)}.top b{flex:1;font-size:15px;line-height:1.1}.top b small{display:block;color:var(--pk2);font-size:11px}
+.hb{background:var(--pk);color:#fff;border:0;border-radius:16px;padding:6px 10px;font-weight:700;font-size:13px;white-space:nowrap}
+.hb.alt{background:#fff;color:#c2186e}
+.moods{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}.moods button{border:1px solid #ffc2e2aa;background:#0005;color:#fff;border-radius:16px;padding:5px 12px;white-space:nowrap;font-size:13px}
+.moods button.on{background:var(--pk);border-color:var(--pk)}
+#feed{height:100dvh;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch}
+.clip,.promo{height:100dvh;scroll-snap-align:start;position:relative;display:flex;align-items:center;justify-content:center}
+.clip .frame{width:100%;max-width:56.25dvh;aspect-ratio:9/16;max-height:100dvh;background:#000 center/cover no-repeat;position:relative}
+.clip .frame iframe,.clip .frame>div{position:absolute;inset:0;width:100%;height:100%;border:0}
+.clip .play{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;border:0;background:#ff4fa3e0;color:#fff;font-size:30px;box-shadow:0 0 0 6px #ff4fa355}
+.info{position:absolute;left:12px;bottom:84px;right:84px;text-shadow:0 1px 3px #000;pointer-events:none}.info small{opacity:.85;color:var(--lt)}
+.side{position:absolute;right:8px;bottom:84px;display:flex;flex-direction:column;gap:10px;z-index:2}
+.side button{width:60px;height:60px;border-radius:50%;border:0;background:#ffe3f1;color:#a3105a;font-size:11px;font-weight:800;line-height:1.05;box-shadow:0 2px 8px #0007}
+.side button i{display:block;font-style:normal;font-size:20px}
+.side button.hot{background:var(--pk);color:#fff}
+.promo{padding:70px 16px 20px}
+.pc{background:var(--card);border:2px solid var(--pk);padding:22px;border-radius:18px;text-align:center;max-width:360px;width:100%;box-shadow:0 0 30px #ff4fa344}
+.pc img.l{width:64px;border-radius:50%}.pc h3{margin:8px 0;color:var(--lt)}.pc p{font-size:14px;opacity:.92;margin:6px 0}
+.pc a.big,.pc button.big,.b{display:block;width:100%;text-decoration:none;color:#fff;border-radius:12px;margin:9px 0 0;padding:13px;font-weight:800;border:0;background:var(--pk);text-align:center;font-size:15px}
+.b.x,.pc .x{background:#5a2048}.b[disabled]{background:#555;color:#bbb}
+.radio iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;margin-top:8px;background:#000}
+.tag{display:inline-block;background:#fff;color:#c2186e;border-radius:10px;padding:2px 8px;font-size:11px;font-weight:800}
+.payl{background:#fff;color:#7a0b44;border-radius:10px;padding:9px;margin:8px 0;font-weight:800;font-size:14px;word-break:break-word}
+.row{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}.row button{flex:1 1 28%;padding:10px 4px;border-radius:10px;border:2px solid var(--pk);background:#0004;color:#fff;font-weight:800}
+.row button.on{background:var(--pk)}
+dialog{margin:auto;border:0;border-radius:18px;padding:18px;max-width:380px;width:94%;max-height:88dvh;overflow:auto;background:#3a0f2d;color:#fff;border:2px solid var(--pk)}
+dialog::backdrop{background:#1a0512cc}
+dialog h3{margin-bottom:8px;color:var(--lt)}dialog h4{margin:14px 0 4px;color:var(--pk2)}dialog p,dialog li{font-size:14px;margin:6px 0;opacity:.94}dialog ul{padding-left:18px}
+dialog input,dialog textarea{width:100%;padding:9px;border-radius:9px;border:0;margin:5px 0;font:inherit}
+.tiers button{display:block;width:100%;text-align:left;margin:7px 0;padding:11px;border-radius:12px;border:2px solid var(--pk);background:#0003;color:#fff}
+.tiers button.on{background:var(--pk)}.tiers b{font-size:15px}.tiers small{display:block;opacity:.9}
+.shr{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.shr a,.shr button{padding:10px 4px;border-radius:10px;border:0;color:#fff;font-weight:800;text-decoration:none;text-align:center;font-size:13px}
+.code{font:800 20px ui-monospace,monospace;letter-spacing:2px;background:#fff;color:#c2186e;border-radius:10px;padding:8px;text-align:center;margin:6px 0}
+.toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);background:#fff;color:#a3105a;font-weight:800;padding:9px 16px;border-radius:20px;z-index:9;display:none;box-shadow:0 3px 12px #0008}
+body.atFoot #snd{display:none}#snd{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:8;background:#fff;color:#c2186e;border:0;border-radius:24px;padding:11px 18px;font-weight:800;box-shadow:0 3px 14px #0009}
+.endsec{scroll-snap-align:start;padding:70px 14px 10px;min-height:100dvh;display:flex;flex-direction:column;align-items:center}
+.more{max-width:420px;width:100%}
+.disc{max-width:420px;font-size:12px;opacity:.85;text-align:center;margin:18px auto 0;line-height:1.45}
+#cbFoot{width:100%;text-align:center;padding:18px 12px 26px}
+#cbFoot h3{margin:0 0 6px;font-size:18px;color:var(--lt)}
+#cbFoot .m{display:block;width:100%;max-width:420px;margin:9px auto;padding:17px 14px;border-radius:14px;font-weight:800;font-size:18px;color:#fff;text-decoration:none}
+#cbFoot .sub{display:inline-block;background:#ff0000;color:#fff;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;text-decoration:none;margin-top:12px}
+#cbFoot .tl{margin-top:10px;font-size:12px;opacity:.8}#cbFoot .tl a{color:inherit}
+</style></head><body>
+<header><div class="top"><img src="logo.jpg" alt="Coffeebreak logo"><b>Coffeebreak Clips TV<small>Pink Edition</small></b>
+<button class="hb alt" id="ptsBtn">0 pts</button><button class="hb" id="earnBtn">💖 Earn</button><button class="hb" id="supBtn">Support</button></div>
+<div class="moods" id="moods"></div></header>
+<div id="feed"></div><div class="toast" id="toast"></div>
+<button id="snd" hidden>🔊 Tap for sound</button>
+
+<!-- SUPPORT / TIP -->
+<dialog id="supD"><h3>Support Coffeebreak</h3>
+<p>Every tip and Supporter payment goes straight to Karen and keeps new clips, songs and apps coming. It also builds the Monthly Prize Pool for watchers and sharers.</p>
+<h4>Tip jar</h4><div class="row" id="tipRow"></div><input id="tipAmt" type="number" min="1" placeholder="Other amount (AUD)">
+<h4>Or become a Supporter (monthly)</h4><div class="tiers" id="tiers"></div>
+<div class="payl">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</div>
+<p style="font-size:12px">Use your bank app, choose PayID, and put your name in the description. Cancel a Supporter plan any time by stopping the payment.</p>
+<input id="supName" placeholder="Your name or nickname (optional)">
+<button class="b" id="supGo">I have paid, let Karen know</button><button class="b x" onclick="supD.close()">Close</button></dialog>
+
+<!-- EARN -->
+<dialog id="earnD"><h3>💖 Earn with Coffeebreak Clips TV</h3>
+<p>Watch, share and bring friends to earn <b>Coffeebreak Points</b> and a shot at the monthly prize. Points have no cash value.</p>
+<h4>Your share code</h4><div class="code" id="myCode"></div>
+<p>Share Clips TV with your code. Friends type it in below to get 10 welcome points, and every friend who joins with your code counts towards Top Sharer.</p>
+<div class="shr" id="shr"></div>
+<h4>Got a friend's code?</h4><input id="refIn" placeholder="e.g. CB-AB12CD" maxlength="12"><button class="b" id="refGo">Use code (+10 points)</button>
+<h4>Monthly Prize Pool</h4><div id="poolTxt"></div>
+<button class="b" id="enterGo">Enter this month (email Karen)</button>
+<h4>Make money with your business or clips</h4>
+<button class="b" onclick="openBiz(0)">📣 Advertise your business here</button>
+<button class="b" onclick="openBiz(1)">🎬 Get your clip featured / shout-out</button>
+<button class="b x" onclick="earnD.close()">Close</button></dialog>
+
+<!-- POINTS -->
+<dialog id="ptsD"><h3>Coffeebreak Points</h3><p>You have <b id="ptsN">0</b> points. Streak: <b id="strN">0</b> days. Shares: <b id="shN">0</b>.</p>
+<ul><li>1 point for every clip watched to the end</li><li>5 points for your first full clip each day</li><li>3 points for each share (each place once a day)</li><li>2 points for checking out a Coffeebreak app (once a day each)</li><li>10 welcome points when you use a friend's code</li></ul>
+<p><b>Points have no cash value.</b> They can't be withdrawn, sold or swapped for money. Use them for the rewards below and to enter the monthly prize.</p>
+<div id="rewards"></div><button class="b x" onclick="ptsD.close()">Close</button></dialog>
+
+<!-- SONG -->
+<dialog id="songD"><h3>Get this song</h3><p id="songT"></p>
+<a class="b" style="background:#1db954" target="_blank" rel="noopener" id="spL">Stream on Spotify</a>
+<a class="b" style="background:#fa2d48" target="_blank" rel="noopener" id="apL">Stream or buy on Apple Music</a>
+<a class="b" style="background:#212121" target="_blank" rel="noopener" id="ytmL">YouTube Music</a>
+<h4>Buy this song or clip direct · AU$3</h4>
+<p>Karen emails you the file for personal use. Karen keeps all rights.</p>
+<div class="payl">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</div>
+<button class="b" id="songGo">I have paid AU$3, email Karen</button><button class="b x" onclick="songD.close()">Close</button></dialog>
+
+<!-- BUSINESS / CREATOR -->
+<dialog id="bizD"><h3 id="bizT"></h3><div id="bizP"></div><div class="tiers" id="bizTiers"></div>
+<div class="payl">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</div>
+<input id="bizN" placeholder="Business or creator name"><textarea id="bizM" rows="3" placeholder="Your message, link or YouTube clip link"></textarea>
+<p style="font-size:12px">Karen checks every request before it goes up. Family-friendly content only. If it can't run, Karen refunds you in full.</p>
+<button class="b" id="bizGo">I have paid, send to Karen</button><button class="b x" onclick="bizD.close()">Close</button></dialog>
+
+<script>
+var CLIPS=[
+{id:"0KTU3jswJ8c",t:"COFFEEBREAK TV SERIES",m:["Hype", "Happy"]},
+{id:"0TA5AMMGzOQ",t:"COFFEEBREAK TV SERIES",m:["Chill", "Happy"]},
+{id:"0c3vr-9sRGY",t:"COFFEEBREAK TV SERIES",m:["Sad", "Chill"]},
+{id:"4yl0x1s5Mw4",t:"COFFEEBREAK TV SERIES",m:["Tired", "Chill"]},
+{id:"61nbpiWY0j4",t:"COFFEEBREAK TV SERIES",m:["Happy", "Hype"]},
+{id:"62NUEZABvTU",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Chill", "Tired"]},
+{id:"6HWFxKHJAU0",t:"COFFEEBREAK TV SERIES",m:["Sad", "Tired"]},
+{id:"7OU25U-RBg0",t:"Coffeebreak TV Series",m:["Hype", "Sad"]},
+{id:"7u3ZFuKKJSw",t:"COFFEEBREAK TV SERIES",m:["Hype", "Happy"]},
+{id:"7u4hU581G-U",t:"COFFEEBREAK TV SERIES",m:["Chill", "Happy"]},
+{id:"8ERlcMw2P-c",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Sad", "Chill"]},
+{id:"8qnXLaFEFh0",t:"Coffeebreak TV Series",m:["Tired", "Chill"]},
+{id:"8tDD2SgCI5U",t:"COFFEEBREAK TV SERIES Love Master (Version 3) - Coffeebreak",m:["Happy", "Chill"]},
+{id:"9I1vqw2BMoc",t:"Coffeebreak TV Series",m:["Chill", "Tired"]},
+{id:"9OjNMtum9hM",t:"COFFEEBREAK TV SERIES",m:["Sad", "Tired"]},
+{id:"AudUhs5hxlk",t:"Coffeebreak TV Series",m:["Hype", "Sad"]},
+{id:"B3J1979kopA",t:"COFFEEBREAK TV SERIES",m:["Hype", "Happy"]},
+{id:"BiZWSrNE8rA",t:"Coffeebreak TV Series",m:["Chill", "Happy"]},
+{id:"CcMCCVRFAMA",t:"COFFEEBREAK TV SERIES Coffeebreak Bee Tattoo Flash | 20 Cute Bee Tattoo Designs",m:["Sad", "Chill"]},
+{id:"CggAhaV39AI",t:"COFFEEBREAK TV SERIES",m:["Tired", "Chill"]},
+{id:"DYh7EsHA4io",t:"COFFEEBREAK TV SERIES",m:["Happy", "Hype"]},
+{id:"DqFZknsqR3U",t:"COFFEEBREAK TV SERIES Love Master (Version 1) - Coffeebreak",m:["Sad", "Chill"]},
+{id:"Fb1bdDswjME",t:"COFFEEBREAK TV SERIES",m:["Sad", "Tired"]},
+{id:"FmHZcW3IOdc",t:"Coffeebreak TV Series",m:["Hype", "Sad"]},
+{id:"Fpb3un_tsfo",t:"Coffeebreak TV Series",m:["Hype", "Happy"]},
+{id:"G132X0xszHU",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Chill", "Happy"]},
+{id:"G7u3VfOlmaY",t:"COFFEEBREAK TV SERIES",m:["Sad", "Chill"]},
+{id:"G_TEWagguzg",t:"COFFEEBREAK TV SERIES",m:["Tired", "Chill"]},
+{id:"GiFiT4jEgOQ",t:"COFFEEBREAK TV SERIES",m:["Happy", "Hype"]},
+{id:"HJDAW6fv2zk",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES 18 October 2026",m:["Chill", "Tired"]},
+{id:"HoV13YYGZIU",t:"COFFEEBREAK TV SERIES Untitled",m:["Sad", "Tired"]},
+{id:"HqpQTW_7boU",t:"COFFEEBREAK TV SERIES",m:["Hype", "Sad"]},
+{id:"I1gNYjzF6-s",t:"COFFEEBREAK TV SERIES",m:["Hype", "Happy"]},
+{id:"IUcwGRfdS-Y",t:"Coffeebreak TV Series",m:["Chill", "Happy"]},
+{id:"J1i1-PknZaA",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES Untitled",m:["Sad", "Chill"]},
+{id:"JZhTMDqwr9A",t:"COFFEEBREAK TV SERIES",m:["Tired", "Chill"]},
+{id:"Jc1FcVzAaiw",t:"COFFEEBREAK TV SERIES Love Master (Version 2) - Coffeebreak",m:["Happy", "Chill"]},
+{id:"KUIxTAUnBvQ",t:"COFFEEBREAK TV SERIES Love Master (Version 6) - Coffeebreak",m:["Sad", "Chill"]},
+{id:"L469xTwudrk",t:"COFFEEBREAK TV SERIES",m:["Sad", "Tired"]},
+{id:"LZpZKkxbRyI",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Hype", "Sad"]},
+{id:"L_eySQuwct0",t:"COFFEEBREAK TV SERIES Love Master (Version 5) - Coffeebreak",m:["Happy", "Chill"]},
+{id:"MEAURE6Am90",t:"COFFEEBREAK TV SERIES",m:["Chill", "Happy"]},
+{id:"Mx2vp9QJJts",t:"COFFEEBREAK TV SERIES",m:["Sad", "Chill"]},
+{id:"N8kHi1vmraw",t:"COFFEEBREAK TV SERIES",m:["Tired", "Chill"]},
+{id:"Nh_5mqydX3w",t:"COFFEEBREAK TV SERIES",m:["Happy", "Hype"]},
+{id:"O_hpmYS1j7Y",t:"COFFEEBREAK TV SERIES Love Master (Version 9) - Coffeebreak",m:["Sad", "Chill"]},
+{id:"OmDLCvMj4mY",t:"COFFEEBREAK TV SERIES",m:["Sad", "Tired"]},
+{id:"Paq9lTTtOdA",t:"COFFEEBREAK TV SERIES",m:["Hype", "Sad"]},
+{id:"SVT85YGrmH8",t:"Coffeebreak TV Series",m:["Hype", "Happy"]},
+{id:"SaxwwFA1Htg",t:"Coffeebreak TV Series",m:["Chill", "Happy"]},
+{id:"Sq3k6o5MnYk",t:"COFFEEBREAK TV SERIES",m:["Sad", "Chill"]},
+{id:"StWsad48gPY",t:"COFFEEBREAK TV SERIES CoffeeBreak's Got Something",m:["Hype", "Happy"]},
+{id:"U9-jl13_1tY",t:"COFFEEBREAK TV SERIES A Name Is Not a Punchline | Coffeebreak",m:["Sad", "Tired"]},
+{id:"UL2lmUtKPWw",t:"COFFEEBREAK TV SERIES",m:["Chill", "Tired"]},
+{id:"VrTYgFtkJ9s",t:"COFFEEBREAK TV SERIES",m:["Sad", "Tired"]},
+{id:"Wp9MFCX7kxk",t:"COFFEEBREAK TV SERIES",m:["Hype", "Sad"]},
+{id:"Wvt-qXvcWsI",t:"Coffeebreak TV Series",m:["Hype", "Happy"]},
+{id:"XO91EtUgzgQ",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES 18 October 2026",m:["Chill", "Happy"]},
+{id:"XcmaQ4igkTM",t:"COFFEEBREAK TV SERIES Love Master (Version 4) - Coffeebreak",m:["Happy", "Chill"]},
+{id:"XjI9-ADPLY0",t:"COFFEEBREAK TV SERIES",m:["Tired", "Chill"]},
+{id:"Y-lMGLy4ZcU",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Happy", "Hype"]},
+{id:"YLHZCFM2d7I",t:"COFFEEBREAK TV SERIES Coffeebreak Phone \u00b7 Wi-Fi based, no SIM needed \u00b7 AU$2,500",m:["Chill", "Tired"]},
+{id:"YXpP2HDapNs",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Sad", "Tired"]},
+{id:"ZZEfVB4j3u0",t:"COFFEEBREAK TV SERIES",m:["Hype", "Sad"]},
+{id:"ZevmzlgtcvM",t:"COFFEEBREAK TV SERIES",m:["Hype", "Happy"]},
+{id:"_-7Wg1b3HHY",t:"COFFEEBREAK TV SERIES Love Master (Version 8) - Coffeebreak",m:["Sad", "Chill"]},
+{id:"_Y_0atDaWRI",t:"Coffeebreak TV Series",m:["Sad", "Chill"]},
+{id:"a5STqbq73lc",t:"COFFEEBREAK TV SERIES Coffeebreak Pink Silk Collection | Runway and Merch Reveal",m:["Hype", "Happy"]},
+{id:"aVQahpaXpFA",t:"Coffeebreak TV Series",m:["Happy", "Hype"]},
+{id:"av5kwSPf-CI",t:"COFFEEBREAK TV SERIES",m:["Chill", "Tired"]},
+{id:"bECdnKLnsQk",t:"COFFEEBREAK TV SERIES",m:["Sad", "Tired"]},
+{id:"bFq7ExFsuCo",t:"COFFEEBREAK TV SERIES Love Master (Version 7) - Coffeebreak",m:["Sad", "Chill"]},
+{id:"bgDms5k-zao",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Hype", "Happy"]},
+{id:"cTzm1HMu-k4",t:"COFFEEBREAK TV SERIES The Filthy Marshmallow Factory - Coffeebreak",m:["Hype", "Happy"]},
+{id:"d1g-U4xwXbI",t:"Coffeebreak TV Series",m:["Sad", "Chill"]},
+{id:"d7Ft3yMU3Ik",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Tired", "Chill"]},
+{id:"dmdUj23E_SE",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Happy", "Hype"]},
+{id:"dsq56vv1juo",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Chill", "Tired"]},
+{id:"eGruBgdTcF0",t:"COFFEEBREAK TV SERIES",m:["Sad", "Tired"]},
+{id:"etcRWXa6M4g",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Hype", "Sad"]},
+{id:"fOthT0k4p0g",t:"Coffeebreak TV Series",m:["Hype", "Happy"]},
+{id:"fhCui6Vf9hA",t:"COFFEEBREAK TV SERIES",m:["Chill", "Happy"]},
+{id:"gCBav22wWr8",t:"Coffeebreak TV Series",m:["Sad", "Chill"]},
+{id:"g_qLOFPJtx4",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Tired", "Chill"]},
+{id:"iAZ9jUjwRU4",t:"COFFEEBREAK TV SERIES",m:["Happy", "Hype"]},
+{id:"j1R0wgZKeJg",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Chill", "Tired"]},
+{id:"j5fQ2naV8Us",t:"Coffeebreak TV Series",m:["Sad", "Tired"]},
+{id:"jo4SQeXLoJw",t:"COFFEEBREAK TV SERIES Coffeebreak Bipolar Weather Flash | 100 Tattoo Designs",m:["Sad", "Tired"]},
+{id:"jtxCgD31Hgg",t:"COFFEEBREAK TV SERIES Coffeebreak Fashion Design | 8 Looks for the Coffeebreak Girl",m:["Hype", "Happy"]},
+{id:"k8RHwNLi_cc",t:"Coffeebreak TV Series",m:["Chill", "Happy"]},
+{id:"kjPmG7EHbqw",t:"COFFEEBREAK TV SERIES",m:["Sad", "Chill"]},
+{id:"l0hvN0VbTT8",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Tired", "Chill"]},
+{id:"mFCzcP9t_hU",t:"COFFEEBREAK TV SERIES",m:["Happy", "Hype"]},
+{id:"mpw9JYyfxZA",t:"Coffeebreak TV Series",m:["Chill", "Tired"]},
+{id:"oRa5leUU5nw",t:"COFFEEBREAK TV SERIES",m:["Sad", "Tired"]},
+{id:"oWDortbIaNs",t:"COFFEEBREAK TV SERIES",m:["Hype", "Sad"]},
+{id:"oWPRMLfGJdk",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Hype", "Happy"]},
+{id:"p7yfTwHxRto",t:"COFFEEBREAK TV SERIES",m:["Chill", "Happy"]},
+{id:"pAA8XNXs2zM",t:"COFFEEBREAK TV SERIES",m:["Sad", "Chill"]},
+{id:"soWACcmvcEQ",t:"Coffeebreak TV Series",m:["Tired", "Chill"]},
+{id:"tVvsFnYuf3A",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Happy", "Hype"]},
+{id:"uIKhFNAkAY0",t:"Coffeebreak TV Series",m:["Chill", "Tired"]},
+{id:"ufg1sKpkJJ4",t:"COFFEEBREAK TV SERIES",m:["Sad", "Tired"]},
+{id:"vjs5NL2FHzo",t:"Coffeebreak TV Series",m:["Hype", "Sad"]},
+{id:"w1D38CUbMz4",t:"COFFEEBREAK TV SERIES",m:["Hype", "Happy"]},
+{id:"wFpSX6ZqWik",t:"Coffeebreak TV Series",m:["Chill", "Happy"]},
+{id:"wia_3NT40NU",t:"COFFEEBREAK TV SERIES",m:["Sad", "Chill"]},
+{id:"wjvCpO5-ylY",t:"COFFEEBREAK TV SERIES COFFEEBREAK TV SERIES",m:["Tired", "Chill"]},
+{id:"yoVoCpjzzF4",t:"Coffeebreak TV Series",m:["Happy", "Hype"]},
+{id:"zd7p2h6yScM",t:"COFFEEBREAK TV SERIES Coffeebreak Fashion Flip Book | Sketch to Colour",m:["Hype", "Happy"]}];
+var CB_LATEST=[["ceW3_h606u0", "Coffeebreak TV Series – Ep 4: Drip Drip Drip Country"], ["kjfpVkxYaSQ", "Blue Line: Port Calder – Thriller Cop Trailer"], ["uOkZIvij0d0", "Coffeebreak TV Series – New Clip 1"], ["TekWhzZh12k", "Coffeebreak TV Series – New Clip 2"], ["8VSuBtq_Gtc", "Coffeebreak TV Series – New Clip 3"], ["tJ5VlRTOjUo", "Coffeebreak TV Series – New Clip 4"], ["grtE6nTLNlM", "Coffeebreak TV Series – Track 1"], ["Nu7S61IId6A", "Coffeebreak TV Series – Track 2"], ["6QLGY7iXm6M", "Coffeebreak TV Series – Track 3"], ["c0TxRERlc24", "Coffeebreak TV Series – New Clip 5"], ["X3EBh9r1ImQ", "Coffeebreak TV Series – New Clip 6"], ["LwYNcyks4bk", "Coffeebreak TV Series – New Clip 7"], ["zB1WPyoSh-E", "Coffeebreak TV Series – Part 40"], ["moO9CRw7i8k", "Coffeebreak TV Series – Part 39"], ["cGB4p5tEIz8", "Coffeebreak TV Series – Part 38"], ["37nuGA9KiIs", "Coffeebreak TV Series – Part 37"], ["S253vuj66UY", "Coffeebreak TV Series – Part 36"], ["BFz84AWbcZk", "Coffeebreak TV Series – Part 35"], ["XuEfpiFR5Bk", "Coffeebreak TV Series – Part 26"], ["7X0aFJ18Av4", "Coffeebreak TV Series – Part 25"], ["L3AoMou8-60", "Coffeebreak TV Series – Part 24"], ["BTDts8f5blo", "Coffeebreak TV Series – Part 23"], ["nGymfHN2ZHo", "Coffeebreak TV Series – Part 22"], ["lBUHNnVXX3E", "Coffeebreak TV Series – Part 21"], ["bBGKsjUPD2Y", "Coffeebreak TV Series – Part 20"], ["QOeKdHogWy0", "Coffeebreak TV Series – New Clip 8"], ["NRZRGoI_xP8", "Coffeebreak TV Series – New Clip 9"], ["2AC0kg-nEHY", "Coffeebreak TV Series – New Clip 10"], ["0NMPZz0riwY", "Coffeebreak TV Series – New Clip 11"], ["o1M-NdyOBss", "Coffeebreak TV Series – New Clip 12"], ["x54-YNNhIW0", "Coffeebreak TV Series – New Clip 13"], ["mCxhbWlwXms", "Coffeebreak TV Series – New Clip 14"], ["t-ySj0h3JjQ", "Coffeebreak TV Series – New Clip 15"], ["Ov6tOXlbyX8", "Coffeebreak TV Series – New Clip 16"], ["Msz8wnuR1iw", "Coffeebreak TV Series – New Clip 17"]];
+
+var EMAIL="songwriterkaz@gmail.com",PAYL="Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com";
+var ITCH="https://coffeebreaks.itch.io",PAGE=ITCH+"/coffeebreak-clips-tv";
+var SUB="https://www.youtube.com/@coffeebreakTVSERIES?sub_confirmation=1",RADIO="https://www.youtube.com/@coffeebreakTVSERIES/streams",CHAN="UCNuPovMUFJDrl9fhztDgy4w";
+var SPOT="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7",APPLE="https://music.apple.com/au/artist/karen-obrien/535470355",YTM="https://music.youtube.com/channel/UCbI7BchGrNInUgjm0YqB_hg";
+var BIO="Coffeebreak songwriter and creator from Newcastle NSW";
+function $(i){return document.getElementById(i)}
+function cbShuf(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function cbPickNew(key,arr,idOf){var last='';try{last=localStorage.getItem(key)||''}catch(e){}var c=arr.filter(function(x){return idOf(x)!==last});var p=c.length?c[Math.floor(Math.random()*c.length)]:arr[0];try{localStorage.setItem(key,idOf(p))}catch(e){}return p}
+/* latest videos first, a different new one each open, rest shuffled */
+(function(){var MO=["Hype","Happy","Chill","Sad","Tired"];var have={};CLIPS.forEach(function(c){have[c.id]=1});
+var nw=[];CB_LATEST.forEach(function(x,i){if(have[x[0]])return;nw.push({id:x[0],t:x[1],m:[MO[i%5],MO[(i+2)%5]],n:1})});
+var f=cbPickNew("cbclipstv.lastFirst",nw.length?nw:CLIPS,function(c){return c.id});
+var rest=cbShuf(nw.filter(function(c){return c!==f})).slice(0,6).concat(cbShuf(CLIPS.slice()));
+var seen={};seen[f.id]=1;var all=[f];rest.forEach(function(c){if(!seen[c.id]){seen[c.id]=1;all.push(c)}});
+CLIPS=all;CLIPS.forEach(function(c){c.t=c.t.replace(/(COFFEEBREAK TV SERIES ?)+/gi,"Coffeebreak TV Series ").replace(/\s+/g," ").trim()||"Coffeebreak TV Series"})})();
+var APPS=[
+{n:"Sole Trader Log",d:"Track jobs, income and expenses. Free sample, full app $5.",u:ITCH+"/coffeebreak-sole-trader-log"},
+{n:"Radio Pitch Builder",d:"Pitch email, press release and bio for radio in five taps. $5.",u:ITCH+"/coffeebreak-radio-pitch-builder"},
+{n:"Music Release Desk",d:"Plan and launch your next song release.",u:ITCH+"/coffeebreak-music-release-desk"},
+{n:"Royalty Splitter",d:"Split earnings fairly with your cast or band. $5.",u:ITCH+"/coffeebreak-acting-royalties"},
+{n:"Magazine Issue 1",d:"The first Coffeebreak magazine. $5.",u:ITCH+"/coffeebreak-magazine-issue-1"},
+{n:"Print Your Own Bricks",d:"Design your own printable bricks. $5.",u:ITCH+"/coffeebreak-print-your-own-bricks"},
+{n:"Coffeebreak SIM",d:"Live the Coffeebreak life. $5.",u:ITCH+"/coffeebreak-sim"},
+{n:"Inked with Pride",d:"A proud, stigma-free tattoo design store.",u:ITCH+"/coffeebreak-inked-with-pride"},
+{n:"Pluck It VR",d:"Write what you want gone and pluck it away.",u:ITCH+"/coffeebreak-pluck-it"},
+{n:"SPARKRUNNERS",d:"A fast arcade game made by Coffeebreak.",u:ITCH+"/sparkrunners"}];
+cbShuf(APPS);
+var TIPS=[2,5,10,20],TIERS=[{n:"Supporter",a:3,d:"Name on the Supporters list"},{n:"Super Supporter",a:5,d:"Supporters list + monthly shout-out on Coffeebreak Radio"},{n:"VIP",a:10,d:"All of the above + early access to new Coffeebreak apps"}];
+var BIZ=[[{n:"Sponsor card · 1 week",a:10},{n:"Sponsor card · 1 month",a:30}],[{n:"Shout-out on Clips TV",a:5},{n:"Feature your clip for 1 month",a:15}]];
+var MOODS=["All","New","Tired","Happy","Sad","Chill","Hype"];
+var REWARDS=[{c:50,n:"10% off a Coffeebreak store",k:"OFF10"},{c:100,n:"Free Darko Fan File (digital)",k:"FANFILE"},{c:200,n:"Shout-out on Coffeebreak Radio",k:"SHOUT"},{c:300,n:"Free sponsor card for your business (1 week)",k:"SPONSOR"}];
+var S;try{S=JSON.parse(localStorage.cbClips||"null")}catch(e){}S=S||{};S.pts=S.pts||0;S.streak=S.streak||0;S.last=S.last||"";S.done=S.done||{};S.sh=S.sh||0;
+if(!S.code)S.code="CB-"+Math.random().toString(36).slice(2,8).toUpperCase();
+function save(){try{localStorage.cbClips=JSON.stringify(S)}catch(e){}$("ptsBtn").textContent=S.pts+" pts"}
+function toast(m){var e=$("toast");e.textContent=m;e.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(function(){e.style.display="none"},2600)}
+function once(k,g,msg){var d=new Date().toDateString()+k;if(S.done[d]){toast("Already counted today");return false}S.done[d]=1;S.pts+=g;save();toast("+"+g+" points. "+(msg||"Points have no cash value"));return true}
+function earn(id){var d=new Date().toDateString();if(S.done[d+id])return;S.done[d+id]=1;var g=1;
+ if(S.last!==d){var y=new Date(Date.now()-864e5).toDateString();S.streak=S.last===y?S.streak+1:1;S.last=d;g+=5}S.pts+=g;save();toast("+"+g+" points for watching to the end")}
+function mail(sub,body){location.href="mailto:"+EMAIL+"?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(body+"\n\nSent from Coffeebreak Clips TV ("+PAGE+")")}
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+
+/* ---------- feed (lazy players = fast load) ---------- */
+var mood="All",PER=24,shown=PER,list=[],players={},cur=null,soundOn=false,io;
+function promoCard(n){
+ if(n%4===1)return '<section class="promo"><div class="pc radio"><span class="tag">LIVE 24/7</span><h3>📻 Coffeebreak Radio</h3><p>Coffeebreak songs around the clock.</p><div data-radio="1"><button class="big" onclick="radioOn(this)">▶ Play Coffeebreak Radio here</button></div><a class="big x" href="'+RADIO+'" target="_blank" rel="noopener">Open on YouTube</a></div></section>';
+ if(n%4===3)return '<section class="promo"><div class="pc"><img class="l" src="logo.jpg" alt="Coffeebreak"><h3>📣 Your business here</h3><p>Local business? Put your sponsor card in front of Coffeebreak watchers from AU$10 a week.</p><button class="big" onclick="openBiz(0)">Advertise with Coffeebreak</button><button class="big x" onclick="openBiz(1)">Creators: get your clip featured</button></div></section>';
+ var a=APPS[(n>>1)%APPS.length];
+ return '<section class="promo"><div class="pc"><img class="l" src="logo.jpg" alt="Coffeebreak"><span class="tag">COFFEEBREAK APP</span><h3>'+esc(a.n)+'</h3><p>'+esc(a.d)+'</p><a class="big" href="'+a.u+'" target="_blank" rel="noopener" onclick="once(\'app-'+a.n+'\',2)">Check it out on itch</a><a class="big x" href="'+ITCH+'" target="_blank" rel="noopener">See all Coffeebreak apps and stores</a><p style="font-size:12px;margin-top:10px">+2 points once a day each. Points have no cash value.</p></div></section>'}
+function render(){Object.keys(players).forEach(killP);
+ $("moods").innerHTML=MOODS.map(function(m){return '<button class="'+(m==mood?'on':'')+'">'+m+'</button>'}).join("");
+ [].forEach.call($("moods").children,function(b){b.onclick=function(){mood=b.textContent;shown=PER;render()}});
+ list=CLIPS.filter(function(c){return mood=="All"||(mood=="New"?c.n:c.m.indexOf(mood)>=0)});
+ var h="",n=0;list.slice(0,shown).forEach(function(c,i){
+  h+='<section class="clip" data-i="'+i+'" data-id="'+c.id+'"><div class="frame" id="f'+i+'" style="background-image:url(https://i.ytimg.com/vi/'+c.id+'/hqdefault.jpg)"><button class="play" onclick="mount('+i+',true)" aria-label="Play">▶</button></div>'+
+  '<div class="info"><b>'+esc(c.t)+(c.n?' <span class="tag">NEW</span>':'')+'</b><br><small>'+c.m.join(" · ")+' · Coffeebreak</small></div>'+
+  '<div class="side"><button class="hot" onclick="openSup(0)"><i>💖</i>Tip</button><button onclick="openSong('+i+')"><i>🎵</i>Song</button><button onclick="openShare()"><i>↗</i>Share</button><button onclick="showPts()"><i>⭐</i>Points</button></div></section>';
+  if(i%5==4)h+=promoCard(n++)});
+ h+='<section class="endsec"><div class="more">'+(list.length>shown?'<button class="b" onclick="moreClips()">Load more clips</button>':'')+
+ '<div class="pc" style="margin:14px auto"><h3>Shop Coffeebreak</h3><p>'+BIO+'.</p><a class="big" href="'+ITCH+'" target="_blank" rel="noopener">Coffeebreak apps, games and stores</a><button class="big" onclick="openSup(1)">Become a Supporter from $3/month</button><button class="big x" onclick="$(\'earnD\').showModal()">Earn points and prizes</button></div></div>'+
+ '<p class="disc">© Karen Elizabeth O\'Brien (Coffeebreak). Karen keeps all rights to this app, its music, clips and artwork. Buyers may resell physical items they buy, but may not copy them. Brand names mentioned belong to their owners, and Coffeebreak claims no ownership of third-party brands. Points have no cash value. Prizes depend on real earnings and are never guaranteed.</p>'+
+ '<footer id="cbFoot"><h3>🎵 Stream my music</h3><a class="m" style="background:#c4302b" href="'+RADIO+'" target="_blank" rel="noopener">📻 Coffeebreak Radio 24/7 (YouTube)</a><a class="m" style="background:#1db954" href="'+SPOT+'" target="_blank" rel="noopener">Listen on Spotify</a><a class="m" style="background:#fa2d48" href="'+APPLE+'" target="_blank" rel="noopener">Listen on Apple Music</a><a class="m" style="background:#212121" href="'+YTM+'" target="_blank" rel="noopener">Listen on YouTube Music</a>'+
+ '<a class="sub" href="'+SUB+'" target="_blank" rel="noopener">▶ Subscribe to Coffeebreak TV Series</a><div class="tl"><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></div></footer></section>';
+ $("feed").innerHTML=h;if(shown===PER)$("feed").scrollTop=0;observe()}
+function moreClips(){var y=$("feed").scrollTop;shown+=PER;render();$("feed").scrollTop=y}
+function killP(i){var p=players[i];if(!p)return;try{p.destroy&&p.destroy()}catch(e){}delete players[i];var f=$("f"+i);if(f&&!f.querySelector(".play"))f.innerHTML='<button class="play" onclick="mount('+i+',true)" aria-label="Play">▶</button>'}
+function mount(i,user){if(players[i])return;var c=list[i],f=$("f"+i);if(!c||!f)return;if(user)unlock();
+ f.innerHTML='<div id="p'+i+'"></div>';
+ if(window.YT&&YT.Player){players[i]=new YT.Player("p"+i,{host:"https://www.youtube-nocookie.com",videoId:c.id,playerVars:{playsinline:1,rel:0,autoplay:1,mute:soundOn?0:1,modestbranding:1},
+  events:{onReady:function(e){try{if(soundOn)e.target.unMute();e.target.playVideo()}catch(x){}},onStateChange:function(e){if(e.data===0)earn(c.id)}}})}
+ else{f.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+c.id+'?playsinline=1&autoplay=1&mute='+(soundOn?0:1)+'" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';players[i]={}}
+ cur=i;if(!soundOn)$("snd").hidden=false}
+function observe(){if(io)io.disconnect();if(!("IntersectionObserver" in window))return;
+ io=new IntersectionObserver(function(es){es.forEach(function(e){var i=+e.target.dataset.i;if(e.isIntersecting&&e.intersectionRatio>.6){mount(i,false);Object.keys(players).forEach(function(k){if(Math.abs(k-i)>1)killP(+k)})}
+  else if(!e.isIntersecting&&players[i]&&players[i].pauseVideo){try{players[i].pauseVideo()}catch(x){}}})},{threshold:[0,.6]});
+ [].forEach.call(document.querySelectorAll(".clip"),function(s){io.observe(s)});var cf=$("cbFoot");if(cf){new IntersectionObserver(function(es){document.body.classList.toggle("atFoot",es[0].isIntersecting)}).observe(cf)}}
+function radioOn(b){unlock();b.parentNode.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel='+CHAN+'&autoplay=1&playsinline=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>'}
+/* iOS sound fix: playback session + silent buffer, unmute on first tap */
+var AC;function unlock(){try{if(navigator.audioSession)navigator.audioSession.type="playback"}catch(e){}
+ try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();var b=AC.createBuffer(1,1,22050),s=AC.createBufferSource();s.buffer=b;s.connect(AC.destination);s.start(0);AC.resume&&AC.resume()}catch(e){}}
+function soundUp(){unlock();soundOn=true;$("snd").hidden=true;Object.keys(players).forEach(function(k){var p=players[k];try{p.unMute&&p.unMute();p.playVideo&&p.playVideo()}catch(e){}})}
+$("snd").onclick=soundUp;document.addEventListener("touchend",function(){unlock()},{once:true});
+
+/* ---------- money: support ---------- */
+var supAmt=5,supTier=-1;
+function openSup(t){supTier=t?0:-1;drawSup();$("supD").showModal()}
+function drawSup(){$("tipRow").innerHTML=TIPS.map(function(a){return '<button class="'+(supTier<0&&supAmt==a?'on':'')+'" onclick="supTier=-1;supAmt='+a+';drawSup()">$'+a+'</button>'}).join("");
+ $("tiers").innerHTML=TIERS.map(function(t,i){return '<button class="'+(supTier==i?'on':'')+'" onclick="supTier='+i+';drawSup()"><b>'+t.n+' · $'+t.a+'/month</b><small>'+t.d+'</small></button>'}).join("")}
+$("supGo").onclick=function(){var t=supTier>=0?TIERS[supTier]:null,a=t?t.a+" per month ("+t.n+")":($("tipAmt").value||supAmt);
+ mail(t?"Coffeebreak "+t.n:"Coffeebreak tip","Hi Karen,\n\nI sent AUD "+a+" by PayID.\n"+PAYL+"\nName: "+($("supName").value||"-")+"\nMy share code: "+S.code+"\nDate: "+new Date().toLocaleString())};
+$("supBtn").onclick=function(){openSup(0)};
+/* song */
+var songI=0;function openSong(i){songI=i;$("songT").textContent=list[i].t;$("spL").href=SPOT;$("apL").href=APPLE;$("ytmL").href=YTM;$("songD").showModal()}
+$("songGo").onclick=function(){var c=list[songI];mail("Coffeebreak song/clip purchase","Hi Karen,\n\nI sent AUD 3 by PayID for this song/clip:\n"+c.t+"\nhttps://youtu.be/"+c.id+"\n"+PAYL+"\nPlease email the file to me.\nName: \n")};
+/* business / creator */
+var bizK=0,bizI=0;function openBiz(k){bizK=k;bizI=0;$("bizT").textContent=k?"Get your clip featured":"Advertise your business";
+ $("bizP").innerHTML=k?"<p>Creators can pay for a shout-out or to have their own clip shown in the Clips TV feed.</p>":"<p>Show your local business to Coffeebreak watchers with a sponsor card in the feed: your name, a short message and a link.</p>";drawBiz();try{$("earnD").close()}catch(e){}$("bizD").showModal()}
+function drawBiz(){$("bizTiers").innerHTML=BIZ[bizK].map(function(t,i){return '<button class="'+(bizI==i?'on':'')+'" onclick="bizI='+i+';drawBiz()"><b>'+t.n+' · AU$'+t.a+'</b></button>'}).join("")}
+$("bizGo").onclick=function(){var t=BIZ[bizK][bizI];mail((bizK?"Clips TV creator: ":"Clips TV sponsor: ")+t.n,"Hi Karen,\n\nI sent AUD "+t.a+" by PayID for: "+t.n+"\n"+PAYL+"\nName: "+($("bizN").value||"-")+"\nMessage/link: "+($("bizM").value||"-")+"\n")};
+/* earn: share + referral + pool */
+function shareText(){return "Watch Coffeebreak Clips TV, free music clips from "+BIO+". Use my code "+S.code+" for 10 bonus points: "+PAGE}
+function openShare(){$("earnD").showModal()}
+function drawEarn(){$("myCode").textContent=S.code;var t=encodeURIComponent(shareText()),u=encodeURIComponent(PAGE);
+ var L=[["Facebook","#1877f2","https://www.facebook.com/sharer/sharer.php?u="+u],["X","#000","https://twitter.com/intent/tweet?text="+t],["WhatsApp","#25d366","https://wa.me/?text="+t],["Telegram","#229ed9","https://t.me/share/url?url="+u+"&text="+t],["Reddit","#ff4500","https://www.reddit.com/submit?url="+u+"&title="+encodeURIComponent("Coffeebreak Clips TV")],["Email","#7a0b44","mailto:?subject="+encodeURIComponent("Coffeebreak Clips TV")+"&body="+t]];
+ $("shr").innerHTML=L.map(function(x){return '<a style="background:'+x[1]+'" href="'+x[2]+'" target="_blank" rel="noopener" onclick="shared(\''+x[0]+'\')">'+x[0]+'</a>'}).join("")+'<button style="background:#ff4fa3" onclick="copyShare()">Copy link</button>'+(navigator.share?'<button style="background:#c2186e" onclick="natShare()">More…</button>':'');
+ $("poolTxt").innerHTML="<p>Each month the pool is <b>20% of Clips TV's real earnings</b> that month (tips, Supporter, sponsor, song and creator payments actually received), <b>capped at AU$50</b>. Karen always keeps at least 80%, plus everything above the cap.</p><p>The pool is split in two: <b>Top Watcher</b> (most points earned that month) and <b>Top Sharer</b> (most friends who joined with their code). Prizes are paid by PayID.</p><p><b>No earnings, no prize.</b> Nothing is guaranteed and this is not a way to earn an income. No purchase is needed to enter. Points have no cash value. Karen checks entries and her decision is final.</p>"}
+function shared(n){S.sh++;once("share-"+n,3,"Thanks for sharing")}
+function copyShare(){var t=shareText();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){shared("copy")},function(){prompt("Copy this:",t);shared("copy")})}
+function natShare(){navigator.share({title:"Coffeebreak Clips TV",text:shareText(),url:PAGE}).then(function(){shared("native")},function(){})}
+$("refGo").onclick=function(){var c=$("refIn").value.trim().toUpperCase();if(!/^CB-[A-Z0-9]{4,8}$/.test(c)){toast("That code doesn't look right");return}if(c===S.code){toast("That's your own code");return}
+ if(S.ref){toast("You've already used a code");return}S.ref=c;S.pts+=10;save();toast("+10 welcome points");mail("Clips TV: I joined with code "+c,"Hi Karen,\n\nI joined Coffeebreak Clips TV with my friend's code "+c+".\nMy code: "+S.code+"\n")};
+$("enterGo").onclick=function(){mail("Clips TV monthly prize entry","Hi Karen,\n\nMy Coffeebreak Clips TV entry for "+new Date().toLocaleString("en-AU",{month:"long",year:"numeric"})+":\nPoints: "+S.pts+"\nShares: "+S.sh+"\nMy code: "+S.code+"\n(Screenshot attached)\n")};
+$("earnBtn").onclick=function(){$("earnD").showModal()};
+function showPts(){$("ptsN").textContent=S.pts;$("strN").textContent=S.streak;$("shN").textContent=S.sh;
+ $("rewards").innerHTML=REWARDS.map(function(r,i){return '<button class="b" '+(S.pts<r.c?"disabled":"")+' onclick="redeem('+i+')">'+r.n+' ('+r.c+' pts)</button>'}).join("");$("ptsD").showModal()}
+function redeem(i){var r=REWARDS[i];if(S.pts<r.c)return;if(!confirm("Use "+r.c+" points for: "+r.n+"?"))return;var code="CB-"+r.k+"-"+Math.random().toString(36).slice(2,8).toUpperCase();S.pts-=r.c;save();showPts();
+ mail("Coffeebreak reward: "+r.n,"Hi Karen,\n\nI redeemed "+r.c+" Coffeebreak Points for: "+r.n+"\nReward code: "+code+"\nMy name: \n")}
+$("ptsBtn").onclick=showPts;save();drawEarn();drawSup();
+var ytReady=false;window.onYouTubeIframeAPIReady=function(){ytReady=true;render()};render();
+setTimeout(function(){var s=document.createElement("script");s.src="https://www.youtube.com/iframe_api";document.body.appendChild(s)},50);
+</script>
+<noscript>Coffeebreak Clips TV needs JavaScript.</noscript><!--cb-apra--><script>window.cbApraApp='clips-tv';</script><script src="cb-apra.js"></script></body></html>

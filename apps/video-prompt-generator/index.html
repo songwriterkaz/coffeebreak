@@ -1,10 +1,104 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-sample-v1"><title>Coffeebreak Video Prompt Generator</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><div class="card"><h1>Coffeebreak Video Prompt Generator</h1><p class="price">Free (for now)</p><p><small>All Coffeebreak apps are free for the moment. Owner (Karen) always uses free.</small></p></div>
-<div class="card"><h2>What you get</h2><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>Everything below is a live sample you can try now. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card sample"><h2>Try the sample</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Try the sample entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coffeebreak Video Prompt Generator</title>
+<style>
+:root{--bg:#14121c;--card:#1f1c2b;--ink:#f1eefa;--muted:#a9a3c0;--accent:#ff9f43;--line:#34304a}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#0e0c15;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header img{width:46px;height:46px;border-radius:50%;object-fit:cover}
+header h1{font-size:1.2rem;margin:0;flex:1}
+button{background:var(--accent);color:#1a1200;border:0;border-radius:10px;padding:9px 14px;font:700 .9rem system-ui;cursor:pointer}
+button.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.wrap{display:grid;grid-template-columns:minmax(320px,1fr) minmax(340px,1fr);gap:16px;padding:16px;max-width:1500px;margin:0 auto}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:16px}
+.panel h2{font-size:1.05rem;margin:2px 0 10px}
+label{display:block;font-size:.8rem;color:var(--muted);margin-top:8px}
+input,select,textarea{width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#15131e;color:var(--ink)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+textarea.out{min-height:150px;font-size:.92rem}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.fav li{padding:8px 0;border-bottom:1px solid var(--line);font-size:.88rem}
+.cbfoot{text-align:center;color:var(--muted);font-size:.82rem;padding:16px;max-width:900px;margin:0 auto}
+.cbfoot a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header><img src="img/logo.webp" alt="Coffeebreak logo"><h1>Coffeebreak Video Prompt Generator</h1><button onclick="surprise()">Surprise me</button></header>
+<div class="wrap">
+<div>
+<div class="panel"><h2>Build your scene</h2>
+<label>Main character</label><select id="who"></select>
+<label>Or describe your own character</label><input id="whoOwn" placeholder="Leave empty to use the choice above">
+<label>What happens</label><input id="what" placeholder="eg sings on a porch at sunset with a guitar">
+<div class="grid">
+<div><label>Setting</label><select id="where"></select></div>
+<div><label>Time of day</label><select id="when"></select></div>
+<div><label>Camera shot</label><select id="shot"></select></div>
+<div><label>Camera movement</label><select id="move"></select></div>
+<div><label>Lighting</label><select id="light"></select></div>
+<div><label>Mood</label><select id="mood"></select></div>
+<div><label>Look and style</label><select id="style"></select></div>
+<div><label>Colour palette</label><select id="pal"></select></div>
+<div><label>Length</label><select id="len"><option>5 seconds</option><option>8 seconds</option><option>10 seconds</option><option>15 seconds</option><option>30 seconds</option></select></div>
+<div><label>Shape</label><select id="ar"><option value="9:16">9:16 vertical (Shorts, Reels)</option><option value="16:9">16:9 wide (YouTube)</option><option value="1:1">1:1 square</option></select></div>
+</div>
+<label>Sound or music (optional)</label><input id="sound" placeholder="eg soft country guitar, birds, light rain">
+<label>Extra details (optional)</label><input id="extra" placeholder="eg red boots, vintage car in the background">
+<div class="btns"><button onclick="gen()">Make prompt</button><button class="alt" onclick="surprise()">Random scene</button></div>
+</div>
+<div class="panel"><h2>Episode or video title</h2>
+<label>Title</label><input id="title" placeholder="eg Coffeebreak Bay episode 6">
+<label>Short summary</label><input id="sum" placeholder="One line about the video">
+<div class="btns"><button onclick="desc()">Make YouTube description</button></div>
+</div>
+</div>
+<div>
+<div class="panel"><h2>Full prompt</h2><textarea class="out" id="oLong"></textarea><div class="btns"><button onclick="cp('oLong')">Copy</button><button class="alt" onclick="fav()">Save to favourites</button></div></div>
+<div class="panel"><h2>Short prompt</h2><textarea class="out" id="oShort" style="min-height:80px"></textarea><div class="btns"><button onclick="cp('oShort')">Copy</button></div></div>
+<div class="panel"><h2>Things to avoid (negative prompt)</h2><textarea class="out" id="oNeg" style="min-height:70px"></textarea><div class="btns"><button onclick="cp('oNeg')">Copy</button></div></div>
+<div class="panel"><h2>YouTube description</h2><textarea class="out" id="oDesc"></textarea><div class="btns"><button onclick="cp('oDesc')">Copy</button></div></div>
+<div class="panel"><h2>Favourites (saved on this device)</h2><ul class="fav" id="favs" style="list-style:none;padding:0;margin:0"></ul></div>
+</div>
+</div>
+<footer class="cbfoot">
+<p><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">More from Coffeebreak at coffeebreaks.itch.io</a></p>
+<p>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell the physical products they bought, but may not copy them or make their own versions. Coffeebreak claims no ownership of third-party brands or products named; those trademarks belong to their owners and are used only to describe items.</p>
+</footer>
+<script>
+const O={
+who:['Karen, a realistic blonde woman in her forties with a warm smile','Karen, a realistic blonde country singer in a denim jacket','Karen, a realistic blonde woman in a cosy knitted cardigan','Karen, a realistic blonde woman in a 1950s pin-up style dress','an older fisherman with a grey beard','a young barista with an apron','a friendly kelpie dog','a group of friends at a beach'],
+where:['a quiet Australian beach town','a seaside cafe','a country porch with a guitar','a small recording studio','a lighthouse on a cliff','a busy city street at night','a farmhouse kitchen','a rocky ocean pool','a cosy lounge room','a bush track with gum trees','a vintage diner'],
+when:['golden hour','sunrise','midday','blue hour','night','overcast afternoon'],
+shot:['medium shot','close-up','wide establishing shot','over the shoulder shot','low angle shot','aerial drone shot','extreme close-up on the hands'],
+move:['slow push in','smooth tracking shot','gentle handheld','static locked-off camera','slow orbit around the subject','crane up','slow pan left to right'],
+light:['soft natural light','warm window light','neon glow','candle light','dramatic side light','bright sunny light','moody backlight'],
+mood:['warm and hopeful','nostalgic','romantic','funny and light','mysterious','peaceful','dramatic'],
+style:['realistic cinematic film','35mm film look with soft grain','documentary style','music video style','soap opera drama look','retro 1980s VHS look','animated 3D storybook'],
+pal:['warm golds and soft browns','ocean blues and sandy whites','pastel pinks and creams','rich teal and orange','black and white','earthy greens']};
+const $=id=>document.getElementById(id);
+Object.keys(O).forEach(k=>$(k).innerHTML=O[k].map(v=>`<option>${v}</option>`).join(''));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const acts=['sings softly while strumming a guitar','laughs while sharing a coffee with a friend','walks along the shoreline holding her shoes','looks out to sea thinking','dances in the kitchen','opens a letter and smiles','greets a neighbour over the fence','writes song lyrics in a notebook'];
+function v(id){return $(id).value.trim()}
+function gen(){const who=v('whoOwn')||v('who');const what=v('what')||'stands and looks into the distance';
+const long=`${cap(v('shot'))} of ${who} who ${what}, in ${v('where')} at ${v('when')}. ${cap(v('move'))}. ${cap(v('light'))}, ${v('mood')} mood, ${v('style')}, colour palette of ${v('pal')}.${v('extra')?' Details: '+v('extra')+'.':''}${v('sound')?' Sound: '+v('sound')+'.':''} Keep the same character face, hair and clothes in every shot. Natural movement, realistic hands and faces. Length ${v('len')}, aspect ratio ${v('ar')}.`;
+$('oLong').value=long;
+$('oShort').value=`${who}, ${what}, ${v('where')}, ${v('when')}, ${v('shot')}, ${v('move')}, ${v('light')}, ${v('style')}, ${v('ar')}`;
+$('oNeg').value='blurry, warped faces, extra fingers, distorted hands, text, watermark, logos, flicker, low quality, cartoonish skin, nudity, violence';}
+function desc(){const t=v('title')||'Coffeebreak';$('oDesc').value=`${t}\n\n${v('sum')||'A new video from Coffeebreak.'}\n\nCoffeebreak TV Series\n\nMore songs, games and apps from Coffeebreak: https://coffeebreaks.itch.io\n\nCoffeebreak is a songwriter and creator from Newcastle NSW, Australia, making music, stories, games and handmade goods.\n\n#Coffeebreak #CoffeebreakTVSeries`}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+function surprise(){Object.keys(O).forEach(k=>$(k).value=pick(O[k]));$('whoOwn').value='';$('what').value=pick(acts);gen()}
+function cp(id){const t=$(id);t.select();navigator.clipboard?navigator.clipboard.writeText(t.value):document.execCommand('copy')}
+function favs(){return JSON.parse(localStorage.getItem('cbVidFav')||'[]')}
+function fav(){if(!$('oLong').value)gen();const a=favs();a.unshift($('oLong').value);localStorage.setItem('cbVidFav',JSON.stringify(a.slice(0,50)));drawFav()}
+function drawFav(){const a=favs();$('favs').innerHTML=a.length?a.map((p,i)=>`<li>${p.replace(/</g,'&lt;')}<div class="btns"><button class="alt" onclick="navigator.clipboard.writeText(favs()[${i}])">Copy</button><button class="alt" onclick="const a=favs();a.splice(${i},1);localStorage.setItem('cbVidFav',JSON.stringify(a));drawFav()">Remove</button></div></li>`).join(''):'<li>No favourites yet</li>'}
+gen();desc();drawFav();
+</script>
+<div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
+</body>
+</html>

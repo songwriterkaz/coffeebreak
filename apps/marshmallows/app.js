@@ -1,0 +1,12 @@
+const $=id=>document.getElementById(id),S=window.STORE,P=S.items,SC=()=>(window.SUPPLIER_CONFIG||{}).items||{};
+const find=i=>P.find(p=>p.id==i),lab=p=>p.price==null?'Price coming soon':'$'+p.price.toFixed(2)+' AUD';
+let cart=[];try{cart=JSON.parse(localStorage.getItem(S.key+'_cart')||'[]').filter(i=>find(i)&&find(i).price!=null)}catch(e){}
+function save(){try{localStorage.setItem(S.key+'_cart',JSON.stringify(cart))}catch(e){}draw()}
+function add(id){cart.push(id);save();for(let n=0;n<12;n++){const s=document.createElement('div');s.className='sprinkle';s.textContent=S.emoji;s.style.left=Math.random()*100+'vw';s.style.animationDuration=(1.5+Math.random()*2)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),4000)}}
+const total=()=>cart.reduce((a,i)=>a+find(i).price,0);
+function summary(no){return CBOrder.text({store:S.name.toUpperCase(),orderId:no||'',customer:{name:$('cName').value,address:$('cAddr').value,phone:$('cPhone').value,email:$('cEmail').value},items:cart.map(i=>{const p=find(i),s=SC()[i]||{};return {title:p.t+' [ref '+(s.url||'')+'|'+i+']',supplierUrl:s.url,id:i,salePrice:p.price}}),total:total()})+'\n\nSupplier: '+((window.SUPPLIER_CONFIG||{}).supplier||'')}
+let pp=false;function paypal(){if(pp)return;pp=true;CBPay.mount('paypal-buttons',{currency:'AUD',getItems:()=>cart.map(i=>({name:find(i).t,amount:find(i).price,qty:1})),validate:()=>{if(!$('cName').value||!$('cAddr').value||!$('cEmail').value){alert('Please add your name, email and delivery address.');return false}return true},email:()=>$('cEmail').value,subject:no=>S.name+' order '+no+' - '+$('cName').value,body:no=>summary(no),onDone:()=>{cart=[];save()}})}
+function draw(){$('grid').innerHTML=P.map(p=>`<div class="card">${p.img?`<img src="${p.img}" alt="">`:''}<h3>${p.t}</h3><small>${p.d}</small><p class="p">${lab(p)}</p>${p.price==null?'<button disabled>Price coming soon</button>':`<button onclick="add('${p.id}')">Add to cart</button>`}</div>`).join('');
+$('cc').textContent=cart.length;$('lines').innerHTML=cart.map((i,n)=>`<p>${find(i).t} - ${lab(find(i))} <button onclick="cart.splice(${n},1);save()">x</button></p>`).join('')||'<p>Empty</p>';$('tot').textContent=total().toFixed(2)}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x==b));['shop','cart'].forEach(t=>$(t).hidden=t!=b.dataset.t);if(b.dataset.t=='cart')paypal()});
+$('mailBtn').onclick=()=>{if(cart.length)CBOrder.mail(S.name+' order request - '+$('cName').value,summary(''))};draw();

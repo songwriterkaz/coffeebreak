@@ -1,0 +1,23 @@
+*{box-sizing:border-box}body{margin:0;font-family:Georgia,'Times New Roman',serif;color:#1d2b1f;background:linear-gradient(180deg,#dfeee0,#2f5d3a) fixed;min-height:100vh}
+.strip{background:#173d24;color:#f6e7c1;text-align:center;padding:6px;font:700 13px system-ui,sans-serif}
+header{text-align:center;padding:18px 12px 8px;color:#173d24}header h1{margin:.1em 0;font-size:clamp(1.9em,6vw,3em);letter-spacing:.02em}.tag{max-width:680px;margin:.2em auto .8em;font-style:italic}
+button{font:700 14px system-ui,sans-serif;border:0;border-radius:999px;padding:9px 16px;cursor:pointer;background:#2f6b3f;color:#fff;margin:3px}button:disabled{opacity:.5}
+button.gold{background:#c9a24a;color:#1a1306}
+main{max-width:1160px;margin:auto;padding:10px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
+#q,#sort{padding:10px 14px;border-radius:999px;border:2px solid #2f6b3f;font:15px system-ui,sans-serif;background:#fff}#q{width:100%;max-width:380px}
+#filters{display:flex;flex-wrap:wrap;justify-content:center;margin:8px 0 14px}#filters button{background:#fff;color:#173d24}#filters button.on{background:#c9a24a;color:#111}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.card{background:#fffdf6;border-radius:16px;padding:12px;box-shadow:0 4px 14px #0003;display:flex;flex-direction:column;border:2px solid #e7d7a8}
+.pic svg{width:100%;height:auto;display:block;border-radius:12px}
+.card h3{font-size:1.1em;margin:10px 0 2px}.where{font:13px system-ui,sans-serif;color:#4b5d4e}
+.facts{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;font:12px system-ui,sans-serif}.facts span{background:#eef4ea;border-radius:999px;padding:3px 9px}
+.card p.d{font-size:14px;line-height:1.4;flex:1;margin:4px 0 8px}
+.price{font-size:1.3em;font-weight:800;color:#173d24;margin:2px 0}.aud{font:13px system-ui,sans-serif;color:#4b5d4e;margin-bottom:6px}
+.btns{display:flex;flex-direction:column}.btns button{width:100%;margin:3px 0}
+.note,.info,#enq{background:#fffdf6ee;border-radius:14px;padding:14px;margin-top:14px;font-family:system-ui,sans-serif;font-size:14px}
+.asis{text-align:center;font:700 14px system-ui,sans-serif;background:#fff6dc;border:1px solid #c9a24a;border-radius:10px;padding:8px;margin:6px auto 12px;max-width:760px}
+#enq h2{margin-top:0;font-family:Georgia,serif}.form input,.form textarea,.form select{display:block;width:100%;margin:5px 0;padding:9px;border-radius:8px;border:1px solid #9bb39f;font:inherit}
+#cbIntlNote{display:none}
+#toast{display:none;position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#173d24;color:#fff;padding:10px 16px;border-radius:999px;z-index:99;font-family:system-ui,sans-serif}
+footer{text-align:center;color:#fff;padding:20px;font:13px system-ui,sans-serif}
