@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Terms (Digitally Signed)</title>
+<meta name="description" content="Coffeebreak terms and disclaimer, digitally signed by Karen O'Brien, ABN 78 455 298 853.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:system-ui,Segoe UI,Arial,sans-serif;background:#f6efe6;color:#2a1d14;line-height:1.55}
+.wrap{max-width:820px;margin:0 auto;padding:20px}
+.top{display:flex;align-items:center;gap:12px;justify-content:space-between}
+.top img{height:56px}
+a{color:#7a3b12}
+.hub{background:#2a1d14;color:#fff;padding:8px 14px;border-radius:20px;text-decoration:none;font-weight:600}
+h1{margin:.4em 0 .2em}
+.card{background:#fff;border-radius:14px;padding:18px 22px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin:16px 0}
+#terms{white-space:pre-wrap;font-family:inherit;margin:0}
+.badge{display:inline-block;padding:6px 12px;border-radius:20px;font-weight:700;background:#e8f6ec;color:#17652f;border:1px solid #9fd3ae}
+.badge.bad{background:#fdecec;color:#8a1c1c;border-color:#e3a3a3}
+.badge.wait{background:#fff6dd;color:#7a5a00;border-color:#e6cf86}
+.sig{font-family:'Great Vibes',cursive;font-size:52px;color:#1b2a6b;line-height:1;margin:6px 0 0;border-bottom:2px solid #1b2a6b;display:inline-block;padding:0 10px 4px}
+code{word-break:break-all;background:#f3ece4;padding:2px 5px;border-radius:5px;font-size:.88em}
+.small{font-size:.88em;color:#5c4a3d}
+footer{text-align:center;padding:24px 10px;font-size:.92em}
+</style></head><body><div class="wrap">
+<div class="top"><img src="img/logo.png" alt="Coffeebreak logo"><a class="hub" href="https://songwriterkaz.github.io/coffeebreak/">&larr; Coffeebreak Hub</a></div>
+<h1>Coffeebreak Terms and Disclaimer</h1>
+<p><span class="badge">&#10004; Digitally signed</span> <span id="check" class="badge wait">Checking signature&hellip;</span></p>
+
+<div class="card"><pre id="terms">Loading terms&hellip;</pre></div>
+
+<div class="card">
+<h2>Signature</h2>
+<div class="sig">Karen O'Brien</div>
+<p><strong>Karen O'Brien</strong> (Coffeebreak)<br>ABN 78 455 298 853<br>Signed 5 November 2026, Australia/Sydney (AEDT, UTC+11)</p>
+<p>SHA-256 of <a href="terms.txt">terms.txt</a>:<br><code id="hash">3b6f8ff6e45ac0dd2f58f90cab08a248dab4191702f0c883d5690b6f52fe2b5b</code></p>
+<p>Ed25519 signature (base64):<br><code>nNm4iIhLQw6Iap5gfXwRxBGt01R9Ja/CcG/TFnS6tTGdOopxizqDWf4fER0/B/UsCiVALt4Lg5ZVopu7zDKkAw==</code></p>
+<p>Public key: <a href="public-key.pem">public-key.pem</a> (fingerprint <code>63544f7d391b4061</code>) &middot; <a href="terms.txt.sig">terms.txt.sig</a> &middot; <a href="signature.txt">signature.txt</a></p>
+<h3>Verify it yourself</h3>
+<p class="small">Download terms.txt, terms.txt.sig and public-key.pem, then run:</p>
+<p><code>sha256sum terms.txt</code><br><code>openssl pkeyutl -verify -pubin -inkey public-key.pem -rawin -in terms.txt -sigfile terms.txt.sig</code></p>
+<p class="small">Your browser also checks the hash above (and the Ed25519 signature where supported) against the live terms.txt each time this page loads.</p>
+<p class="small">This is a self-issued digital signature that shows these terms were published by Coffeebreak and have not been changed since they were signed. It is not a government or certified electronic signature, and nothing on this page is legal advice.</p>
+</div>
+
+<footer><p>&copy; 2026 Karen O'Brien (Coffeebreak). All rights reserved. Tips by PayID: <strong>darkokaz@gmx.com</strong> (TMB)</p>
+<p><a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak Hub</a></p>
+<p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> | <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p></footer>
+</div>
+<script>
+const EXPECTED="3b6f8ff6e45ac0dd2f58f90cab08a248dab4191702f0c883d5690b6f52fe2b5b",SIG_B64="nNm4iIhLQw6Iap5gfXwRxBGt01R9Ja/CcG/TFnS6tTGdOopxizqDWf4fER0/B/UsCiVALt4Lg5ZVopu7zDKkAw==";
+function b64(s){return Uint8Array.from(atob(s),c=>c.charCodeAt(0))}
+function hex(b){return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+(async()=>{const el=document.getElementById('check');try{
+const r=await fetch('terms.txt',{cache:'no-store'});const buf=await r.arrayBuffer();
+document.getElementById('terms').textContent=new TextDecoder().decode(buf);
+const h=hex(await crypto.subtle.digest('SHA-256',buf));
+if(h!==EXPECTED){el.className='badge bad';el.textContent='Hash mismatch: terms changed since signing';return}
+let msg='Hash verified';
+try{const pem=await (await fetch('public-key.pem')).text();
+const der=b64(pem.replace(/-----[^-]+-----|\s/g,''));
+const key=await crypto.subtle.importKey('spki',der,{name:'Ed25519'},false,['verify']);
+const ok=await crypto.subtle.verify({name:'Ed25519'},key,b64(SIG_B64),buf);
+msg=ok?'Hash + Ed25519 signature verified':'Signature INVALID';if(!ok)el.className='badge bad';}catch(e){msg+=' (Ed25519 check not supported in this browser)'}
+if(!el.className.includes('bad'))el.className='badge';el.textContent='\u2714 '+msg;
+}catch(e){el.className='badge wait';el.textContent='Could not load terms.txt to verify'}})();
+</script>
+</body></html>

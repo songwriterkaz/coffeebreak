@@ -1,0 +1,17 @@
+COFFEEBREAK TERMS - DETACHED SIGNATURE RECORD
+Signed by: Karen O'Brien (Coffeebreak)
+ABN: 78 455 298 853
+Date: 5 November 2026, Australia/Sydney (AEDT, UTC+11)
+Document: terms.txt (version 1.0)
+SHA-256: 3b6f8ff6e45ac0dd2f58f90cab08a248dab4191702f0c883d5690b6f52fe2b5b
+Signature algorithm: Ed25519 over the exact bytes of terms.txt
+Signature (base64): nNm4iIhLQw6Iap5gfXwRxBGt01R9Ja/CcG/TFnS6tTGdOopxizqDWf4fER0/B/UsCiVALt4Lg5ZVopu7zDKkAw==
+Public key: public-key.pem (SHA-256 fingerprint prefix 63544f7d391b4061)
+
+Verify:
+  sha256sum terms.txt
+  openssl pkeyutl -verify -pubin -inkey public-key.pem -rawin -in terms.txt -sigfile terms.txt.sig
+
+This is a self-issued digital signature showing the terms were published by
+Coffeebreak and have not been changed since signing. It is not a government
+or certified e-signature, and it is not legal advice.
