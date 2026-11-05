@@ -40,7 +40,7 @@ function pick(){S.st='pick';const o=[...MUTS].sort(()=>Math.random()-.5).slice(0
 o.forEach(m=>{const b=document.createElement('button');b.innerHTML='<b>'+m[0]+'</b><br><span class=small>'+m[1]+'</span>';b.onclick=()=>{m[2](S.p);S.muts.push(m[0]);$('pick').style.display='none';S.st='play';nextWave()};$('cards').appendChild(b)});$('pick').style.display='flex'}
 function shareText(){return `☕ I scored ${S.score} in Brew Brawl Arena by Coffeebreak! Wave ${S.wave}, ${S.maxc}x combo, ${S.kills} critters brewed. Beat me! #Coffeebreak #BrewBrawl #indiegame #gaming`}
 function end(win){S.st='end';if(S.score>best){best=S.score;localStorage.cbArenaBest=best;$('best').textContent=best}$('endT').textContent=win?'CHAMPION OF THE ARENA!':'KNOCKED OUT!';
-$('res').textContent=`Score ${S.score}  ·  Best ${best}\nWave ${S.wave}  ·  Max combo ${S.maxc}x  ·  KOs ${S.kills}\nMutations: ${S.muts.join(', ')||'none'}`;$('end').style.display='flex'}
+$('res').textContent=`Score ${S.score}  ·  Best ${best}\nWave ${S.wave}  ·  Max combo ${S.maxc}x  ·  KOs ${S.kills}\nMutations: ${S.muts.join(', ')||'none'}`;$('end').style.display='flex';try{cbShowStreamEnd()}catch(e){}}
 function draw(){X.fillStyle='#3b2a1c';X.fillRect(0,0,W,H);X.fillStyle='#4a3524';X.beginPath();X.ellipse(W/2,H/2,460,270,0,0,6.28);X.fill();X.strokeStyle='#f4b43c';X.lineWidth=6;X.stroke();
 // crowd
 const hy=S?S.hype:0;for(let i=0;i<50;i++){const x=i*20+10,j=Math.sin((S?S.t:0)*(4+hy/10)+i)*(2+hy/12);X.fillStyle=['#2f6fa8','#3f9a5a','#d9822b','#7b5fb0','#c9b458'][i%5];X.beginPath();X.arc(x,14+j,8,0,6.28);X.fill();X.beginPath();X.arc(x+10,H-12-j,8,0,6.28);X.fill()}

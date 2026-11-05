@@ -9,7 +9,28 @@ button.sel{background:#e8a0b0;color:#1a0a10}
 #tools{display:flex;gap:6px;padding:4px;flex-wrap:wrap;justify-content:center}
 canvas{flex:1;max-width:100%;min-height:0;touch-action:none}
 #np{font-size:12px;color:#e8a0b0}
-</style><script src="cb-fullscreen.js"></script></head><body><!--cbplus--><style>#cbPlus{position:fixed;top:8px;right:8px;z-index:99997;font:13px system-ui,sans-serif}#cbPlus>button{background:#8c3cc8;color:#fff;border:0;border-radius:18px;padding:7px 11px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px #0006}#cbPlusP{background:#fff;color:#222;border:2px solid #8c3cc8;border-radius:12px;padding:10px;margin-top:6px;width:270px;max-height:70vh;overflow:auto}#cbPlusP button{border:0;border-radius:16px;padding:6px 10px;font-weight:700;cursor:pointer;margin:3px 2px}#cbToast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#ffd54a;color:#222;padding:8px 14px;border-radius:18px;font:bold 14px system-ui;z-index:99999;display:none}</style>
+</style><script src="cb-fullscreen.js"></script>
+<style id="cbStreamAdsCSS">
+#cbHubBack{position:fixed;top:8px;left:8px;z-index:100000;background:#4a2c1d;color:#fff3e6;text-decoration:none;font:700 13px system-ui,sans-serif;padding:8px 12px;border-radius:999px;box-shadow:0 2px 8px #0006}
+#cbHubBack:hover{background:#6b3f28}
+#cbStreamBar{position:fixed;left:0;right:0;bottom:0;z-index:99999;background:linear-gradient(90deg,#1db954,#191414 35%,#4a2c1d 70%,#ff5fa2);color:#fff;font:600 13px/1.3 system-ui,sans-serif;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;box-shadow:0 -4px 16px #0007}
+#cbStreamBar a{color:#fff;background:#0008;border:1px solid #fff5;border-radius:999px;padding:6px 10px;text-decoration:none;font-weight:700}
+#cbStreamBar a.sp{background:#1db954;border-color:#1ed760;color:#041}
+#cbStreamBar a.ap{background:#fa2d48;border-color:#ff5a6e}
+#cbStreamBar a.yt{background:#ff0000;border-color:#ff6666}
+#cbStreamBar b{margin-right:4px}
+#cbStreamEnd{display:none;position:fixed;inset:0;z-index:100001;background:rgba(0,0,0,.72);align-items:center;justify-content:center;padding:16px}
+#cbStreamEnd.on{display:flex}
+#cbStreamEnd .box{background:#fff3e6;color:#4a2c1d;border-radius:16px;padding:18px;max-width:420px;width:100%;text-align:center;box-shadow:0 12px 40px #000a}
+#cbStreamEnd .box h3{margin:0 0 8px;font:800 20px system-ui,sans-serif}
+#cbStreamEnd .links{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+#cbStreamEnd .links a{display:inline-block;padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:800;color:#fff}
+#cbStreamEnd .sp{background:#1db954}#cbStreamEnd .ap{background:#fa2d48}#cbStreamEnd .yt{background:#ff0000}
+#cbStreamEnd .st{background:#7b4cff}#cbStreamEnd .or{background:#ff9f1c;color:#221}
+#cbStreamEnd .hub{background:#4a2c1d}#cbStreamEnd .close{background:#666;margin-top:6px}
+body{padding-bottom:56px !important}
+</style>
+</head><body><!--cbplus--><style>#cbPlus{position:fixed;top:8px;right:8px;z-index:99997;font:13px system-ui,sans-serif}#cbPlus>button{background:#8c3cc8;color:#fff;border:0;border-radius:18px;padding:7px 11px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px #0006}#cbPlusP{background:#fff;color:#222;border:2px solid #8c3cc8;border-radius:12px;padding:10px;margin-top:6px;width:270px;max-height:70vh;overflow:auto}#cbPlusP button{border:0;border-radius:16px;padding:6px 10px;font-weight:700;cursor:pointer;margin:3px 2px}#cbToast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#ffd54a;color:#222;padding:8px 14px;border-radius:18px;font:bold 14px system-ui;z-index:99999;display:none}</style>
 <div id="cbPlus"><button onclick="CB.toggle()">🏆 ☕ Plus</button><div id="cbPlusP" hidden><img src="cb-logo.jpg" onerror="this.remove()" style="width:56px;float:right;border-radius:8px"><b>Coffeebreak Membership – $50 AUD</b><br><small>Optional. Supports Coffeebreak and unlocks a Member badge.</small><br><span class="cb-payid">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</span><button style="background:#ff5fa2;color:#fff" onclick="this.nextElementSibling.hidden=!this.nextElementSibling.hidden">PayID</button><div hidden>PayID: <b>darkokaz@gmx.com</b><br>Amount $50.00 AUD, ref: your name + "CB Member"</div><br><button style="background:#eee" onclick="CB.member()">I've paid – add my badge</button><hr><b>🌟 Sponsor me</b><br><small>Sponsor Coffeebreak any amount.</small><br><span class="cb-payid">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</span> or PayID darkokaz@gmx.com<hr><b>🏆 Trophies</b><div id="cbTro"></div></div></div><div id="cbToast"></div>
 <script>window.CB=window.CB||{};(function(C){var K='cbTrophies',L={first:'☕ First Sip – opened a Coffeebreak app',back:'🔁 Regular – came back 3 times',ten:'⏱️ Ten Minute Break – played 10 min',click50:'👆 Busy Bean – 50 taps',member:'💜 Coffeebreak Member',sponsor:'🌟 Sponsor Spotter – opened sponsor panel'};function g(){try{return JSON.parse(localStorage.getItem(K)||'{}')}catch(e){return{}}}function s(o){try{localStorage.setItem(K,JSON.stringify(o))}catch(e){}}C.trophy=function(id,label){if(label)L[id]=label;var o=g();if(o[id])return;o[id]=Date.now();s(o);var t=document.getElementById('cbToast');if(t){t.textContent='🏆 Trophy: '+(L[id]||id);t.style.display='block';setTimeout(function(){t.style.display='none'},2600)}C.draw()};C.draw=function(){var e=document.getElementById('cbTro');if(!e)return;var o=g(),h='';for(var k in L)h+='<div>'+(o[k]?'✅ ':'🔒 ')+L[k]+'</div>';for(var k in o)if(!L[k])h+='<div>✅ '+k+'</div>';e.innerHTML=h};C.toggle=function(){var p=document.getElementById('cbPlusP');p.hidden=!p.hidden;C.draw();if(!p.hidden)C.trophy('sponsor')};C.member=function(){C.trophy('member');alert('Thanks. Your Member badge is added on this device. Karen will confirm your payment.')};addEventListener('load',function(){C.trophy('first');var n=+(localStorage.getItem('cbVisits')||0)+1;localStorage.setItem('cbVisits',n);if(n>=3)C.trophy('back');setTimeout(function(){C.trophy('ten')},600000);var c=0;addEventListener('pointerdown',function(){if(++c==50)C.trophy('click50')});C.draw()})})(window.CB)</script><!--/cbplus-->
 <div id="wrap">
@@ -38,4 +59,41 @@ canvas{flex:1;max-width:100%;min-height:0;touch-action:none}
 <a href="https://coffeebreaks.itch.io/coffeebreak-fencing-duel" target="_blank" rel="noopener" style="display:inline-block;margin:12px;padding:14px 26px;background:#e8a0b0;color:#1a0a10;border-radius:14px;font-size:22px;font-weight:bold;text-decoration:none">Get the full game on itch.io</a>
 <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener" style="color:#ffcf6a">More games by Coffeebreak</a></div>
 <script>window.DEMO=true;window.demoEnd=function(m){var d=document.getElementById('demoEnd');document.getElementById('deImg').src=window.HERO_SRC||'';if(m)document.getElementById('deMsg').innerHTML=m;d.style.display='flex';window.DEMO_ENDED=true;}</script>
-<script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Fencing" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><!--cb-ytsub--><script>(function(){var n=0;function a(){var s=document.getElementById("cbStrip");if(!s){if(n++<40)setTimeout(a,250);return}if(document.getElementById("cbMusSp"))return;var t=document.getElementById("cbMinT");function L(id,txt,u,red){var e=document.createElement("a");e.id=id;e.className="cbx";e.href=u;e.target="_blank";e.rel="noopener";e.textContent=txt;e.tabIndex=-1;if(red)e.style.cssText="color:#e62117!important;font-weight:600!important";s.insertBefore(e,t||null)}L("cbMusSp","\ud83c\udfb5 Stream my music","https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7",1);L("cbMusRad","\ud83d\udcfb Radio 24/7","https://www.youtube.com/@coffeebreakTVSERIES/streams",1);var y=s.querySelector("a[href*=youtube],button");[].forEach.call(s.querySelectorAll("*"),function(e){if(/Subscribe/.test(e.textContent)&&e.id!=="cbMusRad"&&e.tagName==="A")e.href="https://www.youtube.com/channel/UCNuPovMUFJDrl9fhztDgy4w?sub_confirmation=1"})}if(document.readyState==="loading")addEventListener("DOMContentLoaded",a);else a()})();</script></body></html>
+<script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Fencing" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><!--cb-ytsub--><script>(function(){var n=0;function a(){var s=document.getElementById("cbStrip");if(!s){if(n++<40)setTimeout(a,250);return}if(document.getElementById("cbMusSp"))return;var t=document.getElementById("cbMinT");function L(id,txt,u,red){var e=document.createElement("a");e.id=id;e.className="cbx";e.href=u;e.target="_blank";e.rel="noopener";e.textContent=txt;e.tabIndex=-1;if(red)e.style.cssText="color:#e62117!important;font-weight:600!important";s.insertBefore(e,t||null)}L("cbMusSp","\ud83c\udfb5 Stream my music","https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7",1);L("cbMusRad","\ud83d\udcfb Radio 24/7","https://www.youtube.com/@coffeebreakTVSERIES/streams",1);var y=s.querySelector("a[href*=youtube],button");[].forEach.call(s.querySelectorAll("*"),function(e){if(/Subscribe/.test(e.textContent)&&e.id!=="cbMusRad"&&e.tagName==="A")e.href="https://www.youtube.com/channel/UCNuPovMUFJDrl9fhztDgy4w?sub_confirmation=1"})}if(document.readyState==="loading")addEventListener("DOMContentLoaded",a);else a()})();</script>
+<a id="cbHubBack" href="https://songwriterkaz.github.io/coffeebreak/">← Hub</a>
+<div id="cbStreamBar" role="navigation" aria-label="Stream Karen's music">
+  <b>▶ Stream Karen:</b>
+  <a class="sp" href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">Spotify</a>
+  <a class="ap" href="https://music.apple.com/au/album/billionaire/1542958072" target="_blank" rel="noopener">Apple · Billionaire</a>
+  <a class="yt" href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">YouTube</a>
+  <a href="https://songwriterkaz.github.io/coffeebreak-stream/" target="_blank" rel="noopener">Stream</a>
+  <a href="https://songwriterkaz.github.io/coffeebreak/apps/own-radio/" target="_blank" rel="noopener">Own Radio</a>
+</div>
+<div id="cbStreamEnd"><div class="box">
+  <h3>🎵 Keep the fight going — stream Karen</h3>
+  <p style="margin:0;font-size:14px">Spotify · Apple Billionaire · YouTube · Own Radio</p>
+  <div class="links">
+    <a class="sp" href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">▶ Spotify</a>
+    <a class="ap" href="https://music.apple.com/au/album/billionaire/1542958072" target="_blank" rel="noopener">🍎 Billionaire</a>
+    <a class="yt" href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">YouTube</a>
+    <a class="st" href="https://songwriterkaz.github.io/coffeebreak-stream/" target="_blank" rel="noopener">Stream</a>
+    <a class="or" href="https://songwriterkaz.github.io/coffeebreak/apps/own-radio/" target="_blank" rel="noopener">Own Radio</a>
+    <a class="hub" href="https://songwriterkaz.github.io/coffeebreak/">← Hub</a>
+  </div>
+  <button class="close" type="button" onclick="document.getElementById('cbStreamEnd').classList.remove('on')">Close / Play again</button>
+</div></div>
+<script id="cbStreamAdsJS">
+(function(){
+  function showEnd(){ var e=document.getElementById('cbStreamEnd'); if(e) e.classList.add('on'); }
+  window.cbShowStreamEnd = showEnd;
+  // Hook common game-over paths
+  var _alert = window.alert;
+  // Observe canvas text is hard; expose click on bar already. For Play buttons, show end when they re-enable.
+  document.addEventListener('click', function(ev){
+    var t=ev.target; if(!t) return;
+    var tx=(t.textContent||'').toLowerCase();
+    if(/play again|restart|try again/.test(tx)) setTimeout(showEnd, 50);
+  }, true);
+})();
+</script>
+</body></html>

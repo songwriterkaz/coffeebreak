@@ -1,4 +1,25 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Arena Knights</title><style>*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,sans-serif;background:#2a1a12;color:#fff8ee}header{display:flex;gap:12px;align-items:center;padding:14px 18px;background:#1d120c}header img{height:54px;border-radius:10px}h1{margin:0;font-size:24px}main{max-width:1000px;margin:auto;padding:16px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}.card{background:#3b261b;border-radius:14px;padding:14px}button,select,input,textarea{font:inherit;border-radius:10px;border:0;padding:8px 12px}button{background:#ffd84d;color:#2a1a12;font-weight:700;cursor:pointer}input,textarea,select{width:100%;margin:4px 0 8px}.pay{background:#ffd84d;color:#2a1a12;padding:10px;border-radius:10px;font-weight:700}footer{text-align:center;padding:16px 10px 80px;font-size:13px;opacity:.9}footer a{color:#ffd84d}canvas{background:#111;border-radius:12px;max-width:100%;touch-action:none}.big{font-size:42px;text-align:center}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Arena Knights</title><style>*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,sans-serif;background:#2a1a12;color:#fff8ee}header{display:flex;gap:12px;align-items:center;padding:14px 18px;background:#1d120c}header img{height:54px;border-radius:10px}h1{margin:0;font-size:24px}main{max-width:1000px;margin:auto;padding:16px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}.card{background:#3b261b;border-radius:14px;padding:14px}button,select,input,textarea{font:inherit;border-radius:10px;border:0;padding:8px 12px}button{background:#ffd84d;color:#2a1a12;font-weight:700;cursor:pointer}input,textarea,select{width:100%;margin:4px 0 8px}.pay{background:#ffd84d;color:#2a1a12;padding:10px;border-radius:10px;font-weight:700}footer{text-align:center;padding:16px 10px 80px;font-size:13px;opacity:.9}footer a{color:#ffd84d}canvas{background:#111;border-radius:12px;max-width:100%;touch-action:none}.big{font-size:42px;text-align:center}</style>
+<style id="cbStreamAdsCSS">
+#cbHubBack{position:fixed;top:8px;left:8px;z-index:100000;background:#4a2c1d;color:#fff3e6;text-decoration:none;font:700 13px system-ui,sans-serif;padding:8px 12px;border-radius:999px;box-shadow:0 2px 8px #0006}
+#cbHubBack:hover{background:#6b3f28}
+#cbStreamBar{position:fixed;left:0;right:0;bottom:0;z-index:99999;background:linear-gradient(90deg,#1db954,#191414 35%,#4a2c1d 70%,#ff5fa2);color:#fff;font:600 13px/1.3 system-ui,sans-serif;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;box-shadow:0 -4px 16px #0007}
+#cbStreamBar a{color:#fff;background:#0008;border:1px solid #fff5;border-radius:999px;padding:6px 10px;text-decoration:none;font-weight:700}
+#cbStreamBar a.sp{background:#1db954;border-color:#1ed760;color:#041}
+#cbStreamBar a.ap{background:#fa2d48;border-color:#ff5a6e}
+#cbStreamBar a.yt{background:#ff0000;border-color:#ff6666}
+#cbStreamBar b{margin-right:4px}
+#cbStreamEnd{display:none;position:fixed;inset:0;z-index:100001;background:rgba(0,0,0,.72);align-items:center;justify-content:center;padding:16px}
+#cbStreamEnd.on{display:flex}
+#cbStreamEnd .box{background:#fff3e6;color:#4a2c1d;border-radius:16px;padding:18px;max-width:420px;width:100%;text-align:center;box-shadow:0 12px 40px #000a}
+#cbStreamEnd .box h3{margin:0 0 8px;font:800 20px system-ui,sans-serif}
+#cbStreamEnd .links{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+#cbStreamEnd .links a{display:inline-block;padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:800;color:#fff}
+#cbStreamEnd .sp{background:#1db954}#cbStreamEnd .ap{background:#fa2d48}#cbStreamEnd .yt{background:#ff0000}
+#cbStreamEnd .st{background:#7b4cff}#cbStreamEnd .or{background:#ff9f1c;color:#221}
+#cbStreamEnd .hub{background:#4a2c1d}#cbStreamEnd .close{background:#666;margin-top:6px}
+body{padding-bottom:56px !important}
+</style>
+</head><body>
 <header><img src="logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Arena Knights</h1></header><main><p class="pay" style="background:#7a0010;color:#fff">16+ Contains violence and scary scenes</p><p>Clash swords in a torch lit castle arena as waves of armoured knights charge at you. Swing, block with your shield and land heavy blows to break their lines. Survive the champion every fifth wave and forge better gear.</p><p><b>Controls:</b> Arrows or WASD to move, or hold the mouse to move toward it. Space or 1 to strike, E or 2 for a heavy attack, hold R or Shift to block.</p>
 <div style="text-align:center"><div style="position:relative;display:inline-block;max-width:100%"><canvas id="g3" width="800" height="480" style="display:block;max-width:100%;background:#000"></canvas><canvas id="g" width="800" height="480" style="position:absolute;inset:0;width:100%;height:100%;background:transparent"></canvas></div><br><button id="start">Play</button> <span id="hud"></span><p id="best"></p><div id="upg"></div></div>
 <h2>Add-on packs</h2><div class="grid"><div class="card"><h3>Coffeebreak Arena Knights premium skins</h3><p><b>$2 USD</b> <span id="pk0"></span></p></div><div class="card"><h3>Season Pass: pro mode and double score</h3><p><b>$4 USD</b> <span id="pk1"></span></p></div><div class="card"><h3>Heavy armour pack (extra health)</h3><p><b>$3 USD</b> <span id="pk2"></span></p></div><div class="card"><h3>All add-ons bundle</h3><p><b>$7 USD</b> <span id="pk3"></span></p></div></div><form id="of" data-subject="Coffeebreak Arena Knights add-on request" class="card"><input name="name" placeholder="Your name" required><input name="email" type="email" placeholder="Your email" required><select name="pack"><option>Coffeebreak Arena Knights premium skins $2</option><option>Season Pass: pro mode and double score $4</option><option>Heavy armour pack (extra health) $3</option><option>All add-ons bundle $7</option></select><textarea name="message" placeholder="Anything else"></textarea><button type="submit">Request add-on</button><p id="ofs" role="status"></p></form><script>addEventListener('DOMContentLoaded',function(){cbSend(document.getElementById('of'),'ofs')})</script><p>Send the request, then Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com. Put your email in the PayID description and I will email your unlock code.</p>
@@ -66,7 +87,7 @@ function pc(d){return CB.skin?'#ffd84d':(tint()||d)}
 function key(){return KP.shift()}
 function kd(){for(var i=0;i<arguments.length;i++)if(K[arguments[i]])return 1;return 0}
 function fmt(n){n=Math.floor(n);return n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e4?(n/1e3).toFixed(1)+'k':''+n}
-function over(s){if(!run)return;run=0;s=Math.floor(s);var nb=s>best();if(nb)S.setItem(KEY+'-best',s);var up=record(s);rect2('rgba(0,0,0,.6)',0,0,W,H);txt('Game over',W/2,H/2-30,44,'#ffd84d','center');txt('Score '+s+(nb?'  New best':'  Best '+best()),W/2,H/2+14,24,'#fff','center');txt(up?'Level up. You are now level '+plv()+'. New colour unlocked.':'Level '+plv()+'. Press Play to go again',W/2,H/2+50,18,up?'#7f7':'#fff','center');showBest()}
+function over(s){if(!run)return;run=0;s=Math.floor(s);var nb=s>best();if(nb)S.setItem(KEY+'-best',s);var up=record(s);rect2('rgba(0,0,0,.6)',0,0,W,H);try{if(window.cbShowStreamEnd)cbShowStreamEnd()}catch(e){};txt('Game over',W/2,H/2-30,44,'#ffd84d','center');txt('Score '+s+(nb?'  New best':'  Best '+best()),W/2,H/2+14,24,'#fff','center');txt(up?'Level up. You are now level '+plv()+'. New colour unlocked.':'Level '+plv()+'. Press Play to go again',W/2,H/2+50,18,up?'#7f7':'#fff','center');showBest()}
 function showBest(){try{paintUpg()}catch(e){}var e=document.getElementById('best');if(!e)return;var lb=jget('lb',[]),l=plv(),h='Your best score: '+best()+'. Player level '+l+' ('+xp()+' XP, next level at '+(l*l*400)+').';if(window.CBDAILY)h+=' '+CBDAILY;h+='<br><b>Your top runs:</b> '+(lb.length?lb.map(function(r,i){return (i+1)+'. '+r[0]+' ('+r[1]+')'}).join('  '):'none yet')+'<br>Colours unlocked by levelling up: <button type=button onclick=setTint(0)>Default</button>';for(var i=1;i<l&&i<=TINTS.length;i++)h+=' <button type=button aria-label="Colour '+i+'" style="background:'+TINTS[i-1]+';width:30px" onclick=setTint('+i+')>&nbsp;</button>';e.innerHTML=h}
 function loop(){if(!run)return;T++;try{G.step();if(run){X.clearRect(0,0,W,H);r3begin();G.draw();r3end()}}catch(e){run=0;throw e}M.click=0;KP.length=0;if(run)HUDE.textContent=(G.hud?G.hud():'Score '+fmt(SC))+'   Best '+fmt(best());requestAnimationFrame(loop)}
 function start(){refresh();if(R3.on)r3clear();T=0;SC=0;K={};KP=[];G.init();run=1;requestAnimationFrame(loop)}
@@ -122,4 +143,41 @@ rect2('#000',20,20,104,14);rect2('#3c3',22,22,Math.max(0,p.hp)*100/(100+(CB.boos
 if(g.cmb>1)txt('Combo x'+g.cmb,W/2,40,24,'#ffd84d','center');if(o.time)txt('Time '+Math.ceil(g.tm/60),W-20,30,20,g.tm<600?'#f44':'#fff','right')},
 hud(){return o.rn+' '+this.rd+'   Knockouts '+this.ko+'   Score '+fmt(SC)}}}
 G=FIGHT({gym:'Castle forge',max:6,base:2,every:2,ehp:35,reach:70,spd:.95,time:0,bhp:40,floor:'#0c0b0a',mat:'#3a342a',post:'#c80',posts:10,ec:['#777','#6a5a4a','#5a6a7a'],pc:'#99a',wc:'#ddd',rn:'Wave',ax0:120,ax1:680,ay0:60,ay1:420})
-</script><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Arena Knights" data-url="https://coffeebreaks.itch.io/coffeebreak-arena-knights" data-kind="game" data-howto=""></script></body></html>
+</script><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Arena Knights" data-url="https://coffeebreaks.itch.io/coffeebreak-arena-knights" data-kind="game" data-howto=""></script>
+<a id="cbHubBack" href="https://songwriterkaz.github.io/coffeebreak/">← Hub</a>
+<div id="cbStreamBar" role="navigation" aria-label="Stream Karen's music">
+  <b>▶ Stream Karen:</b>
+  <a class="sp" href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">Spotify</a>
+  <a class="ap" href="https://music.apple.com/au/album/billionaire/1542958072" target="_blank" rel="noopener">Apple · Billionaire</a>
+  <a class="yt" href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">YouTube</a>
+  <a href="https://songwriterkaz.github.io/coffeebreak-stream/" target="_blank" rel="noopener">Stream</a>
+  <a href="https://songwriterkaz.github.io/coffeebreak/apps/own-radio/" target="_blank" rel="noopener">Own Radio</a>
+</div>
+<div id="cbStreamEnd"><div class="box">
+  <h3>🎵 Keep the fight going — stream Karen</h3>
+  <p style="margin:0;font-size:14px">Spotify · Apple Billionaire · YouTube · Own Radio</p>
+  <div class="links">
+    <a class="sp" href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">▶ Spotify</a>
+    <a class="ap" href="https://music.apple.com/au/album/billionaire/1542958072" target="_blank" rel="noopener">🍎 Billionaire</a>
+    <a class="yt" href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">YouTube</a>
+    <a class="st" href="https://songwriterkaz.github.io/coffeebreak-stream/" target="_blank" rel="noopener">Stream</a>
+    <a class="or" href="https://songwriterkaz.github.io/coffeebreak/apps/own-radio/" target="_blank" rel="noopener">Own Radio</a>
+    <a class="hub" href="https://songwriterkaz.github.io/coffeebreak/">← Hub</a>
+  </div>
+  <button class="close" type="button" onclick="document.getElementById('cbStreamEnd').classList.remove('on')">Close / Play again</button>
+</div></div>
+<script id="cbStreamAdsJS">
+(function(){
+  function showEnd(){ var e=document.getElementById('cbStreamEnd'); if(e) e.classList.add('on'); }
+  window.cbShowStreamEnd = showEnd;
+  // Hook common game-over paths
+  var _alert = window.alert;
+  // Observe canvas text is hard; expose click on bar already. For Play buttons, show end when they re-enable.
+  document.addEventListener('click', function(ev){
+    var t=ev.target; if(!t) return;
+    var tx=(t.textContent||'').toLowerCase();
+    if(/play again|restart|try again/.test(tx)) setTimeout(showEnd, 50);
+  }, true);
+})();
+</script>
+</body></html>
