@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bean Vault Runs — Coffeebreak free demo</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#5b2c6f;color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden}
+#top{display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(0,0,0,.35);position:relative;z-index:5;flex-wrap:wrap}
+#top img{height:42px;border-radius:10px;background:#fff}
+#top h1{font-size:15px;margin:0;flex:1;min-width:120px}
+.badge{background:#f5b041;color:#111;font-weight:800;font-size:11px;padding:3px 8px;border-radius:999px}
+.buy{background:#ff4f9a;color:#fff;text-decoration:none;font-weight:800;padding:8px 12px;border-radius:12px;font-size:13px}
+#wrap{position:relative;height:calc(100% - 118px)}
+canvas{display:block;width:100%;height:100%;touch-action:none;background:#000}
+#hud{position:absolute;left:8px;top:8px;right:8px;display:flex;justify-content:space-between;pointer-events:none;font-weight:700;text-shadow:0 1px 3px #000}
+#pad{position:absolute;inset:auto 0 0 0;height:120px;display:flex;justify-content:space-between;align-items:flex-end;padding:10px 16px 16px;pointer-events:none}
+.stick,.btnA,.btnB{pointer-events:auto;user-select:none}
+.stick{width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);position:relative}
+.knob{width:42px;height:42px;border-radius:50%;background:#f5b041;position:absolute;left:27px;top:27px}
+.btnA,.btnB{width:64px;height:64px;border-radius:50%;border:0;font-weight:900;background:#f5b041;color:#111;margin:4px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.btnB{background:#fff}
+#msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.72);z-index:8;padding:20px;text-align:center}
+#msg .card{background:#1b1020;border:2px solid #f5b041;border-radius:18px;padding:18px;max-width:420px}
+#msg button,#msg a.cta{display:inline-block;margin:6px;padding:10px 14px;border-radius:12px;border:0;background:#f5b041;color:#111;font-weight:800;text-decoration:none;cursor:pointer}
+footer{position:absolute;left:0;right:0;bottom:0;transform:translateY(100%);height:0;overflow:hidden}
+#foot{font-size:11px;opacity:.85;padding:6px 10px;background:rgba(0,0,0,.45);text-align:center;position:relative;z-index:5}
+#foot a{color:#f5b041}
+@media (min-width:900px){#pad{opacity:.55}#top h1{font-size:18px}}
+</style>
+</head><body>
+<div id="top">
+  <img src="cb-logo.png" alt="Coffeebreak">
+  <h1>Bean Vault Runs</h1>
+  <span class="badge">FREE DEMO</span>
+  <a class="buy" href="../bean-vault-runs-buy/">Buy full game $10</a>
+</div>
+<div id="wrap">
+  <canvas id="c"></canvas>
+  <div id="hud"><span id="hudL"></span><span id="hudR"></span></div>
+  <div id="pad">
+    <div class="stick" id="stick"><div class="knob" id="knob"></div></div>
+    <div>
+      <button class="btnB" id="btnB" type="button">B</button>
+      <button class="btnA" id="btnA" type="button">A</button>
+    </div>
+  </div>
+  <div id="msg" style="display:none"></div>
+</div>
+<div id="foot">
+  <div>2 floors free · Short coffee-dungeon runs. Grab beans, dodge steam vents, climb floors before the roast timer hits zero.</div>
+  <div><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought but may not copy them. No ownership is claimed of any third-party brands named.</div>
+  <div><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a></div>
+</div>
+<script>window.CBGAME={"slug": "bean-vault-runs", "title": "Bean Vault Runs", "blurb": "Short coffee-dungeon runs. Grab beans, dodge steam vents, climb floors before the roast timer hits zero.", "demo": "2 floors free", "full": "All floors, relics and endless mode", "color": "#5b2c6f", "accent": "#f5b041", "genre": "roguelike"};</script>
+<script>
+const G=window.CBGAME;
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W=0,H=0,dpr=1;
+function resize(){dpr=Math.min(2,window.devicePixelRatio||1);W=canvas.clientWidth;H=canvas.clientHeight;canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+window.addEventListener('resize',resize);resize();
+const input={x:0,y:0,a:false,b:false,ax:false,bx:false};
+function bindPad(){
+  const stick=document.getElementById('stick'), knob=document.getElementById('knob');
+  const set=(cx,cy,x,y)=>{const dx=x-cx,dy=y-cy,m=Math.hypot(dx,dy)||1,r=36,nx=dx/m*Math.min(m,r),ny=dy/m*Math.min(m,r);input.x=nx/r;input.y=ny/r;knob.style.transform=`translate(${nx}px,${ny}px)`};
+  const clear=()=>{input.x=0;input.y=0;knob.style.transform='translate(0,0)'};
+  const pt=(e,el)=>{const t=e.changedTouches?e.changedTouches[0]:e;const r=el.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2,t.clientX,t.clientY]};
+  let sid=null;
+  stick.addEventListener('pointerdown',e=>{sid=e.pointerId;stick.setPointerCapture(sid);const p=pt(e,stick);set(p[0],p[1],p[2],p[3]);e.preventDefault()});
+  stick.addEventListener('pointermove',e=>{if(e.pointerId!==sid)return;const p=pt(e,stick);set(p[0],p[1],p[2],p[3]);e.preventDefault()});
+  const up=e=>{if(e.pointerId!==sid)return;sid=null;clear()};
+  stick.addEventListener('pointerup',up);stick.addEventListener('pointercancel',up);
+  const ba=document.getElementById('btnA'), bb=document.getElementById('btnB');
+  const press=(el,key)=>{el.addEventListener('pointerdown',e=>{input[key]=true;input[key+'x']=true;e.preventDefault()});el.addEventListener('pointerup',()=>input[key]=false);el.addEventListener('pointercancel',()=>input[key]=false)};
+  press(ba,'a');press(bb,'b');
+  window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='a')input.x=-1;if(e.key==='ArrowRight'||e.key==='d')input.x=1;if(e.key==='ArrowUp'||e.key==='w')input.y=-1;if(e.key==='ArrowDown'||e.key==='s')input.y=1;if(e.key===' '||e.key==='j'){input.a=true;input.ax=true}if(e.key==='k'||e.key==='Enter'){input.b=true;input.bx=true}});
+  window.addEventListener('keyup',e=>{if(['ArrowLeft','a','ArrowRight','d'].includes(e.key))input.x=0;if(['ArrowUp','w','ArrowDown','s'].includes(e.key))input.y=0;if(e.key===' '||e.key==='j')input.a=false;if(e.key==='k'||e.key==='Enter')input.b=false});
+}
+bindPad();
+function endFrame(){input.ax=false;input.bx=false}
+const hudL=document.getElementById('hudL'), hudR=document.getElementById('hudR');
+const msg=document.getElementById('msg');
+function showMsg(html){msg.innerHTML='<div class="card">'+html+'</div>';msg.style.display='flex'}
+function hideMsg(){msg.style.display='none'}
+function demoGate(extra){
+  showMsg('<h2>Free demo complete</h2><p>'+G.demo+'</p><p>'+(extra||'')+'</p><p><a class="cta" href="../'+G.slug+'-buy/">Buy full game $10</a> <button id="again">Play demo again</button></p>');
+  document.getElementById('again').onclick=()=>{hideMsg();restart()};
+}
+let running=true;
+
+let floor=1, beans=0, hp=3, t=45, px=0, py=0, relics=[], enemies=[], particles=[], demoDone=false;
+const DEMO_MAX=G.slug==='roast-relic-run'?3:2;
+function spawnFloor(){
+  enemies=[]; particles=[];
+  const n=4+floor;
+  for(let i=0;i<n;i++) enemies.push({x:Math.random()*W*0.8+W*0.1,y:Math.random()*H*0.6+H*0.15,r:14+Math.random()*10,vx:(Math.random()-.5)*60,vy:(Math.random()-.5)*60,kind:Math.random()>.6?'vent':'bug'});
+  px=W/2; py=H*0.8; t=40+floor*5;
+}
+function restart(){floor=1;beans=0;hp=3;relics=[];demoDone=false;spawnFloor();running=true}
+restart();
+function update(dt){
+  if(!running) return;
+  px+=input.x*180*dt; py+=input.y*180*dt;
+  px=Math.max(20,Math.min(W-20,px)); py=Math.max(40,Math.min(H-40,py));
+  t-=dt; if(t<=0){hp--; t=20; if(hp<=0){running=false; showMsg('<h2>Run over</h2><p>Beans '+beans+' · Floor '+floor+'</p><button id="again">Retry</button> <a class="cta" href="../'+G.slug+'-buy/">Buy full game $10</a>'); document.getElementById('again').onclick=()=>{hideMsg();restart()}; return}}
+  enemies.forEach(e=>{e.x+=e.vx*dt;e.y+=e.vy*dt; if(e.x<20||e.x>W-20)e.vx*=-1; if(e.y<40||e.y>H-40)e.vy*=-1;
+    if(Math.hypot(e.x-px,e.y-py)<e.r+12){ if(input.ax){ beans+=1; particles.push({x:e.x,y:e.y,life:.4}); e.x=Math.random()*W; e.y=Math.random()*H*0.5; } else { hp--; e.x+=40; if(hp<=0){running=false; showMsg('<h2>Steamed</h2><p>Tap A / J to clear vents when close.</p><button id="again">Retry</button>'); document.getElementById('again').onclick=()=>{hideMsg();restart()};}} }
+  });
+  if(input.bx){ // next floor / relic
+    if(G.slug==='roast-relic-run'){ relics.push(['Swift','Shield','Brew'][relics.length%3]); }
+    floor++; beans+=5;
+    if(floor>DEMO_MAX && !localStorage.getItem('cb_full_'+G.slug)){ running=false; demoGate('Demo ends after '+DEMO_MAX+' floors.'); return; }
+    spawnFloor();
+  }
+  hudL.textContent='Floor '+floor+' · HP '+hp+' · Beans '+beans+(relics.length?' · '+relics.join(','):'');
+  hudR.textContent=Math.ceil(t)+'s · A clear · B next';
+}
+function draw(){
+  const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,G.color); g.addColorStop(1,'#000'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  // tiles
+  ctx.strokeStyle='rgba(255,255,255,.06)'; for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()} for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+  enemies.forEach(e=>{ctx.beginPath();ctx.fillStyle=e.kind==='vent'?G.accent:'#9b59b6';ctx.arc(e.x,e.y,e.r,0,6.28);ctx.fill();ctx.fillStyle='#111';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(e.kind==='vent'?'steam':'bean',e.x,e.y+3)});
+  particles=particles.filter(p=>{p.life-=0.016;ctx.globalAlpha=Math.max(0,p.life*2);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(p.x,p.y,6,0,6.28);ctx.fill();ctx.globalAlpha=1;return p.life>0});
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(px,py,12,0,6.28);ctx.fill();ctx.fillStyle=G.accent;ctx.beginPath();ctx.arc(px,py-16,8,0,6.28);ctx.fill(); // cup hat
+}
+
+let last=performance.now();
+function frame(now){ const dt=Math.min(0.05,(now-last)/1000); last=now; update(dt); draw(); endFrame(); requestAnimationFrame(frame); }
+requestAnimationFrame(frame);
+showMsg('<h2>'+G.title+'</h2><p>'+G.blurb+'</p><p class="note">'+G.demo+' · Move with stick or WASD. A / J action. B / K secondary.</p><button id="go">Play free demo</button>');
+document.getElementById('go').onclick=()=>{hideMsg();restart()};
+</script>
+</body></html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pink Circuit Tuner — Coffeebreak free demo</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#2d0a1e;color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden}
+#top{display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(0,0,0,.35);position:relative;z-index:5;flex-wrap:wrap}
+#top img{height:42px;border-radius:10px;background:#fff}
+#top h1{font-size:15px;margin:0;flex:1;min-width:120px}
+.badge{background:#ff4d6d;color:#111;font-weight:800;font-size:11px;padding:3px 8px;border-radius:999px}
+.buy{background:#ff4f9a;color:#fff;text-decoration:none;font-weight:800;padding:8px 12px;border-radius:12px;font-size:13px}
+#wrap{position:relative;height:calc(100% - 118px)}
+canvas{display:block;width:100%;height:100%;touch-action:none;background:#000}
+#hud{position:absolute;left:8px;top:8px;right:8px;display:flex;justify-content:space-between;pointer-events:none;font-weight:700;text-shadow:0 1px 3px #000}
+#pad{position:absolute;inset:auto 0 0 0;height:120px;display:flex;justify-content:space-between;align-items:flex-end;padding:10px 16px 16px;pointer-events:none}
+.stick,.btnA,.btnB{pointer-events:auto;user-select:none}
+.stick{width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);position:relative}
+.knob{width:42px;height:42px;border-radius:50%;background:#ff4d6d;position:absolute;left:27px;top:27px}
+.btnA,.btnB{width:64px;height:64px;border-radius:50%;border:0;font-weight:900;background:#ff4d6d;color:#111;margin:4px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.btnB{background:#fff}
+#msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.72);z-index:8;padding:20px;text-align:center}
+#msg .card{background:#1b1020;border:2px solid #ff4d6d;border-radius:18px;padding:18px;max-width:420px}
+#msg button,#msg a.cta{display:inline-block;margin:6px;padding:10px 14px;border-radius:12px;border:0;background:#ff4d6d;color:#111;font-weight:800;text-decoration:none;cursor:pointer}
+footer{position:absolute;left:0;right:0;bottom:0;transform:translateY(100%);height:0;overflow:hidden}
+#foot{font-size:11px;opacity:.85;padding:6px 10px;background:rgba(0,0,0,.45);text-align:center;position:relative;z-index:5}
+#foot a{color:#ff4d6d}
+@media (min-width:900px){#pad{opacity:.55}#top h1{font-size:18px}}
+</style>
+</head><body>
+<div id="top">
+  <img src="cb-logo.png" alt="Coffeebreak">
+  <h1>Pink Circuit Tuner</h1>
+  <span class="badge">FREE DEMO</span>
+  <a class="buy" href="../pink-circuit-tuner-buy/">Buy full game $10</a>
+</div>
+<div id="wrap">
+  <canvas id="c"></canvas>
+  <div id="hud"><span id="hudL"></span><span id="hudR"></span></div>
+  <div id="pad">
+    <div class="stick" id="stick"><div class="knob" id="knob"></div></div>
+    <div>
+      <button class="btnB" id="btnB" type="button">B</button>
+      <button class="btnA" id="btnA" type="button">A</button>
+    </div>
+  </div>
+  <div id="msg" style="display:none"></div>
+</div>
+<div id="foot">
+  <div>1 tune + 1 race free · Tune suspension and boost, then race a pink night circuit. Original Coffeebreak cars only.</div>
+  <div><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought but may not copy them. No ownership is claimed of any third-party brands named.</div>
+  <div><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a></div>
+</div>
+<script>window.CBGAME={"slug": "pink-circuit-tuner", "title": "Pink Circuit Tuner", "blurb": "Tune suspension and boost, then race a pink night circuit. Original Coffeebreak cars only.", "demo": "1 tune + 1 race free", "full": "Full garage and tracks", "color": "#2d0a1e", "accent": "#ff4d6d", "genre": "racing"};</script>
+<script>
+const G=window.CBGAME;
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W=0,H=0,dpr=1;
+function resize(){dpr=Math.min(2,window.devicePixelRatio||1);W=canvas.clientWidth;H=canvas.clientHeight;canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+window.addEventListener('resize',resize);resize();
+const input={x:0,y:0,a:false,b:false,ax:false,bx:false};
+function bindPad(){
+  const stick=document.getElementById('stick'), knob=document.getElementById('knob');
+  const set=(cx,cy,x,y)=>{const dx=x-cx,dy=y-cy,m=Math.hypot(dx,dy)||1,r=36,nx=dx/m*Math.min(m,r),ny=dy/m*Math.min(m,r);input.x=nx/r;input.y=ny/r;knob.style.transform=`translate(${nx}px,${ny}px)`};
+  const clear=()=>{input.x=0;input.y=0;knob.style.transform='translate(0,0)'};
+  const pt=(e,el)=>{const t=e.changedTouches?e.changedTouches[0]:e;const r=el.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2,t.clientX,t.clientY]};
+  let sid=null;
+  stick.addEventListener('pointerdown',e=>{sid=e.pointerId;stick.setPointerCapture(sid);const p=pt(e,stick);set(p[0],p[1],p[2],p[3]);e.preventDefault()});
+  stick.addEventListener('pointermove',e=>{if(e.pointerId!==sid)return;const p=pt(e,stick);set(p[0],p[1],p[2],p[3]);e.preventDefault()});
+  const up=e=>{if(e.pointerId!==sid)return;sid=null;clear()};
+  stick.addEventListener('pointerup',up);stick.addEventListener('pointercancel',up);
+  const ba=document.getElementById('btnA'), bb=document.getElementById('btnB');
+  const press=(el,key)=>{el.addEventListener('pointerdown',e=>{input[key]=true;input[key+'x']=true;e.preventDefault()});el.addEventListener('pointerup',()=>input[key]=false);el.addEventListener('pointercancel',()=>input[key]=false)};
+  press(ba,'a');press(bb,'b');
+  window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='a')input.x=-1;if(e.key==='ArrowRight'||e.key==='d')input.x=1;if(e.key==='ArrowUp'||e.key==='w')input.y=-1;if(e.key==='ArrowDown'||e.key==='s')input.y=1;if(e.key===' '||e.key==='j'){input.a=true;input.ax=true}if(e.key==='k'||e.key==='Enter'){input.b=true;input.bx=true}});
+  window.addEventListener('keyup',e=>{if(['ArrowLeft','a','ArrowRight','d'].includes(e.key))input.x=0;if(['ArrowUp','w','ArrowDown','s'].includes(e.key))input.y=0;if(e.key===' '||e.key==='j')input.a=false;if(e.key==='k'||e.key==='Enter')input.b=false});
+}
+bindPad();
+function endFrame(){input.ax=false;input.bx=false}
+const hudL=document.getElementById('hudL'), hudR=document.getElementById('hudR');
+const msg=document.getElementById('msg');
+function showMsg(html){msg.innerHTML='<div class="card">'+html+'</div>';msg.style.display='flex'}
+function hideMsg(){msg.style.display='none'}
+function demoGate(extra){
+  showMsg('<h2>Free demo complete</h2><p>'+G.demo+'</p><p>'+(extra||'')+'</p><p><a class="cta" href="../'+G.slug+'-buy/">Buy full game $10</a> <button id="again">Play demo again</button></p>');
+  document.getElementById('again').onclick=()=>{hideMsg();restart()};
+}
+let running=true;
+
+let tune={grip:0.5,boost:0.3}, speed=0, angle=-Math.PI/2, px=0,py=0, lap=0, checkpoint=0, cps=[], time=0, raced=false;
+function makeTrack(){cps=[]; const cx=W/2,cy=H/2,rx=Math.min(W,H)*0.32,ry=Math.min(W,H)*0.22; for(let i=0;i<8;i++){const a=i/8*Math.PI*2;cps.push({x:cx+Math.cos(a)*rx,y:cy+Math.sin(a)*ry})}; px=cps[0].x; py=cps[0].y; angle=-Math.PI/2; lap=0; checkpoint=1; speed=0; time=0; raced=false}
+function restart(){tune={grip:0.5,boost:0.3};makeTrack();running=true;hideMsg()}
+restart();
+function update(dt){
+  if(!running)return;
+  if(!raced){ // tune phase
+    if(input.x) tune.grip=Math.max(0.2,Math.min(1,tune.grip+input.x*dt*0.5));
+    if(input.y) tune.boost=Math.max(0.1,Math.min(1,tune.boost-input.y*dt*0.5));
+    if(input.ax||input.bx){raced=true}
+    hudL.textContent='TUNE  Grip '+(tune.grip*100|0)+'  Boost '+(tune.boost*100|0);
+    hudR.textContent='Stick adjust · A/B race';
+    return;
+  }
+  time+=dt;
+  const throttle=input.a?1:(input.y<0? -input.y:0.35);
+  const steer=input.x*(1.8-tune.grip*0.8);
+  angle+=steer*dt*(0.6+speed/180);
+  speed+=throttle*220*tune.boost*dt; speed*=(1-dt*(0.55+tune.grip*0.35)); speed=Math.max(0,Math.min(320,speed));
+  px+=Math.cos(angle)*speed*dt; py+=Math.sin(angle)*speed*dt;
+  // wrap soft
+  if(px<0)px=W; if(px>W)px=0; if(py<0)py=H; if(py>H)py=0;
+  const cp=cps[checkpoint%cps.length];
+  if(Math.hypot(cp.x-px,cp.y-py)<36){ checkpoint++; if(checkpoint%cps.length===0){ lap++; if(lap>=1 && !localStorage.getItem('cb_full_'+G.slug)){running=false;demoGate('Demo is one tuned lap.');return;} if(lap>=3){running=false;showMsg('<h2>Finished</h2><p>'+time.toFixed(1)+'s</p><button id="again">Again</button> <a class="cta" href="../'+G.slug+'-buy/">Buy full game $10</a>');document.getElementById('again').onclick=()=>{hideMsg();restart()};} } }
+  hudL.textContent='Lap '+lap+'/3 · CP '+(checkpoint%cps.length)+' · '+speed.toFixed(0)+' u/s';
+  hudR.textContent=time.toFixed(1)+'s · A boost';
+}
+function draw(){
+  ctx.fillStyle=G.color;ctx.fillRect(0,0,W,H);
+  // track ring
+  ctx.strokeStyle='rgba(255,255,255,.2)';ctx.lineWidth=50;ctx.beginPath();ctx.ellipse(W/2,H/2,Math.min(W,H)*0.32,Math.min(W,H)*0.22,0,0,6.28);ctx.stroke();
+  ctx.strokeStyle=G.accent;ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(W/2,H/2,Math.min(W,H)*0.32,Math.min(W,H)*0.22,0,0,6.28);ctx.stroke();
+  cps.forEach((c,i)=>{ctx.beginPath();ctx.fillStyle=i===(checkpoint%cps.length)?G.accent:'#fff6';ctx.arc(c.x,c.y,10,0,6.28);ctx.fill()});
+  if(!raced){ctx.fillStyle='rgba(0,0,0,.45)';ctx.fillRect(W/2-120,H/2-50,240,100);ctx.fillStyle='#fff';ctx.textAlign='center';ctx.font='16px sans-serif';ctx.fillText('Tune your ride',W/2,H/2-10);ctx.fillText('Grip '+(tune.grip*100|0)+'  Boost '+(tune.boost*100|0),W/2,H/2+16);return}
+  ctx.save();ctx.translate(px,py);ctx.rotate(angle);ctx.fillStyle=G.accent;ctx.fillRect(-14,-8,28,16);ctx.fillStyle='#111';ctx.fillRect(6,-6,8,12);ctx.restore();
+}
+
+let last=performance.now();
+function frame(now){ const dt=Math.min(0.05,(now-last)/1000); last=now; update(dt); draw(); endFrame(); requestAnimationFrame(frame); }
+requestAnimationFrame(frame);
+showMsg('<h2>'+G.title+'</h2><p>'+G.blurb+'</p><p class="note">'+G.demo+' · Move with stick or WASD. A / J action. B / K secondary.</p><button id="go">Play free demo</button>');
+document.getElementById('go').onclick=()=>{hideMsg();restart()};
+</script>
+</body></html>

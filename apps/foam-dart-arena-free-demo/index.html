@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Foam Dart Arena — Coffeebreak free demo</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#14213d;color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden}
+#top{display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(0,0,0,.35);position:relative;z-index:5;flex-wrap:wrap}
+#top img{height:42px;border-radius:10px;background:#fff}
+#top h1{font-size:15px;margin:0;flex:1;min-width:120px}
+.badge{background:#fca311;color:#111;font-weight:800;font-size:11px;padding:3px 8px;border-radius:999px}
+.buy{background:#ff4f9a;color:#fff;text-decoration:none;font-weight:800;padding:8px 12px;border-radius:12px;font-size:13px}
+#wrap{position:relative;height:calc(100% - 118px)}
+canvas{display:block;width:100%;height:100%;touch-action:none;background:#000}
+#hud{position:absolute;left:8px;top:8px;right:8px;display:flex;justify-content:space-between;pointer-events:none;font-weight:700;text-shadow:0 1px 3px #000}
+#pad{position:absolute;inset:auto 0 0 0;height:120px;display:flex;justify-content:space-between;align-items:flex-end;padding:10px 16px 16px;pointer-events:none}
+.stick,.btnA,.btnB{pointer-events:auto;user-select:none}
+.stick{width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);position:relative}
+.knob{width:42px;height:42px;border-radius:50%;background:#fca311;position:absolute;left:27px;top:27px}
+.btnA,.btnB{width:64px;height:64px;border-radius:50%;border:0;font-weight:900;background:#fca311;color:#111;margin:4px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.btnB{background:#fff}
+#msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.72);z-index:8;padding:20px;text-align:center}
+#msg .card{background:#1b1020;border:2px solid #fca311;border-radius:18px;padding:18px;max-width:420px}
+#msg button,#msg a.cta{display:inline-block;margin:6px;padding:10px 14px;border-radius:12px;border:0;background:#fca311;color:#111;font-weight:800;text-decoration:none;cursor:pointer}
+footer{position:absolute;left:0;right:0;bottom:0;transform:translateY(100%);height:0;overflow:hidden}
+#foot{font-size:11px;opacity:.85;padding:6px 10px;background:rgba(0,0,0,.45);text-align:center;position:relative;z-index:5}
+#foot a{color:#fca311}
+@media (min-width:900px){#pad{opacity:.55}#top h1{font-size:18px}}
+</style>
+</head><body>
+<div id="top">
+  <img src="cb-logo.png" alt="Coffeebreak">
+  <h1>Foam Dart Arena</h1>
+  <span class="badge">FREE DEMO</span>
+  <a class="buy" href="../foam-dart-arena-buy/">Buy full game $10</a>
+</div>
+<div id="wrap">
+  <canvas id="c"></canvas>
+  <div id="hud"><span id="hudL"></span><span id="hudR"></span></div>
+  <div id="pad">
+    <div class="stick" id="stick"><div class="knob" id="knob"></div></div>
+    <div>
+      <button class="btnB" id="btnB" type="button">B</button>
+      <button class="btnA" id="btnA" type="button">A</button>
+    </div>
+  </div>
+  <div id="msg" style="display:none"></div>
+</div>
+<div id="foot">
+  <div>1 match free · Cartoon foam-dart arena. Tag rivals with soft darts, no gore, big colourful hits.</div>
+  <div><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought but may not copy them. No ownership is claimed of any third-party brands named.</div>
+  <div><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a></div>
+</div>
+<script>window.CBGAME={"slug": "foam-dart-arena", "title": "Foam Dart Arena", "blurb": "Cartoon foam-dart arena. Tag rivals with soft darts, no gore, big colourful hits.", "demo": "1 match free", "full": "All arenas and loadouts", "color": "#14213d", "accent": "#fca311", "genre": "shooter"};</script>
+<script>
+const G=window.CBGAME;
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W=0,H=0,dpr=1;
+function resize(){dpr=Math.min(2,window.devicePixelRatio||1);W=canvas.clientWidth;H=canvas.clientHeight;canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+window.addEventListener('resize',resize);resize();
+const input={x:0,y:0,a:false,b:false,ax:false,bx:false};
+function bindPad(){
+  const stick=document.getElementById('stick'), knob=document.getElementById('knob');
+  const set=(cx,cy,x,y)=>{const dx=x-cx,dy=y-cy,m=Math.hypot(dx,dy)||1,r=36,nx=dx/m*Math.min(m,r),ny=dy/m*Math.min(m,r);input.x=nx/r;input.y=ny/r;knob.style.transform=`translate(${nx}px,${ny}px)`};
+  const clear=()=>{input.x=0;input.y=0;knob.style.transform='translate(0,0)'};
+  const pt=(e,el)=>{const t=e.changedTouches?e.changedTouches[0]:e;const r=el.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2,t.clientX,t.clientY]};
+  let sid=null;
+  stick.addEventListener('pointerdown',e=>{sid=e.pointerId;stick.setPointerCapture(sid);const p=pt(e,stick);set(p[0],p[1],p[2],p[3]);e.preventDefault()});
+  stick.addEventListener('pointermove',e=>{if(e.pointerId!==sid)return;const p=pt(e,stick);set(p[0],p[1],p[2],p[3]);e.preventDefault()});
+  const up=e=>{if(e.pointerId!==sid)return;sid=null;clear()};
+  stick.addEventListener('pointerup',up);stick.addEventListener('pointercancel',up);
+  const ba=document.getElementById('btnA'), bb=document.getElementById('btnB');
+  const press=(el,key)=>{el.addEventListener('pointerdown',e=>{input[key]=true;input[key+'x']=true;e.preventDefault()});el.addEventListener('pointerup',()=>input[key]=false);el.addEventListener('pointercancel',()=>input[key]=false)};
+  press(ba,'a');press(bb,'b');
+  window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='a')input.x=-1;if(e.key==='ArrowRight'||e.key==='d')input.x=1;if(e.key==='ArrowUp'||e.key==='w')input.y=-1;if(e.key==='ArrowDown'||e.key==='s')input.y=1;if(e.key===' '||e.key==='j'){input.a=true;input.ax=true}if(e.key==='k'||e.key==='Enter'){input.b=true;input.bx=true}});
+  window.addEventListener('keyup',e=>{if(['ArrowLeft','a','ArrowRight','d'].includes(e.key))input.x=0;if(['ArrowUp','w','ArrowDown','s'].includes(e.key))input.y=0;if(e.key===' '||e.key==='j')input.a=false;if(e.key==='k'||e.key==='Enter')input.b=false});
+}
+bindPad();
+function endFrame(){input.ax=false;input.bx=false}
+const hudL=document.getElementById('hudL'), hudR=document.getElementById('hudR');
+const msg=document.getElementById('msg');
+function showMsg(html){msg.innerHTML='<div class="card">'+html+'</div>';msg.style.display='flex'}
+function hideMsg(){msg.style.display='none'}
+function demoGate(extra){
+  showMsg('<h2>Free demo complete</h2><p>'+G.demo+'</p><p>'+(extra||'')+'</p><p><a class="cta" href="../'+G.slug+'-buy/">Buy full game $10</a> <button id="again">Play demo again</button></p>');
+  document.getElementById('again').onclick=()=>{hideMsg();restart()};
+}
+let running=true;
+
+let px=0,py=0, bullets=[], foes=[], score=0, lives=3, t=60, match=0;
+function wave(){foes=[]; for(let i=0;i<6;i++) foes.push({x:40+Math.random()*(W-80),y:40+Math.random()*(H*0.45),vx:(Math.random()-.5)*80,vy:(Math.random()-.5)*60,r:16,hp:2})}
+function restart(){px=W/2;py=H*0.75;bullets=[];score=0;lives=3;t=60;match=0;wave();running=true;hideMsg()}
+restart();
+function update(dt){
+  if(!running)return;
+  px+=input.x*200*dt; py+=input.y*200*dt; px=Math.max(16,Math.min(W-16,px)); py=Math.max(40,Math.min(H-40,py));
+  t-=dt;
+  if(input.ax){ bullets.push({x:px,y:py,vx:input.x*40,vy:-280,life:1.2}); }
+  bullets.forEach(b=>{b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt}); bullets=bullets.filter(b=>b.life>0);
+  foes.forEach(f=>{f.x+=f.vx*dt;f.y+=f.vy*dt; if(f.x<20||f.x>W-20)f.vx*=-1; if(f.y<40||f.y>H*0.55)f.vy*=-1;
+    bullets.forEach(b=>{if(Math.hypot(b.x-f.x,b.y-f.y)<f.r+6){f.hp--;b.life=0;score+=10; if(G.slug==='confetti-clash'){ for(let k=0;k<8;k++) bullets.push({x:f.x,y:f.y,vx:(Math.random()-.5)*200,vy:(Math.random()-.5)*200,life:.35,conf:true}) } }});
+  });
+  foes=foes.filter(f=>f.hp>0);
+  if(!foes.length){ match++; if(match>=1 && !localStorage.getItem('cb_full_'+G.slug)){running=false;demoGate('Demo is one arena match.');return;} wave(); t=60; }
+  foes.forEach(f=>{ if(Math.hypot(f.x-px,f.y-py)<f.r+12){ lives--; f.x+=50; if(lives<=0){running=false;showMsg('<h2>Tagged out</h2><p>Score '+score+'</p><button id="again">Retry</button>');document.getElementById('again').onclick=()=>{hideMsg();restart()};}}});
+  if(t<=0){running=false;showMsg('<h2>Time</h2><p>Score '+score+'</p><button id="again">Retry</button> <a class="cta" href="../'+G.slug+'-buy/">Buy full game $10</a>');document.getElementById('again').onclick=()=>{hideMsg();restart()};}
+  hudL.textContent='Score '+score+' · Lives '+lives;
+  hudR.textContent=Math.ceil(t)+'s · A fire foam/confetti';
+}
+function draw(){
+  ctx.fillStyle=G.color;ctx.fillRect(0,0,W,H);
+  // arena
+  ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=4;ctx.strokeRect(20,40,W-40,H-80);
+  foes.forEach(f=>{ctx.fillStyle='#ff9f1c';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,6.28);ctx.fill();ctx.fillStyle='#111';ctx.font='11px sans-serif';ctx.textAlign='center';ctx.fillText('rival',f.x,f.y+3)});
+  bullets.forEach(b=>{ctx.fillStyle=b.conf?['#ff4d6d','#4cc9f0','#b7e4c7','#ffd60a'][Math.floor(Math.random()*4)]:G.accent;ctx.beginPath();ctx.arc(b.x,b.y,b.conf?5:5,0,6.28);ctx.fill()});
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(px,py,13,0,6.28);ctx.fill();ctx.fillStyle=G.accent;ctx.fillRect(px-4,py-22,8,12);
+}
+
+let last=performance.now();
+function frame(now){ const dt=Math.min(0.05,(now-last)/1000); last=now; update(dt); draw(); endFrame(); requestAnimationFrame(frame); }
+requestAnimationFrame(frame);
+showMsg('<h2>'+G.title+'</h2><p>'+G.blurb+'</p><p class="note">'+G.demo+' · Move with stick or WASD. A / J action. B / K secondary.</p><button id="go">Play free demo</button>');
+document.getElementById('go').onclick=()=>{hideMsg();restart()};
+</script>
+</body></html>

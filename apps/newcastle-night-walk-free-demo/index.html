@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Newcastle Night Walk — Coffeebreak free demo</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#0d1b2a;color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden}
+#top{display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(0,0,0,.35);position:relative;z-index:5;flex-wrap:wrap}
+#top img{height:42px;border-radius:10px;background:#fff}
+#top h1{font-size:15px;margin:0;flex:1;min-width:120px}
+.badge{background:#e0aaff;color:#111;font-weight:800;font-size:11px;padding:3px 8px;border-radius:999px}
+.buy{background:#ff4f9a;color:#fff;text-decoration:none;font-weight:800;padding:8px 12px;border-radius:12px;font-size:13px}
+#wrap{position:relative;height:calc(100% - 118px)}
+canvas{display:block;width:100%;height:100%;touch-action:none;background:#000}
+#hud{position:absolute;left:8px;top:8px;right:8px;display:flex;justify-content:space-between;pointer-events:none;font-weight:700;text-shadow:0 1px 3px #000}
+#pad{position:absolute;inset:auto 0 0 0;height:120px;display:flex;justify-content:space-between;align-items:flex-end;padding:10px 16px 16px;pointer-events:none}
+.stick,.btnA,.btnB{pointer-events:auto;user-select:none}
+.stick{width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);position:relative}
+.knob{width:42px;height:42px;border-radius:50%;background:#e0aaff;position:absolute;left:27px;top:27px}
+.btnA,.btnB{width:64px;height:64px;border-radius:50%;border:0;font-weight:900;background:#e0aaff;color:#111;margin:4px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.btnB{background:#fff}
+#msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.72);z-index:8;padding:20px;text-align:center}
+#msg .card{background:#1b1020;border:2px solid #e0aaff;border-radius:18px;padding:18px;max-width:420px}
+#msg button,#msg a.cta{display:inline-block;margin:6px;padding:10px 14px;border-radius:12px;border:0;background:#e0aaff;color:#111;font-weight:800;text-decoration:none;cursor:pointer}
+footer{position:absolute;left:0;right:0;bottom:0;transform:translateY(100%);height:0;overflow:hidden}
+#foot{font-size:11px;opacity:.85;padding:6px 10px;background:rgba(0,0,0,.45);text-align:center;position:relative;z-index:5}
+#foot a{color:#e0aaff}
+@media (min-width:900px){#pad{opacity:.55}#top h1{font-size:18px}}
+</style>
+</head><body>
+<div id="top">
+  <img src="cb-logo.png" alt="Coffeebreak">
+  <h1>Newcastle Night Walk</h1>
+  <span class="badge">FREE DEMO</span>
+  <a class="buy" href="../newcastle-night-walk-buy/">Buy full game $10</a>
+</div>
+<div id="wrap">
+  <canvas id="c"></canvas>
+  <div id="hud"><span id="hudL"></span><span id="hudR"></span></div>
+  <div id="pad">
+    <div class="stick" id="stick"><div class="knob" id="knob"></div></div>
+    <div>
+      <button class="btnB" id="btnB" type="button">B</button>
+      <button class="btnA" id="btnA" type="button">A</button>
+    </div>
+  </div>
+  <div id="msg" style="display:none"></div>
+</div>
+<div id="foot">
+  <div>2 districts free · Lite open map of a glowing coastal city. Talk, collect stamps, unlock districts.</div>
+  <div><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought but may not copy them. No ownership is claimed of any third-party brands named.</div>
+  <div><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a></div>
+</div>
+<script>window.CBGAME={"slug": "newcastle-night-walk", "title": "Newcastle Night Walk", "blurb": "Lite open map of a glowing coastal city. Talk, collect stamps, unlock districts.", "demo": "2 districts free", "full": "Whole city and quests", "color": "#0d1b2a", "accent": "#e0aaff", "genre": "adventure"};</script>
+<script>
+const G=window.CBGAME;
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W=0,H=0,dpr=1;
+function resize(){dpr=Math.min(2,window.devicePixelRatio||1);W=canvas.clientWidth;H=canvas.clientHeight;canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+window.addEventListener('resize',resize);resize();
+const input={x:0,y:0,a:false,b:false,ax:false,bx:false};
+function bindPad(){
+  const stick=document.getElementById('stick'), knob=document.getElementById('knob');
+  const set=(cx,cy,x,y)=>{const dx=x-cx,dy=y-cy,m=Math.hypot(dx,dy)||1,r=36,nx=dx/m*Math.min(m,r),ny=dy/m*Math.min(m,r);input.x=nx/r;input.y=ny/r;knob.style.transform=`translate(${nx}px,${ny}px)`};
+  const clear=()=>{input.x=0;input.y=0;knob.style.transform='translate(0,0)'};
+  const pt=(e,el)=>{const t=e.changedTouches?e.changedTouches[0]:e;const r=el.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2,t.clientX,t.clientY]};
+  let sid=null;
+  stick.addEventListener('pointerdown',e=>{sid=e.pointerId;stick.setPointerCapture(sid);const p=pt(e,stick);set(p[0],p[1],p[2],p[3]);e.preventDefault()});
+  stick.addEventListener('pointermove',e=>{if(e.pointerId!==sid)return;const p=pt(e,stick);set(p[0],p[1],p[2],p[3]);e.preventDefault()});
+  const up=e=>{if(e.pointerId!==sid)return;sid=null;clear()};
+  stick.addEventListener('pointerup',up);stick.addEventListener('pointercancel',up);
+  const ba=document.getElementById('btnA'), bb=document.getElementById('btnB');
+  const press=(el,key)=>{el.addEventListener('pointerdown',e=>{input[key]=true;input[key+'x']=true;e.preventDefault()});el.addEventListener('pointerup',()=>input[key]=false);el.addEventListener('pointercancel',()=>input[key]=false)};
+  press(ba,'a');press(bb,'b');
+  window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='a')input.x=-1;if(e.key==='ArrowRight'||e.key==='d')input.x=1;if(e.key==='ArrowUp'||e.key==='w')input.y=-1;if(e.key==='ArrowDown'||e.key==='s')input.y=1;if(e.key===' '||e.key==='j'){input.a=true;input.ax=true}if(e.key==='k'||e.key==='Enter'){input.b=true;input.bx=true}});
+  window.addEventListener('keyup',e=>{if(['ArrowLeft','a','ArrowRight','d'].includes(e.key))input.x=0;if(['ArrowUp','w','ArrowDown','s'].includes(e.key))input.y=0;if(e.key===' '||e.key==='j')input.a=false;if(e.key==='k'||e.key==='Enter')input.b=false});
+}
+bindPad();
+function endFrame(){input.ax=false;input.bx=false}
+const hudL=document.getElementById('hudL'), hudR=document.getElementById('hudR');
+const msg=document.getElementById('msg');
+function showMsg(html){msg.innerHTML='<div class="card">'+html+'</div>';msg.style.display='flex'}
+function hideMsg(){msg.style.display='none'}
+function demoGate(extra){
+  showMsg('<h2>Free demo complete</h2><p>'+G.demo+'</p><p>'+(extra||'')+'</p><p><a class="cta" href="../'+G.slug+'-buy/">Buy full game $10</a> <button id="again">Play demo again</button></p>');
+  document.getElementById('again').onclick=()=>{hideMsg();restart()};
+}
+let running=true;
+
+let px=0,py=0, stamps=0, districts=1, npcs=[], parcels=[], demoMax=G.slug==='coastline-courier'?3:2;
+function world(){npcs=[];parcels=[]; for(let i=0;i<5;i++) npcs.push({x:60+Math.random()*(W-120),y:60+Math.random()*(H-140),name:['Kai','Mel','Jo','Ash','Pip'][i],done:false}); for(let i=0;i<4;i++) parcels.push({x:40+Math.random()*(W-80),y:40+Math.random()*(H-120),carried:false,delivered:false}); px=W/2;py=H/2}
+function restart(){stamps=0;districts=1;world();running=true;hideMsg()}
+restart();
+function update(dt){
+  if(!running)return;
+  px+=input.x*170*dt; py+=input.y*170*dt; px=Math.max(12,Math.min(W-12,px)); py=Math.max(40,Math.min(H-40,py));
+  if(input.ax){
+    if(G.slug==='coastline-courier'){
+      const p=parcels.find(p=>!p.carried&&!p.delivered&&Math.hypot(p.x-px,p.y-py)<28); if(p) p.carried=true;
+      else { const c=parcels.find(p=>p.carried); if(c){ const n=npcs.find(n=>!n.done&&Math.hypot(n.x-px,n.y-py)<30); if(n){ c.carried=false;c.delivered=true;n.done=true;stamps++; if(stamps>=demoMax && !localStorage.getItem('cb_full_'+G.slug)){running=false;demoGate('Demo is '+demoMax+' deliveries.');} } } }
+    } else {
+      const n=npcs.find(n=>!n.done&&Math.hypot(n.x-px,n.y-py)<30); if(n){n.done=true;stamps++; if(stamps%2===0){districts++;} if(districts>demoMax && !localStorage.getItem('cb_full_'+G.slug)){running=false;demoGate('Demo unlocks '+demoMax+' districts.');} }
+    }
+  }
+  parcels.forEach(p=>{ if(p.carried){p.x=px+14;p.y=py-10} });
+  hudL.textContent=(G.slug==='coastline-courier'?'Drops ':'Stamps ')+stamps+' · District '+districts;
+  hudR.textContent='A talk/deliver';
+}
+function draw(){
+  // map tiles
+  for(let y=0;y<H;y+=32) for(let x=0;x<W;x+=32){ ctx.fillStyle=((x+y)/32|0)%2?G.color:'#102a43'; ctx.fillRect(x,y,32,32); }
+  // water edge
+  ctx.fillStyle='#0077b6';ctx.fillRect(0,0,W,28);
+  npcs.forEach(n=>{ctx.fillStyle=n.done?'#95d5b2':'#ffd6a5';ctx.beginPath();ctx.arc(n.x,n.y,12,0,6.28);ctx.fill();ctx.fillStyle='#111';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(n.name,n.x,n.y+3)});
+  parcels.forEach(p=>{if(p.delivered)return;ctx.fillStyle=G.accent;ctx.fillRect(p.x-8,p.y-8,16,16)});
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(px,py,12,0,6.28);ctx.fill();
+}
+
+let last=performance.now();
+function frame(now){ const dt=Math.min(0.05,(now-last)/1000); last=now; update(dt); draw(); endFrame(); requestAnimationFrame(frame); }
+requestAnimationFrame(frame);
+showMsg('<h2>'+G.title+'</h2><p>'+G.blurb+'</p><p class="note">'+G.demo+' · Move with stick or WASD. A / J action. B / K secondary.</p><button id="go">Play free demo</button>');
+document.getElementById('go').onclick=()=>{hideMsg();restart()};
+</script>
+</body></html>
