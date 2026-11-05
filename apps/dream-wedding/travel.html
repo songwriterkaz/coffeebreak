@@ -1,0 +1,66 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Dream Wedding — Real Travel Planner</title>
+<style>
+body{margin:0;background:#12060c;color:#ffe9c7;font-family:Georgia,serif}
+.w{max-width:860px;margin:0 auto;padding:14px}
+h1,h2{color:#e8a0b0}h1{font-size:24px}
+header{display:flex;align-items:center;gap:10px}header img{width:56px;border-radius:50%;background:#fff}
+label{display:block;font-size:14px;margin:6px 0 2px}
+input,select{width:100%;box-sizing:border-box;background:#1a0a10;color:#ffe9c7;border:2px solid #5a2a3a;border-radius:8px;padding:8px;font:16px Georgia}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.card{background:#24101a;border:2px solid #5a2a3a;border-radius:12px;padding:12px;margin:12px 0}
+a.b,button{display:inline-block;margin:4px 4px 4px 0;background:#e8a0b0;color:#1a0a10;border:0;border-radius:20px;padding:9px 14px;font:bold 14px Georgia;text-decoration:none;cursor:pointer}
+.note{font-size:13px;color:#d9b9a0}
+#pass{background:linear-gradient(135deg,#fff8ee,#ffd6ea);color:#2a1018;border-radius:16px;padding:14px;display:none;position:relative}
+#pass .big{font-size:28px;font-weight:bold;letter-spacing:2px}
+footer{font-size:12px;text-align:center;padding:16px;color:#d9b9a0}footer a{color:#ffb3d6}
+</style></head><body><div class="w">
+<header><img src="assets/cb-logo.png" alt="Coffeebreak logo"><div><h1>Dream Wedding — Real Travel Planner</h1><a href="./" style="color:#ffb3d6">Back to Dream Wedding</a></div></header>
+<p class="note">This planner opens real, live search results on trusted travel and venue sites. You compare, book and pay on those sites. This app does not book anything or take any payment.</p>
+<div class="card"><h2>Your trip</h2><div class="g">
+<div><label for="from">From city or airport</label><input id="from" placeholder="Sydney" value="Sydney"></div>
+<div><label for="to">Wedding destination</label><input id="to" placeholder="Santorini" value="Bali"></div>
+<div><label for="d1">Leave</label><input id="d1" type="date"></div>
+<div><label for="d2">Return</label><input id="d2" type="date"></div>
+<div><label for="n">Guests travelling</label><input id="n" type="number" min="1" max="9" value="2"></div>
+<div><label for="cab">Cabin</label><select id="cab"><option value="economy">Economy</option><option value="premiumeconomy">Premium economy</option><option value="business">Business</option><option value="first">First</option></select></div>
+</div>
+<p><label><input type="checkbox" id="surprise" style="width:auto"> Surprise mode: hide the destination on the boarding pass until the reveal</label></p>
+</div>
+<div class="card"><h2>Flights (live)</h2><div id="fl"></div><p class="note">Skyscanner needs airport codes for exact results; if a city is not recognised it opens Skyscanner's search so you can pick the airport.</p></div>
+<div class="card"><h2>Cruises (live)</h2><div id="cr"></div></div>
+<div class="card"><h2>Wedding venues and stays (live)</h2><div id="ve"></div></div>
+<div class="card"><h2>Passports and travel advice</h2>
+<a class="b" href="https://www.passports.gov.au/" target="_blank" rel="noopener">Australian Passport Office</a>
+<a class="b" href="https://www.smartraveller.gov.au/" target="_blank" rel="noopener">Smartraveller (destination advice)</a>
+<a class="b" href="https://www.gov.uk/apply-renew-passport" target="_blank" rel="noopener">UK passports</a>
+<a class="b" href="https://travel.state.gov/content/travel/en/passports.html" target="_blank" rel="noopener">US passports</a>
+<a class="b" href="https://www.passports.govt.nz/" target="_blank" rel="noopener">NZ passports</a>
+<p class="note">Check visa and entry rules for your destination before you book.</p></div>
+<div class="card"><h2>Manifestation boarding pass</h2><button id="mk">Make my boarding pass</button>
+<div id="pass"><div>COFFEEBREAK DREAM WEDDING · VISION BOARDING PASS</div><div class="big" id="route"></div><div id="pinfo"></div><div style="margin-top:6px;font-style:italic">"I am already on my way to my dream wedding."</div><button id="reveal" style="display:none">Reveal destination</button></div>
+<p class="note">The boarding pass is a vision-board keepsake, not a ticket.</p></div>
+<footer><img src="assets/cb-logo.png" alt="" width="36" style="border-radius:50%;background:#fff;vertical-align:middle"> Coffeebreak © Karen O'Brien. Karen O'Brien keeps all rights to the designs, name and logo. No claim is made to any third-party brands; travel sites named here are independent.<br><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a></footer>
+</div>
+<script>
+const $=i=>document.getElementById(i),E=encodeURIComponent;
+const IATA={sydney:'SYD',melbourne:'MEL',brisbane:'BNE',perth:'PER',adelaide:'ADL',canberra:'CBR','gold coast':'OOL',cairns:'CNS',hobart:'HBA',darwin:'DRW',auckland:'AKL',bali:'DPS',denpasar:'DPS',fiji:'NAN',nadi:'NAN',santorini:'JTR',london:'LON',paris:'PAR',rome:'ROM',tokyo:'TYO',singapore:'SIN',bangkok:'BKK',phuket:'HKT','los angeles':'LAX','new york':'NYC','las vegas':'LAS',honolulu:'HNL',hawaii:'HNL',maldives:'MLE',male:'MLE',dubai:'DXB',athens:'ATH',barcelona:'BCN',venice:'VCE',florence:'FLR',cancun:'CUN',tahiti:'PPT',noumea:'NOU','port vila':'VLI',queenstown:'ZQN'};
+const d=new Date();const iso=x=>x.toISOString().slice(0,10);
+const a=new Date(d.getTime()+60*864e5),b=new Date(d.getTime()+70*864e5);$('d1').value=iso(a);$('d2').value=iso(b);
+const code=s=>IATA[s.trim().toLowerCase()]||(/^[a-z]{3}$/i.test(s.trim())?s.trim().toUpperCase():null);
+const ymm=s=>s.slice(2,4)+s.slice(5,7)+s.slice(8,10);
+function L(h,t){return `<a class="b" href="${h}" target="_blank" rel="noopener">${t}</a>`}
+function upd(){const f=$('from').value||'Sydney',t=$('to').value||'Bali',d1=$('d1').value,d2=$('d2').value,n=Math.max(1,Math.min(9,+$('n').value||1)),cab=$('cab').value;
+ const gq=`Flights from ${f} to ${t} on ${d1}${d2?' returning '+d2:''} for ${n} adults ${cab.replace('premiumeconomy','premium economy')}`;
+ let h=L('https://www.google.com/travel/flights?q='+E(gq),'Google Flights');
+ const fc=code(f),tc=code(t);
+ h+=fc&&tc?L(`https://www.skyscanner.com.au/transport/flights/${fc.toLowerCase()}/${tc.toLowerCase()}/${ymm(d1)}/${d2?ymm(d2)+'/':''}?adultsv2=${n}&cabinclass=${cab}`,'Skyscanner'):L('https://www.skyscanner.com.au/','Skyscanner');
+ $('fl').innerHTML=h;
+ $('cr').innerHTML=L('https://www.google.com/search?q='+E('cruises to '+t+' from '+f+' '+d1.slice(0,7)),'Search cruises to '+t)+L('https://www.cruisecritic.com.au/','Cruise Critic')+L('https://www.royalcaribbean.com/aus/en/cruises','Royal Caribbean')+L('https://www.carnival.com.au/','Carnival')+L('https://www.princess.com/en-au/','Princess')+'<p class="note">Wedding at sea: search the cruise line sites for onboard wedding packages.</p>';
+ $('ve').innerHTML=L('https://www.google.com/maps/search/'+E('wedding venues in '+t),'Wedding venues in '+t+' (Google Maps)')+L('https://www.google.com/search?q='+E('destination wedding venues '+t+' packages'),'Venue packages')+L('https://www.easyweddings.com.au/','Easy Weddings')+L(`https://www.booking.com/searchresults.html?ss=${E(t)}&checkin=${d1}&checkout=${d2}&group_adults=${n}`,'Guest stays on Booking.com')+L(`https://www.airbnb.com.au/s/${E(t)}/homes?checkin=${d1}&checkout=${d2}&adults=${n}`,'Guest stays on Airbnb');
+}
+['from','to','d1','d2','n','cab'].forEach(i=>$(i).addEventListener('input',upd));upd();
+$('mk').onclick=()=>{const f=$('from').value,t=$('to').value,s=$('surprise').checked;const fc=code(f)||f.slice(0,3).toUpperCase(),tc=code(t)||t.slice(0,3).toUpperCase();
+ $('pass').style.display='block';$('route').textContent=fc+' ✈ '+(s?'???':tc);$('pinfo').textContent='Depart '+$('d1').value+' · Guests '+$('n').value+' · Destination: '+(s?'a surprise':t);
+ $('reveal').style.display=s?'inline-block':'none';$('reveal').onclick=()=>{$('route').textContent=fc+' ✈ '+tc;$('pinfo').textContent='Depart '+$('d1').value+' · Guests '+$('n').value+' · Destination: '+t;$('reveal').style.display='none'}};
+</script></body></html>
