@@ -1,0 +1,215 @@
+[
+ {
+  "id": "p01-espresso-matte-lipstick",
+  "name": "Espresso Matte Lipstick",
+  "cat": "Lip",
+  "price_aud": 24,
+  "desc": "A deep espresso brown with a soft velvet matte finish. Rich colour in one swipe.",
+  "shades": [
+   "#3b2418"
+  ]
+ },
+ {
+  "id": "p02-latte-satin-lipstick",
+  "name": "Latte Satin Lipstick",
+  "cat": "Lip",
+  "price_aud": 24,
+  "desc": "A milky latte nude with a satin sheen. The everyday shade for caf\u00e9 mornings.",
+  "shades": [
+   "#c9a27e"
+  ]
+ },
+ {
+  "id": "p03-mocha-cream-lipstick",
+  "name": "Mocha Cream Lipstick",
+  "cat": "Lip",
+  "price_aud": 24,
+  "desc": "A warm mocha brown in a creamy, comfortable formula.",
+  "shades": [
+   "#6b4030"
+  ]
+ },
+ {
+  "id": "p04-caramel-gloss-lipstick",
+  "name": "Caramel Gloss Lipstick",
+  "cat": "Lip",
+  "price_aud": 24,
+  "desc": "A glossy caramel tan with a high-shine finish.",
+  "shades": [
+   "#b5793f"
+  ]
+ },
+ {
+  "id": "p05-cherry-red-pinup-lipstick",
+  "name": "Cherry Red Pin-Up Lipstick",
+  "cat": "Lip",
+  "price_aud": 26,
+  "desc": "A true 1940s pin-up cherry red. The hero shade of the collection.",
+  "shades": [
+   "#a3121f"
+  ]
+ },
+ {
+  "id": "p06-vanilla-latte-lip-balm",
+  "name": "Vanilla Latte Lip Balm 10g",
+  "cat": "Lip",
+  "price_aud": 12,
+  "desc": "A sheer vanilla balm with a hint of coffee butter, for soft lips all day.",
+  "shades": [
+   "#f1e3c6"
+  ]
+ },
+ {
+  "id": "p07-coffee-ground-lip-scrub",
+  "name": "Coffee Ground Lip Scrub 15g",
+  "cat": "Lip",
+  "price_aud": 14,
+  "desc": "Fine coffee grounds and sugar to buff lips smooth before colour.",
+  "shades": [
+   "#4a2e1f"
+  ]
+ },
+ {
+  "id": "p08-coffee-eyeshadow-palette",
+  "name": "Coffee Eyeshadow Palette (10 shades)",
+  "cat": "Eye",
+  "price_aud": 45,
+  "desc": "Ten caf\u00e9 shades from cream to dark roast, in matte and shimmer, with a mirror.",
+  "shades": [
+   "#f3e5cf",
+   "#e6cfae",
+   "#d6b08a",
+   "#c08454",
+   "#a86d3d",
+   "#b9764a",
+   "#8a6a50",
+   "#b07a6e",
+   "#5a3a28",
+   "#3b2418"
+  ]
+ },
+ {
+  "id": "p09-brow-lash-duo",
+  "name": "Coffee Brow Powder and Lash Duo",
+  "cat": "Eye",
+  "price_aud": 29,
+  "desc": "Two brow powders in taupe and coffee brown, plus a lengthening mascara.",
+  "shades": [
+   "#9c7f66",
+   "#6b4a35",
+   "#2b1a12"
+  ]
+ },
+ {
+  "id": "p10-setting-spray",
+  "name": "Setting Spray 100ml",
+  "cat": "Face",
+  "price_aud": 24,
+  "desc": "A fine mist that locks makeup in place with a fresh, dewy finish.",
+  "shades": [
+   "#f4d3d3"
+  ]
+ },
+ {
+  "id": "p11-red-nail-polish",
+  "name": "Red Nail Polish 12ml",
+  "cat": "Nails",
+  "price_aud": 16,
+  "desc": "A glossy cherry red to match the Pin-Up lipstick.",
+  "shades": [
+   "#b3121f"
+  ]
+ },
+ {
+  "id": "p12-brush-set",
+  "name": "Five Piece Makeup Brush Set",
+  "cat": "Tools",
+  "price_aud": 39,
+  "desc": "Five soft brushes for face and eyes, with coffee-brown handles and a pink roll.",
+  "shades": [
+   "#5a3a28",
+   "#e0a8a8"
+  ]
+ },
+ {
+  "id": "p13-makeup-bag",
+  "name": "Coffeebreak Makeup Bag",
+  "cat": "Tools",
+  "price_aud": 22,
+  "desc": "A quilted pink zip bag with brown trim, sized for your everyday kit.",
+  "shades": [
+   "#efb8b8",
+   "#7a4a2e"
+  ]
+ },
+ {
+  "id": "p14-espresso-noir-edp",
+  "name": "Espresso Noir Eau de Parfum 50ml",
+  "cat": "Fragrance",
+  "price_aud": 69,
+  "desc": "Dark roasted coffee, cocoa and amber. Bold and late-night.",
+  "shades": [
+   "#3a1f12"
+  ]
+ },
+ {
+  "id": "p15-vanilla-latte-edp",
+  "name": "Vanilla Latte Eau de Parfum 50ml",
+  "cat": "Fragrance",
+  "price_aud": 69,
+  "desc": "Creamy vanilla, steamed milk and a soft espresso base.",
+  "shades": [
+   "#e9d29a"
+  ]
+ },
+ {
+  "id": "p16-mocha-rose-edp",
+  "name": "Mocha Rose Eau de Parfum 50ml",
+  "cat": "Fragrance",
+  "price_aud": 69,
+  "desc": "Pink rose petals over warm mocha and musk.",
+  "shades": [
+   "#e7a1a1"
+  ]
+ },
+ {
+  "id": "p17-caramel-macchiato-edp",
+  "name": "Caramel Macchiato Eau de Parfum 50ml",
+  "cat": "Fragrance",
+  "price_aud": 69,
+  "desc": "Golden caramel, toasted sugar and a shot of coffee.",
+  "shades": [
+   "#d9902e"
+  ]
+ },
+ {
+  "id": "p18-morning-roast-edp",
+  "name": "Morning Roast Eau de Parfum 50ml",
+  "cat": "Fragrance",
+  "price_aud": 69,
+  "desc": "Fresh-ground medium roast, cedar and a hint of citrus.",
+  "shades": [
+   "#a0592a"
+  ]
+ },
+ {
+  "id": "p19-coffee-body-mist",
+  "name": "Coffee Body Mist 150ml",
+  "cat": "Fragrance",
+  "price_aud": 29,
+  "desc": "A light all-over coffee and vanilla mist for a quick refresh.",
+  "shades": [
+   "#f2cfcf"
+  ]
+ },
+ {
+  "id": "p20-solid-perfume-balm",
+  "name": "Solid Perfume Balm 15g",
+  "cat": "Fragrance",
+  "price_aud": 22,
+  "desc": "A pocket tin of solid perfume in Vanilla Latte, for wrists and neck.",
+  "shades": [
+   "#e8d6bf"
+  ]
+ }
+]
