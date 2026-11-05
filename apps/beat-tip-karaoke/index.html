@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Beat Tip Karaoke — free music game by Coffeebreak</title>
+<meta name="description" content="Free rhythm karaoke game. Tap the beats, build your streak, then stream Karen's music on Spotify, Apple Music and YouTube.">
+<meta name="theme-color" content="#ff5fa2">
+<style>
+:root{--pink:#ff5fa2;--pink2:#ffc1dc;--coffee:#4a2c1d;--cream:#fff3e6;--latte:#c89b6d}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:linear-gradient(160deg,#2a160d,#4a2c1d 55%,#7a3a55);color:var(--cream);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--pink2)}
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px}
+header h1{font-size:1.15rem;margin:0}header h1 span{color:var(--pink)}
+header a{font-size:.85rem}
+#wrap{max-width:520px;margin:0 auto;padding:0 10px 20px}
+#stage{position:relative;width:100%;aspect-ratio:9/13;max-height:72vh;border-radius:18px;overflow:hidden;background:#1d0f09;box-shadow:0 8px 30px #0008;border:2px solid var(--pink)}
+canvas{width:100%;height:100%;display:block;touch-action:none}
+.hud{position:absolute;top:8px;left:10px;right:10px;display:flex;justify-content:space-between;font-weight:700;text-shadow:0 2px 4px #000;pointer-events:none}
+#lyric{position:absolute;top:40px;left:0;right:0;text-align:center;font-size:1.15rem;font-weight:800;color:#fff;text-shadow:0 0 12px var(--pink);pointer-events:none;padding:0 10px}
+#lyric b{color:var(--pink)}
+.overlay{position:absolute;inset:0;background:#1d0f09ee;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:16px;overflow:auto;text-align:center}
+.overlay h2{margin:.3em 0;color:var(--pink)}
+.btn{display:inline-block;background:var(--pink);color:#fff;border:0;border-radius:999px;padding:12px 22px;font-size:1rem;font-weight:800;margin:6px;cursor:pointer;text-decoration:none}
+.btn.alt{background:var(--latte);color:var(--coffee)}
+.btn.ghost{background:transparent;border:2px solid var(--pink2);color:var(--pink2)}
+.tracks{display:grid;gap:8px;width:100%;max-width:360px;margin:8px 0}
+.tracks button{background:#ffffff14;color:var(--cream);border:2px solid #ffffff30;border-radius:14px;padding:10px;font-size:.95rem;cursor:pointer;text-align:left}
+.tracks button.sel{border-color:var(--pink);background:#ff5fa233}
+.card{background:#ffffff12;border:1px solid #ffffff25;border-radius:14px;padding:12px;margin:8px 0;width:100%;max-width:400px}
+.tip{background:linear-gradient(135deg,#ff5fa2,#c8466f);color:#fff;border:0}
+.tip code{background:#0003;padding:3px 8px;border-radius:6px;font-size:1rem}
+.links{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.links a{background:#ffffff18;padding:8px 12px;border-radius:999px;text-decoration:none;font-weight:700;font-size:.9rem}
+.big{font-size:2.4rem;font-weight:900;color:#fff}
+.grade{font-size:3rem;font-weight:900;color:var(--pink)}
+.hidden{display:none!important}
+small{opacity:.85}
+footer{text-align:center;font-size:.8rem;opacity:.8;padding:10px}
+</style></head><body>
+<header><h1>☕ Beat Tip <span>Karaoke</span></h1><a href="../../">← Hub</a></header>
+<div id="wrap">
+<div id="stage">
+ <canvas id="c"></canvas>
+ <div class="hud"><span id="sc">0</span><span id="cb"></span><span id="tm">60s</span></div>
+ <div id="lyric"></div>
+
+ <div class="overlay" id="menu">
+  <h2>Tap the beat. Feel the vibe.</h2>
+  <p id="streakMsg" style="margin:.2em 0"></p>
+  <small>Notes fall down 4 lanes — tap the pink pads (or keys D F J K) as they hit the line. Free forever.</small>
+  <div class="tracks" id="tracks"></div>
+  <button class="btn" id="play">▶ Play</button>
+  <small id="best"></small>
+ </div>
+
+ <div class="overlay hidden" id="end">
+  <h2 id="endTitle">Encore!</h2>
+  <div class="grade" id="grade">A</div>
+  <div class="big" id="final">0</div>
+  <small id="stats"></small>
+  <p id="endStreak" style="font-weight:700"></p>
+  <div class="card tip">
+   <b>💖 Loved it? Tip Karen a coffee</b><br>
+   PayID: <code id="payid">darkokaz@gmx.com</code><br>
+   <small>Teachers Mutual Bank · any amount · reference “Beat Tip”</small><br>
+   <button class="btn ghost" id="copy" style="border-color:#fff;color:#fff">Copy PayID</button>
+  </div>
+  <div class="card"><b>🎧 Hear the full songs</b>
+   <div class="links" style="margin-top:8px">
+    <a href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">Spotify</a>
+    <a href="https://music.apple.com/au/album/billionaire/1542958072" target="_blank" rel="noopener">Apple · Billionaire</a>
+    <a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">YouTube</a>
+    <a href="https://songwriterkaz.github.io/coffeebreak-stream/" target="_blank" rel="noopener">Coffeebreak Stream</a>
+    <a href="../own-radio/">Own Radio</a>
+   </div>
+   <small>Every stream helps an independent songwriter.</small>
+  </div>
+  <button class="btn" id="again">↻ Play again</button>
+  <button class="btn alt" id="share">Share score</button>
+  <a class="btn ghost" href="../radio-rush/">Try Radio Rush →</a>
+ </div>
+</div>
+<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Music in-game is a synthesised beat, not the original recordings. Tips are voluntary gifts and unlock nothing extra. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Spotify, Apple Music, YouTube and other names belong to their owners and do not imply endorsement.</small></div>
+</div>
+<footer>Coffeebreak · Free + tip · Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer>
+<script>
+(()=>{
+const TRACKS=[
+ {id:'billionaire',name:'💸 Billionaire Vibe',sub:'Confident pop strut · 104 BPM',bpm:104,root:57,scale:[0,3,5,7,10],dens:.55,
+  lyr:['I got <b>dreams</b> worth a billion','Coffee in my <b>hand</b>, crown on my head','Every beat a <b>dollar</b> sign','Shine like a <b>billion</b> tonight']},
+ {id:'chill',name:'☕ Coffeebreak Chill',sub:'Laid-back lo-fi · 86 BPM',bpm:86,root:60,scale:[0,2,4,7,9],dens:.42,
+  lyr:['Sip it <b>slow</b>, let it flow','Steam on the <b>window</b>, rain outside','Warm cup, <b>soft</b> light','Take a <b>break</b>, take a breath']},
+ {id:'pink',name:'🎀 Pink Pop Rush',sub:'Fast & sparkly · 128 BPM',bpm:128,root:62,scale:[0,2,4,7,9,12],dens:.62,
+  lyr:['Pink <b>lights</b>, all night','Turn it <b>up</b>, don\'t stop','Sugar <b>rush</b> on the dance floor','Hands up, <b>shine</b> on']}
+];
+const $=id=>document.getElementById(id);
+const cv=$('c'),cx=cv.getContext('2d');
+let W,H,DPR;
+function rs(){DPR=Math.min(2,devicePixelRatio||1);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;cx.setTransform(DPR,0,0,DPR,0,0)}
+addEventListener('resize',rs);
+let sel=+(localStorage.btkTrack||0);
+function drawTracks(){const t=$('tracks');t.innerHTML='';TRACKS.forEach((tr,i)=>{const b=document.createElement('button');b.className=i===sel?'sel':'';b.innerHTML=`<b>${tr.name}</b><br><small>${tr.sub} · best ${localStorage['btkBest_'+tr.id]||0}</small>`;b.onclick=()=>{sel=i;localStorage.btkTrack=i;drawTracks()};t.appendChild(b)})}
+// daily streak
+function today(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function dayNum(s){const [y,m,d]=s.split('-').map(Number);return Math.round(new Date(y,m-1,d)/864e5)}
+function streakInfo(){return{last:localStorage.btkLast||'',n:+(localStorage.btkStreak||0)}}
+function bumpStreak(){const s=streakInfo(),t=today();if(s.last===t)return s.n;let n=(s.last&&dayNum(t)-dayNum(s.last)===1)?s.n+1:1;localStorage.btkLast=t;localStorage.btkStreak=n;return n}
+function menuStreak(){const s=streakInfo();const alive=s.last&&(dayNum(today())-dayNum(s.last))<=1;$('streakMsg').innerHTML=alive&&s.n?`🔥 <b>${s.n}-day streak</b> — play today to keep it alive!`:`🔥 Play daily to build a streak!`}
+// audio
+let ac,master;
+function audio(){if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();master=ac.createGain();master.gain.value=.5;master.connect(ac.destination)}if(ac.state==='suspended')ac.resume()}
+const mf=n=>440*Math.pow(2,(n-69)/12);
+function tone(t,f,d,type,v,dest){const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(dest||master);o.start(t);o.stop(t+d+.05)}
+function kick(t){const o=ac.createOscillator(),g=ac.createGain();o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(40,t+.15);g.gain.setValueAtTime(.9,t);g.gain.exponentialRampToValueAtTime(.001,t+.25);o.connect(g);g.connect(master);o.start(t);o.stop(t+.3)}
+let nb;function noise(t,d,v,hp){if(!nb){nb=ac.createBuffer(1,ac.sampleRate*.5,ac.sampleRate);const a=nb.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1}const s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();s.buffer=nb;f.type='highpass';f.frequency.value=hp;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);s.connect(f);f.connect(g);g.connect(master);s.start(t);s.stop(t+d+.02)}
+// game
+const LANES=4,KEYS=['d','f','j','k'],LEN=60,TRAVEL=1.6;
+let G=null,raf;
+function build(tr){const spb=60/tr.bpm,notes=[];const steps=Math.floor((LEN-2)/(spb/2));let lastLane=0;
+ for(let i=8;i<steps;i++){const onBeat=i%2===0,p=onBeat?tr.dens:tr.dens*.35;if(Math.random()<p){let l=(lastLane+1+Math.floor(Math.random()*3))%LANES;lastLane=l;notes.push({t:1.5+i*spb/2,lane:l,deg:Math.floor(Math.random()*tr.scale.length),hit:0})}}
+ return notes}
+function start(){audio();rs();const tr=TRACKS[sel];G={tr,notes:build(tr),t0:ac.currentTime+.3,score:0,combo:0,max:0,perf:0,good:0,miss:0,fx:[],flash:[0,0,0,0],sched:0,li:-1};$('menu').classList.add('hidden');$('end').classList.add('hidden');cancelAnimationFrame(raf);loop()}
+function schedule(){const tr=G.tr,spb=60/tr.bpm,now=ac.currentTime;while(G.sched*spb/2+G.t0<now+.2&&G.sched*spb/2<LEN){const st=G.sched,t=G.t0+st*spb/2;
+  if(st%2===0)kick(t);if(st%4===2)noise(t,.18,.5,1200);noise(t,.04,.18,7000);
+  const bar=Math.floor(st/8)%4,bassN=tr.root-24+[0,5,3,7][bar];if(st%2===0)tone(t,mf(bassN),spb*.9,'triangle',.35);
+  if(st%8===0){[0,4,7].forEach(x=>tone(t,mf(tr.root-12+[0,5,3,7][bar]+x),spb*3.5,'sine',.06))}
+  G.sched++}}
+function songTime(){return ac.currentTime-G.t0}
+function hit(l){if(!G||G.over)return;audio();G.flash[l]=1;const st=songTime();let best=null,bd=9;for(const n of G.notes){if(n.hit||n.lane!==l)continue;const d=Math.abs(n.t-st);if(d<bd){bd=d;best=n}if(n.t>st+.3)break}
+ if(best&&bd<.16){best.hit=1;const perfect=bd<.06;G.combo++;G.max=Math.max(G.max,G.combo);const mult=1+Math.min(4,Math.floor(G.combo/10));G.score+=(perfect?100:50)*mult;perfect?G.perf++:G.good++;
+  tone(ac.currentTime,mf(G.tr.root+G.tr.scale[best.deg]),.25,'square',.08);G.fx.push({l,txt:perfect?'PERFECT':'GOOD',a:1})}
+ else{tone(ac.currentTime,180,.08,'sawtooth',.05)}}
+function loop(){raf=requestAnimationFrame(loop);const st=songTime();schedule();
+ const tr=G.tr,lw=W/LANES,hy=H*.84;
+ // misses
+ for(const n of G.notes){if(!n.hit&&st-n.t>.16){n.hit=2;G.miss++;G.combo=0;G.fx.push({l:n.lane,txt:'miss',a:1})}}
+ // bg
+ const g=cx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#2a140c');g.addColorStop(1,'#5a2440');cx.fillStyle=g;cx.fillRect(0,0,W,H);
+ const pulse=Math.max(0,1-((st*tr.bpm/60)%1)*3);
+ for(let i=0;i<LANES;i++){cx.fillStyle=i%2?'#ffffff08':'#ffffff04';cx.fillRect(i*lw,0,lw,H);
+  G.flash[i]*=.85;cx.fillStyle=`rgba(255,95,162,${.15+G.flash[i]*.6})`;cx.fillRect(i*lw,hy,lw,H-hy);
+  cx.beginPath();cx.arc(i*lw+lw/2,hy+ (H-hy)/2,Math.min(lw,H-hy)*.36,0,7);cx.fillStyle=`rgba(255,193,220,${.35+G.flash[i]*.6})`;cx.fill();
+  cx.fillStyle='#2a140c';cx.font=`bold ${Math.round(lw*.18)}px system-ui`;cx.textAlign='center';cx.textBaseline='middle';cx.fillText(KEYS[i].toUpperCase(),i*lw+lw/2,hy+(H-hy)/2)}
+ cx.fillStyle=`rgba(255,95,162,${.6+pulse*.4})`;cx.fillRect(0,hy-3,W,5);
+ for(const n of G.notes){if(n.hit===1)continue;const dt=n.t-st;if(dt>TRAVEL||dt<-.3)continue;const y=hy-dt/TRAVEL*hy;const x=n.lane*lw+lw/2,r=lw*.28;
+  cx.save();cx.translate(x,y);cx.globalAlpha=n.hit===2?.3:1;// coffee bean note
+  cx.fillStyle='#c89b6d';cx.beginPath();cx.ellipse(0,0,r,r*.72,0,0,7);cx.fill();cx.strokeStyle='#4a2c1d';cx.lineWidth=3;cx.beginPath();cx.moveTo(-r*.7,0);cx.quadraticCurveTo(0,-r*.35,r*.7,0);cx.stroke();
+  cx.fillStyle='#ff5fa2';cx.beginPath();cx.arc(r*.6,-r*.5,r*.18,0,7);cx.fill();cx.restore()}
+ G.fx=G.fx.filter(f=>(f.a-=.025)>0);for(const f of G.fx){cx.globalAlpha=f.a;cx.fillStyle=f.txt==='miss'?'#aaa':'#fff';cx.font=`bold ${Math.round(lw*.17)}px system-ui`;cx.fillText(f.txt,f.l*lw+lw/2,hy-30-(1-f.a)*40);cx.globalAlpha=1}
+ $('sc').textContent=G.score.toLocaleString();$('cb').textContent=G.combo>2?`${G.combo}x combo`:'';$('tm').textContent=Math.max(0,Math.ceil(LEN-st))+'s';
+ const li=Math.floor(Math.max(0,st)/(LEN/tr.lyr.length/2))%tr.lyr.length;if(li!==G.li){G.li=li;$('lyric').innerHTML='🎤 '+tr.lyr[li]}
+ if(st>LEN+.3)finish()}
+function finish(){cancelAnimationFrame(raf);G.over=1;$('lyric').textContent='';const tot=G.perf+G.good+G.miss||1,acc=(G.perf+G.good*.6)/tot;
+ const gr=acc>.92?'S':acc>.8?'A':acc>.65?'B':acc>.45?'C':'D';$('grade').textContent=gr;$('final').textContent=G.score.toLocaleString();
+ $('stats').textContent=`${Math.round(acc*100)}% accuracy · ${G.perf} perfect · ${G.good} good · ${G.miss} miss · max combo ${G.max}`;
+ const key='btkBest_'+G.tr.id,best=+(localStorage[key]||0),nb=G.score>best;if(nb)localStorage[key]=G.score;
+ $('endTitle').textContent=nb?'🏆 New best on '+G.tr.name.replace(/^\S+ /,'')+'!':'Encore!';
+ const n=bumpStreak();$('endStreak').innerHTML=n>1?`🔥 ${n}-day streak! Celebrate with a tip ☕ — and come back tomorrow.`:`🔥 Day 1 of your streak — come back tomorrow to keep it going!`;
+ if(n>1&&n%7===0)$('endStreak').innerHTML+=`<br>🎉 A whole week! Shout Karen a coffee to celebrate.`;
+ $('end').classList.remove('hidden');$('end').scrollTop=0}
+// input
+cv.addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect();hit(Math.min(LANES-1,Math.floor((e.clientX-r.left)/r.width*LANES)));e.preventDefault()});
+addEventListener('keydown',e=>{const i=KEYS.indexOf(e.key.toLowerCase());if(i>=0)hit(i);if(e.key===' '&&!$('menu').classList.contains('hidden')){e.preventDefault();start()}});
+$('play').onclick=start;$('again').onclick=()=>{$('end').classList.add('hidden');$('menu').classList.remove('hidden');drawTracks();menuStreak();$('menu').scrollTop=0};
+$('copy').onclick=()=>{navigator.clipboard?.writeText('darkokaz@gmx.com').then(()=>$('copy').textContent='Copied ✓',()=>prompt('PayID','darkokaz@gmx.com'))};
+$('share').onclick=()=>{const txt=`I scored ${G.score.toLocaleString()} on Beat Tip Karaoke ☕🎤 — free game, play it:`;const url=location.href;if(navigator.share)navigator.share({title:'Beat Tip Karaoke',text:txt,url}).catch(()=>{});else{navigator.clipboard?.writeText(txt+' '+url);$('share').textContent='Link copied ✓'}};
+rs();drawTracks();menuStreak();
+// idle background draw
+cx.fillStyle='#2a140c';cx.fillRect(0,0,W,H);
+})();
+</script>
+</body></html>
