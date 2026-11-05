@@ -1,0 +1,37 @@
+:root{--a:#e75b9a;--b:#ffd6e8;--bg:#fff5f9;--ink:#5a2840;--card:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:linear-gradient(90deg,var(--b),#fff);border-bottom:3px solid var(--a);flex-wrap:wrap}
+.logo{height:54px;border-radius:10px}h1{margin:0;font-size:1.25rem}header small{opacity:.8}
+.meterbox{margin-left:auto;display:flex;align-items:center;gap:6px}#meter{background:#3a1a2a;border-radius:4px}
+.clip{font-size:.7rem;padding:2px 5px;border-radius:4px;background:#ccc;color:#fff}.clip.on{background:#d00}
+nav{display:flex;overflow-x:auto;gap:4px;padding:6px;background:var(--b);position:sticky;top:0;z-index:5}
+nav button{white-space:nowrap}nav button.on{background:var(--a);color:#fff}
+button,select,input[type=number]{font:inherit;border:2px solid var(--a);background:#fff;color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer;min-height:36px}
+button:active{transform:scale(.97)}button.big{font-weight:700}button.rec{border-color:#d33;color:#d33}button.rec.on,button.huge.on{background:#d33;color:#fff}
+.huge{width:160px;height:160px;border-radius:50%;font-size:1.4rem;font-weight:800;background:var(--a);color:#fff;margin:16px auto;display:block}
+.timer{font-size:2.4rem;font-variant-numeric:tabular-nums;text-align:center}
+main{padding:10px;max-width:1200px;margin:auto}.tab{display:none}.tab.on{display:block}
+.panel{background:var(--card);border-radius:14px;padding:8px 12px;margin:8px 0;box-shadow:0 2px 8px #e75b9a22}
+summary{font-weight:700;cursor:pointer;padding:4px 0}
+.row,.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0}.chips button.on{background:var(--a);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}.grid label{display:flex;flex-direction:column}
+input[type=range]{accent-color:var(--a);width:100%}
+.wave{width:100%;background:#2e1422;border-radius:10px;display:block;touch-action:none}
+.hint{font-size:.85rem;opacity:.75}.hidden{display:none!important}.center{text-align:center}
+.banner{background:var(--a);color:#fff;padding:8px 12px;text-align:center}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#d00}
+#timeline{position:relative;overflow-x:auto;background:#fff;border-radius:12px;min-height:80px}
+#playhead{position:absolute;top:0;bottom:0;width:2px;background:#d00;z-index:3;left:150px;pointer-events:none}
+.track{display:flex;border-bottom:1px solid var(--b);min-height:74px}.track.sel{background:#ffe9f2}
+.tctl{width:150px;min-width:150px;padding:4px;font-size:.75rem;display:flex;flex-direction:column;gap:2px;position:sticky;left:0;background:inherit;z-index:2}
+.tctl input[type=text]{width:100%;border:none;background:transparent;font-weight:700;color:var(--ink)}
+.tctl .mini{display:flex;gap:2px;flex-wrap:wrap}.tctl button{padding:1px 6px;min-height:24px;font-size:.7rem}.tctl button.on{background:var(--a);color:#fff}
+.lane{position:relative;flex:1;min-width:2000px}.clipbox{position:absolute;top:6px;bottom:6px;background:var(--b);border:1px solid var(--a);border-radius:6px;overflow:hidden;cursor:grab;touch-action:none}
+.clipbox canvas{width:100%;height:100%}
+#piano{position:relative;height:150px;display:flex;user-select:none;touch-action:none;overflow-x:auto}
+.wk{flex:0 0 44px;height:150px;background:#fff;border:1px solid var(--a);border-radius:0 0 8px 8px}.bk{position:absolute;width:28px;height:90px;background:var(--ink);border-radius:0 0 6px 6px;z-index:2}
+.wk.on,.bk.on{background:var(--a)}
+.recitem{display:flex;gap:6px;align-items:center;flex-wrap:wrap;background:#fff;border-radius:10px;padding:6px;margin:4px 0}
+.sticky{position:sticky;top:48px;background:var(--bg);z-index:4}
+body.compact .panel{padding:4px 8px;margin:4px 0}body.compact button{padding:3px 8px;min-height:28px}
+@media(max-width:600px){.logo{height:40px}h1{font-size:1rem}.tctl{width:110px;min-width:110px}#playhead{left:110px}}

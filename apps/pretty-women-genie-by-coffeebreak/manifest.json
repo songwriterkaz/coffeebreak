@@ -1,0 +1,23 @@
+{
+ "name": "Pretty Women Genie Flash bids",
+ "short_name": "Genie Bids",
+ "description": "Bid for the licence to 20 cheeky Coffeebreak genie tattoo flash designs.",
+ "start_url": "./index.html",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#fff0f7",
+ "theme_color": "#ff4fa3",
+ "icons": [
+  {
+   "src": "icons/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icons/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
+}
