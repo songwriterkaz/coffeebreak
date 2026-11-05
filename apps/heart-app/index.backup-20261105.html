@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d0b0a">
+<meta name="description" content="Heart rate and blood pressure from Bluetooth devices or by hand, with saved history.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Coffeebreak Heart</title>
+<style>
+:root{--bg:#0d0b0a;--panel:#1a1614;--line:#3a312c;--tx:#f6efe6;--mut:#b9aca0;--acc:#e9a8b4;--accx:#2a1418;--ok:#7be0a4;--warn:#ffcf5a;--red:#ff6b6b;--c1:#e9a8b4;--c2:#7bb8ff;--fs:16px;--hdr:#120f0e;--wbg:#2a1f12;--wline:#5a4322;--wtx:#ffe3b0}
+body.hc{--bg:#ffffff;--panel:#ffffff;--line:#000000;--tx:#000000;--mut:#222222;--acc:#0b3d91;--accx:#ffffff;--ok:#006b2d;--warn:#7a4a00;--red:#b00020;--c1:#0b3d91;--c2:#b00020;--fs:20px;--hdr:#fdf8ef;--wbg:#ffe45c;--wline:#000;--wtx:#000}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:var(--fs);line-height:1.45}
+body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+header{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--hdr)}
+header img{height:46px;width:auto;border-radius:6px;background:#fdf8ef}
+header h1{font-size:1.1rem;margin:0;letter-spacing:.04em}
+header h1 small{display:block;font-size:.75rem;font-weight:600;color:var(--acc);letter-spacing:.14em;text-transform:uppercase}
+body.hc header{border-bottom:3px solid #000}
+body.hc header h1 small{color:#000}
+.badge{margin-left:auto;font-size:.7rem;color:var(--mut);border:1px solid var(--line);border-radius:999px;padding:3px 9px;text-align:center}
+.warn{background:var(--wbg);border-bottom:1px solid var(--wline);color:var(--wtx);font-size:.82rem;padding:8px 14px;text-align:center}
+.warn b{color:inherit}
+body.hc .warn{font-size:.9rem;border-bottom:3px solid #000}
+.rights{font-size:.75rem;color:var(--mut);text-align:center;padding:6px 14px;border-bottom:1px solid var(--line)}
+#remBanner{padding:10px 14px;border-bottom:2px solid var(--acc);background:var(--panel);display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+#remBanner.due{background:var(--warn);color:#000;border-color:#000;font-weight:700}
+#remBanner button{min-height:40px;padding:6px 14px}
+main{max-width:680px;margin:0 auto;padding:12px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:12px}
+body.hc .panel{border:3px solid #000}
+.panel h2{margin:0 0 8px;font-size:1.1rem}
+.panel p{margin:6px 0}
+.mut{color:var(--mut)}
+.small{font-size:.82rem}
+button,.btn{font:inherit;font-weight:700;color:var(--tx);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 18px;min-height:52px;cursor:pointer;touch-action:manipulation}
+button:active{transform:scale(.98)}
+button.primary{background:var(--acc);color:var(--accx);border-color:var(--acc);font-size:1.05rem;padding:16px 26px}
+button.big{min-height:64px;font-size:1.15rem;width:100%}
+button.link{background:none;border:none;color:var(--acc);text-decoration:underline;min-height:40px;padding:6px 8px;font-weight:600}
+button:disabled{opacity:.45}
+button[aria-pressed=true]{outline:3px solid var(--acc);outline-offset:1px}
+body.hc button{border:3px solid #000}
+body.hc button[aria-pressed=true]{background:#000;color:#fff;outline:none}
+body.hc button.primary{border-color:#000}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.tabs{display:flex;gap:6px;padding:10px 12px 0;max-width:680px;margin:0 auto;overflow-x:auto}
+.tabs button{flex:1;min-width:0;padding:10px 6px;min-height:48px;white-space:nowrap}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.wrap button{flex:1 1 auto}
+label{display:block;font-weight:700;margin:10px 0 4px}
+input,select{font:inherit;width:100%;min-height:52px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--tx)}
+body.hc input,body.hc select{border:3px solid #000;background:#fff}
+input.huge{font-size:2.2rem;font-weight:800;text-align:center;min-height:76px}
+.stat{padding:10px 12px;border:1px solid var(--line);border-radius:12px;text-align:center}
+.stat b{display:block;font-size:1.4rem;font-variant-numeric:tabular-nums}
+.stat span{font-size:.75rem;color:var(--mut)}
+body.hc .stat{border:2px solid #000}
+.status{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:.95rem}
+.status.good{border-color:var(--ok);color:var(--ok)}
+.status.bad{border-color:var(--warn);color:var(--warn)}
+.status.err{border-color:var(--red);color:var(--red)}
+body.hc .status{border-width:2px}
+.bigval{font-size:4rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.bigval small{font-size:1rem;font-weight:600;color:var(--mut);margin-left:6px}
+canvas.chart{width:100%;height:170px;display:block;background:var(--bg);border:1px solid var(--line);border-radius:12px;margin-top:10px}
+body.hc canvas.chart{border:2px solid #000}
+ul.items{list-style:none;margin:8px 0 0;padding:0}
+ul.items li{display:flex;gap:10px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding:10px 2px}
+ul.items li:first-child{border-top:none}
+ul.items .v{font-weight:800;font-variant-numeric:tabular-nums}
+ul.items .d{font-size:.8rem;color:var(--mut)}
+ul.items button{min-height:44px;padding:6px 12px;font-size:.85rem}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:12px 18px;border-radius:999px;font-weight:700;z-index:9;max-width:90vw;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+footer{max-width:680px;margin:6px auto 30px;padding:12px;color:var(--mut);font-size:.86rem}
+footer h3{color:var(--tx);font-size:.95rem;margin:14px 0 4px}
+footer p{margin:0 0 6px}
+footer a{color:var(--acc)}
+.note{border-left:3px solid var(--warn);padding:2px 10px;color:var(--tx)}
+body.hc footer{color:#000}
+.bpbig{font-size:2.6rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.bpbig small{font-size:.9rem;font-weight:600;color:var(--mut);margin-left:6px}
+
+</style>
+</head>
+<body>
+<header><img src="logo.png" alt="Coffeebreak logo"><h1>Coffeebreak<small>Heart</small></h1><div class="badge">Not a medical<br>device</div></header>
+<div class="warn" role="note"><b>Not a medical device. For information only. Not for diagnosis or treatment. Talk to a doctor or call 000 in an emergency.</b></div>
+<div class="rights">Karen O'Brien (Coffeebreak) keeps all rights to this app, its designs, name and logo. Please do not copy or make your own versions.</div>
+<div id="remBanner" hidden></div>
+<nav class="tabs" id="nav" aria-label="Sections">
+  <button type="button" data-tab="hr" aria-pressed="true">Heart rate</button>
+  <button type="button" data-tab="bp" aria-pressed="false">Blood pressure</button>
+  <button type="button" data-tab="hist" aria-pressed="false">History</button>
+  <button type="button" data-tab="share" aria-pressed="false">Share</button>
+</nav>
+<main>
+  <div id="p-hr">
+    <section class="panel" id="hrHost"></section>
+    <section class="panel">
+      <h2>Add a heart rate by hand</h2>
+      <label for="mHr">Beats per minute</label>
+      <input id="mHr" type="number" inputmode="numeric" min="20" max="250" placeholder="For example 70">
+      <div class="row" style="grid-template-columns:1fr"><button type="button" class="primary" id="mHrSave">Save heart rate</button></div>
+    </section>
+  </div>
+  <div id="p-bp" hidden>
+    <section class="panel">
+      <h2>Blood pressure cuff</h2>
+      <p class="small mut">Works with cuffs that share readings over Bluetooth using the standard blood pressure service. Many cuffs only use their own app, and some need to be put into pairing mode first. If yours is not found, add readings by hand below.</p>
+      <div class="status bad" id="bpSupport" hidden></div>
+      <div class="wrap"><button type="button" class="primary" id="bpConnect">Connect blood pressure cuff</button></div>
+      <div class="wrap"><button type="button" class="link" id="bpAll">Cannot see yours? Show all Bluetooth devices</button></div>
+      <div class="status" id="bpStatus">Not connected.</div>
+      <div class="wrap" id="bpAgainRow" hidden><button type="button" id="bpAgain" class="primary">Reconnect</button></div>
+      <div class="wrap"><button type="button" id="bpOff" disabled>Disconnect</button></div>
+      <p class="small mut">Take a reading on the cuff while connected, or connect after a reading to receive stored ones. Readings that arrive are saved automatically.</p>
+      <div id="bpLast" class="bpbig" hidden></div>
+      <div class="small mut" id="bpLastInfo"></div>
+    </section>
+    <section class="panel">
+      <h2>Add a blood pressure by hand</h2>
+      <div class="row">
+        <div><label for="mSys">Top number (systolic), mmHg</label><input id="mSys" type="number" inputmode="numeric" min="50" max="260"></div>
+        <div><label for="mDia">Bottom number (diastolic), mmHg</label><input id="mDia" type="number" inputmode="numeric" min="30" max="160"></div>
+      </div>
+      <label for="mPul">Pulse, BPM (optional)</label><input id="mPul" type="number" inputmode="numeric" min="20" max="250">
+      <label for="mNote">Note (optional)</label><input id="mNote" maxlength="80" placeholder="For example: seated, after rest">
+      <div class="row" style="grid-template-columns:1fr"><button type="button" class="primary" id="mBpSave">Save blood pressure</button></div>
+    </section>
+  </div>
+  <div id="p-hist" hidden>
+    <section class="panel">
+      <h2>Saved readings</h2>
+      <div class="row3" id="filt">
+        <button type="button" data-f="all" aria-pressed="true">All</button>
+        <button type="button" data-f="hr" aria-pressed="false">Heart rate</button>
+        <button type="button" data-f="bp" aria-pressed="false">Pressure</button>
+      </div>
+      <div class="row3"><div class="stat"><b id="hsN">0</b><span>Readings</span></div><div class="stat"><b id="hsHr">--</b><span>Average BPM</span></div><div class="stat"><b id="hsBp">--</b><span>Average pressure</span></div></div>
+      <h2 style="margin-top:14px" id="cBpT">Blood pressure</h2>
+      <canvas class="chart" id="bpChart" aria-label="Saved blood pressure readings over time"></canvas>
+      <h2 style="margin-top:14px" id="cHrT">Heart rate</h2>
+      <canvas class="chart" id="hrHist" aria-label="Saved heart rate readings over time"></canvas>
+      <ul class="items" id="histList"></ul>
+    </section>
+  </div>
+  <div id="p-share" hidden>
+    <section class="panel" id="shareHost"></section>
+    <section class="panel" id="remHost"></section>
+  </div>
+</main>
+
+<footer>
+<p class="note"><b>Not a medical device. For information only. Not for diagnosis or treatment. Talk to a doctor or call 000 in an emergency.</b></p>
+<p>Karen O'Brien (Coffeebreak) keeps all rights to this app, its designs, name and logo. Please do not copy or make your own versions.</p>
+<h3>Your data</h3><p>No account and no sign-up. Readings are kept in this browser on this device and are never sent anywhere. The app works offline once it has loaded.</p>
+<h3>Install</h3><p><button type="button" id="btnInstall" hidden>Install this app</button> <span id="installHint" class="small"></span></p>
+<p style="margin-top:10px">More from Coffeebreak: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+</footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+/* Coffeebreak BLE parsers. Pure functions, no browser needed. */
+(function(root,factory){
+  if(typeof module==='object'&&module.exports)module.exports=factory();
+  else root.CBP=factory();
+})(typeof self!=='undefined'?self:this,function(){
+'use strict';
+var MGDL_PER_MMOL=18.016;
+var MMHG_PER_KPA=7.50062;
+
+/* IEEE-11073 16-bit SFLOAT: 4-bit signed exponent, 12-bit signed mantissa. Returns null for NaN, NRes, reserved and infinities. */
+function sfloat(dv,off){
+  var raw=dv.getUint16(off,true);
+  if(raw===0x07FF||raw===0x0800||raw===0x0801||raw===0x07FE||raw===0x0802)return null;
+  var mant=raw&0x0FFF,exp=raw>>12;
+  if(mant>=0x0800)mant-=0x1000;
+  if(exp>=0x08)exp-=0x10;
+  var v=exp<0?mant/Math.pow(10,-exp):mant*Math.pow(10,exp);
+  return v;
+}
+function round(v,d){var m=Math.pow(10,d||0);return Math.round(v*m)/m}
+
+/* 7-byte BLE date time: year u16, month, day, hour, minute, second. Returns epoch ms (local time) or null. */
+function dateTime(dv,off){
+  var y=dv.getUint16(off,true),mo=dv.getUint8(off+2),d=dv.getUint8(off+3),h=dv.getUint8(off+4),mi=dv.getUint8(off+5),s=dv.getUint8(off+6);
+  if(!y||!mo||!d)return null;
+  var t=new Date(y,mo-1,d,h,mi,s).getTime();
+  return isNaN(t)?null:t;
+}
+
+/* Heart Rate Measurement 0x2A37 */
+function parseHeartRate(dv){
+  var f=dv.getUint8(0),o=1,r={bpm:0,contactSupported:!!(f&4),contact:null,energy:null,rr:[]};
+  if(f&1){r.bpm=dv.getUint16(o,true);o+=2}else{r.bpm=dv.getUint8(o);o+=1}
+  if(f&4)r.contact=!!(f&2);
+  if(f&8){r.energy=dv.getUint16(o,true);o+=2}
+  if(f&16){
+    while(o+1<dv.byteLength){r.rr.push(round(dv.getUint16(o,true)/1024*1000,1));o+=2}
+  }
+  return r;
+}
+
+var SAMPLE_TYPES={1:'Capillary whole blood',2:'Capillary plasma',3:'Venous whole blood',4:'Venous plasma',5:'Arterial whole blood',6:'Arterial plasma',7:'Undetermined whole blood',8:'Undetermined plasma',9:'Interstitial fluid',10:'Control solution'};
+var SAMPLE_LOCS={1:'Finger',2:'Alternate site',3:'Earlobe',4:'Control solution',15:'Not available'};
+var STATUS_BITS=['Battery low','Sensor malfunction','Sample size too small','Strip insertion error','Wrong strip type','Result too high for the meter','Result too low for the meter','Temperature too high','Temperature too low','Reading interrupted','General device fault','Time fault'];
+
+/* Glucose Measurement 0x2A18. Returns mmol/L and mg/dL. */
+function parseGlucose(dv){
+  var f=dv.getUint8(0),o=1,r={seq:dv.getUint16(o,true),t:null,offsetMin:null,mmol:null,mgdl:null,type:null,loc:null,typeName:'',locName:'',status:0,statusText:[],contextFollows:!!(f&16)};
+  o+=2;
+  r.t=dateTime(dv,o);o+=7;
+  if(f&1){r.offsetMin=dv.getInt16(o,true);o+=2;if(r.t!==null)r.t+=r.offsetMin*60000}
+  if(f&2){
+    var c=sfloat(dv,o);o+=2;
+    if(c!==null){
+      if(f&4){r.mmol=round(c*1000,3);r.mgdl=round(r.mmol*MGDL_PER_MMOL,1)}     // mol/L
+      else{r.mgdl=round(c*100000,1);r.mmol=round(r.mgdl/MGDL_PER_MMOL,3)}         // kg/L
+    }
+    var b=dv.getUint8(o);o+=1;
+    r.type=b&0x0F;r.loc=b>>4;
+    r.typeName=SAMPLE_TYPES[r.type]||'';r.locName=SAMPLE_LOCS[r.loc]||'';
+  }
+  if(f&8){
+    r.status=dv.getUint16(o,true);o+=2;
+    for(var i=0;i<STATUS_BITS.length;i++)if(r.status&(1<<i))r.statusText.push(STATUS_BITS[i]);
+  }
+  return r;
+}
+
+var MEALS={1:'Before meal',2:'After meal',3:'Fasting',4:'Other',5:'Bedtime'};
+/* Glucose Measurement Context 0x2A34 */
+function parseGlucoseContext(dv){
+  var f=dv.getUint8(0),o=1,r={seq:dv.getUint16(o,true),carbsG:null,meal:null,mealName:'',tester:null,health:null,exerciseMin:null,exercisePct:null,medId:null,medAmount:null,medUnit:'',hba1c:null};
+  o+=2;
+  if(f&128)o+=1;                                   // extended flags
+  if(f&1){var cid=dv.getUint8(o);o+=1;var cv=sfloat(dv,o);o+=2;r.carbsG=cv===null?null:round(cv*1000,1);r.carbsId=cid}
+  if(f&2){r.meal=dv.getUint8(o);o+=1;r.mealName=MEALS[r.meal]||''}
+  if(f&4){var th=dv.getUint8(o);o+=1;r.tester=th&0x0F;r.health=th>>4}
+  if(f&8){r.exerciseMin=Math.round(dv.getUint16(o,true)/60);o+=2;r.exercisePct=dv.getUint8(o);o+=1}
+  if(f&16){r.medId=dv.getUint8(o);o+=1;var mv=sfloat(dv,o);o+=2;r.medUnit=(f&32)?'L':'kg';r.medAmount=mv}
+  if(f&64){r.hba1c=sfloat(dv,o);o+=2}
+  return r;
+}
+
+/* Record Access Control Point 0x2A52 */
+var RACP_CODES={1:'Success',2:'Op code not supported',3:'Invalid operator',4:'Operator not supported',5:'Invalid operand',6:'No records found',7:'Abort unsuccessful',8:'Procedure not completed',9:'Operand not supported'};
+function racpReportAll(){return new Uint8Array([1,1])}
+function racpReportNumber(){return new Uint8Array([4,1])}
+function racpReportSince(seq){return new Uint8Array([1,3,1,seq&255,(seq>>8)&255])}
+function racpAbort(){return new Uint8Array([3,0])}
+function parseRacp(dv){
+  var op=dv.getUint8(0);
+  if(op===5&&dv.byteLength>=4)return {type:'count',count:dv.getUint16(2,true)};
+  if(op===6&&dv.byteLength>=4){var code=dv.getUint8(3);return {type:'response',reqOp:dv.getUint8(2),code:code,text:RACP_CODES[code]||'Unknown',ok:code===1,none:code===6}}
+  return {type:'other',op:op};
+}
+
+/* Blood Pressure Measurement 0x2A35 (also usable for 0x2A36 first fields). Values in mmHg. */
+function parseBloodPressure(dv){
+  var f=dv.getUint8(0),o=1,kpa=!!(f&1);
+  var s=sfloat(dv,o);o+=2;var d=sfloat(dv,o);o+=2;var m=sfloat(dv,o);o+=2;
+  var conv=function(v){return v===null?null:(kpa?round(v*MMHG_PER_KPA,0):round(v,0))};
+  var r={sys:conv(s),dia:conv(d),map:conv(m),unit:kpa?'kPa':'mmHg',t:null,pulse:null,userId:null,status:null,flags:[]};
+  if(f&2){r.t=dateTime(dv,o);o+=7}
+  if(f&4){var p=sfloat(dv,o);o+=2;r.pulse=p===null?null:round(p,0)}
+  if(f&8){r.userId=dv.getUint8(o);o+=1}
+  if(f&16){
+    var st=dv.getUint16(o,true);o+=2;r.status=st;
+    if(st&1)r.flags.push('Body movement detected');
+    if(st&2)r.flags.push('Cuff fit looser than expected');
+    if(st&4)r.flags.push('Irregular pulse flagged by the device');
+    if(st&32)r.flags.push('Measurement position flagged by the device');
+  }
+  return r;
+}
+
+function mmolToMgdl(v){return v*MGDL_PER_MMOL}
+function mgdlToMmol(v){return v/MGDL_PER_MMOL}
+
+/* beat-to-beat variation from RR intervals in ms (rough) */
+function rmssd(rr){
+  var a=rr.filter(function(x){return x>=300&&x<=2000});
+  if(a.length<8)return null;
+  var s=0,n=0;
+  for(var i=1;i<a.length;i++){var d=a[i]-a[i-1];s+=d*d;n++}
+  return round(Math.sqrt(s/n),1);
+}
+
+return {sfloat:sfloat,dateTime:dateTime,parseHeartRate:parseHeartRate,parseGlucose:parseGlucose,parseGlucoseContext:parseGlucoseContext,
+  parseRacp:parseRacp,racpReportAll:racpReportAll,racpReportNumber:racpReportNumber,racpReportSince:racpReportSince,racpAbort:racpAbort,
+  parseBloodPressure:parseBloodPressure,mmolToMgdl:mmolToMgdl,mgdlToMmol:mgdlToMmol,rmssd:rmssd,round:round,MGDL_PER_MMOL:MGDL_PER_MMOL};
+});
+
+/* Coffeebreak shared helpers: storage, charts, export, share, reminders, Bluetooth session. Browser built-ins only. */
+var CB=(function(){
+'use strict';
+var P=window.CBP;
+function $(id){return document.getElementById(id)}
+function h(tag,attrs,kids){
+  var e=document.createElement(tag);
+  if(attrs)for(var k in attrs){
+    if(k==='text')e.textContent=attrs[k];
+    else if(k==='class')e.className=attrs[k];
+    else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),attrs[k]);
+    else e.setAttribute(k,attrs[k]);
+  }
+  (kids||[]).forEach(function(c){if(c!=null)e.appendChild(typeof c==='string'?document.createTextNode(c):c)});
+  return e;
+}
+function pad(n){return n<10?'0'+n:''+n}
+function dayKey(d){d=d||new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function isoLocal(t){
+  var d=new Date(t),o=-d.getTimezoneOffset(),s=o<0?'-':'+';o=Math.abs(o);
+  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())+s+pad(Math.floor(o/60))+':'+pad(o%60);
+}
+function fmtDate(t){try{return new Date(t).toLocaleString(undefined,{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})}catch(e){return isoLocal(t)}}
+function fmtDay(t){try{return new Date(t).toLocaleDateString(undefined,{day:'numeric',month:'short'})}catch(e){return dayKey(new Date(t))}}
+
+var toastTimer=0;
+function toast(msg){
+  var el=$('toast');if(!el)return;
+  el.textContent=msg;el.className='on';
+  clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.className=''},2600);
+}
+
+/* ---------- storage: localStorage with an in-memory fallback ---------- */
+function makeStore(key){
+  var mem=[],persistent=true;
+  function load(){
+    try{var s=localStorage.getItem(key);var a=s?JSON.parse(s):[];mem=a;return a}
+    catch(e){persistent=false;return mem}
+  }
+  function save(a){
+    mem=a;
+    try{localStorage.setItem(key,JSON.stringify(a))}catch(e){persistent=false}
+  }
+  return {
+    all:function(){var a=load().slice();a.sort(function(x,y){return y.t-x.t});return a},
+    add:function(rec){
+      var a=load();
+      if(rec.key&&a.some(function(r){return r.key===rec.key}))return false;
+      rec.id=rec.id||(Date.now().toString(36)+Math.random().toString(36).slice(2,6));
+      a.push(rec);save(a);return true;
+    },
+    remove:function(id){save(load().filter(function(r){return r.id!==id}))},
+    clear:function(){save([])},
+    replaceAll:function(a){save(a)},
+    isPersistent:function(){load();return persistent}
+  };
+}
+function getPref(k,def){try{var v=localStorage.getItem(k);return v===null?def:v}catch(e){return def}}
+function setPref(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+
+/* ---------- export and share ---------- */
+function csvCell(v){
+  if(v===null||v===undefined)return '';
+  var s=String(v);
+  if(/^[=+@\t\r]/.test(s)||(/^-/.test(s)&&isNaN(Number(s))))s=' '+s;   // keep spreadsheets from reading text as a formula
+  if(/[",\n\r]/.test(s))s='"'+s.replace(/"/g,'""')+'"';
+  return s;
+}
+function toCSV(cols,rows){
+  var out=[cols.map(function(c){return csvCell(c.label)}).join(',')];
+  rows.forEach(function(r){out.push(cols.map(function(c){return csvCell(c.get(r))}).join(','))});
+  return out.join('\r\n')+'\r\n';
+}
+function download(name,mime,text){
+  var url=URL.createObjectURL(new Blob([text],{type:mime}));
+  var a=h('a',{href:url,download:name});document.body.appendChild(a);a.click();
+  setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url)},1500);
+}
+function canShareFiles(){
+  try{
+    if(!navigator.share||!navigator.canShare||typeof File==='undefined')return false;
+    return navigator.canShare({files:[new File(['x'],'x.csv',{type:'text/csv'})]});
+  }catch(e){return false}
+}
+function shareFile(name,mime,text,title){
+  try{
+    var f=new File([text],name,{type:mime});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){
+      return navigator.share({files:[f],title:title}).then(function(){return 'shared'}).catch(function(e){
+        if(e&&e.name==='AbortError')return 'cancelled';
+        download(name,mime,text);return 'downloaded';
+      });
+    }
+  }catch(e){}
+  download(name,mime,text);
+  return Promise.resolve('downloaded');
+}
+
+/* Share and export panel. cfg: {el, appName, slug, store, cols, onChange} */
+function sharePanel(cfg){
+  var el=cfg.el;
+  el.innerHTML='<h2>Save and share your history</h2>'+
+    '<p class="small mut">Your readings stay on this device only. Pick a file type, then share it or save it.</p>'+
+    '<div class="row"><button type="button" id="shCsv" class="primary">Share CSV file</button><button type="button" id="shJson">Share JSON file</button></div>'+
+    '<div class="row"><button type="button" id="dlCsv">Save CSV</button><button type="button" id="dlJson">Save JSON</button></div>'+
+    '<div class="status" id="shMsg" hidden></div>'+
+    '<h2 style="margin-top:16px">Health apps</h2>'+
+    '<p class="small">A web page cannot write straight into Apple Health or Health Connect on Android. That is a limit set by those systems, not by this app. What you can do is share the file above. Some importer apps can read a CSV or JSON file into Apple Health or Health Connect, but file layouts differ between apps, so a file may need adjusting and no particular importer is promised to accept it.</p>'+
+    '<h2 style="margin-top:16px">Backup</h2>'+
+    '<p class="small mut">A JSON file can be loaded back in on another device.</p>'+
+    '<div class="row"><button type="button" id="impBtn">Load a JSON backup</button><button type="button" id="clrBtn">Delete all saved data</button></div>'+
+    '<input type="file" id="impFile" accept="application/json,.json" hidden>'+
+    '<p class="small mut" id="persistNote"></p>';
+  var st=cfg.store;
+  function stamp(){return dayKey()}
+  function csv(){return toCSV(cfg.cols,st.all())}
+  function json(){return JSON.stringify({app:cfg.appName,exported:isoLocal(Date.now()),version:1,records:st.all()},null,2)}
+  function guard(){
+    if(!st.all().length){msg('Nothing saved yet. Save a reading first.');return false}
+    return true;
+  }
+  function msg(t){var m=el.querySelector('#shMsg');m.hidden=false;m.className='status';m.textContent=t}
+  function doShare(kind){
+    if(!guard())return;
+    var isCsv=kind==='csv',name=cfg.slug+'-'+stamp()+(isCsv?'.csv':'.json');
+    if(!canShareFiles())msg('This browser cannot share files directly, so the file was saved to your downloads instead.');
+    shareFile(name,isCsv?'text/csv':'application/json',isCsv?csv():json(),cfg.appName).then(function(r){
+      if(r==='shared')msg('Shared. Choose your health app or a files app from the share sheet.');
+      else if(r==='downloaded'&&canShareFiles())msg('Share was not possible, so the file was saved to your downloads.');
+    });
+  }
+  function doSave(kind){
+    if(!guard())return;
+    var isCsv=kind==='csv';
+    download(cfg.slug+'-'+stamp()+(isCsv?'.csv':'.json'),isCsv?'text/csv':'application/json',isCsv?csv():json());
+    msg('File saved to your downloads.');
+  }
+  el.querySelector('#shCsv').addEventListener('click',function(){doShare('csv')});
+  el.querySelector('#shJson').addEventListener('click',function(){doShare('json')});
+  el.querySelector('#dlCsv').addEventListener('click',function(){doSave('csv')});
+  el.querySelector('#dlJson').addEventListener('click',function(){doSave('json')});
+  var file=el.querySelector('#impFile');
+  el.querySelector('#impBtn').addEventListener('click',function(){file.click()});
+  file.addEventListener('change',function(){
+    var f=file.files&&file.files[0];if(!f)return;
+    var rd=new FileReader();
+    rd.onload=function(){
+      try{
+        var d=JSON.parse(rd.result),recs=Array.isArray(d)?d:d.records,have={},n=0;
+        if(!Array.isArray(recs))throw new Error('x');
+        st.all().forEach(function(r){have[r.id]=1});
+        recs.forEach(function(r){
+          if(r&&typeof r.t==='number'&&!have[r.id]){st.add(r);n++}
+        });
+        msg('Loaded '+n+' new reading'+(n===1?'':'s')+'.');
+        if(cfg.onChange)cfg.onChange();
+      }catch(e){msg('That file could not be read. Use a JSON file saved from this app.')}
+      file.value='';
+    };
+    rd.readAsText(f);
+  });
+  el.querySelector('#clrBtn').addEventListener('click',function(){
+    if(!st.all().length){msg('Nothing to delete.');return}
+    if(window.confirm('Delete all readings saved in this app on this device? This cannot be undone.')){
+      st.clear();msg('All saved data deleted.');if(cfg.onChange)cfg.onChange();
+    }
+  });
+  el.querySelector('#persistNote').textContent=st.isPersistent()?'Saved in this browser on this device. Clearing the browser data for this site will erase it, so keep a backup file if it matters to you.':'This browser is not letting the app save data, so readings will be lost when you close the page. Save a file before you leave.';
+}
+
+/* ---------- charts ---------- */
+function cssVar(n,def){var v=getComputedStyle(document.body).getPropertyValue(n).trim();return v||def}
+/* series: [{pts:[{t,v}],color,label}]. o: {dec,unit,bandLo,bandHi,xfmt,min,max} */
+function lineChart(cv,series,o){
+  o=o||{};
+  var dpr=window.devicePixelRatio||1,w=cv.clientWidth||320,ht=cv.clientHeight||170;
+  cv.width=Math.round(w*dpr);cv.height=Math.round(ht*dpr);
+  var c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,ht);
+  var tx=cssVar('--tx','#fff'),mut=cssVar('--mut','#aaa'),line=cssVar('--line','#444');
+  var all=[];series.forEach(function(s){all=all.concat(s.pts)});
+  c.font='12px system-ui,sans-serif';c.textBaseline='middle';
+  if(!all.length){c.fillStyle=mut;c.textAlign='center';c.fillText('No data yet',w/2,ht/2);return}
+  var xmin=Infinity,xmax=-Infinity,ymin=Infinity,ymax=-Infinity;
+  all.forEach(function(p){xmin=Math.min(xmin,p.t);xmax=Math.max(xmax,p.t);ymin=Math.min(ymin,p.v);ymax=Math.max(ymax,p.v)});
+  if(o.bandLo!=null)ymin=Math.min(ymin,o.bandLo);
+  if(o.bandHi!=null)ymax=Math.max(ymax,o.bandHi);
+  if(o.min!=null)ymin=Math.min(ymin,o.min);
+  if(o.max!=null)ymax=Math.max(ymax,o.max);
+  if(ymax-ymin<1e-9){ymin-=1;ymax+=1}
+  var padY=(ymax-ymin)*0.12;ymin-=padY;ymax+=padY;
+  if(xmax-xmin<1)xmax=xmin+3600000;
+  var L=40,R=10,T=10,B=24,pw=w-L-R,ph=ht-T-B;
+  function X(t){return L+(t-xmin)/(xmax-xmin)*pw}
+  function Y(v){return T+(1-(v-ymin)/(ymax-ymin))*ph}
+  var dec=o.dec||0,i;
+  c.strokeStyle=line;c.lineWidth=1;c.fillStyle=mut;c.textAlign='right';
+  for(i=0;i<=3;i++){
+    var yy=T+ph*i/3,val=ymax-(ymax-ymin)*i/3;
+    c.beginPath();c.moveTo(L,yy);c.lineTo(w-R,yy);c.stroke();
+    c.fillText(val.toFixed(dec),L-5,yy);
+  }
+  if(o.bandLo!=null&&o.bandHi!=null){
+    c.fillStyle='rgba(120,200,140,.18)';c.fillRect(L,Y(o.bandHi),pw,Y(o.bandLo)-Y(o.bandHi));
+  }else{
+    c.setLineDash([6,4]);c.lineWidth=2;
+    if(o.bandLo!=null){c.strokeStyle=cssVar('--ok','#7be0a4');c.beginPath();c.moveTo(L,Y(o.bandLo));c.lineTo(w-R,Y(o.bandLo));c.stroke()}
+    if(o.bandHi!=null){c.strokeStyle=cssVar('--ok','#7be0a4');c.beginPath();c.moveTo(L,Y(o.bandHi));c.lineTo(w-R,Y(o.bandHi));c.stroke()}
+    c.setLineDash([]);
+  }
+  c.textAlign='left';c.fillStyle=mut;
+  var xf=o.xfmt||fmtDay;
+  c.fillText(xf(xmin),L,ht-9);c.textAlign='right';c.fillText(xf(xmax),w-R,ht-9);
+  series.forEach(function(s){
+    var pts=s.pts.slice().sort(function(a,b){return a.t-b.t});
+    if(!pts.length)return;
+    c.strokeStyle=s.color;c.fillStyle=s.color;c.lineWidth=o.thin?2:3;c.lineJoin='round';
+    if(pts.length>1){c.beginPath();pts.forEach(function(p,k){if(k)c.lineTo(X(p.t),Y(p.v));else c.moveTo(X(p.t),Y(p.v))});c.stroke()}
+    if(!o.noDots&&pts.length<=120)pts.forEach(function(p){c.beginPath();c.arc(X(p.t),Y(p.v),pts.length>40?2.5:4,0,7);c.fill()});
+  });
+  if(series.length>1&&series[0].label){
+    c.textAlign='left';var x0=L+6;
+    series.forEach(function(s){c.fillStyle=s.color;c.fillRect(x0,T+3,10,10);c.fillStyle=tx;c.fillText(s.label,x0+14,T+9);x0+=14+c.measureText(s.label).width+14});
+  }
+}
+
+/* ---------- tabs ---------- */
+function tabs(nav,panels,onChange){
+  var btns=Array.prototype.slice.call(nav.querySelectorAll('button[data-tab]'));
+  function show(name){
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-tab')===name))});
+    for(var k in panels)panels[k].hidden=(k!==name);
+    if(onChange)onChange(name);
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){show(b.getAttribute('data-tab'))})});
+  return show;
+}
+
+/* ---------- on-screen reminder note ---------- */
+function reminder(cfg){
+  var key='cb_rem_'+cfg.slug,banner=cfg.banner,panel=cfg.panel,timer=0;
+  function load(){try{return JSON.parse(localStorage.getItem(key))||{}}catch(e){return {}}}
+  function save(s){try{localStorage.setItem(key,JSON.stringify(s))}catch(e){}}
+  function due(s){
+    if(!s.text)return false;
+    if(s.done===dayKey())return false;
+    if(!s.time)return false;
+    var p=s.time.split(':'),n=new Date(),m=n.getHours()*60+n.getMinutes();
+    return m>=(+p[0])*60+(+p[1]);
+  }
+  function render(){
+    var s=load();
+    if(!s.text||s.done===dayKey()){banner.hidden=true;return}
+    banner.hidden=false;banner.innerHTML='';
+    var d=due(s);banner.className=d?'due':'';banner.id='remBanner';
+    banner.appendChild(h('span',{text:(d?'Reminder due: ':'Reminder: ')+s.text+(s.time?' ('+s.time+')':'')}));
+    banner.appendChild(h('button',{type:'button',text:'Done for today',onclick:function(){var x=load();x.done=dayKey();save(x);render()}}));
+  }
+  panel.innerHTML='<h2>Reminder note</h2>'+
+    '<p class="small mut">This shows a note at the top of this page. It only appears while the page is open. No notifications are sent and nothing leaves your device.</p>'+
+    '<label for="remText">Note</label><input id="remText" maxlength="100" placeholder="For example: check before breakfast">'+
+    '<label for="remTime">Time of day (optional)</label><input id="remTime" type="time">'+
+    '<div class="row"><button type="button" class="primary" id="remSave">Save reminder</button><button type="button" id="remClear">Remove reminder</button></div>';
+  var s0=load();panel.querySelector('#remText').value=s0.text||'';panel.querySelector('#remTime').value=s0.time||'';
+  panel.querySelector('#remSave').addEventListener('click',function(){
+    var t=panel.querySelector('#remText').value.trim();
+    if(!t){toast('Type a note first');return}
+    save({text:t,time:panel.querySelector('#remTime').value||'',done:''});render();toast('Reminder saved');
+  });
+  panel.querySelector('#remClear').addEventListener('click',function(){save({});panel.querySelector('#remText').value='';panel.querySelector('#remTime').value='';render();toast('Reminder removed')});
+  render();
+  timer=setInterval(render,30000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)render()});
+}
+
+/* ---------- Bluetooth support and sessions ---------- */
+function bleSupport(){
+  var ua=navigator.userAgent||'';
+  var ios=/iPad|iPhone|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  if(!window.isSecureContext)return {ok:false,msg:'Bluetooth needs a secure page (an address starting with https). Open the app from its https link.'};
+  if(navigator.bluetooth&&navigator.bluetooth.requestDevice)return {ok:true};
+  if(ios)return {ok:false,msg:'Safari and Chrome on iPhone and iPad cannot connect to Bluetooth devices from a web page. On iPhone or iPad, open this page in Bluefy, a free browser that supports Web Bluetooth. Or use Chrome on an Android phone. Manual entry still works here.'};
+  return {ok:false,msg:'This browser does not support Web Bluetooth. Use Chrome or Edge on Android, Windows, Mac, Linux or Chromebook, or Bluefy on iPhone and iPad. Firefox and Safari do not support it. Manual entry still works here.'};
+}
+function bleError(e){
+  var n=e&&e.name,m=(e&&e.message)||'';
+  if(n==='NotFoundError'&&/cancel/i.test(m))return 'No device was chosen. Tap the connect button to try again.';
+  if(n==='NotFoundError')return 'That device does not offer the expected service. Check it is the right kind of device, or try "Show all devices".';
+  if(n==='SecurityError'||n==='NotAllowedError')return 'Bluetooth was blocked. Allow Bluetooth for this page. If the page is shown inside a small frame, open it in its own tab first.';
+  if(n==='NetworkError')return 'Could not connect. Make sure the device is switched on, awake and close by, and that no other app is already connected to it.';
+  if(n==='InvalidStateError')return 'The device connection was interrupted. Try again.';
+  if(n==='NotSupportedError')return 'This device or browser does not support that Bluetooth feature.';
+  return 'Bluetooth problem: '+(m||n||'unknown')+'. Try again.';
+}
+/* cfg: {service, optionalServices, chars:[{uuid,onValue,optional}], onStatus(state,text), onReady(api)} */
+function bleSession(cfg){
+  var dev=null,svc=null,want=false,attempts=0,timer=0,hooks=[],chars={},busy=false;
+  var api={};
+  function st(s,t){if(cfg.onStatus)cfg.onStatus(s,t)}
+  function nm(){return dev&&dev.name?dev.name:'device'}
+  function unhook(){hooks.forEach(function(x){try{x[0].removeEventListener('characteristicvaluechanged',x[1])}catch(e){}});hooks=[];chars={}}
+  async function setup(){
+    st('connecting','Connecting to '+nm()+' ...');
+    var server=await dev.gatt.connect();
+    svc=await server.getPrimaryService(cfg.service);
+    unhook();
+    for(var i=0;i<cfg.chars.length;i++){
+      var d=cfg.chars[i],ch;
+      try{ch=await svc.getCharacteristic(d.uuid)}catch(e){if(d.optional)continue;throw e}
+      var fn=(function(dd){return function(ev){try{dd.onValue(ev.target.value)}catch(err){console.error(err)}}})(d);
+      ch.addEventListener('characteristicvaluechanged',fn);hooks.push([ch,fn]);chars[d.uuid]=ch;
+      try{await ch.startNotifications()}catch(e){if(!d.optional)throw e}
+    }
+    attempts=0;
+    st('connected','Connected to '+nm());
+    if(cfg.onReady)cfg.onReady(api,server);
+  }
+  function onDisc(){
+    if(!want)return;
+    if(attempts>=8){want=false;st('lost','Connection lost. Move closer, check the device is awake, then tap Reconnect.');return}
+    var delay=Math.min(15000,1000*Math.pow(2,attempts));attempts++;
+    st('reconnecting','Connection dropped. Reconnecting (try '+attempts+' of 8) ...');
+    clearTimeout(timer);
+    timer=setTimeout(function(){
+      if(!want)return;
+      setup().catch(function(){onDisc()});
+    },delay);
+  }
+  api.pick=async function(all){
+    if(busy)return;
+    var sup=bleSupport();if(!sup.ok){st('unsupported',sup.msg);return}
+    busy=true;
+    try{
+      var opts=all?{acceptAllDevices:true,optionalServices:[cfg.service].concat(cfg.optionalServices||[])}:{filters:[{services:[cfg.service]}],optionalServices:cfg.optionalServices||[]};
+      var d=await navigator.bluetooth.requestDevice(opts);
+      if(dev&&dev!==d){try{dev.removeEventListener('gattserverdisconnected',onDisc)}catch(e){}}
+      dev=d;dev.addEventListener('gattserverdisconnected',onDisc);
+      want=true;attempts=0;
+      await setup();
+    }catch(e){
+      var cancelled=e&&e.name==='NotFoundError'&&/cancel/i.test(e.message||'');
+      if(cancelled){if(!(dev&&want))st('idle',bleError(e))}
+      else{want=false;st('error',bleError(e))}
+    }finally{busy=false}
+  };
+  api.reconnect=async function(){
+    if(!dev){return api.pick(false)}
+    if(busy)return;busy=true;want=true;attempts=0;clearTimeout(timer);
+    try{await setup()}catch(e){want=false;st('error',bleError(e))}finally{busy=false}
+  };
+  api.disconnect=function(){
+    want=false;clearTimeout(timer);
+    try{if(dev&&dev.gatt&&dev.gatt.connected)dev.gatt.disconnect()}catch(e){}
+    unhook();st('idle','Disconnected.');
+  };
+  api.char=function(uuid){return chars[uuid]||null};
+  api.service=function(){return svc};
+  api.deviceName=nm;
+  api.hasDevice=function(){return !!dev};
+  return api;
+}
+
+function installHook(btn,hint){
+  var dp=null;
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;btn.hidden=false});
+  btn.addEventListener('click',function(){if(dp){dp.prompt();dp=null;btn.hidden=true}});
+  var ios=/iPad|iPhone|iPod/.test(navigator.userAgent||'');
+  hint.textContent=ios?'To install on iPhone or iPad: tap the Share icon, then Add to Home Screen.':'To install: use your browser menu and choose Install app or Add to Home screen.';
+}
+function registerSW(){
+  if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+
+return {$:$,h:h,toast:toast,makeStore:makeStore,getPref:getPref,setPref:setPref,toCSV:toCSV,isoLocal:isoLocal,fmtDate:fmtDate,fmtDay:fmtDay,dayKey:dayKey,
+  download:download,sharePanel:sharePanel,lineChart:lineChart,tabs:tabs,reminder:reminder,bleSupport:bleSupport,bleSession:bleSession,bleError:bleError,installHook:installHook,registerSW:registerSW,esc:esc,canShareFiles:canShareFiles};
+})();
+
+/* Heart rate over Bluetooth (service 0x180D, measurement 0x2A37). Shared by the Pulse and Heart apps. */
+CB.hrPanel=function(el,opts){
+  var P=window.CBP,$=function(s){return el.querySelector(s)};
+  el.innerHTML=
+   '<h2>Heart rate strap, watch or band</h2>'+
+   '<p class="small mut">Works with devices that share heart rate over Bluetooth, such as chest straps and bands. Some watches only share it when you switch on a setting like heart rate broadcast. Close other apps that may be connected to the device first.</p>'+
+   '<div class="status bad" id="hrSupport" hidden></div>'+
+   '<div class="wrap"><button type="button" class="primary" id="hrConnect">Connect heart rate device</button></div>'+
+   '<div class="wrap"><button type="button" class="link" id="hrAll">Cannot see yours? Show all Bluetooth devices</button></div>'+
+   '<div class="status" id="hrStatus">Not connected.</div>'+
+   '<div class="wrap" id="hrAgainRow" hidden><button type="button" id="hrAgain" class="primary">Reconnect</button></div>'+
+   '<div style="margin-top:12px"><div class="bigval" id="hrBpm">--<small>BPM</small></div>'+
+   '<div class="small mut" id="hrInfo">Waiting for a reading.</div></div>'+
+   '<canvas class="chart" id="hrChart" aria-label="Heart rate over the last 2 minutes"></canvas>'+
+   '<div class="row3"><div class="stat"><b id="hrMin">--</b><span>Lowest</span></div><div class="stat"><b id="hrAvg">--</b><span>Average</span></div><div class="stat"><b id="hrMax">--</b><span>Highest</span></div></div>'+
+   '<div class="row3"><div class="stat"><b id="hrRR">--</b><span>Last beat gap (ms)</span></div><div class="stat"><b id="hrVar">--</b><span>Variation (RMSSD, ms)</span></div><div class="stat"><b id="hrBat">--</b><span>Battery</span></div></div>'+
+   '<div class="row"><button type="button" class="primary" id="hrSave" disabled>Save this reading</button><button type="button" id="hrOff" disabled>Disconnect</button></div>';
+  var sup=CB.bleSupport();
+  if(!sup.ok){var s=$('#hrSupport');s.hidden=false;s.textContent=sup.msg;$('#hrConnect').disabled=true;$('#hrAll').disabled=true}
+  var series=[],all=[],rrs=[],cur=0,lastRR=null,contact=null,devName='',paintQueued=false,var_=null;
+  function setStatus(state,text){
+    var s=$('#hrStatus');s.textContent=text;
+    s.className='status'+(state==='connected'?' good':(state==='error'||state==='lost'||state==='unsupported')?' err':(state==='reconnecting'||state==='connecting')?' bad':'');
+    $('#hrAgainRow').hidden=!(state==='lost'||state==='error')||!session.hasDevice();
+    $('#hrOff').disabled=!(state==='connected'||state==='reconnecting'||state==='connecting');
+    if(state==='connected'){devName=session.deviceName();$('#hrConnect').textContent='Connect a different device'}
+  }
+  function paint(){
+    paintQueued=false;
+    $('#hrBpm').firstChild.nodeValue=cur?String(cur):'--';
+    var now=Date.now(),pts=series.filter(function(p){return p.t>now-120000});
+    CB.lineChart($('#hrChart'),[{pts:pts,color:getComputedStyle(document.body).getPropertyValue('--c1').trim()||'#e9a8b4'}],{dec:0,thin:true,noDots:true,xfmt:function(t){var d=Math.round((now-t)/1000);return d<=1?'now':'-'+d+' s'}});
+    if(all.length){
+      var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all),sum=all.reduce(function(a,b){return a+b},0);
+      $('#hrMin').textContent=mn;$('#hrMax').textContent=mx;$('#hrAvg').textContent=Math.round(sum/all.length);
+    }
+    $('#hrRR').textContent=lastRR===null?'--':Math.round(lastRR);
+    $('#hrVar').textContent=var_===null?'--':Math.round(var_);
+    var info=contact===false?'Sensor not touching skin. Check the strap fit.':contact===true?'Sensor contact good.':'Live from your device.';
+    $('#hrInfo').textContent=info;
+    $('#hrSave').disabled=!cur;
+  }
+  function queue(){if(!paintQueued){paintQueued=true;requestAnimationFrame(paint)}}
+  function onValue(dv){
+    var r=P.parseHeartRate(dv);
+    contact=r.contact;
+    if(r.bpm>=20&&r.bpm<=250&&r.contact!==false){
+      cur=r.bpm;series.push({t:Date.now(),v:r.bpm});all.push(r.bpm);
+      if(series.length>600)series.shift();
+    }
+    if(r.rr.length){
+      r.rr.forEach(function(x){rrs.push(x)});lastRR=r.rr[r.rr.length-1];
+      if(rrs.length>120)rrs=rrs.slice(-120);
+      var rr=P.rmssd(rrs.slice(-60));var_=rr;
+    }
+    queue();
+  }
+  var session=CB.bleSession({
+    service:0x180D,optionalServices:['battery_service'],
+    chars:[{uuid:0x2A37,onValue:onValue}],
+    onStatus:setStatus,
+    onReady:function(api,server){
+      all=[];series=[];rrs=[];cur=0;lastRR=null;var_=null;
+      server.getPrimaryService('battery_service').then(function(s){return s.getCharacteristic('battery_level')}).then(function(c){return c.readValue()}).then(function(v){$('#hrBat').textContent=v.getUint8(0)+'%'}).catch(function(){$('#hrBat').textContent='n/a'});
+      queue();
+    }
+  });
+  $('#hrConnect').addEventListener('click',function(){session.pick(false)});
+  $('#hrAll').addEventListener('click',function(){session.pick(true)});
+  $('#hrAgain').addEventListener('click',function(){session.reconnect()});
+  $('#hrOff').addEventListener('click',function(){session.disconnect()});
+  $('#hrSave').addEventListener('click',function(){
+    if(!cur)return;
+    var rec={t:Date.now(),type:'hr',src:'bluetooth',bpm:cur,dev:devName||session.deviceName()};
+    if(all.length>1){
+      rec.min=Math.min.apply(null,all);rec.max=Math.max.apply(null,all);
+      rec.avg=Math.round(all.reduce(function(a,b){return a+b},0)/all.length);
+    }
+    if(var_!==null)rec.rmssd=var_;
+    opts.onSave(rec);
+  });
+  window.addEventListener('resize',queue);
+  paint();
+  return {disconnect:function(){session.disconnect()},repaint:queue};
+};
+
+/* ---------- Heart app glue ---------- */
+(function(){
+  var $=CB.$,P=window.CBP,store=CB.makeStore('cb_heart_v1'),filter='all';
+  var cols=[
+    {label:'date_time',get:function(r){return CB.isoLocal(r.t)}},
+    {label:'epoch_ms',get:function(r){return r.t}},
+    {label:'type',get:function(r){return r.type==='bp'?'blood_pressure':'heart_rate'}},
+    {label:'source',get:function(r){return r.src}},
+    {label:'heart_rate_bpm',get:function(r){return r.type==='hr'?r.bpm:r.pulse}},
+    {label:'systolic_mmHg',get:function(r){return r.sys}},
+    {label:'diastolic_mmHg',get:function(r){return r.dia}},
+    {label:'mean_arterial_mmHg',get:function(r){return r.map}},
+    {label:'bpm_session_min',get:function(r){return r.min}},
+    {label:'bpm_session_avg',get:function(r){return r.avg}},
+    {label:'bpm_session_max',get:function(r){return r.max}},
+    {label:'rmssd_ms',get:function(r){return r.rmssd}},
+    {label:'device_flags',get:function(r){return r.flags&&r.flags.length?r.flags.join('; '):''}},
+    {label:'device',get:function(r){return r.dev}},
+    {label:'note',get:function(r){return r.note}}
+  ];
+  function saved(msg){CB.toast(msg);renderHist()}
+  var hr=CB.hrPanel($('hrHost'),{onSave:function(rec){store.add(rec);saved('Saved '+rec.bpm+' BPM')}});
+
+  /* manual entries */
+  function num(id){var v=parseFloat($(id).value.replace(',','.'));return isNaN(v)?null:v}
+  $('mHrSave').addEventListener('click',function(){
+    var v=num('mHr');
+    if(v===null||v<20||v>250){CB.toast('Enter a number from 20 to 250');return}
+    store.add({t:Date.now(),type:'hr',src:'manual',bpm:Math.round(v)});$('mHr').value='';saved('Saved '+Math.round(v)+' BPM');
+  });
+  $('mBpSave').addEventListener('click',function(){
+    var s=num('mSys'),d=num('mDia'),p=num('mPul');
+    if(s===null||d===null){CB.toast('Enter both numbers');return}
+    if(s<50||s>260||d<30||d>160){CB.toast('Check the numbers, they look out of range');return}
+    if(s<=d){CB.toast('The top number should be higher than the bottom number');return}
+    if(p!==null&&(p<20||p>250)){CB.toast('Pulse should be 20 to 250');return}
+    var rec={t:Date.now(),type:'bp',src:'manual',sys:Math.round(s),dia:Math.round(d)};
+    if(p!==null)rec.pulse=Math.round(p);
+    var n=$('mNote').value.trim();if(n)rec.note=n;
+    store.add(rec);['mSys','mDia','mPul','mNote'].forEach(function(i){$(i).value=''});saved('Saved '+rec.sys+'/'+rec.dia);
+  });
+
+  /* Bluetooth blood pressure cuff */
+  var sup=CB.bleSupport();
+  if(!sup.ok){$('bpSupport').hidden=false;$('bpSupport').textContent=sup.msg;$('bpConnect').disabled=true;$('bpAll').disabled=true}
+  function bpStatus(state,text){
+    var s=$('bpStatus');s.textContent=text;
+    s.className='status'+(state==='connected'?' good':(state==='error'||state==='lost'||state==='unsupported')?' err':(state==='reconnecting'||state==='connecting')?' bad':'');
+    $('bpAgainRow').hidden=!(state==='lost'||state==='error')||!bp.hasDevice();
+    $('bpOff').disabled=!(state==='connected'||state==='reconnecting'||state==='connecting');
+  }
+  function onBp(dv){
+    var r=P.parseBloodPressure(dv);
+    if(r.sys===null||r.dia===null){CB.toast('The cuff sent a reading that could not be read');return}
+    var now=Date.now(),t=(r.t&&r.t>946684800000&&r.t<=now+86400000)?r.t:now;
+    var rec={t:t,type:'bp',src:'bluetooth',sys:r.sys,dia:r.dia,dev:bp.deviceName(),key:'bp|'+bp.deviceName()+'|'+t+'|'+r.sys+'|'+r.dia};
+    if(r.map!==null)rec.map=r.map;if(r.pulse!==null)rec.pulse=r.pulse;if(r.flags.length)rec.flags=r.flags;
+    var added=store.add(rec);
+    var el=$('bpLast');el.hidden=false;el.innerHTML='';
+    el.appendChild(document.createTextNode(r.sys+' / '+r.dia));el.appendChild(CB.h('small',{text:'mmHg'+(r.pulse!==null?'   pulse '+r.pulse:'')}));
+    $('bpLastInfo').textContent=(added?'Saved. ':'Already saved. ')+CB.fmtDate(t)+(r.flags.length?' - '+r.flags.join('; '):'');
+    if(added)renderHist();
+  }
+  var bp=CB.bleSession({service:0x1810,chars:[{uuid:0x2A35,onValue:onBp}],onStatus:bpStatus});
+  $('bpConnect').addEventListener('click',function(){bp.pick(false)});
+  $('bpAll').addEventListener('click',function(){bp.pick(true)});
+  $('bpAgain').addEventListener('click',function(){bp.reconnect()});
+  $('bpOff').addEventListener('click',function(){bp.disconnect()});
+
+  /* history */
+  function avg(a){return a.length?Math.round(a.reduce(function(x,y){return x+y},0)/a.length):null}
+  function renderHist(){
+    var all=store.all().filter(function(r){return filter==='all'||r.type===filter});
+    var hrs=all.filter(function(r){return r.type==='hr'}),bps=all.filter(function(r){return r.type==='bp'});
+    $('hsN').textContent=all.length;
+    var a=avg(hrs.map(function(r){return r.bpm}));$('hsHr').textContent=a===null?'--':a;
+    var s=avg(bps.map(function(r){return r.sys})),d=avg(bps.map(function(r){return r.dia}));$('hsBp').textContent=s===null?'--':s+'/'+d;
+    var cs=getComputedStyle(document.body),c1=cs.getPropertyValue('--c1').trim(),c2=cs.getPropertyValue('--c2').trim();
+    CB.lineChart($('bpChart'),[
+      {pts:bps.map(function(r){return {t:r.t,v:r.sys}}),color:c1,label:'Top'},
+      {pts:bps.map(function(r){return {t:r.t,v:r.dia}}),color:c2,label:'Bottom'}],{dec:0});
+    CB.lineChart($('hrHist'),[{pts:hrs.map(function(r){return {t:r.t,v:r.bpm}}),color:c1}],{dec:0});
+    $('cBpT').hidden=$('bpChart').hidden=(filter==='hr');
+    $('cHrT').hidden=$('hrHist').hidden=(filter==='bp');
+    var ul=$('histList');ul.innerHTML='';
+    if(!all.length){ul.appendChild(CB.h('li',{},[CB.h('span',{class:'mut',text:'No saved readings yet.'})]));return}
+    all.slice(0,200).forEach(function(r){
+      var main,info;
+      if(r.type==='bp'){
+        main=r.sys+' / '+r.dia+' mmHg'+(r.pulse?'  pulse '+r.pulse:'');
+        info=(r.src==='manual'?'By hand':'Bluetooth'+(r.dev?' - '+r.dev:''))+(r.flags&&r.flags.length?' - '+r.flags.join('; '):'')+(r.note?' - '+r.note:'');
+      }else{
+        main=r.bpm+' BPM';
+        info=(r.src==='manual'?'By hand':'Bluetooth'+(r.dev?' - '+r.dev:''))+(r.min!=null?' - session '+r.min+' to '+r.max+', average '+r.avg:'');
+      }
+      ul.appendChild(CB.h('li',{},[
+        CB.h('div',{},[CB.h('div',{class:'v',text:main}),CB.h('div',{class:'d',text:CB.fmtDate(r.t)+' - '+info})]),
+        CB.h('button',{type:'button',text:'Delete',onclick:function(){store.remove(r.id);renderHist()}})
+      ]));
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#filt button'),function(b){
+    b.addEventListener('click',function(){
+      filter=b.getAttribute('data-f');
+      Array.prototype.forEach.call(document.querySelectorAll('#filt button'),function(x){x.setAttribute('aria-pressed',String(x===b))});
+      renderHist();
+    });
+  });
+  CB.sharePanel({el:$('shareHost'),appName:'Coffeebreak Heart',slug:'coffeebreak-heart',store:store,cols:cols,onChange:renderHist});
+  CB.reminder({slug:'heart',banner:$('remBanner'),panel:$('remHost')});
+  CB.tabs($('nav'),{hr:$('p-hr'),bp:$('p-bp'),hist:$('p-hist'),share:$('p-share')},function(name){
+    if(name==='hist')renderHist();
+    if(name==='hr')hr.repaint();
+  });
+  renderHist();
+})();
+
+(function(){
+  CB.registerSW();
+  CB.installHook(document.getElementById('btnInstall'),document.getElementById('installHint'));
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+Title: Coffeebreak Music Software
+Short description: Drum pad, beat maker, metronome, chord finder, piano and recorder in your browser. Free, no installs.
+Description:
+Coffeebreak Music Software is a set of six music tools that run in your browser with the Web Audio API: an 8 pad drum pad with keyboard keys, a 16 step beat maker with tempo and random beats, a metronome with tap tempo, a chord finder with 10 chord types and chords in a key, a 16 key piano keyboard, and a simple recorder using MediaRecorder for your microphone or the app sound. Takes stay on your device until you download them.
+No samples, no installs, no paid services, nothing uploaded.
+Coffeebreak, songwriter and creator from Newcastle NSW.
+Itch: https://coffeebreaks.itch.io
+Kind: HTML, playable in browser. Viewport 1000x800, mobile friendly. Price: free, pay what you want (music software, not the $5 app price).
+Tags: music, beat maker, drum machine, metronome, chords, piano, recorder, web audio, coffeebreak
+
+© Karen O'Brien (Coffeebreak). Karen O'Brien keeps all rights to this software, its design, name and logo. You may use and resell what you make with it, but may not copy the software or make your own version. Third-party brands named belong to their owners.

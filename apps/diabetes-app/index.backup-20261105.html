@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffe45c">
+<meta name="description" content="A simple blood glucose diary with Bluetooth meter support, mmol/L and mg/dL.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Coffeebreak Glucose</title>
+<style>
+:root{--bg:#0d0b0a;--panel:#1a1614;--line:#3a312c;--tx:#f6efe6;--mut:#b9aca0;--acc:#e9a8b4;--accx:#2a1418;--ok:#7be0a4;--warn:#ffcf5a;--red:#ff6b6b;--c1:#e9a8b4;--c2:#7bb8ff;--fs:16px;--hdr:#120f0e;--wbg:#2a1f12;--wline:#5a4322;--wtx:#ffe3b0}
+body.hc{--bg:#ffffff;--panel:#ffffff;--line:#000000;--tx:#000000;--mut:#222222;--acc:#0b3d91;--accx:#ffffff;--ok:#006b2d;--warn:#7a4a00;--red:#b00020;--c1:#0b3d91;--c2:#b00020;--fs:20px;--hdr:#fdf8ef;--wbg:#ffe45c;--wline:#000;--wtx:#000}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:var(--fs);line-height:1.45}
+body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+header{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--hdr)}
+header img{height:46px;width:auto;border-radius:6px;background:#fdf8ef}
+header h1{font-size:1.1rem;margin:0;letter-spacing:.04em}
+header h1 small{display:block;font-size:.75rem;font-weight:600;color:var(--acc);letter-spacing:.14em;text-transform:uppercase}
+body.hc header{border-bottom:3px solid #000}
+body.hc header h1 small{color:#000}
+.badge{margin-left:auto;font-size:.7rem;color:var(--mut);border:1px solid var(--line);border-radius:999px;padding:3px 9px;text-align:center}
+.warn{background:var(--wbg);border-bottom:1px solid var(--wline);color:var(--wtx);font-size:.82rem;padding:8px 14px;text-align:center}
+.warn b{color:inherit}
+body.hc .warn{font-size:.9rem;border-bottom:3px solid #000}
+.rights{font-size:.75rem;color:var(--mut);text-align:center;padding:6px 14px;border-bottom:1px solid var(--line)}
+#remBanner{padding:10px 14px;border-bottom:2px solid var(--acc);background:var(--panel);display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+#remBanner.due{background:var(--warn);color:#000;border-color:#000;font-weight:700}
+#remBanner button{min-height:40px;padding:6px 14px}
+main{max-width:680px;margin:0 auto;padding:12px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:12px}
+body.hc .panel{border:3px solid #000}
+.panel h2{margin:0 0 8px;font-size:1.1rem}
+.panel p{margin:6px 0}
+.mut{color:var(--mut)}
+.small{font-size:.82rem}
+button,.btn{font:inherit;font-weight:700;color:var(--tx);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 18px;min-height:52px;cursor:pointer;touch-action:manipulation}
+button:active{transform:scale(.98)}
+button.primary{background:var(--acc);color:var(--accx);border-color:var(--acc);font-size:1.05rem;padding:16px 26px}
+button.big{min-height:64px;font-size:1.15rem;width:100%}
+button.link{background:none;border:none;color:var(--acc);text-decoration:underline;min-height:40px;padding:6px 8px;font-weight:600}
+button:disabled{opacity:.45}
+button[aria-pressed=true]{outline:3px solid var(--acc);outline-offset:1px}
+body.hc button{border:3px solid #000}
+body.hc button[aria-pressed=true]{background:#000;color:#fff;outline:none}
+body.hc button.primary{border-color:#000}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.tabs{display:flex;gap:6px;padding:10px 12px 0;max-width:680px;margin:0 auto;overflow-x:auto}
+.tabs button{flex:1;min-width:0;padding:10px 6px;min-height:48px;white-space:nowrap}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.wrap button{flex:1 1 auto}
+label{display:block;font-weight:700;margin:10px 0 4px}
+input,select{font:inherit;width:100%;min-height:52px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--tx)}
+body.hc input,body.hc select{border:3px solid #000;background:#fff}
+input.huge{font-size:2.2rem;font-weight:800;text-align:center;min-height:76px}
+.stat{padding:10px 12px;border:1px solid var(--line);border-radius:12px;text-align:center}
+.stat b{display:block;font-size:1.4rem;font-variant-numeric:tabular-nums}
+.stat span{font-size:.75rem;color:var(--mut)}
+body.hc .stat{border:2px solid #000}
+.status{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:.95rem}
+.status.good{border-color:var(--ok);color:var(--ok)}
+.status.bad{border-color:var(--warn);color:var(--warn)}
+.status.err{border-color:var(--red);color:var(--red)}
+body.hc .status{border-width:2px}
+.bigval{font-size:4rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.bigval small{font-size:1rem;font-weight:600;color:var(--mut);margin-left:6px}
+canvas.chart{width:100%;height:170px;display:block;background:var(--bg);border:1px solid var(--line);border-radius:12px;margin-top:10px}
+body.hc canvas.chart{border:2px solid #000}
+ul.items{list-style:none;margin:8px 0 0;padding:0}
+ul.items li{display:flex;gap:10px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding:10px 2px}
+ul.items li:first-child{border-top:none}
+ul.items .v{font-weight:800;font-variant-numeric:tabular-nums}
+ul.items .d{font-size:.8rem;color:var(--mut)}
+ul.items button{min-height:44px;padding:6px 12px;font-size:.85rem}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:12px 18px;border-radius:999px;font-weight:700;z-index:9;max-width:90vw;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+footer{max-width:680px;margin:6px auto 30px;padding:12px;color:var(--mut);font-size:.86rem}
+footer h3{color:var(--tx);font-size:.95rem;margin:14px 0 4px}
+footer p{margin:0 0 6px}
+footer a{color:var(--acc)}
+.note{border-left:3px solid var(--warn);padding:2px 10px;color:var(--tx)}
+body.hc footer{color:#000}
+.unitrow button{font-size:1.2rem;min-height:64px}
+.ctxrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.ctxrow button{min-height:60px}
+#latest .bigval{font-size:4.6rem}
+body.hc button.primary{background:#0b3d91;color:#fff}
+body.hc .panel h2{font-size:1.25rem}
+body.hc ul.items .d{color:#222}
+body.hc .stat span{color:#222}
+
+</style>
+</head>
+<body class="hc">
+<header><img src="logo.png" alt="Coffeebreak logo"><h1>Coffeebreak<small>Glucose diary</small></h1><div class="badge">Not a medical<br>device</div></header>
+<div class="warn" role="note"><b>Not a medical device. For information only. Not for diagnosis or treatment. Talk to a doctor or call 000 in an emergency.</b></div>
+<div class="rights">Karen O'Brien (Coffeebreak) keeps all rights to this app, its designs, name and logo. Please do not copy or make your own versions.</div>
+<div id="remBanner" hidden></div>
+<nav class="tabs" id="nav" aria-label="Sections">
+  <button type="button" data-tab="add" aria-pressed="true">Add</button>
+  <button type="button" data-tab="hist" aria-pressed="false">History</button>
+  <button type="button" data-tab="share" aria-pressed="false">Share</button>
+</nav>
+<main>
+  <div id="p-add">
+    <section class="panel">
+      <h2>Units</h2>
+      <div class="row unitrow" id="unitRow">
+        <button type="button" data-u="mmol" aria-pressed="true">mmol/L</button>
+        <button type="button" data-u="mgdl" aria-pressed="false">mg/dL</button>
+      </div>
+    </section>
+    <section class="panel" id="latest">
+      <h2>Last reading</h2>
+      <div class="bigval" id="lastVal">--<small id="lastUnit">mmol/L</small></div>
+      <div class="mut" id="lastInfo">Nothing saved yet.</div>
+    </section>
+    <section class="panel">
+      <h2>Type in a reading</h2>
+      <label for="gIn" id="gLab">Blood glucose (mmol/L)</label>
+      <input id="gIn" class="huge" type="text" inputmode="decimal" autocomplete="off" placeholder="0.0">
+      <label>When was it</label>
+      <div class="ctxrow" id="ctxRow">
+        <button type="button" data-c="fasting" aria-pressed="false">Fasting</button>
+        <button type="button" data-c="before" aria-pressed="false">Before a meal</button>
+        <button type="button" data-c="after" aria-pressed="false">After a meal</button>
+        <button type="button" data-c="bedtime" aria-pressed="false">Bedtime</button>
+        <button type="button" data-c="other" aria-pressed="false">Other</button>
+      </div>
+      <label for="gNote">Note (optional)</label>
+      <input id="gNote" maxlength="80" placeholder="For example: after a walk">
+      <div style="margin-top:14px"><button type="button" class="primary big" id="gSave">Save reading</button></div>
+    </section>
+    <section class="panel">
+      <h2>Bluetooth glucose meter</h2>
+      <p class="small">Works with meters that share readings over the standard Bluetooth glucose service. Many meters only work with their own app, and some need to be paired first in your phone Bluetooth settings. If your meter is not found, type the reading in above.</p>
+      <div class="status bad" id="gmSupport" hidden></div>
+      <button type="button" class="primary big" id="gmConnect">Connect meter</button>
+      <div class="wrap"><button type="button" class="link" id="gmAll">Cannot see yours? Show all Bluetooth devices</button></div>
+      <div class="status" id="gmStatus">Not connected.</div>
+      <div class="wrap" id="gmAgainRow" hidden><button type="button" id="gmAgain" class="primary">Reconnect</button></div>
+      <div class="row"><button type="button" id="gmFetch" disabled>Get stored readings</button><button type="button" id="gmOff" disabled>Disconnect</button></div>
+      <p class="small mut">Switch the meter on and keep it close. Control solution tests are skipped. Readings received are saved automatically and are never saved twice.</p>
+    </section>
+  </div>
+  <div id="p-hist" hidden>
+    <section class="panel">
+      <h2>History</h2>
+      <div class="ctxrow" id="rangeRow" style="grid-template-columns:repeat(4,1fr)">
+        <button type="button" data-r="7" aria-pressed="false">7 days</button>
+        <button type="button" data-r="14" aria-pressed="true">14 days</button>
+        <button type="button" data-r="30" aria-pressed="false">30 days</button>
+        <button type="button" data-r="0" aria-pressed="false">All</button>
+      </div>
+      <div class="row3" style="grid-template-columns:repeat(2,1fr)">
+        <div class="stat"><b id="sN">0</b><span>Readings</span></div>
+        <div class="stat"><b id="sAvg">--</b><span id="sAvgL">Average</span></div>
+        <div class="stat"><b id="sMin">--</b><span>Lowest</span></div>
+        <div class="stat"><b id="sMax">--</b><span>Highest</span></div>
+      </div>
+      <canvas class="chart" id="gChart" style="height:220px" aria-label="Saved glucose readings over time"></canvas>
+      <details style="margin-top:10px"><summary style="font-weight:700;min-height:44px">Draw my own lines on the chart</summary>
+        <p class="small mut">These lines are only for your chart and are set by you.</p>
+        <div class="row"><div><label for="lnLo" id="lnLoL">Lower line</label><input id="lnLo" type="text" inputmode="decimal"></div>
+        <div><label for="lnHi" id="lnHiL">Upper line</label><input id="lnHi" type="text" inputmode="decimal"></div></div>
+      </details>
+      <ul class="items" id="gList"></ul>
+    </section>
+  </div>
+  <div id="p-share" hidden>
+    <section class="panel" id="shareHost"></section>
+    <section class="panel" id="remHost"></section>
+  </div>
+</main>
+
+<footer>
+<p class="note"><b>Not a medical device. For information only. Not for diagnosis or treatment. Talk to a doctor or call 000 in an emergency.</b></p>
+<p>Karen O'Brien (Coffeebreak) keeps all rights to this app, its designs, name and logo. Please do not copy or make your own versions.</p>
+<h3>Your data</h3><p>No account and no sign-up. Readings are kept in this browser on this device and are never sent anywhere. The app works offline once it has loaded.</p>
+<h3>Install</h3><p><button type="button" id="btnInstall" hidden>Install this app</button> <span id="installHint" class="small"></span></p>
+<p style="margin-top:10px">More from Coffeebreak: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+</footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+/* Coffeebreak BLE parsers. Pure functions, no browser needed. */
+(function(root,factory){
+  if(typeof module==='object'&&module.exports)module.exports=factory();
+  else root.CBP=factory();
+})(typeof self!=='undefined'?self:this,function(){
+'use strict';
+var MGDL_PER_MMOL=18.016;
+var MMHG_PER_KPA=7.50062;
+
+/* IEEE-11073 16-bit SFLOAT: 4-bit signed exponent, 12-bit signed mantissa. Returns null for NaN, NRes, reserved and infinities. */
+function sfloat(dv,off){
+  var raw=dv.getUint16(off,true);
+  if(raw===0x07FF||raw===0x0800||raw===0x0801||raw===0x07FE||raw===0x0802)return null;
+  var mant=raw&0x0FFF,exp=raw>>12;
+  if(mant>=0x0800)mant-=0x1000;
+  if(exp>=0x08)exp-=0x10;
+  var v=exp<0?mant/Math.pow(10,-exp):mant*Math.pow(10,exp);
+  return v;
+}
+function round(v,d){var m=Math.pow(10,d||0);return Math.round(v*m)/m}
+
+/* 7-byte BLE date time: year u16, month, day, hour, minute, second. Returns epoch ms (local time) or null. */
+function dateTime(dv,off){
+  var y=dv.getUint16(off,true),mo=dv.getUint8(off+2),d=dv.getUint8(off+3),h=dv.getUint8(off+4),mi=dv.getUint8(off+5),s=dv.getUint8(off+6);
+  if(!y||!mo||!d)return null;
+  var t=new Date(y,mo-1,d,h,mi,s).getTime();
+  return isNaN(t)?null:t;
+}
+
+/* Heart Rate Measurement 0x2A37 */
+function parseHeartRate(dv){
+  var f=dv.getUint8(0),o=1,r={bpm:0,contactSupported:!!(f&4),contact:null,energy:null,rr:[]};
+  if(f&1){r.bpm=dv.getUint16(o,true);o+=2}else{r.bpm=dv.getUint8(o);o+=1}
+  if(f&4)r.contact=!!(f&2);
+  if(f&8){r.energy=dv.getUint16(o,true);o+=2}
+  if(f&16){
+    while(o+1<dv.byteLength){r.rr.push(round(dv.getUint16(o,true)/1024*1000,1));o+=2}
+  }
+  return r;
+}
+
+var SAMPLE_TYPES={1:'Capillary whole blood',2:'Capillary plasma',3:'Venous whole blood',4:'Venous plasma',5:'Arterial whole blood',6:'Arterial plasma',7:'Undetermined whole blood',8:'Undetermined plasma',9:'Interstitial fluid',10:'Control solution'};
+var SAMPLE_LOCS={1:'Finger',2:'Alternate site',3:'Earlobe',4:'Control solution',15:'Not available'};
+var STATUS_BITS=['Battery low','Sensor malfunction','Sample size too small','Strip insertion error','Wrong strip type','Result too high for the meter','Result too low for the meter','Temperature too high','Temperature too low','Reading interrupted','General device fault','Time fault'];
+
+/* Glucose Measurement 0x2A18. Returns mmol/L and mg/dL. */
+function parseGlucose(dv){
+  var f=dv.getUint8(0),o=1,r={seq:dv.getUint16(o,true),t:null,offsetMin:null,mmol:null,mgdl:null,type:null,loc:null,typeName:'',locName:'',status:0,statusText:[],contextFollows:!!(f&16)};
+  o+=2;
+  r.t=dateTime(dv,o);o+=7;
+  if(f&1){r.offsetMin=dv.getInt16(o,true);o+=2;if(r.t!==null)r.t+=r.offsetMin*60000}
+  if(f&2){
+    var c=sfloat(dv,o);o+=2;
+    if(c!==null){
+      if(f&4){r.mmol=round(c*1000,3);r.mgdl=round(r.mmol*MGDL_PER_MMOL,1)}     // mol/L
+      else{r.mgdl=round(c*100000,1);r.mmol=round(r.mgdl/MGDL_PER_MMOL,3)}         // kg/L
+    }
+    var b=dv.getUint8(o);o+=1;
+    r.type=b&0x0F;r.loc=b>>4;
+    r.typeName=SAMPLE_TYPES[r.type]||'';r.locName=SAMPLE_LOCS[r.loc]||'';
+  }
+  if(f&8){
+    r.status=dv.getUint16(o,true);o+=2;
+    for(var i=0;i<STATUS_BITS.length;i++)if(r.status&(1<<i))r.statusText.push(STATUS_BITS[i]);
+  }
+  return r;
+}
+
+var MEALS={1:'Before meal',2:'After meal',3:'Fasting',4:'Other',5:'Bedtime'};
+/* Glucose Measurement Context 0x2A34 */
+function parseGlucoseContext(dv){
+  var f=dv.getUint8(0),o=1,r={seq:dv.getUint16(o,true),carbsG:null,meal:null,mealName:'',tester:null,health:null,exerciseMin:null,exercisePct:null,medId:null,medAmount:null,medUnit:'',hba1c:null};
+  o+=2;
+  if(f&128)o+=1;                                   // extended flags
+  if(f&1){var cid=dv.getUint8(o);o+=1;var cv=sfloat(dv,o);o+=2;r.carbsG=cv===null?null:round(cv*1000,1);r.carbsId=cid}
+  if(f&2){r.meal=dv.getUint8(o);o+=1;r.mealName=MEALS[r.meal]||''}
+  if(f&4){var th=dv.getUint8(o);o+=1;r.tester=th&0x0F;r.health=th>>4}
+  if(f&8){r.exerciseMin=Math.round(dv.getUint16(o,true)/60);o+=2;r.exercisePct=dv.getUint8(o);o+=1}
+  if(f&16){r.medId=dv.getUint8(o);o+=1;var mv=sfloat(dv,o);o+=2;r.medUnit=(f&32)?'L':'kg';r.medAmount=mv}
+  if(f&64){r.hba1c=sfloat(dv,o);o+=2}
+  return r;
+}
+
+/* Record Access Control Point 0x2A52 */
+var RACP_CODES={1:'Success',2:'Op code not supported',3:'Invalid operator',4:'Operator not supported',5:'Invalid operand',6:'No records found',7:'Abort unsuccessful',8:'Procedure not completed',9:'Operand not supported'};
+function racpReportAll(){return new Uint8Array([1,1])}
+function racpReportNumber(){return new Uint8Array([4,1])}
+function racpReportSince(seq){return new Uint8Array([1,3,1,seq&255,(seq>>8)&255])}
+function racpAbort(){return new Uint8Array([3,0])}
+function parseRacp(dv){
+  var op=dv.getUint8(0);
+  if(op===5&&dv.byteLength>=4)return {type:'count',count:dv.getUint16(2,true)};
+  if(op===6&&dv.byteLength>=4){var code=dv.getUint8(3);return {type:'response',reqOp:dv.getUint8(2),code:code,text:RACP_CODES[code]||'Unknown',ok:code===1,none:code===6}}
+  return {type:'other',op:op};
+}
+
+/* Blood Pressure Measurement 0x2A35 (also usable for 0x2A36 first fields). Values in mmHg. */
+function parseBloodPressure(dv){
+  var f=dv.getUint8(0),o=1,kpa=!!(f&1);
+  var s=sfloat(dv,o);o+=2;var d=sfloat(dv,o);o+=2;var m=sfloat(dv,o);o+=2;
+  var conv=function(v){return v===null?null:(kpa?round(v*MMHG_PER_KPA,0):round(v,0))};
+  var r={sys:conv(s),dia:conv(d),map:conv(m),unit:kpa?'kPa':'mmHg',t:null,pulse:null,userId:null,status:null,flags:[]};
+  if(f&2){r.t=dateTime(dv,o);o+=7}
+  if(f&4){var p=sfloat(dv,o);o+=2;r.pulse=p===null?null:round(p,0)}
+  if(f&8){r.userId=dv.getUint8(o);o+=1}
+  if(f&16){
+    var st=dv.getUint16(o,true);o+=2;r.status=st;
+    if(st&1)r.flags.push('Body movement detected');
+    if(st&2)r.flags.push('Cuff fit looser than expected');
+    if(st&4)r.flags.push('Irregular pulse flagged by the device');
+    if(st&32)r.flags.push('Measurement position flagged by the device');
+  }
+  return r;
+}
+
+function mmolToMgdl(v){return v*MGDL_PER_MMOL}
+function mgdlToMmol(v){return v/MGDL_PER_MMOL}
+
+/* beat-to-beat variation from RR intervals in ms (rough) */
+function rmssd(rr){
+  var a=rr.filter(function(x){return x>=300&&x<=2000});
+  if(a.length<8)return null;
+  var s=0,n=0;
+  for(var i=1;i<a.length;i++){var d=a[i]-a[i-1];s+=d*d;n++}
+  return round(Math.sqrt(s/n),1);
+}
+
+return {sfloat:sfloat,dateTime:dateTime,parseHeartRate:parseHeartRate,parseGlucose:parseGlucose,parseGlucoseContext:parseGlucoseContext,
+  parseRacp:parseRacp,racpReportAll:racpReportAll,racpReportNumber:racpReportNumber,racpReportSince:racpReportSince,racpAbort:racpAbort,
+  parseBloodPressure:parseBloodPressure,mmolToMgdl:mmolToMgdl,mgdlToMmol:mgdlToMmol,rmssd:rmssd,round:round,MGDL_PER_MMOL:MGDL_PER_MMOL};
+});
+
+/* Coffeebreak shared helpers: storage, charts, export, share, reminders, Bluetooth session. Browser built-ins only. */
+var CB=(function(){
+'use strict';
+var P=window.CBP;
+function $(id){return document.getElementById(id)}
+function h(tag,attrs,kids){
+  var e=document.createElement(tag);
+  if(attrs)for(var k in attrs){
+    if(k==='text')e.textContent=attrs[k];
+    else if(k==='class')e.className=attrs[k];
+    else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),attrs[k]);
+    else e.setAttribute(k,attrs[k]);
+  }
+  (kids||[]).forEach(function(c){if(c!=null)e.appendChild(typeof c==='string'?document.createTextNode(c):c)});
+  return e;
+}
+function pad(n){return n<10?'0'+n:''+n}
+function dayKey(d){d=d||new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function isoLocal(t){
+  var d=new Date(t),o=-d.getTimezoneOffset(),s=o<0?'-':'+';o=Math.abs(o);
+  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())+s+pad(Math.floor(o/60))+':'+pad(o%60);
+}
+function fmtDate(t){try{return new Date(t).toLocaleString(undefined,{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})}catch(e){return isoLocal(t)}}
+function fmtDay(t){try{return new Date(t).toLocaleDateString(undefined,{day:'numeric',month:'short'})}catch(e){return dayKey(new Date(t))}}
+
+var toastTimer=0;
+function toast(msg){
+  var el=$('toast');if(!el)return;
+  el.textContent=msg;el.className='on';
+  clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.className=''},2600);
+}
+
+/* ---------- storage: localStorage with an in-memory fallback ---------- */
+function makeStore(key){
+  var mem=[],persistent=true;
+  function load(){
+    try{var s=localStorage.getItem(key);var a=s?JSON.parse(s):[];mem=a;return a}
+    catch(e){persistent=false;return mem}
+  }
+  function save(a){
+    mem=a;
+    try{localStorage.setItem(key,JSON.stringify(a))}catch(e){persistent=false}
+  }
+  return {
+    all:function(){var a=load().slice();a.sort(function(x,y){return y.t-x.t});return a},
+    add:function(rec){
+      var a=load();
+      if(rec.key&&a.some(function(r){return r.key===rec.key}))return false;
+      rec.id=rec.id||(Date.now().toString(36)+Math.random().toString(36).slice(2,6));
+      a.push(rec);save(a);return true;
+    },
+    remove:function(id){save(load().filter(function(r){return r.id!==id}))},
+    clear:function(){save([])},
+    replaceAll:function(a){save(a)},
+    isPersistent:function(){load();return persistent}
+  };
+}
+function getPref(k,def){try{var v=localStorage.getItem(k);return v===null?def:v}catch(e){return def}}
+function setPref(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+
+/* ---------- export and share ---------- */
+function csvCell(v){
+  if(v===null||v===undefined)return '';
+  var s=String(v);
+  if(/^[=+@\t\r]/.test(s)||(/^-/.test(s)&&isNaN(Number(s))))s=' '+s;   // keep spreadsheets from reading text as a formula
+  if(/[",\n\r]/.test(s))s='"'+s.replace(/"/g,'""')+'"';
+  return s;
+}
+function toCSV(cols,rows){
+  var out=[cols.map(function(c){return csvCell(c.label)}).join(',')];
+  rows.forEach(function(r){out.push(cols.map(function(c){return csvCell(c.get(r))}).join(','))});
+  return out.join('\r\n')+'\r\n';
+}
+function download(name,mime,text){
+  var url=URL.createObjectURL(new Blob([text],{type:mime}));
+  var a=h('a',{href:url,download:name});document.body.appendChild(a);a.click();
+  setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url)},1500);
+}
+function canShareFiles(){
+  try{
+    if(!navigator.share||!navigator.canShare||typeof File==='undefined')return false;
+    return navigator.canShare({files:[new File(['x'],'x.csv',{type:'text/csv'})]});
+  }catch(e){return false}
+}
+function shareFile(name,mime,text,title){
+  try{
+    var f=new File([text],name,{type:mime});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){
+      return navigator.share({files:[f],title:title}).then(function(){return 'shared'}).catch(function(e){
+        if(e&&e.name==='AbortError')return 'cancelled';
+        download(name,mime,text);return 'downloaded';
+      });
+    }
+  }catch(e){}
+  download(name,mime,text);
+  return Promise.resolve('downloaded');
+}
+
+/* Share and export panel. cfg: {el, appName, slug, store, cols, onChange} */
+function sharePanel(cfg){
+  var el=cfg.el;
+  el.innerHTML='<h2>Save and share your history</h2>'+
+    '<p class="small mut">Your readings stay on this device only. Pick a file type, then share it or save it.</p>'+
+    '<div class="row"><button type="button" id="shCsv" class="primary">Share CSV file</button><button type="button" id="shJson">Share JSON file</button></div>'+
+    '<div class="row"><button type="button" id="dlCsv">Save CSV</button><button type="button" id="dlJson">Save JSON</button></div>'+
+    '<div class="status" id="shMsg" hidden></div>'+
+    '<h2 style="margin-top:16px">Health apps</h2>'+
+    '<p class="small">A web page cannot write straight into Apple Health or Health Connect on Android. That is a limit set by those systems, not by this app. What you can do is share the file above. Some importer apps can read a CSV or JSON file into Apple Health or Health Connect, but file layouts differ between apps, so a file may need adjusting and no particular importer is promised to accept it.</p>'+
+    '<h2 style="margin-top:16px">Backup</h2>'+
+    '<p class="small mut">A JSON file can be loaded back in on another device.</p>'+
+    '<div class="row"><button type="button" id="impBtn">Load a JSON backup</button><button type="button" id="clrBtn">Delete all saved data</button></div>'+
+    '<input type="file" id="impFile" accept="application/json,.json" hidden>'+
+    '<p class="small mut" id="persistNote"></p>';
+  var st=cfg.store;
+  function stamp(){return dayKey()}
+  function csv(){return toCSV(cfg.cols,st.all())}
+  function json(){return JSON.stringify({app:cfg.appName,exported:isoLocal(Date.now()),version:1,records:st.all()},null,2)}
+  function guard(){
+    if(!st.all().length){msg('Nothing saved yet. Save a reading first.');return false}
+    return true;
+  }
+  function msg(t){var m=el.querySelector('#shMsg');m.hidden=false;m.className='status';m.textContent=t}
+  function doShare(kind){
+    if(!guard())return;
+    var isCsv=kind==='csv',name=cfg.slug+'-'+stamp()+(isCsv?'.csv':'.json');
+    if(!canShareFiles())msg('This browser cannot share files directly, so the file was saved to your downloads instead.');
+    shareFile(name,isCsv?'text/csv':'application/json',isCsv?csv():json(),cfg.appName).then(function(r){
+      if(r==='shared')msg('Shared. Choose your health app or a files app from the share sheet.');
+      else if(r==='downloaded'&&canShareFiles())msg('Share was not possible, so the file was saved to your downloads.');
+    });
+  }
+  function doSave(kind){
+    if(!guard())return;
+    var isCsv=kind==='csv';
+    download(cfg.slug+'-'+stamp()+(isCsv?'.csv':'.json'),isCsv?'text/csv':'application/json',isCsv?csv():json());
+    msg('File saved to your downloads.');
+  }
+  el.querySelector('#shCsv').addEventListener('click',function(){doShare('csv')});
+  el.querySelector('#shJson').addEventListener('click',function(){doShare('json')});
+  el.querySelector('#dlCsv').addEventListener('click',function(){doSave('csv')});
+  el.querySelector('#dlJson').addEventListener('click',function(){doSave('json')});
+  var file=el.querySelector('#impFile');
+  el.querySelector('#impBtn').addEventListener('click',function(){file.click()});
+  file.addEventListener('change',function(){
+    var f=file.files&&file.files[0];if(!f)return;
+    var rd=new FileReader();
+    rd.onload=function(){
+      try{
+        var d=JSON.parse(rd.result),recs=Array.isArray(d)?d:d.records,have={},n=0;
+        if(!Array.isArray(recs))throw new Error('x');
+        st.all().forEach(function(r){have[r.id]=1});
+        recs.forEach(function(r){
+          if(r&&typeof r.t==='number'&&!have[r.id]){st.add(r);n++}
+        });
+        msg('Loaded '+n+' new reading'+(n===1?'':'s')+'.');
+        if(cfg.onChange)cfg.onChange();
+      }catch(e){msg('That file could not be read. Use a JSON file saved from this app.')}
+      file.value='';
+    };
+    rd.readAsText(f);
+  });
+  el.querySelector('#clrBtn').addEventListener('click',function(){
+    if(!st.all().length){msg('Nothing to delete.');return}
+    if(window.confirm('Delete all readings saved in this app on this device? This cannot be undone.')){
+      st.clear();msg('All saved data deleted.');if(cfg.onChange)cfg.onChange();
+    }
+  });
+  el.querySelector('#persistNote').textContent=st.isPersistent()?'Saved in this browser on this device. Clearing the browser data for this site will erase it, so keep a backup file if it matters to you.':'This browser is not letting the app save data, so readings will be lost when you close the page. Save a file before you leave.';
+}
+
+/* ---------- charts ---------- */
+function cssVar(n,def){var v=getComputedStyle(document.body).getPropertyValue(n).trim();return v||def}
+/* series: [{pts:[{t,v}],color,label}]. o: {dec,unit,bandLo,bandHi,xfmt,min,max} */
+function lineChart(cv,series,o){
+  o=o||{};
+  var dpr=window.devicePixelRatio||1,w=cv.clientWidth||320,ht=cv.clientHeight||170;
+  cv.width=Math.round(w*dpr);cv.height=Math.round(ht*dpr);
+  var c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,ht);
+  var tx=cssVar('--tx','#fff'),mut=cssVar('--mut','#aaa'),line=cssVar('--line','#444');
+  var all=[];series.forEach(function(s){all=all.concat(s.pts)});
+  c.font='12px system-ui,sans-serif';c.textBaseline='middle';
+  if(!all.length){c.fillStyle=mut;c.textAlign='center';c.fillText('No data yet',w/2,ht/2);return}
+  var xmin=Infinity,xmax=-Infinity,ymin=Infinity,ymax=-Infinity;
+  all.forEach(function(p){xmin=Math.min(xmin,p.t);xmax=Math.max(xmax,p.t);ymin=Math.min(ymin,p.v);ymax=Math.max(ymax,p.v)});
+  if(o.bandLo!=null)ymin=Math.min(ymin,o.bandLo);
+  if(o.bandHi!=null)ymax=Math.max(ymax,o.bandHi);
+  if(o.min!=null)ymin=Math.min(ymin,o.min);
+  if(o.max!=null)ymax=Math.max(ymax,o.max);
+  if(ymax-ymin<1e-9){ymin-=1;ymax+=1}
+  var padY=(ymax-ymin)*0.12;ymin-=padY;ymax+=padY;
+  if(xmax-xmin<1)xmax=xmin+3600000;
+  var L=40,R=10,T=10,B=24,pw=w-L-R,ph=ht-T-B;
+  function X(t){return L+(t-xmin)/(xmax-xmin)*pw}
+  function Y(v){return T+(1-(v-ymin)/(ymax-ymin))*ph}
+  var dec=o.dec||0,i;
+  c.strokeStyle=line;c.lineWidth=1;c.fillStyle=mut;c.textAlign='right';
+  for(i=0;i<=3;i++){
+    var yy=T+ph*i/3,val=ymax-(ymax-ymin)*i/3;
+    c.beginPath();c.moveTo(L,yy);c.lineTo(w-R,yy);c.stroke();
+    c.fillText(val.toFixed(dec),L-5,yy);
+  }
+  if(o.bandLo!=null&&o.bandHi!=null){
+    c.fillStyle='rgba(120,200,140,.18)';c.fillRect(L,Y(o.bandHi),pw,Y(o.bandLo)-Y(o.bandHi));
+  }else{
+    c.setLineDash([6,4]);c.lineWidth=2;
+    if(o.bandLo!=null){c.strokeStyle=cssVar('--ok','#7be0a4');c.beginPath();c.moveTo(L,Y(o.bandLo));c.lineTo(w-R,Y(o.bandLo));c.stroke()}
+    if(o.bandHi!=null){c.strokeStyle=cssVar('--ok','#7be0a4');c.beginPath();c.moveTo(L,Y(o.bandHi));c.lineTo(w-R,Y(o.bandHi));c.stroke()}
+    c.setLineDash([]);
+  }
+  c.textAlign='left';c.fillStyle=mut;
+  var xf=o.xfmt||fmtDay;
+  c.fillText(xf(xmin),L,ht-9);c.textAlign='right';c.fillText(xf(xmax),w-R,ht-9);
+  series.forEach(function(s){
+    var pts=s.pts.slice().sort(function(a,b){return a.t-b.t});
+    if(!pts.length)return;
+    c.strokeStyle=s.color;c.fillStyle=s.color;c.lineWidth=o.thin?2:3;c.lineJoin='round';
+    if(pts.length>1){c.beginPath();pts.forEach(function(p,k){if(k)c.lineTo(X(p.t),Y(p.v));else c.moveTo(X(p.t),Y(p.v))});c.stroke()}
+    if(!o.noDots&&pts.length<=120)pts.forEach(function(p){c.beginPath();c.arc(X(p.t),Y(p.v),pts.length>40?2.5:4,0,7);c.fill()});
+  });
+  if(series.length>1&&series[0].label){
+    c.textAlign='left';var x0=L+6;
+    series.forEach(function(s){c.fillStyle=s.color;c.fillRect(x0,T+3,10,10);c.fillStyle=tx;c.fillText(s.label,x0+14,T+9);x0+=14+c.measureText(s.label).width+14});
+  }
+}
+
+/* ---------- tabs ---------- */
+function tabs(nav,panels,onChange){
+  var btns=Array.prototype.slice.call(nav.querySelectorAll('button[data-tab]'));
+  function show(name){
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-tab')===name))});
+    for(var k in panels)panels[k].hidden=(k!==name);
+    if(onChange)onChange(name);
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){show(b.getAttribute('data-tab'))})});
+  return show;
+}
+
+/* ---------- on-screen reminder note ---------- */
+function reminder(cfg){
+  var key='cb_rem_'+cfg.slug,banner=cfg.banner,panel=cfg.panel,timer=0;
+  function load(){try{return JSON.parse(localStorage.getItem(key))||{}}catch(e){return {}}}
+  function save(s){try{localStorage.setItem(key,JSON.stringify(s))}catch(e){}}
+  function due(s){
+    if(!s.text)return false;
+    if(s.done===dayKey())return false;
+    if(!s.time)return false;
+    var p=s.time.split(':'),n=new Date(),m=n.getHours()*60+n.getMinutes();
+    return m>=(+p[0])*60+(+p[1]);
+  }
+  function render(){
+    var s=load();
+    if(!s.text||s.done===dayKey()){banner.hidden=true;return}
+    banner.hidden=false;banner.innerHTML='';
+    var d=due(s);banner.className=d?'due':'';banner.id='remBanner';
+    banner.appendChild(h('span',{text:(d?'Reminder due: ':'Reminder: ')+s.text+(s.time?' ('+s.time+')':'')}));
+    banner.appendChild(h('button',{type:'button',text:'Done for today',onclick:function(){var x=load();x.done=dayKey();save(x);render()}}));
+  }
+  panel.innerHTML='<h2>Reminder note</h2>'+
+    '<p class="small mut">This shows a note at the top of this page. It only appears while the page is open. No notifications are sent and nothing leaves your device.</p>'+
+    '<label for="remText">Note</label><input id="remText" maxlength="100" placeholder="For example: check before breakfast">'+
+    '<label for="remTime">Time of day (optional)</label><input id="remTime" type="time">'+
+    '<div class="row"><button type="button" class="primary" id="remSave">Save reminder</button><button type="button" id="remClear">Remove reminder</button></div>';
+  var s0=load();panel.querySelector('#remText').value=s0.text||'';panel.querySelector('#remTime').value=s0.time||'';
+  panel.querySelector('#remSave').addEventListener('click',function(){
+    var t=panel.querySelector('#remText').value.trim();
+    if(!t){toast('Type a note first');return}
+    save({text:t,time:panel.querySelector('#remTime').value||'',done:''});render();toast('Reminder saved');
+  });
+  panel.querySelector('#remClear').addEventListener('click',function(){save({});panel.querySelector('#remText').value='';panel.querySelector('#remTime').value='';render();toast('Reminder removed')});
+  render();
+  timer=setInterval(render,30000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)render()});
+}
+
+/* ---------- Bluetooth support and sessions ---------- */
+function bleSupport(){
+  var ua=navigator.userAgent||'';
+  var ios=/iPad|iPhone|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  if(!window.isSecureContext)return {ok:false,msg:'Bluetooth needs a secure page (an address starting with https). Open the app from its https link.'};
+  if(navigator.bluetooth&&navigator.bluetooth.requestDevice)return {ok:true};
+  if(ios)return {ok:false,msg:'Safari and Chrome on iPhone and iPad cannot connect to Bluetooth devices from a web page. On iPhone or iPad, open this page in Bluefy, a free browser that supports Web Bluetooth. Or use Chrome on an Android phone. Manual entry still works here.'};
+  return {ok:false,msg:'This browser does not support Web Bluetooth. Use Chrome or Edge on Android, Windows, Mac, Linux or Chromebook, or Bluefy on iPhone and iPad. Firefox and Safari do not support it. Manual entry still works here.'};
+}
+function bleError(e){
+  var n=e&&e.name,m=(e&&e.message)||'';
+  if(n==='NotFoundError'&&/cancel/i.test(m))return 'No device was chosen. Tap the connect button to try again.';
+  if(n==='NotFoundError')return 'That device does not offer the expected service. Check it is the right kind of device, or try "Show all devices".';
+  if(n==='SecurityError'||n==='NotAllowedError')return 'Bluetooth was blocked. Allow Bluetooth for this page. If the page is shown inside a small frame, open it in its own tab first.';
+  if(n==='NetworkError')return 'Could not connect. Make sure the device is switched on, awake and close by, and that no other app is already connected to it.';
+  if(n==='InvalidStateError')return 'The device connection was interrupted. Try again.';
+  if(n==='NotSupportedError')return 'This device or browser does not support that Bluetooth feature.';
+  return 'Bluetooth problem: '+(m||n||'unknown')+'. Try again.';
+}
+/* cfg: {service, optionalServices, chars:[{uuid,onValue,optional}], onStatus(state,text), onReady(api)} */
+function bleSession(cfg){
+  var dev=null,svc=null,want=false,attempts=0,timer=0,hooks=[],chars={},busy=false;
+  var api={};
+  function st(s,t){if(cfg.onStatus)cfg.onStatus(s,t)}
+  function nm(){return dev&&dev.name?dev.name:'device'}
+  function unhook(){hooks.forEach(function(x){try{x[0].removeEventListener('characteristicvaluechanged',x[1])}catch(e){}});hooks=[];chars={}}
+  async function setup(){
+    st('connecting','Connecting to '+nm()+' ...');
+    var server=await dev.gatt.connect();
+    svc=await server.getPrimaryService(cfg.service);
+    unhook();
+    for(var i=0;i<cfg.chars.length;i++){
+      var d=cfg.chars[i],ch;
+      try{ch=await svc.getCharacteristic(d.uuid)}catch(e){if(d.optional)continue;throw e}
+      var fn=(function(dd){return function(ev){try{dd.onValue(ev.target.value)}catch(err){console.error(err)}}})(d);
+      ch.addEventListener('characteristicvaluechanged',fn);hooks.push([ch,fn]);chars[d.uuid]=ch;
+      try{await ch.startNotifications()}catch(e){if(!d.optional)throw e}
+    }
+    attempts=0;
+    st('connected','Connected to '+nm());
+    if(cfg.onReady)cfg.onReady(api,server);
+  }
+  function onDisc(){
+    if(!want)return;
+    if(attempts>=8){want=false;st('lost','Connection lost. Move closer, check the device is awake, then tap Reconnect.');return}
+    var delay=Math.min(15000,1000*Math.pow(2,attempts));attempts++;
+    st('reconnecting','Connection dropped. Reconnecting (try '+attempts+' of 8) ...');
+    clearTimeout(timer);
+    timer=setTimeout(function(){
+      if(!want)return;
+      setup().catch(function(){onDisc()});
+    },delay);
+  }
+  api.pick=async function(all){
+    if(busy)return;
+    var sup=bleSupport();if(!sup.ok){st('unsupported',sup.msg);return}
+    busy=true;
+    try{
+      var opts=all?{acceptAllDevices:true,optionalServices:[cfg.service].concat(cfg.optionalServices||[])}:{filters:[{services:[cfg.service]}],optionalServices:cfg.optionalServices||[]};
+      var d=await navigator.bluetooth.requestDevice(opts);
+      if(dev&&dev!==d){try{dev.removeEventListener('gattserverdisconnected',onDisc)}catch(e){}}
+      dev=d;dev.addEventListener('gattserverdisconnected',onDisc);
+      want=true;attempts=0;
+      await setup();
+    }catch(e){
+      var cancelled=e&&e.name==='NotFoundError'&&/cancel/i.test(e.message||'');
+      if(cancelled){if(!(dev&&want))st('idle',bleError(e))}
+      else{want=false;st('error',bleError(e))}
+    }finally{busy=false}
+  };
+  api.reconnect=async function(){
+    if(!dev){return api.pick(false)}
+    if(busy)return;busy=true;want=true;attempts=0;clearTimeout(timer);
+    try{await setup()}catch(e){want=false;st('error',bleError(e))}finally{busy=false}
+  };
+  api.disconnect=function(){
+    want=false;clearTimeout(timer);
+    try{if(dev&&dev.gatt&&dev.gatt.connected)dev.gatt.disconnect()}catch(e){}
+    unhook();st('idle','Disconnected.');
+  };
+  api.char=function(uuid){return chars[uuid]||null};
+  api.service=function(){return svc};
+  api.deviceName=nm;
+  api.hasDevice=function(){return !!dev};
+  return api;
+}
+
+function installHook(btn,hint){
+  var dp=null;
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;btn.hidden=false});
+  btn.addEventListener('click',function(){if(dp){dp.prompt();dp=null;btn.hidden=true}});
+  var ios=/iPad|iPhone|iPod/.test(navigator.userAgent||'');
+  hint.textContent=ios?'To install on iPhone or iPad: tap the Share icon, then Add to Home Screen.':'To install: use your browser menu and choose Install app or Add to Home screen.';
+}
+function registerSW(){
+  if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+
+return {$:$,h:h,toast:toast,makeStore:makeStore,getPref:getPref,setPref:setPref,toCSV:toCSV,isoLocal:isoLocal,fmtDate:fmtDate,fmtDay:fmtDay,dayKey:dayKey,
+  download:download,sharePanel:sharePanel,lineChart:lineChart,tabs:tabs,reminder:reminder,bleSupport:bleSupport,bleSession:bleSession,bleError:bleError,installHook:installHook,registerSW:registerSW,esc:esc,canShareFiles:canShareFiles};
+})();
+
+
+/* ---------- Glucose diary glue ---------- */
+(function(){
+  var $=CB.$,P=window.CBP,store=CB.makeStore('cb_glucose_v1');
+  var units=CB.getPref('cb_glu_units','mmol')==='mgdl'?'mgdl':'mmol',ctx='',range=14;
+  var CTX={fasting:'Fasting',before:'Before a meal',after:'After a meal',bedtime:'Bedtime',other:'Other'};
+  var cols=[
+    {label:'date_time',get:function(r){return CB.isoLocal(r.t)}},
+    {label:'epoch_ms',get:function(r){return r.t}},
+    {label:'glucose_mmol_L',get:function(r){return r.mmol}},
+    {label:'glucose_mg_dL',get:function(r){return r.mgdl}},
+    {label:'context',get:function(r){return r.ctx?CTX[r.ctx]:''}},
+    {label:'source',get:function(r){return r.src==='meter'?'bluetooth_meter':'manual'}},
+    {label:'meter_sequence',get:function(r){return r.seq}},
+    {label:'sample_type',get:function(r){return r.stype}},
+    {label:'device',get:function(r){return r.dev}},
+    {label:'note',get:function(r){return r.note}}
+  ];
+  function u(){return units==='mmol'?'mmol/L':'mg/dL'}
+  function val(r){return units==='mmol'?r.mmol:r.mgdl}
+  function fmt(r){return units==='mmol'?r.mmol.toFixed(1):String(Math.round(r.mgdl))}
+  function toDisp(mmol){return units==='mmol'?mmol:mmol*P.MGDL_PER_MMOL}
+  function parseNum(s){var v=parseFloat(String(s).replace(',','.'));return isNaN(v)?null:v}
+
+  /* units */
+  function setUnits(x){
+    units=x;CB.setPref('cb_glu_units',x);
+    Array.prototype.forEach.call(document.querySelectorAll('#unitRow button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-u')===x))});
+    $('gLab').textContent='Blood glucose ('+u()+')';
+    $('gIn').placeholder=units==='mmol'?'0.0':'0';$('gIn').value='';
+    $('lnLoL').textContent='Lower line ('+u()+')';$('lnHiL').textContent='Upper line ('+u()+')';
+    loadLines();renderAll();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#unitRow button'),function(b){b.addEventListener('click',function(){setUnits(b.getAttribute('data-u'))})});
+
+  /* manual entry */
+  Array.prototype.forEach.call(document.querySelectorAll('#ctxRow button'),function(b){
+    b.addEventListener('click',function(){
+      var c=b.getAttribute('data-c');ctx=(ctx===c)?'':c;
+      Array.prototype.forEach.call(document.querySelectorAll('#ctxRow button'),function(x){x.setAttribute('aria-pressed',String(x.getAttribute('data-c')===ctx))});
+    });
+  });
+  $('gSave').addEventListener('click',function(){
+    var v=parseNum($('gIn').value);
+    if(v===null||v<=0){CB.toast('Type your reading first');return}
+    var mmol,mgdl;
+    if(units==='mmol'){
+      if(v>40){CB.toast('That is very high for mmol/L. Did you mean mg/dL? Change the unit at the top.');return}
+      if(v<0.5){CB.toast('That is too low to be right. Please check the number.');return}
+      mmol=Math.round(v*10)/10;mgdl=Math.round(mmol*P.MGDL_PER_MMOL);
+    }else{
+      if(v<20){CB.toast('That looks like mmol/L. Change the unit at the top.');return}
+      if(v>1000){CB.toast('That is too high to be right. Please check the number.');return}
+      mgdl=Math.round(v);mmol=Math.round(mgdl/P.MGDL_PER_MMOL*100)/100;
+    }
+    var rec={t:Date.now(),src:'manual',mmol:mmol,mgdl:mgdl};
+    if(ctx)rec.ctx=ctx;
+    var n=$('gNote').value.trim();if(n)rec.note=n;
+    store.add(rec);
+    $('gIn').value='';$('gNote').value='';
+    CB.toast('Saved '+fmt(rec)+' '+u());renderAll();
+  });
+  $('gIn').addEventListener('keydown',function(e){if(e.key==='Enter')$('gSave').click()});
+
+  /* meter */
+  var sup=CB.bleSupport();
+  if(!sup.ok){$('gmSupport').hidden=false;$('gmSupport').textContent=sup.msg;$('gmConnect').disabled=true;$('gmAll').disabled=true}
+  var pend={},flushT=0,gotNew=0,gotAll=0;
+  function sched(ms){clearTimeout(flushT);flushT=setTimeout(flush,ms)}
+  function setStatus(state,text){
+    var s=$('gmStatus');s.textContent=text;
+    s.className='status'+(state==='connected'?' good':(state==='error'||state==='lost'||state==='unsupported')?' err':(state==='reconnecting'||state==='connecting')?' bad':'');
+    $('gmAgainRow').hidden=!(state==='lost'||state==='error')||!gm.hasDevice();
+    $('gmOff').disabled=!(state==='connected'||state==='reconnecting'||state==='connecting');
+    $('gmFetch').disabled=!(state==='connected'&&gm.char(0x2A52));
+  }
+  function flush(){
+    var now=Date.now(),added=0,seen=0,skipped=0,name=gm.deviceName();
+    Object.keys(pend).forEach(function(k){
+      var m=pend[k].m,c=pend[k].c;if(!m)return;
+      if(m.mmol===null){return}
+      if(m.type===10){skipped++;return}
+      seen++;
+      var t=m.t,clock=true;
+      if(!t||t<946684800000||t>now+86400000){t=now;clock=false}
+      var rec={t:t,src:'meter',mmol:Math.round(m.mmol*100)/100,mgdl:Math.round(m.mgdl),seq:m.seq,dev:name,key:'g|'+name+'|'+m.seq+'|'+t};
+      if(m.typeName)rec.stype=m.typeName+(m.locName?' ('+m.locName+')':'');
+      if(c&&c.meal){var map={1:'before',2:'after',3:'fasting',4:'other',5:'bedtime'};if(map[c.meal])rec.ctx=map[c.meal]}
+      var notes=[];
+      if(!clock)notes.push('Meter clock not set, time is when received');
+      if(m.statusText.length)notes.push('Meter flagged: '+m.statusText.join(', '));
+      if(notes.length)rec.note=notes.join('. ');
+      if(store.add(rec))added++;
+    });
+    pend={};gotNew+=added;gotAll+=seen;
+    if(seen||skipped){setStatusText('Received '+seen+' reading'+(seen===1?'':'s')+', '+added+' new and saved.'+(skipped?' Skipped '+skipped+' control solution test'+(skipped===1?'':'s')+'.':''))}
+    if(added){CB.toast(added+' new reading'+(added===1?'':'s')+' saved');renderAll()}
+  }
+  function setStatusText(t){var s=$('gmStatus');s.textContent=t;s.className='status good'}
+  function onMeas(dv){var r=P.parseGlucose(dv);(pend[r.seq]=pend[r.seq]||{}).m=r;sched(1500)}
+  function onCtx(dv){var c=P.parseGlucoseContext(dv);(pend[c.seq]=pend[c.seq]||{}).c=c;sched(1500)}
+  function onRacp(dv){
+    var r=P.parseRacp(dv);
+    if(r.type==='response'){
+      if(r.none)setStatusText('The meter has no stored readings.');
+      else if(!r.ok)setStatusText('The meter replied: '+r.text+'.');
+      sched(400);
+    }
+  }
+  var gm=CB.bleSession({
+    service:0x1808,
+    chars:[{uuid:0x2A18,onValue:onMeas},{uuid:0x2A34,onValue:onCtx,optional:true},{uuid:0x2A52,onValue:onRacp,optional:true}],
+    onStatus:setStatus,
+    onReady:function(api){
+      $('gmFetch').disabled=!api.char(0x2A52);
+      if(!api.char(0x2A52))setStatusText('Connected. This meter does not offer stored readings over Bluetooth, so take a new test and it will arrive here.');
+    }
+  });
+  $('gmConnect').addEventListener('click',function(){gm.pick(false)});
+  $('gmAll').addEventListener('click',function(){gm.pick(true)});
+  $('gmAgain').addEventListener('click',function(){gm.reconnect()});
+  $('gmOff').addEventListener('click',function(){gm.disconnect()});
+  $('gmFetch').addEventListener('click',function(){
+    var ch=gm.char(0x2A52);if(!ch){CB.toast('Connect the meter first');return}
+    setStatusText('Asking the meter for its stored readings ...');
+    ch.writeValueWithResponse?ch.writeValueWithResponse(P.racpReportAll()).catch(fail):ch.writeValue(P.racpReportAll()).catch(fail);
+    function fail(){setStatusText('The meter did not accept the request. Some meters need pairing in your phone Bluetooth settings first, or only work with their own app.');$('gmStatus').className='status err'}
+  });
+
+  /* history and display */
+  function lines(){
+    var lo=CB.getPref('cb_glu_lo',''),hi=CB.getPref('cb_glu_hi','');
+    return {lo:lo===''?null:parseFloat(lo),hi:hi===''?null:parseFloat(hi)};
+  }
+  function loadLines(){
+    var l=lines();
+    $('lnLo').value=l.lo===null?'':(units==='mmol'?l.lo.toFixed(1):Math.round(l.lo*P.MGDL_PER_MMOL));
+    $('lnHi').value=l.hi===null?'':(units==='mmol'?l.hi.toFixed(1):Math.round(l.hi*P.MGDL_PER_MMOL));
+  }
+  function saveLine(id,key){
+    var v=parseNum($(id).value);
+    if(v===null||v<=0){CB.setPref(key,'');}
+    else CB.setPref(key,String(units==='mmol'?v:v/P.MGDL_PER_MMOL));
+    renderHist();
+  }
+  $('lnLo').addEventListener('change',function(){saveLine('lnLo','cb_glu_lo')});
+  $('lnHi').addEventListener('change',function(){saveLine('lnHi','cb_glu_hi')});
+  Array.prototype.forEach.call(document.querySelectorAll('#rangeRow button'),function(b){
+    b.addEventListener('click',function(){
+      range=parseInt(b.getAttribute('data-r'),10);
+      Array.prototype.forEach.call(document.querySelectorAll('#rangeRow button'),function(x){x.setAttribute('aria-pressed',String(x===b))});
+      renderHist();
+    });
+  });
+  function renderLast(){
+    var a=store.all(),r=a[0];
+    $('lastUnit').textContent=u();
+    $('lastVal').firstChild.nodeValue=r?fmt(r):'--';
+    $('lastInfo').textContent=r?(CB.fmtDate(r.t)+(r.ctx?' - '+CTX[r.ctx]:'')+(r.src==='meter'?' - from meter':'')):'Nothing saved yet.';
+  }
+  function renderHist(){
+    var all=store.all(),cut=range?Date.now()-range*86400000:0;
+    var rs=all.filter(function(r){return r.t>=cut});
+    $('sN').textContent=rs.length;
+    if(rs.length){
+      var v=rs.map(val),sum=v.reduce(function(a,b){return a+b},0),d=units==='mmol'?1:0;
+      $('sAvg').textContent=(sum/v.length).toFixed(d);$('sMin').textContent=Math.min.apply(null,v).toFixed(d);$('sMax').textContent=Math.max.apply(null,v).toFixed(d);
+    }else{$('sAvg').textContent=$('sMin').textContent=$('sMax').textContent='--'}
+    $('sAvgL').textContent='Average ('+u()+')';
+    var l=lines();
+    CB.lineChart($('gChart'),[{pts:rs.map(function(r){return {t:r.t,v:val(r)}}),color:getComputedStyle(document.body).getPropertyValue('--c1').trim()}],
+      {dec:units==='mmol'?1:0,bandLo:l.lo===null?null:toDisp(l.lo),bandHi:l.hi===null?null:toDisp(l.hi)});
+    var ul=$('gList');ul.innerHTML='';
+    if(!rs.length){ul.appendChild(CB.h('li',{},[CB.h('span',{class:'mut',text:'No readings in this time.'})]));return}
+    rs.slice(0,300).forEach(function(r){
+      var info=CB.fmtDate(r.t)+(r.ctx?' - '+CTX[r.ctx]:'')+(r.src==='meter'?' - meter'+(r.dev?' '+r.dev:''):'')+(r.note?' - '+r.note:'');
+      ul.appendChild(CB.h('li',{},[
+        CB.h('div',{},[CB.h('div',{class:'v',text:fmt(r)+' '+u()}),CB.h('div',{class:'d',text:info})]),
+        CB.h('button',{type:'button',text:'Delete',onclick:function(){store.remove(r.id);renderAll()}})
+      ]));
+    });
+  }
+  function renderAll(){renderLast();renderHist()}
+  CB.sharePanel({el:$('shareHost'),appName:'Coffeebreak Glucose',slug:'coffeebreak-glucose',store:store,cols:cols,onChange:renderAll});
+  CB.reminder({slug:'glucose',banner:$('remBanner'),panel:$('remHost')});
+  CB.tabs($('nav'),{add:$('p-add'),hist:$('p-hist'),share:$('p-share')},function(name){if(name==='hist')renderHist()});
+  setUnits(units);
+})();
+
+(function(){
+  CB.registerSW();
+  CB.installHook(document.getElementById('btnInstall'),document.getElementById('installHint'));
+})();
+
+</script>
+</body>
+</html>

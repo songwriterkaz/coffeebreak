@@ -1,10 +1,80 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak SIM</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak SIM</h1><p class="price">Free</p><p>A quick play sample round with scoring and a saved best score.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p>Tap the cup as many times as you can in 10 seconds.</p><p><button id=cup style="font-size:2em">&#9749; Tap</button></p><p>Score <b id=sc>0</b> &middot; Best <b id=bs></b> &middot; <span id=tm>Ready</span></p><script>
-var KEY='cb-best-'+location.pathname,s=0,on=0,end;bs.textContent=localStorage.getItem(KEY)||0;
-cup.onclick=()=>{if(!on){on=1;s=0;end=Date.now()+10000;(function t(){var l=end-Date.now();tm.textContent=(l/1000).toFixed(1)+'s';if(l>0)requestAnimationFrame(t);else{on=0;tm.textContent='Done';if(s>+bs.textContent){bs.textContent=s;localStorage.setItem(KEY,s)}}})()}if(on){s++;sc.textContent=s}}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak SIM</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#5a3a29"><link rel="icon" href="icon-192.png">
+<style>
+:root{--b:#5a3a29;--b2:#7b5440;--c:#fff6e8;--c2:#fdecd2;--p:#f6b3c4;--p2:#e98aa6;--ink:#3b2418}
+*{box-sizing:border-box}body{margin:0;background:var(--c);color:var(--ink);font-family:Georgia,Verdana,sans-serif;font-size:19px;line-height:1.5;padding-bottom:90px}
+header{background:linear-gradient(135deg,var(--b),var(--b2));color:var(--c);display:flex;align-items:center;gap:12px;padding:10px 14px}
+header img{width:54px;height:54px;border-radius:50%;background:var(--c);padding:3px;border:3px solid var(--p)}header h1{font-size:1.3rem;margin:0}header small{display:block;color:var(--c2)}
+main{max-width:760px;margin:0 auto;padding:12px}section{display:none}section.on{display:block}
+.card{background:#fff;border:2px solid var(--c2);border-top:6px solid var(--p2);border-radius:16px;padding:14px 16px;margin:12px 0}
+h2{color:var(--b);margin:8px 0}h3{color:var(--b);margin:4px 0}
+button,.btn{display:inline-block;font:inherit;font-weight:bold;background:var(--b);color:var(--c);border:0;border-radius:14px;padding:14px 18px;min-height:56px;margin:4px 2px;cursor:pointer;text-decoration:none;text-align:center}
+button.alt{background:var(--p);color:var(--ink)}button.red{background:#b3261e;color:#fff}button.grn{background:#2e7d32;color:#fff}.wide{width:100%}
+input,select,textarea{font:inherit;padding:12px;border:2px solid var(--p);border-radius:12px;width:100%;margin:4px 0;background:#fff}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--b);display:flex;overflow-x:auto;z-index:5}nav button{flex:1 0 auto;border-radius:0;margin:0;min-height:64px;font-size:.85rem;background:var(--b)}nav button.on{background:var(--p2);color:var(--ink)}
+.num{font-size:1.8rem;font-weight:bold;letter-spacing:2px;color:var(--b)}.muted{color:var(--b2);font-size:.9rem}
+.warn{background:#fff3f3;border-left:6px solid #b3261e;border-radius:10px;padding:10px 12px;font-size:.9rem}
+.emg{display:flex;gap:8px}.emg a{flex:1;background:#b3261e;color:#fff;font-size:1.4rem}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.list div{border-bottom:1px solid var(--c2);padding:8px 0}
+.msg{max-width:80%;padding:8px 12px;border-radius:12px;margin:4px 0}.me{background:var(--p);margin-left:auto}.them{background:var(--c2)}
+video{width:100%;background:#000;border-radius:12px}#lv{width:30%;position:absolute;right:8px;top:8px}
+#overlay{position:fixed;inset:0;background:rgba(59,36,24,.92);display:none;align-items:center;justify-content:center;z-index:20;padding:16px}#overlay.on{display:flex}#overlay .card{max-width:560px;width:100%;max-height:92vh;overflow:auto}
+footer{max-width:760px;margin:0 auto;padding:10px 14px;font-size:.8rem;color:var(--b2);text-align:center}
+.bar{height:22px;background:var(--c2);border-radius:11px;overflow:hidden}.bar i{display:block;height:100%;background:var(--p2)}
+#radar{width:200px;height:200px;margin:10px auto;border-radius:50%;background:radial-gradient(circle,var(--p) 0 8%,transparent 9% 30%,var(--c2) 31% 32%,transparent 33% 60%,var(--c2) 61% 62%,transparent 63%);border:3px solid var(--p2);position:relative;overflow:hidden}
+#radar span{position:absolute;inset:0;background:conic-gradient(rgba(233,138,166,.6),transparent 25%);animation:sp 2.5s linear infinite;border-radius:50%}@keyframes sp{to{transform:rotate(1turn)}}
+#qr img,#qr svg{width:220px;height:220px}.big{font-size:2.6rem;font-weight:bold;letter-spacing:8px;text-align:center;color:var(--b)}
+</style></head><body>
+<header><img src="logo.png" alt="Coffeebreak logo"><div><h1>Coffeebreak SIM</h1><small>Coffeebreak, Newcastle NSW</small></div></header>
+<main>
+<section id="t-net" class="on">
+ <div class="card"><h2>Coffeebreak Network</h2><div class="muted">Your free Coffeebreak number</div><div class="num" id="mynum">...</div>
+ <div class="muted" id="netstat">Connecting...</div>
+ <p class="muted">Free calls, video calls and texts to other Coffeebreak numbers over WiFi or mobile data. It reaches other Coffeebreak app users only, not regular phone numbers and not 000.</p></div>
+ <div class="card"><h3>Call or text a Coffeebreak number</h3><input id="dial" placeholder="CB-1234-5678" autocapitalize="characters">
+ <div class="row"><button class="grn" id="bVoice">Voice call</button><button class="grn" id="bVideo">Video call</button><button class="alt" id="bText">Text</button><button class="alt" id="bSave">Save contact</button></div>
+ <p class="warn" id="dialerEmg">Emergency: use any phone to dial 000. Coffeebreak calls cannot reach 000.</p>
+ <div class="emg"><a class="btn" href="tel:000">Call 000</a><a class="btn" href="tel:112">Call 112</a></div></div>
+ <button class="wide alt" id="bPair">Add phone nearby</button>
+ <div id="callbox" class="card" style="display:none;position:relative"><h3 id="callwho">Call</h3><video id="rv" autoplay playsinline></video><video id="lv" autoplay playsinline muted></video><div id="ctimer" class="muted"></div><button class="red wide" id="bHang">Hang up</button></div>
+</section>
+<section id="t-near">
+ <div class="card"><h2>Add phone nearby</h2><div id="radar" aria-hidden="true"><span></span></div>
+ <p class="muted">Pair two phones on the same WiFi or hotspot. Calls, texts and files then go straight from phone to phone where possible.</p>
+ <div class="row"><button class="wide" id="bShowCode">Show my pairing code</button><button class="wide alt" id="bEnterCode">Type a 4-digit code</button><button class="wide alt" id="bScan">Scan a QR code</button><button class="wide alt" id="bBt">Find by Bluetooth</button></div>
+ <div id="pairbox"></div><p class="muted" id="btMsg"></p>
+ <p class="muted">Browsers cannot make Bluetooth voice calls, so calls run over WiFi or mobile data.</p></div>
+ <div class="card"><h2>Send to nearby</h2><p class="muted">Send a photo or file to a paired phone. They can accept or decline.</p><select id="sendTo"></select><input type="file" id="sendFile"><button class="wide" id="bSendFile">Send</button><div id="recvList" class="list"></div></div>
+</section>
+<section id="t-contacts"><div class="card"><h2>Contacts</h2><input id="cName" placeholder="Name"><input id="cNum" placeholder="CB-1234-5678"><button class="wide" id="bAddC">Add contact</button></div><div class="card list" id="clist"></div></section>
+<section id="t-msgs"><div class="card"><h2>Messages</h2><select id="thread"></select><div id="msglist"></div><textarea id="mtext" rows="2" placeholder="Type a message"></textarea><button class="wide" id="bSend">Send</button></div></section>
+<section id="t-history"><div class="card"><h2>Call history</h2><div id="hlist" class="list"></div><button class="alt" id="bClearH">Clear history</button></div></section>
+<section id="t-sim">
+ <div class="card"><h2>Coffeebreak SIM</h2><p><b>Coming soon via our network partner.</b></p><p>A real Coffeebreak mobile SIM is not available yet. Join the free waitlist and we will let you know.</p>
+ <input id="wName" placeholder="Your first name"><input id="wEmail" type="email" placeholder="Your email"><button class="wide" id="bWait">Join the free waitlist</button><p id="wMsg" class="muted"></p></div>
+ <div class="card"><h2>Find a plan</h2><p class="muted">Coffeebreak is not a mobile carrier. Plans are provided by the listed providers. Check each site for current prices.</p>
+ <select id="pFilter"><option value="all">Show all</option><option value="home">Everyday plans</option><option value="prepaid">Prepaid</option><option value="travel">Travel eSIM</option></select><div id="plist"></div></div>
+</section>
+<section id="t-usage">
+ <div class="card"><h2>Data tracker</h2><p class="muted">Type in your numbers from your provider's app. Nothing is read from your phone.</p>
+ <label>Monthly data allowance (GB)<input id="uAllow" type="number" min="0" step="0.1"></label><label>Data used so far (GB)<input id="uUsed" type="number" min="0" step="0.1"></label><label>Plan renews on<input id="uRenew" type="date"></label><button class="wide" id="bUsage">Save</button>
+ <div class="bar"><i id="ubar" style="width:0"></i></div><p id="uText"></p></div>
+ <div class="card"><h2>Bill reminders</h2><input id="rName" placeholder="Bill name, eg Mobile plan"><input id="rAmt" type="number" step="0.01" placeholder="Amount A$"><input id="rDate" type="date"><button class="wide" id="bRem">Add reminder</button><div id="rlist" class="list"></div></div>
+</section>
+<section id="t-help"><div class="card"><h2>SIM and eSIM help</h2>
+<h3>APN tips</h3><p>The APN is the setting that lets your phone use mobile data. Most phones set it on their own when you put the SIM in. If data does not work, restart the phone first. Then look in Settings, Mobile or Cellular, Access Point Names, and check it matches the APN on your provider's help page.</p>
+<h3>Keeping your number (porting)</h3><p>You can move your number to a new provider. Do not cancel your old plan first. Sign up with the new provider and choose keep my number. You will need your account number or date of birth from the old provider. It usually moves within a day.</p>
+<h3>Can my phone use an eSIM</h3><p>An eSIM is a SIM built into the phone, with no card. On iPhone look in Settings, General, About for Digital SIM or EID. On Android look in Settings, Network, SIMs for Add eSIM. You can also dial *#06# and see if an EID number shows. Check your provider's eSIM phone list too.</p>
+<h3>Coffeebreak phones</h3><p>Coffeebreak WiFi phones are apps that run on WiFi and do not need a SIM.</p></div></section>
+<section id="t-apps"><div class="card"><h2>Coffeebreak WiFi phone apps</h2><p>Find all the Coffeebreak phones, apps and games on itch.io.</p><a class="btn wide" href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">Open coffeebreaks.itch.io</a></div></section>
+<section id="t-about"><div class="card"><h2>Settings and about</h2>
+<label>Ringtone<select id="ring"><option value="classic">Classic</option><option value="soft">Soft chime</option><option value="beep">Beep</option><option value="off">Silent</option></select></label><button class="alt" id="bRingTest">Play ringtone</button>
+<p class="warn" id="aboutEmg"></p>
+<p>Coffeebreak SIM is a free app from Coffeebreak, Newcastle NSW. Coffeebreak is not a mobile carrier. Mobile plans are provided by the listed providers. The Coffeebreak Network is an internet calling app between Coffeebreak app users only.</p>
+<p class="disc"></p><button class="alt" id="bNewNum">Get a new Coffeebreak number</button></div></section>
+</main>
+<footer><p>Coffeebreak is not a mobile carrier. Plans are provided by the listed providers. Emergency: use any phone to dial 000.</p><p class="disc"></p></footer>
+<nav id="nav"></nav>
+<div id="overlay"><div class="card" id="ovc"></div></div>
+<script src="peerjs.min.js"></script><script src="qrcode.js"></script><script src="app.js"></script>
+</body></html>

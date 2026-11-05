@@ -1,0 +1,38 @@
+{
+  "name": "Coffeebreak Glucose",
+  "short_name": "Glucose diary",
+  "description": "A simple blood glucose diary with Bluetooth meter support, mmol/L and mg/dL.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#ffe45c",
+  "lang": "en-AU",
+  "categories": [
+    "health",
+    "medical",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

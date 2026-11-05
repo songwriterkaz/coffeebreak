@@ -1,0 +1,4 @@
+Title: Coffeebreak What I Need Now
+Short description: Karen's simple checklist of missed builds, things to do, work in progress and recent Coffeebreak releases.
+Tags: checklist, productivity, organiser, todo, pwa, offline, coffeebreak, planner, tracker, simple
+https://coffeebreaks.itch.io

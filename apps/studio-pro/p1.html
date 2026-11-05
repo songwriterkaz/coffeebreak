@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Recording Studio Pro</title>
+<style>
+:root{--bg:#0d0d12;--p1:#16161e;--p2:#1e1e29;--p3:#2a2a38;--ln:#33334a;--tx:#e8e6f0;--mu:#8d8aa3;--pk:#ff2d95;--pk2:#ff7bbd;--gr:#3ddc97;--rd:#ff4d4d;--yl:#ffd166}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:13px/1.3 system-ui,Segoe UI,Arial,sans-serif;overflow:hidden}
+button,select,input{font:inherit;color:var(--tx)}
+button{background:var(--p3);border:1px solid var(--ln);border-radius:5px;padding:4px 9px;cursor:pointer}
+button:hover{border-color:var(--pk)}button.on{background:var(--pk);border-color:var(--pk);color:#fff}
+select,input[type=number],input[type=text]{background:var(--p1);border:1px solid var(--ln);border-radius:4px;padding:3px 5px}
+input[type=range]{accent-color:var(--pk)}
+#app{display:flex;flex-direction:column;height:100%}
+header{display:flex;align-items:center;gap:10px;padding:6px 10px;background:linear-gradient(90deg,#1a0f19,#14141c);border-bottom:2px solid var(--pk);flex-wrap:wrap}
+header img{height:44px;width:44px;border-radius:8px}
+.brand b{font-size:17px;color:var(--pk2);display:block}.brand span{font-size:11px;color:var(--mu)}
+.tp{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.lcd{font:600 20px/1 ui-monospace,Consolas,monospace;background:#05050a;color:var(--pk2);padding:6px 10px;border-radius:6px;border:1px solid var(--ln);min-width:170px;text-align:center}
+.grp{display:flex;gap:4px;align-items:center;padding:0 6px;border-left:1px solid var(--ln)}
+.grp label{color:var(--mu);font-size:11px}
+#rec{color:var(--rd);font-weight:700}#rec.on{background:var(--rd);color:#fff}
+#tools{display:flex;gap:4px;align-items:center;padding:4px 10px;background:var(--p1);border-bottom:1px solid var(--ln);flex-wrap:wrap}
+#main{flex:1;display:flex;flex-direction:column;min-height:0}
+#tlwrap{flex:1;overflow:auto;position:relative;min-height:120px;background:var(--bg)}
+#tlin{display:flex;position:relative}
+#heads{position:sticky;left:0;z-index:3;background:var(--p1);width:250px;flex:none;padding-top:24px;border-right:1px solid var(--ln)}
+.th{height:64px;border-bottom:1px solid var(--ln);padding:4px 6px;display:grid;grid-template-columns:8px 1fr;gap:5px;cursor:pointer}
+.th.sel{background:var(--p2)}.th .col{border-radius:3px}
+.th .r1,.th .r2{display:flex;gap:3px;align-items:center}
+.th input.nm{width:110px;padding:2px 4px}.th button{padding:1px 6px;font-size:11px}
+.th select{font-size:11px;padding:1px 2px;max-width:150px}
+.th .arm.on{background:var(--rd);border-color:var(--rd)}.th .mon.on{background:var(--yl);color:#000}.th .sol.on{background:var(--yl);color:#000}.th .mut.on{background:#5a6cff}
+#tl{display:block}#ph{position:absolute;top:0;width:2px;background:var(--pk);pointer-events:none;z-index:2}
+#bottom{height:320px;flex:none;background:var(--p1);border-top:2px solid var(--ln);display:flex;flex-direction:column}
+#tabs{display:flex;gap:2px;padding:4px 8px 0}#tabs button{border-radius:6px 6px 0 0;border-bottom:none}
+#panes{flex:1;overflow:auto;padding:8px;background:var(--p2)}.pane{display:none}.pane.show{display:block}
+.strips{display:flex;gap:6px}
+.strip{width:74px;flex:none;background:var(--p1);border:1px solid var(--ln);border-radius:6px;padding:5px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px}
+.strip .sn{width:100%;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--pk2)}
+.strip .fz{display:flex;gap:4px;align-items:flex-end}
+.strip input.fader{writing-mode:vertical-lr;direction:rtl;height:140px;width:22px}
+.strip canvas{background:#05050a;border-radius:2px}
+.strip input[type=range].kn{width:62px}
+.strip.mst{border-color:var(--pk)}
+.fx{display:flex;gap:8px;flex-wrap:wrap}
+.fxb{background:var(--p1);border:1px solid var(--ln);border-radius:8px;padding:6px 8px;min-width:170px}
+.fxb h4{margin:0 0 4px;font-size:12px;display:flex;justify-content:space-between;align-items:center;color:var(--pk2)}
+.fxb .row{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:11px;color:var(--mu)}
+.fxb .row input[type=range]{width:100px}
+.dm{display:grid;grid-template-columns:110px repeat(16,26px);gap:3px;align-items:center}
+.dm .cell{height:22px;background:var(--p3);border-radius:3px;cursor:pointer;border:1px solid var(--ln)}
+.dm .cell.b{background:#34344a}.dm .cell.on{background:var(--pk);border-color:var(--pk2)}
+#pr{background:#0b0b10;cursor:crosshair;display:block}
+#kb{display:flex;height:70px;position:relative;margin-top:6px;user-select:none}
+.wk{width:26px;height:70px;background:#f4f2f8;border:1px solid #888;border-radius:0 0 4px 4px;flex:none}
+.bk{width:16px;height:42px;background:#16161e;position:absolute;border-radius:0 0 3px 3px;z-index:1}
+.wk.dn,.bk.dn{background:var(--pk)}
+.msg{color:var(--pk2);font-size:12px;margin-left:8px}
+.note{color:var(--mu);font-size:11px}
+#drop{position:fixed;inset:0;background:rgba(255,45,149,.18);border:4px dashed var(--pk);display:none;align-items:center;justify-content:center;font-size:26px;z-index:50}
+.ci{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#lufs{font:600 12px ui-monospace,monospace;color:var(--gr)}
+</style></head><body>
+<div id="app">
+<header>
+ <img src="__MUG__" alt="Coffeebreak Games logo"><div class="brand"><b>Coffeebreak Recording Studio Pro</b><span>Coffeebreak Games</span></div>
+ <div class="tp">
+  <button id="rew" title="Back to start (Home)">&#9198;</button>
+  <button id="play" title="Play / Stop (Space)">&#9654; Play</button>
+  <button id="rec" title="Record (R)">&#9679; Rec</button>
+  <div class="lcd" id="lcd">001.1.00 0:00.0</div>
+ </div>
+ <div class="grp"><label>BPM</label><input id="bpm" type="number" min="30" max="300" value="120" style="width:60px">
+  <label>Time</label><select id="ts"><option>4/4</option><option>3/4</option><option>6/8</option><option>5/4</option><option>7/8</option><option>2/4</option></select></div>
+ <div class="grp"><button id="met" title="Metronome click">Click</button><label>Count-in</label><select id="ci"><option value="0">Off</option><option value="1" selected>1 bar</option><option value="2">2 bars</option></select></div>
+ <div class="grp"><button id="loop" title="Loop region (shift-drag the ruler)">Loop</button><button id="punch" title="Punch in/out region (alt-drag the ruler)">Punch</button></div>
+ <div class="grp"><label>Master</label><canvas id="mm" width="90" height="16"></canvas><span id="lufs">-- LUFS</span></div>
+ <span class="msg" id="msg"></span>
+</header>
+<div id="tools">
+ <button id="tsel" class="on" title="Move and trim clips">Select</button><button id="tsplit" title="Click a clip to split it">Split</button><button id="tdraw" title="Draw a new MIDI or drum clip">Draw</button>
+ <span class="note">|</span>
+ <button id="undo" title="Ctrl+Z">Undo</button><button id="redo" title="Ctrl+Y">Redo</button>
+ <button id="cdup" title="Ctrl+D">Duplicate</button><button id="csplitph" title="S">Split at playhead</button><button id="cdel" title="Delete">Delete clip</button>
+ <span class="note">Clip gain</span><input id="cgain" type="range" min="0" max="2" step="0.01" value="1" style="width:80px">
+ <span class="note">Fade in</span><input id="cfi" type="number" min="0" step="0.05" value="0" style="width:56px">
+ <span class="note">Fade out</span><input id="cfo" type="number" min="0" step="0.05" value="0" style="width:56px">
+ <span class="note">|</span><span class="note">Snap</span><select id="snap"><option value="1">Beat</option><option value="0.5">1/8</option><option value="0.25" selected>1/16</option><option value="4">Bar</option><option value="0">Off</option></select>
+ <span class="note">Zoom</span><input id="zoom" type="range" min="8" max="120" value="32" style="width:90px">
+ <button id="imp" title="Import audio files (or drag and drop)">Import audio</button><input id="impf" type="file" accept="audio/*" multiple hidden>
+ <button id="mics" title="Allow microphone and list inputs">Mic inputs</button>
+</div>
+<div id="main">
+ <div id="tlwrap"><div id="tlin"><div id="heads"></div><div style="position:relative"><canvas id="tl"></canvas><div id="ph"></div></div></div></div>
+ <div id="bottom">
+  <div id="tabs"><button data-p="mix" class="on">Mixer</button><button data-p="fx">Track Effects</button><button data-p="roll">Piano Roll</button><button data-p="drum">Drum Machine</button><button data-p="mst">Mastering</button><button data-p="exp">Export and Project</button><button data-p="help">Help</button></div>
+  <div id="panes">
+   <div class="pane show" id="p-mix"><div class="strips" id="strips"></div></div>
+   <div class="pane" id="p-fx"><div class="note" id="fxname"></div><div class="fx" id="fxbox"></div></div>
+   <div class="pane" id="p-roll"><div class="ci"><span class="note" id="rollname">Select or draw a MIDI clip on a synth track.</span><label class="note">Note length</label><select id="nlen"><option value="0.25">1/16</option><option value="0.5">1/8</option><option value="1" selected>1/4</option><option value="2">1/2</option><option value="4">1 bar</option></select><button id="qkb" class="on" title="Play notes with A W S E D F T G Y H U J K, Z and X shift octave">Computer keyboard</button><span class="note" id="midist">Web MIDI: checking</span><span class="note">Click empty space to add, drag to move, drag the right edge to resize, double-click to delete.</span></div>
+    <canvas id="pr" width="1200" height="300"></canvas><div id="kb"></div></div>
+   <div class="pane" id="p-drum"><div class="ci" style="margin-bottom:6px"><span class="note" id="drumname">Select or draw a drum clip on a drum track.</span><label class="note">Kit</label><select id="kit"><option>808</option><option>Acoustic</option><option>Electro</option><option>Lo-Fi</option></select><button id="dclr">Clear</button><button id="dfill">Basic beat</button></div><div class="dm" id="dm"></div></div>
+   <div class="pane" id="p-mst"><div class="fx" id="mstbox"></div></div>
+   <div class="pane" id="p-exp"><div class="ci">
+     <button id="xwav">Export mixdown WAV</button><button id="xmp3">Export mixdown MP3</button><select id="kbps"><option>128</option><option selected>192</option><option>320</option></select><span class="note">kbps</span>
+     <button id="xmp4">Export MP4 video</button><button id="xstem">Export stems (WAV)</button>
+     <span class="note">|</span><button id="psave">Save project</button><button id="pload">Open project</button><input id="ploadf" type="file" accept=".json,.cbstudio" hidden><button id="pnew">New project</button>
+    </div><p class="note" id="xinfo">Exports render the whole song, from the start to the end of the last clip, through every effect and the mastering chain.</p><canvas id="viz" width="1280" height="720" style="width:320px;height:180px;background:#000;border-radius:6px"></canvas></div>
+   <div class="pane" id="p-help"><div class="note" style="font-size:12px;max-width:900px">
+    <p><b>Recording.</b> Press Mic inputs to allow your microphone, pick an input on the track, press R on the track to arm it, then press Rec. Turn on I to hear yourself (use headphones). Set Count-in for a bar of clicks first. Turn on Punch and alt-drag the ruler to only keep a section.</p>
+    <p><b>Timeline.</b> Click the ruler to move the playhead, shift-drag it to set the loop region, alt-drag it to set the punch region. Drag clips to move them, drag clip edges to trim. Use Split, Duplicate, fades and clip gain in the toolbar. Drop audio files anywhere to import them.</p>
+    <p><b>Instruments.</b> Synth tracks play piano, electric piano, organ, pad, bass, lead and pluck sounds. Use Draw to make a clip, then the Piano Roll. Play with the on-screen keys, your computer keyboard or a MIDI keyboard. Arm a synth track and press Rec to record what you play. Drum tracks use the step sequencer.</p>
+    <p><b>Shortcuts.</b> Space play or stop, R record, Home to start, L loop, Ctrl+Z undo, Ctrl+Y redo, Ctrl+D duplicate, S split at playhead, Delete removes the clip. With Computer keyboard on in the Piano Roll tab, A to K play notes.</p>
+    <p>MP3 encoding uses lamejs (LAME project, LGPL, lame.sourceforge.net). Your project autosaves in this browser when storage is allowed. Use Save project to keep a file copy.</p></div></div>
+  </div>
+ </div>
+</div>
+</div>
+<div id="drop">Drop audio files to import</div>
+<script>/*__LAME__*/</script>
+<script>
