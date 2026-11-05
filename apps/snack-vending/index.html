@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Snack Vending Machine</title>
+<style>body{margin:0;background:radial-gradient(#5a1d3e,#1a0812);color:#fff;font-family:system-ui,sans-serif}main{max-width:900px;margin:0 auto;padding:10px}a{color:#ffb3d6}h1{text-align:center;color:#ffcf6a;margin:6px}
+.m{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.vm{background:linear-gradient(#ff5fae,#c02a72);border-radius:22px;padding:14px;box-shadow:0 10px 30px #000a,inset 0 0 0 6px #ffd1e8;width:min(520px,100%);box-sizing:border-box}
+.glass{background:linear-gradient(135deg,#2a1020cc,#4a2040cc);border-radius:12px;padding:8px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;position:relative;overflow:hidden}
+.slot{background:#ffffff10;border-radius:8px;text-align:center;padding:4px 2px;font-size:11px;position:relative}.slot .e{font-size:34px;display:block;transition:transform .9s cubic-bezier(.5,0,1,.5),opacity .9s}.slot.lock{opacity:.45}
+.slot b{display:block;color:#ffcf6a}.fall{transform:translateY(420px) rotate(40deg)!important}
+.tray{margin-top:10px;height:70px;background:#1a0812;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer}
+.panel{background:#2a1020;border-radius:16px;padding:12px;width:min(300px,100%);box-sizing:border-box}
+.scr{background:#0f2a12;color:#7dff8a;font-family:monospace;font-size:18px;padding:10px;border-radius:8px;min-height:44px}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}.keys button,.coins button{padding:12px 0;font-size:18px;font-weight:700;border-radius:10px;border:0;background:#ffd1e8;color:#5a1d3e;cursor:pointer}
+.keys button:active,.coins button:active{transform:scale(.92)}.coins{display:flex;gap:6px}.coins button{flex:1;border-radius:50%;aspect-ratio:1;background:radial-gradient(#ffe58a,#c99a2e)}
+#bag{font-size:14px}.coinfly{position:fixed;font-size:30px;transition:all .5s ease-in;pointer-events:none;z-index:9}</style></head><body><main>
+<header style="text-align:center"><img src="cb-logo.png" alt="Coffeebreak logo" width="60" style="border-radius:50%;background:#fff"><h1>Coffeebreak Snack Vending Machine</h1>
+<p style="font-size:14px">A just-for-fun digital vending machine with play coins. No real money is used and no real snacks are posted.</p></header>
+<div class="m"><div class="vm"><div class="glass" id="g"></div><div class="tray" id="tray" aria-live="polite" title="Collect your snack">⬇</div></div>
+<div class="panel"><div class="scr" id="scr" aria-live="polite">INSERT COINS</div><p>Credit: <b id="cr">0</b>c · Wallet: <b id="wal">0</b>c</p>
+<div class="coins"><button data-c="20" aria-label="Insert 20 cents">20c</button><button data-c="50" aria-label="Insert 50 cents">50c</button><button data-c="100" aria-label="Insert one dollar">$1</button><button data-c="200" aria-label="Insert two dollars">$2</button></div>
+<div class="keys" id="keys"></div><button id="ret" style="width:100%;padding:10px;border-radius:10px;border:0;background:#7a2350;color:#fff;font-weight:700">Coin return</button>
+<p style="font-size:13px">Need coins? <button id="earn" style="border:0;border-radius:14px;background:#ffcf6a;padding:4px 10px">Tap for 50c</button></p>
+<div id="bag"><b>My snacks:</b> <span id="bl">none yet</span></div></div></div>
+<p style="text-align:center;font-size:13px">Free demo: top two rows (8 snacks). The full app unlocks all 16 Coffeebreak snacks.</p>
+<div style="text-align:center;margin:10px"><a href="buy.html" style="background:#ff4fa3;color:#fff;padding:10px 18px;border-radius:22px;font-weight:700;text-decoration:none">Buy full app $10</a></div>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Buy full app</title><style>body{font-family:system-ui;background:#2a0f1f;color:#fff;text-align:center;padding:24px}a{color:#ffb3d6}</style></head><body><footer style="font-size:12px;text-align:center;padding:14px"><img src="cb-logo.png" alt="Coffeebreak logo" width="36" style="border-radius:50%;background:#fff;vertical-align:middle"> Coffeebreak © Karen O'Brien. Karen O'Brien keeps all rights to the designs, name and logo. No claim is made to any third-party brands.<br><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a></footer></body></html></main><script>
+const S=[['☕','CB Coffee',150],['🍩','Pink Donut',120],['🍪','Cinnamon Cookie',100],['🧁','Cupcake',140],['🍫','Choc Bar',110],['🥤','Iced Latte',160],['🍬','Candy',60],['🍭','Lollipop',50],
+['🥐','Croissant',130],['🍰','Cheesecake',180],['🍿','Popcorn',90],['🧃','Juice Box',80],['🍓','Strawberries',120],['🥨','Pretzel',90],['🍦','Soft Serve',140],['🍵','Matcha',150]];
+const FULL=localStorage.getItem('cbsnack_full')==='1';const $=i=>document.getElementById(i);let st=JSON.parse(localStorage.getItem('cbsnack')||'{"w":400,"bag":[]}'),cr=0,code='',busy=0;
+const codes=S.map((s,i)=>'ABCD'[i>>2]+(i%4+1));
+$('g').innerHTML=S.map((s,i)=>'<div class="slot'+(!FULL&&i>=8?' lock':'')+'" id="s'+i+'"><span class="e">'+s[0]+'</span>'+s[1]+'<b>'+codes[i]+' · '+s[2]+'c</b>'+(!FULL&&i>=8?'🔒':'')+'</div>').join('');
+['A','B','C','D','1','2','3','4'].forEach(k=>{const b=document.createElement('button');b.textContent=k;b.onclick=()=>key(k);$('keys').appendChild(b)});
+const OK=document.createElement('button');OK.textContent='OK';OK.style.gridColumn='span 2';OK.onclick=vend;const CL=document.createElement('button');CL.textContent='CLR';CL.style.gridColumn='span 2';CL.onclick=()=>{code='';show()};$('keys').append(CL,OK);
+let ac;const snd=(f,d,t='square')=>{try{ac=ac||new AudioContext();const o=ac.createOscillator(),g=ac.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(.15,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}};
+function save(){localStorage.setItem('cbsnack',JSON.stringify(st));$('wal').textContent=st.w;$('cr').textContent=cr;$('bl').textContent=st.bag.length?st.bag.slice(-12).join(' '):'none yet'}
+function show(t){$('scr').textContent=t||(code?'CODE '+code:(cr?'CREDIT '+cr+'c · PICK':'INSERT COINS'))}
+document.querySelectorAll('.coins button').forEach(b=>b.onclick=e=>{const c=+b.dataset.c;if(st.w<c){show('NOT ENOUGH IN WALLET');snd(120,.3);return}st.w-=c;cr+=c;
+ const f=document.createElement('div');f.className='coinfly';f.textContent='🪙';const r=b.getBoundingClientRect(),t=$('scr').getBoundingClientRect();f.style.left=r.left+'px';f.style.top=r.top+'px';document.body.appendChild(f);requestAnimationFrame(()=>{f.style.left=t.right-30+'px';f.style.top=t.top+'px';f.style.opacity=.2});setTimeout(()=>f.remove(),550);
+ snd(1200,.08,'triangle');setTimeout(()=>snd(1600,.1,'triangle'),80);save();show()});
+function key(k){snd(600,.05);code=(code+k).slice(-2);show()}
+function vend(){if(busy)return;const i=codes.indexOf(code);code='';if(i<0){show('PICK A CODE LIKE A1');snd(150,.3);return}
+ if(!FULL&&i>=8){show('FULL APP SNACK 🔒');snd(150,.3);return}const s=S[i];if(cr<s[2]){show('NEED '+(s[2]-cr)+'c MORE');snd(150,.3);return}
+ cr-=s[2];busy=1;show('VENDING '+s[1].toUpperCase());const el=$('s'+i).querySelector('.e');let n=0;const sp=setInterval(()=>{snd(80+n*10,.1,'sawtooth');if(++n>6)clearInterval(sp)},120);
+ setTimeout(()=>{el.classList.add('fall');snd(90,.25,'sine')},800);
+ setTimeout(()=>{snd(60,.3,'sine');$('tray').textContent=s[0];$('tray').dataset.s=s[0];show('ENJOY! TAKE YOUR '+s[1].toUpperCase());el.style.transition='none';el.classList.remove('fall');el.style.opacity=0;
+  requestAnimationFrame(()=>{el.style.transition='';el.style.opacity=1});busy=0;save()},1750)}
+$('tray').onclick=()=>{if($('tray').dataset.s){st.bag.push($('tray').dataset.s);$('tray').dataset.s='';$('tray').textContent='⬇';snd(900,.1,'triangle');save()}};
+$('ret').onclick=()=>{if(cr){st.w+=cr;cr=0;snd(1000,.2,'triangle');save();show('COINS RETURNED')}};
+$('earn').onclick=()=>{st.w+=50;snd(1400,.08,'triangle');save()};save();show();
+</script></body></html>

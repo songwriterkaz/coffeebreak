@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Abundance Cheques</title>
+<style>body{margin:0;background:linear-gradient(#2a0f1f,#4a1a36);color:#fff3f8;font-family:Georgia,serif}main{max-width:860px;margin:0 auto;padding:12px}h1{color:#ffcf6a;text-align:center}a{color:#ffb3d6}
+.card{background:rgba(0,0,0,.3);border:1px solid #8a3a62;border-radius:14px;padding:12px;margin:12px 0}label{display:block;font-size:14px;margin-top:6px}input{width:100%;box-sizing:border-box;padding:8px;font:16px Georgia;border-radius:8px;border:1px solid #8a3a62;background:#1a0a14;color:#fff}
+button{background:#ff4fa3;color:#fff;border:0;border-radius:20px;padding:9px 14px;font:bold 15px Georgia;margin:4px;cursor:pointer}canvas{width:100%;height:auto;border-radius:12px;box-shadow:0 6px 24px #0008}
+#aff{font-size:20px;text-align:center;font-style:italic;color:#ffe9a8}#hist div{border-bottom:1px solid #5a2a42;padding:6px 0;font-size:14px}.lock{opacity:.6}</style></head><body><main>
+<header style="text-align:center"><img src="cb-logo.png" alt="Coffeebreak logo" width="64" style="border-radius:50%;background:#fff"><h1>Coffeebreak Abundance Cheques</h1></header>
+<div class="card"><p id="aff" aria-live="polite"></p><div style="text-align:center"><button id="na">New affirmation</button></div></div>
+<canvas id="cq" width="1200" height="540" role="img" aria-label="Your manifestation cheque"></canvas>
+<div class="card"><label for="payee">Pay to</label><input id="payee" value="Karen O'Brien">
+<label for="amt">Amount (numbers)</label><input id="amt" type="number" min="0" step="0.01" value="1000000">
+<label for="dt">Date</label><input id="dt" type="date"><label for="memo">Memo / affirmation</label><input id="memo" maxlength="70" value="For my dream life, received with gratitude">
+<p><button id="save">Save to cheque book</button><button id="dl">Download image</button><button id="pr">Print</button><button id="sh">Share</button></p>
+<p style="font-size:13px">Free demo: 3 saved cheques. The full app gives you an unlimited cheque book and gold cheque designs.</p></div>
+<div class="card"><h2>Cheque book</h2><div id="hist"></div></div>
+<div style="text-align:center;margin:10px"><a href="buy.html" style="background:#ff4fa3;color:#fff;padding:10px 18px;border-radius:22px;font-weight:700;text-decoration:none">Buy full app $10</a></div>
+<footer style="font-size:12px;text-align:center;padding:14px"><img src="cb-logo.png" alt="Coffeebreak logo" width="36" style="border-radius:50%;background:#fff;vertical-align:middle"> Coffeebreak © Karen O'Brien. Karen O'Brien keeps all rights to the designs, name and logo. No claim is made to any third-party brands.<br><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a></footer></main><script>
+const $=i=>document.getElementById(i),c=$('cq'),x=c.getContext('2d');
+const A=["Money flows to me easily and often.","I am open to receiving abundance in all forms.","Every day my wealth grows.","I am worthy of my dreams.","Good things are on their way to me.","I welcome prosperity with gratitude.","My songs and art bring me joy and abundance.","I attract opportunities with ease.","I have more than enough.","The universe supports me."];
+const dayA=()=>A[Math.floor(Date.now()/864e5)%A.length];$('aff').textContent=dayA();let ai=0;$('na').onclick=()=>{ai=(ai+1)%A.length;$('aff').textContent=A[ai]};
+$('dt').value=new Date().toISOString().slice(0,10);
+const O=['','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'],TT=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+function w3(n){let s='';if(n>=100){s+=O[Math.floor(n/100)]+' hundred';n%=100;if(n)s+=' and '}if(n>=20){s+=TT[Math.floor(n/10)];if(n%10)s+='-'+O[n%10]}else if(n)s+=O[n];return s}
+function words(v){v=Math.min(999999999999,Math.max(0,v));let d=Math.floor(v),ct=Math.round((v-d)*100);if(!d)return 'Zero dollars';const u=[[1e9,'billion'],[1e6,'million'],[1e3,'thousand']];let s='';for(const [q,n] of u){if(d>=q){s+=w3(Math.floor(d/q))+' '+n+' ';d%=q}}s+=w3(d);s=s.trim()+' dollars'+(ct?' and '+ct+' cents':'')+' only';return s[0].toUpperCase()+s.slice(1)}
+const logo=new Image();logo.src='cb-logo.png';logo.onload=draw;
+function draw(){const W=1200,H=540;const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#ffe4f1');g.addColorStop(.5,'#fff6e0');g.addColorStop(1,'#e9ddff');x.fillStyle=g;x.fillRect(0,0,W,H);
+ x.globalAlpha=.08;x.fillStyle='#c0407a';for(let i=0;i<40;i++){x.beginPath();x.arc((i*137)%W,(i*91)%H,30+i%5*12,0,7);x.fill()}x.globalAlpha=1;
+ x.strokeStyle='#c99a2e';x.lineWidth=6;x.strokeRect(14,14,W-28,H-28);x.lineWidth=2;x.strokeRect(26,26,W-52,H-52);
+ x.drawImage(logo,46,44,90,90);x.fillStyle='#7a2350';x.font='bold 40px Georgia';x.fillText('The Bank of the Universe',150,90);x.font='italic 20px Georgia';x.fillText('A Coffeebreak abundance cheque',152,122);
+ x.font='20px Georgia';x.fillStyle='#333';x.fillText('Date  '+$('dt').value,900,80);
+ x.fillText('PAY TO',50,200);x.font='bold 34px Georgia';x.fillText($('payee').value.slice(0,40),160,200);x.fillRect(160,210,680,2);
+ const v=+$('amt').value||0;x.strokeStyle='#7a2350';x.strokeRect(880,160,280,60);x.font='bold 30px Georgia';x.fillText('$ '+v.toLocaleString('en-AU',{minimumFractionDigits:2}),895,202);
+ const ws=words(v);x.font='italic '+(ws.length>80?16:ws.length>60?19:24)+'px Georgia';x.fillText(ws,50,270,1110);x.fillRect(50,282,1110,2);
+ x.font='20px Georgia';x.fillText('MEMO  '+$('memo').value,50,340);x.fillRect(50,352,700,2);
+ x.font='italic 34px Georgia';x.fillStyle='#7a2350';x.fillText('The Universe',860,340);x.fillRect(820,352,340,2);x.font='14px Georgia';x.fillText('Authorised by gratitude',900,372);
+ x.fillStyle='#b0004a';x.fillRect(40,410,W-80,70);x.fillStyle='#fff';x.font='bold 30px Georgia';x.textAlign='center';x.fillText('MANIFESTATION ONLY — NOT A REAL CHEQUE — NO CASH VALUE',W/2,456);x.textAlign='left';
+ x.fillStyle='#7a2350';x.font='13px Georgia';x.fillText('Coffeebreak © Karen O\'Brien. A vision-board keepsake. Cannot be deposited, cashed or exchanged.',50,510)}
+['payee','amt','dt','memo'].forEach(i=>$(i).addEventListener('input',draw));draw();
+let H=JSON.parse(localStorage.getItem('cbcheques')||'[]');const FULL=localStorage.getItem('cbcheques_full')==='1';
+function hist(){$('hist').innerHTML=H.length?H.map(h=>'<div>'+h.d+' · '+h.p+' · $'+(+h.a).toLocaleString()+' · <em>'+h.m+'</em></div>').join(''):'No cheques yet.'}hist();
+$('save').onclick=()=>{if(!FULL&&H.length>=3){alert('The free demo holds 3 cheques. Buy the full app for an unlimited cheque book.');return}H.unshift({d:$('dt').value,p:$('payee').value,a:$('amt').value,m:$('memo').value});localStorage.setItem('cbcheques',JSON.stringify(H));hist()};
+$('dl').onclick=()=>{const a=document.createElement('a');a.download='abundance-cheque.png';a.href=c.toDataURL();a.click()};
+$('pr').onclick=()=>{const w=open('');w.document.write('<img src="'+c.toDataURL()+'" style="width:100%">');w.document.close();w.onload=()=>w.print()};
+$('sh').onclick=()=>c.toBlob(async b=>{const f=new File([b],'abundance-cheque.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],title:'My abundance cheque'});else $('dl').click()});
+</script></body></html>
