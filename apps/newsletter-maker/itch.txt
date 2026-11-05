@@ -1,0 +1,39 @@
+TITLE
+Coffeebreak Newsletter
+
+SHORT DESCRIPTION (105 characters)
+Join the free Coffeebreak Newsletter for new apps, new songs, Coffeebreak TV Series news, deals and more.
+
+KIND / SETTINGS
+Kind of project: HTML. Upload coffeebreak-newsletter.zip and tick "This file will be played in the browser".
+Embed: Click to launch in fullscreen OFF, viewport 640 x 820, mobile friendly ON.
+Pricing: No payments (free).
+Classification: Other. Genre: Other.
+
+TAGS
+newsletter, coffeebreak, music, apps, free, australian, community, html5
+
+COVER / SCREENSHOTS
+Cover (630x500): ads/coffeebreak-newsletter-01-new-apps-630x500.png
+Screenshots (630x500): 02-new-songs, 03-tv-series, 04-deals, 05-behind-the-scenes
+1200x628 versions of all five are in ads/ for sharing on socials and in devlogs.
+
+DESCRIPTION
+Coffeebreak Newsletter
+
+Grab a cuppa and stay in the loop. The Coffeebreak Newsletter is free, and it is the first place to hear about everything Coffeebreak is making.
+
+What you get:
+- New apps: be first to play new Coffeebreak apps and games
+- New songs: hear Karen's new songs before anyone else
+- Coffeebreak TV Series: episode news and sneak peeks
+- Deals: newsletter friends get Coffeebreak deals first
+- Behind the scenes: see how the apps, songs and shows get made
+
+How to join:
+Type your name and email, then press Sign me up. Your own email app opens with a short signup message. Press Send and you are in.
+
+Your privacy:
+We only ask for your name and email. Nothing else is collected, and your details are only used to send you the newsletter. To leave at any time, reply to any newsletter and ask to be removed.
+
+Coffeebreak by Karen O'Brien. Karen keeps all rights to these designs, name and logo. You may not copy them or make your own versions.

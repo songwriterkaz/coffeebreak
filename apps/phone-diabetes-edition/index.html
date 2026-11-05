@@ -1,11 +1,87 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Phone Diabetes Edition</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Phone Diabetes Edition</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><script>/*storage-shim*/(function(){var ok=false;try{var s=window.localStorage;s.setItem('__t','1');s.removeItem('__t');ok=true}catch(e){}if(ok)return;var d={};var m={getItem:function(k){return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}};try{Object.defineProperty(window,'localStorage',{get:function(){return m},configurable:true})}catch(e){}try{Object.defineProperty(window,'sessionStorage',{get:function(){return m},configurable:true})}catch(e){}})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Coffeebreak Phone Diabetes Edition</title><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#ff4fa3"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(#4a2436,#1a0a12);font:16px system-ui,sans-serif;color:#3a1a28;min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;padding:10px;user-select:none;-webkit-user-select:none}
+.unit{width:100%;max-width:440px;background:linear-gradient(#ffd9ea,#ff9fc8);border:6px solid #cfd3d8;border-radius:28px;box-shadow:inset 0 0 0 3px #fff8,0 10px 30px #0008;padding:14px}
+.chrome{background:linear-gradient(#f4f6f8,#9aa1a8,#e9ecef);border-radius:14px;padding:8px;margin-bottom:10px}
+.top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.top img{width:54px;height:54px;border-radius:50%;border:3px solid #fff}
+.brand{font-weight:900;font-size:17px;letter-spacing:1px;color:#5a1e3a}.brand small{display:block;font-size:11px;font-weight:600}
+.lcd{background:#1b0d06;color:#ff5a3c;font:bold 64px/1 'Courier New',monospace;text-align:center;border-radius:10px;padding:8px;text-shadow:0 0 12px #ff3a1c;border:4px solid #fff1dc}
+.lcd small{display:block;font-size:13px;color:#ffb26a;text-shadow:none}
+.meter{display:flex;gap:3px;height:16px;margin:8px 0}.meter i{flex:1;background:#5a3a2a;border-radius:2px}.meter i.on{background:#7cff5a}.meter i.on.hi{background:#ff4a3a}
+.knobs{display:flex;justify-content:space-around;margin:8px 0}.kn{text-align:center;font-size:12px;font-weight:800}
+.knob{width:78px;height:78px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#b9bec4 45%,#6d737a);border:3px solid #fff8ef;position:relative;touch-action:none;margin:auto}
+.knob::after{content:'';position:absolute;left:50%;top:6px;width:6px;height:22px;margin-left:-3px;background:#ff2f8a;border-radius:3px}
+.big{width:62px;height:62px}
+.row{display:flex;gap:8px;margin:6px 0}.row>*{flex:1}
+input,button{font:inherit;font-size:17px;border-radius:12px;border:2px solid #fff;padding:12px}
+button{background:#fff3e0;font-weight:800;color:#5a1e3a;cursor:pointer}
+.lingo button{background:#ffe9f3;font-size:15px;padding:10px 4px}
+#ptt{width:100%;height:120px;border-radius:60px;background:radial-gradient(#ff6aa8,#c2185b);color:#fff;font-size:28px;border:6px solid #e6e8eb;box-shadow:0 6px 0 #8a1040;touch-action:none}
+#ptt.tx{background:radial-gradient(#ff3a3a,#a00);box-shadow:0 2px 0 #600;transform:translateY(4px)}
+.mic{display:flex;align-items:center;gap:8px;margin:10px 0}.cord{flex:1;height:22px;background:repeating-linear-gradient(90deg,#2b2b2b 0 6px,#555 6px 9px);border-radius:11px}
+.mic b{background:#fff3e0;padding:6px 10px;border-radius:10px;font-size:13px}
+#log{background:#fffaf2;border-radius:10px;height:130px;overflow:auto;padding:8px;font-size:14px}
+#st{font-size:13px;font-weight:700;text-align:center;margin:4px 0}
+#fsb{background:#5a1e3a;color:#fff}
+.sw{margin-left:auto;flex-shrink:0;display:flex;border:3px solid #9aa1a8;border-radius:10px;overflow:hidden}.sw button{border:0;border-radius:0;padding:8px 10px;font-size:13px;background:#e9ecef}.sw button.on{background:#ff4fa3;color:#fff}
+.emf{display:flex;align-items:center;gap:8px;margin:8px 0}.emfbar{flex:1;height:22px;background:#3a2a2a;border-radius:11px;overflow:hidden}.emfbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7cff5a,#ffe14a,#ff3a3a);transition:width .12s}
+#glog{background:#fffaf2;border-radius:10px;height:140px;overflow:auto;padding:8px;font-size:14px}
+.ent{text-align:center;font-size:12px;margin-top:8px;opacity:.8}
+body.glow{background:radial-gradient(#0a3a1a,#000)}body.glow .unit{background:linear-gradient(#123a22,#06180c);color:#9dff9d;box-shadow:0 0 40px #2bff6a88}body.glow .lcd{color:#5bff7a;text-shadow:0 0 14px #2bff4a}body.glow #glog,body.glow #log{background:#021006;color:#7dff8d}body.glow button{background:#0d2a16;color:#9dff9d;border-color:#2bff6a}body.glow .brand{color:#9dff9d}
+body.glow .chrome{background:linear-gradient(#1a3a24,#06180c);border:2px solid #2bff6a}body.glow .sw button.on{background:#2bff6a;color:#021006}
+.dcard{background:#fffaf2;border-radius:12px;padding:10px;margin:8px 0;font-size:15px}.dcard h3{margin:0 0 6px;font-size:16px;color:#5a1e3a}.dcard video{width:100%;border-radius:10px}.dis{background:#5a1e3a;color:#fff;border-radius:10px;padding:8px;font-size:13px;font-weight:700}#sos{width:100%;background:#d50000;color:#fff;font-size:24px}.dcard select,.dcard input{width:100%;margin:3px 0}
+</style></head><body>
+<div class="unit">
+ <div class="chrome top"><img src="logo.jpg" alt="Coffeebreak logo"><div class="brand">COFFEEBREAK<small>PHONE · DIABETES EDITION</small></div><div class="sw"><button id="mRadio" class="on">RADIO</button><button id="mGhost">GHOST</button><button id="mDiab">DIABETES</button></div></div>
+ <div class="lcd" id="lcd">19<small id="lcds">CH 19 · RX</small></div>
+ <div class="meter" id="meter"></div>
+ <div id="radioUI"><div class="knobs">
+  <div class="kn"><div class="knob big" id="kSq"></div>SQUELCH</div>
+  <div class="kn"><div class="knob" id="kCh"></div>CHANNEL</div>
+  <div class="kn"><div class="knob big" id="kVol"></div>VOLUME</div>
+ </div>
+ <div class="row"><button id="chDn">CH -</button><input id="room" placeholder="Room code (optional)" style="flex:2"><button id="chUp">CH +</button></div>
+ <div class="row"><button id="tune">Tune in</button><button id="fsb">Full screen</button></div>
+ <div id="st">Off air. Tap Tune in.</div>
+ <button id="ptt">HOLD TO TALK</button>
+ <div class="mic"><b>MIC</b><div class="cord"></div><b id="peers">0 on channel</b></div>
+ <div class="row lingo"><button data-l="10-4">10-4</button><button data-l="Breaker breaker">Breaker</button><button data-l="What's your 20">Your 20</button><button data-l="Over">Over</button></div>
+ <div class="row"><input id="msg" placeholder="Breaker message" style="flex:3"><button id="send">Send</button></div>
+ <div id="log"></div>
+</div>
+<div id="ghostUI" hidden>
+ <div class="knobs"><div class="kn"><div class="knob big" id="kSweep"></div>SWEEP</div><div class="kn"><div class="knob big" id="kGVol"></div>VOLUME</div></div>
+ <div class="emf"><b>EMF</b><div class="emfbar"><i id="emf"></i></div><b id="emfv">0.0</b></div>
+ <div class="row"><button id="gScan">Start scan</button><button id="gRec">Record session</button></div>
+ <div class="row"><button id="gSpeak">Voice: off</button><button id="gGlow">Green glow</button></div>
+ <div class="row"><button id="gSave">Save log</button><button id="gClear">Clear log</button></div>
+ <b style="font-size:13px">Captured words</b><div id="glog"></div>
+</div>
+<div id="diabUI" hidden>
+ <div class="dis">Estimates only. This phone does not measure blood glucose. Always use your meter or CGM and follow your diabetes team.</div>
+ <div class="dcard" style="text-align:center"><img src="diabetes-girl.jpg" alt="Coffeebreak girl, Type 1 Tough" style="width:100%;border-radius:10px"><b>Type 1 Tough · Sweet Enough Already</b></div>
+ <div class="dcard"><h3>Food Sugar Scanner</h3><button id="dFoodCam">Open camera</button><video id="dVid" hidden playsinline muted></video><button id="dFoodSnap" hidden>Snap</button><div id="dFoodMsg" style="font-size:13px"></div>
+  <select id="dFood"></select>Portion <span id="dPortV"></span><input id="dPortion" type="range" min="0.25" max="4" step="0.25" value="1"><div id="dFoodOut"></div><button id="dFoodLog">Log carbs</button>
+  <h3 style="margin-top:10px">Barcode (packaged food)</h3><div class="row"><input id="dBarIn" inputmode="numeric" placeholder="Barcode numbers" style="flex:2"><button id="dBarGo">Look up</button></div><button id="dBarCam">Scan barcode with camera</button><video id="dBarVid" hidden playsinline muted></video><div id="dBarOut" style="font-size:14px"></div><small>Data from Open Food Facts, per 100g.</small></div>
+ <div class="dcard"><h3>Meter Reader</h3><small>Photograph your glucose meter screen and the phone reads the number for you to check.</small><button id="dMCam">Open camera</button><video id="dMVid" hidden playsinline muted></video><button id="dMSnap" hidden>Read</button><div id="dMOut" style="font-size:13px"></div><div class="row"><input id="dMIn" inputmode="decimal" style="flex:2"><button id="dMLog">Log</button></div></div>
+ <div class="dcard"><h3>Plug-in meter</h3><small>Your USB-C plug-in meter does the strip test and shows the result in its own app. Snap that screen or type the number in to log it here. This app does not read the meter directly.</small><button id="dPCam">Snap meter result</button><video id="dPVid" hidden playsinline muted></video><button id="dPSnap" hidden>Read</button><div id="dPOut" style="font-size:13px"></div><div class="row"><input id="dPIn" inputmode="decimal" style="flex:2"><button id="dPLog">Log</button></div></div>
+ <div class="dcard"><h3>Arm sensor (CGM)</h3><small>Your wireless arm sensor shows readings in its maker's official app. Snap that screen or type the number in to log it here. This app does not read the sensor directly.</small><button id="dSCam">Snap sensor app</button><video id="dSVid" hidden playsinline muted></video><button id="dSSnap" hidden>Read</button><div id="dSOut" style="font-size:13px"></div><div class="row"><input id="dSIn" inputmode="decimal" style="flex:2"><button id="dSLog">Log</button></div></div>
+ <div class="dcard"><h3>Log and chart</h3><div class="row"><input id="dIIn" placeholder="Insulin or meds note, eg 4u rapid" style="flex:3"><button id="dILog">Add</button></div>
+  <canvas id="dChart" width="400" height="160" style="width:100%;background:#fff;border-radius:8px"></canvas>
+  <div class="row"><button id="dUnitT">Units: <span id="dUnit"></span></button></div>
+  <div class="row"><input id="dLow" inputmode="decimal" title="Low"><input id="dHigh" inputmode="decimal" title="High"><button id="dBands">Set low/high</button></div>
+  <div class="row"><button id="dCsv">Export CSV</button><button id="dClear">Clear</button></div><div id="dLog" style="max-height:200px;overflow:auto;font-size:13px"></div></div>
+ <div class="dcard"><h3>Reminders</h3><div class="row"><input id="dRemT" type="time"><input id="dRemW" placeholder="Check glucose / meds" style="flex:2"><button id="dRemAdd">Add</button></div><div id="dRemList" style="font-size:14px"></div><small>Reminders pop up while the app is open.</small></div>
+ <div class="dcard" style="border:3px solid #d50000"><h3>Hypo card</h3>I have diabetes. If I am confused, shaky, sweaty or not making sense, my blood sugar may be low.<br>1. Give 15g of fast sugar: 150ml juice or soft drink (not diet), or 6 jelly beans.<br>2. Wait 15 minutes and recheck.<br>3. Repeat if still low, then eat a snack.<br>If I am unconscious, do not give food or drink. Call 000.<a href="tel:000"><button id="sos">SOS · Call 000</button></a><div class="sosdis" style="background:#fff200;color:#000;border:3px solid #d50000;border-radius:10px;padding:10px;margin:8px 0;font-size:17px;font-weight:800;line-height:1.35;text-align:center">SOS may not work. The Coffeebreak Phone is Wi-Fi only with no SIM, so it may not be able to call 000. In an emergency use a mobile phone with a SIM or a landline.</div></div>
+ <div class="dis">Estimates only. This phone does not measure blood glucose. Always use your meter or CGM and follow your diabetes team.</div>
+</div>
+<div class="ent">For entertainment only</div>
+</div>
+<script src="peerjs.min.js"></script><script src="cb-fullscreen.js"></script><script src="app.js"></script><script src="ghost.js"></script><script src="diabetes.js"></script>
+<!-- CB-VALUE-WATERMARK:START --><div id="cb-value-wm" aria-hidden="true" style="position:fixed;right:6px;bottom:4px;z-index:1;pointer-events:none;user-select:none;opacity:.3;font:11px/1.2 sans-serif;color:#000;text-shadow:0 0 2px #fff;background:transparent;white-space:nowrap">Coffeebreak catalogue value AU$47,094</div><!-- CB-VALUE-WATERMARK:END --><noscript><p style="font:700 26px system-ui;padding:24px;text-align:center">This phone needs JavaScript. Please turn it on in your browser settings, then reload.</p></noscript><script src="cbsimple.js"></script><script src="simple-init.js"></script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

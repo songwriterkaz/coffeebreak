@@ -1,0 +1,160 @@
+{
+ "products": [
+  {
+   "sku": "BK-001",
+   "title": "Dot Cookie Box (4 Pack)",
+   "category": "Cookies",
+   "icon": "🍪",
+   "supplier": "S1",
+   "supplierUrl": "S1-0",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 84
+  },
+  {
+   "sku": "BK-002",
+   "title": "Biscoff Loaded Cookie Box (4 Pack)",
+   "category": "Cookies",
+   "icon": "🍪",
+   "supplier": "S1",
+   "supplierUrl": "S1-1",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 84
+  },
+  {
+   "sku": "BK-003",
+   "title": "KitKat Loaded Cookie Box (4 Pack)",
+   "category": "Cookies",
+   "icon": "🍪",
+   "supplier": "S1",
+   "supplierUrl": "S1-2",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 84
+  },
+  {
+   "sku": "BK-004",
+   "title": "Oreo Brownie - Serves 9 people",
+   "category": "Brownies",
+   "icon": "🍫",
+   "supplier": "S1",
+   "supplierUrl": "S1-3",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 84
+  },
+  {
+   "sku": "BK-005",
+   "title": "Blondie Brownie - Serves 9 people",
+   "category": "Brownies",
+   "icon": "🍫",
+   "supplier": "S1",
+   "supplierUrl": "S1-4",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 84
+  },
+  {
+   "sku": "BK-006",
+   "title": "Favourite Four",
+   "category": "Brownies",
+   "icon": "🍫",
+   "supplier": "S1",
+   "supplierUrl": "S1-5",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 84
+  },
+  {
+   "sku": "BK-007",
+   "title": "9 Mixed Donuts",
+   "category": "Donuts",
+   "icon": "🍩",
+   "supplier": "S1",
+   "supplierUrl": "S1-6",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 114
+  },
+  {
+   "sku": "BK-008",
+   "title": "4 Nutella Donuts",
+   "category": "Donuts",
+   "icon": "🍩",
+   "supplier": "S1",
+   "supplierUrl": "S1-7",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 74
+  },
+  {
+   "sku": "BK-009",
+   "title": "Brownie Party Box + FREE Happy Birthday Card",
+   "category": "Gift Boxes",
+   "icon": "🎁",
+   "supplier": "S1",
+   "supplierUrl": "S1-8",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 84
+  },
+  {
+   "sku": "BK-010",
+   "title": "Lolly and Cookie Bundle",
+   "category": "Gift Boxes",
+   "icon": "🎁",
+   "supplier": "S1",
+   "supplierUrl": "S1-9",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 128
+  },
+  {
+   "sku": "BK-011",
+   "title": "The Birthday Bouquet",
+   "category": "Gift Boxes",
+   "icon": "🎁",
+   "supplier": "S1",
+   "supplierUrl": "S1-10",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 128
+  },
+  {
+   "sku": "BK-012",
+   "title": "Gluten Free Cookie 4 Pack",
+   "category": "Gluten-free & Vegan",
+   "icon": "🌱",
+   "supplier": "S1",
+   "supplierUrl": "S1-11",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 84
+  },
+  {
+   "sku": "BK-013",
+   "title": "Vegan Cookie 4 Pack Gift Box",
+   "category": "Gluten-free & Vegan",
+   "icon": "🌱",
+   "supplier": "S1",
+   "supplierUrl": "S1-12",
+   "available": true,
+   "allergens_note": "See allergen info on the product (typically wheat, egg, milk, soy, nuts)",
+   "ships": "Baked fresh and posted Australia-wide to you",
+   "salePrice": 84
+  }
+ ]
+}

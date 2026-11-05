@@ -1,11 +1,67 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Scrapbook Vision Board &amp; Journal</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Scrapbook Vision Board &amp; Journal</h1><p class="price">Free</p><p>A post feed on your device: write posts, like them, and keep a local community board.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=nm placeholder="Your name" value="Guest"></p><textarea id=tx placeholder="Write a post"></textarea><p><button id=po>Post</button></p><div id=fd></div><script>
-var KEY='cb-feed-'+location.pathname,F=JSON.parse(localStorage.getItem(KEY)||'null')||[{n:'Coffeebreak',t:'Welcome to the board. Say hi.',l:3}];
-function r(){localStorage.setItem(KEY,JSON.stringify(F));fd.innerHTML=F.map((p,i)=>'<div class=item><b>'+p.n.replace(/</g,'')+'</b><p>'+p.t.replace(/</g,'')+'</p><button data-i='+i+'>Like '+p.l+'</button></div>').join('')}r();
-po.onclick=()=>{if(tx.value){F.unshift({n:nm.value,t:tx.value,l:0});tx.value='';r()}};fd.onclick=e=>{var i=e.target.dataset.i;if(i){F[i].l++;r()}}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Vision Board</title><style>
+*{box-sizing:border-box}body{margin:0;font-family:Georgia,serif;background:#5a3b22;color:#2b1a10}
+header{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#2b1a10;color:#f6e7c8;position:sticky;top:0;z-index:50}
+header img{width:44px;height:44px;border-radius:50%;border:2px solid #f6e7c8}header h1{font-size:19px;margin:0;flex:1}
+#filters{display:flex;gap:6px;overflow-x:auto;padding:8px 10px;background:#3d2716}
+#filters button{flex:none;border:0;border-radius:14px;padding:6px 11px;background:#f6e7c8;font:13px Georgia}#filters button.on{background:#e8b04a}
+#board{position:relative;min-height:1400px;margin:10px;border-radius:10px;border:10px solid #8b5a2b;
+background:linear-gradient(90deg,#fbfbf8 50%,transparent 50%),radial-gradient(#b98a55 1px,#c99a63 1.5px);background-size:100% 100%,6px 6px}
+#board:before{content:"";position:absolute;left:0;top:0;width:50%;height:100%;background:#fdfdfb;box-shadow:inset -2px 0 6px #0002}
+.pin{position:absolute;width:150px;padding:8px 8px 12px;background:#fff;box-shadow:2px 4px 10px #0005;touch-action:none;cursor:grab;font-size:13px}
+.pin.note{width:140px;min-height:120px}.pin img{width:100%;height:110px;object-fit:cover;display:block;background:#eee}
+.pin h3{margin:6px 0 3px;font:bold 14px "Comic Sans MS",cursive}.pin p{margin:0;line-height:1.25}
+.pin .cat{font-size:10px;text-transform:uppercase;opacity:.6;margin-top:4px}
+.pin:before{content:"";position:absolute;top:-7px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff8a8a,#b00);box-shadow:1px 2px 3px #0006}
+.badge{position:absolute;top:-10px;right:-8px;background:#e8b04a;color:#2b1a10;font-size:10px;padding:2px 6px;border-radius:8px;font-weight:bold}
+.del{position:absolute;bottom:2px;right:4px;border:0;background:none;font-size:15px;cursor:pointer}
+#add{position:fixed;right:16px;bottom:16px;width:60px;height:60px;border-radius:50%;border:0;background:#e8b04a;font-size:32px;box-shadow:0 4px 12px #0007;z-index:60}
+#dlg{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:70}
+#dlg form{background:#f6e7c8;padding:16px;border-radius:12px;width:92%;max-width:360px;display:grid;gap:8px}
+#dlg input,#dlg textarea,#dlg select,#dlg button{font:15px Georgia;padding:8px;border-radius:6px;border:1px solid #8b5a2b}
+.colours{display:flex;gap:6px}.colours label{width:30px;height:30px;border-radius:50%;border:2px solid #fff}.colours input{display:none}.colours input:checked+span{display:block}
+</style></head><body>
+<header><img src="logo.jpg" alt="Coffeebreak"><h1>Coffeebreak Vision Board</h1><span id="count" style="font-size:12px"></span></header>
+<div id="filters"></div><div id="board"></div>
+<button id="add" aria-label="Add a pin">+</button>
+<div id="dlg"><form id="f"><b>Add to my board</b>
+<input name="t" placeholder="Title" required maxlength="40"><textarea name="n" placeholder="My dream or goal" rows="3"></textarea>
+<select name="c"></select><input type="file" name="img" accept="image/*">
+<div class="colours" id="cols"></div>
+<button>Pin it</button><button type="button" id="cx">Cancel</button></form></div>
+<script>
+const CATS=["music","stores","apps","home","family-free","travel","money goals","wellbeing"],COLS=["#fff59d","#f8bbd0","#b3e5fc","#c8e6c9","#ffe0b2","#ffffff"];
+const KEY="cbVisionMine",POS="cbVisionPos";let mine=JSON.parse(localStorage[KEY]||"[]"),pos=JSON.parse(localStorage[POS]||"{}"),cb=[],filt="all";
+const B=document.getElementById("board");
+function esc(s){return(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function rot(id){let h=0;for(const c of id)h=(h*31+c.charCodeAt(0))%997;return(h%11)-5}
+function render(){B.innerHTML="";const all=[...cb.map(p=>({...p,src:"cb"})),...mine.map(p=>({...p,src:"me"}))].filter(p=>filt=="all"||p.category==filt);
+const w=Math.max(B.clientWidth-20,300),cols=Math.max(2,Math.floor(w/165));let rows=0;
+all.forEach((p,i)=>{const d=document.createElement("div");d.className="pin"+(p.image?"":" note");d.dataset.id=p.id;
+if(!p.image)d.style.background=p.colour||(p.src=="cb"?COLS[i%5]:"#fff59d");
+const age=(Date.now()-new Date(p.date_added))/864e5;
+d.innerHTML=(p.image?`<img src="${esc(p.image)}" alt="" loading="lazy">`:"")+`<h3>${esc(p.title)}</h3><p>${esc(p.note)}</p><div class="cat">${esc(p.category)}${p.src=="me"?" · mine":""}</div>`+
+(p.src=="cb"&&age<14?`<span class="badge">new from Coffeebreak</span>`:"")+(p.src=="me"?`<button class="del" title="Remove">✕</button>`:"");
+const q=pos[p.id]||{x:10+(i%cols)*((w-160)/(cols-1||1)),y:20+Math.floor(i/cols)*235};rows=Math.max(rows,q.y);
+d.style.left=q.x+"px";d.style.top=q.y+"px";d.style.transform=`rotate(${rot(p.id)}deg)`;drag(d);B.appendChild(d);
+const x=d.querySelector(".del");if(x)x.onclick=e=>{e.stopPropagation();if(confirm("Remove this pin?")){mine=mine.filter(m=>m.id!=p.id);delete pos[p.id];save();render()}}});
+B.style.minHeight=(rows+300)+"px";document.getElementById("count").textContent=cb.length+mine.length+" pins"}
+function drag(d){d.onpointerdown=e=>{if(e.target.tagName=="BUTTON")return;d.setPointerCapture(e.pointerId);const sx=e.clientX-d.offsetLeft,sy=e.clientY-d.offsetTop;d.style.zIndex=40;
+d.onpointermove=m=>{d.style.left=Math.max(0,m.clientX-sx)+"px";d.style.top=Math.max(0,m.clientY-sy)+"px"};
+d.onpointerup=()=>{d.onpointermove=null;d.style.zIndex="";pos[d.dataset.id]={x:d.offsetLeft,y:d.offsetTop};save()}}}
+function save(){try{localStorage[KEY]=JSON.stringify(mine);localStorage[POS]=JSON.stringify(pos)}catch(e){alert("Your board is full. Try a smaller photo.")}}
+const F=document.getElementById("filters");["all",...CATS].forEach(c=>{const b=document.createElement("button");b.textContent=c;b.className=c=="all"?"on":"";b.onclick=()=>{filt=c;[...F.children].forEach(x=>x.className="");b.className="on";render()};F.appendChild(b)});
+const f=document.getElementById("f");CATS.forEach(c=>f.c.add(new Option(c,c)));
+document.getElementById("cols").innerHTML=COLS.map((c,i)=>`<label style="background:${c}"><input type="radio" name="col" value="${c}" ${i?"":"checked"}></label>`).join("");
+document.getElementById("add").onclick=()=>dlg.style.display="flex";document.getElementById("cx").onclick=()=>dlg.style.display="none";
+function shrink(file){return new Promise(r=>{if(!file)return r("");const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),s=Math.min(1,400/Math.max(im.width,im.height));c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);r(c.toDataURL("image/jpeg",.75))};im.onerror=()=>r("");im.src=URL.createObjectURL(file)})}
+f.onsubmit=async e=>{e.preventDefault();const img=await shrink(f.img.files[0]);
+mine.push({id:"me"+Date.now(),title:f.t.value,note:f.n.value,category:f.c.value,image:img,colour:(f.querySelector("[name=col]:checked")||{}).value,date_added:new Date().toISOString()});
+save();f.reset();dlg.style.display="none";render()};
+fetch("board.json?"+Date.now()).then(r=>r.json()).then(j=>{cb=j.pins;render()}).catch(()=>render());
+onresize=()=>render();
+</script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

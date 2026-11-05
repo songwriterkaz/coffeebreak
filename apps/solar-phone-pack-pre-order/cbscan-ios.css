@@ -1,0 +1,55 @@
+/* Coffeebreak iOS-style code scanner and share card v1. Pairs with cbscan-ios.js. No dependencies. */
+.cbsi,.cbsi-card,.cbsi-iconbtn{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",system-ui,Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;box-sizing:border-box}
+.cbsi *,.cbsi-card *{box-sizing:border-box}
+/* full screen viewfinder */
+.cbsi{position:fixed;inset:0;z-index:2147483647;background:#000;color:#fff;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;opacity:0;transition:opacity .22s ease}
+.cbsi.cbsi-on{opacity:1}
+.cbsi-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+/* thin translucent top bar with close */
+.cbsi-top{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px;background:rgba(20,20,22,.38);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);z-index:3}
+.cbsi-x{flex:none;width:36px;height:36px;border-radius:50%;border:0;padding:0;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(120,120,128,.45);cursor:pointer}
+.cbsi-x:focus-visible,.cbsi-banner:focus-visible,.cbsi-go:focus-visible,.cbsi-iconbtn:focus-visible,.cbsi-share:focus-visible{outline:3px solid #ffd60a;outline-offset:2px}
+.cbsi-tt{font-size:17px;font-weight:600;letter-spacing:-.01em;flex:1;text-align:center;margin-right:46px}
+/* corner brackets only */
+.cbsi-br{position:absolute;left:50%;top:50%;width:min(62vmin,300px);height:min(62vmin,300px);transform:translate(-50%,-56%);pointer-events:none;transition:opacity .2s;z-index:1}
+.cbsi-br i{position:absolute;width:34px;height:34px;border:0 solid rgba(255,255,255,.92)}
+.cbsi-br i:nth-child(1){left:0;top:0;border-width:4px 0 0 4px;border-top-left-radius:18px}
+.cbsi-br i:nth-child(2){right:0;top:0;border-width:4px 4px 0 0;border-top-right-radius:18px}
+.cbsi-br i:nth-child(3){left:0;bottom:0;border-width:0 0 4px 4px;border-bottom-left-radius:18px}
+.cbsi-br i:nth-child(4){right:0;bottom:0;border-width:0 4px 4px 0;border-bottom-right-radius:18px}
+.cbsi.cbsi-has .cbsi-br{opacity:0}
+/* the yellow outline that snaps onto the code */
+.cbsi-ol{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;opacity:0;transition:opacity .16s ease}
+.cbsi.cbsi-has .cbsi-ol{opacity:1}
+.cbsi-ol path{fill:rgba(255,214,10,.10);stroke:#ffd60a;stroke-width:5;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(0,0,0,.35))}
+/* unobtrusive pill */
+.cbsi-pill{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 64px);transform:translate(-50%,-10px);padding:7px 14px;border-radius:999px;font-size:14px;font-weight:600;color:#fff;background:rgba(40,40,44,.55);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:3;white-space:nowrap}
+.cbsi-pill.cbsi-show{opacity:1;transform:translate(-50%,0)}
+/* blurred banner that slides up */
+.cbsi-banner{position:absolute;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);display:flex;align-items:center;gap:12px;padding:12px 14px;min-height:68px;border:1px solid rgba(255,255,255,.18);border-radius:28px;color:#fff;text-align:left;font:inherit;cursor:pointer;background:rgba(44,44,48,.58);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 8px 30px rgba(0,0,0,.35);transform:translateY(160%);opacity:0;transition:transform .42s cubic-bezier(.2,.9,.25,1.05),opacity .25s;z-index:4;max-width:520px;margin:0 auto}
+.cbsi-banner.cbsi-show{transform:translateY(0);opacity:1}
+.cbsi-ic{flex:none;width:44px;height:44px;border-radius:11px;object-fit:cover;background:#5e5ce6;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px}
+.cbsi-bt{flex:1;min-width:0;display:flex;flex-direction:column}
+.cbsi-t{font-size:17px;font-weight:600;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cbsi-s{font-size:13px;color:rgba(255,255,255,.72);line-height:1.3}
+.cbsi-ch{flex:none;opacity:.7}
+/* camera not available */
+.cbsi-deny{position:absolute;left:14px;right:14px;top:50%;transform:translateY(-50%);padding:20px;border-radius:28px;background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);text-align:center;z-index:3;max-width:480px;margin:0 auto}
+.cbsi-deny p{margin:0 0 14px;font-size:17px;line-height:1.35}
+.cbsi .cbsi-in{display:block;width:100%;min-height:50px;height:50px;font:inherit;font-size:17px;font-weight:400;padding:0 16px;border:0;border-radius:14px;background:rgba(255,255,255,.92);color:#111;text-align:left}
+.cbsi-go{display:block;width:100%;height:50px;margin-top:10px;border:0;border-radius:25px;font:inherit;font-size:17px;font-weight:600;color:#fff;background:#0a84ff;cursor:pointer}
+.cbsi-msg{margin-top:10px;font-size:15px;color:#ffd60a;min-height:20px}
+/* share a code card */
+.cbsi-card{background:#fff;color:#111;border-radius:38px;padding:28px 16px 20px;margin:12px auto;max-width:440px;text-align:center;box-shadow:0 12px 44px rgba(0,0,0,.16)}
+.cbsi-qrw{display:flex;justify-content:center;align-items:center;margin:4px auto 14px;padding:10px;border-radius:26px;background:#fff}
+.cbsi-qrw canvas,.cbsi-qrw img{display:block;margin:0 auto;max-width:100%;height:auto!important;image-rendering:pixelated;background:#fff}
+.cbsi-name{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.15;word-break:break-word}
+.cbsi-sub{font-size:17px;color:#6e6e73;margin-top:2px}
+.cbsi-share{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:56px;margin:18px 0 12px;border:0;border-radius:28px;font:inherit;font-size:18px;font-weight:600;color:#fff;background:#0a84ff;cursor:pointer}
+.cbsi-hint{display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;line-height:1.3;color:#6e6e73}
+.cbsi-hint svg{flex:none}
+/* small QR icon button for the home screen */
+.cbsi-iconbtn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px 0 12px;border:0;border-radius:22px;font-size:16px;font-weight:600;color:#111;background:rgba(235,235,240,.95);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.cbsi-iconbtn:active{transform:scale(.96)}
+.cbsi-homebar{display:flex;justify-content:flex-end;margin:2px 0 6px}
+@media(prefers-reduced-motion:reduce){.cbsi,.cbsi-banner,.cbsi-pill,.cbsi-ol{transition:none}}

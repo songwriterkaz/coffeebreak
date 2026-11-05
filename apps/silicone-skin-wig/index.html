@@ -1,11 +1,135 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Silicone Skin Wig</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style></head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Silicone Skin Wig</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Coffeebreak Silicone Skin Wig - feel it in 3D</title>
+<style>
+html,body{margin:0;height:100%;background:#2b1d2e;font-family:Georgia,serif;color:#f7c6d9;overflow:hidden}
+#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.top{position:fixed;top:0;left:0;right:0;text-align:center;padding:10px;pointer-events:none}
+.top b{letter-spacing:3px;font-size:20px}
+.hint{font-size:14px;opacity:.85}
+.ui{position:fixed;left:0;right:0;bottom:62px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:0 8px}
+button,a.buy{font-family:inherit;font-size:15px;padding:10px 16px;border-radius:20px;border:2px solid #f7c6d9;background:#3b2a3f;color:#f7c6d9;cursor:pointer;text-decoration:none}
+button.on{background:#f7c6d9;color:#2b1d2e}
+a.buy{background:#b5527a;border-color:#b5527a;color:#fff}
+.sw{display:inline-block;width:18px;height:18px;border-radius:50%;vertical-align:middle;border:2px solid #fff}
+footer{position:fixed;bottom:0;left:0;right:0;font-size:10px;text-align:center;padding:6px 10px;background:#1d1220;color:#c9a6b6}
+footer a{color:#f7c6d9}
+</style></head><body>
+<canvas id="c"></canvas>
+<div class="top"><b>☕ COFFEEBREAK</b><div>Silicone Skin Wig · very fine hand-knotted hair</div><div class="hint" id="hint">Stroke the hair with your finger or mouse. On a phone you will feel a soft buzz.</div></div>
+<div class="ui">
+<button id="mTouch" class="on">Touch hair</button><button id="mRot">Rotate</button><button id="mPeek">Peek at silicone scalp</button>
+<button data-c="0">Honey <span class="sw" style="background:#b98a5a"></span></button>
+<button data-c="1">Dark <span class="sw" style="background:#2b1c16"></span></button>
+<button data-c="2">Rose <span class="sw" style="background:#d98aa8"></span></button>
+<a class="buy" style="background:#5a3a5e" href="store.html">Photos and details</a><a class="buy" href="https://coffeebreaks.itch.io">Buy from Coffeebreak</a></div>
+<footer>Concept render. Made by Karen O'Brien / Coffeebreak. Karen O'Brien keeps all rights to this product, its design, name and logo. Buyers may resell the physical wig they bought, but may not copy it or make their own version. · <a href="https://coffeebreaks.itch.io">coffeebreaks.itch.io</a></footer>
+<script src="three.min.js"></script>
+<script>
+const cv=document.getElementById('c');
+let R;try{R=new THREE.WebGLRenderer({canvas:cv,antialias:true})}catch(e){document.body.innerHTML='<p style="padding:30px;color:#f7c6d9;font-family:Georgia">Your browser could not start the 3D view. <a style="color:#fff" href="store.html">See the photos and details</a></p>';throw e}R.setPixelRatio(Math.min(devicePixelRatio,matchMedia('(pointer:coarse)').matches?1.5:2));
+const S=new THREE.Scene();S.background=new THREE.Color(0x2b1d2e);
+const cam=new THREE.PerspectiveCamera(40,1,.1,50);cam.position.set(0,-.2,8.2);cam.lookAt(0,-.55,0);
+S.add(new THREE.HemisphereLight(0xfff0f5,0x3a2440,1.1));
+const dl=new THREE.DirectionalLight(0xffffff,1.1);dl.position.set(2,3,4);S.add(dl);
+const G=new THREE.Group();S.add(G);
+// mannequin head: smooth silicone skin tone
+const skin=new THREE.MeshStandardMaterial({color:0xe3b898,roughness:.45,metalness:0,transparent:true,opacity:1});
+const head=new THREE.Mesh(new THREE.SphereGeometry(1,64,48),skin);head.scale.set(.88,1.08,.98);G.add(head);
+const neck=new THREE.Mesh(new THREE.CylinderGeometry(.34,.4,1.3,32),skin);neck.position.y=-1.35;G.add(neck);
+const stand=new THREE.Mesh(new THREE.CylinderGeometry(.6,.7,.12,32),new THREE.MeshStandardMaterial({color:0x111111,roughness:.5}));stand.position.y=-2.05;G.add(stand);
+// scalp cap with tiny knot dots, visible when peeking
+const knotPts=[];
+// hair strands
+const N=matchMedia('(pointer:coarse)').matches?6000:14000,SEG=7;let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
+const pal=[[0xb98a5a,0x8a5f3a,0xd9b484],[0x2b1c16,0x120b08,0x4a342a],[0xd98aa8,0xa85f7d,0xf2b8cc]];
+let cur=0;
+const roots=[],dirs=[],len=[],curl=[],shade=[];
+for(let i=0;i<N;i++){
+  let th,ph,x,y,z;
+  do{th=rnd()*Math.PI*2;ph=Math.acos(1-rnd()*1.15); // upper hemisphere plus a bit more
+    x=Math.sin(ph)*Math.cos(th);y=Math.cos(ph);z=Math.sin(ph)*Math.sin(th);
+    // lower the band to cover sides/back
+    if(rnd()<.45){y=y*.9-.25*rnd();const l=Math.hypot(x,y,z);x/=l;y/=l;z/=l}
+  }while(z>.4&&y<.4&&Math.abs(x)<.34); // leave a face window
+  const rx=x*.88,ry=y*1.08,rz=z*.98;
+  roots.push([rx,ry,rz]);dirs.push([x,y,z]);
+  len.push(1.5+rnd()*1.2+(1-y)*.5);curl.push(rnd()*Math.PI*2);shade.push(.75+rnd()*.5);
+}
+const pos=new Float32Array(N*SEG*2*3),col=new Float32Array(N*SEG*2*3);
+const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+const hm=new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:.9});
+const hair=new THREE.LineSegments(geo,hm);hair.frustumCulled=false;G.add(hair);
+const disp=new Float32Array(N*3),vel=new Float32Array(N*3);
+const tmp=new THREE.Vector3();
+function setColors(){const [a,b,c]=pal[cur].map(h=>new THREE.Color(h));
+  let k=0;for(let i=0;i<N;i++){for(let s=0;s<SEG;s++){for(let e=0;e<2;e++){const t=(s+e)/SEG;
+    const m=t<.5?b.clone().lerp(a,t*2):a.clone().lerp(c,(t-.5)*2);m.multiplyScalar(shade[i]);
+    col[k++]=m.r;col[k++]=m.g;col[k++]=m.b;}}}geo.attributes.color.needsUpdate=true}
+setColors();
+function strandPoint(i,t,out){
+  const r=roots[i],d=dirs[i],L=len[i];
+  // leaves the scalp along the normal, then gravity pulls it down with a gentle wave
+  const out_=Math.min(t*3,1)*.28*(1-t*.4);
+  let x=r[0]+d[0]*out_,y=r[1]+d[1]*out_,z=r[2]+d[2]*out_;
+  // horizontal spread keeps hair outside the head
+  const fall=t*t*L*.62;
+  y-=fall;
+  const wave=Math.sin(t*5+curl[i])*.05*t;
+  x+=d[0]*t*.2+wave+Math.sign(r[0]||1)*Math.pow(t,1.2)*.62*Math.max(r[2],0);z+=d[2]*t*.2+Math.cos(t*4+curl[i])*.04*t;
+  // keep outside the head surface
+  const hx=x/.9,hy=y/1.1,hz=z/1.0;const hl=Math.hypot(hx,hy,hz);
+  if(hl<1.04&&y>-.2){const f=1.04/hl;x*=f;y*=f;z*=f}
+  // shoulder area stays slightly out
+  if(y<-.3){const rr=Math.hypot(x,z);const mr=.56+Math.min(-y-.3,1.5)*.12;if(rr<mr&&rr>0){x*=mr/rr;z*=mr/rr}}
+  const w=t*t;out.set(x+disp[i*3]*w,y+disp[i*3+1]*w,z+disp[i*3+2]*w);
+}
+function rebuild(){let k=0;const a=new THREE.Vector3(),b=new THREE.Vector3();
+  for(let i=0;i<N;i++){strandPoint(i,0,a);for(let s=0;s<SEG;s++){strandPoint(i,(s+1)/SEG,b);
+    pos[k++]=a.x;pos[k++]=a.y;pos[k++]=a.z;pos[k++]=b.x;pos[k++]=b.y;pos[k++]=b.z;a.copy(b)}}
+  geo.attributes.position.needsUpdate=true}
+// pointer interaction
+let mode='touch',px=-1,py=-1,lx=-1,ly=-1,down=false,rot=0,rotV=.003,lastBuzz=0,touching=false,peek=false;
+function resize(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();cam.position.z=w/h<.8?11:8.2;cam.lookAt(0,-.55,0)}
+addEventListener('resize',resize);resize();
+function pp(e){const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]}
+cv.addEventListener('pointerdown',e=>{down=true;[px,py]=pp(e);lx=px;ly=py;cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',e=>{[px,py]=pp(e);});
+cv.addEventListener('pointerup',()=>{down=false});
+cv.addEventListener('pointerleave',()=>{px=-1;py=-1});
+const hint=document.getElementById('hint');
+function setMode(m){mode=m;document.getElementById('mTouch').classList.toggle('on',m=='touch');document.getElementById('mRot').classList.toggle('on',m=='rot');
+  hint.textContent=m=='touch'?'Stroke the hair with your finger or mouse. On a phone you will feel a soft buzz.':'Drag to spin the wig and look at it from every side.'}
+mTouch.onclick=()=>setMode('touch');mRot.onclick=()=>setMode('rot');
+mPeek.onclick=()=>{peek=!peek;mPeek.classList.toggle('on',peek)};
+document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{cur=+b.dataset.c;setColors()});
+const v=new THREE.Vector3();let first=true;
+function step(){
+  // rotate
+  if(mode=='rot'&&down&&px>=0){rot+= (px-lx)*.012;}
+  else if(!down&&mode=='rot'){rot+=0} else if(mode=='touch'&&!down){rot+=0}
+  G.rotation.y=rot;lx=px;ly=py;
+  // forces from pointer
+  const w=cv.clientWidth,h=cv.clientHeight;
+  const active=mode=='touch'&&px>=0&&(down||matchMedia('(hover:hover)').matches);
+  let hit=0;
+  if(active){const dx=px-(window._ppx??px),dy=py-(window._ppy??py);
+    G.updateMatrixWorld();
+    for(let i=0;i<N;i++){
+      strandPoint(i,1,tmp);tmp.applyMatrix4(G.matrixWorld).project(cam);
+      const sx=(tmp.x+1)/2*w,sy=(1-tmp.y)/2*h;
+      const dd=Math.hypot(sx-px,sy-py),rad=Math.min(w,h)*.09;
+      if(dd<rad){const f=(1-dd/rad);hit++;
+        vel[i*3]+=dx*f*.009;vel[i*3+1]+=-dy*f*.009;vel[i*3+2]+=Math.abs(dx+dy)*f*.001}
+    }}
+  window._ppx=px;window._ppy=py;
+  let mv=0;for(let i=0;i<N*3;i++){vel[i]+=-disp[i]*.06;vel[i]*=.9;disp[i]+=vel[i];mv+=Math.abs(vel[i])+Math.abs(disp[i])}
+  if(hit>20&&navigator.vibrate&&navigator.userActivation&&navigator.userActivation.hasBeenActive&&performance.now()-lastBuzz>70){navigator.vibrate(6);lastBuzz=performance.now()}
+  // peek: fade hair, show scalp
+  const target=peek?.12:.9;hm.opacity+=(target-hm.opacity)*.12;
+  if(mv>.02||first){rebuild();first=false}R.render(S,cam);requestAnimationFrame(step)}
+step();
+</script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
+<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
+<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>

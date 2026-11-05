@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#3b2417">
+<title>Coffeebreak Instant Phone</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#3b2417;color:#fff6ea;font:17px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overscroll-behavior:none}
+#app{max-width:480px;margin:0 auto;height:100%;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+header{display:flex;align-items:center;gap:10px;padding:8px 14px}
+header img{height:34px;width:auto;border-radius:6px;background:#fff}
+header b{font-size:18px;flex:1}
+.mini{background:#5a3a28;color:#fff6ea;border:0;border-radius:10px;padding:8px 12px;font:inherit;font-size:14px}
+main{flex:1;overflow:auto;padding:6px 14px}
+.view{display:none}.view.on{display:block}
+#disp{width:100%;background:#2b1a10;color:#fff;border:0;border-radius:14px;padding:14px;font:600 28px system-ui;text-align:center;letter-spacing:1px}
+#hint{min-height:22px;text-align:center;font-size:14px;color:#e8c9a8;margin:4px 0}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0}
+.k{height:62px;border:0;border-radius:16px;background:#6b4631;color:#fff;font:600 26px system-ui;touch-action:manipulation}
+.k small{display:block;font-size:10px;font-weight:400;opacity:.7;margin-top:-4px}
+.k:active{background:#8a5c40}
+.row{display:flex;gap:10px;justify-content:center;margin:6px 0}
+.go{flex:1;height:60px;border:0;border-radius:30px;font:700 19px system-ui;color:#fff}
+.green{background:#2e9e5b}.red{background:#d23b3b}.grey{background:#5a3a28;flex:0 0 70px}
+nav{display:flex;background:#2b1a10}
+nav button{flex:1;padding:14px 4px;border:0;background:none;color:#e8c9a8;font:600 15px system-ui;border-top:3px solid transparent}
+nav button.on{color:#fff;border-top-color:#e8a860}
+.c{display:flex;align-items:center;gap:10px;background:#4a2f20;border-radius:14px;padding:10px 12px;margin:8px 0}
+.c div{flex:1;min-width:0}.c b,.c span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.c span{font-size:14px;color:#e8c9a8}
+.c button{border:0;border-radius:10px;padding:10px 14px;font:600 15px system-ui;background:#2e9e5b;color:#fff}
+.c button.d{background:#8b3a3a}
+input.t{width:100%;margin:5px 0;padding:12px;border-radius:12px;border:0;font:17px system-ui;background:#fff6ea;color:#2b1a10}
+#call{position:fixed;inset:0;background:#2b1a10;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:9;padding:20px;text-align:center}
+#call.on{display:flex}
+#cn{font:700 30px system-ui;word-break:break-all}#cs{font-size:18px;color:#e8c9a8}#ct{font:600 24px system-ui}
+.ring{width:96px;height:96px;border-radius:50%;background:#6b4631;display:flex;align-items:center;justify-content:center;font-size:44px}
+.ring.p{animation:p 1s infinite}@keyframes p{50%{transform:scale(1.12)}}
+#err{position:fixed;left:10px;right:10px;top:10px;background:#fff6ea;color:#2b1a10;border-radius:12px;padding:10px 14px;z-index:20;display:none;font-size:15px}
+footer{font-size:11px;line-height:1.3;color:#cfae8c;padding:6px 14px 8px;text-align:center}
+a{color:#e8c9a8}
+</style></head><body>
+<div id="app">
+<header><img alt="Coffeebreak" src="data:image/png;base64,@@LOGO@@"><b>Instant Phone</b><button class="mini" id="snd" type="button" aria-label="Sound on or off">Sound on</button></header>
+<main>
+<section class="view on" id="v-dial">
+<input id="disp" readonly aria-label="Number" value="" placeholder="Enter a number" inputmode="none">
+<div id="hint"></div>
+<div class="pad" id="pad"></div>
+<div class="row"><button class="go grey" id="bk" type="button" aria-label="Delete">Del</button><button class="go green" id="cl" type="button">Call</button><button class="go grey" id="sv" type="button" aria-label="Save contact">Save</button></div>
+</section>
+<section class="view" id="v-con">
+<div id="list"></div>
+<input class="t" id="nn" placeholder="Name" autocomplete="off"><input class="t" id="nt" placeholder="Number" inputmode="tel" autocomplete="off">
+<div class="row"><button class="go green" id="add" type="button">Add contact</button></div>
+</section>
+<section class="view" id="v-info">
+<p><b>How this works</b></p>
+<p>This is a practice phone. Calls ring and connect inside the app so you can try the dial pad, ringtone and hang up with no sign in, no permissions and no internet. It does not reach real phone lines.</p>
+<p>To place a real call on this device, use <a id="tel" href="tel:">Open the phone dialler</a> after typing a number.</p>
+<p>The app keeps working offline. Contacts stay on this device only.</p>
+<p id="stor"></p>
+</section>
+</main>
+<nav><button class="on" data-v="dial" type="button">Keypad</button><button data-v="con" type="button">Contacts</button><button data-v="info" type="button">Help</button></nav>
+<footer>Coffeebreak Instant Phone. Coffeebreak keeps all rights to this product, its designs, name and logo. Buyers may resell physical products they bought but may not copy it or make their own versions.</footer>
+</div>
+<div id="call"><div class="ring p" id="rg">&#9742;</div><div id="cn"></div><div id="cs"></div><div id="ct"></div><button class="go red" id="hu" type="button" style="flex:none;width:200px">Hang up</button></div>
+<div id="err" role="alert"></div>
+<noscript><p style="padding:20px">This app needs JavaScript. Please turn it on and reload.</p></noscript>
+<script>
+(function(){
+"use strict";
+var $=function(i){return document.getElementById(i)};
+function showErr(m){try{var e=$('err');e.textContent=m;e.style.display='block';setTimeout(function(){e.style.display='none'},4000)}catch(x){}}
+window.addEventListener('error',function(e){showErr('Something went wrong, but the phone is still working.')});
+window.addEventListener('unhandledrejection',function(e){try{e.preventDefault()}catch(x){}});
+function safe(f){return function(){try{return f.apply(this,arguments)}catch(x){showErr('That did not work. Please try again.')}}}
+/* storage with memory fallback */
+var mem={},ok=true;
+function ls(){try{return window.localStorage}catch(x){return null}}
+function get(k){try{var s=ls();if(s&&ok)return s.getItem(k)}catch(x){ok=false}return mem[k]===undefined?null:mem[k]}
+function set(k,v){mem[k]=v;try{var s=ls();if(s&&ok)s.setItem(k,v)}catch(x){ok=false}}
+var contacts=[];
+try{contacts=JSON.parse(get('cbip_c')||'[]');if(!Array.isArray(contacts))contacts=[]}catch(x){contacts=[]}
+var snd=get('cbip_s')!=='0';
+/* audio, created on first tap only */
+var AC=null;
+function ctx(){if(!snd)return null;try{if(!AC){var C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C()}if(AC.state==='suspended')AC.resume();return AC}catch(x){return null}}
+function beep(f,d,v,t){var c=ctx();if(!c)return;try{var o=c.createOscillator(),g=c.createGain(),n=c.currentTime+(t||0);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,n);g.gain.linearRampToValueAtTime(v||.15,n+.01);g.gain.linearRampToValueAtTime(0,n+d);o.connect(g);g.connect(c.destination);o.start(n);o.stop(n+d+.02)}catch(x){}}
+var D={1:[697,1209],2:[697,1336],3:[697,1477],4:[770,1209],5:[770,1336],6:[770,1477],7:[852,1209],8:[852,1336],9:[852,1477],'*':[941,1209],0:[941,1336],'#':[941,1477]};
+function key(c){var p=D[c];if(p){beep(p[0],.09,.08);beep(p[1],.09,.08)}}
+function ringtone(){beep(440,.4,.15);beep(480,.4,.15)}
+/* views */
+function view(n){var v=document.querySelectorAll('.view'),b=document.querySelectorAll('nav button'),i;for(i=0;i<v.length;i++)v[i].className='view'+(v[i].id==='v-'+n?' on':'');for(i=0;i<b.length;i++)b[i].className=b[i].getAttribute('data-v')===n?'on':''}
+var nav=document.querySelectorAll('nav button');
+for(var i=0;i<nav.length;i++)nav[i].onclick=(function(b){return safe(function(){view(b.getAttribute('data-v'))})})(nav[i]);
+/* pad */
+var L={1:'',2:'ABC',3:'DEF',4:'GHI',5:'JKL',6:'MNO',7:'PQRS',8:'TUV',9:'WXYZ','*':'',0:'+','#':''};
+var pad=$('pad'),disp=$('disp'),ks=['1','2','3','4','5','6','7','8','9','*','0','#'];
+ks.forEach(function(k){var b=document.createElement('button');b.type='button';b.className='k';b.innerHTML=k+'<small>'+(L[k]||'&nbsp;')+'</small>';b.onclick=safe(function(){disp.value=(disp.value+k).slice(0,20);key(k);hint()});pad.appendChild(b)});
+function hint(){var n=clean(disp.value),m='';for(var i=0;i<contacts.length;i++)if(clean(contacts[i].t)===n&&n){m=contacts[i].n;break}$('hint').textContent=m;$('tel').href='tel:'+encodeURIComponent(n)}
+function clean(s){return String(s||'').replace(/[^0-9+*#]/g,'')}
+$('bk').onclick=safe(function(){disp.value=disp.value.slice(0,-1);hint()});
+$('bk').oncontextmenu=function(e){e.preventDefault();disp.value='';hint()};
+/* call */
+var tmr=null,tt=null,sec=0,active=false;
+function startCall(num,name){
+  if(active)return;num=clean(num);if(!num){showErr('Type a number first.');return}
+  active=true;sec=0;$('cn').textContent=name||num;$('cs').textContent='Calling';$('ct').textContent='';$('rg').className='ring p';$('call').className='on';
+  ringtone();var n=0;tmr=setInterval(function(){n++;ringtone()},2000);
+  tt=setTimeout(function(){clearInterval(tmr);tmr=null;$('cs').textContent='Connected (practice call)';$('rg').className='ring';beep(880,.12,.12);var s=Date.now();tmr=setInterval(function(){sec=Math.floor((Date.now()-s)/1000);$('ct').textContent=('0'+Math.floor(sec/60)).slice(-2)+':'+('0'+sec%60).slice(-2)},500)},4200);
+}
+function endCall(){if(!active)return;active=false;clearInterval(tmr);clearTimeout(tt);tmr=tt=null;beep(480,.15,.12);beep(380,.2,.12,.18);$('call').className=''}
+$('cl').onclick=safe(function(){startCall(disp.value)});
+$('hu').onclick=safe(endCall);
+document.addEventListener('keydown',function(e){if(e.key==='Escape')endCall()});
+$('sv').onclick=safe(function(){var n=clean(disp.value);if(!n){showErr('Type a number first.');return}$('nt').value=n;view('con');$('nn').focus()});
+/* contacts */
+function save(){set('cbip_c',JSON.stringify(contacts))}
+function render(){var l=$('list');l.innerHTML='';if(!contacts.length){var p=document.createElement('p');p.textContent='No contacts yet. Add one below.';l.appendChild(p)}
+contacts.forEach(function(c,i){var d=document.createElement('div');d.className='c';var m=document.createElement('div');var b=document.createElement('b');b.textContent=c.n;var s=document.createElement('span');s.textContent=c.t;m.appendChild(b);m.appendChild(s);var g=document.createElement('button');g.type='button';g.textContent='Call';g.onclick=safe(function(){disp.value=clean(c.t);view('dial');startCall(c.t,c.n)});var x=document.createElement('button');x.type='button';x.className='d';x.textContent='Remove';x.onclick=safe(function(){contacts.splice(i,1);save();render();hint()});d.appendChild(m);d.appendChild(g);d.appendChild(x);l.appendChild(d)})}
+$('add').onclick=safe(function(){var n=$('nn').value.trim(),t=clean($('nt').value);if(!n||!t){showErr('Please enter a name and a number.');return}contacts.push({n:n.slice(0,40),t:t});save();$('nn').value='';$('nt').value='';render();hint()});
+/* sound toggle */
+function sndLbl(){$('snd').textContent=snd?'Sound on':'Sound off'}
+$('snd').onclick=safe(function(){snd=!snd;set('cbip_s',snd?'1':'0');sndLbl();if(snd)beep(660,.1,.1)});
+sndLbl();render();hint();
+$('stor').textContent=ok&&ls()?'':'Saving is turned off in this browser, so contacts last until you close this page.';
+/* offline: optional, never blocks */
+try{if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){setTimeout(function(){try{navigator.serviceWorker.register('sw.js').catch(function(){})}catch(x){}},1500)})}}catch(x){}
+window.__cbipReady=performance.now();
+})();
+</script></body></html>
