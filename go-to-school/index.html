@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="icon" href="favicon.png" type="image/png"><title>Coffeebreak Go To School</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(#ffe0ef,#ffc2dd);color:#4a1631;min-height:100vh;font-size:var(--fs,16px)}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#ff5fa2;color:#fff}header img{height:44px;border-radius:10px;background:#fff}
+h1{font-size:1.2em;margin:0}.sub{font-size:.8em;margin:2px 0 0}.wrap{max-width:640px;margin:auto;padding:12px}
+.card{background:#fff;border-radius:18px;padding:16px;margin:10px 0;box-shadow:0 4px 14px #ff5fa244}
+button{font:inherit;border:0;border-radius:14px;padding:12px 14px;margin:5px 0;background:#ff5fa2;color:#fff;width:100%;cursor:pointer;touch-action:manipulation}
+button.alt{background:#ffd1e6;color:#4a1631}button.quiet{background:#6b8fb3}.row{display:flex;gap:6px;flex-wrap:wrap}.row button{flex:1;min-width:30%}
+.stats{display:flex;justify-content:space-between;font-weight:600;flex-wrap:wrap;gap:6px}
+.meter{height:18px;background:#eee;border-radius:9px;overflow:hidden}.meter div{height:100%;transition:width .5s;background:linear-gradient(90deg,#7bd88f,#ffd166,#ff6b6b)}
+.avatar{font-size:56px;text-align:center}.badge{display:inline-block;background:#ffe0ef;border-radius:10px;padding:4px 8px;margin:3px;font-size:.9em}
+.help{background:#fff3f8;border:2px solid #ff5fa2}footer{font-size:.8em;padding:16px;text-align:center}footer a{color:#b0105a;margin:0 6px}
+.toast{position:fixed;left:50%;top:20px;transform:translateX(-50%);background:#4a1631;color:#fff;padding:10px 16px;border-radius:12px;display:none;z-index:9}
+.strip{display:flex;gap:4px;overflow-x:auto;padding-bottom:4px}.strip div{flex:0 0 auto;text-align:center;font-size:.7em;width:56px;padding:4px;border-radius:10px;background:#ffe0ef;opacity:.6}
+.strip div span{display:block;font-size:1.9em}.strip .now{background:#ff5fa2;color:#fff;opacity:1;outline:3px solid #4a1631}.strip .done{opacity:1;background:#c9f2d3}
+.nn{display:flex;gap:8px}.nn>div{flex:1;border-radius:14px;padding:10px;text-align:center;background:#ffe0ef}.nn .n1{background:#ff5fa2;color:#fff}.nn span{display:block;font-size:2.2em}
+.story p{margin:6px 0}.story b{display:block}label{display:block;margin:8px 0}select{font:inherit;padding:6px;border-radius:8px}
+body.calm{background:#eef1ee;color:#33403a}body.calm header{background:#8aa39a}body.calm button{background:#8aa39a}body.calm button.alt{background:#dfe7e2;color:#33403a}
+body.calm .card{box-shadow:none;border:1px solid #cfd8d3}body.calm .strip .now,body.calm .nn .n1{background:#8aa39a}body.calm .strip div,body.calm .nn>div{background:#e6ece8}body.calm .help{border-color:#8aa39a;background:#f4f7f5}body.calm footer a{color:#3f6457}
+body.rm *{transition:none!important;animation:none!important}body.words .ic{display:none}body.pics .tx{display:none}
+</style></head><body>
+<header><img src="cb-logo.png" alt="Coffeebreak logo"><div><h1>Coffeebreak Go To School</h1><p class="sub">Autism friendly: clear steps, a visual schedule, calm settings and breaks any time.</p></div></header>
+<div class="wrap">
+<div class="card stats"><span id="sxp"></span><span id="sstar"></span><span id="sstreak"></span><span id="sday"></span></div>
+<div class="card"><div>Worry meter</div><div class="meter"><div id="mfill"></div></div></div>
+<div id="main"></div>
+<div class="card row"><button class="quiet" id="qbtn" onclick="quiet()">🛋️ Quiet space / break</button><button class="alt" onclick="calm('breath')">🌬️ Breathe</button><button class="alt" onclick="calm('ground')">🖐️ 5-4-3-2-1</button><button class="alt" onclick="calm('talk')">💬 Kind words</button><button class="alt" id="setbtn" onclick="settings()">⚙️ Sensory settings</button></div>
+<div class="card help"><b>Talk to a trusted adult.</b> A parent, carer, teacher, school counsellor or GP can help you. You are not in trouble for finding school hard.<br>
+Kids Helpline <a href="tel:1800551800">1800 55 1800</a> (24/7, ages 5-25) · Lifeline <a href="tel:131114">13 11 14</a> · Emergency 000<br>
+Autism supports: <a href="https://www.autismawareness.com.au" target="_blank">Autism Awareness Australia</a> · <a href="https://www.amaze.org.au" target="_blank">Amaze</a><br><small>This game is for fun and encouragement. It is not therapy or medical advice.</small></div>
+<div class="card"><b>Price: $5</b><br>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</div>
+</div>
+<footer>© Coffeebreak by Karen O'Brien, Newcastle NSW. Karen keeps all rights to her products, designs, apps, name and logo. Buyers may resell what they bought but may not copy it or make their own versions. Third-party trademarks belong to their owners.<br><br>
+<a href="https://www.tesla.com" target="_blank">Tesla</a><a href="https://www.starlink.com" target="_blank">Starlink</a><a href="https://coffeebreaks.itch.io" target="_blank">coffeebreaks.itch.io</a></footer>
+<div class="toast" id="toast"></div>
+<script>
+const K='cbGoToSchool2';
+const D={xp:0,stars:0,streak:0,last:'',days:0,badges:[],outfit:'🧑',unl:['🧑'],goal:'',step:0,worry:50,dayStars:0,interest:'',
+set:{sound:'off',rm:false,calm:false,big:false,view:'both',speak:false}};
+let S=Object.assign({},D,JSON.parse(localStorage.getItem(K)||localStorage.getItem('cbGoToSchool1')||'{}'));S.set=Object.assign({},D.set,S.set||{});
+const save=()=>localStorage.setItem(K,JSON.stringify(S));
+let AC;function beep(f=440){if(S.set.sound==='off')return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=Math.min(f,520);g.gain.setValueAtTime(.04,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.25);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+.25)}catch(e){}}
+function say(t){if(!S.set.speak||!window.speechSynthesis)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,' '));u.rate=.9;u.lang='en-AU';speechSynthesis.speak(u)}catch(e){}}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._);t._=setTimeout(()=>t.style.display='none',2500)}
+function applySet(){const b=document.body.classList,x=S.set;b.toggle('rm',x.rm);b.toggle('calm',x.calm);b.toggle('words',x.view==='words');b.toggle('pics',x.view==='pics');document.documentElement.style.setProperty('--fs',x.big?'20px':'16px')}
+const OUTFITS=[['🧑',0],['👩‍🎓',30],['🧑‍🎤',80],['🦸',150],['🧙',250],['🐱',400],['🦄',600]];
+const INTERESTS=[['🚂','Trains'],['🦕','Dinosaurs'],['🚀','Space'],['🎮','Games'],['🐾','Animals'],['🎨','Art'],['🎵','Music'],['🧱','Building blocks'],['⚽','Sport'],['🌊','Ocean']];
+const STEPS=[
+{i:'⏰',t:'Wake up',w:'My alarm rings. It is time to get up.',f:'I might feel tired or worried. That is OK.',d:'I can sit up slowly and take 3 slow breaths.',c:[['Sit up and take 3 slow breaths',-10,2],['Stay in bed 5 more minutes, then get up',0,1],['Tell an adult at home how I feel',-15,2]]},
+{i:'👕',t:'Get dressed',w:'I put on my school clothes.',f:'Some clothes can feel scratchy or tight.',d:'I can pick soft clothes and cut out tags.',c:[['Wear my soft, comfy clothes',-10,2],['Wear the clothes I laid out last night',-8,2],['Ask an adult to help me get dressed',-5,1]]},
+{i:'🥣',t:'Breakfast',w:'I eat breakfast in the kitchen.',f:'I might not feel hungry.',d:'I can eat my usual food. A few bites still counts.',c:[['Eat my usual breakfast',-8,2],['Eat a small snack',-5,1],['Drink water and take a few bites',-3,1]]},
+{i:'🎒',t:'Pack my bag',w:'I put my things in my school bag.',f:'I might worry I will forget something.',d:'I can use my checklist, one item at a time.',pack:true,c:[['Use my checklist',-10,2],['Pack my toolkit (headphones and fidget)',-10,2],['Ask an adult to check my bag',-5,1]]},
+{i:'🚌',t:'Travel to school',w:'I go to school by bus, car or walking.',f:'It might be noisy or busy.',d:'I can wear headphones and look out the window.',c:[['Wear my headphones on the way',-10,2],['Go with an adult or friend',-10,2],['Get dropped off close to the gate',-5,1]]},
+{i:'🏫',t:'School gate',w:'I arrive at the school gate. There are other students.',f:'I might feel nervous. My body might feel shaky.',d:'I can count 5 things I see, then walk in.',c:[['Count 5 things I can see, then walk in',-12,2],['Walk in with a safe person',-10,2],['Stand still for one minute, then walk in',-5,1]]},
+{i:'📚',t:'Classroom',w:'I go to my classroom and sit at my seat.',f:'The room might be loud or bright.',d:'I can use my fidget or show my break card.',c:[['Say hello to one person',-8,2],['Sit at my seat and use my fidget',-8,2],['Show my break card to the teacher if I need it',-8,2]]},
+{i:'🍎',t:'Lunch',w:'The bell rings. I eat lunch.',f:'The playground can be noisy and crowded.',d:'I can go to a quiet place, like the library.',c:[['Eat with a friend',-8,2],['Eat in the library or a quiet spot',-10,2],['Eat my lunch and wear headphones',-8,2]]},
+{i:'🤝',t:'Friends',w:'Someone says hello or waves at me.',f:'I might not know what to say. That is OK.',d:'I can wave, smile or say "Hi".',c:[['Wave back',-8,2],['Say "Hi" and their name',-8,2],['Talk about something I like',-10,3]]},
+{i:'🧑‍🏫',t:'Talk to a teacher',w:'I have a question or a worry about class.',f:'I might feel shy or worried about asking.',d:'I can tell the teacher, or write it down.',c:[['Tell the teacher after class',-12,3],['Write the teacher a note',-10,2],['Ask a friend or aide to come with me',-8,2]]}];
+const TALK=['I can do one step at a time.','Feeling worried is OK. It will get smaller.','Going for part of the day still counts.','I am brave for trying.','I can ask for help.','I can take a break when I need one.','My brain works in its own way, and that is OK.'];
+const GROUND=['👀 Name 5 things you can SEE','✋ Name 4 things you can FEEL','👂 Name 3 things you can HEAR','👃 Name 2 things you can SMELL','👅 Name 1 thing you can TASTE'];
+const PACK=[['📒','Books'],['🥪','Lunch'],['💧','Water bottle'],['🎧','Noise-cancelling headphones (optional)'],['🌀','Fidget toy (optional)'],['🃏','Break card']];
+const ic=(e,t)=>`<span class="ic">${e}</span> <span class="tx">${t}</span>`;
+function badge(b){if(!S.badges.includes(b)){S.badges.push(b);toast('🏅 Badge: '+b);beep(520)}}
+function stats(){sxp.textContent='✨ '+S.xp+' XP';sstar.textContent=(S.interest||'⭐')+' '+S.stars;sstreak.textContent='🔥 '+S.streak+' day streak';sday.textContent='📅 '+S.days+' days';mfill.style.width=Math.max(5,S.worry)+'%';
+OUTFITS.forEach(([o,x])=>{if(S.xp>=x&&!S.unl.includes(o)){S.unl.push(o);toast('New look unlocked '+o)}});save()}
+function strip(){return `<div class="strip" aria-label="Today's schedule">${STEPS.map((s,k)=>`<div class="${k<S.step?'done':k==S.step&&S.inDay?'now':''}"><span class="ic">${k<S.step?'✅':s.i}</span><span class="tx">${s.t}</span></div>`).join('')}</div>`}
+function home(){S.step=0;S.inDay=false;S.worry=50;S.dayStars=0;stats();main.innerHTML=`<div class="card"><div class="avatar">${S.outfit}</div>
+<p>Hello. Today you will practise a school day. There are ${STEPS.length} steps. You can take a break at any time.</p>
+<h3>Today's schedule</h3>${strip()}
+<p><b>My goal for today:</b> <input id="goal" value="${S.goal.replace(/"/g,'')}" placeholder="e.g. get to the gate" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ff9cc8;font:inherit"></p>
+<p><b>My reward picture (special interest):</b></p><div class="row" id="ints">${INTERESTS.map(([e,n])=>`<button class="alt" style="min-width:18%" aria-label="${n}" onclick="S.interest='${e}';save();home()">${e}${S.interest==e?' ✔':''}</button>`).join('')}</div>
+<button id="start" onclick="S.goal=goal.value;start()">${ic('🌅','Start my day')}</button>
+<p>Look:</p><div class="row">${S.unl.map(o=>`<button class="alt" onclick="S.outfit='${o}';home()">${o}</button>`).join('')}</div>
+<p>Badges: ${S.badges.map(b=>`<span class="badge">${b}</span>`).join('')||'none yet'}</p></div>`;say('Hello. Today you will practise a school day. There are '+STEPS.length+' steps.')}
+function start(){S.inDay=true;save();beep(440);play()}
+function play(){const s=STEPS[S.step],nx=STEPS[S.step+1];stats();main.innerHTML=`<div class="card">${strip()}
+<div class="nn"><div class="n1"><small>NOW</small><span class="ic">${s.i}</span><b class="tx">${s.t}</b></div><div><small>NEXT</small><span class="ic">${nx?nx.i:'🏡'}</span><b class="tx">${nx?nx.t:'Go home'}</b></div></div>
+<div class="story" id="story"><p><b>📖 What will happen</b>${s.w}</p><p><b>💭 What I might feel</b>${s.f}</p><p><b>💪 What I can do</b>${s.d}</p></div>
+${s.pack?`<p><b>Checklist:</b></p>${PACK.map(([e,n])=>`<label><input type="checkbox"> ${ic(e,n)}</label>`).join('')}`:''}
+<p>Step ${S.step+1} of ${STEPS.length}. Choose one:</p>
+${s.c.map((c,i)=>`<button class="choice" onclick="pick(${i})">${c[0]}</button>`).join('')}
+<button class="quiet" onclick="quiet()">${ic('🛋️','I need a break')}</button>
+<button class="alt" onclick="endDay(true)">${ic('🏡',"That's enough for today")}</button>
+${S.set.speak?`<button class="alt" onclick="sayStep()">🔊 Read aloud again</button>`:''}</div>`;sayStep()}
+function sayStep(){const s=STEPS[S.step];say(s.t+'. What will happen: '+s.w+' What I might feel: '+s.f+' What I can do: '+s.d)}
+function pick(i){const c=STEPS[S.step].c[i];S.worry=Math.max(0,S.worry+c[1]);S.xp+=10*c[2];S.stars+=c[2];S.dayStars+=c[2];beep(440);toast('+'+(10*c[2])+' XP '+(S.interest||'⭐')+' Step done');
+if(S.step==5)badge('Gate Hero');if(S.step==9)badge('Speak Up Star');S.step++;S.step>=STEPS.length?endDay(false):play()}
+function endDay(partial){S.inDay=false;const today=new Date().toDateString();if(S.last!==today){const y=new Date(Date.now()-864e5).toDateString();S.streak=S.last===y?S.streak+1:1;S.last=today;S.days++}
+badge('First Brave Day');if(S.streak>=3)badge('3 Day Streak');if(partial)badge('Partial Day Champion');else badge('Full Day Legend');S.xp+=20;stats();const r=S.interest||'🎉';
+const msg=partial?'You did '+S.step+' of '+STEPS.length+' steps. Part of a day is real progress.':'You did all '+STEPS.length+' steps. You finished the whole day.';
+main.innerHTML=`<div class="card" id="done"><div class="avatar">${r}${S.outfit}${r}</div><h2>${msg}</h2><p>You earned ${S.dayStars} stars today.</p>${S.goal?`<p>My goal: ${S.goal.replace(/</g,'')}</p>`:''}
+<button onclick="home()">Back home</button></div>`;say(msg)}
+function quiet(){badge('Took a Break');main.innerHTML=`<div class="card" id="quietcard"><h2>${ic('🛋️','Quiet space')}</h2><p>You are taking a break. That is OK. There is no time limit.</p>
+<p>You can: put on headphones, hold your fidget, close your eyes, or go to a quiet place and tell an adult.</p>
+<button onclick="back()">${ic('▶️','I am ready to go back')}</button><button class="alt" onclick="endDay(true)">${ic('🏡',"That's enough for today")}</button></div>`;say('You are taking a break. That is OK. There is no time limit.')}
+function settings(){const x=S.set;main.innerHTML=`<div class="card" id="setcard"><h2>⚙️ Sensory settings</h2>
+<label>Sound: <select id="o_sound"><option value="off">Off</option><option value="soft">Soft</option></select></label>
+<label><input type="checkbox" id="o_rm"> Reduce motion</label>
+<label><input type="checkbox" id="o_calm"> Calm colours (low contrast)</label>
+<label><input type="checkbox" id="o_big"> Larger text</label>
+<label>Show: <select id="o_view"><option value="both">Pictures and words</option><option value="pics">Pictures only</option><option value="words">Words only</option></select></label>
+<label><input type="checkbox" id="o_speak"> Read text aloud</label>
+<button id="savebtn" onclick="saveSet()">Save settings</button></div>`;
+o_sound.value=x.sound;o_rm.checked=x.rm;o_calm.checked=x.calm;o_big.checked=x.big;o_view.value=x.view;o_speak.checked=x.speak}
+function saveSet(){S.set={sound:o_sound.value,rm:o_rm.checked,calm:o_calm.checked,big:o_big.checked,view:o_view.value,speak:o_speak.checked};save();applySet();toast('Settings saved');back()}
+function calm(k){if(k=='breath'){badge('Calm Breather');let p=0;const ph=['Breathe in slowly 1, 2, 3, 4','Hold 1, 2, 3, 4','Breathe out slowly 1, 2, 3, 4','Hold 1, 2, 3, 4'];
+const f=()=>{main.innerHTML=`<div class="card"><h2>Box breathing</h2><p style="text-align:center;font-size:1.3em">${ph[p]}</p><p><small>Go at your own speed. Tap Next when you are ready.</small></p><button onclick="bn()">Next</button><button class="alt" onclick="back()">Done</button></div>`;say(ph[p])};window.bn=()=>{p=(p+1)%4;f()};f()}
+else if(k=='ground'){let g=0;badge('Grounded');const f=()=>{main.innerHTML=`<div class="card"><h2>5-4-3-2-1</h2><p style="font-size:1.4em">${GROUND[g]}</p><button onclick="gn()">${g<4?'Next':'Finish'}</button></div>`;say(GROUND[g])};window.gn=()=>{g++;g>4?back():f()};f()}
+else{badge('Kind Self Talk');let i=0;const f=()=>{main.innerHTML=`<div class="card"><h2>💬 Kind words</h2><p style="font-size:1.4em">${TALK[i]}</p><button onclick="nt()">Next</button><button class="alt" onclick="back()">Done</button></div>`;say(TALK[i])};window.nt=()=>{i=(i+1)%TALK.length;f()};f()}
+S.worry=Math.max(0,S.worry-10);stats()}
+function back(){S.inDay&&S.step<STEPS.length?play():home()}
+applySet();S.inDay?play():home();
+</script></body></html>

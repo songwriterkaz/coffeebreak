@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Plush Flash Cards</title><link rel="icon" href="cb-logo.png"><meta name="description" content="Coffeebreak Plush Flash Cards by Coffeebreak"><style>*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:linear-gradient(160deg,#ffe3f1,#ffc2df);color:#3a1030;min-height:100vh}
+header{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#ff4fa3;color:#fff;box-shadow:0 2px 10px #0002}header img{width:48px;height:48px;border-radius:50%;background:#fff}
+header h1{font-size:1.3rem;margin:0}main{max-width:1000px;margin:auto;padding:16px}.card{background:#fff;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 4px 16px #ff4fa333}
+button,.btn{background:#ff4fa3;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-size:1rem;cursor:pointer;margin:4px}button:hover{background:#e0358a}button.alt{background:#fff;color:#ff4fa3;border:2px solid #ff4fa3}
+input,select,textarea{font-size:1rem;padding:9px;border:2px solid #ffb3d6;border-radius:10px;width:100%;margin:4px 0}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.price{background:#fff0f7;border:2px dashed #ff4fa3;border-radius:14px;padding:12px;text-align:center;font-weight:600}footer{background:#3a1030;color:#ffd6ea;padding:20px;font-size:.85rem;text-align:center;margin-top:30px}footer a{color:#ff9ccc;margin:0 8px}
+.tabs button{margin:2px}.muted{color:#8a5a78;font-size:.9rem}.fc{perspective:900px;height:240px;cursor:pointer}.fc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}.fc.f .in{transform:rotateY(180deg)}
+.fc .s{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.5rem;padding:16px;text-align:center;background:#fff;border:4px solid #ffb3d6}
+.fc .b{transform:rotateY(180deg);background:#fff0f7}.toy{font-size:3rem}.bar{height:14px;background:#ffe0ef;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:#ff4fa3}</style></head><body>
+<header><img src="cb-logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Plush Flash Cards</h1></header><main><div class="card"><label for="deck">Study deck</label><select id="deck"></select>
+<div class="tabs"><button id="mStudy">Study</button><button id="mQuiz" class="alt">Quiz</button><button id="mAdd" class="alt">Make a card</button></div></div>
+<div id="study" class="card"><div class="fc" id="fc" tabindex="0" role="button" aria-label="Flip card"><div class="in"><div class="s"><div class="toy" id="toyF"></div><div id="front"></div></div><div class="s b"><div class="toy" id="toyB"></div><div id="back"></div></div></div></div>
+<p style="text-align:center"><button id="prev">&larr; Back</button><button id="flip">Flip</button><button id="know">I knew it</button><button id="next">Next &rarr;</button></p><p id="pos" class="muted" style="text-align:center"></p></div>
+<div id="quiz" class="card" hidden><h2 id="qq"></h2><div id="qa" class="grid"></div><p id="qr"></p><button id="qn">Next question</button></div>
+<div id="add" class="card" hidden><input id="nf" placeholder="Front (question)"><input id="nb" placeholder="Back (answer)"><button id="nadd">Add to deck</button></div>
+<div class="card"><h3>Progress</h3><div id="prog"></div><button class="alt" id="reset">Reset progress</button></div>
+<div class="price card" role="note">Full version $5 AUD &middot; Pay by PayID (Teachers Mutual Bank): <b>darkokaz@gmx.com</b><br><span class="muted">Put "Coffeebreak Plush Flash Cards" and your email in the payment description.</span></div></main>
+<footer><p>&copy; Coffeebreak. All rights reserved. Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell what they bought but may not copy it or make their own versions. Third-party trademarks belong to their owners and are used only to describe items.</p>
+<p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a><a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">Coffeebreak on itch</a></p></footer>
+<script>const toys=['🧸','🐰','🦄','🐻','🐶','🐱','🐼','🦊','🐨','🐷'];
+const base={'Times Tables':[['3 × 4','12'],['6 × 7','42'],['8 × 8','64'],['9 × 6','54'],['7 × 7','49'],['12 × 11','132']],
+'Capital Cities':[['Australia','Canberra'],['Japan','Tokyo'],['France','Paris'],['Canada','Ottawa'],['Kenya','Nairobi'],['Brazil','Brasília']],
+'Music Notes':[['How many beats in a whole note?','4'],['Half note beats','2'],['What does forte mean?','Loud'],['What does piano mean?','Soft'],['Notes in a major scale','7'],['Treble clef lines (bottom up)','E G B D F']],
+'Spelling':[['Opposite of early','Late'],['Plural of mouse','Mice'],['Past tense of run','Ran'],['Word for very big','Enormous'],['Plural of child','Children'],['Opposite of brave','Scared']]};
+let S=JSON.parse(localStorage.cbPlush||'null')||{decks:base,known:{}};const save=()=>localStorage.cbPlush=JSON.stringify(S);
+const $=i=>document.getElementById(i);let d,i=0;
+function decks(){$('deck').innerHTML=Object.keys(S.decks).map(k=>`<option>${k}</option>`).join('');}
+function cur(){return S.decks[$('deck').value]}
+function show(){const c=cur();i=(i+c.length)%c.length;$('fc').classList.remove('f');$('front').textContent=c[i][0];$('back').textContent=c[i][1];$('toyF').textContent=$('toyB').textContent=toys[i%toys.length];$('pos').textContent=`Card ${i+1} of ${c.length}`;prog()}
+function prog(){$('prog').innerHTML=Object.keys(S.decks).map(k=>{const n=S.decks[k].length,kn=(S.known[k]||[]).length;const p=Math.round(100*kn/n);return `<p>${k}: ${kn}/${n} (${p}%)</p><div class="bar"><i style="width:${p}%"></i></div>`}).join('')}
+function mode(m){['study','quiz','add'].forEach(x=>$(x).hidden=x!=m);[['mStudy','study'],['mQuiz','quiz'],['mAdd','add']].forEach(([b,x])=>$(b).className=x==m?'':'alt');if(m=='quiz')quiz()}
+function quiz(){const c=cur(),q=c[Math.floor(Math.random()*c.length)];$('qq').textContent=toys[Math.floor(Math.random()*10)]+' '+q[0];$('qr').textContent='';
+let opts=[q[1],...c.filter(x=>x!=q).map(x=>x[1]).sort(()=>Math.random()-.5).slice(0,3)].sort(()=>Math.random()-.5);
+$('qa').innerHTML='';opts.forEach(o=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>{if(o==q[1]){$('qr').textContent='🎉 Correct, the plushies are cheering';mark(q[0])}else $('qr').textContent='💗 Not quite, it was '+q[1]};$('qa').appendChild(b)})}
+function mark(f){const k=$('deck').value;S.known[k]=S.known[k]||[];if(!S.known[k].includes(f))S.known[k].push(f);save();prog()}
+$('fc').onclick=$('flip').onclick=()=>$('fc').classList.toggle('f');$('fc').onkeydown=e=>{if(e.key==' '||e.key=='Enter'){e.preventDefault();$('fc').classList.toggle('f')}};
+$('next').onclick=()=>{i++;show()};$('prev').onclick=()=>{i--;show()};$('know').onclick=()=>{mark(cur()[i][0]);i++;show()};
+$('deck').onchange=()=>{i=0;show();if(!$('quiz').hidden)quiz()};$('mStudy').onclick=()=>mode('study');$('mQuiz').onclick=()=>mode('quiz');$('mAdd').onclick=()=>mode('add');$('qn').onclick=quiz;
+$('nadd').onclick=()=>{if(!$('nf').value||!$('nb').value)return;cur().push([$('nf').value,$('nb').value]);$('nf').value=$('nb').value='';save();show();alert('Card added')};
+$('reset').onclick=()=>{S.known={};save();prog()};decks();show();</script></body></html>

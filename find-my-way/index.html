@@ -1,0 +1,85 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Find My Way</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100dvh;font-family:system-ui,sans-serif;background:#eef4f1;color:#23413a}
+#app{display:flex;flex-direction:column;height:100dvh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+header{display:flex;align-items:center;gap:8px;padding:6px 10px;background:#dcebe4}
+header img{width:40px;height:40px;border-radius:50%}header b{flex:1;font-size:18px}
+header a{font-size:13px;color:#2d6a5a}
+#calm{text-align:center;padding:6px;font-size:17px;background:#f6fbf8}
+#map{flex:1;min-height:180px}
+.bar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px}
+button{font-size:16px;min-height:56px;border:0;border-radius:16px;background:#cfe3f2;color:#1d3b55;padding:6px}
+#lost{grid-column:span 3;min-height:72px;font-size:24px;background:#7fb7d9;color:#fff}
+#sos{background:#e8b4b4;color:#5a1e1e;font-weight:bold}
+#cards{display:flex;overflow-x:auto;gap:8px;padding:0 6px 6px}
+.card{min-width:220px;background:#fff;border-radius:16px;padding:8px;font-size:18px}
+.card .ar{font-size:44px}.card img{width:100%;height:90px;object-fit:cover;border-radius:10px}
+#compass{position:absolute;right:12px;top:12px;z-index:999;width:56px;height:56px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:30px}
+.wrap{position:relative;flex:1;display:flex}
+small.disc{display:block;font-size:11px;padding:4px 8px;color:#55706a}
+.you{width:28px;height:28px;border-radius:50%;background:#2a7de1;border:5px solid #fff;box-shadow:0 0 0 8px rgba(42,125,225,.25)}
+.lm{font-size:22px}
+</style></head><body><div id="app">
+<header><img src="logo.jpg" alt="Coffeebreak logo"><b>Find My Way</b><a href="" target="_blank" id="fs">Open full screen</a></header>
+<div id="calm">You are safe. Let's find the way.</div>
+<div class="wrap"><div id="map"></div><div id="compass" title="Your direction">⬆</div></div>
+<div id="cards"></div>
+<div class="bar">
+<button id="lost">I'm lost</button>
+<button id="home">Take me home</button><button id="places">My places</button><button id="share">Show someone where I am</button>
+<button id="call">Call my person</button><button id="sos" onclick="location.href='tel:000'">000 Emergency</button><button id="breathe">Breathe</button>
+<button id="layer">Map view</button><button id="speak">Speak: off</button><button id="setup">Set up</button>
+</div>
+<small class="disc">Not a replacement for emergency services. In danger call 000. Directions may be wrong, stay safe and look around you. © Karen O'Brien / Coffeebreak. All rights to the app, name and logo reserved. Maps © OpenStreetMap contributors, imagery © Esri.</small>
+</div>
+<script>
+const $=id=>document.getElementById(id),S=k=>JSON.parse(localStorage.getItem('cbgps_'+k)||'null'),W=(k,v)=>localStorage.setItem('cbgps_'+k,JSON.stringify(v));
+$('fs').href=location.href;if(window.top===window)$('fs').style.display='none';
+const map=L.map('map',{zoomControl:false}).setView([-32.9283,151.7817],14);
+const sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Imagery © Esri'}).addTo(map);
+const osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'});
+let isSat=true,me=null,meM=null,route=null,talk=false,watching=false,lmLayer=L.layerGroup().addTo(map),lmDone=0;
+$('layer').onclick=()=>{isSat=!isSat;map.removeLayer(isSat?osm:sat);(isSat?sat:osm).addTo(map);$('layer').textContent=isSat?'Map view':'Land view'};
+$('speak').onclick=()=>{talk=!talk;$('speak').textContent='Speak: '+(talk?'on':'off');say('Speaking is on')};
+function say(t){if(talk&&'speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=.85;speechSynthesis.speak(u)}}
+function calm(t){$('calm').textContent=t}
+$('lost').onclick=()=>{calm('Looking for you now. Stay where you are.');if(!navigator.geolocation)return calm('This device cannot find location. Call your person.');
+ if(watching)return center();watching=true;
+ navigator.geolocation.watchPosition(p=>{me=[p.coords.latitude,p.coords.longitude];
+  if(!meM){meM=L.marker(me,{icon:L.divIcon({className:'',html:'<div class="you"></div>',iconSize:[28,28]})}).addTo(map).bindTooltip('You are here',{permanent:true,direction:'top'});center();calm('You are here. You are safe. Let\'s find the way.');say('I found you. You are safe.')}
+  else meM.setLatLng(me);
+  if(p.coords.heading!=null&&!isNaN(p.coords.heading))$('compass').style.transform=`rotate(${p.coords.heading}deg)`;
+  if(Date.now()-lmDone>120000)landmarks();},
+ e=>{watching=false;calm('Could not find you. Tap Open full screen, allow location, or call your person.')},{enableHighAccuracy:true,maximumAge:5000,timeout:20000})};
+function center(){if(me)map.setView(me,17)}
+addEventListener('deviceorientation',e=>{const h=e.webkitCompassHeading??(e.alpha!=null?360-e.alpha:null);if(h!=null)$('compass').style.transform=`rotate(${h}deg)`});
+function landmarks(){lmDone=Date.now();const[a,b]=me,q=`[out:json][timeout:15];(node(around:400,${a},${b})[amenity~"^(pharmacy|police|hospital|cafe|school|library|bus_station|toilets)$"];node(around:400,${a},${b})[shop~"^(supermarket|convenience)$"];node(around:400,${a},${b})[highway=bus_stop];);out 40;`;
+ fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q)}).then(r=>r.json()).then(d=>{lmLayer.clearLayers();const ic={pharmacy:'💊',police:'👮',hospital:'🏥',cafe:'☕',school:'🏫',library:'📚',bus_station:'🚌',toilets:'🚻',supermarket:'🛒',convenience:'🏪',bus_stop:'🚏'};
+ d.elements.forEach(n=>{const t=n.tags,k=t.amenity||t.shop||t.highway;L.marker([n.lat,n.lon],{icon:L.divIcon({className:'lm',html:ic[k]||'📍',iconSize:[24,24]})}).addTo(lmLayer).bindPopup((t.name||k).replace(/_/g,' '))})}).catch(()=>{})}
+function needMe(){if(!me){calm('Tap I\'m lost first so I can find you.');return 1}}
+function arrow(m){const x=(m.modifier||'');if(m.type==='arrive')return['🏁','You have arrived'];if(x.includes('left'))return['⬅','Turn left'];if(x.includes('right'))return['➡','Turn right'];if(x==='uturn')return['↩','Turn around'];return['⬆','Go straight']}
+function snap(lat,lon){const z=18,n=2**z,x=Math.floor((lon+180)/360*n),r=lat*Math.PI/180,y=Math.floor((1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*n);return`https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}`}
+function go(dest,name){if(needMe())return;calm('Finding the way to '+name+'. Take a slow breath.');
+ fetch(`https://router.project-osrm.org/route/v1/foot/${me[1]},${me[0]};${dest[1]},${dest[0]}?overview=full&geometries=geojson&steps=true`).then(r=>r.json()).then(d=>{const rt=d.routes[0];
+ if(route)map.removeLayer(route);route=L.geoJSON(rt.geometry,{style:{color:'#ffd54a',weight:8}}).addTo(map);map.fitBounds(route.getBounds(),{padding:[30,30]});
+ const c=$('cards');c.innerHTML='';const steps=rt.legs[0].steps;steps.forEach((s,i)=>{const[a,w]=arrow(s.maneuver),road=s.name?' onto '+s.name:'',dist=s.distance>0?Math.round(s.distance)+' m':'';const[lo,la]=s.maneuver.location;
+  const el=document.createElement('div');el.className='card';el.innerHTML=`<div class="ar">${a}</div><div>${i+1}. ${w}${road}</div><div>${dist}</div>${i<3?`<img src="${snap(la,lo)}" alt="Picture of this turn">`:''}`;el.onclick=()=>{map.setView([la,lo],18);say(w+road+' '+dist)};c.appendChild(el)});
+ calm(`${name}: about ${Math.round(rt.distance)} metres. Follow the yellow line. You are doing well.`);const f=arrow(steps[0].maneuver)[1];say('Let\'s go to '+name+'. '+f)}).catch(()=>calm('Could not get directions right now. Call your person.'))}
+$('home').onclick=()=>{const h=S('places')?.find(p=>p.n==='Home');h?go([h.a,h.b],'Home'):(calm('Home is not saved yet. Tap Set up.'))};
+$('places').onclick=()=>{const p=S('places')||[];if(!p.length)return calm('No places saved yet. Tap Set up.');const c=$('cards');c.innerHTML='';
+ p.forEach(x=>{const el=document.createElement('div');el.className='card';el.innerHTML=`<div class="ar">${x.i}</div><div>${x.n}</div>`;el.onclick=()=>go([x.a,x.b],x.n);c.appendChild(el)})};
+$('share').onclick=()=>{if(needMe())return;const u=`https://www.google.com/maps?q=${me[0].toFixed(6)},${me[1].toFixed(6)}`,t='I need help. This is where I am: '+u;
+ navigator.share?navigator.share({title:'Where I am',text:t,url:u}).catch(()=>{}):location.href='sms:?&body='+encodeURIComponent(t)};
+$('call').onclick=()=>{const c=S('person');c?location.href='tel:'+c.p:calm('Your person is not saved yet. Tap Set up.')};
+$('breathe').onclick=()=>{let n=0;const s=['Breathe in slowly','Hold','Breathe out slowly'];const t=setInterval(()=>{calm(s[n%3]+'. You are safe.');say(s[n%3]);if(++n>8){clearInterval(t);calm('You are safe. Let\'s find the way.')}},4000);calm(s[0]);n=1};
+$('setup').onclick=async()=>{const w=prompt('What place do you want to save? Type Home, Shop, School, Doctor, or a name. Or type Person to save who to call.');if(!w)return;
+ if(/^person$/i.test(w)){const p=prompt('Phone number of your trusted person');if(p)W('person',{p:p.replace(/[^\d+]/g,'')});return calm('Your person is saved.')}
+ const how=prompt('Type an address to search, or leave empty to use where you are now.');let a,b;
+ if(how){const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=au&q='+encodeURIComponent(how)).then(r=>r.json()).catch(()=>[]);if(!r[0])return calm('Could not find that address.');a=+r[0].lat;b=+r[0].lon}
+ else{if(needMe())return;[a,b]=me}
+ const n=w[0].toUpperCase()+w.slice(1).toLowerCase(),ic={Home:'🏠',Shop:'🛒',School:'🏫',Doctor:'🩺'}[n]||'⭐';const p=(S('places')||[]).filter(x=>x.n!==n);p.push({n,a,b,i:ic});W('places',p);calm(n+' is saved.')};
+</script><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Coffeebreak Lost Gps" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

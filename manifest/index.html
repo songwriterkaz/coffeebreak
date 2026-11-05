@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak Manifest: $1,000 Law of Attraction Coach</title>
+<meta name="description" content="A pink mindset and motivation coach: $1,000 goal tracker, affirmations, vision board, gratitude journal, scripting, inspired actions and a Motivational Speaker mode.">
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <img src="assets/logo.png" alt="Coffeebreak logo" class="logo">
+  <div>
+    <h1>Coffeebreak Manifest</h1>
+    <p class="sub">$1,000 Law of Attraction Coach</p>
+  </div>
+</header>
+
+<p class="honest" role="note"><strong>Honest note:</strong> A mindset and motivation tool. It doesn't guarantee money. Your actions make the results.</p>
+
+<nav class="tabs" role="tablist">
+  <button data-tab="goal" class="active">💰 Goal</button>
+  <button data-tab="speaker">🎤 Speaker</button>
+  <button data-tab="affirm">✨ Affirmations</button>
+  <button data-tab="actions">✅ Actions</button>
+  <button data-tab="vision">🖼️ Vision Board</button>
+  <button data-tab="gratitude">🙏 Gratitude</button>
+  <button data-tab="script">✍️ Scripting</button>
+</nav>
+
+<main>
+<!-- GOAL -->
+<section id="tab-goal" class="panel active">
+  <h2>My money goal</h2>
+  <div class="card">
+    <div class="goal-head">
+      <div class="big" id="goalSummary">$0 of $1,000</div>
+      <div id="goalDays" class="muted"></div>
+    </div>
+    <div class="bar" aria-label="Goal progress"><div class="fill" id="goalFill"></div><span id="goalPct">0%</span></div>
+    <p id="goalMsg" class="cheer"></p>
+  </div>
+  <div class="card">
+    <h3>Add money earned</h3>
+    <div class="row">
+      <label>Amount ($)<input id="earnAmt" type="number" min="0" step="0.01" inputmode="decimal" placeholder="25"></label>
+      <label class="grow">What was it?<input id="earnNote" type="text" maxlength="80" placeholder="Sold a jacket"></label>
+    </div>
+    <button class="btn big-btn" id="earnAdd">+ Add to my goal</button>
+    <ul id="earnList" class="list"></ul>
+  </div>
+  <details class="card">
+    <summary>Goal settings</summary>
+    <div class="row">
+      <label>Goal amount ($)<input id="goalAmt" type="number" min="1" step="1" inputmode="numeric"></label>
+      <label>Goal date<input id="goalDate" type="date"></label>
+    </div>
+    <button class="btn" id="goalSave">Save goal</button>
+    <button class="btn ghost" id="goalReset">Start a new goal</button>
+  </details>
+</section>
+
+<!-- SPEAKER -->
+<section id="tab-speaker" class="panel">
+  <h2>Motivational Speaker</h2>
+  <div class="card">
+    <label>Pep talk
+      <select id="spScript"></select>
+    </label>
+    <div class="row">
+      <button class="btn big-btn" id="spPlay">▶ Play</button>
+      <button class="btn big-btn ghost" id="spStop">■ Stop</button>
+    </div>
+    <div class="row">
+      <button class="btn" id="spRandom">🎲 Surprise me</button>
+      <button class="btn" id="spAffirm">✨ Read 5 affirmations</button>
+    </div>
+    <label>Voice<select id="spVoice"></select></label>
+    <label>Speed <span id="spRateVal">1.0x</span><input id="spRate" type="range" min="0.6" max="1.6" step="0.1" value="1"></label>
+    <label>Pitch <span id="spPitchVal">1.0</span><input id="spPitch" type="range" min="0.6" max="1.6" step="0.1" value="1"></label>
+    <p id="spStatus" class="muted">Ready.</p>
+    <p id="spNoVoice" class="warn" hidden>Your browser doesn't support read-aloud. You can still read the pep talks below.</p>
+  </div>
+  <div class="card script-view" id="spText" aria-live="polite"></div>
+</section>
+
+<!-- AFFIRMATIONS -->
+<section id="tab-affirm" class="panel">
+  <h2>Daily affirmations</h2>
+  <div class="card affirm">
+    <p class="muted" id="affLabel">Today's affirmation</p>
+    <p class="affirm-text" id="affText"></p>
+    <div class="row">
+      <button class="btn big-btn" id="affNext">Next ➜</button>
+      <button class="btn big-btn" id="affSay">🔊 Say it</button>
+      <button class="btn big-btn ghost" id="affFav">♡ Save</button>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Write my own</h3>
+    <input id="affOwn" type="text" maxlength="160" placeholder="I am...">
+    <button class="btn" id="affOwnAdd">Add affirmation</button>
+  </div>
+  <div class="card">
+    <h3>My favourites</h3>
+    <ul id="affFavList" class="list"></ul>
+  </div>
+</section>
+
+<!-- ACTIONS -->
+<section id="tab-actions" class="panel">
+  <h2>Today's inspired actions</h2>
+  <p class="muted">Real steps that can bring money in. Tick them off today. The list resets each day.</p>
+  <div class="card">
+    <div class="big" id="actCount">0 done today</div>
+    <ul id="actList" class="checks"></ul>
+    <div class="row">
+      <input id="actOwn" class="grow" type="text" maxlength="120" placeholder="Add my own action">
+      <button class="btn" id="actOwnAdd">Add</button>
+    </div>
+  </div>
+</section>
+
+<!-- VISION -->
+<section id="tab-vision" class="panel">
+  <h2>Vision board</h2>
+  <div class="card">
+    <div class="row">
+      <input id="visText" class="grow" type="text" maxlength="100" placeholder="Words for my board, e.g. Goal reached">
+      <button class="btn" id="visTextAdd">Add words</button>
+    </div>
+    <label class="btn big-btn file-btn">📷 Add a picture from my device
+      <input id="visImg" type="file" accept="image/*" hidden>
+    </label>
+    <p id="visMsg" class="muted"></p>
+  </div>
+  <div id="visBoard" class="board"></div>
+</section>
+
+<!-- GRATITUDE -->
+<section id="tab-gratitude" class="panel">
+  <h2>Gratitude journal</h2>
+  <div class="card">
+    <p class="muted">Three things I'm thankful for today:</p>
+    <input id="gr1" type="text" maxlength="140" placeholder="1.">
+    <input id="gr2" type="text" maxlength="140" placeholder="2.">
+    <input id="gr3" type="text" maxlength="140" placeholder="3.">
+    <button class="btn big-btn" id="grSave">Save today's gratitude</button>
+  </div>
+  <ul id="grList" class="list entries"></ul>
+</section>
+
+<!-- SCRIPTING -->
+<section id="tab-script" class="panel">
+  <h2>Scripting</h2>
+  <p class="muted">Write it as if it already happened. Use the present tense and add lots of detail.</p>
+  <div class="card">
+    <button class="btn" id="scStarter">Give me a starter</button>
+    <textarea id="scText" rows="8" placeholder="I am so happy and grateful now that..."></textarea>
+    <button class="btn big-btn" id="scSave">Save my script</button>
+    <button class="btn ghost" id="scRead">🔊 Read it to me</button>
+  </div>
+  <ul id="scList" class="list entries"></ul>
+</section>
+</main>
+
+<div class="card backup">
+  <button class="btn ghost" id="exportBtn">⬇ Save a backup</button>
+  <label class="btn ghost file-btn">⬆ Load a backup<input id="importFile" type="file" accept="application/json,.json" hidden></label>
+  <p class="muted small">Everything is saved only in this browser on this device. Nothing is uploaded.</p>
+</div>
+
+<footer>
+  <p><strong>Disclaimer:</strong> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell the physical products they bought, but may not copy them or make their own versions. Third-party trademarks and brand names belong to their owners and are mentioned only for description.</p>
+  <p>A mindset and motivation tool. It doesn't guarantee money. Your actions make the results. Not financial advice.</p>
+  <p><strong>AI disclosure:</strong> This app was made with the help of AI tools, including its text, code and images. All words, pep talks and affirmations are original Coffeebreak content.</p>
+  <p class="links"><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">More Coffeebreak apps on itch.io</a> · <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
+  <p class="small">© Coffeebreak · Newcastle NSW</p>
+</footer>
+<div id="toast" role="status"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body>
+</html>

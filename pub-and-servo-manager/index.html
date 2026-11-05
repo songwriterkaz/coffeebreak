@@ -1,0 +1,171 @@
+<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Coffeebreak Pub and Servo Manager</title><link rel="icon" href="assets/logo.png"><style>
+:root{--pink:#e7548a;--pink2:#f7a8c4;--blush:#fff0f5;--cream:#fffaf3;--ink:#3b2430;--mute:#8a6a78;--card:#fff;--line:#f3cfe0}
+*{box-sizing:border-box}html,body{margin:0}body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:linear-gradient(180deg,var(--blush),var(--cream) 60%);color:var(--ink);min-height:100vh}
+a{color:var(--pink)}
+header.cb{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:10px 16px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:2px solid var(--line)}
+header.cb img{width:48px;height:48px;border-radius:12px;object-fit:cover;box-shadow:0 2px 8px #e7548a33}
+header.cb .t{flex:1;min-width:0}header.cb h1{font-family:Georgia,serif;font-size:1.15rem;margin:0;color:var(--pink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header.cb small{color:var(--mute);font-size:.78rem}
+.btn{appearance:none;border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-size:.95rem;cursor:pointer;background:var(--pink);color:#fff;box-shadow:0 3px 10px #e7548a44;transition:transform .1s}
+.btn:active{transform:scale(.96)}.btn.alt{background:#fff;color:var(--pink);border:2px solid var(--pink2);box-shadow:none}.btn.sm{padding:6px 12px;font-size:.82rem}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+nav.tabs{display:flex;gap:8px;overflow-x:auto;padding:10px 16px}nav.tabs button{white-space:nowrap}
+main{max-width:1100px;margin:0 auto;padding:12px 16px 40px}
+.hero{border-radius:22px;padding:22px;background:linear-gradient(135deg,#ffd6e6,#fff3f8);border:2px solid var(--line);margin-bottom:18px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.hero h2{font-family:Georgia,serif;margin:0 0 6px;color:var(--pink);font-size:1.6rem}.hero p{margin:0;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.card{background:var(--card);border-radius:18px;border:2px solid var(--line);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 14px #e7548a14}
+.card img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:var(--blush)}
+.card .b{padding:12px 14px;display:flex;flex-direction:column;gap:6px;flex:1}.card h3{margin:0;font-size:1rem}.card p{margin:0;font-size:.85rem;color:var(--mute);flex:1}
+.price{font-weight:800;color:var(--pink)}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+select,input,textarea{font:inherit;border:2px solid var(--line);border-radius:12px;padding:8px 10px;background:#fff;color:var(--ink);width:100%}
+textarea{min-height:90px;resize:vertical}label{font-size:.82rem;color:var(--mute);display:block;margin:8px 0 3px}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--blush);border:1px solid var(--line);font-size:.75rem;color:var(--mute)}
+.note{background:#fff;border-left:5px solid var(--pink2);border-radius:12px;padding:10px 14px;font-size:.85rem;color:var(--mute);margin:14px 0}
+footer.cb{max-width:1100px;margin:0 auto;padding:20px 16px 40px;font-size:.78rem;color:var(--mute);text-align:center;border-top:2px dashed var(--line)}
+footer.cb img{width:40px;height:40px;border-radius:10px;vertical-align:middle;margin-right:6px}
+.modal{position:fixed;inset:0;background:#3b243088;display:none;align-items:flex-end;justify-content:center;z-index:50}
+.modal.on{display:flex}.sheet{background:#fff;width:min(560px,100%);max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:18px 18px 26px}
+@media(min-width:700px){.modal{align-items:center}.sheet{border-radius:22px}}
+.sheet h2{margin:0 0 10px;color:var(--pink);font-family:Georgia,serif}
+.line{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:.9rem}
+.payid{background:linear-gradient(135deg,#ffe3ee,#fff);border:2px solid var(--pink2);border-radius:16px;padding:14px;margin:12px 0;font-size:.92rem}
+.payid b.id{font-size:1.1rem;color:var(--pink);word-break:break-all}
+.cartbtn{position:relative}.cartbtn .n{position:absolute;top:-6px;right:-6px;background:var(--ink);color:#fff;border-radius:999px;font-size:.7rem;padding:2px 6px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:.88rem;opacity:0;transition:opacity .25s;z-index:60;pointer-events:none}.toast.on{opacity:1}
+.hidden{display:none}
+#cv{width:100%;height:auto;border-radius:18px;border:2px solid var(--line);background:#cfe9ff;display:block;touch-action:manipulation}
+.hud{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:10px 0}.hud div{background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 10px;font-size:.78rem;color:var(--mute)}.hud b{display:block;font-size:1.1rem;color:var(--ink)}
+.panel{background:#fff;border:2px solid var(--line);border-radius:18px;padding:12px 14px;margin-bottom:12px}.panel h3{margin:0 0 8px;color:var(--pink);font-family:Georgia,serif}
+table{width:100%;border-collapse:collapse;font-size:.85rem}td,th{padding:6px 4px;border-bottom:1px dashed var(--line);text-align:left}th{color:var(--mute);font-weight:600}
+.bar{height:8px;border-radius:9px;background:var(--blush);overflow:hidden;min-width:60px}.bar i{display:block;height:100%;background:var(--pink)}
+.cols{display:grid;grid-template-columns:1fr;gap:12px}@media(min-width:900px){.cols{grid-template-columns:1fr 1fr}}
+#log{max-height:150px;overflow:auto;font-size:.8rem;color:var(--mute)}input.pr{width:70px;padding:4px 6px}</style></head><body><header class="cb"><img src="assets/logo.png" alt="Coffeebreak logo"><div class="t"><h1>Coffeebreak Pub and Servo Manager</h1><small>Run a country servo, a convenience store and the pub next door</small></div></header>
+<main><canvas id="cv" width="960" height="380"></canvas>
+<div class="hud"><div>Day<b id="hDay">1</b></div><div>Time<b id="hTime">6:00</b></div><div>Cash<b id="hCash">$0</b></div><div>Reputation<b id="hRep">50</b></div><div>Today's takings<b id="hTake">$0</b></div><div>Customers today<b id="hCust">0</b></div></div>
+<div class="row" style="margin-bottom:12px"><button class="btn" id="play">Open for the day</button><button class="btn alt" id="spd">Speed 1x</button><button class="btn alt" id="saveb">Save</button><button class="btn alt" id="newg">New game</button></div>
+<nav class="tabs" style="padding:0 0 10px"><button class="btn sm" data-t="stock">Stock and prices</button><button class="btn sm alt" data-t="sup">Suppliers</button><button class="btn sm alt" data-t="staff">Staff</button><button class="btn sm alt" data-t="up">Upgrades</button><button class="btn sm alt" data-t="rep">Reports</button><button class="btn sm alt" data-t="help">How to play</button></nav>
+<section id="t-stock" class="panel"><h3>Stock and prices</h3><table id="stockT"></table></section>
+<section id="t-sup" class="panel hidden"><h3>Supplier orders</h3><p style="font-size:.85rem;color:var(--mute)">Orders arrive at 6:00 the next morning. Bigger orders get a better unit price.</p><table id="supT"></table><div id="pend" class="note"></div></section>
+<section id="t-staff" class="panel hidden"><h3>Staff</h3><table id="staffT"></table></section>
+<section id="t-up" class="panel hidden"><h3>Upgrades</h3><table id="upT"></table></section>
+<section id="t-rep" class="panel hidden"><h3>Reports</h3><div id="repD"></div><h3 style="margin-top:12px">Today</h3><div id="log"></div></section>
+<section id="t-help" class="panel hidden"><h3>How to play</h3><p>Each day runs from 6:00 to midnight. Cars pull up to the bowsers, buy fuel and often grab a pie, a coffee or a cold drink from the shop. The pub opens at 11:00 for lunch and gets busy after work.</p><p>Keep tanks and shelves stocked by ordering from suppliers, set fair prices, hire staff so queues stay short, and buy upgrades to grow. Prices that are too high, empty shelves and long queues hurt your reputation. Wages and running costs are paid at close.</p><p>The game saves on this device. Tap the canvas for a quick tip.</p></section>
+<div class="modal" id="eod"><div class="sheet" id="eodD"></div></div>
+</main><footer class="cb"><p><img src="assets/logo.png" alt="">Made in Newcastle NSW by Coffeebreak. More apps at <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p><p>A game for fun. Fuel brands and chains are not represented here; any resemblance to real businesses is coincidental.</p><p>© Karen (Coffeebreak). Karen keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Karen claims no ownership of any third-party brands named here; all trademarks belong to their owners.</p></footer><div class="toast" id="toast"></div><script>const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2000)}
+const ITEMS={ulp:{n:'Unleaded 91 (L)',a:'Fuel',cost:1.76,price:1.89,max:20000,unit:'L',ref:1.95},prem:{n:'Premium 98 (L)',a:'Fuel',cost:1.99,price:2.15,max:10000,unit:'L',ref:2.2},dsl:{n:'Diesel (L)',a:'Fuel',cost:1.85,price:1.99,max:15000,unit:'L',ref:2.05},
+pie:{n:'Meat pies',a:'Shop',cost:2.2,price:5.5,max:120,ref:5.5},chips:{n:'Chips and lollies',a:'Shop',cost:1.1,price:3.5,max:300,ref:3.5},drink:{n:'Cold drinks',a:'Shop',cost:1.0,price:4.2,max:400,ref:4.2},coffee:{n:'Coffee (cups)',a:'Shop',cost:0.6,price:4.8,max:400,ref:5,need:'coffee'},milk:{n:'Milk and bread',a:'Shop',cost:2.0,price:4.5,max:150,ref:4.5},ice:{n:'Bags of ice',a:'Shop',cost:1.2,price:5,max:100,ref:5},
+beer:{n:'Beer (schooners)',a:'Pub',cost:2.1,price:8.5,max:800,ref:8.5},wine:{n:'Wine (glasses)',a:'Pub',cost:2.5,price:10,max:300,ref:10},soft:{n:'Soft drinks (glasses)',a:'Pub',cost:0.8,price:4.5,max:400,ref:4.5},meal:{n:'Pub meals',a:'Pub',cost:7,price:22,max:120,ref:22,need:'kitchen'}};
+const SUP=[{id:'tank',n:'Regional fuel tanker',items:['ulp','prem','dsl'],packs:[2000,5000,10000],fee:180},{id:'whole',n:'Snack and grocery wholesaler',items:['pie','chips','drink','milk','ice'],packs:[20,50,100],fee:25},{id:'bean',n:'Coffee roaster',items:['coffee'],packs:[100,250],fee:10},{id:'brew',n:'Brewery and bottle supplier',items:['beer','wine','soft'],packs:[100,250,500],fee:40},{id:'butch',n:'Local butcher and grocer',items:['meal'],packs:[20,50],fee:20}];
+const STAFF={console:{n:'Console operator',w:190,d:'Serves shop and fuel customers at the counter'},barista:{n:'Barista',w:180,d:'Makes coffee faster (needs coffee machine)'},bar:{n:'Bartender',w:200,d:'Serves drinks in the pub'},chef:{n:'Chef',w:230,d:'Cooks pub meals (needs kitchen)'},clean:{n:'Cleaner',w:150,d:'Keeps the place tidy, boosts reputation'}};
+const UPS={pump3:{n:'Third bowser',c:4500,d:'More cars served at once'},pump4:{n:'Fourth bowser',c:6500,d:'Even more pump capacity',req:'pump3'},coffee:{n:'Coffee machine',c:2500,d:'Sell coffee in the shop'},kitchen:{n:'Pub kitchen',c:7000,d:'Sell pub meals'},garden:{n:'Beer garden',c:5500,d:'Pub seats 40 instead of 20'},carwash:{n:'Car wash',c:8000,d:'Extra $12 from some drivers'},ev:{n:'EV chargers',c:9000,d:'Electric cars visit and spend in the shop'},stage:{n:'Music stage',c:4000,d:'Live Coffeebreak music nights draw a crowd on Fri and Sat'},solar:{n:'Solar panels',c:6000,d:'Cuts running costs by $60 a day'},sign:{n:'Big highway sign',c:3000,d:'More passing traffic'},cool:{n:'Walk-in cool room',c:3500,d:'Stock spoils less overnight'}};
+let S,run=false,spd=1,acc=0,lastT=0,cars=[],walkers=[];
+function fresh(){const st={};for(const k in ITEMS)st[k]=ITEMS[k].a==='Fuel'?ITEMS[k].max*0.4:Math.round(ITEMS[k].max*0.4);const pr={};for(const k in ITEMS)pr[k]=ITEMS[k].price;
+ return{day:1,min:360,cash:5000,rep:50,stock:st,price:pr,staff:{console:1,barista:0,bar:1,chef:0,clean:0},ups:{},pend:[],hist:[],today:null,open:false}}
+function newDay(){S.today={take:0,cust:0,lost:0,sold:{},cost:0,log:[]}}
+function load(){try{S=JSON.parse(localStorage.getItem('cbpubservo'))}catch(e){S=null}if(!S||!S.stock)S=fresh();if(!S.today)newDay()}
+function save(){localStorage.setItem('cbpubservo',JSON.stringify(S))}
+const money=n=>(n<0?'-$':'$')+Math.abs(n).toLocaleString('en-AU',{maximumFractionDigits:0});
+const log=t=>{S.today.log.unshift(fmtT(S.min)+' '+t);if(S.today.log.length>80)S.today.log.pop()};
+const fmtT=m=>Math.floor(m/60)+':'+String(Math.floor(m%60)).padStart(2,'0');
+const pumps=()=>2+(S.ups.pump3?1:0)+(S.ups.pump4?1:0),seats=()=>S.ups.garden?40:20;
+function pf(k){const r=S.price[k]/ITEMS[k].ref;return Math.max(0.05,Math.min(1.4,1.6-r*0.6-(r>1.25?(r-1.25)*2:0)))}
+function sell(k,q){if(ITEMS[k].need&&!S.ups[ITEMS[k].need])return 0;if(k==='meal'&&!S.staff.chef)return 0;if(k==='coffee'&&!S.ups.coffee)return 0;q=Math.min(q,S.stock[k]);if(q<=0){S.today.miss=(S.today.miss||0)+1;return 0}
+ S.stock[k]-=q;S.today.cogs=(S.today.cogs||0)+q*ITEMS[k].cost;const v=q*S.price[k];S.cash+=v;S.today.take+=v;S.today.sold[k]=(S.today.sold[k]||0)+q;return v}
+function hourCurve(h){return h<6?0:h<7?.6:h<9?1.4:h<11?.8:h<14?1.1:h<16?.8:h<19?1.3:h<21?.7:.35}
+function pubCurve(h,dow){if(h<11)return 0;let b=h<14?.9:h<17?.4:h<21?1.3:h<23?.9:.4;if(dow>=4)b*=1.5;if(S.ups.stage&&dow>=4&&h>=19&&h<23)b*=1.6;return b}
+let pubCount=0,counterQ=0;
+function minute(){const h=S.min/60,dow=(S.day-1)%7,repF=0.5+S.rep/100;
+ // servo traffic
+ const rate=0.32*hourCurve(h)*repF*(S.ups.sign?1.25:1)*(0.5+pf('ulp')*0.5);
+ if(Math.random()<rate){const waiting=cars.filter(c=>c.ph===0).length;
+  if(waiting>=4){S.today.lost++;S.rep=Math.max(0,S.rep-0.1)}else{const ev=S.ups.ev&&Math.random()<.12;cars.push({x:-80,pump:-1,t:0,col:['#e7548a','#7ab8ff','#ffd166','#8bd3a8','#c9a7ff','#ffffff','#333'][Math.floor(Math.random()*7)],fuel:ev?null:(Math.random()<.2?'dsl':Math.random()<.2?'prem':'ulp'),ev,ph:0})}}
+ // assign pumps
+ const used=new Set(cars.filter(c=>c.pump>=0).map(c=>c.pump));for(const c of cars)if(c.ph===0){for(let p=0;p<pumps();p++)if(!used.has(p)){c.pump=p;used.add(p);c.t=3+Math.random()*2.5;c.ph=1;break}}
+ for(const c of cars){if(c.pump>=0&&c.ph===1){c.t--;if(c.t<=0){finishCar(c);c.ph=2;c.gone=0}}else if(c.ph===2){c.gone++}}cars=cars.filter(c=>!(c.ph===2&&c.gone>4));
+ // counter
+ const cap=S.staff.console*0.9+0.1;counterQ=Math.max(0,counterQ-cap);if(counterQ>8){S.rep=Math.max(0,S.rep-0.03)}
+ // pub
+ const pr=0.35*pubCurve(h,dow)*repF;if(Math.random()<pr&&pubCount<seats()){pubCount++;walkers.push({x:960,tx:600+Math.random()*300,y:300,c:'#'+Math.floor(Math.random()*0xaaaaaa+0x444444).toString(16)})}
+ if(pubCount>0){const orders=pubCount*0.035,barCap=S.staff.bar*1.2;const o=Math.min(orders,barCap);let n=Math.floor(o)+(Math.random()<o%1?1:0);
+  for(let i=0;i<n;i++){const r=Math.random();if(r<.55)sell('beer',pf('beer')>Math.random()*1.2?1:0);else if(r<.75)sell('wine',pf('wine')>Math.random()*1.2?1:0);else if(r<.9)sell('soft',1);else if(sell('meal',pf('meal')>Math.random()?1:0))S.rep=Math.min(100,S.rep+.02)}
+  if(orders>barCap*1.5)S.rep=Math.max(0,S.rep-.03);if(Math.random()<pubCount*0.012){pubCount--;S.today.cust++;if(walkers.length)walkers.shift()}}
+ if(S.staff.clean&&Math.random()<.02)S.rep=Math.min(100,S.rep+.1);
+ S.min++;if(S.min>=1440)endDay()}
+function finishCar(c){S.today.cust++;let spent=0;
+ if(c.fuel){const L=25+Math.random()*45;const f=pf(c.fuel);const got=Math.min(L,S.stock[c.fuel]);if(got<5){S.rep=Math.max(0,S.rep-.4);log('A driver left: no '+ITEMS[c.fuel].n.split(' (')[0]);S.today.lost++;return}spent+=sell(c.fuel,Math.round(got*Math.min(1,f+.2)))}
+
+ const shopBias=c.ev?1.6:1;
+ if(Math.random()<.45*shopBias)spent+=sell('drink',1);if(Math.random()<.3*shopBias)spent+=sell('pie',pf('pie')>Math.random()?1:0);if(Math.random()<.35*shopBias)spent+=sell('chips',1);
+ if(S.ups.coffee&&Math.random()<(S.staff.barista?.45:.25)*shopBias)spent+=sell('coffee',pf('coffee')>Math.random()?1:0);
+ if(Math.random()<.12)spent+=sell('milk',1);if(Math.random()<.1*(S.day%5===2?3:1))spent+=sell('ice',1);
+ if(S.ups.carwash&&Math.random()<.12){S.cash+=12;S.today.take+=12;spent+=12}
+ if(c.ev){S.cash+=14;S.today.take+=14}
+ counterQ+=1;if(spent>0&&counterQ<5)S.rep=Math.min(100,S.rep+.03)}
+function endDay(){run=false;S.open=false;$('#play').textContent='Open next day';
+ const wages=Object.keys(STAFF).reduce((a,k)=>a+S.staff[k]*STAFF[k].w,0);let run_=450-(S.ups.solar?60:0);
+ let spoil=0;for(const k of ['pie','milk','meal']){const l=Math.floor(S.stock[k]*(S.ups.cool?.05:.15));S.stock[k]-=l;spoil+=l*ITEMS[k].cost}
+ S.cash-=wages+run_;const cogs=S.today.cogs||0;const profit=S.today.take-cogs-wages-run_-spoil;
+ S.hist.push({day:S.day,take:Math.round(S.today.take),wages,run:run_,stock:Math.round(S.today.cost),profit:Math.round(profit),cust:S.today.cust,rep:Math.round(S.rep)});
+ const top=Object.entries(S.today.sold).sort((a,b)=>b[1]*S.price[b[0]]-a[1]*S.price[a[0]]).slice(0,4).map(([k,q])=>`<div class="line"><span>${ITEMS[k].n}</span><span>${Math.round(q)}</span></div>`).join('');
+ $('#eodD').innerHTML=`<h2>Day ${S.day} closed</h2><div class="line"><span>Takings</span><b>${money(S.today.take)}</b></div><div class="line"><span>Cost of goods sold</span><span>${money(-cogs)}</span></div><div class="line"><span>Wages</span><span>${money(-wages)}</span></div><div class="line"><span>Running costs</span><span>${money(-run_)}</span></div><div class="line"><span>Spoiled stock (value)</span><span>${money(-spoil)}</span></div><div class="line"><b>Profit</b><b>${money(profit)}</b></div><div class="line"><span>Spent on supplier orders today</span><span>${money(S.today.cost)}</span></div><div class="line"><span>Customers</span><span>${S.today.cust} served, ${S.today.lost} lost</span></div><div class="line"><span>Reputation</span><span>${Math.round(S.rep)}</span></div><h3>Best sellers</h3>${top||'<p>Nothing sold.</p>'}<button class="btn x" style="margin-top:12px">Close</button>`;$('#eod').classList.add('on');
+ S.day++;S.min=360;cars=[];walkers=[];pubCount=0;counterQ=0;
+ for(const o of S.pend){S.stock[o.k]=Math.min(ITEMS[o.k].max,S.stock[o.k]+o.q)}if(S.pend.length)toast('Supplier deliveries arrived');S.pend=[];
+ if(S.cash<-2000)toast('The bank is worried. Cut costs or raise takings.');
+ newDay();randomEvent();save();renderAll()}
+function randomEvent(){const r=Math.random();if(r<.12){S.rep=Math.min(100,S.rep+3);log('A travel blogger praised your pies. Reputation up.')}else if(r<.2){const k=['ulp','dsl'][Math.floor(Math.random()*2)];ITEMS[k].cost+=.08;log('Wholesale '+ITEMS[k].n+' price rose 8c.')}else if(r<.26){S.cash-=300;log('A freezer needed a $300 repair.')}}
+// UI tables
+function renderStock(){let h='<tr><th>Item</th><th>Stock</th><th>Cost</th><th>Price</th></tr>',a='';for(const k in ITEMS){const it=ITEMS[k];if(it.a!==a){a=it.a;h+=`<tr><th colspan="4" style="color:var(--pink)">${a}</th></tr>`}const lock=(it.need&&!S.ups[it.need])||(k==='meal'&&!S.staff.chef);
+ h+=`<tr style="${lock?'opacity:.45':''}"><td>${it.n}${lock?' (locked)':''}</td><td><div class="bar"><i style="width:${Math.min(100,S.stock[k]/it.max*100)}%"></i></div><small>${Math.round(S.stock[k]).toLocaleString()}</small></td><td>$${it.cost.toFixed(2)}</td><td><input class="pr" type="number" step="0.05" min="0" data-k="${k}" value="${S.price[k].toFixed(2)}"></td></tr>`}
+ $('#stockT').innerHTML=h;$$('#stockT input').forEach(i=>i.onchange=()=>{S.price[i.dataset.k]=Math.max(0,+i.value||0);save()})}
+function renderSup(){let h='<tr><th>Supplier</th><th>Item</th><th>Order</th></tr>';for(const s of SUP)for(const k of s.items){h+=`<tr><td>${s.n}<br><small>$${s.fee} delivery</small></td><td>${ITEMS[k].n}<br><small>${Math.round(S.stock[k]).toLocaleString()} / ${ITEMS[k].max.toLocaleString()}</small></td><td class="row">${s.packs.map((p,i)=>`<button class="btn sm alt" data-s="${s.id}" data-k="${k}" data-q="${p}">${p.toLocaleString()} ($${Math.round(p*ITEMS[k].cost*(1-i*.04)+s.fee).toLocaleString()})</button>`).join('')}</td></tr>`}
+ $('#supT').innerHTML=h;$$('#supT button').forEach(b=>b.onclick=()=>{const s=SUP.find(x=>x.id===b.dataset.s),k=b.dataset.k,q=+b.dataset.q,i=s.packs.indexOf(q),c=Math.round(q*ITEMS[k].cost*(1-i*.04)+s.fee);
+  const queued=S.pend.filter(o=>o.k===k).reduce((a,o)=>a+o.q,0);if(S.stock[k]+queued+q>ITEMS[k].max*1.05){toast('Not enough storage for that order');return}if(S.cash<c){toast('Not enough cash');return}
+  S.cash-=c;S.today.cost+=c;S.pend.push({k,q});log('Ordered '+q+' '+ITEMS[k].n+' for '+money(c));toast('Order placed. Arrives 6:00 tomorrow.');save();renderAll()});
+ $('#pend').innerHTML=S.pend.length?'<b>Arriving tomorrow:</b> '+S.pend.map(o=>o.q.toLocaleString()+' '+ITEMS[o.k].n).join(', '):'No deliveries booked for tomorrow.'}
+function renderStaff(){let h='<tr><th>Role</th><th>Wage a day</th><th>On staff</th><th></th></tr>';for(const k in STAFF)h+=`<tr><td>${STAFF[k].n}<br><small>${STAFF[k].d}</small></td><td>$${STAFF[k].w}</td><td>${S.staff[k]}</td><td class="row"><button class="btn sm" data-h="${k}">Hire</button><button class="btn sm alt" data-f="${k}" ${S.staff[k]?'':'disabled'}>Let go</button></td></tr>`;
+ $('#staffT').innerHTML=h;$$('[data-h]').forEach(b=>b.onclick=()=>{if(S.staff[b.dataset.h]>=6){toast('That is plenty for one shift');return}S.staff[b.dataset.h]++;save();renderAll()});$$('[data-f]').forEach(b=>b.onclick=()=>{S.staff[b.dataset.f]--;save();renderAll()})}
+function renderUps(){let h='<tr><th>Upgrade</th><th>Cost</th><th></th></tr>';for(const k in UPS){const u=UPS[k],own=S.ups[k],lock=u.req&&!S.ups[u.req];h+=`<tr><td>${u.n}<br><small>${u.d}</small></td><td>$${u.c.toLocaleString()}</td><td>${own?'<span class="pill">Owned</span>':`<button class="btn sm" data-u="${k}" ${lock?'disabled':''}>${lock?'Needs '+UPS[u.req].n:'Buy'}</button>`}</td></tr>`}
+ $('#upT').innerHTML=h;$$('[data-u]').forEach(b=>b.onclick=()=>{const u=UPS[b.dataset.u];if(S.cash<u.c){toast('Not enough cash');return}S.cash-=u.c;S.ups[b.dataset.u]=1;log('Bought '+u.n);toast(u.n+' installed');save();renderAll()})}
+function renderRep(){const H=S.hist.slice(-10);$('#repD').innerHTML=H.length?'<table><tr><th>Day</th><th>Takings</th><th>Profit</th><th>Customers</th><th>Rep</th></tr>'+H.map(d=>`<tr><td>${d.day}</td><td>${money(d.take)}</td><td style="color:${d.profit<0?'#c0392b':'#2e8b57'}">${money(d.profit)}</td><td>${d.cust}</td><td>${d.rep}</td></tr>`).join('')+'</table>':'<p>Finish a day to see reports.</p>';$('#log').innerHTML=S.today.log.map(l=>'<div>'+l+'</div>').join('')}
+function hud(){$('#hDay').textContent=S.day+' '+['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][(S.day-1)%7];$('#hTime').textContent=fmtT(S.min);$('#hCash').textContent=money(S.cash);$('#hRep').textContent=Math.round(S.rep);$('#hTake').textContent=money(S.today.take);$('#hCust').textContent=S.today.cust}
+function renderAll(){renderStock();renderSup();renderStaff();renderUps();renderRep();hud()}
+// drawing
+const cv=$('#cv'),g=cv.getContext('2d');
+function sky(h){const t=h<6||h>=21?0:h<8?(h-6)/2:h<18?1:h<21?1-(h-18)/3:0;const top=`rgb(${Math.round(30+170*t)},${Math.round(30+200*t)},${Math.round(70+185*t)})`;return[top,t]}
+function draw(){const h=S.min/60,[top,t]=sky(h);const gr=g.createLinearGradient(0,0,0,260);gr.addColorStop(0,top);gr.addColorStop(1,t>.5?'#ffe3ee':'#4a3a5a');g.fillStyle=gr;g.fillRect(0,0,960,380);
+ if(t<.3){g.fillStyle='#fff';for(let i=0;i<30;i++)g.fillRect((i*137)%960,(i*61)%150,2,2)}else{g.fillStyle='#ffd166';g.beginPath();g.arc(120+h*30,70,26,0,7);g.fill()}
+ g.fillStyle='#6d6d76';g.fillRect(0,300,960,80);g.fillStyle='#ffd166';for(let x=0;x<960;x+=60)g.fillRect(x,338,30,4);
+ g.fillStyle='#9a9aa3';g.fillRect(0,250,560,50);
+ // canopy
+ g.fillStyle='#e7548a';g.fillRect(40,150,440,22);g.fillStyle='#fff';g.font='bold 15px Georgia';g.fillText('COFFEEBREAK SERVO',170,166);g.fillStyle='#ccc';
+ for(let p=0;p<pumps();p++){const x=80+p*110;g.fillStyle='#ddd';g.fillRect(x+30,172,8,78);g.fillStyle='#fff';g.fillRect(x+20,215,28,35);g.fillStyle='#e7548a';g.fillRect(x+22,218,24,8)}
+ // shop
+ g.fillStyle='#fff0f5';g.fillRect(490,170,150,80);g.fillStyle='#e7548a';g.fillRect(490,160,150,14);g.fillStyle='#fff';g.font='bold 11px sans-serif';g.fillText('SHOP 24/7',535,171);g.fillStyle=t>.5?'#bde0fe':'#ffe08a';g.fillRect(505,190,50,40);g.fillRect(575,190,50,60);
+ // pub
+ g.fillStyle='#8b5a3c';g.fillRect(680,130,260,170);g.fillStyle='#5a3a26';g.beginPath();g.moveTo(670,130);g.lineTo(810,80);g.lineTo(950,130);g.fill();g.fillStyle='#ffd6e6';g.font='bold 16px Georgia';g.fillText('THE COFFEEBREAK HOTEL',700,155);
+ const open=h>=11;g.fillStyle=open?(t>.5?'#ffe8a3':'#ffcf5a'):'#40302a';for(let i=0;i<4;i++)g.fillRect(700+i*60,175,40,40);g.fillStyle='#3a2416';g.fillRect(790,240,40,60);
+ if(S.ups.garden){g.fillStyle='#8bd3a8';g.fillRect(880,260,70,40);g.fillStyle='#fff';g.fillRect(890,270,20,4);g.fillRect(920,270,20,4)}
+ if(S.ups.stage){g.fillStyle='#e7548a';g.font='12px sans-serif';g.fillText(open?'Live music tonight':'Music stage',700,232)}
+ if(S.ups.carwash){g.fillStyle='#7ab8ff';g.fillRect(0,200,36,50);g.fillStyle='#fff';g.font='9px sans-serif';g.fillText('WASH',4,230)}
+ if(S.ups.ev){g.fillStyle='#8bd3a8';g.fillRect(450,225,14,25)}
+ if(S.ups.solar){g.fillStyle='#2b4c7e';for(let i=0;i<4;i++)g.fillRect(500+i*35,150,30,8)}
+ // cars
+ for(const c of cars){const tx=80+Math.max(0,c.pump)*110+50;if(c.ph===1){c.x+=Math.sign(tx-c.x)*Math.min(5*spd,Math.abs(tx-c.x))}else if(c.ph===0){const ahead=cars.filter(o=>o.ph===0&&o!==c&&o.x>c.x).length;const target=30-ahead*90;c.x+=Math.sign(target-c.x)*Math.min(4*spd,Math.abs(target-c.x))}else{c.x+=6*spd}
+  const y=c.ph>=1?262:318;g.fillStyle=c.col;g.fillRect(c.x-30,y-16,60,20);g.fillRect(c.x-18,y-28,36,14);g.fillStyle='#bde0fe';g.fillRect(c.x-14,y-25,28,9);g.fillStyle='#222';g.beginPath();g.arc(c.x-18,y+5,7,0,7);g.arc(c.x+18,y+5,7,0,7);g.fill();if(c.ev){g.fillStyle='#2e8b57';g.font='9px sans-serif';g.fillText('EV',c.x-6,y-2)}}
+ cars=cars.filter(c=>c.x<1000);
+ for(const w of walkers){w.x+=Math.sign(w.tx-w.x)*Math.min(1.5*spd,Math.abs(w.tx-w.x));g.fillStyle=w.c;g.beginPath();g.arc(w.x,w.y-22,6,0,7);g.fill();g.fillRect(w.x-5,w.y-16,10,16)}
+ g.fillStyle='rgba(255,255,255,.85)';g.fillRect(10,10,190,52);g.fillStyle='#3b2430';g.font='bold 13px sans-serif';g.fillText('Pub: '+pubCount+'/'+seats()+' seated',20,30);g.fillText('Counter queue: '+Math.round(counterQ),20,50);
+ if(!run){g.fillStyle='rgba(59,36,48,.55)';g.fillRect(0,0,960,380);g.fillStyle='#fff';g.font='bold 26px Georgia';g.textAlign='center';g.fillText(S.min===360?'Ready to open. Day '+S.day:'Paused',480,190);g.textAlign='left'}}
+function loop(ts){const dt=Math.min(100,ts-(lastT||ts));lastT=ts;if(run){acc+=dt*spd;let n=0;while(acc>=120&&n<50){acc-=120;n++;minute();if(!run)break}if(n)hud()}draw();if(run&&Math.floor(S.min)%30===0)renderStock();requestAnimationFrame(loop)}
+const TIPS=['Fuel sells best when priced near the local average.','A coffee machine and a barista lift shop sales.','Friday and Saturday nights are big at the pub.','Order fuel before the tanks run dry. Deliveries take a night.','Long counter queues lower your reputation. Hire another console operator.','A cool room cuts overnight spoilage.'];
+document.addEventListener('DOMContentLoaded',()=>{load();renderAll();
+ $('#play').onclick=()=>{run=!run;$('#play').textContent=run?'Pause':'Resume';if(run&&S.min===360)log('Doors open')};
+ $('#spd').onclick=()=>{spd=spd===1?3:spd===3?6:1;$('#spd').textContent='Speed '+spd+'x'};
+ $('#saveb').onclick=()=>{save();toast('Game saved on this device')};
+ $('#newg').onclick=()=>{if(confirm('Start a new game? Your save will be replaced.')){S=fresh();newDay();cars=[];walkers=[];pubCount=0;save();renderAll()}};
+ $$('nav.tabs button').forEach(b=>b.onclick=()=>{$$('nav.tabs button').forEach(x=>x.classList.toggle('alt',x!==b));$$('main>section').forEach(s=>s.classList.add('hidden'));$('#t-'+b.dataset.t).classList.remove('hidden');renderAll()});
+ cv.onclick=()=>toast(TIPS[Math.floor(Math.random()*TIPS.length)]);
+ $$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m||e.target.matches('.x'))m.classList.remove('on')}));
+ setInterval(()=>{if(run)save()},15000);requestAnimationFrame(loop)});</script><div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

@@ -1,0 +1,401 @@
+<!doctype html><html lang="en-AU"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Coffeebreak Piñata Party</title><link rel="icon" href="assets/logo.png">
+<style>
+:root{--pink:#e7548a;--pink2:#f7a8c4;--blush:#fff0f5;--cream:#fffaf3;--ink:#3b2430;--mute:#8a6a78;--line:#f3cfe0;--gold:#f4b400}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:linear-gradient(180deg,#ffe3ef,var(--cream));color:var(--ink);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.screen{position:absolute;inset:0;display:none;flex-direction:column}
+.screen.on{display:flex}
+header.cb{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,.92);border-bottom:2px solid var(--line);z-index:5}
+header.cb img{width:40px;height:40px;border-radius:10px;object-fit:cover;background:#fff}
+header.cb .t{flex:1;min-width:0}
+header.cb h1{font-family:Georgia,serif;font-size:1.05rem;margin:0;color:var(--pink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header.cb small{color:var(--mute);font-size:.72rem}
+.btn{appearance:none;border:0;border-radius:999px;padding:12px 22px;font-weight:800;font-size:1rem;cursor:pointer;background:var(--pink);color:#fff;box-shadow:0 3px 10px #e7548a55;transition:transform .1s;font-family:inherit}
+.btn:active{transform:scale(.95)}
+.btn.alt{background:#fff;color:var(--pink);border:2px solid var(--pink2);box-shadow:none}
+.btn.sm{padding:7px 12px;font-size:.8rem}
+#title{align-items:center;justify-content:center;text-align:center;padding:20px;gap:14px;overflow:auto;background:radial-gradient(circle at 50% 30%,#fff 0,#ffe3ef 55%,#ffd0e2 100%)}
+#title .logo{width:min(220px,55vw);border-radius:28px;box-shadow:0 8px 30px #e7548a44;background:#fff}
+#title h2{font-family:Georgia,serif;font-size:clamp(1.8rem,7vw,3rem);margin:0;color:var(--pink);text-shadow:0 2px 0 #fff}
+#title p{margin:0;color:var(--mute);max-width:440px}
+#title .menu{display:flex;flex-direction:column;gap:10px;width:min(300px,80vw)}
+#title .foot{font-size:.72rem;color:var(--mute)}
+#game{background:linear-gradient(180deg,#bfe7ff 0,#ffe3ef 70%,#ffd0a8 100%)}
+#stage{position:relative;flex:1;min-height:0}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:pointer}
+.hud{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:flex-start;padding:8px 10px;pointer-events:none;gap:8px}
+.chip{background:rgba(255,255,255,.9);border:2px solid var(--line);border-radius:14px;padding:5px 10px;font-weight:800;font-size:.85rem;color:var(--ink)}
+.chip b{color:var(--pink)}
+#hint{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-weight:800;color:#fff;text-shadow:0 2px 6px #0006;pointer-events:none;font-size:1.05rem}
+#toast{position:absolute;top:56px;left:50%;transform:translateX(-50%);background:#fff;border:3px solid var(--pink);color:var(--ink);padding:8px 14px;border-radius:16px;font-weight:800;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:94vw;overflow:hidden;text-overflow:ellipsis;font-size:.9rem}
+#toast.on{opacity:1}
+.panel{flex:1;overflow:auto;padding:14px;max-width:960px;margin:0 auto;width:100%}
+.panel h2{font-family:Georgia,serif;color:var(--pink);margin:4px 0 6px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}
+.tabs button{border:2px solid var(--pink2);background:#fff;color:var(--pink);border-radius:999px;padding:6px 12px;font-weight:700;cursor:pointer;font-family:inherit}
+.tabs button.on{background:var(--pink);color:#fff;border-color:var(--pink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.prize{background:#fff;border:2px solid var(--line);border-radius:16px;padding:8px;text-align:center;position:relative}
+.prize canvas{width:96px;height:96px;display:block;margin:0 auto}
+.prize .n{font-weight:800;font-size:.82rem;margin-top:4px}
+.prize .k{font-size:.7rem;color:var(--mute)}
+.prize .c{position:absolute;top:6px;right:8px;background:var(--pink);color:#fff;border-radius:999px;font-size:.7rem;font-weight:800;padding:2px 7px}
+.prize.lock{opacity:.55;filter:grayscale(1)}
+.prize.legendary{border-color:var(--gold);box-shadow:0 0 0 2px #f4b40033}
+.prize.rare{border-color:#9b7bff}
+.bar{height:12px;background:#fff;border-radius:999px;border:2px solid var(--line);overflow:hidden;margin:6px 0 2px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pink),#ffa64d);width:0}
+.disc{background:#fff;border:2px solid var(--line);border-radius:18px;padding:16px;line-height:1.55}
+.disc h3{margin-top:0;color:var(--pink);font-family:Georgia,serif}
+.modal{position:absolute;inset:0;background:#3b243088;display:none;align-items:center;justify-content:center;z-index:30;padding:16px}
+.modal.on{display:flex}
+.modal .box{background:#fff;border-radius:22px;padding:18px;max-width:420px;width:100%;text-align:center;border:3px solid var(--pink2);max-height:90vh;overflow:auto}
+.modal h3{font-family:Georgia,serif;color:var(--pink);margin:0 0 6px}
+.won{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0}
+.won canvas{width:64px;height:64px;background:var(--blush);border-radius:12px}
+.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.freeline{font-size:.8rem;color:var(--pink);font-weight:800;margin:4px 0}
+.gift{background:var(--blush);border:2px dashed var(--pink);border-radius:16px;padding:10px;margin:10px 0}
+.gift b{display:block;color:var(--pink);font-size:1.05rem}
+.gift a.btn{display:inline-block;text-decoration:none;margin-top:8px}
+.mine{list-style:none;padding:0;margin:8px 0}.mine li{background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin:6px 0;display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.mine a{color:var(--pink);font-weight:800}
+.links{display:flex;gap:12px;justify-content:center;font-size:.75rem}.links a{color:var(--pink)}
+</style></head><body>
+
+<section id="title" class="screen on">
+  <img class="logo" src="assets/logo.png" alt="Coffeebreak logo" onerror="this.style.display='none'">
+  <h2>Piñata Party</h2>
+  <p>Tap to swing at the piñata. Break it open and collect tattoo designs, stickers and badges, and win a free Coffeebreak app or flash pack.</p>
+  <p class="freeline">Free to play. Prizes are free digital downloads, no purchase needed.</p>
+  <div class="menu">
+    <button class="btn" id="bPlay">Play</button>
+    <button class="btn alt" id="bColl">Prize Collection</button>
+    <button class="btn alt" id="bDisc">Disclaimer</button>
+    <button class="btn alt sm" id="bSnd">Sound: On</button>
+  </div>
+  <div class="foot">© Karen O'Brien (Coffeebreak), Newcastle NSW. All rights reserved.</div>
+  <div class="links"><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">More Coffeebreak</a><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a><a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></div>
+</section>
+
+<section id="game" class="screen">
+  <header class="cb"><img src="assets/logo.png" alt=""><div class="t"><h1>Coffeebreak Piñata Party</h1><small id="lvlTxt">Piñata 1</small></div>
+    <button class="btn alt sm" id="gColl">Prizes</button><button class="btn alt sm" id="gHome">Menu</button></header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div class="hud"><div class="chip">Score <b id="score">0</b></div><div class="chip" style="min-width:42%"><div style="font-size:.72rem">Piñata strength</div><div class="bar" style="margin:2px 0"><i id="hp"></i></div></div><div class="chip">Combo <b id="combo">x1</b></div></div>
+    <div id="toast"></div>
+    <div id="hint">Tap the piñata to swing</div>
+  </div>
+  <div class="modal" id="mWin"><div class="box"><h3 id="winT">Piñata smashed</h3><div id="winS" style="color:var(--mute);font-size:.9rem"></div><div class="won" id="winList"></div><div class="gift" id="gift"><div style="font-size:.8rem;color:var(--mute)">You won a free digital prize</div><b id="giftName"></b><div id="giftKind" style="font-size:.8rem;color:var(--mute)"></div><a class="btn" id="giftLink" href="#" target="_blank" rel="noopener">Get my free download</a></div><p class="freeline">Prizes are free digital downloads, no purchase needed.</p><div class="row"><button class="btn" id="bNext">Next piñata</button><button class="btn alt" id="bWinColl">See collection</button></div></div></div>
+</section>
+
+<section id="coll" class="screen">
+  <header class="cb"><img src="assets/logo.png" alt=""><div class="t"><h1>Prize Collection</h1><small id="collTxt"></small></div><button class="btn alt sm" id="cBack">Back</button></header>
+  <div class="panel">
+    <div class="bar"><i id="collBar"></i></div>
+    <div class="tabs" id="tabs"></div>
+    <div class="grid" id="grid"></div>
+    <h2 style="margin-top:16px">My free prizes</h2><p class="freeline">Prizes are free digital downloads, no purchase needed. Digital only, no physical items.</p><ul class="mine" id="mine"></ul>
+    <p style="font-size:.75rem;color:var(--mute);margin-top:16px">All designs © Karen O'Brien (Coffeebreak). Tattoo, sticker and badge designs are in-game collectables. Won prizes are free digital downloads.</p>
+  </div>
+</section>
+
+<section id="disc" class="screen">
+  <header class="cb"><img src="assets/logo.png" alt=""><div class="t"><h1>Disclaimer</h1><small>Coffeebreak Piñata Party</small></div><button class="btn alt sm" id="dBack">Back</button></header>
+  <div class="panel"><div class="disc">
+    <h3>Disclaimer and rights</h3>
+    <p>© Karen O'Brien (Coffeebreak), songwriter and creator from Newcastle NSW. All rights reserved.</p>
+    <p>Karen O'Brien keeps all rights to this game, its artwork, tattoo, sticker and badge designs, sounds, the Coffeebreak name and the Coffeebreak logo.</p>
+    <p>You may not copy, reproduce, redistribute, resell or make your own versions of this game, its designs, name or logo.</p>
+    <p>The game is free to play. Each smashed piñata wins a free digital download of a Coffeebreak app or flash pack. No purchase or payment is needed to play or to get a prize. Prizes are digital only, there are no physical prizes, and prizes have no cash value and cannot be swapped for money.</p>
+    <p>Buyers may resell physical items they bought from Coffeebreak but may not copy them.</p>
+    <p>No claim of ownership is made to any third-party brands, products or trademarks that may be named. All trademarks belong to their respective owners.</p>
+    <p>Third-party trademarks belong to their owners and are used only to describe.</p>
+    <p>More apps, games and stores: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+  <p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> | <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
+  </div></div>
+</section>
+
+<script>
+(function(){
+"use strict";
+// ---------- free digital prizes (replace url with itch download-key links later) ----------
+var PRIZE_LINKS=[
+ {name:"Coffeebreak Tattoo Flash Maker",kind:"Tattoo app",url:"https://coffeebreaks.itch.io/coffeebreak-tattoo-flash-maker/download/RwDRL1rNCZ3r5ejAChBHoImeBv7DrhYzNi9JS9Dh"},
+ {name:"Coffeebreak Tattoo Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-tattoo-flash"},
+ {name:"Coffeebreak Aussie Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-aussie-flash"},
+ {name:"Coffeebreak Ice Cream Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-ice-cream-flash"},
+ {name:"Coffeebreak Cherry Cola Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-cherry-cola-flash"},
+ {name:"Coffeebreak Rockabilly Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-rockabilly-flash"},
+ {name:"Coffeebreak Pink Pool Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-pink-pool-flash"},
+ {name:"Coffeebreak Marshmallow Frills Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-marshmallow-frills-flash"},
+ {name:"Coffeebreak Squiggle Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-squiggle-flash"},
+ {name:"Coffeebreak Liquorice Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-liquorice-flash"},
+ {name:"Coffeebreak Sweet Skulls Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-sweet-skulls-flash"},
+ {name:"Coffeebreak Frills and Lace Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-frills-lace-flash"},
+ {name:"Coffeebreak 1930 Vintage Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-1930-vintage-flash"},
+ {name:"Coffeebreak Little Soul Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-little-soul-flash"},
+ {name:"Coffeebreak Water Flash",kind:"Flash pack",url:"https://coffeebreaks.itch.io/coffeebreak-water-flash"},
+ {name:"Coffeebreak Radio Pitch Builder",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-radio-pitch-builder"},
+ {name:"Coffeebreak Karaoke",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-karaoke"},
+ {name:"Coffeebreak Karaoke Amp",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-karaoke-amp"},
+ {name:"Coffeebreak Beat Maker",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-beat-maker"},
+ {name:"Coffeebreak DJ Mixer",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-dj-mixer"},
+ {name:"Coffeebreak Guitar Tuner and Chords",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-guitar-tuner-and-chords"},
+ {name:"Coffeebreak Kids Guitar Chords",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-kids-guitar-chords"},
+ {name:"Coffeebreak Piano Trainer",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-piano-trainer"},
+ {name:"Coffeebreak Song Studio",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-song-studio"},
+ {name:"Coffeebreak Radio Edit Studio",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-radio-edit-studio"},
+ {name:"Coffeebreak Recording Studio Pro",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-recording-studio-pro"},
+ {name:"Coffeebreak Music Tool Maker",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-music-tool-maker"},
+ {name:"Coffeebreak Espresso Music Maker",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-espresso-music-maker"},
+ {name:"Coffeebreak Song Maker",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-song-maker"},
+ {name:"Coffeebreak Music Release Desk",kind:"Music app",url:"https://coffeebreaks.itch.io/coffeebreak-music-release-desk"}
+];
+var $=function(id){return document.getElementById(id)};
+// ---------- prizes ----------
+var KINDS=["Tattoo","Sticker","Badge"];
+var DESIGNS=[
+ {id:"star",name:"Star",col:"#ffcf33"},{id:"heart",name:"Heart",col:"#ff4f8b"},
+ {id:"cup",name:"Coffee Cup",col:"#a8693f"},{id:"guitar",name:"Guitar",col:"#e9873a"},
+ {id:"note",name:"Music Note",col:"#7b5cff"},{id:"script",name:"Coffeebreak Script",col:"#e7548a"},
+ {id:"mallow",name:"Marshmallow",col:"#ffd9e6"},{id:"bolt",name:"Lightning",col:"#ffd400"},
+ {id:"rose",name:"Rose",col:"#e3264d"},{id:"moon",name:"Moon",col:"#ffe58a"}
+];
+var RAR={Tattoo:"common",Sticker:"common",Badge:"rare"};
+var PRIZES=[];
+DESIGNS.forEach(function(d){KINDS.forEach(function(k){
+  var r=RAR[k]; if(d.id==="script"&&k!=="Sticker")r="legendary"; if(d.id==="guitar"&&k==="Tattoo")r="rare";
+  PRIZES.push({key:k+":"+d.id,kind:k,d:d,name:d.name+" "+k,rar:r});
+});});
+PRIZES.push({key:"Badge:gold",kind:"Badge",d:{id:"star",name:"Golden Piñata",col:"#f4b400"},name:"Golden Piñata Badge",rar:"legendary"});
+var W={common:70,rare:24,legendary:6};
+function pickPrize(){var t=0,i;for(i=0;i<PRIZES.length;i++)t+=W[PRIZES[i].rar];var r=Math.random()*t;for(i=0;i<PRIZES.length;i++){r-=W[PRIZES[i].rar];if(r<=0)return PRIZES[i];}return PRIZES[0];}
+
+// ---------- save ----------
+var SKEY="cb_pinata_party_v1";
+var save={coll:{},score:0,level:1,best:0,sound:true};
+try{var s=JSON.parse(localStorage.getItem(SKEY)||"null");if(s)for(var k in s)save[k]=s[k];}catch(e){}
+function persist(){try{localStorage.setItem(SKEY,JSON.stringify(save));}catch(e){}}
+
+// ---------- audio ----------
+var AC=null;
+function ac(){if(save.sound===false)return null;try{if(AC===null){var C=window.AudioContext||window.webkitAudioContext;if(C===undefined)return null;AC=new C();}if(AC.state==="suspended")AC.resume();}catch(e){return null}return AC;}
+function tone(f,dur,type,vol,slide,delay){var a=ac();if(a===null)return;var t=a.currentTime+(delay||0);var o=a.createOscillator(),g=a.createGain();o.type=type||"sine";o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(20,slide),t+dur);g.gain.setValueAtTime(vol||.2,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+dur+.02);}
+function noise(dur,vol,freq,delay){var a=ac();if(a===null)return;var t=a.currentTime+(delay||0);var n=Math.floor(a.sampleRate*dur),b=a.createBuffer(1,n,a.sampleRate),d=b.getChannelData(0);for(var i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2);var s=a.createBufferSource();s.buffer=b;var f=a.createBiquadFilter();f.type="bandpass";f.frequency.value=freq||900;f.Q.value=.8;var g=a.createGain();g.gain.value=vol||.5;s.connect(f);f.connect(g);g.connect(a.destination);s.start(t);}
+var SFX={
+ swoosh:function(){noise(.15,.25,2400);},
+ whack:function(){noise(.12,.8,600);tone(140,.15,"triangle",.35,60);},
+ miss:function(){tone(300,.18,"sine",.12,180);},
+ crash:function(){noise(.5,.9,400);noise(.35,.6,1800,.05);tone(90,.4,"sawtooth",.2,40);[523,659,784,1047].forEach(function(f,i){tone(f,.25,"square",.08,0,.15+i*.08);});},
+ pop:function(){tone(700+Math.random()*500,.09,"sine",.18,1600);},
+ rare:function(){[784,988,1175,1568].forEach(function(f,i){tone(f,.3,"triangle",.14,0,i*.07);});},
+ tap:function(){tone(520,.06,"square",.06);}
+};
+
+// ---------- drawing prize icons ----------
+function star(c,x,y,r,n,inner){c.beginPath();for(var i=0;i<n*2;i++){var a=-Math.PI/2+i*Math.PI/n,rr=i%2?r*inner:r;c.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr);}c.closePath();}
+function heart(c,x,y,s){c.beginPath();c.moveTo(x,y+s*.35);c.bezierCurveTo(x-s*1.1,y-s*.35,x-s*.45,y-s*1.05,x,y-s*.45);c.bezierCurveTo(x+s*.45,y-s*1.05,x+s*1.1,y-s*.35,x,y+s*.35);c.closePath();}
+function drawDesign(c,id,col,s){ // centred at 0,0 size ~s
+ c.save();c.lineJoin="round";c.lineCap="round";
+ switch(id){
+ case"star":star(c,0,0,s*.45,5,.45);c.fill();c.stroke();break;
+ case"heart":heart(c,0,s*.12,s*.48);c.fill();c.stroke();break;
+ case"cup":c.beginPath();c.moveTo(-s*.32,-s*.1);c.lineTo(s*.22,-s*.1);c.lineTo(s*.16,s*.28);c.lineTo(-s*.26,s*.28);c.closePath();c.fill();c.stroke();
+   c.beginPath();c.arc(s*.24,s*.07,s*.1,-Math.PI/2,Math.PI/2);c.stroke();
+   c.beginPath();c.ellipse(-s*.05,s*.33,s*.36,s*.05,0,0,Math.PI*2);c.stroke();
+   c.beginPath();c.moveTo(-s*.12,-s*.2);c.quadraticCurveTo(-s*.2,-s*.3,-s*.1,-s*.4);c.moveTo(s*.02,-s*.2);c.quadraticCurveTo(-s*.06,-s*.3,s*.04,-s*.4);c.stroke();break;
+ case"guitar":c.save();c.rotate(-.6);c.beginPath();c.arc(0,s*.2,s*.2,0,Math.PI*2);c.arc(0,-s*.02,s*.14,0,Math.PI*2);c.fill();c.beginPath();c.arc(0,s*.2,s*.2,0,Math.PI*2);c.stroke();c.beginPath();c.arc(0,-s*.02,s*.14,0,Math.PI*2);c.stroke();
+   c.fillStyle="#3b2430";c.beginPath();c.arc(0,s*.1,s*.05,0,Math.PI*2);c.fill();c.fillRect(-s*.03,-s*.48,s*.06,s*.42);c.fillRect(-s*.06,-s*.56,s*.12,s*.1);c.restore();break;
+ case"note":c.beginPath();c.ellipse(-s*.15,s*.25,s*.13,s*.1,-.4,0,Math.PI*2);c.fill();c.stroke();c.beginPath();c.ellipse(s*.22,s*.15,s*.13,s*.1,-.4,0,Math.PI*2);c.fill();c.stroke();
+   c.lineWidth=Math.max(2,s*.05);c.beginPath();c.moveTo(-s*.03,s*.22);c.lineTo(-s*.03,-s*.35);c.lineTo(s*.34,-s*.45);c.lineTo(s*.34,s*.12);c.stroke();break;
+ case"script":c.font="italic bold "+Math.round(s*.2)+"px Georgia,serif";c.textAlign="center";c.textBaseline="middle";c.lineWidth=Math.max(1.5,s*.03);c.strokeText("Coffeebreak",0,0);c.fillText("Coffeebreak",0,0);
+   c.beginPath();c.moveTo(-s*.4,s*.16);c.quadraticCurveTo(0,s*.3,s*.4,s*.16);c.stroke();break;
+ case"mallow":c.save();c.rotate(-.5);c.fillStyle="#8a5a3c";c.fillRect(-s*.02,-s*.48,s*.04,s*.5);c.restore();c.save();c.rotate(-.5);c.beginPath();if(c.roundRect)c.roundRect(-s*.18,s*.0,s*.36,s*.3,s*.08);else c.rect(-s*.18,0,s*.36,s*.3);c.fill();c.stroke();c.restore();break;
+ case"bolt":c.beginPath();c.moveTo(s*.08,-s*.45);c.lineTo(-s*.22,s*.05);c.lineTo(-s*.02,s*.05);c.lineTo(-s*.1,s*.45);c.lineTo(s*.24,-s*.08);c.lineTo(s*.03,-s*.08);c.closePath();c.fill();c.stroke();break;
+ case"rose":for(var i=0;i<5;i++){c.beginPath();var a=i*Math.PI*2/5;c.ellipse(Math.cos(a)*s*.14,Math.sin(a)*s*.14-s*.08,s*.15,s*.12,a,0,Math.PI*2);c.fill();c.stroke();}
+   c.beginPath();c.arc(0,-s*.08,s*.08,0,Math.PI*2);c.stroke();c.strokeStyle="#2f8a3a";c.beginPath();c.moveTo(0,s*.12);c.lineTo(0,s*.45);c.stroke();break;
+ case"moon":c.beginPath();c.arc(0,0,s*.38,Math.PI*.3,Math.PI*1.7);c.arc(s*.16,0,s*.3,Math.PI*1.55,Math.PI*.45,true);c.closePath();c.fill();c.stroke();break;
+ }
+ c.restore();
+}
+function drawPrize(c,p,s){ // centred at 0,0
+ var col=p.d.col;
+ c.save();
+ if(p.kind==="Badge"){
+   c.fillStyle=p.rar==="legendary"?"#f4b400":"#e7548a";
+   c.beginPath();c.moveTo(-s*.2,s*.2);c.lineTo(-s*.28,s*.5);c.lineTo(-s*.12,s*.42);c.lineTo(-s*.05,s*.52);c.lineTo(0,s*.2);c.fill();
+   c.beginPath();c.moveTo(s*.2,s*.2);c.lineTo(s*.28,s*.5);c.lineTo(s*.12,s*.42);c.lineTo(s*.05,s*.52);c.lineTo(0,s*.2);c.fill();
+   c.beginPath();c.arc(0,-s*.02,s*.42,0,Math.PI*2);c.fillStyle=p.rar==="legendary"?"#ffe08a":"#fff";c.fill();c.lineWidth=s*.06;c.strokeStyle=p.rar==="legendary"?"#c98a00":"#e7548a";c.stroke();
+   c.translate(0,-s*.02);c.scale(.62,.62);c.fillStyle=col;c.strokeStyle="#3b2430";c.lineWidth=s*.04;drawDesign(c,p.d.id,col,s);
+ }else if(p.kind==="Sticker"){
+   c.shadowColor="#0003";c.shadowBlur=s*.06;c.shadowOffsetY=s*.03;
+   c.fillStyle="#fff";c.beginPath();c.arc(0,0,s*.47,0,Math.PI*2);c.fill();c.shadowColor="transparent";
+   c.fillStyle="#fff0f5";c.beginPath();c.arc(0,0,s*.42,0,Math.PI*2);c.fill();
+   c.scale(.8,.8);c.fillStyle=col;c.strokeStyle="#fff";c.lineWidth=s*.07;drawDesign(c,p.d.id,col,s);c.strokeStyle="#3b2430";c.lineWidth=s*.025;drawDesign(c,p.d.id,col,s);
+ }else{ // tattoo: ink outline with dotted transfer edge
+   c.setLineDash([s*.03,s*.04]);c.strokeStyle="#8a6a78";c.lineWidth=s*.015;c.strokeRect(-s*.47,-s*.47,s*.94,s*.94);c.setLineDash([]);
+   c.scale(.9,.9);c.fillStyle=col;c.strokeStyle="#1d1420";c.lineWidth=s*.05;drawDesign(c,p.d.id,col,s);
+ }
+ c.restore();
+}
+function prizeCanvas(p,px){var cv=document.createElement("canvas"),dpr=Math.min(2,window.devicePixelRatio||1);cv.width=cv.height=px*dpr;var c=cv.getContext("2d");c.scale(dpr,dpr);c.translate(px/2,px/2);drawPrize(c,p,px*.9);return cv;}
+
+// ---------- game state ----------
+var cv=$("cv"),ctx=cv.getContext("2d"),VW=0,VH=0,DPR=1;
+function resize(){var r=$("stage").getBoundingClientRect();DPR=Math.min(2,window.devicePixelRatio||1);VW=r.width;VH=r.height;cv.width=Math.max(1,VW*DPR);cv.height=Math.max(1,VH*DPR);}
+window.addEventListener("resize",resize);
+var PCOL=[["#ff4f8b","#ffcf33","#38c7a8","#7b5cff","#ff8a3d"],["#e7548a","#f7a8c4","#fff","#ffcf33","#a8693f"],["#00b4d8","#ff4f8b","#ffd400","#7ae582","#b892ff"]];
+var G={level:1,hp:10,maxHp:10,angle:0,vel:0,t:0,shake:0,broken:false,parts:[],prizes:[],combo:0,lastHit:0,bat:0,batX:0,batY:0,shape:0,won:[],cracks:[]};
+function newPinata(){G.level=save.level||1;G.maxHp=8+G.level*3;G.hp=G.maxHp;G.broken=false;G.angle=0;G.vel=.6+Math.min(1.6,G.level*.12);G.t=0;G.won=[];G.cracks=[];G.shape=(G.level-1)%3;$("lvlTxt").textContent="Piñata "+G.level+(G.level%5===0?" (golden)":"");updHud();}
+function pinPos(){var ax=VW/2,ay=Math.max(50,VH*.08),len=Math.min(VH*.38,260);var sw=Math.sin(G.t*G.vel*2)*0.5+Math.sin(G.t*1.7)*.08;G.angle=sw;return{ax:ax,ay:ay,x:ax+Math.sin(sw)*len,y:ay+Math.cos(sw)*len,r:Math.min(VW,VH)*.14+10};}
+function updHud(){$("score").textContent=save.score;$("combo").textContent="x"+Math.max(1,G.combo);$("hp").style.width=(100*G.hp/G.maxHp)+"%";}
+var toastT=0;function toast(m){var t=$("toast");t.textContent=m;t.classList.add("on");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("on")},1600);}
+function confetti(x,y,n,spd){for(var i=0;i<n;i++){var a=Math.random()*Math.PI*2,v=(Math.random()*.8+.2)*spd;G.parts.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-spd*.4,life:1.5+Math.random(),col:PCOL[0][i%5],s:3+Math.random()*5,rot:Math.random()*6,vr:(Math.random()-.5)*10,shape:i%3});}}
+function hit(px,py){
+ if(G.broken)return;
+ var p=pinPos();G.bat=1;G.batX=px;G.batY=py;
+ var dx=px-p.x,dy=py-p.y;
+ if(dx*dx+dy*dy<(p.r*1.35)*(p.r*1.35)){
+   var now=performance.now();G.combo=(now-G.lastHit<900)?G.combo+1:1;G.lastHit=now;
+   var dmg=1+(G.combo>=5?1:0)+(G.combo>=10?1:0);G.hp=Math.max(0,G.hp-dmg);
+   save.score+=10*Math.max(1,G.combo);G.shake=12;G.vel+=.03;
+   SFX.whack();confetti(px,py,10,220);
+   G.cracks.push({x:dx,y:dy,a:Math.random()*6});
+   if(G.combo===5)toast("Combo x5, double damage");
+   if(G.hp<=0)breakIt(p);
+ }else{G.combo=0;SFX.miss();}
+ updHud();persist();
+}
+function breakIt(p){
+ G.broken=true;SFX.crash();G.shake=24;confetti(p.x,p.y,140,520);
+ var n=3+Math.min(4,Math.floor(G.level/2));if(G.level%5===0)n+=2;
+ for(var i=0;i<n;i++){var pr=pickPrize();if(G.level%5===0&&i===0)pr=PRIZES[PRIZES.length-1];
+   var a=-Math.PI/2+(Math.random()-.5)*2.4,v=320+Math.random()*260;
+   G.prizes.push({p:pr,x:p.x,y:p.y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,rot:0,vr:(Math.random()-.5)*6,got:false,landed:false,t:0});}
+ $("hint").textContent="Tap the prizes to collect them";
+ save.score+=100*G.level;updHud();
+}
+function collect(pz){
+ if(pz.got)return;pz.got=true;var k=pz.p.key;var first=(save.coll[k]||0)===0;save.coll[k]=(save.coll[k]||0)+1;G.won.push(pz.p);save.score+=pz.p.rar==="legendary"?250:pz.p.rar==="rare"?60:20;
+ if(pz.p.rar!=="common")SFX.rare();else SFX.pop();
+ confetti(pz.x,pz.y,18,200);toast((first?"New: ":"")+pz.p.name+(pz.p.rar!=="common"?" ("+pz.p.rar+")":""));
+ persist();updHud();
+ if(G.prizes.every(function(q){return q.got}))setTimeout(showWin,700);
+}
+function showWin(){
+ if($("mWin").classList.contains("on"))return;
+  $("winS").textContent="Piñata "+G.level+" smashed. You collected "+G.won.length+" prizes. Score "+save.score+".";
+ var L=$("winList");L.innerHTML="";G.won.forEach(function(p){L.appendChild(prizeCanvas(p,64));});
+ var gp=PRIZE_LINKS[(G.level-1)%5===0&&G.level===1?0:Math.floor(Math.random()*PRIZE_LINKS.length)];
+ $("winT").textContent="You won";$("giftName").textContent=gp.name;$("giftKind").textContent=gp.kind+" · free digital download";$("giftLink").href=gp.url;
+ save.mine=save.mine||[];if(!save.mine.some(function(m){return m.url===gp.url}))save.mine.push({name:gp.name,kind:gp.kind,url:gp.url});persist();
+ $("mWin").classList.add("on");
+}
+$("bNext").onclick=function(){SFX.tap();$("mWin").classList.remove("on");save.level=(save.level||1)+1;persist();G.prizes=[];newPinata();$("hint").textContent="Tap the piñata to swing";};
+function pointer(e){
+ if($("mWin").classList.contains("on"))return;
+ var r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;ac();
+ if(G.broken){var best=null,bd=1e9;G.prizes.forEach(function(pz){if(pz.got)return;var d=Math.hypot(pz.x-x,pz.y-y);if(d<bd){bd=d;best=pz;}});if(best&&bd<70)collect(best);return;}
+ SFX.swoosh();hit(x,y);
+}
+cv.addEventListener("pointerdown",function(e){e.preventDefault();pointer(e);});
+
+// ---------- render ----------
+function drawPinata(c,p){
+ var r=p.r,cols=PCOL[G.shape];
+ c.strokeStyle="#5a4030";c.lineWidth=3;c.beginPath();c.moveTo(p.ax-VW,p.ay);c.lineTo(p.ax+VW,p.ay);c.stroke();
+ c.beginPath();c.moveTo(p.ax,p.ay);c.lineTo(p.x,p.y-r*.8);c.stroke();
+ c.save();c.translate(p.x,p.y);c.rotate(-G.angle*.6);
+ var golden=G.level%5===0;
+ if(G.shape===0||golden){ // star pinata
+   for(var i=0;i<5;i++){var a=-Math.PI/2+i*Math.PI*2/5;c.save();c.rotate(a+Math.PI/2);c.fillStyle=golden?"#f4b400":cols[i];c.beginPath();c.moveTo(-r*.3,-r*.5);c.lineTo(0,-r*1.25);c.lineTo(r*.3,-r*.5);c.fill();
+     c.strokeStyle="#fff8";c.lineWidth=2;for(var j=1;j<4;j++){c.beginPath();c.moveTo(-r*.3+j*r*.05,-r*.5-j*r*.18);c.lineTo(r*.3-j*r*.05,-r*.5-j*r*.18);c.stroke();}c.restore();}
+   c.fillStyle=golden?"#ffd54a":"#fff";c.beginPath();c.arc(0,0,r*.62,0,Math.PI*2);c.fill();
+   c.save();c.beginPath();c.arc(0,0,r*.62,0,Math.PI*2);c.clip();for(var m=0;m<6;m++){c.fillStyle=golden?(m%2?"#f4b400":"#ffe08a"):cols[m%5];c.fillRect(-r*.62,-r*.62+m*r*.21,r*1.24,r*.21);}c.restore();
+ }else if(G.shape===1){ // coffee cup pinata
+   c.fillStyle="#fff";c.beginPath();c.moveTo(-r*.8,-r*.6);c.lineTo(r*.8,-r*.6);c.lineTo(r*.6,r*.7);c.lineTo(-r*.6,r*.7);c.closePath();c.fill();
+   c.save();c.clip();for(var q=0;q<8;q++){c.fillStyle=cols[q%5];c.fillRect(-r,-r*.6+q*r*.17,r*2,r*.17);}c.restore();
+   c.strokeStyle="#e7548a";c.lineWidth=r*.16;c.beginPath();c.arc(r*.78,0,r*.3,-Math.PI/2,Math.PI/2);c.stroke();
+   c.fillStyle="#6b3e26";c.beginPath();c.ellipse(0,-r*.6,r*.8,r*.14,0,0,Math.PI*2);c.fill();
+   c.fillStyle="#fff";c.font="bold "+Math.round(r*.26)+"px Georgia,serif";c.textAlign="center";c.fillText("CB",0,r*.15);
+ }else{ // music note pinata
+   c.fillStyle=cols[0];c.beginPath();c.ellipse(-r*.15,r*.45,r*.55,r*.42,-.4,0,Math.PI*2);c.fill();
+   c.save();c.beginPath();c.ellipse(-r*.15,r*.45,r*.55,r*.42,-.4,0,Math.PI*2);c.clip();for(var u=0;u<6;u++){c.fillStyle=cols[u%5];c.fillRect(-r,-r*.1+u*r*.18,r*2,r*.18);}c.restore();
+   c.fillStyle=cols[3];c.fillRect(r*.28,-r*1.1,r*.2,r*1.55);
+   c.fillStyle=cols[1];c.beginPath();c.moveTo(r*.48,-r*1.1);c.quadraticCurveTo(r*1.1,-r*.8,r*.8,-r*.2);c.quadraticCurveTo(r*.85,-r*.6,r*.48,-r*.7);c.fill();
+ }
+ // tassels
+ for(var tt=0;tt<5;tt++){c.strokeStyle=cols[tt];c.lineWidth=3;var tx=-r*.4+tt*r*.2,sw=Math.sin(G.t*6+tt)*6;c.beginPath();c.moveTo(tx,r*.65);c.quadraticCurveTo(tx+sw,r*.95,tx+sw*1.5,r*1.2);c.stroke();}
+ // cracks
+ c.strokeStyle="#3b2430";c.lineWidth=2;G.cracks.forEach(function(k){c.save();c.translate(k.x*.7,k.y*.7);c.rotate(k.a);c.beginPath();c.moveTo(-10,0);c.lineTo(-3,4);c.lineTo(3,-3);c.lineTo(11,2);c.stroke();c.restore();});
+ c.restore();
+}
+var last=performance.now();
+function frame(now){
+ var dt=Math.min(.05,(now-last)/1000);last=now;G.t+=dt;
+ var c=ctx;c.setTransform(DPR,0,0,DPR,0,0);c.clearRect(0,0,VW,VH);
+ // ground and bunting
+ c.fillStyle="#ffd0a8";c.fillRect(0,VH*.86,VW,VH*.14);c.fillStyle="#f7b98a";for(var g=0;g<VW;g+=40)c.fillRect(g,VH*.86,20,4);
+ for(var b=0;b<VW/30+1;b++){c.fillStyle=PCOL[0][b%5];c.beginPath();c.moveTo(b*30,8);c.lineTo(b*30+28,8);c.lineTo(b*30+14,26);c.fill();}
+ c.save();
+ if(G.shake>0){c.translate((Math.random()-.5)*G.shake,(Math.random()-.5)*G.shake);G.shake*=.85;if(G.shake<.5)G.shake=0;}
+ var p=pinPos();
+ if(G.broken===false)drawPinata(c,p);
+ else{c.strokeStyle="#5a4030";c.lineWidth=3;c.beginPath();c.moveTo(0,p.ay);c.lineTo(VW,p.ay);c.stroke();c.beginPath();c.moveTo(p.ax,p.ay);c.lineTo(p.ax+Math.sin(G.t*3)*20,p.ay+40);c.stroke();}
+ c.restore();
+ // prizes
+ var floor=VH*.86;
+ G.prizes.forEach(function(pz){
+   if(pz.got)return;pz.t+=dt;
+   if(pz.landed===false){pz.vy+=900*dt;pz.x+=pz.vx*dt;pz.y+=pz.vy*dt;pz.rot+=pz.vr*dt;
+     var m=Math.min(76,VW*.15)*.6+6;if(pz.x<m){pz.x=m;pz.vx*=-.6}if(pz.x>VW-m){pz.x=VW-m;pz.vx*=-.6}
+     if(pz.y>floor-30){pz.y=floor-30;pz.vy*=-.45;pz.vx*=.7;pz.vr*=.5;if(Math.abs(pz.vy)<60){pz.landed=true;pz.vy=0;}}}
+   var s=Math.min(76,VW*.15);c.save();c.translate(pz.x,pz.y+(pz.landed?Math.sin(pz.t*4)*3:0));c.rotate(pz.landed?Math.sin(pz.t*2)*.08:pz.rot);
+   if(pz.p.rar!=="common"){c.fillStyle=pz.p.rar==="legendary"?"#ffd54a66":"#b892ff55";c.beginPath();c.arc(0,0,s*.65+Math.sin(pz.t*5)*4,0,Math.PI*2);c.fill();}
+   drawPrize(c,pz.p,s);c.restore();
+ });
+ // particles
+ for(var i=G.parts.length-1;i>=0;i--){var q=G.parts[i];q.vy+=500*dt;q.x+=q.vx*dt;q.y+=q.vy*dt;q.rot+=q.vr*dt;q.life-=dt;q.vx*=.99;if(q.life<=0||q.y>VH+20){G.parts.splice(i,1);continue;}
+   c.save();c.translate(q.x,q.y);c.rotate(q.rot);c.globalAlpha=Math.min(1,q.life);c.fillStyle=q.col;if(q.shape===0)c.fillRect(-q.s/2,-q.s/4,q.s,q.s/2);else if(q.shape===1){c.beginPath();c.arc(0,0,q.s/2,0,Math.PI*2);c.fill();}else{star(c,0,0,q.s*.7,5,.5);c.fill();}c.restore();}
+ // bat
+ if(G.bat>0){G.bat=Math.max(0,G.bat-dt*4);c.save();c.translate(G.batX,G.batY);c.rotate(-1.2+(1-G.bat)*1.8);c.globalAlpha=G.bat;c.fillStyle="#a8693f";c.strokeStyle="#5a4030";c.lineWidth=2;c.beginPath();if(c.roundRect)c.roundRect(-8,-90,16,90,8);else c.rect(-8,-90,16,90);c.fill();c.stroke();c.fillStyle="#e7548a";c.fillRect(-6,-22,12,22);c.restore();}
+ requestAnimationFrame(frame);
+}
+
+// ---------- collection ----------
+var filt="All";
+function renderColl(){
+ var owned=PRIZES.filter(function(p){return (save.coll[p.key]||0)>0}).length;
+ $("collTxt").textContent=owned+" of "+PRIZES.length+" collected";$("collBar").style.width=(100*owned/PRIZES.length)+"%";
+ var T=$("tabs");T.innerHTML="";["All","Tattoo","Sticker","Badge"].forEach(function(t){var b=document.createElement("button");b.textContent=t==="All"?"All":t+"s";if(t===filt)b.className="on";b.onclick=function(){filt=t;SFX.tap();renderColl();};T.appendChild(b);});
+ var M=$("mine");M.innerHTML="";(save.mine||[]).forEach(function(m){var li=document.createElement("li");var s=document.createElement("span");s.textContent=m.name+" ("+m.kind+")";var a=document.createElement("a");a.href=m.url;a.target="_blank";a.rel="noopener";a.textContent="Free download";li.appendChild(s);li.appendChild(a);M.appendChild(li);});
+ if(!(save.mine||[]).length){M.innerHTML="<li>Smash a piñata to win your first free prize.</li>";}
+ var Gd=$("grid");Gd.innerHTML="";
+ PRIZES.forEach(function(p){if(filt!=="All"&&p.kind!==filt)return;var n=save.coll[p.key]||0;var d=document.createElement("div");d.className="prize "+p.rar+(n?"":" lock");d.appendChild(prizeCanvas(p,96));
+   var nm=document.createElement("div");nm.className="n";nm.textContent=n?p.name:"Locked";d.appendChild(nm);var k=document.createElement("div");k.className="k";k.textContent=p.kind+" · "+p.rar;d.appendChild(k);
+   if(n){var cc=document.createElement("div");cc.className="c";cc.textContent="x"+n;d.appendChild(cc);}Gd.appendChild(d);});
+}
+
+// ---------- navigation ----------
+var prev="title";
+function show(id){["title","game","coll","disc"].forEach(function(s){$(s).classList.toggle("on",s===id)});if(id==="game")resize();if(id==="coll")renderColl();}
+function go(id){var cur=["title","game","coll","disc"].filter(function(s){return $(s).classList.contains("on")})[0];if(id==="coll"||id==="disc")prev=cur;show(id);}
+$("bPlay").onclick=function(){ac();SFX.tap();go("game");};
+$("bColl").onclick=function(){SFX.tap();go("coll");};
+$("bDisc").onclick=function(){SFX.tap();go("disc");};
+$("gColl").onclick=function(){SFX.tap();go("coll");};
+$("bWinColl").onclick=function(){SFX.tap();go("coll");};
+$("gHome").onclick=function(){SFX.tap();go("title");};
+$("cBack").onclick=function(){SFX.tap();show(prev==="coll"?"title":prev);};
+$("dBack").onclick=function(){SFX.tap();show(prev==="disc"?"title":prev);};
+function sndLbl(){$("bSnd").textContent="Sound: "+(save.sound===false?"Off":"On");}
+$("bSnd").onclick=function(){save.sound=save.sound===false;persist();sndLbl();SFX.tap();};
+sndLbl();newPinata();requestAnimationFrame(frame);
+window.__cbTest={G:G,hit:hit,pinPos:pinPos,collect:collect,show:show,PRIZES:PRIZES,PRIZE_LINKS:PRIZE_LINKS,showWin:showWin,save:function(){return save}};
+})();
+</script><div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Perfect Pour by Coffeebreak</title>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#fff4e0;font-family:sans-serif;touch-action:none;user-select:none}button{background:#ff6fae;color:#fff;border:0;border-radius:24px;padding:14px 28px;font-size:20px;font-weight:bold}a{color:#d6336c}#fsb{position:fixed;top:10px;right:10px;padding:8px 12px;font-size:14px;z-index:9}</style></head><body>
+<canvas id="c"></canvas><button id="fsb" onclick="window.cbFullscreen&&cbFullscreen.toggle()">Fullscreen</button>
+<div id="title" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,244,224,.95);color:#d6336c;text-align:center;padding:20px;gap:12px"><img src="cb-logo.jpg" alt="Coffeebreak" style="width:140px;border-radius:50%"><h1 style="margin:0">Perfect Pour</h1><p style="max-width:320px">Hold to pour, let go right at the line. Every cup is different. 60 seconds.</p><p>Best: <b id="hi">0</b></p><button id="pb">Play</button><button id="sh2" style="background:#d6336c;font-size:16px">Share</button><a href="https://coffeebreaks.itch.io" target="_blank">Support Coffeebreak</a></div>
+<div id="over" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,244,224,.95);color:#d6336c;text-align:center;padding:20px;gap:12px;display:none"><img src="cb-logo.jpg" alt="Coffeebreak" style="width:80px;border-radius:50%"><h2 style="margin:0">Score <span id="fs"></span></h2><p>Best <span id="fh"></span></p><button id="ag">Play again</button><button id="sh">Share score</button><a href="https://coffeebreaks.itch.io" target="_blank">Support Coffeebreak</a></div>
+<script>var SLUG='perfectpour',NAME='Perfect Pour';
+var C=document.getElementById('c'),X=C.getContext('2d'),W,H,DPR;
+function rs(){DPR=Math.min(2,window.devicePixelRatio||1);W=innerWidth;H=innerHeight;C.width=W*DPR;C.height=H*DPR;C.style.width=W+'px';C.style.height=H+'px';X.setTransform(DPR,0,0,DPR,0,0)}
+addEventListener('resize',rs);rs();
+var AC;function snd(f,d,t,v){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();var o=AC.createOscillator(),g=AC.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.value=v||.15;g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+(d||.15));o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+(d||.15))}catch(e){}}
+var P=[],shake=0;function burst(x,y,n,col){for(var i=0;i<n;i++)P.push({x:x,y:y,vx:(Math.random()-.5)*8,vy:(Math.random()-1)*7,l:40,c:col||['#ff6fae','#ffd1e3','#7a4a2e','#fff4e0'][i%4]})}
+function drawP(){for(var i=P.length-1;i>=0;i--){var p=P[i];p.x+=p.vx;p.y+=p.vy;p.vy+=.3;p.l--;X.globalAlpha=Math.max(0,p.l/40);X.fillStyle=p.c;X.fillRect(p.x,p.y,5,5);if(p.l<=0)P.splice(i,1)}X.globalAlpha=1}
+var KEY='cb_hi_'+SLUG,hi=+localStorage.getItem(KEY)||0,state='title',score=0;
+function $(i){return document.getElementById(i)}
+function show(id){['title','over'].forEach(function(k){$(k).style.display=k===id?'flex':'none'})}
+function gameOver(){state='over';if(score>hi){hi=score;localStorage.setItem(KEY,hi)}$('fs').textContent=score;$('fh').textContent=hi;snd(150,.5,'sawtooth');shake=15;show('over')}
+function share(){var t='I scored '+score+' in '+NAME+' by Coffeebreak. Can you beat it? https://coffeebreaks.itch.io/'+SLUG;if(navigator.share)navigator.share({title:NAME,text:t}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){$('sh').textContent='Copied'});else prompt('Copy this',t)}
+function start(){score=0;P=[];show('none');state='play';reset();T0=performance.now()}
+var T0=0;
+function loop(){X.save();if(shake>0){X.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake*=.85;if(shake<.5)shake=0}
+X.fillStyle='#fff4e0';X.fillRect(-20,-20,W+40,H+40);if(state==='play'){update();var left=Math.max(0,60-(performance.now()-T0)/1000|0);if(left<=0&&TIMED)gameOver()}draw();drawP();
+X.fillStyle='#d6336c';X.font='bold 28px sans-serif';X.textAlign='center';if(state==='play'){X.fillText(score,W/2,44);if(TIMED){X.font='16px sans-serif';X.fillText(Math.max(0,60-((performance.now()-T0)/1000|0))+'s',W/2,66)}}
+X.restore();requestAnimationFrame(loop)}
+$('hi').textContent=hi;$('pb').onclick=start;$('ag').onclick=start;$('sh').onclick=share;$('sh2').onclick=share;
+requestAnimationFrame(loop);
+
+var TIMED=true,lvl,fill,target,pouring,rate,cupH,cupW,msg,msgT;
+var CUPS=[[90,140],[70,180],[120,90],[60,220],[100,160]];
+function reset(){lvl=0;nl()}
+function nl(){var c=CUPS[lvl%5];cupW=c[0];cupH=c[1];fill=0;target=.5+Math.random()*.4;rate=.004+lvl*.0012;pouring=false}
+function down(){if(state==='play'){pouring=true;snd(200,.1)}}
+function up(){if(state!=='play'||!pouring)return;pouring=false;var e=Math.abs(fill-target),pts=e<.01?100:e<.03?50:e<.08?20:0;
+if(fill>1)pts=0;score+=pts;msg=pts>=100?'Perfect':pts>=50?'Great':pts?'Ok':'Spilt';msgT=60;
+if(pts){snd(500+pts*4,.25,'triangle');burst(W/2,H/2,pts/3)}else{shake=10;snd(120,.3,'sawtooth')}lvl++;nl()}
+function update(){if(pouring){fill+=rate;if(fill>1.08){up()}}}
+function draw(){if(state!=='play')return;var x=W/2-cupW,y=H/2-cupH/2+40,w=cupW*2,h=cupH*1.4;
+if(pouring){X.fillStyle='#7a4a2e';X.fillRect(W/2-4,60,8,y+h*(1-Math.min(fill,1))-60);if(Math.random()<.3)burst(W/2,y+h*(1-fill),1,'#7a4a2e')}
+X.fillStyle='#ffd1e3';X.fillRect(x,y,w,h);var f=Math.min(fill,1);X.fillStyle='#7a4a2e';X.fillRect(x,y+h*(1-f),w,h*f);
+X.strokeStyle='#d6336c';X.lineWidth=6;X.strokeRect(x,y,w,h);X.setLineDash([8,6]);X.beginPath();X.moveTo(x-20,y+h*(1-target));X.lineTo(x+w+20,y+h*(1-target));X.stroke();X.setLineDash([]);
+X.fillStyle='#d6336c';X.font='16px sans-serif';X.fillText('Cup '+(lvl+1)+'  hold to pour, let go at the line',W/2,H-30);
+if(msgT>0){msgT--;X.font='bold 36px sans-serif';X.fillText(msg,W/2,y-20)}}
+C.addEventListener('pointerdown',down);addEventListener('pointerup',up);addEventListener('pointercancel',up);
+</script><script src="cb-fullscreen.js"></script><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Perfectpour" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

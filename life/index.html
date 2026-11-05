@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Life</title>
+<meta name="description" content="Coffeebreak Life, a pink life game with the Coffeebreak characters by Karen Elizabeth O'Brien.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><img src="cb-logo.jpg" alt="Coffeebreak logo" class="logo"><div><b>Coffeebreak Life</b><small>a pink life game</small></div></div>
+  <div class="hud" id="hud" hidden>
+    <div class="clock" id="clock"><span id="sunmoon" class="sunmoon"></span><span id="clockTxt">Day 1, 8:00 am</span></div>
+    <div class="coins" id="coins"><span class="coin"></span><span id="coinTxt">0</span></div>
+    <div class="speed" id="speed">
+      <button data-sp="0" title="Pause">II</button><button data-sp="1" class="on">1x</button><button data-sp="2">2x</button><button data-sp="4">4x</button>
+    </div>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<nav class="tabs" id="tabs" hidden>
+  <button data-tab="home" class="on"><i class="ic ic-home"></i>Home</button>
+  <button data-tab="work"><i class="ic ic-work"></i>Work</button>
+  <button data-tab="friends"><i class="ic ic-friends"></i>Friends</button>
+  <button data-tab="shop"><i class="ic ic-shop"></i>Shop</button>
+  <button data-tab="style"><i class="ic ic-style"></i>Style</button>
+  <button data-tab="about"><i class="ic ic-about"></i>Info</button>
+</nav>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="modal" class="modal" hidden><div class="sheet" id="sheet"></div></div>
+
+<footer class="foot">
+  <p><b>Rights.</b> &copy; Karen Elizabeth O'Brien (Coffeebreak). Karen keeps all rights to her products, designs, apps, characters, name and logo, including Coffeebreak Life. Buyers may resell the copies they bought, but may not copy it or make their own versions of it. Third-party trademarks belong to their owners. Coffeebreak Life is an original game and is not affiliated with or endorsed by any other game maker.</p>
+  <p><b>AI disclosure.</b> AI tools were used to help create this game and its artwork. Everything runs offline in your browser, with no accounts and no outside requests.</p>
+  <p class="links"><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">More Coffeebreak on itch</a> <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
+</footer>
+<script src="chars.js"></script>
+<script src="game.js"></script>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body>
+</html>

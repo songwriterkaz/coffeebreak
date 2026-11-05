@@ -1,0 +1,36 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Coffee Mail</title><style>body{margin:0;font-family:Arial,sans-serif;background:#ffe4f1;color:#4a0030}
+header{background:#ff4fa3;color:#fff;display:flex;align-items:center;gap:12px;padding:10px}
+header img{height:56px;border-radius:8px;background:#fff}
+.banner{background:#ffc2df;padding:10px;text-align:center;font-weight:bold}
+.banner a,footer a{color:#b0005a}
+button{background:#ff4fa3;color:#fff;border:0;border-radius:8px;padding:8px 14px;margin:3px;cursor:pointer}
+.card{background:#fff;border-radius:12px;padding:12px;margin:10px;box-shadow:0 2px 6px #f9a}
+footer{background:#ffb6d9;padding:12px;font-size:13px}
+input,textarea,select{width:95%;padding:6px;margin:4px 0;border:1px solid #f8a;border-radius:6px}
+</style></head><body>
+<header><img src="cb-logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Coffee Mail</h1></header><div class="banner">Full version $5. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com | <a href="https://coffeebreaks.itch.io">https://coffeebreaks.itch.io</a></div>
+<nav class="card"><button id="tInbox" onclick="show('inbox')">Inbox</button><button onclick="show('compose')">Compose</button><button onclick="show('sent')">Sent</button><button id="tShop" onclick="show('shop')">Coffee Shop</button></nav>
+<section id="inbox" class="card"></section><section id="sent" class="card"></section>
+<section id="compose" class="card"><h2>Compose</h2><input id="to" placeholder="To"><input id="subj" placeholder="Subject"><textarea id="body" rows="5" placeholder="Message"></textarea><button id="sendBtn" onclick="sendMail()">Send</button></section>
+<section id="shop" class="card"><h2>Coffee Menu</h2><div id="menu"></div><h3>Cart</h3><div id="cart"></div><input id="cname" placeholder="Your name"><input id="cnote" placeholder="Pickup or delivery notes"><button id="checkout" onclick="checkout()">Checkout and email order</button><p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p></section>
+<footer><p><b>Disclaimer:</b> Karen O&#39;Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought but may not copy them. No ownership is claimed of any third-party brands named.</p><p><a href="https://www.tesla.com">Tesla</a> | <a href="https://www.starlink.com">Starlink</a> | <a href="https://coffeebreaks.itch.io">coffeebreaks.itch.io</a></p></footer>
+<script>
+const K='cbcm',S=JSON.parse(localStorage.getItem(K)||'null')||{inbox:[{from:'Coffeebreak',subj:'Welcome to Coffee Mail',body:'Send mail and order a real coffee from the Coffee Shop tab.',t:new Date().toLocaleString()}],sent:[],cart:[]};
+const save=()=>localStorage.setItem(K,JSON.stringify(S));
+const M=[['Flat White',5],['Cappuccino',5],['Latte',5.5],['Long Black',4.5],['Pink Mocha',6],['Chai Latte',5.5]];
+const SZ=[['Small',0],['Regular',.5],['Large',1]],MK=[['Full cream',0],['Skim',0],['Oat',.7],['Almond',.7]],SG=['No sugar','1 sugar','2 sugars'];
+const opt=a=>a.map((o,i)=>'<option value="'+i+'">'+(Array.isArray(o)?o[0]+(o[1]?' +$'+o[1].toFixed(2):''):o)+'</option>').join('');
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function show(id){['inbox','sent','compose','shop'].forEach(x=>document.getElementById(x).style.display=x==id?'block':'none');render()}
+function list(a,t){return '<h2>'+t+'</h2>'+(a.length?a.slice().reverse().map(m=>'<div class="card"><b>'+esc(m.subj)+'</b><br><small>'+esc(m.from||('To: '+m.to))+' | '+esc(m.t)+'</small><pre style="white-space:pre-wrap">'+esc(m.body)+'</pre></div>').join(''):'<p>Nothing here yet.</p>')}
+function render(){inbox.innerHTML=list(S.inbox,'Inbox');sent.innerHTML=list(S.sent,'Sent');
+menu.innerHTML=M.map((m,i)=>'<div class="card"><b>'+m[0]+'</b> $'+m[1].toFixed(2)+'<br><select id="sz'+i+'">'+opt(SZ)+'</select><select id="mk'+i+'">'+opt(MK)+'</select><select id="sg'+i+'">'+opt(SG)+'</select><button class="add" onclick="add('+i+')">Add</button></div>').join('');
+let tot=0;cart.innerHTML=S.cart.map((c,i)=>{tot+=c.p;return '<div>'+esc(c.d)+' $'+c.p.toFixed(2)+' <button onclick="S.cart.splice('+i+',1);save();render()">Remove</button></div>'}).join('')+'<p><b>Total: $'+tot.toFixed(2)+'</b></p>'}
+function add(i){const s=SZ[document.getElementById('sz'+i).value],k=MK[document.getElementById('mk'+i).value],g=SG[document.getElementById('sg'+i).value];S.cart.push({d:M[i][0]+' ('+s[0]+', '+k[0]+', '+g+')',p:M[i][1]+s[1]+k[1]});save();render()}
+function sendMail(){if(!to.value)return alert('Add a recipient');S.sent.push({to:to.value,subj:subj.value||'(no subject)',body:body.value,t:new Date().toLocaleString()});save();to.value=subj.value=body.value='';show('sent')}
+function checkout(){if(!S.cart.length)return alert('Your cart is empty');const tot=S.cart.reduce((a,c)=>a+c.p,0),id='CB'+Date.now().toString().slice(-6);
+const b='Order '+id+'\nName: '+(cname.value||'Guest')+'\nNotes: '+cnote.value+'\n\n'+S.cart.map(c=>c.d+' $'+c.p.toFixed(2)).join('\n')+'\n\nTotal: $'+tot.toFixed(2)+'\nPay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
+S.sent.push({to:'darkokaz@gmx.com',subj:'Coffee order '+id,body:b,t:new Date().toLocaleString()});S.inbox.push({from:'Coffeebreak Coffee Shop',subj:'Order receipt '+id,body:'Thanks for your order.\n\n'+b,t:new Date().toLocaleString()});S.cart=[];save();
+window.lastMailto='mailto:darkokaz@gmx.com?subject='+encodeURIComponent('Coffee order '+id)+'&body='+encodeURIComponent(b);if(!window.noMailto)location.href=window.lastMailto;show('inbox')}
+show('inbox');
+</script></body></html>

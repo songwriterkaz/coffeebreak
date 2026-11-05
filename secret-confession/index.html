@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Coffeebreak Secret Confession: I Have a Crush</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Georgia,serif;background:#fdeef2;color:#4a2c1a}
+header{background:#4a2c1a;color:#ffd6e2;display:flex;align-items:center;gap:10px;padding:10px 14px}
+header img{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #f7a8c0}
+header h1{font-size:17px;margin:0}header small{display:block;color:#f7c4d4;font-size:11px}
+nav{display:flex;overflow-x:auto;background:#6b3f26}
+nav button{flex:1;min-width:84px;background:none;border:0;color:#ffe3ec;padding:12px 6px;font-size:13px}
+nav button.on{background:#f7a8c0;color:#4a2c1a;font-weight:bold}
+main{padding:14px;max-width:560px;margin:auto}
+.scr{display:none}.scr.on{display:block}
+.card{background:#fff;border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px #4a2c1a22}
+h2{margin:0 0 8px;font-size:20px}
+textarea,input,select{width:100%;padding:10px;border:2px solid #f7a8c0;border-radius:10px;font:inherit;font-size:16px;margin:4px 0 8px;background:#fff9fb}
+.b{background:#4a2c1a;color:#ffe3ec;border:0;border-radius:24px;padding:11px 18px;font-size:15px;margin:4px 4px 4px 0}
+.b.p{background:#e8789c;color:#fff}
+.e{border-left:4px solid #f7a8c0;padding:8px;margin:8px 0;background:#fff4f7;border-radius:8px;position:relative}
+.e small{color:#9b6b52}.e button{position:absolute;right:6px;top:6px;background:#fff;border:1px solid #e8789c;border-radius:12px;color:#c0496f}
+.res{font-size:18px;text-align:center;padding:10px}
+.fun{font-size:11px;text-align:center;color:#9b6b52;padding:10px}
+.q{margin:8px 0}.q label{display:block;padding:6px 0}
+.heart{position:fixed;bottom:-40px;font-size:28px;animation:up 2.6s ease-out forwards;pointer-events:none}
+@keyframes up{to{transform:translateY(-110vh) rotate(30deg);opacity:0}}
+.meter{height:22px;background:#fbd3de;border-radius:11px;overflow:hidden}.meter div{height:100%;background:linear-gradient(90deg,#f7a8c0,#c0496f);width:0;transition:width 1.2s}
+</style></head><body>
+<header><img src="logo.jpg" alt="Coffeebreak"><div><h1>Coffeebreak Secret Confession</h1><small>I Have a Crush &middot; just for fun</small></div></header>
+<nav id="nav"><button data-s="diary">Diary</button><button data-s="meter">Crush Meter</button><button data-s="note">Love Note</button><button data-s="tell">Tell Them?</button><button data-s="stars">Coffee Stars</button></nav>
+<main>
+<section class="scr" id="diary">
+ <div class="card" id="lockbox" style="display:none"><h2>Diary locked</h2><input id="pinIn" type="password" inputmode="numeric" maxlength="4" placeholder="4-digit PIN"><button class="b" onclick="unlock()">Unlock</button><div id="pinMsg"></div></div>
+ <div id="diaryBody"><div class="card"><h2>My secret confession</h2><textarea id="conf" rows="4" placeholder="Today my crush smiled at me..."></textarea><button class="b p" onclick="addConf()">Save secretly</button><div class="fun">Saved only on this device. Nothing is sent anywhere.</div></div>
+ <div class="card"><h2>PIN lock</h2><input id="pinSet" type="password" inputmode="numeric" maxlength="4" placeholder="Set a 4-digit PIN"><button class="b" onclick="setPin()">Set PIN</button><button class="b" onclick="lockNow()">Lock now</button><button class="b" onclick="clearPin()">Remove PIN</button><div id="pinNote"></div></div>
+ <div class="card"><h2>My confessions</h2><div id="list"></div></div></div>
+</section>
+<section class="scr" id="meter"><div class="card"><h2>Crush Meter</h2><div id="mq"></div><button class="b p" onclick="measure()">Measure my crush</button><div class="meter"><div id="bar"></div></div><div class="res" id="mres"></div></div></section>
+<section class="scr" id="note"><div class="card"><h2>Love Note Writer</h2>
+<select id="tone"><option value="sweet">Sweet</option><option value="funny">Funny</option><option value="shy">Shy</option><option value="bold">Bold</option></select>
+<input id="nTo" placeholder="Their nickname"><input id="nThing" placeholder="Something you like about them"><input id="nPlace" placeholder="A place to meet (e.g. the cafe)"><input id="nFrom" placeholder="Signed (e.g. Secret Admirer)">
+<button class="b" onclick="makeNote()">Make my note</button><div class="e" id="noteOut" style="min-height:60px;white-space:pre-wrap"></div>
+<button class="b" onclick="copyNote()">Copy</button><button class="b p" onclick="pngNote()">Download card</button><div id="cmsg"></div></div></section>
+<section class="scr" id="tell"><div class="card"><h2>Should I tell them?</h2><div id="tq"></div><button class="b p" onclick="tellRes()">See my answer</button><div class="res" id="tres"></div></div></section>
+<section class="scr" id="stars"><div class="card"><h2>Coffee Crush Horoscope</h2><select id="sign"></select><button class="b p" onclick="star()">Pour my crush's coffee</button><div class="res" id="sres"></div></div></section>
+<div class="fun">Coffeebreak Secret Confession is just for fun. &copy; Coffeebreak</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+function show(s){document.querySelectorAll('.scr').forEach(x=>x.classList.toggle('on',x.id==s));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.s==s));}
+$('nav').onclick=e=>{if(e.target.dataset.s){show(e.target.dataset.s);history.replaceState(0,'','#'+e.target.dataset.s)}};
+show((location.hash||'#diary').slice(1));
+function hearts(n){for(let i=0;i<n;i++)setTimeout(()=>{const h=document.createElement('div');h.className='heart';h.textContent=['💗','💕','☕','💖'][i%4];h.style.left=Math.random()*95+'vw';document.body.appendChild(h);setTimeout(()=>h.remove(),2700)},i*90)}
+// diary
+const K='cbcrush_';let unlocked=false;
+const get=()=>JSON.parse(localStorage.getItem(K+'list')||'[]'),put=a=>localStorage.setItem(K+'list',JSON.stringify(a));
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function render(){const locked=localStorage.getItem(K+'pin')&&!unlocked;$('lockbox').style.display=locked?'block':'none';$('diaryBody').style.display=locked?'none':'block';
+const a=get();$('list').innerHTML=a.length?a.map((e,i)=>`<div class="e"><small>${e.d}</small><button onclick="del(${i})">Delete</button><div>${esc(e.t)}</div></div>`).reverse().join(''):'<small>No confessions yet. Your secrets will appear here.</small>';
+$('pinNote').textContent=localStorage.getItem(K+'pin')?'PIN lock is on.':'No PIN set.'}
+function addConf(){const t=$('conf').value.trim();if(!t)return;const a=get();a.push({t,d:new Date().toLocaleString()});put(a);$('conf').value='';hearts(8);render()}
+function del(i){if(!confirm('Delete this confession?'))return;const a=get();a.splice(i,1);put(a);render()}
+function setPin(){const p=$('pinSet').value;if(!/^\d{4}$/.test(p)){$('pinNote').textContent='Please use exactly 4 digits.';return}localStorage.setItem(K+'pin',p);$('pinSet').value='';unlocked=true;render()}
+function lockNow(){unlocked=false;render()}
+function clearPin(){localStorage.removeItem(K+'pin');render()}
+function unlock(){if($('pinIn').value===localStorage.getItem(K+'pin')){unlocked=true;$('pinIn').value='';$('pinMsg').textContent='';render()}else $('pinMsg').textContent='That PIN does not match. Try again.'}
+render();
+// quizzes
+function quiz(el,qs){$(el).innerHTML=qs.map((q,i)=>`<div class="q"><b>${q[0]}</b>${q[1].map((o,j)=>`<label><input type="radio" name="${el}${i}" value="${j}" style="width:auto"> ${o}</label>`).join('')}</div>`).join('')}
+function score(el,n){let s=0,c=0;for(let i=0;i<n;i++){const r=document.querySelector(`input[name="${el}${i}"]:checked`);if(r){s+=+r.value;c++}}return c<n?-1:s}
+const MQ=[['When they walk in, you...',['Barely notice','Smile a little','Fix your hair','Forget your own name']],['You think about them...',['Rarely','Sometimes','Most days','Every coffee break']],['Their name in your phone has...',['Just their name','One emoji','Three emojis','A whole heart parade']],['If they texted you right now...',['Reply later','Reply soon','Reply instantly','Do a happy dance first']]];
+quiz('mq',MQ);
+function measure(){const s=score('mq',4);if(s<0){$('mres').textContent='Answer every question first.';return}const p=Math.round(s/12*100);$('bar').style.width=Math.max(p,5)+'%';
+$('mres').textContent=p<25?`${p}% - A tiny decaf crush. Cute and calm.`:p<50?`${p}% - A warm latte crush. Something is brewing.`:p<80?`${p}% - A double shot crush. Your heart is buzzing.`:`${p}% - Full espresso overload. You are totally smitten.`;hearts(Math.round(p/5)+4)}
+const TQ=[['Are they kind to you?',['Not really','Sometimes','Yes','Always']],['Do you talk easily?',['Not yet','A little','Often','All the time']],['How would you feel if you never said anything?',['Fine','A bit curious','Wondering forever','Really sad']],['How brave do you feel today?',['Tiny bit','Getting there','Pretty brave','Lion brave']]];
+quiz('tq',TQ);
+function tellRes(){const s=score('tq',4);if(s<0){$('tres').textContent='Answer every question first.';return}
+$('tres').textContent=s<4?'Take your time. Get to know them as a friend first, there is no rush.':s<8?'Maybe soon. Try a friendly chat or share a coffee and see how it feels.':'Your heart says yes. Be gentle, be yourself, and remember you are brave whatever they say.';hearts(10)}
+// note
+const T={sweet:'Dear {to},\nEvery time I see you, my day gets sweeter. I really like {thing}. Maybe we could meet at {place} sometime?\nWith a warm heart,\n{from}',
+funny:'Hey {to},\nI was going to play it cool, but my coffee spilled thinking about {thing}. Want to meet at {place} before I spill another one?\nYours clumsily,\n{from}',
+shy:'Hi {to}...\nI am a bit shy, so I wrote this instead. I like {thing}. If you ever want to, maybe we could say hi at {place}.\nQuietly,\n{from}',
+bold:'{to},\nI will just say it. I have a crush on you. I love {thing}. Meet me at {place} and let us share a coffee.\nConfidently,\n{from}'};
+function makeNote(){const v={to:$('nTo').value||'You',thing:$('nThing').value||'your smile',place:$('nPlace').value||'the cafe',from:$('nFrom').value||'Your Secret Admirer'};$('noteOut').textContent=T[$('tone').value].replace(/\{(\w+)\}/g,(m,k)=>v[k]);hearts(6)}
+function copyNote(){if(!$('noteOut').textContent)makeNote();const t=$('noteOut').textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>$('cmsg').textContent='Copied.').catch(()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();$('cmsg').textContent='Copied.'})}
+function pngNote(){if(!$('noteOut').textContent)makeNote();const c=document.createElement('canvas');c.width=800;c.height=1000;const x=c.getContext('2d');
+x.fillStyle='#fdeef2';x.fillRect(0,0,800,1000);x.fillStyle='#4a2c1a';x.fillRect(0,0,800,150);x.strokeStyle='#f7a8c0';x.lineWidth=12;x.strokeRect(20,170,760,800);
+x.font='60px serif';['💗','☕','💕','💖'].forEach((h,i)=>x.fillText(h,[40,690,40,690][i],[260,260,950,950][i]));
+x.fillStyle='#ffd6e2';x.font='bold 40px Georgia';x.fillText('Coffeebreak',170,75);x.font='24px Georgia';x.fillText('A little love note',170,115);
+x.fillStyle='#4a2c1a';x.font='30px Georgia';let y=340;$('noteOut').textContent.split('\n').forEach(l=>{let w='';l.split(' ').forEach(word=>{if(x.measureText(w+word).width>620){x.fillText(w,90,y);y+=46;w=''}w+=word+' '});x.fillText(w,90,y);y+=56});
+const done=()=>{const a=document.createElement('a');a.download='coffeebreak-love-note.png';a.href=c.toDataURL('image/png');a.click()};
+const im=new Image();im.onload=()=>{x.save();x.beginPath();x.arc(85,75,55,0,7);x.clip();x.drawImage(im,30,20,110,110);x.restore();done()};im.onerror=done;im.src='logo.jpg'}
+// stars
+const S=[['Aries','Bold espresso - your crush loves a little spark.'],['Taurus','Honey latte - slow, sweet and cosy.'],['Gemini','Half and half flat white - two moods, both lovely.'],['Cancer','Warm hot chocolate - they melt for kindness.'],['Leo','Golden caramel macchiato - shower them with compliments.'],['Virgo','Perfect pour-over - they notice little thoughtful things.'],['Libra','Rose latte - pretty, balanced and charming.'],['Scorpio','Dark mocha - deep, mysterious and loyal.'],['Sagittarius','Iced cold brew - they love an adventure date.'],['Capricorn','Classic long black - steady and dependable.'],['Aquarius','Lavender oat latte - quirky and one of a kind.'],['Pisces','Vanilla cappuccino - dreamy and soft hearted.']];
+$('sign').innerHTML=S.map((s,i)=>`<option value="${i}">${s[0]}</option>`).join('');
+function star(){const s=S[$('sign').value];$('sres').innerHTML=`<b>${s[0]}</b><br>Lucky coffee: ${s[1]}<br><small>Lucky number: ${(+$('sign').value*7%9)+1} &middot; just for fun</small>`;hearts(8)}
+</script><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Secret Confession" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

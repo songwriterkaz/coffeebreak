@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="en"><head><script src="cb-demo.js" data-url="https://coffeebreaks.itch.io/coffeebreak-cb-ghost-scanner" data-mode="app" data-nosave="1"></script><script>/*storage-shim*/(function(){var ok=false;try{var s=window.localStorage;s.setItem('__t','1');s.removeItem('__t');ok=true}catch(e){}if(ok)return;var d={};var m={getItem:function(k){return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}};try{Object.defineProperty(window,'localStorage',{get:function(){return m},configurable:true})}catch(e){}try{Object.defineProperty(window,'sessionStorage',{get:function(){return m},configurable:true})}catch(e){}})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Coffeebreak CB Ghost Scanner (Free Demo)</title><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#ff4fa3"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(#4a2436,#1a0a12);font:16px system-ui,sans-serif;color:#3a1a28;min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;padding:10px;user-select:none;-webkit-user-select:none}
+.unit{width:100%;max-width:440px;background:linear-gradient(#ffd9ea,#ff9fc8);border:6px solid #cfd3d8;border-radius:28px;box-shadow:inset 0 0 0 3px #fff8,0 10px 30px #0008;padding:14px}
+.chrome{background:linear-gradient(#f4f6f8,#9aa1a8,#e9ecef);border-radius:14px;padding:8px;margin-bottom:10px}
+.top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.top img{width:54px;height:54px;border-radius:50%;border:3px solid #fff}
+.brand{font-weight:900;font-size:17px;letter-spacing:1px;color:#5a1e3a}.brand small{display:block;font-size:11px;font-weight:600}
+.lcd{background:#1b0d06;color:#ff5a3c;font:bold 64px/1 'Courier New',monospace;text-align:center;border-radius:10px;padding:8px;text-shadow:0 0 12px #ff3a1c;border:4px solid #fff1dc}
+.lcd small{display:block;font-size:13px;color:#ffb26a;text-shadow:none}
+.meter{display:flex;gap:3px;height:16px;margin:8px 0}.meter i{flex:1;background:#5a3a2a;border-radius:2px}.meter i.on{background:#7cff5a}.meter i.on.hi{background:#ff4a3a}
+.knobs{display:flex;justify-content:space-around;margin:8px 0}.kn{text-align:center;font-size:12px;font-weight:800}
+.knob{width:78px;height:78px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#b9bec4 45%,#6d737a);border:3px solid #fff8ef;position:relative;touch-action:none;margin:auto}
+.knob::after{content:'';position:absolute;left:50%;top:6px;width:6px;height:22px;margin-left:-3px;background:#ff2f8a;border-radius:3px}
+.big{width:62px;height:62px}
+.row{display:flex;gap:8px;margin:6px 0}.row>*{flex:1}
+input,button{font:inherit;font-size:17px;border-radius:12px;border:2px solid #fff;padding:12px}
+button{background:#fff3e0;font-weight:800;color:#5a1e3a;cursor:pointer}
+.lingo button{background:#ffe9f3;font-size:15px;padding:10px 4px}
+#ptt{width:100%;height:120px;border-radius:60px;background:radial-gradient(#ff6aa8,#c2185b);color:#fff;font-size:28px;border:6px solid #e6e8eb;box-shadow:0 6px 0 #8a1040;touch-action:none}
+#ptt.tx{background:radial-gradient(#ff3a3a,#a00);box-shadow:0 2px 0 #600;transform:translateY(4px)}
+.mic{display:flex;align-items:center;gap:8px;margin:10px 0}.cord{flex:1;height:22px;background:repeating-linear-gradient(90deg,#2b2b2b 0 6px,#555 6px 9px);border-radius:11px}
+.mic b{background:#fff3e0;padding:6px 10px;border-radius:10px;font-size:13px}
+#log{background:#fffaf2;border-radius:10px;height:130px;overflow:auto;padding:8px;font-size:14px}
+#st{font-size:13px;font-weight:700;text-align:center;margin:4px 0}
+#fsb{background:#5a1e3a;color:#fff}
+.sw{margin-left:auto;flex-shrink:0;display:flex;border:3px solid #9aa1a8;border-radius:10px;overflow:hidden}.sw button{border:0;border-radius:0;padding:8px 10px;font-size:13px;background:#e9ecef}.sw button.on{background:#ff4fa3;color:#fff}
+.emf{display:flex;align-items:center;gap:8px;margin:8px 0}.emfbar{flex:1;height:22px;background:#3a2a2a;border-radius:11px;overflow:hidden}.emfbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7cff5a,#ffe14a,#ff3a3a);transition:width .12s}
+#glog{background:#fffaf2;border-radius:10px;height:140px;overflow:auto;padding:8px;font-size:14px}
+.ent{text-align:center;font-size:12px;margin-top:8px;opacity:.8}
+body.glow{background:radial-gradient(#0a3a1a,#000)}body.glow .unit{background:linear-gradient(#123a22,#06180c);color:#9dff9d;box-shadow:0 0 40px #2bff6a88}body.glow .lcd{color:#5bff7a;text-shadow:0 0 14px #2bff4a}body.glow #glog,body.glow #log{background:#021006;color:#7dff8d}body.glow button{background:#0d2a16;color:#9dff9d;border-color:#2bff6a}body.glow .brand{color:#9dff9d}
+body.glow .chrome{background:linear-gradient(#1a3a24,#06180c);border:2px solid #2bff6a}body.glow .sw button.on{background:#2bff6a;color:#021006}
+</style></head><body>
+<div class="unit">
+ <div class="chrome top"><img src="logo.jpg" alt="Coffeebreak logo"><div class="brand">COFFEEBREAK<small>CB GHOST SCANNER</small></div><div class="sw"><button id="mRadio" class="on">RADIO</button><button id="mGhost">GHOST</button></div></div>
+ <div class="lcd" id="lcd">19<small id="lcds">CH 19 · RX</small></div>
+ <div class="meter" id="meter"></div>
+ <div id="radioUI"><div class="knobs">
+  <div class="kn"><div class="knob big" id="kSq"></div>SQUELCH</div>
+  <div class="kn"><div class="knob" id="kCh"></div>CHANNEL</div>
+  <div class="kn"><div class="knob big" id="kVol"></div>VOLUME</div>
+ </div>
+ <div class="row"><button id="chDn">CH -</button><input id="room" placeholder="Room code (optional)" style="flex:2"><button id="chUp">CH +</button></div>
+ <div class="row"><button id="tune">Tune in</button><button id="fsb">Full screen</button></div>
+ <div id="st">Off air. Tap Tune in.</div>
+ <button id="ptt">HOLD TO TALK</button>
+ <div class="mic"><b>MIC</b><div class="cord"></div><b id="peers">0 on channel</b></div>
+ <div class="row lingo"><button data-l="10-4">10-4</button><button data-l="Breaker breaker">Breaker</button><button data-l="What's your 20">Your 20</button><button data-l="Over">Over</button></div>
+ <div class="row"><input id="msg" placeholder="Breaker message" style="flex:3"><button id="send">Send</button></div>
+ <div id="log"></div>
+</div>
+<div id="ghostUI" hidden>
+ <div class="knobs"><div class="kn"><div class="knob big" id="kSweep"></div>SWEEP</div><div class="kn"><div class="knob big" id="kGVol"></div>VOLUME</div></div>
+ <div class="emf"><b>EMF</b><div class="emfbar"><i id="emf"></i></div><b id="emfv">0.0</b></div>
+ <div class="row"><button id="gScan">Start scan</button><button id="gRec">Record session</button></div>
+ <div class="row"><button id="gSpeak">Voice: off</button><button id="gGlow">Green glow</button></div>
+ <div class="row"><button id="gSave">Save log</button><button id="gClear">Clear log</button></div>
+ <b style="font-size:13px">Captured words</b><div id="glog"></div>
+</div>
+<div class="ent">For entertainment only</div>
+</div>
+<script src="peerjs.min.js"></script><script src="cb-fullscreen.js"></script><script src="app.js"></script><script src="ghost.js"></script>
+<!-- CB-VALUE-WATERMARK:START --><div id="cb-value-wm" aria-hidden="true" style="position:fixed;right:6px;bottom:4px;z-index:1;pointer-events:none;user-select:none;opacity:.3;font:11px/1.2 sans-serif;color:#000;text-shadow:0 0 2px #fff;background:transparent;white-space:nowrap">Coffeebreak catalogue value AU$47,094</div><!-- CB-VALUE-WATERMARK:END --><script src="qrcode.min.js"></script><script>window.CBCALL_OPEN=false</script><script src="cbcall.js"></script><noscript><p style="font:700 26px system-ui;padding:24px;text-align:center">This phone needs JavaScript. Please turn it on in your browser settings, then reload.</p></noscript><script src="cbsimple.js"></script><script src="simple-init.js"></script><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Cbphone" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

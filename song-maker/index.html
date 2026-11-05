@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Song Maker</title><meta name="theme-color" content="#3b2a22"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="theme.css">
+<style>
+#stage{background:#2a1a12;border-radius:10px;padding:10px;margin-top:8px;max-height:230px;overflow:auto;font-size:15px;line-height:1.5}
+#stage .ln{opacity:.55;padding:1px 4px;border-radius:5px}#stage .ln.cur{opacity:1;background:var(--orange);color:#3b2a22;font-weight:700}#stage .hd{font-size:11px;color:#ffb3c6;margin-top:6px;text-transform:uppercase}
+#prog{height:6px;background:#5a4236;border-radius:4px;margin-top:8px;overflow:hidden}#prog i{display:block;height:100%;width:0;background:var(--pink)}
+.songrow{display:flex;gap:6px;align-items:center;padding:6px 0;border-top:1px solid #5a4236}.songrow b{flex:1;font-size:14px}.songrow button{flex:0 0 auto;padding:6px 10px;min-height:34px}
+.opt{display:flex;align-items:center;gap:8px;font-size:14px;margin:6px 0}.opt input{width:20px;height:20px}
+</style></head><body><div id="app">
+<header class="top"><img src="logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Song Maker<small>Write a song. Hear it in minutes. Free.</small></h1></header>
+<div class="card"><h2>Song title</h2><input type="text" id="title" placeholder="My song" maxlength="60" autocomplete="off">
+<label class="l" for="lyrics">Your lyrics</label><textarea id="lyrics" spellcheck="false" placeholder="Type your lyrics here, or pick some below. Use [Verse] and [Chorus] lines to mark the parts. One line of lyrics fills one bar."></textarea>
+<label class="l" for="pick">Pick lyrics</label><select id="pick"><option value="">Choose a song to start from</option></select>
+<label class="l" for="about">Or tell me what the song is about</label><input type="text" id="about" value="coffee" maxlength="40" autocomplete="off">
+<button class="wide pink" id="write" style="margin-top:8px">Write lyrics for me</button></div>
+<div class="card"><h2>Style</h2><div class="chips" id="styles"></div>
+<div class="row" style="margin-top:8px"><div><label class="l" for="tempo">Tempo</label><select id="tempo"></select></div><div><label class="l" for="mood">Mood</label><select id="mood"></select></div></div></div>
+<div class="card"><h2>Voice and band</h2>
+<label class="l" for="voice">Phone voice</label><select id="voice"><option value="">Melody only</option></select>
+<label class="opt"><input type="checkbox" id="oVoice" checked> Phone voice reads the lyrics along with the music</label>
+<label class="opt"><input type="checkbox" id="oMel" checked> Melody</label>
+<label class="opt"><input type="checkbox" id="oBack" checked> Backing track (chords, bass and drums)</label>
+<p class="note" id="vnote"></p></div>
+<div class="card"><div class="row"><button class="pink" id="play">Play my song</button><button class="dark" id="stop">Stop</button></div>
+<div id="prog"><i></i></div><div id="info" class="note" style="margin-top:6px"></div><div id="stage" aria-live="polite"></div>
+<div class="row" style="margin-top:10px"><button id="save">Save song</button><button id="wav">Download WAV</button><button id="share">Share lyrics</button></div>
+<p class="note" id="msg"></p></div>
+<div class="card"><h2>My songs</h2><div id="mine"><span class="note">Nothing saved yet.</span></div></div>
+<div class="card"><h2>About</h2><p class="note">Song Maker is free. It runs on your phone with no sign in, no ads and no outside service. It builds a backing track and melody in the style you choose, and uses the voice already on your phone. The WAV file has the music only, because phone voices play live and cannot be saved.</p></div>
+<footer class="disc"><img src="logo.png" alt="Coffeebreak" width="48" height="48" style="border-radius:8px;background:#fff"><br>More Coffeebreak apps: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a><br>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers and fans may resell the physical products and phones they bought, but may not copy them or make their own versions.</footer>
+</div>
+<script src="engine.js"></script><script src="songgen.js"></script><script src="app.js"></script>
+<script>if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(function(){});</script>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

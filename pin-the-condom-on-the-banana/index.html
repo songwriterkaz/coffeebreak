@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Pin the Condom on the Banana</title>
+<link rel="icon" href="assets/logo.png">
+<style>
+:root{--pink:#ff5fa2;--pink2:#ffd1e6;--deep:#c2186b;--cream:#fff7fb;--ink:#4a1030}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"Trebuchet MS",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,#ffe3f0,#ffc4df);color:var(--ink);min-height:100vh}
+header{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fff;border-bottom:4px solid var(--pink)}
+header img{width:54px;height:54px;border-radius:50%;object-fit:cover;border:3px solid var(--pink)}
+header h1{font-size:clamp(16px,4vw,26px);margin:0;color:var(--deep)}
+header .tag{font-size:12px;background:var(--deep);color:#fff;padding:3px 8px;border-radius:20px;white-space:nowrap}
+main{max-width:860px;margin:0 auto;padding:12px}
+#hud{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;margin-bottom:8px}
+.pill{background:#fff;border:2px solid var(--pink);border-radius:20px;padding:4px 12px;font-weight:bold;font-size:14px}
+#wrap{position:relative;width:100%;aspect-ratio:4/3;border-radius:18px;overflow:hidden;border:4px solid var(--pink);background:#fff;box-shadow:0 8px 24px rgba(194,24,107,.25);touch-action:none}
+canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;background:rgba(255,240,247,.96);overflow:auto}
+.screen.hide{display:none}
+.screen h2{margin:4px 0 8px;color:var(--deep);font-size:clamp(20px,5vw,34px)}
+.screen p{margin:6px auto;max-width:560px;font-size:clamp(13px,3.4vw,16px);line-height:1.4}
+.age{display:inline-block;background:var(--deep);color:#fff;font-weight:bold;padding:6px 14px;border-radius:12px;margin:6px 0;font-size:clamp(13px,3.4vw,16px)}
+.btn{background:var(--pink);color:#fff;border:0;border-radius:30px;padding:12px 26px;font-size:18px;font-weight:bold;cursor:pointer;margin:6px;box-shadow:0 4px 0 var(--deep)}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 var(--deep)}
+.btn.alt{background:#fff;color:var(--deep);border:2px solid var(--pink);box-shadow:none}
+.tipcard{background:#fff;border:3px dashed var(--pink);border-radius:16px;padding:12px 16px;max-width:520px;margin:8px auto}
+.tipcard b{color:var(--deep)}
+a{color:var(--deep)}
+.help{font-size:14px}
+#logoBig{width:min(120px,26vw);border-radius:50%;border:4px solid var(--pink)}
+.howto{font-size:14px;text-align:left;max-width:520px;margin:4px auto}
+.howto li{margin:3px 0}
+#tipsAll{max-width:760px;margin:16px auto;background:#fff;border-radius:16px;padding:12px 18px;border:2px solid var(--pink)}
+#tipsAll h3{color:var(--deep);margin:4px 0}
+#tipsAll ol{padding-left:22px;margin:6px 0}
+footer{max-width:860px;margin:10px auto 24px;padding:12px;font-size:12.5px;line-height:1.5;text-align:center;color:#6b2347}
+footer .links a{font-weight:bold;margin:0 8px}
+</style>
+</head>
+<body>
+<header>
+  <img src="assets/logo.png" alt="Coffeebreak logo">
+  <h1>Pin the Condom on the Banana</h1>
+  <span class="tag">Ages 14+ · Sex education</span>
+</header>
+<main>
+  <div id="hud">
+    <span class="pill">Level <span id="hLevel">1</span>/6</span>
+    <span class="pill">Time <span id="hTime">20</span>s</span>
+    <span class="pill">Condoms <span id="hLeft">5</span></span>
+    <span class="pill">Score <span id="hScore">0</span></span>
+    <span class="pill">Best <span id="hBest">0</span></span>
+  </div>
+  <div id="wrap">
+    <canvas id="c" width="800" height="600" aria-label="Game area"></canvas>
+
+    <div class="screen" id="sTitle">
+      <img id="logoBig" src="assets/logo.png" alt="Coffeebreak logo">
+      <h2>Pin the Condom on the Banana</h2>
+      <div class="age" id="ageNotice">Ages 14+ · Sex education game</div>
+      <p>A Coffeebreak party game with a safe-sex twist. Drag or tap to pin the condom right on the tip of the moving banana. The closer you get, the more points you score.</p>
+      <ul class="howto">
+        <li>Each round: 5 condoms and 20 seconds.</li>
+        <li>Drag the condom from the tray and let go over the banana tip, or just tap where you want it.</li>
+        <li>Perfect = 100, Great = 70, Good = 40. Reach the target score to go up a level.</li>
+        <li>From level 4 the room goes dark, just like a blindfold.</li>
+      </ul>
+      <div><button class="btn" id="bStart">Play</button><button class="btn alt" id="bTips">Safe-sex tips</button></div>
+    </div>
+
+    <div class="screen hide" id="sBetween">
+      <h2 id="bTitle">Round complete</h2>
+      <p id="bMsg"></p>
+      <div class="tipcard"><b>Safe-sex tip <span id="tipNum"></span>:</b> <span id="tipText"></span></div>
+      <p class="help">Where to get help: <a href="https://www.healthdirect.gov.au/condoms" target="_blank" rel="noopener">healthdirect: Condoms</a></p>
+      <div><button class="btn" id="bNext">Next round</button><button class="btn alt" id="bMenu">Menu</button></div>
+    </div>
+
+    <div class="screen hide" id="sTipsScreen">
+      <h2>Safe-sex tips</h2>
+      <ol class="howto" id="tipList"></ol>
+      <p class="help">Where to get help: <a href="https://www.healthdirect.gov.au/condoms" target="_blank" rel="noopener">healthdirect: Condoms</a></p>
+      <button class="btn" id="bTipsBack">Back</button>
+    </div>
+  </div>
+
+  <section id="tipsAll">
+    <h3>How to use a condom: quick tips</h3>
+    <ol id="tipList2"></ol>
+    <p>Condoms help protect against sexually transmitted infections (STIs) and pregnancy. Free or low-cost condoms are available at many sexual health clinics. If you have questions, talk to a trusted adult, a school nurse, a GP or a sexual health clinic.</p>
+    <p><b>Where to get help:</b> <a href="https://www.healthdirect.gov.au/condoms" target="_blank" rel="noopener">https://www.healthdirect.gov.au/condoms</a> · Kids Helpline (ages 5 to 25): 1800 55 1800</p>
+    <p style="font-size:12px">This game is for general education only and is not medical advice.</p>
+  </section>
+</main>
+<footer>
+  <p>© Karen O'Brien (Coffeebreak). Karen O'Brien keeps all rights to her products, designs, apps, games, name and logo. Buyers may resell physical items they bought but may not copy them or make their own versions. Third-party trademarks and brand names belong to their owners and are used only to describe products.</p>
+  <p class="links"><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> | <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> | <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">More Coffeebreak apps</a></p>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var TIPS=[
+ 'Check the expiry date on the wrapper, and make sure the wrapper is not torn or damaged. You should feel a little air bubble when you squeeze it.',
+ 'Open the wrapper carefully with your fingers. Never use teeth, scissors or sharp nails, because they can tear the condom.',
+ 'Check which way it unrolls before you start. The rolled rim should be on the outside, like a little hat.',
+ 'Pinch the tip of the condom to squeeze out the air. This leaves space at the end and helps stop it breaking.',
+ 'Keep pinching the tip and roll the condom all the way down to the base.',
+ 'Use a new condom every time. Never reuse one, and never wear two at once, because rubbing can make them tear.',
+ 'With latex condoms, use water-based lube only (silicone-based is also safe). Oil-based products like Vaseline, baby oil or massage oil can break latex.',
+ 'Store condoms somewhere cool and dry. Heat and friction, like a wallet or a hot car, can damage them.',
+ 'Condoms help protect against STIs and pregnancy. You can get free or cheap condoms at many sexual health clinics.'
+];
+var LEVELS=[
+ {target:200,speed:0.9,amp:180,bob:10,dark:false,name:'Warm-up'},
+ {target:240,speed:1.3,amp:230,bob:16,dark:false,name:'Party time'},
+ {target:270,speed:1.7,amp:260,bob:28,dark:false,name:'Wobbly banana'},
+ {target:220,speed:1.2,amp:220,bob:16,dark:true,name:'Blindfold'},
+ {target:250,speed:1.7,amp:260,bob:26,dark:true,name:'Blindfold spin'},
+ {target:280,speed:2.2,amp:280,bob:34,dark:true,name:'Banana master'}
+];
+var W=800,H=600,ROUND_TIME=20,PER_ROUND=5;
+var cv=document.getElementById('c'),ctx=cv.getContext('2d');
+var logo=new Image();logo.src='assets/logo.png';
+var $=function(id){return document.getElementById(id)};
+var best=0;try{best=parseInt(localStorage.getItem('cbPinBananaBest')||'0',10)||0}catch(e){}
+$('hBest').textContent=best;
+
+var st={mode:'title',level:0,score:0,roundScore:0,left:PER_ROUND,time:ROUND_TIME,t:0,pinned:[],drag:null,pointer:{x:W/2,y:H/2,in:false},pops:[],tipIdx:0,lastTs:0};
+
+function fill(list){TIPS.forEach(function(t){var li=document.createElement('li');li.textContent=t;list.appendChild(li)})}
+fill($('tipList'));fill($('tipList2'));
+
+var ac=null;
+function beep(f,d){try{if(!ac){var A=window.AudioContext||window.webkitAudioContext;if(!A)return;ac=new A()}var o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=f;g.gain.value=0.08;o.connect(g);g.connect(ac.destination);var n=ac.currentTime;g.gain.setValueAtTime(0.08,n);g.gain.exponentialRampToValueAtTime(0.0001,n+d);o.start(n);o.stop(n+d)}catch(e){}}
+
+function banana(){
+ var L=LEVELS[st.level],t=st.t;
+ var x=W/2+Math.sin(t*L.speed)*L.amp*Math.cos(t*L.speed*0.37);
+ var y=330+Math.sin(t*L.speed*1.9)*L.bob;
+ var ang=Math.sin(t*L.speed*1.3)*0.18;
+ return {x:x,y:y,ang:ang};
+}
+function tipPoint(b){ // top tip of banana in world coords
+ var lx=18,ly=-150;var c=Math.cos(b.ang),s=Math.sin(b.ang);
+ return {x:b.x+lx*c-ly*s,y:b.y+lx*s+ly*c};
+}
+function show(id){['sTitle','sBetween','sTipsScreen'].forEach(function(s){$(s).classList.toggle('hide',s!==id)})}
+function hud(){$('hLevel').textContent=st.level+1;$('hTime').textContent=Math.ceil(st.time);$('hLeft').textContent=st.left;$('hScore').textContent=st.score;$('hBest').textContent=best}
+
+function startGame(){st.level=0;st.score=0;st.tipIdx=0;startRound()}
+function startRound(){st.mode='play';st.roundScore=0;st.left=PER_ROUND;st.time=ROUND_TIME;st.pinned=[];st.pops=[];st.drag=null;show(null);hud()}
+function endRound(){
+ st.mode='between';
+ var L=LEVELS[st.level],passed=st.roundScore>=L.target,last=st.level===LEVELS.length-1;
+ if(st.score>best){best=st.score;try{localStorage.setItem('cbPinBananaBest',String(best))}catch(e){}}
+ var title,msg,next;
+ if(passed&&last){title='You are the Banana Master';msg='You beat all 6 levels with a total of '+st.score+' points. Play again to beat your best.';next='Play again';st.level=-1;}
+ else if(passed){title='Level '+(st.level+1)+' passed';msg='Round score '+st.roundScore+' (target '+L.target+'). Next: level '+(st.level+2)+', '+LEVELS[st.level+1].name+'.';next='Next level';}
+ else{title='So close';msg='Round score '+st.roundScore+'. You need '+L.target+' to pass level '+(st.level+1)+'. Try again.';next='Try again';}
+ st.passed=passed;
+ $('bTitle').textContent=title;$('bMsg').textContent=msg;$('bNext').textContent=next;
+ $('tipNum').textContent=(st.tipIdx%TIPS.length)+1;$('tipText').textContent=TIPS[st.tipIdx%TIPS.length];st.tipIdx++;
+ show('sBetween');hud();
+}
+$('bStart').onclick=function(){beep(660,.15);startGame()};
+$('bTips').onclick=function(){show('sTipsScreen')};
+$('bTipsBack').onclick=function(){show('sTitle')};
+$('bMenu').onclick=function(){st.mode='title';st.level=0;show('sTitle')};
+$('bNext').onclick=function(){
+ if(st.level===-1){startGame();return}
+ if(st.passed){st.level++;st.score=st.score} else {st.score-=st.roundScore}
+ startRound();
+};
+
+// pointer
+function toWorld(e){var r=cv.getBoundingClientRect();return {x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
+var TRAY={x:W-90,y:H-70};
+cv.addEventListener('pointerdown',function(e){
+ if(st.mode!=='play'||st.left<=0)return;
+ var p=toWorld(e);st.pointer={x:p.x,y:p.y,in:true};
+ st.drag={x:p.x,y:p.y,fromTray:Math.hypot(p.x-TRAY.x,p.y-TRAY.y)<70,moved:false,sx:p.x,sy:p.y};
+ try{cv.setPointerCapture(e.pointerId)}catch(err){}
+ e.preventDefault();
+});
+cv.addEventListener('pointermove',function(e){
+ var p=toWorld(e);st.pointer={x:p.x,y:p.y,in:true};
+ if(st.drag){st.drag.x=p.x;st.drag.y=p.y;if(Math.hypot(p.x-st.drag.sx,p.y-st.drag.sy)>8)st.drag.moved=true}
+});
+cv.addEventListener('pointerleave',function(){st.pointer.in=false});
+function release(e){
+ if(!st.drag)return;var d=st.drag;st.drag=null;
+ if(st.mode!=='play')return;
+ if(d.fromTray&&!d.moved)return; // tapped tray: nothing
+ place(d.x,d.y);
+}
+cv.addEventListener('pointerup',release);
+cv.addEventListener('pointercancel',function(){st.drag=null});
+
+function place(x,y){
+ if(st.left<=0)return;
+ var b=banana(),tp=tipPoint(b),dist=Math.hypot(x-tp.x,y-tp.y),pts,label,col;
+ if(dist<14){pts=100;label='Perfect';col='#c2186b'}
+ else if(dist<28){pts=70;label='Great';col='#ff5fa2'}
+ else if(dist<48){pts=40;label='Good';col='#ff8fc0'}
+ else {pts=0;label='Miss';col='#888'}
+ st.left--;st.roundScore+=pts;st.score+=pts;
+ if(pts>0){ // stick to banana (store local offset)
+  var c=Math.cos(-b.ang),s=Math.sin(-b.ang),dx=x-b.x,dy=y-b.y;
+  st.pinned.push({lx:dx*c-dy*s,ly:dx*s+dy*c,stuck:true});
+  beep(pts===100?880:pts===70?740:600,.18);
+ } else {st.pinned.push({x:x,y:y,stuck:false,vy:0});beep(220,.2)}
+ st.pops.push({x:x,y:y-20,text:label+(pts?' +'+pts:''),col:col,life:1.2});
+ hud();
+ if(st.left<=0)setTimeout(function(){if(st.mode==='play')endRound()},700);
+}
+window.__cbPlace=place; window.__cbState=st; window.__cbTip=function(){return tipPoint(banana())};
+
+// drawing
+function drawBanana(b){
+ ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.ang);
+ // shadow
+ ctx.fillStyle='rgba(194,24,107,.12)';ctx.beginPath();ctx.ellipse(0,165,70,14,0,0,Math.PI*2);ctx.fill();
+ // body: curved banana standing upright
+ ctx.beginPath();
+ ctx.moveTo(10,-150);
+ ctx.bezierCurveTo(70,-110,80,60,20,150);
+ ctx.bezierCurveTo(5,165,-25,162,-30,145);
+ ctx.bezierCurveTo(10,60,10,-60,-12,-140);
+ ctx.closePath();
+ var g=ctx.createLinearGradient(-30,0,70,0);g.addColorStop(0,'#ffe066');g.addColorStop(1,'#f4b400');
+ ctx.fillStyle=g;ctx.fill();ctx.lineWidth=5;ctx.strokeStyle='#8a5a00';ctx.stroke();
+ // stem tip
+ ctx.fillStyle='#6b4a1a';ctx.beginPath();ctx.ellipse(1,-150,10,8,-0.4,0,Math.PI*2);ctx.fill();
+ // bottom tip
+ ctx.fillStyle='#5a3a10';ctx.beginPath();ctx.arc(-6,152,6,0,Math.PI*2);ctx.fill();
+ // face
+ ctx.fillStyle='#3b2400';ctx.beginPath();ctx.arc(16,-10,6,0,Math.PI*2);ctx.arc(40,-8,6,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(18,-12,2,0,Math.PI*2);ctx.arc(42,-10,2,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle='#3b2400';ctx.lineWidth=3;ctx.beginPath();ctx.arc(28,8,10,0.2,Math.PI-0.2);ctx.stroke();
+ ctx.fillStyle='rgba(255,95,162,.45)';ctx.beginPath();ctx.ellipse(6,6,7,4,0,0,Math.PI*2);ctx.ellipse(52,8,7,4,0,0,Math.PI*2);ctx.fill();
+ // party hat target marker
+ if(!LEVELS[st.level].dark||st.mode!=='play'){ctx.strokeStyle='rgba(194,24,107,.7)';ctx.setLineDash([6,6]);ctx.lineWidth=2;ctx.beginPath();ctx.arc(18,-150,28,0,Math.PI*2);ctx.stroke();ctx.setLineDash([])}
+ // pinned condoms
+ st.pinned.forEach(function(p){if(p.stuck)drawCondom(p.lx,p.ly,1,true)});
+ ctx.restore();
+}
+function drawCondom(x,y,sc,placed){
+ ctx.save();ctx.translate(x,y);ctx.scale(sc,sc);
+ if(placed){ // little pink cap shape with rolled rim
+  ctx.fillStyle='rgba(255,95,162,.75)';ctx.strokeStyle='#c2186b';ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.moveTo(-16,14);ctx.lineTo(-14,-8);ctx.quadraticCurveTo(0,-26,14,-8);ctx.lineTo(16,14);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.beginPath();ctx.ellipse(0,15,18,6,0,0,Math.PI*2);ctx.fillStyle='#ff9cc8';ctx.fill();ctx.stroke();
+  ctx.beginPath();ctx.arc(0,-20,4,0,Math.PI*2);ctx.fillStyle='#ffb8d9';ctx.fill();ctx.stroke();
+ } else { // rolled ring
+  ctx.beginPath();ctx.arc(0,0,22,0,Math.PI*2);ctx.fillStyle='#ffb8d9';ctx.fill();ctx.lineWidth=7;ctx.strokeStyle='#ff5fa2';ctx.stroke();
+  ctx.beginPath();ctx.arc(0,0,9,0,Math.PI*2);ctx.fillStyle='#ffe3f0';ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#c2186b';ctx.stroke();
+ }
+ ctx.restore();
+}
+function drawBg(){
+ var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#fff0f7');g.addColorStop(1,'#ffd1e6');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ // bunting
+ var cols=['#ff5fa2','#ffd166','#c2186b','#ffb8d9'];
+ ctx.strokeStyle='#c2186b';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,20);ctx.quadraticCurveTo(W/2,70,W,20);ctx.stroke();
+ for(var i=0;i<16;i++){var px=i*W/16+25,py=20+50*(1-Math.pow((px-W/2)/(W/2),2))*0.98;ctx.fillStyle=cols[i%4];ctx.beginPath();ctx.moveTo(px-14,py);ctx.lineTo(px+14,py);ctx.lineTo(px,py+26);ctx.closePath();ctx.fill()}
+ // floor
+ ctx.fillStyle='#ffc4df';ctx.fillRect(0,H-110,W,110);
+ // logo
+ if(logo.complete&&logo.naturalWidth){ctx.save();ctx.globalAlpha=.9;ctx.beginPath();ctx.arc(60,95,40,0,Math.PI*2);ctx.closePath();ctx.fillStyle='#fff';ctx.fill();ctx.clip();ctx.drawImage(logo,20,55,80,80);ctx.restore();ctx.strokeStyle='#ff5fa2';ctx.lineWidth=4;ctx.beginPath();ctx.arc(60,95,40,0,Math.PI*2);ctx.stroke()}
+}
+function drawTray(){
+ ctx.fillStyle='#fff';ctx.strokeStyle='#ff5fa2';ctx.lineWidth=4;
+ ctx.beginPath();if(ctx.roundRect)ctx.roundRect(TRAY.x-70,TRAY.y-50,140,100,18);else ctx.rect(TRAY.x-70,TRAY.y-50,140,100);ctx.fill();ctx.stroke();
+ if(st.left>0&&!(st.drag&&st.drag.fromTray))drawCondom(TRAY.x,TRAY.y-8,1,false);
+ ctx.fillStyle='#c2186b';ctx.font='bold 15px Trebuchet MS, sans-serif';ctx.textAlign='center';ctx.fillText('Drag me x'+st.left,TRAY.x,TRAY.y+38);
+}
+function frame(ts){
+ var dt=st.lastTs?Math.min(0.05,(ts-st.lastTs)/1000):0;st.lastTs=ts;
+ if(st.mode==='play'){st.t+=dt;st.time-=dt;if(st.time<=0){st.time=0;endRound()}if(Math.ceil(st.time)!==+$('hTime').textContent)hud()}
+ else st.t+=dt*0.6;
+ drawBg();
+ var b=banana();drawBanana(b);
+ st.pinned.forEach(function(p){if(!p.stuck){p.vy+=dt*900;p.y=Math.min(H-40,p.y+p.vy*dt);drawCondom(p.x,p.y,0.8,false)}});
+ var L=LEVELS[st.level]||LEVELS[0];
+ if(st.mode==='play'&&L.dark){
+  var px=st.pointer.in?st.pointer.x:W/2,py=st.pointer.in?st.pointer.y:H/2;if(st.drag){px=st.drag.x;py=st.drag.y}
+  var rg=ctx.createRadialGradient(px,py,40,px,py,130);rg.addColorStop(0,'rgba(60,10,35,0)');rg.addColorStop(1,'rgba(60,10,35,0.93)');
+  ctx.fillStyle=rg;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#fff';ctx.font='bold 18px Trebuchet MS, sans-serif';ctx.textAlign='center';ctx.fillText('Blindfold on: find the tip with your spotlight',W/2,H-125);
+ }
+ if(st.mode==='play'){drawTray();ctx.fillStyle='#c2186b';ctx.font='bold 20px Trebuchet MS, sans-serif';ctx.textAlign='left';ctx.fillText('Level '+(st.level+1)+': '+L.name+'   Round '+st.roundScore+' / '+L.target,20,H-20)}
+ if(st.drag&&st.mode==='play'&&(st.drag.moved||!st.drag.fromTray))drawCondom(st.drag.x,st.drag.y,1,true);
+ st.pops=st.pops.filter(function(p){p.life-=dt;p.y-=dt*40;ctx.globalAlpha=Math.max(0,Math.min(1,p.life));ctx.fillStyle=p.col;ctx.font='bold 30px Trebuchet MS, sans-serif';ctx.textAlign='center';ctx.fillText(p.text,p.x,p.y);ctx.globalAlpha=1;return p.life>0});
+ requestAnimationFrame(frame);
+}
+show('sTitle');hud();requestAnimationFrame(frame);
+})();
+</script>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body>
+</html>

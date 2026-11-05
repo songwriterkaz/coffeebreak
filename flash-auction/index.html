@@ -1,0 +1,201 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Flash Tattoo Art Auction</title><style>
+body{margin:0;font-family:Georgia,serif;background:#1a1013;color:#ffe0ee}
+header{text-align:center;padding:24px;background:repeating-linear-gradient(45deg,#1a1013 0 14px,#24161b 14px 28px);border-bottom:6px double #ff4fa3}
+header img{width:110px;border-radius:50%;border:4px solid #ff4fa3}h1{color:#ff9fcb;margin:8px 0;letter-spacing:2px}
+.banner{display:inline-block;background:#c8102e;color:#fff;padding:6px 26px;clip-path:polygon(0 0,100% 0,95% 50%,100% 100%,0 100%,5% 50%);font-style:italic}
+nav{text-align:center;padding:10px}nav a{color:#ffd6ea;margin:0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;padding:20px;max-width:1300px;margin:auto}
+.lot{background:#24161b;border:3px solid #ff4fa3;border-radius:14px;padding:14px;box-shadow:6px 6px 0 #000}
+.lot img{width:100%;border-radius:8px;border:2px solid #000;background:#fff}.lot h2{color:#ff9fcb;margin:8px 0 4px}
+.tag{font-size:12px;background:#ffd6ea;color:#1a1013;padding:2px 8px;border-radius:10px;display:inline-block}
+.price td{padding:2px 6px}.cd{color:#ffd23f;font-weight:bold}
+button,.btn{background:#ff4fa3;color:#1a1013;border:2px solid #000;border-radius:8px;padding:8px 12px;font-weight:bold;cursor:pointer;font-family:inherit}
+input{width:100%;box-sizing:border-box;padding:7px;margin:3px 0;border-radius:6px;border:1px solid #ff9fcb}
+details{margin-top:8px;background:#1a1013;padding:8px;border-radius:8px;border:1px dashed #ff9fcb}summary{cursor:pointer;color:#ffd6ea}
+section.info{max-width:900px;margin:20px auto;padding:20px;background:#24161b;border:3px dashed #ff4fa3;border-radius:14px}
+#certOut{background:#fff;color:#1a1013;padding:30px;border:10px double #c8102e;max-width:700px;margin:16px auto;display:none;text-align:center}
+#certOut img.l{width:90px}#certOut img.a{max-width:260px;border:2px solid #000}
+footer{text-align:center;padding:20px;font-size:13px}
+@media print{body *{visibility:hidden}#certOut,#certOut *{visibility:visible}#certOut{position:absolute;left:0;top:0;border-width:8px}}
+</style></head><body>
+<header><img src="img/logo.jpg" alt="Coffeebreak logo"><h1>COFFEEBREAK FLASH AUCTION</h1><div class="banner">Original tattoo flash art by Karen O'Brien</div>
+<p>Bid on original Coffeebreak tattoo flash designs from a Newcastle NSW artist who has exhibited at Watt Space. Every lot is a 1 of 1 digital edition, an NFT style collectible delivered by email.</p></header>
+<nav><a href="#lots">Lots</a><a href="#how">How bidding works</a><a href="#nft">Digital editions</a><a href="#cert">Certificate</a></nav>
+<div class="grid" id="lots"></div>
+<section class="info" id="how"><h2>How bidding works</h2><ol>
+<li>Choose a lot and enter a bid above the current highest bid. Your bid opens an email to <b id="be"></b> with your details. A bid counts once it is received and confirmed.</li>
+<li>Current highest bids and bid history are updated by Coffeebreak after each confirmed bid.</li>
+<li>If your bid is the highest when the countdown ends and it meets the reserve, you win. Or pay the buy-now price to win straight away.</li>
+<li>Winners pay by PayID to <b id="pi"></b> using the lot code and your name as the reference, for example CB-FLASH-01 SMITH.</li>
+<li>After payment you receive the full resolution flash file, a certificate of authenticity as your 1 of 1 digital edition, emailed to you.</li></ol>
+<p>Prices are in AUD. Buying a digital artwork gives you personal ownership of that file and certificate. Copyright stays with the artist unless agreed in writing.</p></section>
+<section class="info" id="nft"><h2>Digital edition (NFT style collectible, 1 of 1)</h2><p>Every flash design is sold as a single digital edition, 1 of 1. The winner or buy-now buyer pays by PayID to <b>darkokaz@gmx.com</b> with the lot code and their surname as the reference. After payment is confirmed, Coffeebreak emails the buyer the full-resolution flash design file and a numbered 1 of 1 certificate of authenticity. This is a digital collectible delivered by email. It is not recorded on a blockchain.</p></section>
+<section class="info" id="cert"><h2>Certificate of authenticity generator</h2>
+<label>Lot<select id="cLot"></select></label><input id="cName" placeholder="Collector name"><input id="cPrice" placeholder="Price paid AUD"><input id="cDate" type="date">
+<button onclick="makeCert()">Make certificate</button> <button onclick="window.print()">Print</button></section>
+<div id="certOut"></div>
+<footer><img src="img/logo.jpg" width="50" alt=""><br>Coffeebreak . coffeebreaks.itch.io</footer>
+<script>
+const CONFIG={
+ "payid": "darkokaz@gmx.com",
+ "bidEmail": "songwriterkaz@gmail.com",
+ "minIncrement": 5,
+ "lots": [
+  {
+   "id": "CB-FLASH-01",
+   "title": "Rockabilly Thriller",
+   "img": "img/lot01.jpg",
+   "start": 149,
+   "reserve": 238,
+   "buyNow": 387,
+   "highest": 0,
+   "history": [],
+   "ends": "2026-11-06T20:00:00+11:00",
+   "nft": true
+  },
+  {
+   "id": "CB-FLASH-02",
+   "title": "Pink Terror",
+   "img": "img/lot02.jpg",
+   "start": 129,
+   "reserve": 206,
+   "buyNow": 335,
+   "highest": 0,
+   "history": [],
+   "ends": "2026-11-07T20:00:00+11:00",
+   "nft": true
+  },
+  {
+   "id": "CB-FLASH-03",
+   "title": "Coffeebreak Glam Fishnet",
+   "img": "img/lot03.jpg",
+   "start": 149,
+   "reserve": 238,
+   "buyNow": 387,
+   "highest": 0,
+   "history": [],
+   "ends": "2026-11-08T20:00:00+11:00",
+   "nft": true
+  },
+  {
+   "id": "CB-FLASH-04",
+   "title": "Lullaby Lolita Fishnet",
+   "img": "img/lot04.jpg",
+   "start": 129,
+   "reserve": 206,
+   "buyNow": 335,
+   "highest": 0,
+   "history": [],
+   "ends": "2026-11-09T20:00:00+11:00",
+   "nft": true
+  },
+  {
+   "id": "CB-FLASH-05",
+   "title": "Rockabilly Legs",
+   "img": "img/lot05.jpg",
+   "start": 99,
+   "reserve": 158,
+   "buyNow": 257,
+   "highest": 0,
+   "history": [],
+   "ends": "2026-11-10T20:00:00+11:00",
+   "nft": true
+  },
+  {
+   "id": "CB-FLASH-06",
+   "title": "Pink Lolita",
+   "img": "img/lot06.jpg",
+   "start": 99,
+   "reserve": 158,
+   "buyNow": 257,
+   "highest": 0,
+   "history": [],
+   "ends": "2026-11-11T20:00:00+11:00",
+   "nft": true
+  },
+  {
+   "id": "CB-FLASH-07",
+   "title": "Snake Gothic",
+   "img": "img/lot07.jpg",
+   "start": 119,
+   "reserve": 190,
+   "buyNow": 309,
+   "highest": 0,
+   "history": [],
+   "ends": "2026-11-12T20:00:00+11:00",
+   "nft": true
+  },
+  {
+   "id": "CB-FLASH-08",
+   "title": "Horror",
+   "img": "img/lot08.jpg",
+   "start": 119,
+   "reserve": 190,
+   "buyNow": 309,
+   "highest": 0,
+   "history": [],
+   "ends": "2026-11-13T20:00:00+11:00",
+   "nft": true
+  },
+  {
+   "id": "CB-FLASH-09",
+   "title": "Corset Lace",
+   "img": "img/lot09.jpg",
+   "start": 99,
+   "reserve": 158,
+   "buyNow": 257,
+   "highest": 0,
+   "history": [],
+   "ends": "2026-11-14T20:00:00+11:00",
+   "nft": true
+  },
+  {
+   "id": "CB-FLASH-10",
+   "title": "Strawberries and Cream",
+   "img": "img/lot10.jpg",
+   "start": 89,
+   "reserve": 142,
+   "buyNow": 231,
+   "highest": 0,
+   "history": [],
+   "ends": "2026-11-15T20:00:00+11:00",
+   "nft": true
+  },
+  {
+   "id": "CB-FLASH-11",
+   "title": "Coffeebreak Football Flash",
+   "img": "img/lot11-football-flash.png",
+   "start": 119,
+   "reserve": 190,
+   "buyNow": 309,
+   "highest": 0,
+   "history": [],
+   "ends": "2026-11-16T20:00:00+11:00",
+   "nft": true
+  }
+ ]
+};
+const $=id=>document.getElementById(id),aud=n=>'$'+Number(n).toLocaleString('en-AU');
+$('be').textContent=CONFIG.bidEmail;$('pi').textContent=CONFIG.payid;
+function cur(l){return l.highest>0?l.highest:0}
+function render(){$('lots').innerHTML=CONFIG.lots.map(l=>{const min=cur(l)?cur(l)+CONFIG.minIncrement:l.start;return `<div class="lot"><img src="${l.img}" alt="${l.title}"><h2>${l.title}</h2><span class="tag">${l.id}</span> <span class="tag">Digital edition, NFT style collectible, 1 of 1</span>
+<table class="price"><tr><td>Starting bid</td><td>${aud(l.start)}</td></tr><tr><td>Current highest</td><td>${cur(l)?aud(cur(l)):'No bids yet'}</td></tr><tr><td>Reserve</td><td>${aud(l.reserve)}</td></tr><tr><td>Buy now</td><td>${aud(l.buyNow)}</td></tr></table>
+<div>Ends in <span class="cd" data-end="${l.ends}"></span></div>
+<details><summary>Place a bid</summary><input id="b-${l.id}" type="number" min="${min}" value="${min}"><input id="n-${l.id}" placeholder="Your name"><input id="e-${l.id}" placeholder="Your email"><input id="p-${l.id}" placeholder="Your phone">
+<button onclick="bid('${l.id}',0)">Send bid</button> <button onclick="bid('${l.id}',1)">Buy now ${aud(l.buyNow)}</button></details>
+<details><summary>Bid history</summary>${l.history.length?l.history.map(h=>`<div>${h.when} . ${h.name} . ${aud(h.amount)}</div>`).join(''):'No bids yet'}</details>
+<details><summary>Digital edition</summary>Digital edition (NFT style collectible, 1 of 1). After your PayID payment is confirmed, you are emailed the full-resolution ${l.title} flash file and a numbered 1 of 1 certificate of authenticity.</details></div>`}).join('');tick()}
+function bid(id,now){const l=CONFIG.lots.find(x=>x.id==id),v=k=>$(k+'-'+id).value.trim();const amt=now?l.buyNow:Number(v('b'));const min=cur(l)?cur(l)+CONFIG.minIncrement:l.start;
+if(new Date(l.ends)<new Date()){alert('This lot has ended.');return}
+if(!now&&amt<min){alert('Please bid at least '+aud(min)+'.');return}if(!v('n')||!v('e')||!v('p')){alert('Please add your name, email and phone.');return}
+const sub=`${now?'Buy now':'Bid'} ${id} ${l.title} ${aud(amt)}`;const body=`Lot: ${id} ${l.title}\n${now?'Buy now':'Bid'}: ${aud(amt)} AUD\nName: ${v('n')}\nEmail: ${v('e')}\nPhone: ${v('p')}\n\nIf I win I will pay by PayID to ${CONFIG.payid} with reference ${id} and my surname.`;
+location.href=`mailto:${CONFIG.bidEmail}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`}
+function tick(){document.querySelectorAll('.cd').forEach(e=>{let t=new Date(e.dataset.end)-new Date();if(t<=0){e.textContent='Ended';return}const d=Math.floor(t/864e5),h=Math.floor(t/36e5)%24,m=Math.floor(t/6e4)%60;e.textContent=`${d}d ${h}h ${m}m`})}
+setInterval(tick,30000);render();
+$('cLot').innerHTML=CONFIG.lots.map(l=>`<option value="${l.id}">${l.id} ${l.title}</option>`).join('');$('cDate').value=new Date().toLocaleDateString('en-CA');
+function esc(s){return s.replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]))}
+function makeCert(){const l=CONFIG.lots.find(x=>x.id==$('cLot').value),o=$('certOut');o.style.display='block';
+o.innerHTML=`<img class="l" src="img/logo.jpg" alt=""><h2>Certificate of Authenticity</h2><p>This certifies that the original tattoo flash artwork</p><h3>${l.title}</h3><img class="a" src="${l.img}" alt=""><p>Lot ${l.id} . Original digital artwork by Karen O'Brien, Coffeebreak</p><p>Collected by <b>${esc($('cName').value||'')}</b> for ${esc($('cPrice').value?aud($('cPrice').value):'')} AUD on ${esc($('cDate').value)}</p><p>Digital edition 1 of 1 . Certificate no. ${l.id}-1/1</p><p>Copyright remains with the artist.</p><p style="margin-top:40px">Signed ____________________ Karen O'Brien</p>`;o.scrollIntoView()}
+</script><div id="cb-legal" style="position:fixed;left:0;right:0;bottom:0;z-index:2147483000;background:rgba(25,10,25,.9);color:#fff;font:11px/1.35 system-ui,Arial,sans-serif;padding:5px 32px 5px 8px;display:flex;gap:8px;align-items:center"><img src="cb-logo.jpg" alt="Coffeebreak logo" style="height:28px;width:28px;border-radius:50%;object-fit:cover;flex:none"><span>© Karen (Coffeebreak). Karen keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Karen claims no ownership of any third-party brands named here, which belong to their owners.</span><button type="button" aria-label="Hide notice" onclick="this.parentNode.remove()" style="position:absolute;right:6px;top:3px;background:none;border:0;color:#fff;font-size:18px;cursor:pointer">&times;</button></div>
+</body></html>

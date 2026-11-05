@@ -1,0 +1,37 @@
+'use strict';
+/* Coffeebreak School Bookings: absences and excursions. © Karen (Coffeebreak). */
+if(!S.absences)S.absences=[];if(!S.excursions)S.excursions=[];if(!S.consents)S.consents=[];
+const ABS_REASONS=['Family event','Appointment','Holiday','Running late','Leaving early','Unwell','Other'];
+function renderAbsence(){venueOpts($('#avenue'),$('#avenue').value);if(!$('#afrom').value){$('#afrom').value=today();$('#ato').value=today()}
+ $('#areason').innerHTML=ABS_REASONS.map(r=>'<option>'+r+'</option>').join('');renderAbsList()}
+function renderAbsList(){const q=$('#aq').value.trim().toLowerCase(),qp=normPhone(q);const L=q?S.absences.filter(a=>(qp.length>=8&&normPhone(a.phone)===qp)||a.ref.toLowerCase()===q):[];
+ $('#alist').innerHTML=q?(L.length?L.map(absCard).join(''):'<p class="muted">No absences found.</p>'):'<p class="muted">Enter your mobile or absence ref to see absences you reported.</p>'}
+function absCard(a){const v=venue(a.venueId);return '<div class="card"><b>'+esc(a.student)+(a.cls?' ('+esc(a.cls)+')':'')+'</b>: '+(a.from===a.to?fmtD(a.from):fmtD(a.from)+' to '+fmtD(a.to))+' · '+esc(a.reason)+'<div class="muted">Ref '+a.ref+' · '+esc(v?v.name:'')+' · <span class="pill">'+esc(a.status)+'</span></div>'+(a.note?'<div class="muted">Note: '+esc(a.note)+'</div>':'')+'</div>'}
+$('#aadd').onclick=()=>{const st=$('#astudent').value.trim(),pn=$('#aparent').value.trim(),ph=$('#aphone').value.trim();
+ if(!st||!pn||normPhone(ph).length<8){toast('Please enter the student, your name and mobile');return}
+ let f=$('#afrom').value||today(),t=$('#ato').value||f;if(t<f)t=f;
+ const a={id:uid(),ref:'ABS'+Math.random().toString(36).slice(2,7).toUpperCase(),venueId:$('#avenue').value,student:st,cls:$('#acls').value.trim(),from:f,to:t,reason:$('#areason').value,note:$('#anote').value.trim(),parent:pn,phone:ph,status:'reported',created:Date.now()};
+ S.absences.push(a);save();$('#aDone').innerHTML='<div class="card" style="border:2px solid var(--ok)"><h3>Absence reported ✓</h3>'+absCard(a)+'</div>';$('#aq').value=ph;renderAbsList();toast('Absence reported. Ref '+a.ref)};
+$('#afind').onclick=renderAbsList;RENDER.absence=renderAbsence;
+
+function exCard(e){const v=venue(e.venueId);const n=S.consents.filter(c=>c.exId===e.id).length;
+ return '<div class="ex" data-ex="'+e.id+'"><h3>'+esc(e.title)+'</h3><div class="muted">'+esc(v?v.name:'')+' · '+esc(e.cls)+' · '+fmtD(e.date)+', '+fmtT(e.depart)+' to '+fmtT(e.ret)+'</div><p>'+esc(e.info||'')+'</p><p><span class="pill">Cost '+(e.cost>0?money(e.cost):'free')+'</span> <span class="pill">Permission due '+fmtD(e.due)+'</span> <span class="pill">'+n+' permission'+(n===1?'':'s')+' given</span></p>'+
+ '<button class="sm" type="button" data-exgo>Give permission'+(e.cost>0?' and pay':'')+'</button><div class="exform"></div></div>'}
+function renderExcursions(){$('#exlist').innerHTML=S.excursions.length?S.excursions.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(exCard).join(''):'<p class="muted">No excursions yet. Staff can add one below.</p>';
+ $$('#exlist [data-exgo]').forEach(b=>b.onclick=()=>{const el=b.closest('[data-ex]');const e=S.excursions.find(x=>x.id===el.dataset.ex);
+  el.querySelector('.exform').innerHTML='<div class="row"><div><label>Student name *</label><input data-x="student"></div><div><label>Class</label><input data-x="cls" value="'+esc(e.cls)+'"></div><div><label>Parent or carer name *</label><input data-x="parent"></div><div><label>Mobile *</label><input data-x="phone"></div><div><label>Emergency contact phone</label><input data-x="emerg"></div></div><label><input type="checkbox" data-x="ok" style="width:auto"> I give permission for my child to attend this excursion.</label><p><button class="sm ok" type="button" data-exsign>Sign permission slip</button></p><div class="exres"></div>';
+  el.querySelector('[data-exsign]').onclick=()=>{const g=k=>el.querySelector('[data-x='+k+']');const st=g('student').value.trim(),pn=g('parent').value.trim(),ph=g('phone').value.trim();
+   if(!st||!pn||normPhone(ph).length<8){toast('Please enter the student, your name and mobile');return}if(!g('ok').checked){toast('Please tick the permission box');return}
+   const c={id:uid(),ref:'EXC'+Math.random().toString(36).slice(2,7).toUpperCase(),exId:e.id,student:st,cls:g('cls').value.trim(),parent:pn,phone:ph,emerg:g('emerg').value.trim(),paid:false,created:Date.now()};S.consents.push(c);save();
+   const v=venue(e.venueId);el.querySelector('.exres').innerHTML='<div class="msgbox"><b>Permission given ✓</b> Ref '+c.ref+'.'+(e.cost>0?' Pay '+money(e.cost)+' by PayID to '+esc(v&&v.payid?v.payid:'the school\'s PayID')+' using reference '+c.ref+'. No card details are taken in this app.':'')+'</div>';toast('Permission given. Ref '+c.ref)}})}
+function exAdmin(){venueOpts($('#exvenue'),$('#exvenue').value);if(!$('#exdate').value){$('#exdate').value=addDays(today(),14);$('#exdue').value=addDays(today(),7)}
+ const L=S.consents.slice().reverse();$('#exconsents').innerHTML=L.length?'<table><tr><th>Excursion</th><th>Student</th><th>Parent</th><th>Payment</th><th></th></tr>'+L.map(c=>{const e=S.excursions.find(x=>x.id===c.exId);return '<tr data-c="'+c.id+'"><td>'+esc(e?e.title:'')+'</td><td>'+esc(c.student)+'<div class="muted">'+esc(c.cls)+'</div></td><td>'+esc(c.parent)+'<div class="muted">'+esc(c.phone)+'</div></td><td>'+(e&&e.cost>0?money(e.cost)+(c.paid?' paid':' unpaid'):'Free')+'</td><td>'+(e&&e.cost>0&&!c.paid?'<button class="sm ghost" type="button" data-cpaid>Mark paid</button>':'')+'</td></tr>'}).join('')+'</table>':'<p class="muted">No permission slips yet.</p>';
+ $$('#exconsents [data-cpaid]').forEach(b=>b.onclick=()=>{S.consents.find(x=>x.id===b.closest('tr').dataset.c).paid=true;save();exAdmin()})}
+$('#exadd').onclick=()=>{const t=$('#extitle').value.trim();if(!t){toast('Please enter the excursion name');return}
+ S.excursions.push({id:uid(),venueId:$('#exvenue').value,title:t,cls:$('#excls').value.trim(),date:$('#exdate').value||today(),depart:$('#exdep').value||'09:00',ret:$('#exret').value||'15:00',cost:Math.max(0,+$('#excost').value||0),due:$('#exdue').value||today(),info:$('#exinfo').value.trim()});save();$('#extitle').value='';toast('Excursion added');renderExcursions();exAdmin()};
+RENDER.excursions=()=>{renderExcursions();exAdmin()};
+window.renderExtraStaff=()=>{const v=$('#dvenue').value,d=$('#dday').value;const L=S.absences.filter(a=>a.venueId===v&&a.from<=d&&a.to>=d);
+ $('#absStaff').innerHTML=L.length?'<table><tr><th>Student</th><th>Dates</th><th>Reason</th><th>Parent</th><th>Status</th><th></th></tr>'+L.map(a=>'<tr data-ab="'+a.id+'"><td>'+esc(a.student)+'<div class="muted">'+esc(a.cls)+'</div></td><td>'+fmtD(a.from)+(a.to!==a.from?' to '+fmtD(a.to):'')+'</td><td>'+esc(a.reason)+(a.note?'<div class="muted">'+esc(a.note)+'</div>':'')+'</td><td>'+esc(a.parent)+'<div class="muted">'+esc(a.phone)+'</div></td><td>'+esc(a.status)+'</td><td>'+(a.status==='reported'?'<button class="sm ok" type="button" data-ack>Acknowledge</button>':'')+'</td></tr>').join('')+'</table>':'<p class="muted">No absences reported for this day.</p>';
+ $$('#absStaff [data-ack]').forEach(b=>b.onclick=()=>{S.absences.find(x=>x.id===b.closest('tr').dataset.ab).status='acknowledged';save();window.renderExtraStaff()})};
+['#dvenue','#dday'].forEach(s=>$(s).addEventListener('change',window.renderExtraStaff));
+if(window.CB_DEMO){$('#exadd').onclick=()=>toast('Adding your own excursions is in the full version')}

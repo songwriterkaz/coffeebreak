@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head><script src="cb-demo.js" data-url="https://coffeebreaks.itch.io/coffeebreak-red-paper-clip-tracker" data-mode="app" data-nosave="1"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Red Paper Clip Trade-Up Tracker (Free Demo)</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#2b1a12;color:#fbeee0}
+.wrap{max-width:400px;margin:0 auto;min-height:720px;padding:12px}
+header{display:flex;align-items:center;gap:10px}header img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid #d9232e}
+h1{font-size:18px;margin:0}h1 span{color:#ff4d57}small{color:#d8bfa8}
+.card{background:#3d271b;border-radius:12px;padding:10px;margin:10px 0}
+label{display:block;font-size:12px;margin-top:6px;color:#d8bfa8}
+input{width:100%;padding:8px;border-radius:8px;border:1px solid #6b4a36;background:#fff8f0;color:#2b1a12}
+button{width:100%;margin-top:10px;padding:10px;border:0;border-radius:10px;background:#d9232e;color:#fff;font-weight:700;font-size:15px}
+.ladder{display:flex;flex-direction:column-reverse;gap:3px}
+.rung{display:flex;justify-content:space-between;font-size:12px;padding:4px 8px;border-radius:6px;background:#4a3022}
+.rung.done{background:#d9232e;color:#fff}
+.bar{height:10px;background:#4a3022;border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:#ff4d57}
+.t{display:flex;gap:8px;align-items:center;border-top:1px solid #5a3b2b;padding:6px 0}
+.t img{width:48px;height:48px;object-fit:cover;border-radius:8px;background:#5a3b2b}.t div{flex:1;font-size:13px}
+.x{width:auto;padding:4px 8px;margin:0;font-size:11px;background:#6b4a36}
+</style></head><body><div class="wrap">
+<header><img src="logo.jpg" alt="Coffeebreak logo"><div><h1>Red Paper Clip <span>Trade-Up</span></h1><small>Coffeebreak tracker: from one clip to a house</small></div></header>
+<div class="card"><b id="stat">Step 0 of 14</b><div class="bar"><i id="prog" style="width:0"></i></div><small id="val">Current value: $0</small></div>
+<div class="card"><b>Log a trade</b>
+<label>Item received</label><input id="item" placeholder="e.g. Novelty pen">
+<label>Photo</label><input id="photo" type="file" accept="image/*">
+<label>Date</label><input id="date" type="date">
+<label>Est. value (AU$)</label><input id="value" type="number" min="0">
+<label>Traded with</label><input id="who" placeholder="First name or username">
+<button id="add">Save trade</button></div>
+<div class="card"><b>Progress ladder</b><div class="ladder" id="ladder"></div></div>
+<div class="card"><b>Trade log</b><div id="log"><small>No trades yet. Start with your red paper clip.</small></div></div>
+<small>Saved on this device only. Meet in public and never send money to strangers. A house is the goal, not a promise.</small>
+</div><script>
+const goals=[["Red paper clip",0],["Pen / keyring",5],["Mug / handmade",20],["Signed CD / vinyl",30],["Small appliance",50],["Camping / guitar gear",100],["Acoustic guitar",200],["Bike / e-scooter",400],["Console / laptop",700],["Furniture / PA",1500],["Motorbike / old ute",4000],["Caravan / boat",10000],["Car / big caravan",25000],["House",300000]];
+const K="cb-redclip-trades";let T=JSON.parse(localStorage.getItem(K)||"[]");
+const $=id=>document.getElementById(id);{const d=new Date();$("date").value=new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function render(){const n=Math.min(T.length,13),v=T.length?T[T.length-1].value:0;
+$("stat").textContent="Step "+T.length+" of 13 trades";$("prog").style.width=(n/13*100)+"%";$("val").textContent="Current value: $"+Number(v).toLocaleString();
+$("ladder").innerHTML=goals.map((g,i)=>`<div class="rung ${i<=T.length?'done':''}"><span>${i}. ${g[0]}</span><span>$${g[1].toLocaleString()}</span></div>`).join("");
+$("log").innerHTML=T.length?T.map((t,i)=>`<div class="t"><img src="${t.photo||'logo.jpg'}"><div><b>${i+1}. ${esc(t.item)}</b><br>${esc(t.date)} · $${Number(t.value).toLocaleString()} · ${esc(t.who)}</div><button class="x" onclick="del(${i})">Remove</button></div>`).reverse().join(""):"<small>No trades yet. Start with your red paper clip.</small>"}
+function del(i){if(confirm("Remove this trade?")){T.splice(i,1);save()}}
+function save(){try{localStorage.setItem(K,JSON.stringify(T))}catch(e){alert("Storage full. Try a smaller photo.")}render()}
+function shrink(f){return new Promise(r=>{if(!f)return r("");const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),s=Math.min(1,240/Math.max(im.width,im.height));c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);r(c.toDataURL("image/jpeg",.7))};im.onerror=()=>r("");im.src=rd.result};rd.readAsDataURL(f)})}
+$("add").onclick=async()=>{const item=$("item").value.trim();if(!item)return alert("Add the item name first.");
+T.push({item,photo:await shrink($("photo").files[0]),date:$("date").value,value:+$("value").value||0,who:$("who").value.trim()||"-"});
+$("item").value=$("value").value=$("who").value="";$("photo").value="";save()};render();
+</script><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Redclip" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

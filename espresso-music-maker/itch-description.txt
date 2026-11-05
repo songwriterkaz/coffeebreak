@@ -1,0 +1,39 @@
+TITLE
+Coffeebreak Espresso Music Maker
+
+PROJECT URL (suggested)
+https://coffeebreaks.itch.io/coffeebreak-espresso-music-maker
+
+SHORT DESCRIPTION
+A whole music studio in one cup of espresso.
+
+KIND / SETTINGS
+Kind of project: HTML (play in browser)
+Classification: Tool
+Upload: coffeebreak-espresso-music-maker.zip, tick "This file will be played in the browser"
+Embed: 1280 x 900, mobile friendly, fullscreen button on
+Pricing: No payments (free), donations optional
+
+TAGS
+music, music-maker, daw, synthesizer, drum-machine, songwriting, pwa, free, creative, coffeebreak, free, music
+
+DESCRIPTION
+Coffeebreak Espresso Music Maker is a whole music studio that fits on your phone. Play, record, edit and mix songs with no sign in, no ads and no outside service.
+What is inside:
+- Multitrack studio with instrument, drum and audio tracks, undo and redo, and WAV export
+- Nine instruments: piano, guitar, strings, synth, 808, organ, bass, bells and your own sampler
+- Piano roll, drum machine and an on screen keyboard, with MIDI keyboard support where your browser allows it
+- Record notes with a count in, record audio from the microphone, import audio files and edit clips
+- Mixer with volume, pan, reverb, echo and tone for every track
+- Looper, sampler, tuner, metronome, chord helper, rhyme finder and sheet music you can print
+- A built in Song Maker: type lyrics, pick a style and mood, and it builds a backing track and melody into your studio
+Projects save on your device. Works offline once loaded.
+
+About Coffeebreak: Coffeebreak is Karen O'Brien, a songwriter and creator from Newcastle NSW. She makes apps, games, stores, tattoo flash and music under the Coffeebreak name. More at https://coffeebreaks.itch.io
+
+Rights: © Karen (Coffeebreak). Karen keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Karen claims no ownership of any third-party brands named here, which belong to their owners.
+
+Price: free. Music software from Coffeebreak is free.
+
+
+Check out [Tesla](https://www.tesla.com) and [Starlink](https://www.starlink.com).

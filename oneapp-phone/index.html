@@ -1,0 +1,66 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak One App Phone</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="logo.webp"><meta name="theme-color" content="#3b2418">
+<style>
+*{box-sizing:border-box}body{margin:0;font:15px system-ui,sans-serif;background:#fff6f0;color:#3b2418}
+header{display:flex;align-items:center;gap:8px;padding:6px 8px;background:#3b2418;color:#ffe9dc}header img{width:34px;height:34px;border-radius:50%}header b{flex:1;font-size:15px;line-height:1.1}
+#st{font-size:12px;padding:3px 8px;border-radius:12px;background:#6d4c41;white-space:nowrap}#st.online{background:#2e7d32}#st.retry,#st.connecting{background:#f9a825;color:#3b2418}#st.offline{background:#b71c1c}
+nav{display:flex;position:sticky;bottom:0;background:#3b2418;z-index:5}nav button{flex:1;padding:10px 0;border:0;background:none;color:#ffe9dc;font-size:12px}nav button.on{background:#c2185b}
+main{padding:10px;min-height:calc(100vh - 100px);max-width:560px;margin:auto}.s{display:none}.s.on{display:block}
+.big{width:min(62vw,230px);height:min(62vw,230px);margin:10px auto;border-radius:50%;border:6px solid #c2185b;background:#3b2418 url(logo.webp) center 30%/50% no-repeat;color:#fff;font-size:16px;display:flex;align-items:flex-end;justify-content:center;padding:0 0 min(13vw,42px);line-height:1.1;touch-action:none;user-select:none;-webkit-user-select:none}
+.big.call{border-color:#2e7d32}.big.talk{border-color:#f9a825}
+.b{padding:9px 12px;margin:3px;border:0;border-radius:10px;background:#c2185b;color:#fff;font-size:14px}.g{background:#2e7d32}.r{background:#b71c1c}.y{background:#6d4c41}.w{background:#1565c0}
+.c{display:flex;align-items:center;gap:6px;padding:6px;border-bottom:1px solid #e8d5c8;flex-wrap:wrap}.c img,.av{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#e8d5c8}.c span{flex:1;min-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+input,textarea,select{width:100%;padding:8px;margin:3px 0;border:1px solid #c9b0a0;border-radius:8px;font:inherit}
+#log{max-height:42vh;overflow:auto;background:#fff;border-radius:8px;padding:4px;font-size:14px}#log p{margin:4px 0}#log i{font-size:11px;opacity:.7}
+video{width:100%;max-height:44vh;background:#000;border-radius:8px}#lv{position:absolute;width:28%;right:14px;top:56px}
+#call{display:none;position:fixed;inset:0;background:#000e;color:#fff;padding:12px;text-align:center;z-index:9}
+#scan{display:none;position:fixed;inset:0;background:#000e;color:#fff;padding:12px;text-align:center;z-index:10}
+.soc a{display:inline-block;margin:3px;padding:7px 10px;border-radius:14px;background:#3b2418;color:#fff;text-decoration:none;font-size:13px}
+small{font-size:12px;display:block;margin:8px 0;opacity:.88}h3{margin:8px 0 4px}
+.card{background:#fff;border:1px solid #e8d5c8;border-radius:12px;padding:10px;margin:8px 0}
+#qrbox{display:flex;justify-content:center;margin:8px 0}#qrbox canvas,#qrbox img{width:200px;height:200px;max-width:70vw;max-height:70vw;image-rendering:pixelated;background:#fff;padding:8px;border-radius:8px}
+#code{font-size:34px;letter-spacing:6px;text-align:center;font-weight:700;color:#c2185b}
+#banner{display:none;margin:8px 0;padding:10px;border-radius:10px;background:#ffe0e0;border:1px solid #b71c1c;color:#5b0a0a}
+#banner.ok{background:#e3f5e4;border-color:#2e7d32;color:#12401a}
+#toast{position:fixed;left:50%;bottom:64px;transform:translateX(-50%);max-width:90vw;background:#3b2418;color:#fff;padding:10px 14px;border-radius:12px;font-size:14px;display:none;z-index:20;text-align:center}
+#netl{font-size:13px;text-align:center;margin:2px 0}
+@media(max-width:300px){body{font-size:13px}.b{padding:6px;font-size:12px}nav button{font-size:10px}header b{font-size:11px}}
+</style></head><body>
+<header><img src="logo.webp" alt="Coffeebreak logo"><b>Coffeebreak One App Phone</b><span id="st" class="connecting">Connecting</span></header>
+<main>
+<section class="s on" id="s1">
+<div style="text-align:center">My number <b id="mn"></b></div>
+<div id="netl"></div>
+<div id="banner"></div>
+<button class="big" id="one">Tap to call</button>
+<div style="text-align:center"><select id="fav" style="width:auto;max-width:90%"></select><br><small style="display:inline">Tap to call, tap again to hang up, hold to talk walkie style</small><br>
+<button class="b y" id="wk">Walkie OFF</button> <button class="b w" id="chk">Check connection</button></div>
+<div class="card" id="welcome" hidden><b>Welcome.</b> Your phone number was set up automatically. To set up the other phone, open the Add tab and use Share, the QR code or a pairing code.<br><button class="b" id="wgo">Add a phone nearby</button><button class="b y" id="wx">Close</button></div>
+<small><b>No SIM.</b> This app needs WiFi or internet. It is not a mobile SIM and cannot call 000 or any emergency service. Keep a real phone for emergencies.</small>
+</section>
+<section class="s" id="s2"><button class="b" id="add">+ Add contact</button><button class="b w" id="addn">Add a phone nearby</button><div id="cl"></div>
+<div id="ed" class="card" hidden><h3 id="et">Contact</h3><img id="ep" class="av" style="width:64px;height:64px" alt=""><input type="file" id="ef" accept="image/*"><input id="en" placeholder="Name"><input id="eu" placeholder="Coffeebreak number 1234-5678" inputmode="numeric"><input id="eh" placeholder="Phone number (optional)"><button class="b g" id="es">Save</button><button class="b r" id="ex">Delete</button><button class="b y" id="ec">Close</button></div></section>
+<section class="s" id="s3"><select id="to"></select><div id="log"></div><textarea id="tx" rows="2" placeholder="Message"></textarea><button class="b" id="snd">Send</button></section>
+<section class="s" id="s6">
+<h3>Add a phone nearby</h3>
+<small>Set up the other phone from this one. My number is <b class="mn"></b>.</small>
+<div class="card"><b>1. Share</b><small id="sharenote"></small><button class="b" id="shr">Share with a nearby phone</button><button class="b y" id="cpy">Copy link</button><button class="b g" id="smsb">SMS</button><button class="b g" id="wab">WhatsApp</button>
+<input id="lnk" readonly aria-label="Link to share"><small id="oslab"></small></div>
+<div class="card"><b>2. QR code</b><small>Scan this with the camera on the other phone. It opens the app and adds me automatically.</small><div id="qrbox"></div><small id="qrtxt"></small><button class="b w" id="scanb">Scan a QR code</button></div>
+<div class="card"><b>3. Pairing code</b><small>Open the app on both phones. Show a code on one and type it on the other. Both phones add each other.</small>
+<button class="b" id="pshow">Show my code</button><div id="code"></div><small id="pinfo"></small>
+<input id="pin" placeholder="Type 6 digit code from the other phone" inputmode="numeric" maxlength="6"><button class="b g" id="pgo">Pair</button><small id="pres"></small></div>
+<div class="card"><b>4. Paste a link or number</b><input id="paste" placeholder="Paste a link or type 1234-5678"><button class="b g" id="pastego">Add</button></div>
+<div class="card"><b>App link</b><small>This is the link the other phone opens. Change it only if you host the app somewhere else.</small><input id="applink" aria-label="App link"><button class="b y" id="appsave">Save link</button></div>
+</section>
+<section class="s" id="s4"><h3>Social</h3><div class="soc" id="soc"></div></section>
+<section class="s" id="s5"><h3>Me</h3><input id="myn" placeholder="My name"><div style="text-align:center">My number <b class="mn"></b></div>
+<p><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">More Coffeebreak products and real phones</a></p>
+<small><b>No SIM.</b> Coffeebreak One App Phone is an app that needs WiFi or internet. It is not a mobile SIM and has no real phone number. It cannot call 000 or any emergency service, so always keep a real phone for emergencies. Calls go device to device and may not connect on some networks. Social buttons just open those apps, which belong to their owners.</small>
+<small><b>Rights.</b> &copy; Coffeebreak. Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers and fans may resell the physical products and phones they bought, but may not copy them or make their own versions.</small></section>
+</main>
+<div id="call"><p id="cw"></p><p id="cr" style="font-size:13px"></p><video id="rv" autoplay playsinline></video><video id="lv" autoplay playsinline muted></video><p><button class="b g" id="ans">Answer</button><button class="b r" id="hup">Hang up</button></p></div>
+<div id="scan"><p>Point the camera at a Coffeebreak QR code</p><video id="sv" autoplay playsinline muted></video><p><button class="b r" id="scx">Close</button></p></div>
+<div id="toast" role="status"></div>
+<nav><button class="on" data-s="1">Call</button><button data-s="2">People</button><button data-s="3">Chat</button><button data-s="6">Add</button><button data-s="4">Social</button><button data-s="5">Me</button></nav>
+<script src="peerjs.min.js"></script><script src="qrcode.min.js"></script><script src="app.js"></script>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

@@ -1,0 +1,5 @@
+function cbLead(fid,mid,subj,key){var f=document.getElementById(fid),m=document.getElementById(mid);if(!f)return;
+f.addEventListener('submit',function(e){e.preventDefault();if(!f.checkValidity()){m.textContent='Please fill in the name, email and suburb fields.';return}
+var d={_subject:subj+f[key].value,_captcha:'false'};new FormData(f).forEach(function(v,k){d[k]=v});if(f.wrap)d.wrap=f.wrap.checked?'Yes':'No';m.textContent='Sending…';
+fetch('https://formsubmit.co/ajax/darkokaz@gmx.com',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(d)}).then(function(r){return r.json()}).then(function(j){if(j&&(j.success===true||j.success==='true')){f.reset();m.textContent='Thank you. Your enquiry is in and Coffeebreak will be in touch within two business days.'}else throw 0}).catch(function(){m.textContent='Sorry, that did not send. please try again soon.'})})}
+cbLead('plForm','plMsg','Coffeebreak vending placement lead – ','business');cbLead('poolForm','poolMsg','Coffeebreak pool table lead – ','venue');

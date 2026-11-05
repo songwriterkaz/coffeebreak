@@ -1,0 +1,22 @@
+Title: Ghost Amps
+Tagline: Blast cute ghosts off a haunted stage with neon power chords.
+Price: Free (pay what you want, $0 minimum)
+
+Description:
+Ghost Amps is a spooky, fun music arcade game by Coffeebreak. Cute ghosts float down four lanes in time with a synth beat. Hit the matching amp as each ghost arrives to blast it with a chord.
+
+- Three songs that get faster: Spooky Shuffle (96 bpm), Haunted Hall Boogie (120 bpm) and Midnight Overdrive (148 bpm). Clear a song to unlock the next.
+- Glowing power chord ghosts for triple points
+- Combo meter with a multiplier that grows every 10 hits
+- Overdrive: fill the meter and clear the whole stage in one blast
+- High scores saved on your device
+- Plays on desktop (D F J K and Space) and mobile (tap the amps, tap the top right for Overdrive)
+- All music and art made in code
+
+Free to play. Optional tips by PayID to darkokaz@gmx.com.
+Gold Amps skin pack, $3: pay by PayID to darkokaz@gmx.com with reference GOLD, then email songwriterkaz@gmail.com for your unlock code.
+
+Tags: rhythm, music, arcade, ghosts, cute, halloween, neon, synth, html5, mobile
+Kind: HTML (play in browser), viewport 540x900, mobile friendly, fullscreen button on
+
+Rights and resale: Karen O'Brien (Coffeebreak) keeps all rights to the products, designs, apps, the Coffeebreak name and logo. Buyers and fans may resell the physical products and phones they bought, but may not copy them or make their own versions.

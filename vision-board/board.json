@@ -1,0 +1,205 @@
+{
+ "owner": "Coffeebreak",
+ "pins": [
+  {
+   "id": "cb001",
+   "title": "Coffeebreak Music",
+   "note": "Writing and releasing Coffeebreak songs, the heart of everything",
+   "category": "music",
+   "image": "img/karen.jpg",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb002",
+   "title": "Every song registered with APRA",
+   "note": "Each new song goes on the APRA AMCOS list so it is protected",
+   "category": "music",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb003",
+   "title": "24/7 Coffeebreak Radio",
+   "note": "The Coffeebreak radio stream playing all day and night on YouTube",
+   "category": "music",
+   "image": "img/radio.jpg",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb004",
+   "title": "Coffeebreak itch shop",
+   "note": "Stores, apps and flash packs all in one place at coffeebreaks.itch.io",
+   "category": "stores",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb005",
+   "title": "Coffeebreak apps",
+   "note": "A growing collection of Coffeebreak games and apps",
+   "category": "apps",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb006",
+   "title": "Coffee Break: No Inside Out",
+   "note": "The sensory clothing line, soft, tagless and comfy",
+   "category": "stores",
+   "image": "img/sensory.jpg",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb007",
+   "title": "The Dreadlock Store",
+   "note": "Dreadlocks, wraps and beads with the Coffeebreak touch",
+   "category": "stores",
+   "image": "img/dread.jpg",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb008",
+   "title": "Red paper clip to a house",
+   "note": "One trade at a time, up the 14-step ladder from a clip to a home",
+   "category": "home",
+   "image": "img/redclip.jpg",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb009",
+   "title": "The dream home",
+   "note": "A cosy home with a music room, a garden and coffee on the porch",
+   "category": "home",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb010",
+   "title": "Sell It Fast book",
+   "note": "800 pages of hooks, captions and plans for every product",
+   "category": "money goals",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb011",
+   "title": "Dreams & Hopes book",
+   "note": "Cork board and whiteboard editions full of dreams and goals",
+   "category": "wellbeing",
+   "image": "img/dreams.jpg",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb012",
+   "title": "A1 whiteboard and cork board",
+   "note": "Real printed boards for the wall",
+   "category": "stores",
+   "image": "img/whiteboard.jpg",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb013",
+   "title": "Coffeebreak Robot",
+   "note": "A helper robot styled like the Coffeebreak doll, with a ghost hunting app",
+   "category": "apps",
+   "image": "img/robot.jpg",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb014",
+   "title": "WifiSIM",
+   "note": "The first Coffeebreak Wi-Fi device, simple and easy to set up",
+   "category": "apps",
+   "image": "img/wifisim.svg",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb015",
+   "title": "Silicone babies store",
+   "note": "Silicone newborn dolls and wigs",
+   "category": "stores",
+   "image": "img/silicone.jpg",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb016",
+   "title": "Real hair wigs",
+   "note": "Wigs on a silicone base for the doll range",
+   "category": "stores",
+   "image": "img/wigs.jpg",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb017",
+   "title": "A Wikipedia page",
+   "note": "Coffeebreak listed on Wikipedia",
+   "category": "music",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb018",
+   "title": "The Coffeebreak doll",
+   "note": "The blonde Coffeebreak doll, the face of the brand",
+   "category": "stores",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb019",
+   "title": "Selling a lot",
+   "note": "Lots of happy customers across every Coffeebreak store",
+   "category": "money goals",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb020",
+   "title": "Coffeebreak Diary",
+   "note": "Daily news, a calendar and star signs in one place",
+   "category": "apps",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb021",
+   "title": "Weekly star signs",
+   "note": "A fresh horoscope every week",
+   "category": "wellbeing",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb022",
+   "title": "Videos and Shorts",
+   "note": "A Short, a TikTok and a Reel every day",
+   "category": "music",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb023",
+   "title": "Free tools only",
+   "note": "Building everything with free tools",
+   "category": "money goals",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb024",
+   "title": "Coffee breaks",
+   "note": "Time out with a cuppa and a song",
+   "category": "wellbeing",
+   "image": "",
+   "date_added": "2026-10-22"
+  },
+  {
+   "id": "cb025",
+   "title": "Gigs on the road",
+   "note": "Taking Coffeebreak songs to new towns around Australia",
+   "category": "travel",
+   "image": "",
+   "date_added": "2026-10-22"
+  }
+ ]
+}

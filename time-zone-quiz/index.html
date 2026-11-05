@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Time Zone Quiz</title><style>
+html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,sans-serif;background:#1b1410;color:#fff;touch-action:none}
+#top{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;gap:10px;padding:6px 10px;background:rgba(20,12,8,.75);z-index:5;font-size:15px}
+#top img{height:40px;border-radius:6px}
+#disc{position:fixed;bottom:0;left:0;right:0;font-size:11px;text-align:center;padding:4px;background:rgba(0,0,0,.6);z-index:5}
+.btn{background:#c58b4e;color:#fff;border:0;border-radius:8px;padding:10px 18px;font-size:16px;cursor:pointer;margin:4px}
+#ov{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(20,12,8,.85);z-index:6;text-align:center;padding:20px}
+#ov img{width:140px;border-radius:12px}
+canvas{display:block}
+</style><style>body{overflow:auto;background:radial-gradient(#2a4a6a,#0d1a2a)}#g{max-width:600px;margin:70px auto 60px;padding:16px;text-align:center}.opt{display:block;width:100%;font-size:20px}#clk{font-size:15px;opacity:.8}#bar{height:8px;background:#c58b4e;border-radius:4px;transition:width .1s linear}</style></head><body>
+<div id="top"><img src="logo.jpg" alt="Coffeebreak logo"><b>Coffeebreak Time Zone Quiz</b><span id="hud"></span></div>
+<div id="g"><div id="clk"></div><h2 id="q"></h2><div id="bar"></div><div id="opts"></div><p id="fb"></p></div>
+<div id="ov"><img src="logo.jpg" alt="Coffeebreak logo"><h1>Coffeebreak Time Zone Quiz</h1><p>Ten rounds. Guess the current local time or the time difference for cities around the world, using live clocks.<br>You get 15 seconds per round. Faster answers score more.</p><button class="btn" id="go">Start</button></div>
+<div id="disc">© 2026 Karen O'Brien / Coffeebreak. All rights to this game, its design, name and logo are kept by Karen O'Brien / Coffeebreak. Players may not copy it or make their own versions.</div>
+<script>
+const C=[['Newcastle NSW','Australia/Sydney'],['London','Europe/London'],['New York','America/New_York'],['Los Angeles','America/Los_Angeles'],['Tokyo','Asia/Tokyo'],['Paris','Europe/Paris'],['Dubai','Asia/Dubai'],['Mumbai','Asia/Kolkata'],['Auckland','Pacific/Auckland'],['Perth','Australia/Perth'],['Singapore','Asia/Singapore'],['Rio de Janeiro','America/Sao_Paulo'],['Cairo','Africa/Cairo'],['Honolulu','Pacific/Honolulu'],['Moscow','Europe/Moscow'],['Mexico City','America/Mexico_City'],['Reykjavik','Atlantic/Reykjavik'],['Bangkok','Asia/Bangkok'],['Adelaide','Australia/Adelaide'],['Nairobi','Africa/Nairobi']];
+const here=Intl.DateTimeFormat().resolvedOptions().timeZone;
+function off(tz){const d=new Date(),p=new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).formatToParts(d).reduce((a,x)=>(a[x.type]=x.value,a),{});return Math.round((Date.UTC(p.year,p.month-1,p.day,p.hour,p.minute)-d.getTime())/60000)}
+function fmt(m){m=((m%1440)+1440)%1440;const h=m/60|0,mi=m%60;return (h%12||12)+':'+String(mi).padStart(2,'0')+(h<12?' am':' pm')}
+function fd(m){const s=m<0?'-':'+';m=Math.abs(m);return s+(m/60|0)+'h'+(m%60?' '+m%60+'m':'')}
+let r,score,t,tim,ans,done;
+function nowMin(tz){const d=new Date();return d.getUTCHours()*60+d.getUTCMinutes()+off(tz)}
+function round(){if(r>=10)return end();r++;done=0;fb.textContent='';const a=C[Math.random()*C.length|0];let b;do b=C[Math.random()*C.length|0];while(b==a);let opts,correct;
+if(Math.random()<.5){q.textContent='What time is it right now in '+a[0]+'?';const n=nowMin(a[1]);correct=fmt(n);const s=new Set([correct]);while(s.size<4)s.add(fmt(n+((Math.random()*12|0)-6||3)*60));opts=[...s]}
+else{q.textContent='How far is '+a[0]+' ahead of '+b[0]+'?';const d=off(a[1])-off(b[1]);correct=fd(d);const s=new Set([correct]);while(s.size<4)s.add(fd(d+((Math.random()*8|0)-4||2)*60));opts=[...s]}
+opts.sort(()=>Math.random()-.5);ans=correct;opts_.innerHTML='';opts.forEach(o=>{const e=document.createElement('button');e.className='btn opt';e.textContent=o;e.onclick=()=>pick(e,o);opts_.appendChild(e)});t=15;}
+const opts_=document.getElementById('opts');
+function pick(e,o){if(done)return;done=1;if(o==ans){const p=50+Math.round(t*10);score+=p;fb.textContent='Correct, +'+p;e.style.background='#3a3'}else{fb.textContent='Not quite. It was '+ans+'.';e.style.background='#a33'}setTimeout(round,1400)}
+function tick(){clk.textContent='Your clock: '+fmt(nowMin(here))+' ('+here+')';if(tim&&!done){t-=.1;if(t<=0){done=1;fb.textContent='Out of time. It was '+ans+'.';setTimeout(round,1400)}}bar.style.width=Math.max(0,t/15*100)+'%';hud.textContent=tim?'  Round '+r+'/10  Score '+score:''}
+setInterval(tick,100);
+function end(){tim=0;const b=Math.max(score,+localStorage.cbtz||0);localStorage.cbtz=b;ov.style.display='flex';ov.querySelector('h1').textContent='Quiz complete';ov.querySelector('p').textContent='Score '+score+'. Best '+b+'.';go.textContent='Play again'}
+go.onclick=()=>{r=0;score=0;tim=1;ov.style.display='none';round()};
+</script><div id="cb-legal" style="position:fixed;left:0;right:0;bottom:0;z-index:2147483000;background:rgba(25,10,25,.9);color:#fff;font:11px/1.35 system-ui,Arial,sans-serif;padding:5px 32px 5px 8px;display:flex;gap:8px;align-items:center"><img src="cb-logo.jpg" alt="Coffeebreak logo" style="height:28px;width:28px;border-radius:50%;object-fit:cover;flex:none"><span>© Karen (Coffeebreak). Karen keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Karen claims no ownership of any third-party brands named here, which belong to their owners.</span><button type="button" aria-label="Hide notice" onclick="this.parentNode.remove()" style="position:absolute;right:6px;top:3px;background:none;border:0;color:#fff;font-size:18px;cursor:pointer">&times;</button></div>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

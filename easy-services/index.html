@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak Easy Services (concept demo)</title>
+<meta name="description" content="Concept demo by Coffeebreak. Not a government service.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="demo-banner" role="note" aria-label="Demo notice">
+  <strong>Concept demo by Coffeebreak</strong> - not a government service, not affiliated with myGov, Services Australia, Medicare, NDIA or Centrelink. Sample data only. Nothing is sent anywhere.
+</div>
+<header class="top">
+  <a href="#home" class="brand" aria-label="Coffeebreak Easy Services home">
+    <img src="cb-logo.jpg" alt="Coffeebreak logo" width="48" height="48">
+    <span><b>Easy Services</b><small>by Coffeebreak</small></span>
+  </a>
+  <div class="top-actions">
+    <button id="btnRead" class="pill" aria-label="Read this screen aloud">🔊 <span>Read aloud</span></button>
+    <button id="btnHelp" class="pill help" aria-label="Help me with this screen">❓ <span>Help me</span></button>
+  </div>
+</header>
+<div id="supportBar" class="support-bar" hidden role="status">🤝 Support person mode is on: <b>Jo Helper (sample)</b> can see this screen with you.</div>
+<main id="main" tabindex="-1" aria-live="polite"></main>
+<nav class="bottom-nav" aria-label="Main sections">
+  <a href="#home" data-nav="home"><span aria-hidden="true">🏠</span>Home</a>
+  <a href="#centrelink" data-nav="centrelink"><span aria-hidden="true">💳</span>Centrelink</a>
+  <a href="#medicare" data-nav="medicare"><span aria-hidden="true">🩺</span>Medicare</a>
+  <a href="#ndis" data-nav="ndis"><span aria-hidden="true">🧩</span>NDIS</a>
+  <a href="#messages" data-nav="messages"><span aria-hidden="true">✉️</span>Messages<em id="msgBadge" class="badge" aria-label="unread messages"></em></a>
+  <a href="#settings" data-nav="settings"><span aria-hidden="true">⚙️</span>Easy</a>
+</nav>
+<footer class="foot">
+  <p class="demo-repeat"><b>Concept demo by Coffeebreak</b> - not a government service, not affiliated with myGov, Services Australia, Medicare, NDIA or Centrelink.</p>
+  <details>
+    <summary>Disclaimer and rights</summary>
+    <p>This is a design concept only. It does not connect to any government system, never asks for, stores or fills in any login, password, code, Medicare number, Customer Reference Number, Tax File Number or ID, and sends nothing anywhere. The "Sign in with myGov" button only opens the official myGov website (my.gov.au) in a new tab. You sign in once on the official myGov site. Coffeebreak never sees your login. All people, amounts and dates are made up (sample person: Sam Sample). For real services, use the official channels of each agency.</p>
+    <p>© Karen Elizabeth O'Brien (Coffeebreak). Karen keeps all rights to her designs, apps, name and logo. Buyers may use the app but may not copy it or make their own versions of it. Third-party trademarks such as myGov, Medicare, NDIS and Centrelink belong to their owners and are named only to describe the services.</p>
+  </details>
+  <p class="links">More from Coffeebreak: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a> · <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
+</footer>
+<div id="modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <h2 id="modalTitle">Help</h2>
+    <div id="modalBody"></div>
+    <div class="row"><button id="modalRead" class="btn ghost">🔊 Read help aloud</button><button id="modalClose" class="btn">Close</button></div>
+  </div>
+</div>
+<div id="toast" class="toast" role="status" aria-live="assertive"></div>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body>
+</html>

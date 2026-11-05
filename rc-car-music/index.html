@@ -1,0 +1,39 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak RC Car Music</title><style>body{margin:0;font-family:Arial,sans-serif;background:#ffe4f1;color:#4a0030}
+header{background:#ff4fa3;color:#fff;display:flex;align-items:center;gap:12px;padding:10px}
+header img{height:56px;border-radius:8px;background:#fff}
+.banner{background:#ffc2df;padding:10px;text-align:center;font-weight:bold}
+.banner a,footer a{color:#b0005a}
+button{background:#ff4fa3;color:#fff;border:0;border-radius:8px;padding:8px 14px;margin:3px;cursor:pointer}
+.card{background:#fff;border-radius:12px;padding:12px;margin:10px;box-shadow:0 2px 6px #f9a}
+footer{background:#ffb6d9;padding:12px;font-size:13px}
+input,textarea,select{width:95%;padding:6px;margin:4px 0;border:1px solid #f8a;border-radius:6px}
+canvas{display:block;margin:auto;max-width:100%;background:#fff0f7;border-radius:12px;touch-action:none}.pad{text-align:center}.pad button{width:70px;height:50px;font-size:20px}</style></head><body>
+<header><img src="cb-logo.png" alt="Coffeebreak logo"><h1>Coffeebreak RC Car Music</h1></header><div class="banner">Full version $5. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com | <a href="https://coffeebreaks.itch.io">https://coffeebreaks.itch.io</a></div>
+<div class="card" style="text-align:center">Track: <select id="trk" style="width:auto"><option value="0">Pink Pop</option><option value="1">Coffee Funk</option><option value="2">Night Drive</option></select>
+<button id="start" onclick="start()">Start</button> Score: <b id="sc">0</b> | Laps: <b id="lp">0</b> | Beat layers: <b id="bl">0</b></div>
+<canvas id="c" width="640" height="420"></canvas>
+<div class="pad"><button data-k="ArrowUp">&#9650;</button><br><button data-k="ArrowLeft">&#9664;</button><button data-k="ArrowDown">&#9660;</button><button data-k="ArrowRight">&#9654;</button></div>
+<p class="card">Arrow keys or WASD to drive, or use the touch pad. Collect music notes. Each lap through the finish line adds a beat layer.</p>
+<footer><p><b>Disclaimer:</b> Karen O&#39;Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought but may not copy them. No ownership is claimed of any third-party brands named.</p><p><a href="https://www.tesla.com">Tesla</a> | <a href="https://www.starlink.com">Starlink</a> | <a href="https://coffeebreaks.itch.io">coffeebreaks.itch.io</a></p></footer>
+<script>
+const cv=c,x=cv.getContext('2d'),W=640,H=420,cx=320,cy=210,RX=230,RY=140,TW=70;
+const T=[{n:[261.6,329.6,392,523.3],bpm:110,w:'triangle'},{n:[196,246.9,293.7,392],bpm:96,w:'square'},{n:[220,261.6,329.6,440],bpm:124,w:'sawtooth'}];
+let A,car,notes,keys={},score=0,laps=0,run=false,half=false,beatT,step=0;
+function tone(f,d,w,v){const o=A.createOscillator(),g=A.createGain();o.type=w;o.frequency.value=f;g.gain.setValueAtTime(v,A.currentTime);g.gain.exponentialRampToValueAtTime(.001,A.currentTime+d);o.connect(g).connect(A.destination);o.start();o.stop(A.currentTime+d)}
+function onTrack(px,py){const r=Math.hypot((px-cx)/RX,(py-cy)/RY);return Math.abs(r-1)*Math.min(RX,RY)<TW/2+5}
+function spawn(){notes=[];for(let i=0;i<10;i++){const a=i/10*Math.PI*2+.3;notes.push({x:cx+RX*Math.cos(a),y:cy+RY*Math.sin(a),f:T[trk.value].n[i%4]})}}
+function start(){A=A||new (window.AudioContext||window.webkitAudioContext)();A.resume();car={x:cx,y:cy+RY,a:0,v:0};score=laps=0;half=false;spawn();run=true;clearInterval(beatT);step=0;
+beatT=setInterval(()=>{const t=T[trk.value];if(laps>=1&&step%4==0)tone(60,.25,'sine',.6);if(laps>=2&&step%4==2)tone(180,.1,'square',.15);if(laps>=3)tone(8000,.03,'square',.03);if(laps>=4&&step%2==0)tone(t.n[step%4]/2,.2,t.w,.08);step++},60000/T[trk.value].bpm/2);upd()}
+function upd(){sc.textContent=score;lp.textContent=laps;bl.textContent=Math.min(laps,4)}
+function loop(){if(run){const k=keys;if(k.ArrowUp||k.w)car.v+=.25;if(k.ArrowDown||k.s)car.v-=.2;if(k.ArrowLeft||k.a)car.a-=.06*Math.sign(car.v||1);if(k.ArrowRight||k.d)car.a+=.06*Math.sign(car.v||1);
+car.v*=onTrack(car.x,car.y)?.96:.85;car.v=Math.max(-3,Math.min(6,car.v));const ox=car.x;car.x+=Math.cos(car.a)*car.v;car.y+=Math.sin(car.a)*car.v;car.x=Math.max(10,Math.min(W-10,car.x));car.y=Math.max(10,Math.min(H-10,car.y));
+if(car.y<cy)half=true;if(half&&car.y>cy&&ox<cx&&car.x>=cx){laps++;half=false;score+=50;spawn();tone(880,.3,'triangle',.2);upd()}
+notes.forEach(n=>{if(!n.got&&Math.hypot(n.x-car.x,n.y-car.y)<22){n.got=1;score+=10;tone(n.f,.35,T[trk.value].w,.2);upd()}})}
+x.fillStyle='#ffd6ea';x.fillRect(0,0,W,H);x.strokeStyle='#ff4fa3';x.lineWidth=TW;x.beginPath();x.ellipse(cx,cy,RX,RY,0,0,7);x.stroke();x.strokeStyle='#fff';x.lineWidth=3;x.setLineDash([12,10]);x.beginPath();x.ellipse(cx,cy,RX,RY,0,0,7);x.stroke();x.setLineDash([]);
+x.fillStyle='#fff';x.fillRect(cx-3,cy+RY-TW/2,6,TW);x.font='22px Arial';notes&&notes.forEach(n=>{if(!n.got){x.fillStyle='#7a0045';x.fillText('\u266A',n.x-7,n.y+8)}});
+if(car){x.save();x.translate(car.x,car.y);x.rotate(car.a);x.fillStyle='#b0005a';x.fillRect(-14,-8,28,16);x.fillStyle='#fff';x.fillRect(4,-6,7,12);x.fillStyle='#222';[[-10,-10],[6,-10],[-10,8],[6,8]].forEach(p=>x.fillRect(p[0],p[1],6,3));x.restore()}
+else{x.fillStyle='#7a0045';x.fillText('Pick a track and press Start',180,215)}requestAnimationFrame(loop)}
+onkeydown=e=>{keys[e.key]=1;if(e.key.startsWith('Arrow'))e.preventDefault()};onkeyup=e=>keys[e.key]=0;
+document.querySelectorAll('.pad button').forEach(b=>{const k=b.dataset.k;b.onpointerdown=()=>keys[k]=1;b.onpointerup=b.onpointerleave=()=>keys[k]=0});
+loop();
+</script></body></html>

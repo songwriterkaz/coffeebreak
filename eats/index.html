@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coffeebreak Food Delivery - Order online, Newcastle NSW</title>
+<meta name="description" content="Order burgers, fries, drinks and coffee from the Coffeebreak burger restaurant in Newcastle NSW. Delivery or pickup. Pay by PayID.">
+<link rel="icon" href="assets/logo.jpg">
+<script>
+/* =====================================================================
+   ADMIN CONFIG - edit this block to change restaurants, menus and fees.
+   ALL PRICES AND FEES BELOW ARE EDITABLE. Change any number here and the
+   whole app updates. Prices are in AUD and include GST.
+   Default menu prices are set for profit: typical Newcastle burger shop
+   retail prices, worked out at about 33 percent food cost (menu price is
+   roughly 3 times what the food costs to make). Check them against your
+   real costs and change them here if needed.
+   fees.deliveryFee      = charged on every delivery order
+   fees.serviceFee       = charged on every delivery order
+   fees.pickupServiceFee = charged on pickup orders (no delivery fee)
+   minOrder              = smallest food subtotal that can be ordered
+   partnerCommission     = cut Coffeebreak takes from partner restaurants
+                           (0.25 = 25 percent of the food subtotal)
+   popular               = menu item ids shown in the Popular quick-add row Set acceptsOrders:false for restaurants that are
+   not real partners yet (they show as samples and cannot be ordered).
+   Option groups: type "one" = pick one, "many" = pick any.
+   ===================================================================== */
+window.CONFIG = {
+  "appName": "Coffeebreak Food Delivery",
+  "testVersion": true,
+  "orderEmail": "darkokaz@gmx.com",
+  "payIdLabel": "Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com",
+  "fees": { "deliveryFee": 6.00, "serviceFee": 1.50, "pickupServiceFee": 0.50, "feesArePlaceholders": false },
+  "minOrder": 25.00,
+  "minOrderAppliesToPickup": true,
+  "partnerCommission": 0.25,
+  "popular": ["meal","burger","chicken","fries","drink","coffee"],
+  "city": "Newcastle NSW",
+  "suburbs": ["Newcastle","Newcastle East","Newcastle West","Cooks Hill","The Hill","The Junction","Merewether","Bar Beach","Hamilton","Islington","Wickham","Carrington","Mayfield","Adamstown","Lambton","New Lambton","Kotara","Charlestown","Waratah","Stockton","Broadmeadow","Georgetown","Tighes Hill","Maryville","Other (we will confirm)"],
+  "categories": [
+    {"id":"burgers","name":"Burgers","e":"\u{1F354}"},
+    {"id":"coffee","name":"Coffee","e":"\u2615"},
+    {"id":"pizza","name":"Pizza","e":"\u{1F355}"},
+    {"id":"asian","name":"Asian","e":"\u{1F35C}"},
+    {"id":"bakery","name":"Bakery","e":"\u{1F950}"},
+    {"id":"drinks","name":"Drinks","e":"\u{1F964}"}
+  ],
+  "restaurants": [
+    {
+      "id":"coffeebreak-burgers","name":"Coffeebreak Burgers","own":true,"sample":false,"acceptsOrders":true,
+      "tagline":"The Coffeebreak burger restaurant. Burgers, fries, drinks and coffee.",
+      "cats":["burgers","coffee","drinks"],"e":"\u{1F354}","eta":"25-35 min","suburb":"Newcastle NSW",
+      "menu":[
+        {"id":"burger","section":"Burgers","name":"Coffeebreak Burger","price":15.90,"e":"\u{1F354}","desc":"Beef patty, cheese, lettuce, tomato and Coffeebreak sauce on a soft bun.",
+          "options":[
+            {"name":"Size","type":"one","choices":[{"n":"Single","p":0},{"n":"Double patty","p":5.00}]},
+            {"name":"Extras","type":"many","choices":[{"n":"Extra cheese","p":1.50},{"n":"Bacon","p":3.00},{"n":"Egg","p":2.00},{"n":"No onion","p":0}]}
+          ]},
+        {"id":"chicken","section":"Burgers","name":"Crispy Chicken Burger","price":16.90,"e":"\u{1F414}","desc":"Crispy chicken fillet, slaw, pickles and mayo on a soft bun.",
+          "options":[
+            {"name":"Heat","type":"one","choices":[{"n":"Classic","p":0},{"n":"Spicy","p":0}]},
+            {"name":"Extras","type":"many","choices":[{"n":"Extra cheese","p":1.50},{"n":"Bacon","p":3.00},{"n":"Avocado","p":2.50}]}
+          ]},
+        {"id":"bigbreak","section":"Burgers","name":"Big Break Burger","price":17.90,"e":"\u{1F354}","desc":"Double beef, double cheese, bacon, egg and beetroot. The works.",
+          "options":[
+            {"name":"Extras","type":"many","choices":[{"n":"Extra cheese","p":1.50},{"n":"Pineapple","p":1.50},{"n":"No beetroot","p":0}]}
+          ]},
+        {"id":"veggie","section":"Burgers","name":"Veggie Burger","price":14.90,"e":"\u{1F96C}","desc":"Plant based patty, cheese, lettuce, tomato and relish.",
+          "options":[
+            {"name":"Extras","type":"many","choices":[{"n":"Extra cheese","p":1.50},{"n":"Avocado","p":2.50}]}
+          ]},
+        {"id":"meal","section":"Meal deals","name":"Coffeebreak Meal","price":21.90,"e":"\u{1F354}\u{1F35F}\u{1F964}","desc":"Coffeebreak Burger with regular fries and a drink.",
+          "options":[
+            {"name":"Drink","type":"one","choices":[{"n":"Cola","p":0},{"n":"Lemonade","p":0},{"n":"Orange","p":0},{"n":"Swap for a coffee","p":1.50}]},
+            {"name":"Upsize fries","type":"many","choices":[{"n":"Large fries","p":2.00}]}
+          ]},
+        {"id":"fries","section":"Sides","name":"Fries","price":6.50,"e":"\u{1F35F}","desc":"Golden fries with sea salt.",
+          "options":[
+            {"name":"Size","type":"one","choices":[{"n":"Regular","p":0},{"n":"Large","p":2.00}]},
+            {"name":"Sauce","type":"many","choices":[{"n":"Tomato sauce","p":1.00},{"n":"Aioli","p":1.00}]}
+          ]},
+        {"id":"rings","section":"Sides","name":"Onion Rings","price":6.90,"e":"\u{1F9C5}","desc":"Crunchy battered onion rings.",
+          "options":[
+            {"name":"Sauce","type":"many","choices":[{"n":"Aioli","p":1.00},{"n":"BBQ sauce","p":1.00}]}
+          ]},
+        {"id":"drink","section":"Drinks","name":"Drink","price":4.50,"e":"\u{1F964}","desc":"Cold soft drink.",
+          "options":[
+            {"name":"Flavour","type":"one","choices":[{"n":"Cola","p":0},{"n":"Lemonade","p":0},{"n":"Orange","p":0},{"n":"Water","p":-1.00}]},
+            {"name":"Size","type":"one","choices":[{"n":"Regular","p":0},{"n":"Large","p":1.50}]}
+          ]},
+        {"id":"coffee","section":"Coffee","name":"Coffee","price":5.50,"e":"\u2615","desc":"Freshly made Coffeebreak coffee.",
+          "options":[
+            {"name":"Type","type":"one","choices":[{"n":"Flat white","p":0},{"n":"Latte","p":0},{"n":"Cappuccino","p":0},{"n":"Long black","p":0}]},
+            {"name":"Milk","type":"one","choices":[{"n":"Full cream","p":0},{"n":"Skim","p":0},{"n":"Oat","p":0.80},{"n":"Soy","p":0.80}]},
+            {"name":"Size","type":"one","choices":[{"n":"Regular","p":0},{"n":"Large","p":1.00}]}
+          ]}
+      ]
+    },
+    {
+      "id":"sample-pizza","name":"Harbour Pizza Co","own":false,"sample":true,"acceptsOrders":false,
+      "tagline":"Wood fired pizza.","cats":["pizza"],"e":"\u{1F355}","eta":"30-40 min","suburb":"Newcastle NSW",
+      "menu":[
+        {"id":"marg","section":"Pizza","name":"Margherita","price":16.00,"e":"\u{1F355}","desc":"Tomato, mozzarella and basil.","options":[{"name":"Size","type":"one","choices":[{"n":"Medium","p":0},{"n":"Large","p":4.00}]}]},
+        {"id":"pepp","section":"Pizza","name":"Pepperoni","price":18.00,"e":"\u{1F355}","desc":"Tomato, mozzarella and pepperoni.","options":[{"name":"Size","type":"one","choices":[{"n":"Medium","p":0},{"n":"Large","p":4.00}]}]}
+      ]
+    },
+    {
+      "id":"sample-noodle","name":"Noodle Bar Newcastle","own":false,"sample":true,"acceptsOrders":false,
+      "tagline":"Noodles, rice and dumplings.","cats":["asian"],"e":"\u{1F35C}","eta":"25-35 min","suburb":"Newcastle NSW",
+      "menu":[
+        {"id":"padthai","section":"Noodles","name":"Pad Thai","price":15.50,"e":"\u{1F35C}","desc":"Rice noodles, egg, peanuts and lime.","options":[{"name":"Protein","type":"one","choices":[{"n":"Chicken","p":0},{"n":"Tofu","p":0},{"n":"Prawn","p":3.00}]}]},
+        {"id":"dumplings","section":"Starters","name":"Dumplings (6)","price":9.00,"e":"\u{1F95F}","desc":"Steamed pork or vegetable dumplings.","options":[{"name":"Filling","type":"one","choices":[{"n":"Pork","p":0},{"n":"Vegetable","p":0}]}]}
+      ]
+    },
+    {
+      "id":"sample-bakery","name":"Corner Bakehouse","own":false,"sample":true,"acceptsOrders":false,
+      "tagline":"Pies, pastries and cakes.","cats":["bakery","coffee"],"e":"\u{1F950}","eta":"20-30 min","suburb":"Newcastle NSW",
+      "menu":[
+        {"id":"pie","section":"Pies","name":"Beef Pie","price":6.50,"e":"\u{1F967}","desc":"Classic beef and gravy pie.","options":[]},
+        {"id":"croissant","section":"Pastries","name":"Croissant","price":4.50,"e":"\u{1F950}","desc":"Butter croissant.","options":[{"name":"Filling","type":"one","choices":[{"n":"Plain","p":0},{"n":"Ham and cheese","p":2.50}]}]}
+      ]
+    }
+  ]
+};
+</script>
+<style>
+@font-face{font-family:'Baloo 2';src:url('assets/baloo2.woff') format('woff');font-weight:400 800;font-display:swap}
+:root{--red:#e8343f;--red2:#b81f2a;--yel:#ffc83d;--yel2:#e0a100;--ink:#2b1a12;--green:#20b26b;--green2:#13834c;--pink:#ff4f9d;--pink2:#d12d78;--pinkbg:#ffe3f0;--card:#fff}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden}
+body{font-family:'Baloo 2','Trebuchet MS',system-ui,sans-serif;background:radial-gradient(circle at 20% 0%,#fff1c9 0,#ffe3b0 35%,#ffd08a 100%);background-attachment:fixed;color:var(--ink);min-height:100vh;-webkit-tap-highlight-color:transparent}
+a{color:var(--red2)}
+button,.btn{font-family:inherit;cursor:pointer;border:0;border-radius:14px;font-weight:800;font-size:15px;padding:10px 16px;color:#fff;background:var(--red);box-shadow:0 5px 0 var(--red2),0 8px 14px rgba(0,0,0,.16);transition:transform .06s,box-shadow .06s;touch-action:manipulation;text-decoration:none;display:inline-block;text-align:center}
+button:active,.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--red2)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.g{background:var(--green);box-shadow:0 5px 0 var(--green2),0 8px 14px rgba(0,0,0,.16)}
+.y{background:var(--yel);color:var(--ink);box-shadow:0 5px 0 var(--yel2),0 8px 14px rgba(0,0,0,.16)}
+.p{background:var(--pink);box-shadow:0 5px 0 var(--pink2),0 8px 14px rgba(0,0,0,.16)}
+.w{background:#fff;color:var(--ink);box-shadow:0 5px 0 #d9c7a8,0 8px 14px rgba(0,0,0,.1)}
+.sm{font-size:13px;padding:6px 10px;border-radius:11px}
+header{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,var(--red) 0,#d42733 100%);color:#fff;padding:8px 12px;box-shadow:0 6px 0 var(--red2),0 10px 20px rgba(0,0,0,.2)}
+.hrow{display:flex;align-items:center;gap:10px;max-width:1100px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;color:#fff;text-decoration:none;min-width:0}
+.brand img{width:50px;height:44px;border-radius:12px;background:#fff;object-fit:cover;box-shadow:0 4px 0 var(--red2);flex:none}
+.brand h1{margin:0;font-size:22px;line-height:1;text-shadow:0 3px 0 var(--red2)}
+.brand small{display:block;font-size:12px;font-weight:600;opacity:.95}
+#cartBtn{background:#fff;color:var(--ink);box-shadow:0 4px 0 var(--red2);white-space:nowrap;flex:none}
+#cartBtn b{background:var(--pink);color:#fff;border-radius:999px;padding:0 7px;margin-left:4px}
+nav.top{display:flex;gap:8px;max-width:1100px;margin:12px auto 0;padding:0 12px;flex-wrap:wrap}
+nav.top a{font-size:14px;padding:7px 12px}
+main{max-width:1100px;margin:0 auto;padding:14px 12px 24px}
+.banner{background:var(--pinkbg);border:3px dashed var(--pink);border-radius:16px;padding:8px 12px;font-weight:700;font-size:14px;margin-bottom:12px}
+.panel{background:var(--card);border-radius:22px;padding:16px;box-shadow:0 8px 0 #e2c89b,0 14px 26px rgba(80,40,0,.16);margin-bottom:18px}
+.panel h2{margin:0 0 8px;font-size:22px}
+.hero{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.hero h2{font-size:28px;line-height:1.1;margin:0}
+.hero .art{font-size:44px;letter-spacing:4px}
+.search{width:100%;font:inherit;font-size:17px;padding:12px 14px;border-radius:14px;border:3px solid #f2d27a;margin-top:10px;outline:none}
+.search:focus{border-color:var(--pink)}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:6px 2px 12px;margin:0 0 6px;scrollbar-width:thin}
+.cat{flex:none;background:#fff;color:var(--ink);border-radius:999px;padding:7px 14px;font-size:15px;box-shadow:0 4px 0 #d9c7a8}
+.cat.on{background:var(--yel);box-shadow:0 4px 0 var(--yel2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.rcard{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 7px 0 #e2c89b,0 12px 22px rgba(80,40,0,.14);cursor:pointer;text-decoration:none;color:var(--ink);display:block}
+.rcard .img{height:120px;display:flex;align-items:center;justify-content:center;font-size:62px;background:linear-gradient(135deg,#ffd27a,#ff8a5c)}
+.rcard.own .img{background:linear-gradient(135deg,var(--yel),var(--red))}
+.rcard.sample .img{background:linear-gradient(135deg,#eee,#cfcfcf);filter:saturate(.7)}
+.rcard .body{padding:10px 14px 14px}
+.rcard h3{margin:0;font-size:19px}
+.tag{display:inline-block;border-radius:999px;font-size:12px;font-weight:800;padding:1px 9px;margin:4px 4px 0 0}
+.tag.own{background:var(--pink);color:#fff}
+.tag.sample{background:#555;color:#fff}
+.tag.eta{background:#fff1c9}
+.muted{opacity:.72;font-size:14px}
+.rhead{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.rhead .big{font-size:56px;width:96px;height:96px;border-radius:22px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--yel),var(--red));flex:none}
+.rhead h2{font-size:26px;margin:0}
+.msec{margin:16px 0 6px;font-size:18px;border-bottom:2px dashed #f1d3c4;padding-bottom:3px}
+.item{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #f4e6dc}
+.item .e{font-size:38px;width:64px;text-align:center;flex:none;white-space:nowrap}.item .e.multi,.cline .e.multi{font-size:20px;white-space:nowrap}
+.item .info{flex:1;min-width:0}
+.item h4{margin:0;font-size:17px}
+.item .pr{font-weight:800;color:var(--red2)}
+.modal{position:fixed;inset:0;background:rgba(43,26,18,.55);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:10px}
+.modal.on{display:flex}
+@media(min-width:700px){.modal{align-items:center}}
+.mbox{background:#fff;border-radius:22px;padding:16px;max-width:480px;width:100%;max-height:90vh;overflow:auto}
+.mbox h3{margin:0;font-size:22px}
+.og{margin:12px 0;border:2px solid #f4e6dc;border-radius:14px;padding:8px 12px}
+.og legend{font-weight:800;padding:0 4px}
+.og label{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:16px;cursor:pointer}
+.og label span.pp{margin-left:auto;opacity:.75;font-size:14px}
+.qty{display:inline-flex;align-items:center;gap:8px}
+.qty button{padding:4px 12px}
+.qty b{min-width:22px;text-align:center;font-size:18px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.spread{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.cline{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #f4e6dc}
+.cline .e{font-size:30px;flex:none;width:44px;text-align:center}
+.cline .info{flex:1;min-width:0}
+.cline .opts{font-size:13px;opacity:.75}
+.totals{margin-top:10px;font-size:16px}
+.totals div{display:flex;justify-content:space-between;padding:3px 0}
+.totals .tot{font-weight:800;font-size:20px;border-top:2px dashed #f1d3c4;margin-top:4px;padding-top:6px}
+.ph{font-size:11px;background:#fff1c9;border-radius:6px;padding:0 5px;margin-left:4px;font-weight:700}
+form label.f{display:block;font-weight:700;margin:10px 0 4px}
+input,select,textarea{font:inherit;font-size:16px;width:100%;padding:10px 12px;border-radius:12px;border:2px solid #e9cfa6;background:#fffdf8;max-width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pink)}
+textarea{min-height:70px;resize:vertical}
+.seg{display:flex;gap:8px}
+.seg label{flex:1;border:3px solid #e9cfa6;border-radius:14px;padding:10px;text-align:center;font-weight:800;cursor:pointer;background:#fffdf8}
+.seg input{width:auto;display:none}
+.seg label.on{border-color:var(--pink);background:var(--pinkbg)}
+.err{color:var(--red2);font-weight:700;font-size:14px;min-height:18px}
+.cols{display:grid;grid-template-columns:1fr;gap:18px}
+@media(min-width:860px){.cols{grid-template-columns:1.3fr 1fr}}
+.payid{background:linear-gradient(135deg,var(--pinkbg),#fff);border:3px solid var(--pink);border-radius:18px;padding:14px;font-size:17px}
+.payid .lbl{font-weight:800;font-size:18px;word-break:break-word}
+.ref{font-size:30px;font-weight:800;letter-spacing:2px;color:var(--pink2)}
+.steps{display:flex;gap:0;margin:18px 0;padding:0;list-style:none}
+.steps li{flex:1;text-align:center;position:relative;font-weight:700;font-size:14px;color:#9a8a7e}
+.steps li .dot{width:44px;height:44px;border-radius:50%;background:#f1e3d6;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:22px;position:relative;z-index:1}
+.steps li:not(:first-child):before{content:'';position:absolute;top:21px;right:50%;width:100%;height:5px;background:#f1e3d6}
+.steps li.done{color:var(--ink)}
+.steps li.done .dot{background:var(--green);box-shadow:0 4px 0 var(--green2)}
+.steps li.done:not(:first-child):before{background:var(--green)}
+.steps li.cur .dot{background:var(--pink);box-shadow:0 4px 0 var(--pink2)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:14px;padding:10px 16px;font-weight:700;z-index:60;display:none;max-width:90vw}
+.empty{text-align:center;padding:30px 10px;opacity:.7}
+#orderNow{font-size:22px;padding:14px 30px;border-radius:18px}
+.pop{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.pc{background:#fffaf0;border:2px solid #f4e6dc;border-radius:16px;padding:10px;text-align:center}
+.pc .e{font-size:34px;white-space:nowrap}.pc .e.multi{font-size:20px;line-height:34px}
+.pc b{display:block;font-size:15px}
+.reo{background:linear-gradient(135deg,#e7fff2,#fff);border:3px solid var(--green)}
+footer{background:#2b1a12;color:#ffe9d6;margin-top:20px;padding:22px 14px 26px}
+.fbox{max-width:1100px;margin:0 auto;font-size:14px}
+.fbox img{width:70px;height:62px;border-radius:12px;background:#fff;object-fit:cover}
+.fbox a{color:#ffc83d}
+.fbox .links{margin-top:14px;padding-top:10px;border-top:1px solid #5a4030;display:flex;gap:16px}
+@media(max-width:520px){.brand h1{font-size:18px}.brand small{display:none}.brand img{width:42px;height:37px}.hero h2{font-size:23px}.steps li{font-size:11px}.steps li .dot{width:36px;height:36px;font-size:18px}.steps li:not(:first-child):before{top:17px}}
+</style>
+</head>
+<body>
+<header><div class="hrow">
+ <a class="brand" href="#home"><img src="assets/logo.jpg" alt="Coffeebreak logo"><div><h1>Coffeebreak Food Delivery</h1><small>Newcastle NSW. Delivery or pickup.</small></div></a>
+ <a class="btn" id="cartBtn" href="#cart">Cart <b id="cartCount">0</b></a>
+</div></header>
+<nav class="top">
+ <a class="btn w" href="#home" id="nav-home">Order food</a>
+ <a class="btn w" href="#track" id="nav-track">Track order</a>
+ <a class="btn w" href="#partner" id="nav-partner">Partner with us</a>
+ <a class="btn w" href="#drive" id="nav-drive">Drive with us</a>
+</nav>
+<main>
+ <div class="banner" id="testBanner">Test version. Orders are confirmed by email once your PayID payment arrives.</div>
+ <div id="view"></div>
+</main>
+<footer>
+ <div class="fbox">
+  <img src="assets/logo.jpg" alt="Coffeebreak logo">
+  <p><b>Coffeebreak Food Delivery</b> by Coffeebreak, Newcastle NSW. Payment by PayID only.</p>
+  <p class="pay">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+  <p>More Coffeebreak apps and games: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+  <p id="disclaimer">Disclaimer: Karen keeps all rights to her products, designs, apps, name and logo. Buyers and users may not copy them or make their own versions. Karen claims no ownership of any third-party brands named, which belong to their owners and are used only to describe items. Restaurants marked as samples are example data only until real partner restaurants join. Prices, fees and the minimum order are set by Coffeebreak and may change.</p>
+  <p class="links"><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
+ </div>
+</footer>
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+var C=window.CONFIG, V=document.getElementById('view');
+var LS={get:function(k,d){try{var v=localStorage.getItem('cbfd_'+k);return v?JSON.parse(v):d}catch(e){return d}},set:function(k,v){try{localStorage.setItem('cbfd_'+k,JSON.stringify(v))}catch(e){}}};
+var cart=LS.get('cart',{rid:null,lines:[]});
+var state={cat:null,q:''};
+var STEPS=[{n:'Placed',e:'\u{1F4DD}'},{n:'Preparing',e:'\u{1F373}'},{n:'On the way',e:'\u{1F6F5}'},{n:'Delivered',e:'\u2705'}];
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function money(n){return '$'+(Math.round(n*100)/100).toFixed(2)}
+function r2(n){return Math.round(n*100)/100}
+function rest(id){return C.restaurants.filter(function(r){return r.id===id})[0]}
+function item(r,id){return r.menu.filter(function(m){return m.id===id})[0]}
+function toast(t){var el=document.getElementById('toast');el.textContent=t;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(function(){el.style.display='none'},2200)}
+function saveCart(){LS.set('cart',cart);var n=0;cart.lines.forEach(function(l){n+=l.qty});document.getElementById('cartCount').textContent=n}
+function lineUnit(l){return l.unit}
+function subtotal(){var t=0;cart.lines.forEach(function(l){t+=l.unit*l.qty});return r2(t)}
+function fees(mode){var f=C.fees;return {delivery:mode==='pickup'?0:f.deliveryFee,service:mode==='pickup'?f.pickupServiceFee:f.serviceFee}}
+function totals(mode){var s=subtotal(),f=fees(mode);return {sub:s,delivery:f.delivery,service:f.service,total:r2(s+f.delivery+f.service)}}
+function minFor(mode){if(mode==='pickup'&&!C.minOrderAppliesToPickup)return 0;return +C.minOrder||0}
+function minShort(mode){return r2(Math.max(0,minFor(mode)-subtotal()))}
+function pct(x){return Math.round((+x||0)*100)+'%'}
+function ownRest(){return C.restaurants.filter(function(r){return r.own&&r.acceptsOrders})[0]}
+function priceFor(m,optNames){var u=m.price;m.options.forEach(function(o){o.choices.forEach(function(c){if(optNames.indexOf(c.n)>=0)u+=c.p})});return r2(u)}
+function setCartRest(r){if(cart.rid&&cart.rid!==r.id&&cart.lines.length){if(!confirm('Your cart has items from another restaurant. Start a new cart?'))return false;cart.lines=[]}cart.rid=r.id;return true}
+function quickAdd(r,m){if(!setCartRest(r))return;var opts=[];m.options.forEach(function(o){if(o.type==='one')opts.push(o.choices[0].n)});
+ var same=cart.lines.filter(function(l){return l.id===m.id&&!l.note&&l.opts.join('|')===opts.join('|')})[0];
+ if(same)same.qty++;else cart.lines.push({id:m.id,name:m.name,e:m.e,opts:opts,note:'',unit:priceFor(m,opts),qty:1});
+ saveCart();toast(m.name+' added to your cart');}
+function reorder(o){var r=rest(o.rid)||C.restaurants.filter(function(x){return x.name===o.restaurant})[0];if(!r||!r.acceptsOrders){toast('That restaurant is not taking orders right now.');return}
+ var lines=[];o.lines.forEach(function(l){var m=item(r,l.id);if(m)lines.push({id:m.id,name:m.name,e:m.e,opts:l.opts.slice(),note:l.note||'',unit:priceFor(m,l.opts),qty:l.qty})});
+ if(!lines.length){toast('Those items are no longer on the menu.');return}
+ cart={rid:r.id,lines:lines};saveCart();location.hash='#cart';}
+function sampleTag(r){return r.sample?'<span class="tag sample">Sample restaurant - example data</span>':''}
+function ownTag(r){return r.own?'<span class="tag own">Coffeebreak own restaurant</span>':''}
+
+function home(){
+ var h='<section class="panel"><div class="hero"><div style="flex:1;min-width:220px"><h2>Hungry, Newcastle</h2><p class="muted" style="margin:4px 0 0">Burgers, fries, drinks and coffee from the Coffeebreak burger restaurant. Delivered or ready for pickup.</p></div><div class="art" aria-hidden="true">\u{1F354}\u{1F35F}\u{1F6F5}\u2615</div></div>';
+ var own=ownRest();
+ if(own)h+='<div class="row" style="margin-top:12px"><a class="btn g" id="orderNow" href="#r/'+own.id+'">Order now</a><span class="muted">Delivery '+money(C.fees.deliveryFee)+'. Minimum order '+money(C.minOrder)+'.</span></div>';
+ h+='<input class="search" id="search" type="search" placeholder="Search restaurants or dishes" aria-label="Search restaurants or dishes" value="'+esc(state.q)+'"></section>';
+ var lastRef=LS.get('last',null),lastO=lastRef&&LS.get('orders',{})[lastRef];
+ if(lastO)h+='<section class="panel reo" id="reorderBox"><div class="spread" style="flex-wrap:wrap"><div style="flex:1;min-width:200px"><h2 style="margin:0">Order again</h2><div class="muted" id="lastSummary">'+esc(lastO.lines.map(function(l){return l.qty+' x '+l.name}).join(', '))+'</div></div><button class="g" id="reorder">Reorder in one tap</button></div></section>';
+ if(own&&C.popular&&C.popular.length){h+='<section class="panel" id="popular"><h2>Popular</h2><div class="pop">';
+  C.popular.forEach(function(id){var m=item(own,id);if(!m)return;h+='<div class="pc"><div class="e'+(Array.from(m.e).length>1?' multi':'')+'">'+m.e+'</div><b>'+esc(m.name)+'</b><div class="pr" style="color:var(--red2);font-weight:800">'+money(m.price)+'</div><button class="y sm" data-quick="'+m.id+'" id="quick-'+m.id+'">Quick add</button></div>'});
+  h+='</div><div class="row" style="margin-top:12px"><a class="btn g" href="#cart" id="popCheckout">Checkout</a></div></section>'}
+ h+='<div class="cats" id="cats"><button class="cat'+(state.cat?'':' on')+'" data-cat="">All</button>';
+ C.categories.forEach(function(c){h+='<button class="cat'+(state.cat===c.id?' on':'')+'" data-cat="'+c.id+'">'+c.e+' '+esc(c.name)+'</button>'});
+ h+='</div><div class="grid" id="rgrid"></div>';
+ V.innerHTML=h;
+ drawGrid();
+ V.querySelectorAll('[data-quick]').forEach(function(b){b.onclick=function(){quickAdd(own,item(own,b.getAttribute('data-quick')))}});
+ if(lastO)document.getElementById('reorder').onclick=function(){reorder(lastO)};
+ var s=document.getElementById('search');
+ s.addEventListener('input',function(){state.q=s.value;drawGrid()});
+ document.getElementById('cats').addEventListener('click',function(e){var b=e.target.closest('.cat');if(!b)return;state.cat=b.getAttribute('data-cat')||null;home();});
+}
+function drawGrid(){
+ var q=state.q.trim().toLowerCase(), list=C.restaurants.filter(function(r){
+  if(state.cat&&r.cats.indexOf(state.cat)<0)return false;
+  if(!q)return true;
+  var hay=(r.name+' '+r.tagline+' '+r.menu.map(function(m){return m.name+' '+m.desc+' '+m.options.map(function(o){return o.choices.map(function(c){return c.n}).join(' ')}).join(' ')}).join(' ')).toLowerCase();
+  return hay.indexOf(q)>=0});
+ var g=document.getElementById('rgrid');
+ if(!list.length){g.innerHTML='<div class="empty panel">No restaurants match that search yet.</div>';return}
+ g.innerHTML=list.map(function(r){
+  return '<a class="rcard'+(r.own?' own':'')+(r.sample?' sample':'')+'" href="#r/'+r.id+'" data-rid="'+r.id+'"><div class="img">'+r.e+'</div><div class="body"><h3>'+esc(r.name)+'</h3><div class="muted">'+esc(r.tagline)+'</div>'+ownTag(r)+sampleTag(r)+'<span class="tag eta">'+esc(r.eta)+'</span>'+(r.acceptsOrders?'':'<span class="tag eta">Not taking orders yet</span>')+'</div></a>'}).join('');
+}
+function restaurantPage(id){
+ var r=rest(id); if(!r){location.hash='#home';return}
+ var h='<section class="panel"><a href="#home" class="btn w sm">Back</a><div class="rhead" style="margin-top:12px"><div class="big">'+r.e+'</div><div style="flex:1;min-width:200px"><h2>'+esc(r.name)+'</h2><div class="muted">'+esc(r.tagline)+'</div>'+ownTag(r)+sampleTag(r)+'<span class="tag eta">'+esc(r.eta)+'</span>'+(r.acceptsOrders&&C.minOrder?'<span class="tag eta" id="minTag">Minimum order '+money(C.minOrder)+'</span>':'')+'<div class="muted" id="feeLine">Delivery fee '+money(C.fees.deliveryFee)+'. Service fee '+money(C.fees.serviceFee)+'.</div></div></div>';
+ if(r.sample)h+='<p class="banner" style="margin-top:12px">Sample restaurant - example data. This restaurant is not a partner yet, so it cannot take orders.</p>';
+ var sec=null;
+ r.menu.forEach(function(m){
+  if(m.section!==sec){sec=m.section;h+='<h3 class="msec">'+esc(sec)+'</h3>'}
+  h+='<div class="item"><div class="e'+(Array.from(m.e).length>1?' multi':'')+'">'+m.e+'</div><div class="info"><h4>'+esc(m.name)+'</h4><div class="muted">'+esc(m.desc)+'</div><div class="pr">'+money(m.price)+'</div></div><button class="y sm" data-add="'+m.id+'" id="add-'+m.id+'"'+(r.acceptsOrders?'':' disabled')+'>Add</button></div>'});
+ h+='</section>';
+ V.innerHTML=h;
+ V.querySelectorAll('[data-add]').forEach(function(b){b.addEventListener('click',function(){openItem(r,item(r,b.getAttribute('data-add')))})});
+}
+function openItem(r,m){
+ var M=document.getElementById('modal'),B=document.getElementById('mbox'),qty=1;
+ var h='<div class="spread"><h3>'+m.e+' '+esc(m.name)+'</h3><button class="w sm" id="mclose" aria-label="Close">Close</button></div><p class="muted">'+esc(m.desc)+'</p><form id="optForm">';
+ m.options.forEach(function(o,gi){
+  h+='<fieldset class="og"><legend>'+esc(o.name)+(o.type==='one'?' (pick one)':' (optional)')+'</legend>';
+  o.choices.forEach(function(c,ci){var t=o.type==='one'?'radio':'checkbox';
+   h+='<label><input type="'+t+'" name="g'+gi+'" value="'+ci+'"'+(o.type==='one'&&ci===0?' checked':'')+' style="width:auto"> '+esc(c.n)+'<span class="pp">'+(c.p?(c.p>0?'+':'-')+money(Math.abs(c.p)):'')+'</span></label>'});
+  h+='</fieldset>'});
+ h+='<label class="f" for="inote">Item note</label><input id="inote" maxlength="120" placeholder="For example no pickles">';
+ h+='<div class="spread" style="margin-top:14px"><div class="qty"><button type="button" class="w" id="qm">-</button><b id="qv">1</b><button type="button" class="w" id="qp">+</button></div><button type="submit" class="g" id="addToCart">Add to cart <span id="ip"></span></button></div></form>';
+ B.innerHTML=h;M.classList.add('on');
+ var F=document.getElementById('optForm');
+ function calc(){var u=m.price;m.options.forEach(function(o,gi){F.querySelectorAll('input[name=g'+gi+']:checked').forEach(function(x){u+=o.choices[+x.value].p})});return r2(u)}
+ function upd(){document.getElementById('qv').textContent=qty;document.getElementById('ip').textContent=money(calc()*qty)}
+ F.addEventListener('change',upd);upd();
+ document.getElementById('qm').onclick=function(){if(qty>1){qty--;upd()}};
+ document.getElementById('qp').onclick=function(){if(qty<20){qty++;upd()}};
+ document.getElementById('mclose').onclick=closeModal;
+ F.addEventListener('submit',function(e){e.preventDefault();
+  if(!setCartRest(r))return;
+  var opts=[];m.options.forEach(function(o,gi){F.querySelectorAll('input[name=g'+gi+']:checked').forEach(function(x){opts.push(o.choices[+x.value].n)})});
+  var note=document.getElementById('inote').value.trim();
+  cart.lines.push({id:m.id,name:m.name,e:m.e,opts:opts,note:note,unit:calc(),qty:qty});
+  saveCart();closeModal();toast(qty+' x '+m.name+' added to your cart');});
+}
+function closeModal(){document.getElementById('modal').classList.remove('on')}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target.id==='modal')closeModal()});
+
+function cartLinesHtml(edit){
+ return cart.lines.map(function(l,i){return '<div class="cline"><div class="e'+(Array.from(l.e).length>1?' multi':'')+'">'+l.e+'</div><div class="info"><b>'+esc(l.name)+'</b><div class="opts">'+esc(l.opts.join(', '))+(l.note?' | Note: '+esc(l.note):'')+'</div><div class="muted">'+money(l.unit)+' each</div></div>'+(edit?'<div class="qty"><button class="w sm" data-m="'+i+'">-</button><b>'+l.qty+'</b><button class="w sm" data-p="'+i+'">+</button></div>':'<b>x'+l.qty+'</b>')+'<b style="min-width:64px;text-align:right" class="lt">'+money(l.unit*l.qty)+'</b></div>'}).join('');
+}
+function totalsHtml(mode){var t=totals(mode),ph=C.fees.feesArePlaceholders?'<span class="ph">placeholder</span>':'';
+ return '<div class="totals" id="totals"><div><span>Subtotal</span><b id="tSub">'+money(t.sub)+'</b></div><div><span>Delivery fee'+ph+'</span><b id="tDel">'+money(t.delivery)+'</b></div><div><span>Service fee'+ph+'</span><b id="tSvc">'+money(t.service)+'</b></div><div class="tot"><span>Total</span><b id="tTot">'+money(t.total)+'</b></div></div>'}
+function minHtml(mode){var sh=minShort(mode);return '<div id="minMsg" class="'+(sh>0?'banner':'muted')+'" style="margin-top:10px">'+(sh>0?'Minimum order is '+money(minFor(mode))+'. Add '+money(sh)+' more to check out.':'Minimum order '+money(minFor(mode))+' reached.')+'</div>'}
+function cartPage(){
+ if(!cart.lines.length){V.innerHTML='<section class="panel empty"><h2>Your cart is empty</h2><p>Have a look at the Coffeebreak burger menu.</p><a class="btn g" href="#r/coffeebreak-burgers">Order now</a></section>';return}
+ checkoutPage();return;
+ var r=rest(cart.rid),mode=LS.get('mode','delivery');
+ V.innerHTML='<section class="panel"><h2>Your cart</h2><div class="muted">From '+esc(r.name)+'</div>'+cartLinesHtml(true)+totalsHtml(mode)+'<div class="row" style="margin-top:14px"><a class="btn w" href="#r/'+r.id+'">Add more</a><a class="btn g" href="#checkout" id="toCheckout">Go to checkout</a></div></section>';
+ V.querySelectorAll('[data-m],[data-p]').forEach(function(b){b.onclick=function(){var i=+(b.getAttribute('data-m')||b.getAttribute('data-p'));if(b.hasAttribute('data-p'))cart.lines[i].qty++;else{cart.lines[i].qty--;if(cart.lines[i].qty<1)cart.lines.splice(i,1)}saveCart();cartPage()}});
+}
+function checkoutPage(){
+ if(!cart.lines.length){if(location.hash!=='#cart')location.hash='#cart';else cartPage();return}
+ var r=rest(cart.rid),mode=LS.get('mode','delivery'),cu=LS.get('customer',{});
+ var sub=C.suburbs.map(function(s){return '<option'+(cu.suburb===s?' selected':'')+'>'+esc(s)+'</option>'}).join('');
+ var h='<div class="cols"><section class="panel"><h2>Checkout</h2><div class="muted" style="margin-bottom:8px">One page. Check your items, add your details and place your order.</div><form id="coForm" novalidate>';
+ h+='<div class="seg" id="modeSeg"><label class="'+(mode==='delivery'?'on':'')+'"><input type="radio" name="mode" value="delivery"'+(mode==='delivery'?' checked':'')+'>\u{1F6F5} Delivery</label><label class="'+(mode==='pickup'?'on':'')+'"><input type="radio" name="mode" value="pickup"'+(mode==='pickup'?' checked':'')+'>\u{1F6CD} Pickup</label></div>';
+ h+='<label class="f" for="cName">Name</label><input id="cName" autocomplete="name" value="'+esc(cu.name||'')+'"><div class="err" id="eName"></div>';
+ h+='<label class="f" for="cPhone">Phone</label><input id="cPhone" type="tel" autocomplete="tel" placeholder="04xx xxx xxx" value="'+esc(cu.phone||'')+'"><div class="err" id="ePhone"></div>';
+ h+='<div id="addrBox"><label class="f" for="cAddr">Street address</label><input id="cAddr" autocomplete="street-address" placeholder="Unit, number and street" value="'+esc(cu.addr||'')+'"><div class="err" id="eAddr"></div>';
+ h+='<label class="f" for="cSuburb">Suburb</label><select id="cSuburb">'+sub+'</select><div class="muted">Delivery within '+esc(C.city)+' only.</div></div>';
+ h+='<label class="f" for="cNotes">Notes for the restaurant or driver</label><textarea id="cNotes" maxlength="300" placeholder="For example gate code or leave at the door"></textarea>';
+ h+='<div class="payid" style="margin-top:14px"><div class="lbl" id="payLabel">'+esc(C.payIdLabel)+'</div><div class="muted" style="margin-top:4px">Payment is by PayID only. After you place your order you will get an order reference to use as the payment description.</div></div>';
+ h+='<div class="err" id="eForm"></div><button type="submit" class="g" id="placeOrder" style="width:100%;margin-top:10px;font-size:18px">Place order</button></form></section>';
+ h+='<section class="panel"><div class="spread"><h2>Your order</h2><a class="btn w sm" href="#r/'+r.id+'">Add more</a></div><div class="muted">From '+esc(r.name)+'</div><div id="sumLines">'+cartLinesHtml(true)+'</div><div id="totWrap">'+totalsHtml(mode)+'</div></section></div>';
+ V.innerHTML=h;
+ var F=document.getElementById('coForm');
+ function setMode(m){mode=m;LS.set('mode',m);document.getElementById('addrBox').style.display=m==='pickup'?'none':'';document.getElementById('totWrap').innerHTML=totalsHtml(m)+minHtml(m);document.getElementById('placeOrder').disabled=minShort(m)>0;document.querySelectorAll('#modeSeg label').forEach(function(l){l.classList.toggle('on',l.querySelector('input').value===m)})}
+ F.querySelectorAll('input[name=mode]').forEach(function(x){x.addEventListener('change',function(){setMode(x.value)})});
+ setMode(mode);
+ function bindQty(){document.querySelectorAll('#sumLines [data-m],#sumLines [data-p]').forEach(function(b){b.onclick=function(){var i=+(b.getAttribute('data-m')||b.getAttribute('data-p'));if(b.hasAttribute('data-p'))cart.lines[i].qty++;else{cart.lines[i].qty--;if(cart.lines[i].qty<1)cart.lines.splice(i,1)}saveCart();if(!cart.lines.length){cartPage();return}document.getElementById('sumLines').innerHTML=cartLinesHtml(true);bindQty();setMode(mode)}})}
+ bindQty();
+ F.addEventListener('input',function(e){var m={cName:'eName',cPhone:'ePhone',cAddr:'eAddr'}[e.target.id];if(m){document.getElementById(m).textContent='';document.getElementById('eForm').textContent=''}LS.set('customer',{name:val('cName'),phone:val('cPhone'),addr:val('cAddr'),suburb:val('cSuburb')})});
+ F.addEventListener('submit',function(e){e.preventDefault();
+  var name=val('cName'),phone=val('cPhone'),addr=val('cAddr'),suburb=val('cSuburb'),notes=val('cNotes'),ok=true;
+  ['eName','ePhone','eAddr','eForm'].forEach(function(i){document.getElementById(i).textContent=''});
+  if(name.length<2){err('eName','Please enter your name.');ok=false}
+  var digits=phone.replace(/[^0-9]/g,'');
+  if(!/^(0[2-478][0-9]{8}|614[0-9]{8})$/.test(digits)){err('ePhone','Please enter an Australian phone number, for example 0412 345 678.');ok=false}
+  if(mode==='delivery'&&addr.length<5){err('eAddr','Please enter your street address in Newcastle NSW.');ok=false}
+  if(!ok){err('eForm','Please check the details above.');return}
+  if(minShort(mode)>0){err('eForm','Minimum order is '+money(minFor(mode))+'. Add '+money(minShort(mode))+' more to your cart.');return}
+  LS.set('customer',{name:name,phone:phone,addr:addr,suburb:suburb});
+  var t=totals(mode),ref=newRef();
+  var order={ref:ref,time:new Date().toISOString(),rid:r.id,restaurant:r.name,mode:mode,name:name,phone:phone,address:mode==='delivery'?(addr+', '+suburb+', '+C.city):'Pickup',notes:notes,lines:cart.lines,totals:t,step:0};
+  var orders=LS.get('orders',{});orders[ref]=order;LS.set('orders',orders);LS.set('last',ref);
+  cart={rid:null,lines:[]};saveCart();
+  location.hash='#done/'+ref;
+ });
+}
+function val(id){var e=document.getElementById(id);return e?e.value.trim():''}
+function err(id,t){document.getElementById(id).textContent=t}
+function newRef(){var orders=LS.get('orders',{}),ref;do{ref='CBE-'+String(Math.floor(1000+Math.random()*9000))}while(orders[ref]);return ref}
+function orderText(o){
+ var L=[];L.push('Coffeebreak Food Delivery order '+o.ref);L.push('Placed: '+new Date(o.time).toLocaleString('en-AU',{timeZone:'Australia/Sydney'}));L.push('Restaurant: '+o.restaurant);L.push('Type: '+(o.mode==='pickup'?'Pickup':'Delivery'));L.push('Name: '+o.name);L.push('Phone: '+o.phone);L.push('Address: '+o.address);if(o.notes)L.push('Notes: '+o.notes);L.push('');L.push('Items:');
+ o.lines.forEach(function(l){L.push('- '+l.qty+' x '+l.name+(l.opts.length?' ('+l.opts.join(', ')+')':'')+(l.note?' Note: '+l.note:'')+' = '+money(l.unit*l.qty))});
+ L.push('');L.push('Subtotal: '+money(o.totals.sub));L.push('Delivery fee: '+money(o.totals.delivery));L.push('Service fee: '+money(o.totals.service));L.push('Total: '+money(o.totals.total));L.push('');L.push(C.payIdLabel);L.push('Payment description: '+o.ref);
+ return L.join('\n');
+}
+function mailto(subject,body){return 'mailto:'+C.orderEmail+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body)}
+function donePage(ref){
+ var o=LS.get('orders',{})[ref]; if(!o){location.hash='#track';return}
+ var h='<div class="cols"><section class="panel"><h2>Thanks, your order is placed</h2><div class="muted">Your order reference</div><div class="ref" id="orderRef">'+esc(o.ref)+'</div>';
+ h+='<div class="payid" style="margin:12px 0"><div class="lbl" id="payLabelDone">'+esc(C.payIdLabel)+'</div><p style="margin:6px 0 0">Please pay <b id="payAmount">'+money(o.totals.total)+'</b> by PayID and use <b>'+esc(o.ref)+'</b> as the payment description. Your food is prepared once the payment arrives.</p></div>';
+ h+='<p><b>Step 2.</b> Tap once to send your order. The email is already written for you.</p><a class="btn p" id="emailOrder" style="width:100%;font-size:20px;padding:14px" href="'+esc(mailto('Coffeebreak Food Delivery order '+o.ref,orderText(o)))+'">Send my order by email</a>';
+ h+='<div class="row" style="margin-top:16px"><a class="btn y" href="#track/'+esc(o.ref)+'" id="toTrack">Track my order</a><a class="btn w" href="#home">Back to restaurants</a></div></section>';
+ h+='<section class="panel"><h2>Order summary</h2><div class="muted">'+esc(o.restaurant)+' | '+(o.mode==='pickup'?'Pickup':'Delivery to '+esc(o.address))+'</div>'+o.lines.map(function(l){return '<div class="cline"><div class="e'+(Array.from(l.e).length>1?' multi':'')+'">'+l.e+'</div><div class="info"><b>'+esc(l.name)+'</b><div class="opts">'+esc(l.opts.join(', '))+'</div></div><b>x'+l.qty+'</b><b style="min-width:64px;text-align:right">'+money(l.unit*l.qty)+'</b></div>'}).join('')+'<div class="totals"><div><span>Subtotal</span><b>'+money(o.totals.sub)+'</b></div><div><span>Delivery fee</span><b>'+money(o.totals.delivery)+'</b></div><div><span>Service fee</span><b>'+money(o.totals.service)+'</b></div><div class="tot"><span>Total</span><b id="doneTotal">'+money(o.totals.total)+'</b></div></div></section></div>';
+ V.innerHTML=h;
+}
+function trackPage(ref){
+ var orders=LS.get('orders',{}); ref=ref||LS.get('last',null);
+ var o=ref&&orders[ref];
+ var h='<section class="panel"><h2>Track your order</h2><form id="tf" class="row" style="margin-bottom:6px"><input id="tRef" placeholder="CBE-1234" style="flex:1;min-width:150px" value="'+esc(ref||'')+'"><button class="y" type="submit">Find</button></form>';
+ if(!o){h+='<p class="muted">'+(ref?'No order found with that reference on this device.':'Enter your order reference to see its status.')+'</p></section>';V.innerHTML=h;bindTf();return}
+ var st=o.step;
+ h+='<div class="ref" id="trackRef">'+esc(o.ref)+'</div><div class="muted">'+esc(o.restaurant)+' | '+(o.mode==='pickup'?'Pickup':'Delivery')+' | Total '+money(o.totals.total)+'</div>';
+ h+='<ol class="steps" id="steps">'+STEPS.map(function(s,i){var n=(o.mode==='pickup'&&i===2)?'Ready for pickup':(o.mode==='pickup'&&i===3?'Collected':s.n);return '<li class="'+(i<st?'done':'')+(i===st?' done cur':'')+'" data-step="'+i+'"><div class="dot">'+s.e+'</div>'+n+'</li>'}).join('')+'</ol>';
+ h+='<p id="stepText"><b>Status:</b> '+esc(STEPS[st].n)+'</p>';
+ h+='<p class="muted">Demo tracker. In this test version Coffeebreak moves your order along by hand.</p><div class="row"><button class="g" id="nextStep"'+(st>=3?' disabled':'')+'>Next step (demo)</button><button class="w" id="resetStep">Reset (demo)</button></div></section>';
+ V.innerHTML=h;bindTf();
+ document.getElementById('nextStep').onclick=function(){orders[o.ref].step=Math.min(3,st+1);LS.set('orders',orders);trackPage(o.ref)};
+ document.getElementById('resetStep').onclick=function(){orders[o.ref].step=0;LS.set('orders',orders);trackPage(o.ref)};
+}
+function bindTf(){document.getElementById('tf').addEventListener('submit',function(e){e.preventDefault();location.hash='#track/'+val('tRef').toUpperCase()})}
+function formPage(kind){
+ var P=kind==='partner'?{t:'Partner with us',e:'\u{1F3EA}',intro:'Run a restaurant, cafe or takeaway in Newcastle NSW. Join Coffeebreak Food Delivery and reach more local customers. Send your details and Coffeebreak will be in touch.',
+  f:[['pBiz','Business name','text',1],['pContact','Contact name','text',1],['pPhone','Phone','tel',1],['pEmail','Email','email',1],['pAddr','Business address','text',1],['pCuisine','Type of food','text',0],['pMsg','Anything else','area',0]],subj:'Restaurant partner enquiry'}
+ :{t:'Drive with us',e:'\u{1F6F5}',intro:'Deliver for Coffeebreak Food Delivery around Newcastle NSW. Choose your own hours. Send your details and Coffeebreak will be in touch.',
+  f:[['dName','Full name','text',1],['dPhone','Phone','tel',1],['dEmail','Email','email',1],['dSuburb','Suburb','text',1],['dVehicle','Vehicle','select',1,['Car','Motorbike or scooter','Bicycle or e-bike']],['dLicence','I hold a current driver licence (if driving)','check',0],['dHours','When can you drive','text',0],['dMsg','Anything else','area',0]],subj:'Driver enquiry'};
+ var h='<section class="panel" style="max-width:640px;margin:0 auto 18px"><h2>'+P.e+' '+P.t+'</h2><p class="muted">'+P.intro+'</p><form id="pf" novalidate>';
+ P.f.forEach(function(x){var id=x[0],lab=x[1]+(x[3]?'':' (optional)');
+  if(x[2]==='area')h+='<label class="f" for="'+id+'">'+lab+'</label><textarea id="'+id+'"></textarea>';
+  else if(x[2]==='select')h+='<label class="f" for="'+id+'">'+lab+'</label><select id="'+id+'">'+x[4].map(function(o){return '<option>'+o+'</option>'}).join('')+'</select>';
+  else if(x[2]==='check')h+='<label class="f" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="'+id+'" style="width:auto"> '+x[1]+'</label>';
+  else h+='<label class="f" for="'+id+'">'+lab+'</label><input id="'+id+'" type="'+x[2]+'">';
+ });
+ if(kind==='partner')h+='<div class="payid" id="partnerTerms" style="margin-top:14px"><div class="lbl">Partner terms</div><ul style="margin:6px 0 0;padding-left:20px"><li>Commission: <b id="commission">'+pct(C.partnerCommission)+'</b> of the food subtotal of each order placed through Coffeebreak Food Delivery.</li><li>Customers pay the delivery fee and service fee. These go to Coffeebreak Food Delivery.</li><li>Payouts of the food subtotal less commission are arranged with you by email.</li><li>Full terms are confirmed by email before you start taking orders.</li></ul></div>';
+ h+='<div class="err" id="pErr"></div><button type="submit" class="p" id="pSubmit" style="width:100%;margin-top:10px">Email my details to Coffeebreak</button><div id="pOut" style="margin-top:10px"></div></form></section>';
+ V.innerHTML=h;
+ document.getElementById('pf').addEventListener('submit',function(e){e.preventDefault();
+  var miss=[],L=[P.subj+' from the Coffeebreak Food Delivery website',''];if(kind==='partner'){L.push('Partner terms shown: '+pct(C.partnerCommission)+' commission on the food subtotal of each order.');L.push('')}
+  P.f.forEach(function(x){var el=document.getElementById(x[0]),v=x[2]==='check'?(el.checked?'Yes':'No'):el.value.trim();if(x[3]&&!v)miss.push(x[1]);L.push(x[1]+': '+v)});
+  var em=document.getElementById(kind==='partner'?'pEmail':'dEmail').value.trim();
+  if(em&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))miss.push('a valid email');
+  if(miss.length){document.getElementById('pErr').textContent='Please fill in: '+miss.join(', ')+'.';return}
+  document.getElementById('pErr').textContent='';
+  var first=document.getElementById(P.f[0][0]).value.trim();
+  var href=mailto(P.subj+' - '+first,L.join('\n'));
+  document.getElementById('pOut').innerHTML='<p>Your email is ready. If it did not open by itself, tap below.</p><a class="btn g" id="pMail" href="'+esc(href)+'">Open email to Coffeebreak</a>';
+  if(!window.__noAutoMail)location.href=href;
+ });
+}
+function route(){
+ closeModal();
+ var h=(location.hash||'#home').slice(1).split('/');
+ document.querySelectorAll('nav.top a').forEach(function(a){a.classList.toggle('y',a.id==='nav-'+h[0]);a.classList.toggle('w',a.id!=='nav-'+h[0])});
+ if(h[0]==='r')restaurantPage(h[1]);else if(h[0]==='cart')cartPage();else if(h[0]==='checkout')checkoutPage();else if(h[0]==='done')donePage(h[1]);else if(h[0]==='track')trackPage(h[1]);else if(h[0]==='partner')formPage('partner');else if(h[0]==='drive')formPage('drive');else home();
+ window.scrollTo(0,0);
+}
+document.getElementById('testBanner').style.display=C.testVersion?'':'none';
+window.addEventListener('hashchange',route);saveCart();route();
+window.CBFD={totals:totals,cart:function(){return cart},minShort:minShort};
+})();
+</script>
+</body>
+</html>

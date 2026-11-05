@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Girl Runway Sim</title>
+<link rel="icon" href="assets/logo.png">
+<style>
+:root{--pink:#ff5fa2;--pink2:#ffc2dc;--pale:#fff0f6;--deep:#c2185b;--ink:#4a1030}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"Trebuchet MS",Verdana,system-ui,sans-serif;background:linear-gradient(180deg,#ffe3ef,#ffd0e4);color:var(--ink);min-height:100vh;overflow-x:hidden}
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--pink);color:#fff;flex-wrap:wrap}
+header img{height:46px;width:auto;background:#fff;border-radius:10px;padding:2px}
+header h1{font-size:1.15rem;margin:0;line-height:1.1}
+header .sub{font-size:.75rem;opacity:.95}
+.stats{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.stat{background:#fff;color:var(--deep);border-radius:999px;padding:4px 10px;font-weight:700;font-size:.85rem;white-space:nowrap}
+nav{display:flex;gap:6px;overflow-x:auto;padding:8px 10px;background:#fff;border-bottom:3px solid var(--pink2)}
+nav button{flex:0 0 auto}
+button{font:inherit;cursor:pointer;border:0;border-radius:999px;padding:9px 14px;background:var(--pink);color:#fff;font-weight:700;box-shadow:0 2px 0 var(--deep)}
+button:active{transform:translateY(1px)}
+button.alt{background:#fff;color:var(--deep);border:2px solid var(--pink)}
+button.on{background:var(--deep)}
+button:disabled{opacity:.5;cursor:not-allowed}
+main{max-width:1000px;margin:0 auto;padding:12px}
+.screen{display:none}
+.screen.show{display:block}
+.panel{background:#fff;border-radius:18px;border:2px solid var(--pink2);padding:14px;margin-bottom:12px}
+h2{color:var(--deep);margin:.1em 0 .4em;font-size:1.25rem}
+.two{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:12px;align-items:start}
+.girlbox{background:radial-gradient(circle at 50% 30%,#fff,#ffd6e8);border-radius:18px;border:2px solid var(--pink2);text-align:center;padding:6px}
+.girlbox svg{width:100%;max-width:220px;height:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.card{background:var(--pale);border:2px solid var(--pink2);border-radius:14px;padding:8px;text-align:center}
+.card.sel{border-color:var(--deep);background:#ffe0ee}
+.card svg{width:90px;height:auto}
+.card b{display:block;font-size:.9rem}
+.card small{display:block;font-size:.75rem;margin:2px 0 6px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.msg{background:var(--pale);border-left:5px solid var(--pink);padding:8px 10px;border-radius:8px;margin:8px 0;font-size:.95rem}
+.runway{position:relative;height:300px;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#3a0d27 0,#5c1340 45%,#ff8fc0 45%,#ffb6d5 100%);border:2px solid var(--pink2)}
+.runway .lights{position:absolute;top:8px;left:0;right:0;display:flex;justify-content:space-around}
+.runway .lights i{width:14px;height:14px;border-radius:50%;background:#ffe56b;box-shadow:0 0 14px #ffe56b}
+.runway .crowd{position:absolute;top:70px;left:0;right:0;text-align:center;font-size:1.4rem;letter-spacing:4px}
+.runway .walker{position:absolute;bottom:4px;left:4%;width:110px;transition:left .35s ease}
+.runway .walker svg{width:100%;height:auto}
+.runway .floor{position:absolute;left:0;right:0;bottom:0;height:20px;background:repeating-linear-gradient(90deg,#fff 0 20px,#ffc2dc 20px 40px);opacity:.6}
+.meter{position:relative;height:34px;border-radius:999px;background:#ffe0ee;border:2px solid var(--pink);margin:10px 0;overflow:hidden}
+.meter .zone{position:absolute;top:0;bottom:0;background:#ff9cc7}
+.meter .zone.perf{background:var(--deep)}
+.meter .mark{position:absolute;top:-2px;bottom:-2px;width:6px;background:#2b0a1c;border-radius:3px}
+.big{font-size:1.1rem;padding:12px 22px}
+.orders{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.ticket{background:#fff8e6;border:2px dashed #d9a441;border-radius:10px;padding:8px 12px;font-weight:700}
+.links a{display:inline-block;margin:4px 6px 4px 0;padding:9px 14px;border-radius:999px;background:var(--pink);color:#fff;text-decoration:none;font-weight:700;box-shadow:0 2px 0 var(--deep)}
+.links a.alt{background:#fff;color:var(--deep);border:2px solid var(--pink)}
+.bar{height:12px;border-radius:999px;background:#ffe0ee;overflow:hidden;border:1px solid var(--pink2)}
+.bar>i{display:block;height:100%;background:var(--pink)}
+footer{max-width:1000px;margin:10px auto 20px;padding:14px;font-size:.8rem;line-height:1.45;background:#fff;border-radius:16px;border:2px solid var(--pink2)}
+footer a{color:var(--deep);font-weight:700}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--deep);color:#fff;padding:10px 16px;border-radius:999px;display:none;z-index:30;max-width:90vw;text-align:center}
+@media (max-width:640px){.two{grid-template-columns:1fr}.girlbox svg{max-width:170px}header h1{font-size:1rem}.stats{margin-left:0}.runway{height:260px}.runway .walker{width:90px}}
+</style></head><body>
+<header><img src="assets/logo.png" alt="Coffeebreak logo"><div><h1>Coffeebreak Girl Runway Sim</h1><div class="sub">Dress up, walk the pink runway, live the Coffeebreak life</div></div>
+<div class="stats"><span class="stat" id="sDay">Day 1</span><span class="stat" id="sCoins">🪙 0</span><span class="stat" id="sFans">💖 0</span><span class="stat" id="sEnergy">⚡ 100</span></div></header>
+<nav id="nav">
+<button data-s="home" class="on">🏠 Home</button><button data-s="wardrobe">👗 Wardrobe</button><button data-s="runway">✨ Runway</button><button data-s="cafe">☕ Cafe</button><button data-s="studio">🎧 Studio</button><button data-s="stage">🎤 Stage</button><button data-s="music">🎵 Music</button>
+</nav>
+<main>
+<!-- HOME -->
+<section class="screen show" id="home">
+<div class="two"><div class="girlbox" id="girlHome"></div>
+<div class="panel"><h2>Coffeebreak Girl's day</h2>
+<div class="msg" id="theme"></div>
+<p>Wear today's theme look on the runway or stage to earn double. Work at the cafe for coins, practise in the studio to get better, and perform on stage for fans. Sleep to start a new day and get your energy back.</p>
+<div>Energy</div><div class="bar"><i id="eBar" style="width:100%"></i></div>
+<p>Singing skill: <b id="skill">0</b> · Outfits unlocked: <b id="unl">2</b> / 9</p>
+<div class="row"><button id="bSleep">🌙 Sleep (new day)</button><button class="alt" id="bReset">Start over</button></div>
+<div class="msg" id="log">Welcome. Open the Wardrobe to pick a look.</div>
+</div></div>
+</section>
+<!-- WARDROBE -->
+<section class="screen" id="wardrobe">
+<div class="two"><div class="girlbox" id="girlWard"></div>
+<div class="panel"><h2>Wardrobe</h2><p>Tap a look to wear it. Locked looks cost coins.</p><div class="grid" id="outfits"></div></div></div>
+</section>
+<!-- RUNWAY -->
+<section class="screen" id="runway">
+<div class="panel"><h2>The pink runway</h2>
+<p>Tap <b>Step</b> (or press space) when the marker is in the pink zone. Dark pink is perfect. 8 steps, then strike a pose. Costs 20 energy.</p>
+<div class="runway"><div class="lights"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="crowd" id="crowd">📸 👏 📸 👏 📸</div><div class="floor"></div><div class="walker" id="walker"></div></div>
+<div class="meter" id="meter"><div class="zone" id="zGood"></div><div class="zone perf" id="zPerf"></div><div class="mark" id="mark"></div></div>
+<div class="row"><button class="big" id="bWalk">Start walk</button><button class="big" id="bStep" disabled>Step</button><span id="rScore"></span></div>
+<div class="msg" id="rMsg">Pick a look in the Wardrobe, then start your walk.</div>
+</div></section>
+<!-- CAFE -->
+<section class="screen" id="cafe">
+<div class="panel"><h2>Coffeebreak Cafe shift</h2>
+<p>Make the drink on the ticket. 6 orders per shift, 🪙5 each one you get right. Costs 15 energy.</p>
+<div class="row"><button id="bShift">Start shift</button><span id="cProg"></span></div>
+<div class="orders" id="ticket"></div>
+<div class="row" id="drinks"></div>
+<div class="msg" id="cMsg">Put your apron on and start a shift.</div>
+</div></section>
+<!-- STUDIO -->
+<section class="screen" id="studio">
+<div class="two"><div class="girlbox" id="girlStudio"></div>
+<div class="panel"><h2>Recording studio</h2>
+<p>Practise a style to build your singing skill. Better skill means more fans on stage. Costs 15 energy.</p>
+<div class="row" id="practise"></div>
+<div class="msg" id="sMsg">Pick a style to practise.</div>
+<p>Want to hear the real Coffeebreak songs? Open the <b>Music</b> tab.</p>
+</div></div></section>
+<!-- STAGE -->
+<section class="screen" id="stage">
+<div class="two"><div class="girlbox" id="girlStage"></div>
+<div class="panel"><h2>Live on stage</h2>
+<p>Perform a set. Fans and coins grow with your skill, and double when you wear the theme look. Costs 25 energy.</p>
+<div class="row"><button class="big" id="bGig">🎤 Perform</button></div>
+<div class="msg" id="gMsg">The crowd is waiting.</div>
+</div></div></section>
+<!-- MUSIC -->
+<section class="screen" id="music">
+<div class="panel"><h2>🎵 Coffeebreak music</h2>
+<p>Listen to the real Coffeebreak songs and videos. Links open in a new tab. Nothing plays by itself, so play what you like, when you like.</p>
+<div class="links">
+<a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">▶ Coffeebreak on YouTube</a>
+<a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener" class="alt">More Coffeebreak apps, games and music on itch</a>
+</div>
+<div class="msg">If you like a song, subscribe on YouTube or tell a friend. Real listeners are what help Coffeebreak music grow.</div>
+</div></section>
+</main>
+<footer>
+<p>Karen O&#x27;Brien (Coffeebreak) keeps all rights to her products, designs, apps, games, characters, music, name and logo. Buyers may resell physical items they bought but may not copy them or make their own versions. Third-party trademarks and brand names belong to their owners and are used only to describe things.</p>
+<p>This game is free. In-game coins and fans are pretend and have no money value. More Coffeebreak apps, games and stores: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a> · YouTube: <a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">@coffeebreakTVSERIES</a></p>
+<p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
+</footer>
+<div class="toast" id="toast"></div>
+<script>
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+// ---------- outfits ----------
+const OUTFITS=[
+ {id:'classic',name:'Coffeebreak Classic',cost:0,hat:'beanie',hatC:'#8e8e96',hair:'#f6d77a',top:'#ff7eb6',sleeve:'#2a2a2e',jacket:'#2a2a2e',bottom:'pants',bC:'#4a6fa5',legs:'#4a6fa5',shoes:'#1e1e22'},
+ {id:'sweet',name:'Sweet',cost:0,hat:'bow',hatC:'#ff4f97',hair:'#f6d77a',top:'#ffb3d1',sleeve:'#ffb3d1',bottom:'dress',bC:'#ffb3d1',trim:'#fff',legs:'#ffffff',shoes:'#ff4f97'},
+ {id:'coffee',name:'Coffee and Cream',cost:40,hat:'beanie',hatC:'#efe1c6',hair:'#f6d77a',top:'#7b4a2d',sleeve:'#7b4a2d',bottom:'skirt',bC:'#efe1c6',legs:'#5a3420',shoes:'#5a3420'},
+ {id:'sailor',name:'Sailor',cost:60,hat:'sailor',hatC:'#ffffff',hair:'#f6d77a',top:'#ffffff',sleeve:'#ffffff',collar:'#1f3a7a',bottom:'skirt',bC:'#1f3a7a',legs:'#ffffff',shoes:'#1f3a7a'},
+ {id:'punk',name:'Punk',cost:80,hat:'beanie',hatC:'#8e8e96',hair:'#f6d77a',top:'#111',sleeve:'#2a2a2e',jacket:'#2a2a2e',studs:true,bottom:'skirt',bC:'#c62845',plaid:true,legs:'#222',shoes:'#111'},
+ {id:'gothic',name:'Gothic',cost:100,hat:'bow',hatC:'#5b1a6e',hair:'#f6d77a',top:'#1a1a1a',sleeve:'#1a1a1a',bottom:'long',bC:'#1a1a1a',trim:'#5b1a6e',legs:'#1a1a1a',shoes:'#1a1a1a'},
+ {id:'cowgirl',name:'Cowgirl',cost:120,hat:'cowboy',hatC:'#ff6fae',hair:'#f6d77a',top:'#ffffff',sleeve:'#c98a4b',jacket:'#c98a4b',fringe:true,bottom:'skirt',bC:'#4a6fa5',legs:'#f2c9a8',shoes:'#8a5a2b',boots:true},
+ {id:'icecream',name:'Ice Cream',cost:150,hat:'cone',hatC:'#ffd27f',hair:'#f6d77a',top:'#bff0dc',sleeve:'#bff0dc',bottom:'dress',bC:'#ffc8e0',trim:'#bff0dc',legs:'#ffffff',shoes:'#ffffff'},
+ {id:'lolita',name:'Lolita',cost:200,hat:'bonnet',hatC:'#ffe0ee',hair:'#f6d77a',top:'#ffe0ee',sleeve:'#ffe0ee',bottom:'dress',bC:'#ffcfe4',trim:'#ffffff',frills:true,legs:'#ffffff',shoes:'#7a2346'}
+];
+const THEMES=['classic','sweet','coffee','sailor','punk','gothic','cowgirl','icecream','lolita'];
+function girlSVG(o,pose){
+ const skin='#ffe0cc', h=o.hair;
+ let s=`<svg viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Coffeebreak Girl wearing ${o.name}">`;
+ // hair back
+ s+=`<path d="M58 70 Q54 160 70 190 L130 190 Q146 160 142 70 Z" fill="${h}"/>`;
+ // legs
+ s+=`<rect x="78" y="250" width="18" height="110" rx="8" fill="${o.legs}"/><rect x="104" y="250" width="18" height="110" rx="8" fill="${o.legs}"/>`;
+ // shoes
+ const bh=o.boots?40:14;
+ s+=`<rect x="72" y="${360-bh+12}" width="28" height="${bh}" rx="6" fill="${o.shoes}"/><rect x="100" y="${360-bh+12}" width="28" height="${bh}" rx="6" fill="${o.shoes}"/>`;
+ // bottoms
+ if(o.bottom==='pants') s+=`<path d="M72 230 L128 230 L126 362 L104 362 L100 270 L96 362 L74 362 Z" fill="${o.bC}"/>`;
+ if(o.bottom==='skirt'){s+=`<path d="M74 228 L126 228 L146 300 L54 300 Z" fill="${o.bC}"/>`; if(o.plaid) s+=`<path d="M64 260 H136 M60 280 H140 M88 228 L80 300 M112 228 L120 300" stroke="#111" stroke-width="3" opacity=".6"/>`;}
+ if(o.bottom==='dress'){s+=`<path d="M74 160 L126 160 L150 305 L50 305 Z" fill="${o.bC}"/><path d="M50 305 Q62 296 75 305 Q88 296 100 305 Q112 296 125 305 Q138 296 150 305" stroke="${o.trim}" stroke-width="6" fill="none"/>`; if(o.frills) s+=`<path d="M56 280 Q70 272 84 280 Q100 272 116 280 Q130 272 144 280" stroke="#fff" stroke-width="5" fill="none"/>`;}
+ if(o.bottom==='long') s+=`<path d="M74 160 L126 160 L152 362 L48 362 Z" fill="${o.bC}"/><path d="M48 362 L152 362" stroke="${o.trim}" stroke-width="6"/>`;
+ // torso + sleeves (long sleeves)
+ const armL=pose?`<path d="M72 160 L40 120 L50 112 L78 150 Z" fill="${o.sleeve}"/><circle cx="44" cy="114" r="8" fill="${skin}"/>`:`<path d="M70 160 L52 240 L64 244 L80 175 Z" fill="${o.sleeve}"/><circle cx="57" cy="246" r="8" fill="${skin}"/>`;
+ s+=armL+`<path d="M130 160 L148 240 L136 244 L120 175 Z" fill="${o.sleeve}"/><circle cx="143" cy="246" r="8" fill="${skin}"/>`;
+ s+=`<path d="M72 152 Q100 144 128 152 L126 232 L74 232 Z" fill="${o.top}"/>`;
+ if(o.collar) s+=`<path d="M78 152 L100 182 L122 152 L116 172 L100 196 L84 172 Z" fill="${o.collar}"/><path d="M96 186 L104 186 L100 196 Z" fill="#c62845"/>`;
+ if(o.jacket){s+=`<path d="M70 152 L92 152 L92 232 L72 232 Z" fill="${o.jacket}"/><path d="M108 152 L130 152 L128 232 L108 232 Z" fill="${o.jacket}"/>`;
+  if(o.studs) for(let i=0;i<4;i++) s+=`<circle cx="80" cy="${165+i*16}" r="2.5" fill="#ddd"/><circle cx="120" cy="${165+i*16}" r="2.5" fill="#ddd"/>`;
+  if(o.fringe) s+=`<path d="M72 232 v10 M77 232 v10 M82 232 v10 M87 232 v10 M113 232 v10 M118 232 v10 M123 232 v10" stroke="${o.jacket}" stroke-width="3"/>`;}
+ if(o.id==='classic') s+=`<text x="100" y="200" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">CB</text>`;
+ // neck + head
+ s+=`<rect x="92" y="128" width="16" height="24" fill="${skin}"/><ellipse cx="100" cy="95" rx="36" ry="40" fill="${skin}"/>`;
+ // face
+ s+=`<ellipse cx="86" cy="98" rx="4" ry="5" fill="#3b2a4a"/><ellipse cx="114" cy="98" rx="4" ry="5" fill="#3b2a4a"/><circle cx="80" cy="110" r="5" fill="#ffb3c7" opacity=".7"/><circle cx="120" cy="110" r="5" fill="#ffb3c7" opacity=".7"/><path d="M90 116 Q100 124 110 116" stroke="#c2185b" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+ // bangs
+ s+=`<path d="M64 80 Q100 50 136 80 Q130 70 118 78 Q108 66 96 78 Q84 68 72 82 Z" fill="${h}"/>`;
+ // hats
+ if(o.hat==='beanie') s+=`<path d="M62 78 Q100 20 138 78 Z" fill="${o.hatC}"/><rect x="60" y="72" width="80" height="12" rx="6" fill="${o.hatC}" stroke="#0002"/><rect x="96" y="42" width="8" height="24" fill="#ff4f97"/><rect x="88" y="50" width="24" height="8" fill="#ff4f97"/>`;
+ if(o.hat==='bow') s+=`<path d="M100 56 L76 44 L78 70 Z M100 56 L124 44 L122 70 Z" fill="${o.hatC}"/><circle cx="100" cy="57" r="6" fill="${o.hatC}"/>`;
+ if(o.hat==='sailor') s+=`<ellipse cx="100" cy="62" rx="34" ry="10" fill="${o.hatC}" stroke="#1f3a7a" stroke-width="3"/><rect x="80" y="48" width="40" height="14" rx="4" fill="#fff" stroke="#1f3a7a" stroke-width="3"/>`;
+ if(o.hat==='cowboy') s+=`<ellipse cx="100" cy="64" rx="56" ry="10" fill="${o.hatC}"/><path d="M72 64 Q74 30 100 36 Q126 30 128 64 Z" fill="${o.hatC}"/><rect x="74" y="56" width="52" height="6" fill="#c2185b"/>`;
+ if(o.hat==='cone') s+=`<path d="M120 62 L132 30 L144 62 Z" fill="#d9a441"/><circle cx="126" cy="30" r="9" fill="#ffc8e0"/><circle cx="138" cy="28" r="9" fill="#bff0dc"/><circle cx="132" cy="20" r="8" fill="#fff6d6"/>`;
+ if(o.hat==='bonnet') s+=`<path d="M58 84 Q100 30 142 84" stroke="${o.hatC}" stroke-width="12" fill="none"/><path d="M58 84 Q100 30 142 84" stroke="#fff" stroke-width="3" stroke-dasharray="4 4" fill="none"/><circle cx="62" cy="86" r="6" fill="#ff8fc0"/><circle cx="138" cy="86" r="6" fill="#ff8fc0"/>`;
+ return s+'</svg>';
+}
+// ---------- state ----------
+const KEY='cbRunwaySim_v1';
+const fresh=()=>({day:1,coins:30,fans:0,energy:100,skill:0,owned:['classic','sweet'],wear:'classic',best:0,walks:0});
+let S=fresh();
+try{const t=JSON.parse(localStorage.getItem(KEY)||'null'); if(t&&typeof t==='object') S=Object.assign(fresh(),t);}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const outfit=()=>OUTFITS.find(o=>o.id===S.wear)||OUTFITS[0];
+const theme=()=>THEMES[(S.day-1)%THEMES.length];
+const themeName=()=>OUTFITS.find(o=>o.id===theme()).name;
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',1900)}
+function render(){
+ $('#sDay').textContent='Day '+S.day;$('#sCoins').textContent='🪙 '+S.coins;$('#sFans').textContent='💖 '+S.fans;$('#sEnergy').textContent='⚡ '+S.energy;
+ $('#eBar').style.width=S.energy+'%';$('#skill').textContent=S.skill;$('#unl').textContent=S.owned.length;
+ $('#theme').innerHTML='Today\'s theme: <b>'+themeName()+'</b>'+(S.wear===theme()?' · you are wearing it ✅':'');
+ const g=girlSVG(outfit());['#girlHome','#girlWard','#girlStudio'].forEach(i=>$(i).innerHTML=g);$('#girlStage').innerHTML=girlSVG(outfit(),true);
+ if(!walk.on)$('#walker').innerHTML=g;
+ $('#outfits').innerHTML=OUTFITS.map(o=>{const own=S.owned.includes(o.id);return `<div class="card${o.id===S.wear?' sel':''}">${girlSVG(o)}<b>${o.name}</b><small>${own?(o.id===S.wear?'Wearing':'Owned'):'🪙 '+o.cost}${o.id===theme()?' · theme':''}</small><button data-o="${o.id}" class="${own?'alt':''}">${own?(o.id===S.wear?'On':'Wear'):'Unlock'}</button></div>`}).join('');
+ save();
+}
+function useEnergy(n){if(S.energy<n){toast('Too tired. Sleep to start a new day.');return false}S.energy-=n;return true}
+function log(m){$('#log').textContent=m}
+// nav
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;show(b.dataset.s)});
+function show(id){$$('.screen').forEach(x=>x.classList.toggle('show',x.id===id));$$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.s===id));window.scrollTo(0,0)}
+// wardrobe
+$('#outfits').addEventListener('click',e=>{const b=e.target.closest('button[data-o]');if(!b)return;const o=OUTFITS.find(x=>x.id===b.dataset.o);
+ if(!S.owned.includes(o.id)){if(S.coins<o.cost){toast('You need 🪙'+o.cost+'. Work a cafe shift.');return}S.coins-=o.cost;S.owned.push(o.id);toast('Unlocked '+o.name)}
+ S.wear=o.id;log('Wearing '+o.name+'.');render()});
+// home
+$('#bSleep').onclick=()=>{S.day++;S.energy=100;S.coins+=10;log('Good morning. Day '+S.day+'. +🪙10 daily bonus. Theme: '+themeName()+'.');toast('New day');render()};
+$('#bReset').onclick=()=>{if(confirm('Start a new game? Your saved progress in this browser will reset.')){S=fresh();log('New game started.');render()}};
+// ---------- runway ----------
+const walk={on:false,step:0,pos:0,dir:1,speed:1.1,score:0,raf:0,good:[0,0],perf:[0,0],last:0};
+function newZone(){const w=22,c=15+Math.random()*(70-w);walk.good=[c,c+w];const p=c+w/2;walk.perf=[p-3.5,p+3.5];
+ $('#zGood').style.left=walk.good[0]+'%';$('#zGood').style.width=w+'%';$('#zPerf').style.left=walk.perf[0]+'%';$('#zPerf').style.width='7%'}
+function tick(t){if(!walk.on)return;const dt=walk.last?Math.min(50,t-walk.last):16;walk.last=t;walk.pos+=walk.dir*walk.speed*dt/16;
+ if(walk.pos>=100){walk.pos=100;walk.dir=-1}if(walk.pos<=0){walk.pos=0;walk.dir=1}$('#mark').style.left='calc('+walk.pos+'% - 3px)';walk.raf=requestAnimationFrame(tick)}
+$('#bWalk').onclick=()=>{if(walk.on)return;if(!useEnergy(20)){render();return}
+ Object.assign(walk,{on:true,step:0,pos:0,dir:1,speed:1.1,score:0,last:0});newZone();$('#bStep').disabled=false;$('#bWalk').disabled=true;
+ $('#walker').style.left='4%';$('#walker').innerHTML=girlSVG(outfit());$('#rMsg').textContent='Walk. Tap Step in the pink zone.';$('#rScore').textContent='Step 0/8';render();walk.raf=requestAnimationFrame(tick)};
+function doStep(){if(!walk.on)return;const p=walk.pos;let r='Miss',pts=0;
+ if(p>=walk.perf[0]&&p<=walk.perf[1]){r='Perfect';pts=3}else if(p>=walk.good[0]&&p<=walk.good[1]){r='Good';pts=2}
+ walk.score+=pts;walk.step++;walk.speed+=0.12;$('#walker').style.left=(4+walk.step*9.5)+'%';$('#crowd').textContent=pts===3?'📸 😍 📸 😍 📸':pts?'📸 👏 📸 👏 📸':'😶 😶 😶';
+ $('#rScore').textContent='Step '+walk.step+'/8 · '+r;if(walk.step>=8)endWalk();else newZone()}
+$('#bStep').onclick=doStep;
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&walk.on&&$('#runway').classList.contains('show')){e.preventDefault();doStep()}});
+function endWalk(){walk.on=false;cancelAnimationFrame(walk.raf);$('#bStep').disabled=true;$('#bWalk').disabled=false;$('#walker').innerHTML=girlSVG(outfit(),true);
+ const mult=S.wear===theme()?2:1;const coins=(walk.score*2+5)*mult, fans=Math.round((walk.score+1)*mult*(1+S.fans/500));
+ S.coins+=coins;S.fans+=fans;S.walks++;S.best=Math.max(S.best,walk.score);
+ $('#rMsg').textContent='Pose. Score '+walk.score+'/24'+(mult>1?' · theme bonus x2':'')+'. +🪙'+coins+' +💖'+fans+'. Best '+S.best+'.';log('Runway walk done: +🪙'+coins+', +💖'+fans+'.');render()}
+// ---------- cafe ----------
+const DRINKS=['Latte','Flat white','Cappuccino','Iced coffee','Hot chocolate','Pink milkshake'];
+const cafe={on:false,n:0,ok:0,want:''};
+$('#drinks').innerHTML=DRINKS.map(d=>`<button class="alt" data-d="${d}" disabled>${d}</button>`).join('');
+function nextOrder(){cafe.want=DRINKS[Math.floor(Math.random()*DRINKS.length)];$('#ticket').innerHTML=`<div class="ticket">Order ${cafe.n+1}/6: ${cafe.want}</div>`;$('#cProg').textContent='Right: '+cafe.ok}
+$('#bShift').onclick=()=>{if(cafe.on)return;if(!useEnergy(15)){render();return}Object.assign(cafe,{on:true,n:0,ok:0});$$('#drinks button').forEach(b=>b.disabled=false);$('#bShift').disabled=true;$('#cMsg').textContent='Customers are lining up.';nextOrder();render()};
+$('#drinks').addEventListener('click',e=>{const b=e.target.closest('button[data-d]');if(!b||!cafe.on)return;
+ if(b.dataset.d===cafe.want){cafe.ok++;$('#cMsg').textContent='Perfect '+cafe.want+'.'}else $('#cMsg').textContent='Oops, they wanted a '+cafe.want+'.';
+ cafe.n++;if(cafe.n>=6){cafe.on=false;const c=cafe.ok*5;S.coins+=c;$$('#drinks button').forEach(x=>x.disabled=true);$('#bShift').disabled=false;$('#ticket').innerHTML='';$('#cProg').textContent='';
+  $('#cMsg').textContent='Shift over. '+cafe.ok+'/6 right. +🪙'+c+'.';log('Cafe shift: +🪙'+c+'.');render()}else nextOrder()});
+// ---------- studio ----------
+const STYLES=['Pop','Country','Rock','Ballad','Dance'];
+$('#practise').innerHTML=STYLES.map(s=>`<button data-p="${s}">${s}</button>`).join('');
+$('#practise').addEventListener('click',e=>{const b=e.target.closest('button[data-p]');if(!b)return;if(!useEnergy(15)){render();return}
+ const g=1+(Math.random()<.35?1:0);S.skill+=g;$('#sMsg').textContent='Practised '+b.dataset.p+'. Skill +'+g+' (now '+S.skill+').';log('Studio practice: skill '+S.skill+'.');render()});
+// ---------- stage ----------
+$('#bGig').onclick=()=>{if(!useEnergy(25)){render();return}const mult=S.wear===theme()?2:1;const fans=(5+S.skill*3)*mult, coins=(8+S.skill*2)*mult;S.fans+=fans;S.coins+=coins;
+ $('#gMsg').textContent='What a show. +💖'+fans+' +🪙'+coins+(mult>1?' · theme bonus x2':'')+'.';log('Stage show: +💖'+fans+', +🪙'+coins+'.');render()};
+// test hooks
+window.__cb={get S(){return S},walk,cafe,theme,doStep,show};
+render();
+</script>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

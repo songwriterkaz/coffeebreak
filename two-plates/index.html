@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Two Plates</title>
+<link rel="icon" href="logo.png">
+<style>
+:root{--bg:#0d0b0a;--panel:#1a1614;--line:#3a312c;--tx:#f6efe6;--mut:#b9aca0;--acc:#e9a8b4;--ok:#7be0a4;--hot:#ffcf5a;--red:#ff6b6b}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.45}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 40px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+header img{width:46px;height:46px;border-radius:10px;object-fit:contain;background:#000}
+h1{font-size:1.25rem;margin:0}
+h2{font-size:1.1rem;margin:0 0 8px}
+h3{font-size:.95rem;margin:14px 0 4px;color:var(--acc)}
+.sub{color:var(--mut);font-size:.88rem;margin:0}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
+.steps{display:flex;gap:6px;margin:12px 0}
+.steps span{flex:1;height:6px;border-radius:3px;background:var(--line)}
+.steps span.on{background:var(--acc)}
+.steps span.ok{background:var(--ok)}
+label{display:block;font-size:.88rem;margin:10px 0 4px;color:var(--mut)}
+input[type=text],textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#120f0d;color:var(--tx);font-size:1rem;font-family:inherit}
+textarea{min-height:70px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--acc);outline-offset:1px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:10px 0;font-size:.95rem;color:var(--tx)}
+.chk input{width:22px;height:22px;margin-top:2px;flex:none;accent-color:var(--acc)}
+button,.btn{display:block;width:100%;padding:14px;border:0;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;background:var(--acc);color:#1a0f12;text-align:center;text-decoration:none;font-family:inherit;margin-top:10px}
+button.big{padding:18px;font-size:1.1rem}
+button.alt{background:transparent;color:var(--tx);border:1px solid var(--line);font-weight:600}
+button:disabled{opacity:.4;cursor:not-allowed}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+.note{font-size:.85rem;color:var(--mut)}
+.warn{border-color:var(--hot);color:var(--hot);font-size:.88rem}
+.good{color:var(--ok)}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;border:1px solid var(--line);font-size:.78rem;color:var(--mut)}
+.tag.ok{border-color:var(--ok);color:var(--ok)}
+.code{font-size:1.7rem;letter-spacing:.2em;font-weight:800;text-align:center;padding:10px;border:1px dashed var(--acc);border-radius:12px;margin:8px 0;user-select:all}
+ol,ul{padding-left:20px;margin:6px 0}
+li{margin:4px 0}
+footer{margin-top:22px;border-top:1px solid var(--line);padding-top:14px;font-size:.8rem;color:var(--mut)}
+a{color:var(--acc)}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <img src="logo.png" alt="Coffeebreak logo">
+  <div><h1>Coffeebreak Two Plates</h1><p class="sub">One meal for you, one meal for a friend. Both are required.</p></div>
+</header>
+
+<div id="app"></div>
+
+<footer>
+  <h3>Privacy</h3>
+  <ul>
+    <li>This app has no server. Nothing you type is sent anywhere.</li>
+    <li>Addresses are kept only in this browser on this device, and never appear in a link.</li>
+    <li>The invite link holds a random code and nothing else.</li>
+  </ul>
+  <p><button class="alt" id="wipe" type="button">Erase everything saved on this device</button></p>
+  <h3>Honest note about Uber Eats</h3>
+  <p>This app does not connect to Uber and cannot place an order. It opens the Uber Eats site, and you place each order there yourselves. Uber Eats is a trademark of its owner and is not affiliated with Coffeebreak.</p>
+  <h3>Rights</h3>
+  <p>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Fans may not copy this app or make their own versions of it.</p>
+  <p>More from Coffeebreak: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+</footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+var KEY='cb_two_plates_v1', JKEY='cb_two_plates_join_v1';
+var app=document.getElementById('app');
+var memStore={};
+function lsGet(k){try{var v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return memStore[k]||null}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){memStore[k]=v}}
+function lsDel(k){try{localStorage.removeItem(k)}catch(e){}delete memStore[k]}
+
+function rnd(){var a='ABCDEFGHJKMNPQRSTUVWXYZ23456789',s='';var b=new Uint8Array(6);
+  (window.crypto||window.msCrypto).getRandomValues(b);for(var i=0;i<6;i++)s+=a[b[i]%a.length];return s}
+
+function blank(){return{code:rnd(),step:1,consent:false,
+  me:{nick:'',addr:'',sub:'',saved:false},
+  fr:{mode:'same',nick:'',addr:'',sub:'',saved:false,agreed:false,joined:false},
+  meal:{pref:'',notes:''},
+  prog:{meStart:false,frStart:false,meDone:false,frDone:false}}}
+var S=lsGet(KEY)||blank();
+function save(){lsSet(KEY,S)}
+
+/* join (friend phone) view, code comes from the hash only */
+var hm=/^#join=([A-Za-z0-9]{4,12})$/.exec(location.hash||'');
+var JOIN=null;
+if(hm){JOIN=lsGet(JKEY);
+  if(!JOIN||JOIN.code!==hm[1].toUpperCase()){JOIN={code:hm[1].toUpperCase(),consent:false,nick:'',addr:'',sub:'',saved:false,start:false,done:false}}}
+function jsave(){lsSet(JKEY,JOIN)}
+
+function isAU(){var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}
+  return /^Australia\//.test(tz)||/-AU$/i.test(navigator.language||'')}
+function ueUrl(){return isAU()?'https://www.ubereats.com/au/feed?diningMode=DELIVERY':'https://www.ubereats.com/feed?diningMode=DELIVERY'}
+
+function el(tag,attrs,kids){var e=document.createElement(tag);attrs=attrs||{};
+  for(var k in attrs){if(k==='class')e.className=attrs[k];else if(k==='text')e.textContent=attrs[k];
+    else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),attrs[k]);else if(attrs[k]!==false&&attrs[k]!==null&&attrs[k]!==undefined)e.setAttribute(k,attrs[k])}
+  (kids||[]).forEach(function(c){if(c)e.appendChild(typeof c==='string'?document.createTextNode(c):c)});return e}
+function clear(){while(app.firstChild)app.removeChild(app.firstChild)}
+function field(label,id,val,opts){opts=opts||{};
+  var inp=opts.area?el('textarea',{id:id,maxlength:opts.max||300,placeholder:opts.ph||''}):
+    el('input',{type:'text',id:id,maxlength:opts.max||120,placeholder:opts.ph||'',autocomplete:opts.ac||'off'});
+  inp.value=val||'';return el('div',{},[el('label',{for:id,text:label}),inp])}
+function val(id){return(document.getElementById(id).value||'').trim()}
+function check(id,text,on,cb,dis){var i=el('input',{type:'checkbox',id:id,disabled:dis?'disabled':false});i.checked=!!on;
+  i.addEventListener('change',function(){cb(i.checked)});
+  return el('label',{class:'chk',for:id},[i,el('span',{text:text})])}
+function bar(step){var b=el('div',{class:'steps'});for(var i=1;i<=5;i++)b.appendChild(el('span',{class:i<step?'ok':(i===step?'on':'')}));return b}
+function copyText(t,btn){var done=function(){var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o},1500)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,function(){fb()})}else fb();
+  function fb(){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');done()}catch(e){}document.body.removeChild(ta)}}
+function nick(n,d){return n||d}
+function shareLink(){return location.href.split('#')[0]+'#join='+S.code}
+
+var CONSENT='I will only order for myself and for a friend who has agreed to receive food. I will not order for strangers or for anyone who has not said yes.';
+
+/* ---------- main flow ---------- */
+function render(){clear();
+  if(JOIN){return renderJoin()}
+  var s=S.step;app.appendChild(bar(s));
+  if(s===1)step1();else if(s===2)step2();else if(s===3)step3();else if(s===4)step4();else step5();
+  window.scrollTo(0,0)}
+function go(n){S.step=n;save();render()}
+
+function step1(){
+  var p=el('div',{class:'panel'},[
+    el('h2',{text:'How this works'}),
+    el('p',{text:'This app has one rule. You order food for yourself and for a friend, both in the same go. You cannot continue with only one person.'}),
+    el('p',{class:'note',text:'Each person types their own delivery details. Nobody sees the other person\u2019s street address.'}),
+    el('div',{class:'panel warn'},[el('strong',{text:'Consent. '}),document.createTextNode(CONSENT)]),
+    check('c1',CONSENT,S.consent,function(v){S.consent=v;save();nx.disabled=!v}),
+  ]);
+  var nx=el('button',{class:'big',text:'Start',onclick:function(){if(S.consent)go(2)}});nx.disabled=!S.consent;
+  p.appendChild(nx);app.appendChild(p)}
+
+function step2(){
+  var p=el('div',{class:'panel'},[
+    el('h2',{text:'Person 1 of 2: you'}),
+    el('p',{class:'note',text:'Stays on this device only. After you save, only the suburb is shown.'}),
+    field('Your nickname','m_nick',S.me.nick,{max:30,ph:'For example Sam'}),
+    field('Your street address (private)','m_addr',S.me.addr,{max:160,ac:'street-address'}),
+    field('Your suburb (this part can be shown)','m_sub',S.me.sub,{max:40})]);
+  var msg=el('p',{class:'note'});
+  p.appendChild(el('button',{class:'big',text:'Save my details',onclick:function(){
+    var n=val('m_nick'),a=val('m_addr'),u=val('m_sub');
+    if(!n||!a||!u){msg.textContent='Please fill in your nickname, address and suburb.';return}
+    S.me={nick:n,addr:a,sub:u,saved:true};save();go(3)}}));
+  p.appendChild(msg);
+  p.appendChild(el('button',{class:'alt',text:'Back',onclick:function(){go(1)}}));app.appendChild(p)}
+
+function step3(){
+  var f=S.fr;
+  var p=el('div',{class:'panel'},[el('h2',{text:'Person 2 of 2: your friend'}),
+    el('p',{class:'note',text:'Your friend must agree first, and must enter their own address themselves. You will not see it.'})]);
+  var tabs=el('div',{class:'row'},[
+    el('button',{class:f.mode==='same'?'':'alt',text:'Friend is with me',onclick:function(){f.mode='same';save();render()}}),
+    el('button',{class:f.mode==='phone'?'':'alt',text:'Friend uses own phone',onclick:function(){f.mode='phone';save();render()}})]);
+  p.appendChild(tabs);
+  var ok=el('button',{class:'big',text:'Continue to meal choice'});
+  var msg=el('p',{class:'note'});
+  if(f.mode==='same'){
+    if(f.saved){
+      p.appendChild(el('p',{},[el('span',{class:'tag ok',text:'Saved'}),document.createTextNode(' '+nick(f.nick,'Friend')+': address saved on their device'+(f.sub?' ('+f.sub+')':''))]));
+      p.appendChild(el('button',{class:'alt',text:'Friend wants to change their details',onclick:function(){f.saved=false;f.addr='';save();render()}}));
+      ok.onclick=function(){go(4)};
+    }else{
+      p.appendChild(el('p',{class:'warn panel',text:'Hand the phone to your friend now. They type their own details, then press Save. Once saved, the address is hidden from the screen.'}));
+      p.appendChild(check('f_ag','I agree to receive food ordered by my friend.',f.agreed,function(v){f.agreed=v;save()}));
+      p.appendChild(field('Friend nickname','f_nick',f.nick,{max:30}));
+      p.appendChild(field('Friend street address (private)','f_addr','',{max:160,ac:'street-address'}));
+      p.appendChild(field('Friend suburb (this part can be shown)','f_sub',f.sub,{max:40}));
+      p.appendChild(el('button',{text:'Save friend details',onclick:function(){
+        var n=val('f_nick'),a=val('f_addr'),u=val('f_sub');
+        if(!f.agreed){msg.textContent='Your friend needs to tick that they agree.';return}
+        if(!n||!a||!u){msg.textContent='Please fill in the nickname, address and suburb.';return}
+        f.nick=n;f.addr=a;f.sub=u;f.saved=true;save();render()}}));
+      ok.disabled=true}
+  }else{
+    p.appendChild(field('Friend nickname','f_nick',f.nick,{max:30,ph:'For example Alex'}));
+    p.appendChild(el('button',{text:'Make invite link',onclick:function(){
+      var n=val('f_nick');if(!n){msg.textContent='Please add your friend\u2019s nickname first.';return}
+      f.nick=n;save();render()}}));
+    if(f.nick){
+      p.appendChild(el('h3',{text:'Invite code'}));
+      p.appendChild(el('div',{class:'code',text:S.code}));
+      var link=shareLink();
+      p.appendChild(el('p',{class:'note',text:'The link holds only this random code. It has no address and no name.'}));
+      p.appendChild(el('div',{class:'panel'},[el('div',{class:'note',style:'word-break:break-all',text:link})]));
+      p.appendChild(el('div',{class:'row'},[
+        el('button',{class:'alt',text:'Copy link',onclick:function(ev){copyText(link,ev.target)}}),
+        navigator.share?el('button',{class:'alt',text:'Share',onclick:function(){navigator.share({title:'Coffeebreak Two Plates',text:'Join me for a shared food order. Open this link and type your own address.',url:link}).catch(function(){})}}):null]));
+      p.appendChild(el('p',{class:'note',text:'Your friend opens the link on their phone, agrees, and types their own address there. There is no server, so this app cannot see their phone. They tell you when they have saved it, and you tick the boxes below.'}));
+      p.appendChild(check('f_ag2','My friend agreed to this order.',f.agreed,function(v){f.agreed=v;save();upd()}));
+      p.appendChild(check('f_jn','My friend told me they saved their own address on their phone.',f.joined,function(v){f.joined=v;save();upd()}));
+    }
+    var upd=function(){ok.disabled=!(f.nick&&f.agreed&&f.joined)};
+    ok.onclick=function(){if(f.nick&&f.agreed&&f.joined)go(4)};upd();
+  }
+  p.appendChild(msg);p.appendChild(ok);
+  p.appendChild(el('button',{class:'alt',text:'Back',onclick:function(){go(2)}}));
+  app.appendChild(p)}
+
+function step4(){
+  var p=el('div',{class:'panel'},[el('h2',{text:'What are you both eating'}),
+    el('p',{class:'note',text:'No addresses here. Keep it to food. Order the same meal for both of you.'}),
+    field('Restaurant or cuisine preference','r_pref',S.meal.pref,{max:80,ph:'For example thai, burgers, anything with noodles'}),
+    field('Notes (allergies, extras, drinks)','r_notes',S.meal.notes,{area:true,max:300})]);
+  var msg=el('p',{class:'note'});
+  p.appendChild(el('button',{class:'big',text:'Go to ordering',onclick:function(){
+    var a=val('r_pref');if(!a){msg.textContent='Please add a restaurant or cuisine preference.';return}
+    S.meal.pref=a;S.meal.notes=val('r_notes');save();go(5)}}));
+  p.appendChild(msg);
+  p.appendChild(el('button',{class:'alt',text:'Back',onclick:function(){go(3)}}));app.appendChild(p)}
+
+function personCard(who,name,place,started,done,openCb,startCb,doneCb,extra){
+  var c=el('div',{class:'panel'},[
+    el('h2',{text:who+': '+name}),
+    el('p',{class:'note'},[el('span',{class:'tag ok',text:place})])]);
+  if(extra)c.appendChild(extra);
+  c.appendChild(el('button',{class:'big',text:'Open Uber Eats for '+name,onclick:function(){openCb();}}));
+  c.appendChild(check('s_'+who,'Order started for '+name,started,startCb));
+  c.appendChild(check('d_'+who,'Order placed and done for '+name,done,doneCb,!started));
+  return c}
+
+function step5(){
+  var me=S.me,f=S.fr,P=S.prog;
+  app.appendChild(el('div',{class:'panel'},[el('h2',{text:'Place both orders in Uber Eats'}),
+    el('p',{text:'Meal: '+S.meal.pref+(S.meal.notes?' ('+S.meal.notes+')':'')}),
+    el('p',{class:'note',text:'This app cannot place the order. Each button opens the Uber Eats site in a new tab, and you finish there.'}),
+    el('h3',{text:'Steps in Uber Eats'}),
+    el('ol',{},[el('li',{text:'Open Uber Eats with the button.'}),
+      el('li',{text:'Set that person\u2019s delivery address in Uber Eats yourself. Only the owner of the address should type it.'}),
+      el('li',{text:'Add the same meal for both people.'}),
+      el('li',{text:'Check out. Then come back and tick the boxes.'})])]));
+  var meExtra=el('button',{class:'alt',text:'Copy my address to paste into Uber Eats',onclick:function(ev){copyText(me.addr,ev.target)}});
+  app.appendChild(personCard('You',me.nick,'Address saved on this device ('+me.sub+')',P.meStart,P.meDone,
+    function(){P.meStart=true;save();window.open(ueUrl(),'_blank','noopener');render()},
+    function(v){P.meStart=v;if(!v)P.meDone=false;save();render()},
+    function(v){P.meDone=v;save();render()},meExtra));
+  var frExtra=null,place;
+  if(f.mode==='same'){place='Friend address saved on their device'+(f.sub?' ('+f.sub+')':'')}
+  else{place='Friend address saved on their own phone';
+    frExtra=el('p',{class:'note',text:'Your friend should place this order from their own phone, using the invite link. Use the button here only if they are next to you and type their own address.'})}
+  app.appendChild(personCard('Friend',f.nick,place,P.frStart,P.frDone,
+    function(){P.frStart=true;save();window.open(ueUrl(),'_blank','noopener');render()},
+    function(v){P.frStart=v;if(!v)P.frDone=false;save();render()},
+    function(v){P.frDone=v;save();render()},frExtra));
+  var both=P.meDone&&P.frDone;
+  var prog=el('div',{class:'panel'},[el('h2',{text:'Checklist'}),el('ul',{},[
+    el('li',{text:(P.meStart?'Done: ':'Waiting: ')+'your order started'}),
+    el('li',{text:(P.frStart?'Done: ':'Waiting: ')+'friend order started'}),
+    el('li',{text:(both?'Done: ':'Waiting: ')+'both orders marked done'})])]);
+  if(both)prog.appendChild(el('p',{class:'good',text:'Both plates are sorted. Enjoy your meal together.'}));
+  else prog.appendChild(el('p',{class:'note',text:'The finish line needs both people. One order alone does not count.'}));
+  app.appendChild(prog);
+  app.appendChild(el('button',{class:'alt',text:'Back',onclick:function(){go(4)}}));
+  app.appendChild(el('button',{class:'alt',text:'Start a new order',onclick:function(){
+    if(confirm('Start over? This erases both sets of details on this device.')){S=blank();save();render()}}}))}
+
+/* ---------- friend view (opened from invite link) ---------- */
+function renderJoin(){
+  var J=JOIN;
+  var p=el('div',{class:'panel'},[el('h2',{text:'You were invited to a shared food order'}),
+    el('p',{text:'Invite code: '+J.code}),
+    el('p',{class:'note',text:'Your friend is ordering food for you as well as for themselves. You type your own address here. It stays on this phone and is never sent to your friend or anywhere else.'})]);
+  if(!J.consent){
+    p.appendChild(check('j_c','I agree to receive food from this order, and I know this person.',false,function(v){J.consent=v;jsave();if(v)renderJoin()}));
+    clear();app.appendChild(p);return}
+  clear();
+  if(!J.saved){
+    p.appendChild(field('Your nickname','j_nick',J.nick,{max:30}));
+    p.appendChild(field('Your street address (private)','j_addr','',{max:160,ac:'street-address'}));
+    p.appendChild(field('Your suburb (this part can be shown)','j_sub',J.sub,{max:40}));
+    var msg=el('p',{class:'note'});
+    p.appendChild(el('button',{class:'big',text:'Save on this phone only',onclick:function(){
+      var n=val('j_nick'),a=val('j_addr'),u=val('j_sub');
+      if(!n||!a||!u){msg.textContent='Please fill in all three fields.';return}
+      J.nick=n;J.addr=a;J.sub=u;J.saved=true;jsave();renderJoin()}}));
+    p.appendChild(msg);app.appendChild(p)}
+  else{
+    p.appendChild(el('p',{},[el('span',{class:'tag ok',text:'Saved'}),document.createTextNode(' '+J.nick+': address saved on this phone ('+J.sub+')')]));
+    p.appendChild(el('p',{class:'good',text:'Tell your friend you are ready. They will tick the box on their side.'}));
+    app.appendChild(p);
+    var c=el('div',{class:'panel'},[el('h2',{text:'Order your meal'}),
+      el('ol',{},[el('li',{text:'Open Uber Eats with the button.'}),
+        el('li',{text:'Set your own delivery address.'}),
+        el('li',{text:'Add the same meal your friend picked, then check out.'})]),
+      el('button',{class:'big',text:'Open Uber Eats for '+J.nick,onclick:function(){J.start=true;jsave();window.open(ueUrl(),'_blank','noopener');renderJoin()}}),
+      el('button',{class:'alt',text:'Copy my address to paste into Uber Eats',onclick:function(ev){copyText(J.addr,ev.target)}}),
+      check('j_s','Order started',J.start,function(v){J.start=v;if(!v)J.done=false;jsave();renderJoin()}),
+      check('j_d','Order placed and done',J.done,function(v){J.done=v;jsave();renderJoin()},!J.start)]);
+    app.appendChild(c);
+    app.appendChild(el('button',{class:'alt',text:'Erase my details from this phone',onclick:function(){lsDel(JKEY);JOIN=null;location.hash='';location.reload()}}))}
+}
+
+document.getElementById('wipe').addEventListener('click',function(){
+  if(confirm('Erase everything this app saved on this device?')){lsDel(KEY);lsDel(JKEY);S=blank();JOIN=null;location.hash='';location.reload()}});
+window.addEventListener('hashchange',function(){location.reload()});
+render();
+})();
+</script>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body>
+</html>

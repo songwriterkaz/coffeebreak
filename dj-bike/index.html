@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak DJ Bike</title>
+<meta name="description" content="DJ Jase rides the DJ Bike. Two decks, crossfader, EQ, effects, loops, beat pads, recording and a library of 1,500 tools. Free music software by Coffeebreak.">
+<meta name="theme-color" content="#1b1326">
+<link rel="icon" href="logo.png">
+<style>
+:root{--bg:#1b1326;--panel:#2a1f3a;--panel2:#352848;--ink:#f6efe4;--mut:#bfb2cf;--a:#ff5fa2;--b:#3fd0ff;--gold:#ffc94a;--ok:#6dffa8}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+button,select,input{font:inherit;color:inherit}
+header{display:flex;align-items:center;gap:12px;padding:10px 14px;background:linear-gradient(90deg,#2a1f3a,#3a2350)}
+header img{width:64px;height:50px;object-fit:contain;background:#fbf5ea;border-radius:10px;padding:2px}
+header h1{font-size:1.25rem;margin:0;line-height:1.2}
+header small{color:var(--mut);display:block;font-weight:400;font-size:.8rem}
+.wrap{max-width:1250px;margin:0 auto;padding:10px}
+.stage{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:10px;align-items:stretch}
+.card{background:var(--panel);border-radius:14px;padding:10px;box-shadow:0 2px 0 #0004}
+.deck h2{margin:0 0 6px;font-size:1rem;display:flex;justify-content:space-between;align-items:center}
+.deckA h2 span.tag{color:var(--a)}.deckB h2 span.tag{color:var(--b)}
+.track{font-size:.8rem;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jog{width:130px;height:130px;margin:8px auto;border-radius:50%;background:repeating-conic-gradient(#111 0 6deg,#222 6deg 12deg);border:6px solid #444;position:relative;touch-action:none;cursor:grab}
+.jog::after{content:"";position:absolute;inset:38%;border-radius:50%;background:var(--gold)}
+.deckB .jog::after{background:var(--b)}.deckA .jog::after{background:var(--a)}
+.jog i{position:absolute;left:50%;top:6px;width:4px;height:22px;margin-left:-2px;background:#fff;border-radius:2px}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:5px 0}
+.row label{font-size:.75rem;color:var(--mut);min-width:44px}
+.row input[type=range]{flex:1;min-width:80px;accent-color:var(--gold)}
+.btn{background:var(--panel2);border:1px solid #ffffff22;border-radius:10px;padding:8px 10px;cursor:pointer;min-height:38px}
+.btn:active{transform:translateY(1px)}
+.btn.on{background:var(--gold);color:#1b1326;font-weight:700}
+.btn.play.on{background:var(--ok)}
+.btn.rec.on{background:#ff4b4b;color:#fff}
+.steps{display:grid;grid-template-columns:repeat(16,1fr);gap:2px;margin:6px 0}
+.steps b{height:8px;border-radius:2px;background:#ffffff1a}
+.steps b.k{background:#ffffff40}.steps b.now{background:var(--gold)}
+.bpm{font-variant-numeric:tabular-nums;font-size:1.4rem;font-weight:700}
+.mid{display:flex;flex-direction:column;gap:8px}
+#jase{width:100%;height:auto;display:block;background:linear-gradient(#2b1d47,#4b2a5c 70%,#2a1f3a 70%);border-radius:12px}
+.xf{display:flex;align-items:center;gap:8px}
+.xf input{flex:1;accent-color:var(--gold)}
+.pads{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.pad{aspect-ratio:1;border-radius:10px;border:0;background:linear-gradient(145deg,#4a3566,#2f2142);font-size:.68rem;padding:3px;cursor:pointer;color:var(--ink);overflow:hidden}
+.pad.hit{background:var(--gold);color:#1b1326}
+.pad.sel{outline:2px solid var(--b)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.lib .top{display:flex;gap:6px;flex-wrap:wrap}
+.lib input[type=search]{flex:1;min-width:140px;background:#120c1b;border:1px solid #ffffff33;border-radius:10px;padding:8px}
+.lib select{background:#120c1b;border:1px solid #ffffff33;border-radius:10px;padding:8px}
+.cats{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}
+.cats button{font-size:.72rem;padding:4px 8px;border-radius:20px;background:#120c1b;border:1px solid #ffffff22;cursor:pointer}
+.cats button.on{background:var(--b);color:#111}
+.list{max-height:330px;overflow:auto;display:flex;flex-direction:column;gap:4px}
+.tool{display:flex;justify-content:space-between;align-items:center;gap:6px;background:#120c1b;border-radius:8px;padding:6px 8px;font-size:.82rem}
+.tool em{color:var(--mut);font-style:normal;font-size:.7rem;display:block}
+.tool button{padding:5px 10px;min-height:30px}
+.pager{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:.8rem;color:var(--mut)}
+.count{color:var(--gold);font-weight:700}
+#status{font-size:.8rem;color:var(--mut);min-height:1.2em}
+footer{max-width:1250px;margin:14px auto 30px;padding:0 14px;font-size:.75rem;color:var(--mut);line-height:1.5}
+footer a{color:var(--b)}
+.start{position:fixed;inset:0;background:#1b1326ee;display:flex;align-items:center;justify-content:center;z-index:9;flex-direction:column;gap:14px;text-align:center;padding:20px}
+.start img{width:160px;background:#fbf5ea;border-radius:16px;padding:6px}
+.start button{font-size:1.2rem;padding:14px 26px;background:var(--gold);color:#1b1326;border:0;border-radius:14px;font-weight:700;cursor:pointer}
+@media (max-width:900px){.stage{grid-template-columns:1fr 1fr}.mid{grid-column:1/-1;order:-1}.grid2{grid-template-columns:1fr}.pads{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:560px){.stage{grid-template-columns:1fr}.jog{width:110px;height:110px}header h1{font-size:1.05rem}}
+</style>
+</head>
+<body>
+<div class="start" id="start">
+  <img src="logo.png" alt="Coffeebreak logo">
+  <h2 style="margin:0">Coffeebreak DJ Bike with DJ Jase</h2>
+  <p style="margin:0;color:var(--mut)">Two decks, effects, loops, beat pads and 1,500 tools. All sounds are made live in your browser.</p>
+  <button id="go">Start the bike</button>
+</div>
+<header>
+  <img src="logo.png" alt="Coffeebreak logo">
+  <h1>Coffeebreak DJ Bike<small>DJ Jase rides the decks. Free music software by Coffeebreak.</small></h1>
+</header>
+<div class="wrap">
+ <div class="stage">
+  <section class="card deck deckA" id="deckA"></section>
+  <section class="mid">
+   <div class="card">
+    <svg id="jase" viewBox="0 0 400 260" role="img" aria-label="DJ Jase riding the DJ Bike">
+     <g id="stars" fill="#fff" opacity=".6"><circle cx="30" cy="30" r="1.5"/><circle cx="90" cy="18" r="1"/><circle cx="160" cy="40" r="1.4"/><circle cx="250" cy="22" r="1"/><circle cx="330" cy="36" r="1.6"/><circle cx="375" cy="14" r="1"/></g>
+     <g id="lights"><circle id="l1" cx="60" cy="70" r="26" fill="#ff5fa2" opacity=".25"/><circle id="l2" cx="340" cy="70" r="26" fill="#3fd0ff" opacity=".25"/></g>
+     <g id="road"><rect x="0" y="182" width="400" height="4" fill="#ffc94a" opacity=".5"/><g id="dashes" fill="#ffffff55"></g></g>
+     <g id="rider">
+      <g id="wheelL" transform="translate(110,190)"><circle r="34" fill="none" stroke="#111" stroke-width="9"/><circle r="34" fill="none" stroke="#555" stroke-width="2"/><g stroke="#ccc" stroke-width="2"><line x1="-30" y1="0" x2="30" y2="0"/><line x1="0" y1="-30" x2="0" y2="30"/><line x1="-21" y1="-21" x2="21" y2="21"/><line x1="-21" y1="21" x2="21" y2="-21"/></g><circle r="5" fill="#ffc94a"/></g>
+      <g id="wheelR" transform="translate(290,190)"><circle r="34" fill="none" stroke="#111" stroke-width="9"/><circle r="34" fill="none" stroke="#555" stroke-width="2"/><g stroke="#ccc" stroke-width="2"><line x1="-30" y1="0" x2="30" y2="0"/><line x1="0" y1="-30" x2="0" y2="30"/><line x1="-21" y1="-21" x2="21" y2="21"/><line x1="-21" y1="21" x2="21" y2="-21"/></g><circle r="5" fill="#ffc94a"/></g>
+      <g stroke="#ff5fa2" stroke-width="7" stroke-linecap="round" fill="none"><path d="M110 190 L170 140 L250 140 L290 190"/><path d="M170 140 L200 190 L250 140"/><path d="M250 140 L262 104"/><path d="M152 132 L186 132"/></g>
+      <rect x="236" y="96" width="70" height="10" rx="4" fill="#3fd0ff"/>
+      <g id="decks"><rect x="226" y="80" width="92" height="18" rx="4" fill="#222" stroke="#ffc94a" stroke-width="2"/><ellipse id="platA" cx="248" cy="83" rx="16" ry="4" fill="#ff5fa2"/><ellipse id="platB" cx="296" cy="83" rx="16" ry="4" fill="#3fd0ff"/><rect x="268" y="82" width="8" height="10" fill="#ffc94a"/></g>
+      <g id="speaker"><rect x="96" y="110" width="44" height="40" rx="6" fill="#222" stroke="#3fd0ff" stroke-width="2"/><circle id="cone" cx="118" cy="130" r="12" fill="#444" stroke="#888" stroke-width="2"/></g>
+      <g id="body">
+       <path d="M200 190 L186 150" stroke="#2c3e8f" stroke-width="12" stroke-linecap="round" id="legA"/>
+       <path d="M200 150 L172 132" stroke="#2c3e8f" stroke-width="12" stroke-linecap="round"/>
+       <path d="M168 128 Q178 84 206 74 L224 86 Q216 120 200 140 Z" fill="#ffc94a"/>
+       <text x="186" y="112" font-size="12" font-weight="700" fill="#1b1326">JASE</text>
+       <path id="arm" d="M212 86 Q240 92 254 84" stroke="#ffc94a" stroke-width="9" stroke-linecap="round" fill="none"/>
+       <path d="M206 84 Q232 104 286 86" stroke="#ffc94a" stroke-width="9" stroke-linecap="round" fill="none"/>
+       <g id="head"><circle cx="214" cy="54" r="22" fill="#c98b5e"/><path d="M192 48 Q200 22 228 28 Q244 34 242 46 L192 46 Z" fill="#ff5fa2"/><rect x="226" y="42" width="24" height="6" rx="3" fill="#ff5fa2"/><rect x="202" y="52" width="30" height="8" rx="4" fill="#111"/><path d="M206 66 Q214 72 224 66" stroke="#6b3a1e" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M190 56 Q188 28 214 26 Q240 28 238 56" stroke="#222" stroke-width="5" fill="none"/><rect x="183" y="48" width="12" height="18" rx="5" fill="#3fd0ff"/><rect x="233" y="48" width="12" height="18" rx="5" fill="#3fd0ff"/></g>
+      </g>
+      <g id="notes" fill="#ffc94a" font-size="18"></g>
+     </g>
+    </svg>
+    <div class="row" style="justify-content:space-between"><span id="jaseSays" style="font-size:.85rem;color:var(--mut)">DJ Jase is ready to ride.</span><span class="count" id="toolCountTop"></span></div>
+   </div>
+   <div class="card">
+    <div class="xf"><b style="color:var(--a)">A</b><input type="range" id="xf" min="0" max="1" step="0.01" value="0.5" aria-label="Crossfader"><b style="color:var(--b)">B</b></div>
+    <div class="row"><label>Master</label><input type="range" id="master" min="0" max="1" step="0.01" value="0.8"><button class="btn rec" id="rec">Record</button><a id="dl" class="btn" style="display:none;text-decoration:none">Save mix</a></div>
+    <div class="row"><button class="btn" id="syncBA">Sync B to A</button><button class="btn" id="syncAB">Sync A to B</button><button class="btn" id="tap">Tap tempo</button><button class="btn" id="auto">Auto mix</button></div>
+    <div id="status"></div>
+   </div>
+  </section>
+  <section class="card deck deckB" id="deckB"></section>
+ </div>
+
+ <div class="grid2">
+  <section class="card">
+   <h3 style="margin:0 0 6px;font-size:1rem">Effects</h3>
+   <div class="row"><label>Echo</label><input type="range" id="fxDelay" min="0" max="1" step="0.01" value="0"><label>Time</label><input type="range" id="fxDelayT" min="0.05" max="1" step="0.01" value="0.375"></div>
+   <div class="row"><label>Repeats</label><input type="range" id="fxFb" min="0" max="0.85" step="0.01" value="0.35"><label>Reverb</label><input type="range" id="fxRev" min="0" max="1" step="0.01" value="0"></div>
+   <div class="row"><label>Room</label><input type="range" id="fxRoom" min="0.3" max="5" step="0.1" value="1.8"><label>Drive</label><input type="range" id="fxDrive" min="0" max="1" step="0.01" value="0"></div>
+   <div class="row"><label>Crush</label><input type="range" id="fxCrush" min="0" max="1" step="0.01" value="0"><label>Flanger</label><input type="range" id="fxFlange" min="0" max="1" step="0.01" value="0"></div>
+   <div class="row"><button class="btn" id="fxOff">All effects off</button><button class="btn" id="brake">Bike brake</button><button class="btn" id="spin">Spin back</button></div>
+   <h3 style="margin:10px 0 6px;font-size:1rem">Beat pads <small style="color:var(--mut);font-weight:400">keys 1 to 8 and Q to I</small></h3>
+   <div class="pads" id="pads"></div>
+  </section>
+  <section class="card lib">
+   <h3 style="margin:0 0 6px;font-size:1rem">Tool library <span class="count" id="toolCount"></span></h3>
+   <div class="top"><input type="search" id="q" placeholder="Search tools, for example siren, dub, 128" aria-label="Search tools"><select id="target" aria-label="Send tool to"><option value="A">Send to deck A</option><option value="B">Send to deck B</option></select></div>
+   <div class="cats" id="cats"></div>
+   <div class="list" id="list"></div>
+   <div class="pager"><button class="btn" id="prev">Back</button><span id="pageInfo"></span><button class="btn" id="next">Next</button></div>
+  </section>
+ </div>
+</div>
+<footer>
+ <p><b>About Coffeebreak:</b> Coffeebreak is Karen O'Brien, a songwriter and creator from Newcastle NSW. She makes apps, games, stores, tattoo flash and music under the Coffeebreak name. More at <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+ <p><b>Rights:</b> © Karen (Coffeebreak). DJ Jase is an original Coffeebreak character. Karen keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Karen claims no ownership of any third-party brands named here, which belong to their owners. All sounds in this app are generated live, with no outside samples.</p>
+ <p>Check out <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>.</p>
+</footer>
+<script src="app.js"></script>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body>
+</html>

@@ -1,0 +1,417 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Plush and Tattoo Flash</title>
+<script>
+/* ============================================================
+   PRICES - PLACEHOLDERS. Change any number below to set the price.
+   All prices are in Australian dollars (AUD), per item.
+   ============================================================ */
+const CURRENCY = 'AUD';
+const PRICES = {
+    'plush-01-coffeebreak-girl': 80,   // Coffeebreak Girl plush toy
+    'plush-02-coffee-bean-buddy': 80,   // Coffee Bean Buddy plush toy
+    'plush-03-bean-buddy-pal': 80,   // Bean Buddy Pal plush toy
+    'plush-04-marshmallow-mug-pals': 80,   // Marshmallow Mug Pals plush toy
+    'plush-05-coffeebreak-kitty': 80,   // Coffeebreak Kitty plush toy
+    'plush-06-outback-kangaroo': 80,   // Outback Kangaroo plush toy
+    'plush-07-blue-fluff': 80,   // Blue Fluff plush toy
+    'plush-08-tv-star': 80,   // Coffeebreak TV Star plush toy
+    'plush-09-bean': 80,   // Bean plush toy
+    'plush-10-queen': 80,   // Queen plush toy
+    'plush-11-espresso': 80,   // Espresso plush toy
+    'flash-01-coffeebreak-girl': 20,   // Coffeebreak Girl tattoo flash print
+    'flash-02-coffee-bean-buddy': 20,   // Coffee Bean Buddy tattoo flash print
+    'flash-03-bean-buddy-pal': 20,   // Bean Buddy Pal tattoo flash print
+    'flash-04-marshmallow-mug-pals': 20,   // Marshmallow Mug Pals tattoo flash print
+    'flash-05-coffeebreak-kitty': 20,   // Coffeebreak Kitty tattoo flash print
+    'flash-06-outback-kangaroo': 20,   // Outback Kangaroo tattoo flash print
+    'flash-07-blue-fluff': 20,   // Blue Fluff tattoo flash print
+    'flash-08-tv-star': 20,   // Coffeebreak TV Star tattoo flash print
+    'flash-09-bean': 20,   // Bean tattoo flash print
+    'flash-10-queen': 20,   // Queen tattoo flash print
+    'flash-11-espresso': 20,   // Espresso tattoo flash print
+};
+/* Payment details shown at checkout */
+const PAYID = { bank: 'Teachers Mutual Bank', id: 'darkokaz@gmx.com' };
+</script>
+<style>
+*{box-sizing:border-box}
+html{font-size:18px}
+body{margin:0;font-family:Poppins,system-ui,-apple-system,Segoe UI,sans-serif;background:#fce4ec;color:#3c1428}
+header{display:flex;align-items:center;gap:24px;padding:22px 40px;background:#fff;border-bottom:5px solid #c2185b}
+header img{height:96px;width:auto}
+h1{margin:0;color:#c2185b;font-size:2.2rem;line-height:1.15}
+header p{margin:6px 0 0;font-size:1.1rem}
+nav{position:sticky;top:0;z-index:5;display:flex;gap:14px;padding:16px 40px;background:#fce4ecee;backdrop-filter:blur(4px);flex-wrap:wrap}
+nav button{border:0;border-radius:40px;padding:16px 30px;font:600 1.2rem Poppins,system-ui,sans-serif;background:#fff;color:#c2185b;cursor:pointer;box-shadow:0 2px 6px #c2185b22}
+nav button.on{background:#c2185b;color:#fff}
+main{padding:8px 40px 140px}
+h2{color:#c2185b;font-size:1.9rem;margin:18px 0 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:28px}
+.card{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 4px 14px #c2185b22;display:flex;flex-direction:column}
+.card .pic{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;cursor:zoom-in;background:#f6eef1}
+.card.flash .pic{aspect-ratio:3/4}
+.card .body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card .kind{font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#ad1457}
+.card h3{margin:0;font-size:1.5rem;color:#3c1428}
+.card p{margin:0;font-size:1.05rem;color:#6d3a52;line-height:1.45;flex:1}
+.row{display:flex;align-items:center;gap:16px;margin-top:10px}
+.price{font-size:1.6rem;font-weight:700;color:#c2185b;white-space:nowrap}
+.add{flex:1;min-height:68px;border:0;border-radius:16px;background:#c2185b;color:#fff;font:700 1.3rem Poppins,system-ui,sans-serif;cursor:pointer}
+.add:hover{background:#ad1457} .add.done{background:#2e7d32}
+#cartBtn{position:fixed;right:28px;bottom:28px;z-index:20;display:flex;align-items:center;gap:12px;border:0;border-radius:60px;padding:20px 32px;background:#3c1428;color:#fff;font:700 1.35rem Poppins,system-ui,sans-serif;box-shadow:0 8px 24px #0005;cursor:pointer}
+#cartBtn svg{width:36px;height:36px}
+#count{min-width:42px;height:42px;border-radius:21px;background:#ff80ab;color:#3c1428;display:inline-flex;align-items:center;justify-content:center;padding:0 10px}
+#shade{position:fixed;inset:0;background:#0007;z-index:30;display:none}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100vw);background:#fff;z-index:31;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;box-shadow:-6px 0 24px #0004}
+body.open #drawer{transform:none} body.open #shade{display:block}
+.dhead{display:flex;align-items:center;justify-content:space-between;padding:22px 26px;border-bottom:3px solid #fce4ec}
+.dhead h2{margin:0}
+.x{border:0;background:#fce4ec;color:#c2185b;font:700 1.1rem Poppins,system-ui,sans-serif;border-radius:14px;padding:14px 20px;cursor:pointer}
+.dbody{flex:1;overflow:auto;padding:16px 26px}
+.line{display:grid;grid-template-columns:84px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid #f3d3df}
+.line img{width:84px;height:84px;object-fit:cover;border-radius:12px}
+.line .nm{font-weight:600;font-size:1.1rem} .line .sub{color:#6d3a52;font-size:.95rem}
+.qty{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.qty button{width:52px;height:52px;border:0;border-radius:12px;background:#fce4ec;color:#c2185b;font:700 1.6rem Poppins,system-ui,sans-serif;cursor:pointer}
+.qty .q{min-width:36px;text-align:center;font-size:1.3rem;font-weight:700}
+.qty .rm{width:auto;padding:0 18px;font-size:1rem;background:#fff;border:2px solid #f3d3df;color:#ad1457}
+.qty .lt{margin-left:auto;font-weight:700;font-size:1.15rem}
+.dfoot{padding:20px 26px 26px;border-top:3px solid #fce4ec}
+.total{display:flex;justify-content:space-between;font-size:1.6rem;font-weight:700;margin-bottom:16px}
+.big{width:100%;min-height:68px;border:0;border-radius:16px;background:#c2185b;color:#fff;font:700 1.3rem Poppins,system-ui,sans-serif;cursor:pointer}
+.big.alt{background:#fff;color:#c2185b;border:2px solid #c2185b;margin-top:10px;min-height:56px;font-size:1.1rem}
+.big:disabled{opacity:.45;cursor:default}
+.empty{padding:40px 0;text-align:center;color:#6d3a52;font-size:1.15rem}
+.pay{background:#fce4ec;border-radius:16px;padding:18px 20px;margin-bottom:16px}
+.pay .lbl{font-weight:600;color:#ad1457}
+.pay .id{font-size:1.35rem;font-weight:700;word-break:break-all;margin:6px 0 10px}
+label{display:block;font-weight:600;margin:12px 0 6px}
+input,textarea{width:100%;font:1rem Poppins,system-ui,sans-serif;padding:12px 14px;border:2px solid #f3d3df;border-radius:12px;color:#3c1428}
+textarea#summary{min-height:220px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92rem;background:#fffafc}
+.steps{margin:0 0 12px;padding-left:22px;line-height:1.5}
+.small{font-size:.9rem;color:#6d3a52}
+#lb{position:fixed;inset:0;background:#000d;display:none;align-items:center;justify-content:center;z-index:40;cursor:zoom-out} #lb img{max-width:94vw;max-height:92vh;border-radius:12px}
+footer{padding:28px 40px 120px;background:#fff;font-size:1rem;line-height:1.6;border-top:5px solid #c2185b}
+footer .who{display:flex;align-items:center;gap:16px;margin-bottom:10px;font-weight:600}
+footer img{height:64px}
+footer a{color:#c2185b}
+@media (max-width:700px){
+ html{font-size:16px}
+ header{padding:14px 16px;gap:14px} header img{height:64px} h1{font-size:1.5rem} header p{font-size:.95rem}
+ nav{padding:12px 16px} nav button{padding:14px 20px;font-size:1.05rem}
+ main{padding:4px 16px 130px} .grid{grid-template-columns:1fr;gap:20px}
+ #cartBtn{right:16px;bottom:16px;padding:16px 24px;font-size:1.2rem}
+ footer{padding:22px 16px 120px}
+ .dhead,.dbody,.dfoot{padding-left:18px;padding-right:18px}
+}
+</style></head><body>
+<header><img src="cb-logo.png" alt="Coffeebreak logo"><div><h1>Coffeebreak Plush and Tattoo Flash</h1><p>Every Coffeebreak TV Series character as a plush toy and a classic tattoo flash print</p></div></header>
+<nav><button class="on" data-s="plush">Plush toys</button><button data-s="flash">Tattoo flash</button></nav>
+<main>
+<section id="plush"><h2>Plush toys</h2><div class="grid" id="gPlush"></div></section>
+<section id="flash" hidden><h2>Tattoo flash</h2><div class="grid" id="gFlash"></div></section>
+</main>
+<footer><div class="who"><img src="cb-logo.png" alt="Coffeebreak logo"><span>Coffeebreak by Karen O'Brien, songwriter and creator from Newcastle NSW. <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></span></div>
+Karen keeps all rights to these products, designs, name and logo. Buyers may resell physical products they bought, but may not copy the designs or make their own versions. Coffeebreak claims no ownership of any third-party brand, product or platform names, which belong to their owners. Copyright 2026 Coffeebreak.</footer>
+
+<button id="cartBtn" aria-label="Open cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.4"/><circle cx="19" cy="21" r="1.4"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>Cart <span id="count">0</span></button>
+<div id="shade"></div>
+<aside id="drawer" aria-label="Cart">
+ <div class="dhead"><h2 id="dTitle">Your cart</h2><button class="x" id="close">Close</button></div>
+ <div class="dbody" id="dBody"></div>
+ <div class="dfoot" id="dFoot"></div>
+</aside>
+<div id="lb"><img alt=""></div>
+
+<script>
+const PRODUCTS = [
+{
+"id": "plush-01-coffeebreak-girl",
+"kind": "plush",
+"name": "Coffeebreak Girl",
+"label": "Plush toy",
+"blurb": "The blonde host of Coffeebreak TV Series, with a pink cardigan, jeans and her coffee.",
+"img": "plush/01-coffeebreak-girl-plush.jpg",
+"num": "01"
+},
+{
+"id": "plush-02-coffee-bean-buddy",
+"kind": "plush",
+"name": "Coffee Bean Buddy",
+"label": "Plush toy",
+"blurb": "The sweet felt coffee bean with lashes and rosy cheeks.",
+"img": "plush/02-coffee-bean-buddy-plush.jpg",
+"num": "02"
+},
+{
+"id": "plush-03-bean-buddy-pal",
+"kind": "plush",
+"name": "Bean Buddy Pal",
+"label": "Plush toy",
+"blurb": "The cheeky caramel bean who always has a grin.",
+"img": "plush/03-bean-buddy-pal-plush.jpg",
+"num": "03"
+},
+{
+"id": "plush-04-marshmallow-mug-pals",
+"kind": "plush",
+"name": "Marshmallow Mug Pals",
+"label": "Plush toy",
+"blurb": "A pink mug with four little marshmallow friends.",
+"img": "plush/04-marshmallow-mug-pals-plush.jpg",
+"num": "04"
+},
+{
+"id": "plush-05-coffeebreak-kitty",
+"kind": "plush",
+"name": "Coffeebreak Kitty",
+"label": "Plush toy",
+"blurb": "A fluffy white kitten in a pink pinafore and bow.",
+"img": "plush/05-coffeebreak-kitty-plush.jpg",
+"num": "05"
+},
+{
+"id": "plush-06-outback-kangaroo",
+"kind": "plush",
+"name": "Outback Kangaroo",
+"label": "Plush toy",
+"blurb": "A kangaroo in a bush hat with a joey in the pouch.",
+"img": "plush/06-outback-kangaroo-plush.jpg",
+"num": "06"
+},
+{
+"id": "plush-07-blue-fluff",
+"kind": "plush",
+"name": "Blue Fluff",
+"label": "Plush toy",
+"blurb": "A round fluffy blue friend with big navy eyes.",
+"img": "plush/07-blue-fluff-plush.jpg",
+"num": "07"
+},
+{
+"id": "plush-08-tv-star",
+"kind": "plush",
+"name": "Coffeebreak TV Star",
+"label": "Plush toy",
+"blurb": "The star of the show in a pink sailor dress with her microphone.",
+"img": "plush/08-tv-star-plush.jpg",
+"num": "08"
+},
+{
+"id": "plush-09-bean",
+"kind": "plush",
+"name": "Bean",
+"label": "Plush toy",
+"blurb": "Curls, a grey beanie, a biker jacket and a pink tutu.",
+"img": "plush/09-bean-plush.jpg",
+"num": "09"
+},
+{
+"id": "plush-10-queen",
+"kind": "plush",
+"name": "Queen",
+"label": "Plush toy",
+"blurb": "The crowned coffee queen with her golden coffee pot.",
+"img": "plush/10-queen-plush.jpg",
+"num": "10"
+},
+{
+"id": "plush-11-espresso",
+"kind": "plush",
+"name": "Espresso",
+"label": "Plush toy",
+"blurb": "The boy next door in a pink cap and hoodie, espresso in hand.",
+"img": "plush/11-espresso-plush.jpg",
+"num": "11"
+},
+{
+"id": "flash-01-coffeebreak-girl",
+"kind": "flash",
+"name": "Coffeebreak Girl",
+"label": "Tattoo flash print",
+"blurb": "Classic tattoo flash sheet of Coffeebreak Girl, with small extra designs and a blank banner.",
+"img": "tattoo-flash/01-coffeebreak-girl-flash.jpg",
+"num": "01"
+},
+{
+"id": "flash-02-coffee-bean-buddy",
+"kind": "flash",
+"name": "Coffee Bean Buddy",
+"label": "Tattoo flash print",
+"blurb": "Classic tattoo flash sheet of Coffee Bean Buddy, with small extra designs and a blank banner.",
+"img": "tattoo-flash/02-coffee-bean-buddy-flash.jpg",
+"num": "02"
+},
+{
+"id": "flash-03-bean-buddy-pal",
+"kind": "flash",
+"name": "Bean Buddy Pal",
+"label": "Tattoo flash print",
+"blurb": "Classic tattoo flash sheet of Bean Buddy Pal, with small extra designs and a blank banner.",
+"img": "tattoo-flash/03-bean-buddy-pal-flash.jpg",
+"num": "03"
+},
+{
+"id": "flash-04-marshmallow-mug-pals",
+"kind": "flash",
+"name": "Marshmallow Mug Pals",
+"label": "Tattoo flash print",
+"blurb": "Classic tattoo flash sheet of Marshmallow Mug Pals, with small extra designs and a blank banner.",
+"img": "tattoo-flash/04-marshmallow-mug-pals-flash.jpg",
+"num": "04"
+},
+{
+"id": "flash-05-coffeebreak-kitty",
+"kind": "flash",
+"name": "Coffeebreak Kitty",
+"label": "Tattoo flash print",
+"blurb": "Classic tattoo flash sheet of Coffeebreak Kitty, with small extra designs and a blank banner.",
+"img": "tattoo-flash/05-coffeebreak-kitty-flash.jpg",
+"num": "05"
+},
+{
+"id": "flash-06-outback-kangaroo",
+"kind": "flash",
+"name": "Outback Kangaroo",
+"label": "Tattoo flash print",
+"blurb": "Classic tattoo flash sheet of Outback Kangaroo, with small extra designs and a blank banner.",
+"img": "tattoo-flash/06-outback-kangaroo-flash.jpg",
+"num": "06"
+},
+{
+"id": "flash-07-blue-fluff",
+"kind": "flash",
+"name": "Blue Fluff",
+"label": "Tattoo flash print",
+"blurb": "Classic tattoo flash sheet of Blue Fluff, with small extra designs and a blank banner.",
+"img": "tattoo-flash/07-blue-fluff-flash.jpg",
+"num": "07"
+},
+{
+"id": "flash-08-tv-star",
+"kind": "flash",
+"name": "Coffeebreak TV Star",
+"label": "Tattoo flash print",
+"blurb": "Classic tattoo flash sheet of Coffeebreak TV Star, with small extra designs and a blank banner.",
+"img": "tattoo-flash/08-tv-star-flash.jpg",
+"num": "08"
+},
+{
+"id": "flash-09-bean",
+"kind": "flash",
+"name": "Bean",
+"label": "Tattoo flash print",
+"blurb": "Classic tattoo flash sheet of Bean, with small extra designs and a blank banner.",
+"img": "tattoo-flash/09-bean-flash.jpg",
+"num": "09"
+},
+{
+"id": "flash-10-queen",
+"kind": "flash",
+"name": "Queen",
+"label": "Tattoo flash print",
+"blurb": "Classic tattoo flash sheet of Queen, with small extra designs and a blank banner.",
+"img": "tattoo-flash/10-queen-flash.jpg",
+"num": "10"
+},
+{
+"id": "flash-11-espresso",
+"kind": "flash",
+"name": "Espresso",
+"label": "Tattoo flash print",
+"blurb": "Classic tattoo flash sheet of Espresso, with small extra designs and a blank banner.",
+"img": "tattoo-flash/11-espresso-flash.jpg",
+"num": "11"
+}
+];
+const KEY='coffeebreak-plush-flash-cart-v1';
+const $=s=>document.querySelector(s);
+const money=n=>'$'+n.toFixed(2)+' '+CURRENCY;
+const price=id=>Number(PRICES[id]||0);
+const byId=Object.fromEntries(PRODUCTS.map(p=>[p.id,p]));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let cart={}, mem={};
+function load(){try{cart=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){cart=mem}
+ for(const k in cart){if(!byId[k]||cart[k]<1)delete cart[k]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(cart))}catch(e){mem=cart}}
+const count=()=>Object.values(cart).reduce((a,b)=>a+b,0);
+const total=()=>Object.entries(cart).reduce((a,[k,q])=>a+price(k)*q,0);
+let view='cart';
+
+function renderGrid(){
+ for(const [kind,el] of [['plush',$('#gPlush')],['flash',$('#gFlash')]]){
+  el.innerHTML=PRODUCTS.filter(p=>p.kind===kind).map(p=>`<article class="card ${kind}">
+   <img class="pic" loading="lazy" src="${p.img}" alt="${esc(p.name)} ${esc(p.label.toLowerCase())}" data-full="${p.img}">
+   <div class="body"><div class="kind">${p.num} &middot; ${esc(p.label)}</div><h3>${esc(p.name)}</h3><p>${esc(p.blurb)}</p>
+   <div class="row"><span class="price">${money(price(p.id))}</span><button class="add" data-id="${p.id}">Add to cart</button></div></div></article>`).join('');
+ }
+}
+function add(id){cart[id]=(cart[id]||0)+1;save();renderCart()}
+function setQty(id,q){if(q<1)delete cart[id];else cart[id]=q;save();renderCart()}
+
+function summaryText(){
+ const f=id=>($('#'+id)||{}).value||'';
+ const lines=Object.entries(cart).map(([k,q])=>{const p=byId[k];return `${q} x ${p.name} (${p.label}) @ ${money(price(k))} = ${money(price(k)*q)}`});
+ return ['Coffeebreak order '+orderRef(),'',...lines,'','Items: '+count(),'Total: '+money(total()),'',
+  'Paid by PayID ('+PAYID.bank+') to '+PAYID.id,'Payment reference: '+orderRef(),'',
+  'Name: '+f('fName'),'Email: '+f('fEmail'),'Postal address: '+f('fAddr').replace(/\n/g,', ')].join('\n');
+}
+function orderRef(){let r;try{r=localStorage.getItem(KEY+'-ref')}catch(e){}
+ if(!r){const d=new Date();r='CB'+String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'-'+Math.floor(1000+Math.random()*9000);
+  try{localStorage.setItem(KEY+'-ref',r)}catch(e){}}
+ return r}
+function copy(text,btn){const done=()=>{const o=btn.textContent;btn.textContent='Copied';setTimeout(()=>btn.textContent=o,1600)};
+ if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(done,()=>fallback())}else fallback();
+ function fallback(){const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();try{document.execCommand('copy')}catch(e){}t.remove();done()}}
+
+function renderCart(){
+ $('#count').textContent=count();
+ const body=$('#dBody'), foot=$('#dFoot');
+ if(view==='checkout'&&count()===0)view='cart';
+ if(view==='cart'){
+  $('#dTitle').textContent='Your cart';
+  body.innerHTML=count()===0?'<div class="empty">Your cart is empty.<br>Tap Add to cart on any plush toy or flash print.</div>':
+   Object.entries(cart).map(([k,q])=>{const p=byId[k];return `<div class="line" data-id="${k}"><img src="${p.img}" alt=""><div>
+    <div class="nm">${esc(p.name)}</div><div class="sub">${esc(p.label)} &middot; ${money(price(k))} each</div>
+    <div class="qty"><button class="dec" aria-label="Less">&minus;</button><span class="q">${q}</span><button class="inc" aria-label="More">+</button>
+    <button class="rm">Remove</button><span class="lt">${money(price(k)*q)}</span></div></div></div>`}).join('');
+  foot.innerHTML=`<div class="total"><span>Total</span><span id="tot">${money(total())}</span></div>
+   <button class="big" id="toCheckout" ${count()?'':'disabled'}>Checkout</button>
+   <button class="big alt" id="keep">Keep shopping</button>`;
+ } else {
+  $('#dTitle').textContent='Checkout';
+  const keep={n:($('#fName')||{}).value||'',e:($('#fEmail')||{}).value||'',a:($('#fAddr')||{}).value||''};
+  body.innerHTML=`<div class="pay"><div class="lbl">Pay by PayID (${esc(PAYID.bank)})</div><div class="id">${esc(PAYID.id)}</div>
+    <div>Amount: <b>${money(total())}</b><br>Reference: <b>${orderRef()}</b></div>
+    <button class="big alt" id="copyId">Copy PayID</button></div>
+   <ol class="steps"><li>Pay the total by PayID in your banking app, using the reference above.</li>
+    <li>Add your details below, then copy the order summary.</li>
+    <li>Email the order summary to ${esc(PAYID.id)}.</li></ol>
+   <label for="fName">Your name</label><input id="fName" autocomplete="name" value="${esc(keep.n)}">
+   <label for="fEmail">Your email</label><input id="fEmail" type="email" autocomplete="email" value="${esc(keep.e)}">
+   <label for="fAddr">Postal address</label><textarea id="fAddr" rows="3" autocomplete="street-address">${esc(keep.a)}</textarea>
+   <label for="summary">Order summary</label><textarea id="summary" readonly></textarea>`;
+  foot.innerHTML=`<div class="total"><span>Total</span><span id="tot">${money(total())}</span></div>
+   <button class="big" id="copySum">Copy order summary</button><button class="big alt" id="back">Back to cart</button>`;
+  $('#summary').value=summaryText();
+ }
+}
+document.addEventListener('input',e=>{if(['fName','fEmail','fAddr'].includes(e.target.id))$('#summary').value=summaryText()});
+document.addEventListener('click',e=>{
+ const t=e.target.closest('button,img.pic,#lb,#shade');if(!t)return;
+ if(t.classList.contains('add')){add(t.dataset.id);t.classList.add('done');t.textContent='Added';setTimeout(()=>{t.classList.remove('done');t.textContent='Add to cart'},1200);return}
+ if(t.matches('nav button')){document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===t));$('#plush').hidden=t.dataset.s!=='plush';$('#flash').hidden=t.dataset.s!=='flash';window.scrollTo({top:0});return}
+ if(t.id==='cartBtn'){view='cart';renderCart();document.body.classList.add('open');return}
+ if(t.id==='close'||t.id==='shade'||t.id==='keep'){document.body.classList.remove('open');return}
+ if(t.id==='toCheckout'){view='checkout';renderCart();return}
+ if(t.id==='back'){view='cart';renderCart();return}
+ if(t.id==='copyId'){copy(PAYID.id,t);return}
+ if(t.id==='copySum'){$('#summary').value=summaryText();copy($('#summary').value,t);return}
+ const line=t.closest('.line');
+ if(line){const id=line.dataset.id;if(t.classList.contains('inc'))setQty(id,cart[id]+1);else if(t.classList.contains('dec'))setQty(id,cart[id]-1);else if(t.classList.contains('rm'))setQty(id,0);return}
+ if(t.classList.contains('pic')){$('#lb img').src=t.dataset.full;$('#lb').style.display='flex';return}
+ if(t.id==='lb'){t.style.display='none'}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.body.classList.remove('open');$('#lb').style.display='none'}});
+load();renderGrid();renderCart();
+</script></body></html>

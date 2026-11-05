@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Lost Kid Helper</title>
+<link rel="icon" href="logo.png">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#0b1d3a;color:#fff;font-size:20px;line-height:1.4}
+.wrap{max-width:560px;margin:0 auto;padding:14px}
+header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+header img{height:44px;width:44px;object-fit:contain;border-radius:8px;background:#fff}
+header h1{font-size:22px;margin:0}
+.btn{display:block;width:100%;border:4px solid #fff;border-radius:22px;padding:26px 12px;margin:14px 0;font-size:30px;font-weight:bold;text-align:center;text-decoration:none;color:#fff;cursor:pointer;font-family:inherit}
+.btn.red{background:#d00000;font-size:34px;padding:34px 12px}
+.btn.green{background:#0a7a2f}
+.btn.blue{background:#0050b3}
+.btn.purple{background:#6a1b9a}
+.btn.yellow{background:#ffd400;color:#000;border-color:#000}
+.btn.grey{background:#333;font-size:22px;padding:14px;border-width:2px}
+.btn.med{font-size:24px;padding:16px 10px;margin:8px 0}
+.btn small{display:block;font-size:20px;font-weight:normal;margin-top:4px}
+.btn.disabled{opacity:.45}
+.panel{background:#fff;color:#111;border-radius:14px;padding:14px;margin:12px 0}
+.panel h2{margin-top:0}
+.panel h3{margin:18px 0 0;font-size:21px}
+label{display:block;font-weight:bold;margin-top:12px}
+input[type=text],input[type=tel],input[type=password]{width:100%;font-size:22px;padding:12px;border:2px solid #333;border-radius:10px;margin-top:4px}
+.row{display:flex;gap:8px;align-items:center;margin-top:12px}
+.row input[type=checkbox]{width:28px;height:28px;flex:none}
+.note{font-size:16px;color:#333}
+footer{font-size:14px;color:#cdd8ee;margin:22px 0 40px}
+footer a{color:#ffd400}
+.hide{display:none}
+#card{position:fixed;inset:0;background:#fff;color:#000;z-index:10;overflow:auto;padding:18px;text-align:center}
+#card h2{font-size:30px;margin:6px 0}
+#card .name{font-size:64px;font-weight:bold;margin:8px 0;word-wrap:break-word}
+#card p{font-size:28px;margin:10px 0}
+#card .sub{font-size:24px;border:3px solid #000;border-radius:12px;padding:8px;margin:10px 0}
+.warn{background:#fff3cd;color:#111;border-radius:10px;padding:10px;font-size:17px}
+.privline{text-align:center;font-size:18px;color:#ffe9a8;margin:14px 0 0}
+#locPanel{background:#fff;color:#111;border:4px solid #6a1b9a;border-radius:16px;padding:12px;margin:12px 0}
+#locPanel h2{margin:0 0 6px;font-size:24px}
+#locPanel .coords{font-family:monospace;font-size:18px;word-break:break-all;background:#eee;border-radius:8px;padding:8px;margin:6px 0}
+#locPanel .status{font-size:18px;margin:6px 0}
+#locPanel .err{background:#ffe0e0;border-radius:10px;padding:10px;font-size:18px}
+.places h2{font-size:22px;margin:22px 0 0;text-align:center;color:#ffe9a8}
+.place{margin:0 0 6px}
+.place .addr{text-align:center;font-size:18px;color:#cdd8ee;margin:-6px 0 4px;word-wrap:break-word}
+.place .sub{display:flex;gap:10px;justify-content:center;font-size:18px;margin-bottom:10px}
+.place .sub a{color:#ffd400}
+.exrow{border:2px solid #bbb;border-radius:10px;padding:8px;margin-top:10px}
+.exrow button{font-size:16px;padding:6px 10px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><img src="logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Lost Kid Helper</h1></header>
+
+<!-- KID HOME -->
+<section id="kid" class="hide">
+  <a class="btn red" id="b000" href="tel:000">Call for help 000<small>Police, ambulance, fire</small></a>
+  <a class="btn green" id="bMum" href="#">Call Mum</a>
+  <a class="btn blue" id="bDad" href="#">Call Dad</a>
+
+  <p class="privline" id="privLine">Your location is only sent when you tap the button below, and only to the grown-ups a parent saved.</p>
+  <button class="btn purple" id="bLoc">Send my location to Mum and Dad</button>
+
+  <div id="locPanel" class="hide" aria-live="polite">
+    <h2 id="locTitle">Finding my location</h2>
+    <div id="locErr" class="err hide"></div>
+    <div id="locOk" class="hide">
+      <div class="status" id="locStatus"></div>
+      <div class="coords" id="locCoords"></div>
+      <a class="btn green med" id="smsMum" href="#">Text my location to Mum</a>
+      <a class="btn blue med" id="smsDad" href="#">Text my location to Dad</a>
+      <button class="btn grey" id="locCopy">Copy my location link</button>
+      <button class="btn grey hide" id="locShare">Share my location</button>
+      <a class="btn grey" id="locOpen" href="#" target="_blank" rel="noopener">Open my position in Maps</a>
+      <a class="btn yellow med" id="locPolice" href="#" target="_blank" rel="noopener">Nearest police station from here</a>
+      <div class="row"><input type="checkbox" id="walkToggle"><label for="walkToggle" style="margin:0">Keep sharing while I walk</label></div>
+      <p class="note" id="walkNote">Off. When on, this page keeps updating my position while it stays open on the screen. Nothing is sent by itself. Each text is sent when I press Send in my messages app.</p>
+      <button class="btn red med hide" id="walkStop">Stop sharing</button>
+    </div>
+    <p id="locMsg" class="note" style="margin-bottom:0"></p>
+    <button class="btn grey" id="locClose">Close</button>
+  </div>
+
+  <div class="places hide" id="places">
+    <h2>Walking directions</h2>
+    <div id="placeList"></div>
+  </div>
+
+  <a class="btn yellow" id="bPolice" href="#">Find a police station</a>
+  <button class="btn yellow" id="bCard">I am lost - show my name card</button>
+  <p id="homeLine" class="hide" style="text-align:center"></p>
+  <button class="btn grey" id="bParent">Parent area</button>
+</section>
+
+<!-- PIN CHECK -->
+<section id="pinGate" class="hide">
+  <div class="panel">
+    <h2>Parent area</h2>
+    <label for="pinIn">Enter PIN</label>
+    <input type="password" id="pinIn" inputmode="numeric" autocomplete="off">
+    <p id="pinErr" class="note"></p>
+    <button class="btn blue" id="pinOk" style="font-size:24px;padding:14px">Unlock</button>
+    <button class="btn grey" id="pinBack">Back</button>
+  </div>
+</section>
+
+<!-- PARENT SETUP -->
+<section id="setup" class="hide">
+  <div class="panel">
+    <h2>Parent setup</h2>
+    <p class="warn">This is a helper, not a tracking service. A web page cannot follow a child once it is closed, and it cannot watch where a child is in the background. Location is read only when your child taps the location button, and it goes nowhere unless a text is sent from your child's messaging app. Everything below is saved only on this device. Teach your child to go to a police officer or a shop worker, and that in Australia the number to call in an emergency is 000.</p>
+
+    <h3>People</h3>
+    <label for="kidName">Child first name only</label>
+    <input type="text" id="kidName" maxlength="30" autocomplete="off" placeholder="First name">
+    <label for="mumName">Mum name (shown on the button)</label>
+    <input type="text" id="mumName" maxlength="30" placeholder="Mum" autocomplete="off">
+    <label for="mumPhone">Mum phone</label>
+    <input type="tel" id="mumPhone" maxlength="20" placeholder="04xx xxx xxx" autocomplete="off">
+    <label for="dadName">Dad or other guardian name</label>
+    <input type="text" id="dadName" maxlength="30" placeholder="Dad" autocomplete="off">
+    <label for="dadPhone">Dad or other guardian phone</label>
+    <input type="tel" id="dadPhone" maxlength="20" placeholder="04xx xxx xxx" autocomplete="off">
+
+    <h3>Saved places (used for walking directions)</h3>
+    <p class="note">Addresses stay on this device only. They are never put in a web link and never sent anywhere by this app. When your child taps a Take me button, their maps app opens with that address as the destination.</p>
+    <label for="homeLabel">Home label (a nickname such as "our house")</label>
+    <input type="text" id="homeLabel" maxlength="40" placeholder="our house" autocomplete="off">
+    <label for="homeAddr">Home address</label>
+    <input type="text" id="homeAddr" maxlength="200" placeholder="Street number, street, suburb" autocomplete="off">
+    <label for="homePhone">Home phone (optional)</label>
+    <input type="tel" id="homePhone" maxlength="20" placeholder="Optional" autocomplete="off">
+    <label for="mumAddr">Mum's address</label>
+    <input type="text" id="mumAddr" maxlength="200" placeholder="Street number, street, suburb" autocomplete="off">
+    <label for="dadAddr">Dad's address</label>
+    <input type="text" id="dadAddr" maxlength="200" placeholder="Street number, street, suburb" autocomplete="off">
+    <label for="polName">Favourite police station name</label>
+    <input type="text" id="polName" maxlength="60" placeholder="Police station name" autocomplete="off">
+    <label for="polAddr">Police station address</label>
+    <input type="text" id="polAddr" maxlength="200" placeholder="Street number, street, suburb" autocomplete="off">
+    <label for="polPhone">Police station phone (optional)</label>
+    <input type="tel" id="polPhone" maxlength="20" placeholder="Optional" autocomplete="off">
+
+    <h3>Other places (Nan's, school and so on)</h3>
+    <div id="exList"></div>
+    <button class="btn grey" id="exAdd" type="button">Add another place</button>
+
+    <h3>Privacy on the kid screen</h3>
+    <div class="row"><input type="checkbox" id="showAddr"><label for="showAddr" style="margin:0">Show address text to the child (off by default, buttons only)</label></div>
+    <div class="row"><input type="checkbox" id="showHome"><label for="showHome" style="margin:0">Show the home label on the kid home screen</label></div>
+    <label for="suburb">Suburb for the name card (optional)</label>
+    <input type="text" id="suburb" maxlength="40" placeholder="e.g. Newcastle NSW" autocomplete="off">
+    <div class="row"><input type="checkbox" id="showSuburb"><label for="showSuburb" style="margin:0">Show the suburb on the name card</label></div>
+    <label for="pinSet">Optional parent PIN, 4 to 8 digits (keeps kids out of this screen). Leave blank to keep the current setting.</label>
+    <input type="password" id="pinSet" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="Leave blank to keep">
+    <div class="row"><input type="checkbox" id="pinRemove"><label for="pinRemove" style="margin:0">Remove the PIN</label></div>
+    <p id="pinState" class="note"></p>
+    <p class="note">The PIN is stored as a salted hash, not as the number. It stops casual snooping only. Saved details are not encrypted, so keep the phone locked too.</p>
+    <button class="btn green" id="save" style="font-size:26px;padding:18px">Save and go to kid screen</button>
+    <button class="btn grey" id="clear">Erase everything saved on this device</button>
+    <p id="saveErr" class="note" style="color:#b00"></p>
+  </div>
+  <div class="panel">
+    <h2>Notes for parents</h2>
+    <ul class="note" style="font-size:17px">
+      <li>Open this page once with internet, then use Add to Home Screen. After that it works offline. Calls, texts and maps still need phone signal.</li>
+      <li>Send my location: your child taps the button, allows location in the browser, then taps Text to Mum or Dad and presses Send in the messages app. Nothing goes out without those taps.</li>
+      <li>Keep sharing while I walk only updates while this page stays open and the screen stays on. A web page cannot track a child after it closes, so this is not a replacement for a real tracking device or a family locator app.</li>
+      <li>If location is turned off or blocked, the 000, Mum, Dad and police station buttons still work.</li>
+      <li>Walking directions and Find a police station open Google Maps or Apple Maps in your child's browser. That maps service then sees the destination, as it would for any search.</li>
+      <li>Practise with your child: press the buttons together, and talk about police officers, shop workers and staying put.</li>
+      <li>If a child is lost right now, call 000.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  Free educational safety tool by Coffeebreak. <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">https://coffeebreaks.itch.io</a><br>
+  Coffeebreak keeps all rights to its products, designs, apps, name and logo. People who buy a physical Coffeebreak product may resell that item, but must not copy it or make their own versions. Fans may not copy or remake versions of this app.<br>
+  This app is a helper only. It is not a tracking or emergency service. In an emergency in Australia, call 000.
+</footer>
+</div>
+
+<!-- NAME CARD -->
+<div id="card" class="hide">
+  <h2>I am lost</h2>
+  <div class="name" id="cName">My name</div>
+  <p>Please help me find <b id="cMum">Mum</b> or <b id="cDad">Dad</b>, or take me to a police station.</p>
+  <div class="sub hide" id="cSub"></div>
+  <div class="sub hide" id="cAddr"></div>
+  <a class="btn green" id="cCallMum" href="#">Call Mum</a>
+  <a class="btn blue" id="cCallDad" href="#">Call Dad</a>
+  <a class="btn red" href="tel:000">Call 000</a>
+  <button class="btn grey" id="cClose" style="color:#fff">Close card</button>
+</div>
+
+<script>
+(function(){
+var KEY="coffeebreak_lostkid_v1";
+var MAXEX=6;
+var pos=null, watchId=null, locBusy=false;
+function $(id){return document.getElementById(id)}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||null}catch(e){return null}}
+function save(d){try{localStorage.setItem(KEY,JSON.stringify(d));return true}catch(e){return false}}
+function clean(s){return String(s||"").replace(/[<>]/g,"").trim()}
+function digits(s){return String(s||"").replace(/[^0-9+]/g,"")}
+function enc(s){return encodeURIComponent(s)}
+function isIOS(){var u=navigator.userAgent||"";return /iPad|iPhone|iPod/.test(u)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1)}
+function show(id){["kid","setup","pinGate"].forEach(function(s){$(s).classList.add("hide")});$(id).classList.remove("hide");window.scrollTo(0,0)}
+function setTel(el,num){
+  if(num){el.href="tel:"+num;el.classList.remove("disabled")}
+  else{el.href="#";el.classList.add("disabled")}
+}
+function getPlaces(d){
+  var out=[],mum=d.mumName||"Mum",dad=d.dadName||"Dad";
+  if(d.homeAddr)out.push({label:"Take me home",addr:d.homeAddr,phone:d.homePhone,who:"home"});
+  if(d.mumAddr)out.push({label:"Take me to "+mum,addr:d.mumAddr,phone:d.mumPhone,who:mum});
+  if(d.dadAddr)out.push({label:"Take me to "+dad,addr:d.dadAddr,phone:d.dadPhone,who:dad});
+  if(d.polAddr)out.push({label:"Take me to "+(d.polName||"the police station"),addr:d.polAddr,phone:d.polPhone,who:"the police station"});
+  (d.extras||[]).forEach(function(x){
+    if(x&&x.addr)out.push({label:"Take me to "+(x.label||"this place"),addr:x.addr,phone:x.phone,who:x.label||"this place"});
+  });
+  return out;
+}
+function googleDir(a){return "https://www.google.com/maps/dir/?api=1&destination="+enc(a)+"&travelmode=walking"}
+function appleDir(a){return "https://maps.apple.com/?daddr="+enc(a)+"&dirflg=w"}
+function renderPlaces(d){
+  var list=$("placeList");list.textContent="";
+  var ps=getPlaces(d);
+  $("places").classList.toggle("hide",ps.length===0);
+  ps.forEach(function(p){
+    var box=document.createElement("div");box.className="place";
+    var a=document.createElement("a");a.className="btn green";a.href=googleDir(p.addr);a.target="_blank";a.rel="noopener";a.textContent=p.label;
+    a.setAttribute("data-place","1");
+    box.appendChild(a);
+    if(d.showAddr){var t=document.createElement("div");t.className="addr";t.textContent=p.addr;box.appendChild(t)}
+    var sub=document.createElement("div");sub.className="sub";
+    var ap=document.createElement("a");ap.href=appleDir(p.addr);ap.target="_blank";ap.rel="noopener";ap.textContent="Apple Maps";sub.appendChild(ap);
+    if(p.phone){var c=document.createElement("a");c.href="tel:"+p.phone;c.textContent="Call "+p.who;sub.appendChild(c)}
+    box.appendChild(sub);
+    list.appendChild(box);
+  });
+}
+function renderKid(d){
+  var mum=d.mumName||"Mum", dad=d.dadName||"Dad";
+  $("bMum").textContent="Call "+mum;
+  $("bDad").textContent="Call "+dad;
+  setTel($("bMum"),d.mumPhone);setTel($("bDad"),d.dadPhone);
+  $("cMum").textContent=mum;$("cDad").textContent=dad;
+  $("cCallMum").textContent="Call "+mum;$("cCallDad").textContent="Call "+dad;
+  setTel($("cCallMum"),d.mumPhone);setTel($("cCallDad"),d.dadPhone);
+  $("cName").textContent=d.kidName||"My name";
+  if(d.showSuburb&&d.suburb){$("cSub").textContent="I live near "+d.suburb;$("cSub").classList.remove("hide")}else{$("cSub").classList.add("hide")}
+  if(d.showAddr&&d.homeAddr){$("cAddr").textContent="Home address: "+d.homeAddr;$("cAddr").classList.remove("hide")}else{$("cAddr").textContent="";$("cAddr").classList.add("hide")}
+  var h=$("homeLine");
+  if(d.showHome&&d.homeLabel){h.textContent="Home: "+d.homeLabel;h.classList.remove("hide")}else{h.classList.add("hide")}
+  $("bLoc").textContent="Send my location to "+mum+" and "+dad;
+  $("smsMum").textContent="Text my location to "+mum;
+  $("smsDad").textContent="Text my location to "+dad;
+  renderPlaces(d);
+}
+function addExRow(x){
+  var list=$("exList");
+  if(list.children.length>=MAXEX)return;
+  x=x||{};
+  var r=document.createElement("div");r.className="exrow";
+  function f(cls,lab,ph,type,val,max){
+    var l=document.createElement("label");l.textContent=lab;l.style.marginTop="8px";
+    var i=document.createElement("input");i.type=type;i.className=cls;i.placeholder=ph;i.maxLength=max;i.value=val||"";i.autocomplete="off";
+    r.appendChild(l);r.appendChild(i);
+  }
+  f("ex-label","Place name","Nan's house","text",x.label,40);
+  f("ex-addr","Address","Street number, street, suburb","text",x.addr,200);
+  f("ex-phone","Phone (optional)","Optional","tel",x.phone,20);
+  var rm=document.createElement("button");rm.type="button";rm.className="btn grey";rm.textContent="Remove this place";
+  rm.addEventListener("click",function(){r.parentNode.removeChild(r);$("exAdd").classList.remove("hide")});
+  r.appendChild(rm);list.appendChild(r);
+  if(list.children.length>=MAXEX)$("exAdd").classList.add("hide");
+}
+function fillSetup(d){
+  d=d||{};
+  var set=function(id,v){$(id).value=v||""};
+  set("kidName",d.kidName);set("mumName",d.mumName);set("mumPhone",d.mumPhone);
+  set("dadName",d.dadName);set("dadPhone",d.dadPhone);set("homeLabel",d.homeLabel);
+  set("homeAddr",d.homeAddr);set("homePhone",d.homePhone);set("mumAddr",d.mumAddr);set("dadAddr",d.dadAddr);
+  set("polName",d.polName);set("polAddr",d.polAddr);set("polPhone",d.polPhone);
+  $("exList").textContent="";$("exAdd").classList.remove("hide");
+  (d.extras||[]).forEach(addExRow);
+  $("showAddr").checked=!!d.showAddr;
+  $("showHome").checked=!!d.showHome;$("suburb").value=d.suburb||"";$("showSuburb").checked=!!d.showSuburb;
+  $("pinSet").value="";$("pinRemove").checked=false;$("pinState").textContent=(d.pinHash||d.pin)?"A PIN is set.":"No PIN is set.";
+}
+function init(){
+  var d=load();
+  if(d&&d.configured){renderKid(d);show("kid")}else{fillSetup(d);show("setup")}
+}
+
+/* ---------- location ---------- */
+function mapsLink(p){return "https://www.google.com/maps?q="+p.lat+","+p.lng}
+function accText(p){return p.acc!=null?Math.round(p.acc)+" m":"unknown"}
+function buildText(p,d){
+  var who=(d&&d.kidName)?d.kidName+" here. ":"";
+  return who+"I need help. My location: "+mapsLink(p)+" (accurate to about "+accText(p)+")";
+}
+function smsHref(num,text){
+  return "sms:"+num+(isIOS()?"&body=":"?body=")+enc(text);
+}
+function setPos(c){
+  pos={lat:Number(c.latitude).toFixed(6),lng:Number(c.longitude).toFixed(6),acc:c.accuracy};
+  var d=load()||{};
+  var text=buildText(pos,d);
+  pos.text=text;
+  $("locCoords").textContent=pos.lat+", "+pos.lng+"  (accuracy about "+accText(pos)+")";
+  $("locOpen").href=mapsLink(pos);
+  $("locPolice").href="https://www.google.com/maps/search/police+station/@"+pos.lat+","+pos.lng+",15z";
+  var live=watchId!==null;
+  var mum=d.mumName||"Mum",dad=d.dadName||"Dad";
+  var verb=live?"Re-send latest link to ":"Text my location to ";
+  $("smsMum").textContent=verb+mum;$("smsDad").textContent=verb+dad;
+  setTel($("smsMum"),null);setTel($("smsDad"),null);
+  if(d.mumPhone){$("smsMum").href=smsHref(d.mumPhone,text);$("smsMum").classList.remove("disabled")}
+  if(d.dadPhone){$("smsDad").href=smsHref(d.dadPhone,text);$("smsDad").classList.remove("disabled")}
+  $("locStatus").textContent=live?"Live. Updated "+new Date().toLocaleTimeString():"Location found.";
+  $("locTitle").textContent=live?"Sharing live while I walk":"My location";
+  $("locErr").classList.add("hide");$("locOk").classList.remove("hide");
+  $("locMsg").textContent=(d.mumPhone||d.dadPhone)?"Pressing a Text button opens my messages app with the link ready. I still need to press Send.":"No phone number is saved yet, so use Copy or Share, or ask a grown-up to finish setup in the Parent area.";
+}
+function locError(e){
+  var msg;
+  if(e&&e.code===1)msg="Location is turned off or blocked for this page.";
+  else if(e&&e.code===3)msg="Finding my location took too long. Try again outside or near a window.";
+  else if(e&&e.code===2)msg="My location is not available right now.";
+  else msg="This phone or browser cannot share location.";
+  $("locTitle").textContent="Location not available";
+  $("locErr").textContent=msg+" You can still call 000, call Mum or Dad, or find a police station with the buttons on the main screen.";
+  $("locErr").classList.remove("hide");$("locOk").classList.add("hide");
+  $("locMsg").textContent="";
+}
+function getFix(){
+  $("locPanel").classList.remove("hide");
+  $("locTitle").textContent="Finding my location";
+  $("locErr").classList.add("hide");
+  $("locMsg").textContent="Please allow location if the browser asks. It is only used for this tap.";
+  if(!navigator.geolocation){locError(null);return}
+  if(locBusy)return;locBusy=true;
+  navigator.geolocation.getCurrentPosition(function(p){locBusy=false;setPos(p.coords)},function(e){locBusy=false;locError(e)},{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+}
+function stopWalk(){
+  if(watchId!==null){try{navigator.geolocation.clearWatch(watchId)}catch(e){}watchId=null}
+  $("walkToggle").checked=false;$("walkStop").classList.add("hide");
+  $("walkNote").textContent="Off. When on, this page keeps updating my position while it stays open on the screen. Nothing is sent by itself. Each text is sent when I press Send in my messages app.";
+  if(pos){setPos({latitude:pos.lat,longitude:pos.lng,accuracy:pos.acc});$("locStatus").textContent="Stopped. This is the last position found."}
+}
+function startWalk(){
+  if(!navigator.geolocation){locError(null);$("walkToggle").checked=false;return}
+  if(watchId!==null)return;
+  watchId=navigator.geolocation.watchPosition(function(p){setPos(p.coords)},function(e){stopWalk();locError(e)},{enableHighAccuracy:true,timeout:20000,maximumAge:0});
+  $("walkStop").classList.remove("hide");
+  $("walkNote").textContent="On. Updating while this page stays open. Press Re-send latest link to text it again. Press Stop sharing to turn this off.";
+}
+function copyText(t,done){
+  function fb(){
+    var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();
+    var ok=false;try{ok=document.execCommand("copy")}catch(e){}document.body.removeChild(ta);done(ok);
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){done(true)},fb)}else fb();
+}
+$("bLoc").addEventListener("click",getFix);
+$("locClose").addEventListener("click",function(){stopWalk();$("locPanel").classList.add("hide");pos=null});
+$("walkToggle").addEventListener("change",function(){if(this.checked)startWalk();else stopWalk()});
+$("walkStop").addEventListener("click",stopWalk);
+$("locCopy").addEventListener("click",function(){
+  if(!pos)return;
+  copyText(pos.text,function(ok){$("locMsg").textContent=ok?"Copied. I can paste it into any message.":"Could not copy. Press and hold the text above to copy it."});
+});
+if(navigator.share){
+  $("locShare").classList.remove("hide");
+  $("locShare").addEventListener("click",function(){
+    if(!pos)return;
+    navigator.share({title:"My location",text:pos.text}).catch(function(){});
+  });
+}
+["smsMum","smsDad"].forEach(function(id){
+  $(id).addEventListener("click",function(e){
+    if(this.getAttribute("href")==="#"||this.classList.contains("disabled")){e.preventDefault();alert("No phone number is saved for this person yet. Use Copy or Share, or ask a grown-up to set it up in the Parent area.")}
+  });
+});
+window.addEventListener("pagehide",function(){stopWalk()});
+
+/* ---------- other buttons ---------- */
+["bMum","bDad","cCallMum","cCallDad"].forEach(function(id){
+  $(id).addEventListener("click",function(e){
+    if(this.getAttribute("href")==="#"){e.preventDefault();alert("No phone number is saved yet. Ask a grown-up to set it up in the Parent area.")}
+  });
+});
+$("bPolice").addEventListener("click",function(e){
+  e.preventDefault();
+  var fallback="https://www.google.com/maps/search/police+station+near+me";
+  var done=false;
+  function go(u){if(done)return;done=true;window.open(u,"_blank")||(location.href=u)}
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(function(p){
+      go("https://www.google.com/maps/search/police+station/@"+p.coords.latitude.toFixed(5)+","+p.coords.longitude.toFixed(5)+",15z");
+    },function(){go(fallback)},{timeout:6000,maximumAge:60000});
+    setTimeout(function(){go(fallback)},7000);
+  }else go(fallback);
+});
+$("bCard").addEventListener("click",function(){$("card").classList.remove("hide")});
+$("cClose").addEventListener("click",function(){$("card").classList.add("hide")});
+$("bParent").addEventListener("click",function(){
+  var d=load()||{};
+  if(d.pinHash||d.pin){$("pinIn").value="";$("pinErr").textContent="";show("pinGate")}
+  else{fillSetup(d);show("setup")}
+});
+$("pinBack").addEventListener("click",function(){show("kid")});
+$("pinOk").addEventListener("click",function(){
+  var d=load()||{};
+  var v=$("pinIn").value;
+  function ok(){fillSetup(d);show("setup")}
+  function bad(){$("pinErr").textContent="That PIN is not right."}
+  if(d.pinHash){hashPin(v,d.pinSalt).then(function(h){h===d.pinHash?ok():bad()})}
+  else{v===d.pin?ok():bad()}
+});
+function toHex(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return("0"+b.toString(16)).slice(-2)}).join("")}
+function fallbackHash(s){
+  var h1=0xdeadbeef,h2=0x41c6ce57;
+  for(var r=0;r<2000;r++){for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}
+    h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909)}
+  return "f"+(4294967296*(2097151&h2)+(h1>>>0)).toString(16)
+}
+function hashPin(pin,salt){
+  try{
+    if(window.crypto&&crypto.subtle){
+      var enc=new TextEncoder();
+      return crypto.subtle.importKey("raw",enc.encode(pin),"PBKDF2",false,["deriveBits"]).then(function(k){
+        return crypto.subtle.deriveBits({name:"PBKDF2",salt:enc.encode(salt),iterations:100000,hash:"SHA-256"},k,256)
+      }).then(function(b){return "p"+toHex(b)}).catch(function(){return fallbackHash(salt+":"+pin)});
+    }
+  }catch(e){}
+  return Promise.resolve(fallbackHash(salt+":"+pin));
+}
+function newSalt(){
+  var a=new Uint8Array(12);
+  if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(a);else for(var i=0;i<12;i++)a[i]=Math.floor(Math.random()*256);
+  return toHex(a);
+}
+$("exAdd").addEventListener("click",function(){addExRow({})});
+$("save").addEventListener("click",function(){
+  var ex=[];
+  Array.prototype.forEach.call($("exList").children,function(r){
+    var o={label:clean(r.querySelector(".ex-label").value),addr:clean(r.querySelector(".ex-addr").value),phone:digits(r.querySelector(".ex-phone").value)};
+    if(o.label||o.addr||o.phone)ex.push(o);
+  });
+  var v=function(id){return clean($(id).value)};
+  var d={
+    configured:true,
+    kidName:v("kidName").split(/\s+/)[0],
+    mumName:v("mumName"),mumPhone:digits($("mumPhone").value),
+    dadName:v("dadName"),dadPhone:digits($("dadPhone").value),
+    homeLabel:v("homeLabel"),homeAddr:v("homeAddr"),homePhone:digits($("homePhone").value),
+    mumAddr:v("mumAddr"),dadAddr:v("dadAddr"),
+    polName:v("polName"),polAddr:v("polAddr"),polPhone:digits($("polPhone").value),
+    extras:ex,
+    showAddr:$("showAddr").checked,showHome:$("showHome").checked,
+    suburb:v("suburb"),showSuburb:$("showSuburb").checked,
+    pinHash:(load()||{}).pinHash,pinSalt:(load()||{}).pinSalt
+  };
+  if(!d.mumPhone&&!d.dadPhone){$("saveErr").textContent="Please add at least one phone number.";return}
+  var pinRaw=$("pinSet").value.replace(/\D/g,"");
+  if($("pinSet").value&&pinRaw.length<4){$("saveErr").textContent="The PIN needs 4 to 8 digits.";return}
+  var step;
+  if($("pinRemove").checked){d.pinHash=undefined;d.pinSalt=undefined;step=Promise.resolve()}
+  else if(pinRaw){d.pinSalt=newSalt();step=hashPin(pinRaw,d.pinSalt).then(function(h){d.pinHash=h})}
+  else step=Promise.resolve();
+  step.then(function(){
+    if(!save(d)){$("saveErr").textContent="This browser would not save the settings. Check private browsing is off.";return}
+    $("saveErr").textContent="";stopWalk();$("locPanel").classList.add("hide");pos=null;renderKid(d);show("kid");
+  });
+});
+$("clear").addEventListener("click",function(){
+  if(confirm("Erase everything saved on this device?")){
+    stopWalk();pos=null;$("locPanel").classList.add("hide");
+    try{localStorage.removeItem(KEY)}catch(e){}
+    fillSetup(null);$("saveErr").textContent="Erased.";
+  }
+});
+init();
+})();
+</script>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body>
+</html>

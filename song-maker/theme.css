@@ -1,0 +1,24 @@
+:root{--brown:#3b2a22;--tan:#c68a50;--orange:#f5a83a;--pink:#ff6f91;--cream:#fff4ea;--ink:#2a1a12}
+*{box-sizing:border-box}
+html,body{margin:0;background:linear-gradient(#fdeaf0,#f7a8c0);min-height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);-webkit-tap-highlight-color:transparent}
+#app{max-width:560px;margin:0 auto;padding:0 8px 40px}
+header.top{display:flex;align-items:center;gap:10px;background:var(--brown);color:#fff;padding:8px 12px;border-radius:0 0 16px 16px;margin-bottom:10px}
+header.top img{width:44px;height:44px;border-radius:8px;background:#fff;object-fit:contain}
+header.top h1{font-size:18px;margin:0;line-height:1.1}header.top small{display:block;opacity:.75;font-size:12px;font-weight:400}
+.card{background:var(--brown);color:#fff;border-radius:14px;padding:12px;margin:10px 0}
+.card h2{font-size:13px;margin:0 0 6px;font-weight:700;color:#ffe3c2}
+label.l{display:block;font-size:12px;font-weight:700;margin:8px 0 3px;color:#ffe3c2}
+input[type=text],textarea,select,input[type=number]{width:100%;font:16px system-ui;padding:9px;border-radius:9px;border:0;background:#fff4ea;color:var(--ink)}
+textarea{min-height:130px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;resize:vertical}
+button{font:600 14px system-ui;border:0;border-radius:9px;padding:9px 12px;background:var(--tan);color:#fff;cursor:pointer;min-height:40px}
+button:active{transform:scale(.97)}
+button.on,.chip.on{background:var(--orange);color:#3b2a22}
+button.pink{background:var(--pink)}button.dark{background:#5a4236}
+button.wide{width:100%}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{flex:0 0 calc(33.33% - 4px);background:#5a4236;color:#fff;border-radius:9px;padding:9px 4px;text-align:center;font-size:13px;min-height:40px}
+.chips.small .chip{flex:0 0 auto;padding:6px 10px;font-size:12px;min-height:32px}
+.note{font-size:12px;opacity:.85;line-height:1.4}
+footer.disc{font-size:11.5px;line-height:1.45;color:#5a2a40;text-align:center;margin:18px 6px}
+footer.disc a{color:#8a1a4a}
+.hide{display:none!important}

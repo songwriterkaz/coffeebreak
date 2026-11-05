@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="icon" href="data:,">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Karaoke 12,000 Tools</title>
+<style>
+:root{--bg:#1b1220;--card:#2a1d31;--ink:#fff7ee;--muted:#cbb8c9;--accent:#ff7ab6;--gold:#f6c177;--line:#3d2b46}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at 20% 0,#3a1f3f,var(--bg) 60%);color:var(--ink);min-height:100vh}
+header{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+header img{width:64px;height:64px;border-radius:50%;object-fit:cover;background:#fff}
+header h1{font-size:1.35rem;margin:0}
+header p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+main{max-width:1100px;margin:0 auto;padding:16px;display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){main{grid-template-columns:1.25fr 1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.card h2{margin:0 0 10px;font-size:1.05rem;color:var(--gold)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input[type=text],input[type=url],textarea,select{background:#1a1120;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;width:100%}
+textarea{min-height:140px;font-family:ui-monospace,Menlo,monospace;font-size:.85rem}
+button,.btn{background:var(--accent);color:#2a0d1c;border:0;border-radius:999px;padding:9px 16px;font-weight:700;cursor:pointer;font:inherit;font-weight:700;text-decoration:none;display:inline-block}
+button.ghost,.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button:disabled{opacity:.45;cursor:not-allowed}
+label{font-size:.88rem;color:var(--muted)}
+.grow{flex:1 1 220px}
+#stage{position:relative;background:#000;border-radius:12px;overflow:hidden;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}
+#stage .placeholder{color:var(--muted);text-align:center;padding:20px}
+#ytwrap,#sunoframe{width:100%;height:100%}
+#sunoframe{border:0}
+#viz{width:100%;height:100%;display:none}
+#lyrics{height:340px;overflow:hidden;position:relative;background:#140c18;border-radius:12px;padding:12px;text-align:center;mask-image:linear-gradient(transparent,#000 18%,#000 82%,transparent)}
+#lyrics .ln{font-size:1.15rem;line-height:1.5;padding:6px 4px;color:#8e7c8f;transition:all .25s}
+#lyrics .ln.on{color:#fff;font-size:1.55rem;font-weight:800;text-shadow:0 0 18px var(--accent)}
+#lyrics .ln.done{color:#5f4f61}
+#lyrics .empty{color:var(--muted);padding-top:120px}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;background:#3d2b46;font-size:.78rem;color:var(--gold)}
+.status{font-size:.88rem;color:var(--muted);margin-top:8px;min-height:1.2em}
+.picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.pick{background:#1a1120;border:1px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;text-align:left;color:var(--ink);font-weight:600}
+.pick small{display:block;color:var(--muted);font-weight:400}
+.ctl{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin:8px 0}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.tabs button{background:#1a1120;color:var(--ink);border:1px solid var(--line)}
+.tabs button.act{background:var(--gold);color:#2a1300}
+.hide{display:none}
+#bigstage{position:fixed;inset:0;background:radial-gradient(circle,#3a1f3f,#000);z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}
+#bigstage .cur{font-size:clamp(28px,6vw,72px);font-weight:900;text-shadow:0 0 30px var(--accent)}
+#bigstage .nxt{font-size:clamp(18px,3vw,36px);color:#b9a6b8;margin-top:20px}
+#bigstage button{position:absolute;top:16px;right:16px}
+#meter{height:10px;background:#1a1120;border-radius:6px;overflow:hidden}
+#meter div{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--accent))}
+footer{max-width:1100px;margin:10px auto 30px;padding:16px;color:var(--muted);font-size:.82rem;line-height:1.5;border-top:1px solid var(--line)}
+footer a{color:var(--gold)}
+.note{background:#3a1f3f;border:1px solid var(--accent);border-radius:12px;padding:10px 12px;font-size:.88rem;color:var(--ink);margin-top:8px}
+.note b{color:var(--gold)}
+#lyrText.big{min-height:200px;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:1rem;border:2px dashed var(--accent)}
+.bigbtn{padding:14px 22px;font-size:1.05rem}
+.saved-row{display:flex;gap:8px;align-items:stretch;margin:6px 0}
+.saved-row .pick{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.saved-row .pick.cur{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.saved-row .rm{background:transparent;color:var(--muted);border:1px solid var(--line);padding:6px 12px;font-size:.85rem;flex:0 0 auto}
+.saved-row .rm:hover{color:var(--ink);border-color:var(--accent)}
+#savedList .empty{color:var(--muted);font-size:.9rem}
+.links{margin-top:12px;display:flex;gap:16px;justify-content:center;font-size:.95rem}
+</style>
+</head>
+<body>
+<header>
+  <img src="data:image/jpeg;base64,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" alt="Coffeebreak logo">
+  <div><h1>Coffeebreak Karaoke 12,000 Tools</h1><p>Paste your lyrics, add a YouTube, Suno or MP3 link (or upload a song), and sing along with scrolling lyrics.</p></div>
+</header>
+<main>
+<section class="card" id="playerCard">
+  <h2>1. Your song</h2>
+  <div class="row">
+    <input type="url" id="link" class="grow" placeholder="Paste a YouTube, Suno or MP3 link here">
+    <button id="go">Make karaoke</button>
+  </div>
+  <div class="row" style="margin-top:8px">
+    <label class="btn ghost" for="file">Upload a song or video</label>
+    <input type="file" id="file" accept="audio/*,video/*" class="hide">
+    <span class="pill" id="mode">No song loaded</span>
+  </div>
+  <div class="note" id="linkNote"><b>Good to know:</b> a YouTube link plays the video, but YouTube does not share a song's lyrics with apps, so a link alone can't be turned into lyrics. Paste the words into the big <b>Paste lyrics here</b> box in section 2 and they will scroll with the video.</div>
+  <div class="status" id="status">Tip: uploaded songs and MP3 links get the full vocals-off switch.</div>
+  <div class="row" style="margin-top:6px">
+    <a id="ytOpen" class="btn ghost hide" target="_blank" rel="noopener">Open video on YouTube</a>
+    <button id="timerBtn" class="ghost hide">Start lyrics timer</button>
+  </div>
+  <div id="stage" style="margin-top:10px">
+    <div class="placeholder" id="ph">Your video or music visualiser shows here.</div>
+    <div id="ytwrap" class="hide"><div id="yt"></div></div>
+    <iframe id="sunoframe" class="hide" allow="autoplay" title="Suno player"></iframe>
+    <canvas id="viz"></canvas>
+    <video id="vid" class="hide" playsinline style="width:100%;height:100%"></video>
+  </div>
+  <div id="audioCtl">
+    <div class="row" style="margin-top:10px">
+      <button id="play" disabled>Play</button>
+      <button id="back" class="ghost" disabled>Back 5s</button>
+      <button id="fwd" class="ghost" disabled>Forward 5s</button>
+      <button id="full" class="ghost">Big lyrics screen</button>
+    </div>
+    <div class="ctl"><label>Time</label><input type="range" id="seek" min="0" max="100" value="0" step="0.1"><span id="time">0:00</span></div>
+    <div class="ctl"><label>Vocals</label><input type="range" id="voc" min="0" max="100" value="100"><span id="vocv">On</span></div>
+    <div class="ctl"><label>Speed</label><input type="range" id="speed" min="70" max="130" value="100"><span id="speedv">100%</span></div>
+    <div class="ctl"><label>Music volume</label><input type="range" id="vol" min="0" max="100" value="90"><span id="volv">90</span></div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>2. Lyrics</h2>
+  <div id="lyrics"><div class="empty">Lyrics will scroll here as the song plays.</div></div>
+  <div class="row" style="margin-top:8px">
+    <button class="ghost" id="offm">Lyrics earlier</button>
+    <span class="pill" id="offv">Offset 0.0s</span>
+    <button class="ghost" id="offp">Lyrics later</button>
+  </div>
+  <div class="tabs" style="margin-top:12px">
+    <button data-tab="paste" class="act">Paste lyrics</button>
+    <button data-tab="find">Find lyrics</button>
+    <button data-tab="sync">Tap to sync</button>
+  </div>
+  <div data-pane="find" class="hide">
+    <div class="row"><input type="text" id="q" class="grow" placeholder="Song title and artist"><button id="search">Search</button></div>
+    <div id="results" class="status"></div>
+  </div>
+  <div data-pane="paste">
+    <label for="lyrText"><b style="color:var(--gold)">Paste lyrics here</b> (copy the words from a lyrics site, a songbook or your own song, one line each)</label>
+    <textarea id="lyrText" class="big" placeholder="Paste the song words here, one line each.&#10;&#10;Timed LRC lyrics like [00:12.50] First line work too."></textarea>
+    <div class="row" style="margin-top:8px">
+      <button id="useLyr" class="bigbtn">Use these lyrics</button>
+      <label class="btn ghost" for="lrcfile">Open .lrc, .srt or .txt</label><input type="file" id="lrcfile" accept=".lrc,.txt,.srt,.vtt,text/plain" class="hide">
+      <button class="ghost" id="saveLrc">Save as .lrc</button>
+    </div>
+    <div class="note">
+      <b>Find a karaoke video</b> for these lyrics
+      <div class="row" style="margin-top:6px">
+        <input type="text" id="kTitle" class="grow" placeholder="Song title">
+        <input type="text" id="kArtist" class="grow" placeholder="Artist (optional)">
+      </div>
+      <div class="row" style="margin-top:6px"><button id="findKara">Find karaoke video</button><span class="status" style="margin:0">Opens a YouTube search in a new tab.</span></div>
+      <div class="row" style="margin-top:6px">
+        <input type="url" id="karaLink" class="grow" placeholder="Paste the karaoke video link you picked">
+        <button id="useKara">Use this video</button>
+      </div>
+    </div>
+  </div>
+  <div data-pane="sync" class="hide">
+    <p class="status">Load plain lyrics, press Play, then tap the big button (or the space bar) as each line starts.</p>
+    <div class="row"><button id="tap" style="flex:1;padding:18px">Tap next line</button><button class="ghost" id="tapReset">Start again</button></div>
+    <div class="status" id="tapInfo"></div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>3. Sing with your mic</h2>
+  <div class="row">
+    <button id="mic">Turn mic on</button>
+    <button id="rec" class="ghost" disabled>Record my performance</button>
+    <a id="dl" class="btn ghost hide" download="coffeebreak-karaoke.webm">Download recording</a>
+  </div>
+  <div class="ctl"><label>Mic volume</label><input type="range" id="micvol" min="0" max="150" value="80"><span id="micvolv">80</span></div>
+  <div class="ctl"><label>Echo</label><input type="range" id="echo" min="0" max="100" value="30"><span id="echov">30</span></div>
+  <div class="ctl"><label>Applause meter</label><div id="meter"><div></div></div><span id="score">0</span></div>
+  <div class="status" id="micStatus">Headphones stop the mic picking up the music.</div>
+</section>
+
+<section class="card" id="savedCard">
+  <h2>My saved songs</h2>
+  <p class="status" style="margin-top:0">Every song you pair with lyrics is saved on this device as you go. Paste the same link or type the same title and it loads by itself. Tap a song to load it again.</p>
+  <div class="row" style="margin-bottom:6px"><input type="text" id="savedFilter" class="grow" placeholder="Search my saved songs"></div>
+  <div id="savedList"></div>
+  <div class="status" id="savedStatus"></div>
+</section>
+
+<section class="card">
+  <h2>Coffeebreak quick picks</h2>
+  <p class="status" style="margin-top:0">Songs by Coffeebreak with timed lyrics ready to go. <a href="https://suno.com/@coffeebreakkobs" target="_blank" rel="noopener" style="color:var(--gold)">More on Suno</a></p>
+  <div class="picks" id="picks"></div>
+</section>
+</main>
+
+<div id="bigstage"><button class="ghost" id="closeBig">Close</button><div class="cur" id="bigCur"></div><div class="nxt" id="bigNxt"></div></div>
+
+<section id="tk" style="max-width:1100px;margin:0 auto;padding:16px">
+<div class="card"><h2>🎤 The 12,000 Tools Toolbox</h2>
+<p style="color:var(--muted)"><b id="tkCount">0</b> working singer and songwriter tools, all running in your browser. Search, pick a category, then tap Run.</p>
+<div class="row"><input type="text" id="tkQ" placeholder="Search tools, for example C major, 120 BPM, A4, rhyme" style="flex:2;min-width:200px">
+<select id="tkCat" style="flex:1;min-width:160px"></select></div>
+<p id="tkInfo" style="color:var(--muted);font-size:.9rem"></p>
+<div id="tkList" style="display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))"></div>
+<div class="row" style="justify-content:center;margin-top:10px"><button type="button" id="tkPrev">◀ Back</button><span id="tkPg"></span><button type="button" id="tkNext">Next ▶</button></div>
+</div>
+<div class="card" id="tkRun" style="margin-top:16px;display:none"><h2 id="tkRT"></h2><div id="tkRB"></div></div>
+</section>
+<script>
+(()=>{
+const N=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],W=['sine','triangle','square','sawtooth'];
+const hz=m=>440*Math.pow(2,(m-69)/12),nm=m=>N[m%12]+(Math.floor(m/12)-1);
+const Q={'major':[0,4,7],'minor':[0,3,7],'7':[0,4,7,10],'maj7':[0,4,7,11],'m7':[0,3,7,10],'dim':[0,3,6],'aug':[0,4,8],'sus2':[0,2,7],'sus4':[0,5,7],'6':[0,4,7,9],'m6':[0,3,7,9],'add9':[0,4,7,14]};
+const SC={'Major':[0,2,4,5,7,9,11],'Natural minor':[0,2,3,5,7,8,10],'Harmonic minor':[0,2,3,5,7,8,11],'Melodic minor':[0,2,3,5,7,9,11],'Major pentatonic':[0,2,4,7,9],'Minor pentatonic':[0,3,5,7,10],'Blues':[0,3,5,6,7,10],'Dorian':[0,2,3,5,7,9,10],'Phrygian':[0,1,3,5,7,8,10],'Lydian':[0,2,4,6,7,9,11],'Mixolydian':[0,2,4,5,7,9,10],'Locrian':[0,1,3,5,6,8,10],'Whole tone':[0,2,4,6,8,10],'Chromatic':[0,1,2,3,4,5,6,7,8,9,10,11]};
+const IV=['Minor 2nd','Major 2nd','Minor 3rd','Major 3rd','Perfect 4th','Tritone','Perfect 5th','Minor 6th','Major 6th','Minor 7th','Major 7th','Octave'];
+const NV=[['Whole note',4],['Half note',2],['Quarter note',1],['Eighth note',.5],['Sixteenth note',.25],['Dotted quarter',1.5],['Dotted eighth',.75],['Quarter triplet',2/3]];
+const TS=[2,3,4,6],PAT=['Up','Down','Up and down','Broken'],DUR=[0.5,1,2,4,8];
+const T=[];const add=(c,n,k,p)=>T.push({c,n,k,p});
+for(let m=21;m<=108;m++)W.forEach(w=>DUR.forEach(d=>add('Tone generator',nm(m)+' '+hz(m).toFixed(1)+' Hz, '+w+', '+d+' s','tone',{m,w,d})));
+for(let b=40;b<240;b++)TS.forEach(t=>add('Metronome',b+' BPM in '+t+'/4','met',{b,t}));
+for(let k=0;k<12;k++)for(let s=-11;s<=11;s++)if(s)add('Chord transposer','From '+N[k]+' '+(s>0?'up ':'down ')+Math.abs(s)+' semitone'+(Math.abs(s)>1?'s':'')+' to '+N[(k+s+24)%12],'tr',{k,s});
+for(let b=40;b<240;b++)NV.forEach(v=>add('Delay and tempo calculator',v[0]+' at '+b+' BPM','dl',{b,v}));
+for(let r=0;r<12;r++)for(const q in Q)for(let i=0;i<3;i++)W.forEach(w=>add('Chord player',N[r]+' '+q+(i?' inversion '+i:' root position')+', '+w,'ch',{r,q,i,w}));
+for(let r=0;r<12;r++)for(const s in SC)W.forEach(w=>add('Scale player',N[r]+' '+s+', '+w,'sc',{r,s,w}));
+for(let r=0;r<12;r++)IV.forEach((v,i)=>W.forEach(w=>add('Ear training interval',N[r]+' '+v+' ('+N[(r+i+1)%12]+'), '+w,'iv',{r,i:i+1,w})));
+for(let r=0;r<12;r++)for(const q in Q)PAT.forEach(p=>W.forEach(w=>add('Arpeggio player',N[r]+' '+q+' arpeggio '+p.toLowerCase()+', '+w,'ar',{r,q,p,w})));
+for(let m=36;m<=84;m++)W.forEach(w=>add('Drone for tuning and practice',nm(m)+' drone, '+w,'dr',{m,w}));
+const TX=[['UPPER CASE',s=>s.toUpperCase()],['lower case',s=>s.toLowerCase()],['Title Case',s=>s.replace(/\w\S*/g,w=>w[0].toUpperCase()+w.slice(1).toLowerCase())],['Number the lines',s=>s.split('\n').map((l,i)=>(i+1)+'. '+l).join('\n')],['Remove blank lines',s=>s.split('\n').filter(l=>l.trim()).join('\n')],['Reverse line order',s=>s.split('\n').reverse().join('\n')],['Word and line count',s=>(s.match(/\S+/g)||[]).length+' words, '+s.split('\n').length+' lines, '+s.length+' characters'],['Syllables per line',s=>s.split('\n').map(l=>((l.toLowerCase().match(/[aeiouy]+/g)||[]).length)+'  '+l).join('\n')],['Last word of each line (rhyme check)',s=>s.split('\n').map(l=>(l.trim().split(/\s+/).pop()||'')).join('\n')],['Remove duplicate lines',s=>[...new Set(s.split('\n'))].join('\n')],['Double every line (chorus repeat)',s=>s.split('\n').map(l=>l+'\n'+l).join('\n')],['Sort lines A to Z',s=>s.split('\n').sort().join('\n')]];
+const TL=[1,2,3,4,5,10,15,20,25,30,45,60];
+TX.forEach((t,i)=>add('Lyric text tool',t[0],'tx',{i}));
+// practice timers fill the rest so the total is exactly 12,000
+let sec=10;while(T.length<12000){add('Practice timer','Sing practice timer '+Math.floor(sec/60)+' min '+(sec%60)+' s','tm',{sec});sec+=5}
+T.length=12000;
+let AC=null;const ac=()=>AC||(AC=new (window.AudioContext||window.webkitAudioContext)());let live=[];
+function stop(){live.forEach(o=>{try{o.stop()}catch(e){}});live=[];clearInterval(window.tkInt)}
+function note(f,w,t0,d,v=.2){const a=ac(),o=a.createOscillator(),g=a.createGain();o.type=w;o.frequency.value=f;g.gain.setValueAtTime(0,a.currentTime+t0);g.gain.linearRampToValueAtTime(v,a.currentTime+t0+.02);g.gain.linearRampToValueAtTime(0,a.currentTime+t0+d);o.connect(g).connect(a.destination);o.start(a.currentTime+t0);o.stop(a.currentTime+t0+d+.05);live.push(o)}
+const B=(l,id)=>'<button type="button" id="'+id+'">'+l+'</button> ';
+const tr=(s,n)=>s.replace(/\b([A-G])([#b]?)/g,(m,a,b)=>{let i=N.indexOf(a)+(b=='#'?1:b=='b'?-1:0);return N[((i+n)%12+12)%12]});
+function run(t){stop();const R=document.getElementById('tkRB'),p=t.p;document.getElementById('tkRT').textContent=t.c+': '+t.n;document.getElementById('tkRun').style.display='';let h='';
+ const ch=(r,q,i)=>{let n=Q[q].map(x=>48+r+x);for(let j=0;j<i;j++)n.push(n.shift()+12);return n};
+ if(t.k=='tone')h=B('▶ Play','tkG')+B('■ Stop','tkS')+'<p>'+hz(p.m).toFixed(2)+' Hz</p>';
+ if(t.k=='met')h=B('▶ Start','tkG')+B('■ Stop','tkS')+'<p id="tkB" style="font-size:2rem">-</p>';
+ if(t.k=='tr')h='<label>Paste chords or a chord sheet</label><textarea id="tkI">'+N[p.k]+' '+N[(p.k+5)%12]+' '+N[(p.k+7)%12]+'m</textarea>'+B('Transpose','tkG')+'<textarea id="tkO" readonly></textarea>';
+ if(t.k=='dl'){const ms=60000/p.b*p.v[1];h='<p style="font-size:1.4rem">'+ms.toFixed(1)+' ms</p><p>'+(1000/ms).toFixed(3)+' Hz LFO rate. Dotted: '+(ms*1.5).toFixed(1)+' ms. Triplet: '+(ms*2/3).toFixed(1)+' ms.</p>'}
+ if(t.k=='ch'){h=B('▶ Play chord','tkG')+B('▶ Strum','tkG2')+'<p>Notes: '+ch(p.r,p.q,p.i).map(nm).join(', ')+'</p>'}
+ if(t.k=='sc')h=B('▶ Play scale','tkG')+B('■ Stop','tkS')+'<p>Notes: '+SC[p.s].map(x=>N[(p.r+x)%12]).join(' ')+'</p>';
+ if(t.k=='iv')h=B('▶ Play','tkG')+B('▶ Together','tkG2')+'<p>'+N[p.r]+' to '+N[(p.r+p.i)%12]+', '+p.i+' semitones</p>';
+ if(t.k=='ar')h=B('▶ Play','tkG')+B('■ Stop','tkS');
+ if(t.k=='dr')h=B('▶ Start drone','tkG')+B('■ Stop','tkS')+'<p>'+hz(p.m).toFixed(2)+' Hz</p>';
+ if(t.k=='tx')h='<label>Your lyrics</label><textarea id="tkI"></textarea>'+B('Run','tkG')+'<textarea id="tkO" readonly></textarea>';
+ if(t.k=='tm')h='<p id="tkB" style="font-size:2.4rem">'+fmt(p.sec)+'</p>'+B('▶ Start','tkG')+B('■ Stop','tkS');
+ R.innerHTML=h;const g=document.getElementById('tkG'),g2=document.getElementById('tkG2'),s=document.getElementById('tkS');if(s)s.onclick=stop;
+ if(g)g.onclick=()=>{stop();
+  if(t.k=='tone')note(hz(p.m),p.w,0,p.d);
+  if(t.k=='met'){let i=0;const tick=()=>{note(i%p.t?880:1320,'square',0,.05,.25);document.getElementById('tkB').textContent=(i%p.t)+1;i++};tick();window.tkInt=setInterval(tick,60000/p.b)}
+  if(t.k=='tr'||t.k=='tx'){const v=document.getElementById('tkI').value;document.getElementById('tkO').value=t.k=='tr'?tr(v,p.s):TX[p.i][1](v)}
+  if(t.k=='ch')ch(p.r,p.q,p.i).forEach(m=>note(hz(m),p.w,0,1.6,.12));
+  if(t.k=='sc'){const n=SC[p.s].map(x=>60+p.r+x).concat([72+p.r]);n.forEach((m,i)=>note(hz(m),p.w,i*.35,.33))}
+  if(t.k=='iv'){note(hz(60+p.r),p.w,0,.7);note(hz(60+p.r+p.i),p.w,.8,.7)}
+  if(t.k=='ar'){let n=Q[p.q].map(x=>48+p.r+x).concat([60+p.r]);if(p.p=='Down')n.reverse();if(p.p=='Up and down')n=n.concat(n.slice(0,-1).reverse());if(p.p=='Broken')n=[n[0],n[2],n[1],n[3]||n[0]+12,n[2]];n.forEach((m,i)=>note(hz(m),p.w,i*.25,.3))}
+  if(t.k=='dr')note(hz(p.m),p.w,0,600,.12);
+  if(t.k=='tm'){let r=p.sec;const el=document.getElementById('tkB');window.tkInt=setInterval(()=>{r--;el.textContent=fmt(r);if(r<=0){clearInterval(window.tkInt);note(880,'sine',0,.4);note(1320,'sine',.5,.6)}},1000)}
+ };
+ if(g2)g2.onclick=()=>{stop();if(t.k=='ch')ch(p.r,p.q,p.i).forEach((m,i)=>note(hz(m),p.w,i*.06,1.5,.12));if(t.k=='iv'){note(hz(60+p.r),p.w,0,1.2,.15);note(hz(60+p.r+p.i),p.w,0,1.2,.15)}};
+ document.getElementById('tkRun').scrollIntoView({behavior:'smooth'})}
+function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+const cats=[...new Set(T.map(t=>t.c))],sel=document.getElementById('tkCat');
+sel.innerHTML='<option value="">All categories ('+T.length.toLocaleString()+')</option>'+cats.map(c=>'<option>'+c+' ('+T.filter(t=>t.c==c).length.toLocaleString()+')</option>').join('');
+document.getElementById('tkCount').textContent=T.length.toLocaleString();
+let pg=0,F=T;const PS=48;
+function filt(){const q=document.getElementById('tkQ').value.toLowerCase().split(/\s+/).filter(Boolean),c=sel.value.replace(/ \([\d,]+\)$/,'');F=T.filter(t=>(!c||t.c==c)&&q.every(w=>(t.n+' '+t.c).toLowerCase().includes(w)));pg=0;show()}
+function show(){const L=document.getElementById('tkList'),max=Math.max(1,Math.ceil(F.length/PS));pg=Math.min(Math.max(0,pg),max-1);
+ L.innerHTML=F.slice(pg*PS,pg*PS+PS).map((t,i)=>'<button type="button" data-i="'+(pg*PS+i)+'" style="text-align:left;background:#1a1120;color:var(--ink);border:1px solid var(--line)"><small style="color:var(--gold)">'+t.c+'</small><br>'+t.n+'</button>').join('');
+ document.getElementById('tkInfo').textContent=F.length.toLocaleString()+' tools match';document.getElementById('tkPg').textContent='Page '+(pg+1)+' of '+max.toLocaleString()}
+document.getElementById('tkList').onclick=e=>{const b=e.target.closest('[data-i]');if(b)run(F[+b.dataset.i])};
+document.getElementById('tkPrev').onclick=()=>{pg--;show()};document.getElementById('tkNext').onclick=()=>{pg++;show()};
+let db;document.getElementById('tkQ').oninput=()=>{clearTimeout(db);db=setTimeout(filt,150)};sel.onchange=filt;show();
+window.cbTools=T;
+})();
+</script>
+<footer>
+  <p><strong>Disclaimer.</strong> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought, but may not copy this app or make their own versions of it. Coffeebreak claims no ownership of any third-party brands named here, including YouTube, Suno, LRCLIB, Tesla and Starlink, which belong to their owners. Songs you load stay on your device. Lyrics search uses the free LRCLIB service. Video search opens YouTube in a new tab; this app does not copy or store videos or lyrics from other sites. Only sing along to songs you have the right to use.</p>
+  <p class="cb-payid"><strong>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</strong></p>
+  <div class="links"><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a><a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></div>
+</footer>
+
+<script>
+const SONGS=[{"id":"d9f3cc6b-d720-4391-8782-d1600bf71922","title":"A Delicious Disaster","lines":[[0,"Mallow: Did you just put marshmallows in my espresso?"],[6.62,"Rosie: I am not laughing. I am simply… vibrating."],[11.0,"Mallow: Ooh, this is SO exciting."],[14.6,"Rosie: This is a disaster. A delicious disaster."],[20.6,"Rosie: Let us pretend this never happened."],[43.48,"Mallow: Did you just put marshmallows in my espresso?"],[50.74,"Rosie: I am not laughing. I am simply… vibrating."],[60.8,"Mallow: Ooh, this is SO exciting."],[64.92,"Rosie: This is a disaster. A delicious disaster."],[74.52,"Mallow: Plot twist: I love it."],[104.26,"Rosie: Let us pretend this never happened."]]},{"id":"86ad2723-7114-40b8-978c-2505d7646fa4","title":"Coffeebreak Grind","lines":[[13.92,"Yeah I’m runnin’ on fumes but the kettle’s still on"],[16.38,"Pour a strong one, black, no sugar, just get gone"],[18.84,"Kids are loud, the list is longer than the day"],[23.75,"But I still chuck a coffeebreak and steal five away"],[28.66,"Reckon life’s a scramble, blood sugar dippin’ low"],[42.58,"Crip forms stack higher than the coffee I pour"],[47.38,"Still I write the bars when the house finally settles"],[52.19,"Steam risin’ off the mug, yeah that’s how I level"],[56.99,"Tired as, but the heart still beats country strong"],[61.79,"Coffeebreak moments keep the wild side movin’ on"],[66.59,"One more sip, one more line,"],[71.39,"then back to the grind"],[76.2,"But for now this cup’s mine — leave the chaos behind"]]},{"id":"26a0652d-5651-487d-9f56-f3fdc4422303","title":"Coffeebreak Moments","lines":[[10.66,"Yeah I’m runnin’ on fumes but the kettle’s still on"],[14.2,"Pour a strong one, black, no sugar, just get gone"],[18.28,"Kids are loud, the list is longer than the day"],[21.18,"But I still chuck a coffeebreak and steal five away"],[23.24,"Pickup line generator"],[27.62,"Coffeebreak logo"],[28.54,"✉ Email me"],[30.38,"Questions, custom orders or anything else? Send me a message."],[34.44,"Name"],[35.44,"Email"],[36.34,"Message"],[37.08,"Send"],[37.42,"Apple Music · Billionaire"],[38.94,"🎵 Listen on Suno"],[49.4,"📊 Stats"],[50.32,"☕ Tip Coffeebreak"],[53.28,"▶ Subscribe on YouTube"],[57.32,"⛶ Fullscreen"],[57.83,"–"],[58.34,"⚠️ Some music may contain adult themes or language."],[61.9,"Listener discretion advised."],[65.66,"🔊 Music"],[69.26,"⏭ Skip"],[72.84,"Now playing: Drip Drip Drip Country (v5)"],[77.34,"I'm not a photographer,"],[78.62,"but I can picture us at a gig together."],[80.08,"1. Pick a genre"],[80.95,"☕ Café Comedy"],[81.82,"mood: silly"],[82.69,"🕯️ Cosy Mystery"],[83.56,"🔒 full game"],[84.42,"🌹 Sweet Romance"],[85.29,"🔒 full game"],[86.16,"💀 Spooky Gothic"],[87.03,"🔒 full game"],[88.77,"🗺️ Big Adventure"],[90.5,"🔒 full game"],[91.37,"🎭 Big Drama"],[92.24,"🔒 full game"],[93.98,"2. Your two characters"],[102.1,"🎭 A"],[105.84,"Start writing ➜"],[109.14,"Reckon life’s a scramble, blood sugar dippin’ low"],[113.3,"Crip forms stack higher than the coffee I pour"],[115.82,"Still I write the bars when the house finally settles"],[119.4,"Steam risin’ off the mug, yeah that’s how I level"],[122.96,"Tired as, but the heart still beats country strong"],[127.78,"Coffeebreak moments keep the wild side movin’ on"],[130.2,"One more sip, one more line,"],[132.6,"then back to the grind"],[133.76,"But for now this cup’s mine — leave the chaos behind"]]},{"id":"8a0da4ee-b2b7-4122-bfe6-28af5a173731","title":"Drip Drip Drip Country","lines":[[4.42,"Well the rain on the tin roof go with drip drip drip"],[10.12,"And the whiskey in my glass got a sweet little fit"],[15.84,"Porch light burnin' down a long dirt road"],[21.54,"And I'm waving on you darling with a heavy load"],[32.98,"Drip drip drip white honey from the comb"],[38.7,"Drip drip drip baby won't you come on home"],[44.4,"Cotton candy thicky over the cotton field"],[50.96,"Sweet 808 thugger cane back the way it feels"],[61.56,"Your boot by the door and your hat on the hook"],[67.28,"You got me reading you flow like a dogeared book"],[72.98,"The creeks runnin' high and the night's runnin' long"],[78.72,"They'll pull up a chair while I sing you gone"],[90.14,"Drip drip drip white honey from the comb"],[95.84,"Drip drip drip baby won't you come on home"],[101.56,"Drip drip drip yeah the rain won't quit"],[107.28,"Drip drip drip and I'm loving every bit"]]},{"id":"5c5e2661-805e-4883-b453-34022902b51f","title":"Kicking Marshmallows Up the Mud","lines":[[8.4,"Sun's up early on the Coffeebreak farm"],[11.5,"Pink boots on and a basket on my arm"],[15.12,"Rooster's singing like he owns the place"],[18.34,"Got a mug of something sweet and a smile on my face"],[21.88,"The rain came down all night long"],[25.28,"Now the paddock's soft and the cows sing along"],[29.1,"I'm kicking marshmallows up the mud"],[31.88,"Pink and white flying where the puddles flood"],[34.9,"Stomp it, splash it, let the sweet stuff fly"],[38.44,"Under a cotton candy country sky"],[41.78,"Don't care if my jeans are a mess"],[45.76,"Coffeebreak girl in a muddy dress"],[50.06,"Life's too short to stay clean, bud"],[53.16,"I'm kicking marshmallows up the mud"],[57.76,"The pigs are rolling in a sugar haze"],[61.9,"The chooks are chasing honey drips all day"],[65.36,"Old dog's barking at a bumblebee"],[68.62,"And the tractor's playing my song for me"],[72.28,"The neighbours stare across the fence"],[76.28,"It don't make a lick of sense"],[79.1,"I'm kicking marshmallows up the mud"],[81.82,"Pink and white flying where the puddles flood"],[85.78,"Stomp it, splash it, let the sweet stuff fly"],[88.82,"Under a cotton candy country sky"],[93.08,"Don't care if my jeans are a mess"],[97.12,"Coffeebreak girl in a muddy dress"],[99.54,"Life's too short to stay clean, bud"],[103.84,"I'm kicking marshmallows up the mud"],[106.12,"Some folks need a big old town"],[110.94,"Bright lights spinning round and round"],[113.98,"But give me a gate, a gumboot stomp"],[117.62,"And a sticky sweet marshmallow romp"],[121.06,"I'm kicking marshmallows up the mud"],[121.26,"Pink and white flying where the puddles flood"],[127.52,"Stomp it, splash it, let the sweet stuff fly"],[131.4,"Under a cotton candy country sky"],[134.76,"Hose me down when the sun goes red"],[137.88,"Marshmallow dreams in a farmhouse bed"],[142.18,"Life's too short to stay clean, bud"],[145.2,"I'm kicking marshmallows up the mud"],[148.34,"Yeah, kicking marshmallows up the mud"],[152.76,"On the Coffeebreak farm"]]},{"id":"ffb8c8bf-6a2f-42c3-8331-8b0484eb4ec5","title":"Naughty Girl","lines":[[11.64,"You naughty girl give me more"],[61.8,"You naughty girl give me more"],[68.42,"You naughty girl give me more"],[113.78,"You naughty girl give me more"],[121.22,"You naughty girl give me more"],[126.04,"You naughty girl give me more"],[127.88,"You naughty girl give me more"],[143.02,"You naughty girl give me more"]]},{"id":"7c253099-cedc-46c2-bcf2-2577edd1c877","title":"Paper Storm","lines":[[8.58,"Yes, songs are perfect for that."],[12.0,"Some ways to keep it discreet:"],[17.04,"Use metaphor: a storm, a fire,"],[19.88,"a broken bottle or a burned bridge can stand in for the anger."],[25.34,"Change the details: use a made-up name, place or story,"],[30.12,"so no one can tell who it's about."],[32.98,"Aim it at the feeling: sing about the rage itself rather than the person,"],[37.94,"like \"I've got thunder in my hands tonight.\""],[43.54,"Let the music carry it: a hard beat or a growl in your voice says it without the words spelling it out."],[50.86,"If you'd like, tell me what the feeling's about,"],[54.04,"even vaguely,"],[55.44,"and I'll write you a verse that hides it.\"Paper Storm\""],[68.8,"You've got a pen and a clipboard face,"],[72.44,"You walk right in like you own my place,"],[75.14,"You don't see the nights I hold her tight,"],[78.86,"You just see a box to tick and write."],[83.42,"There's a paper storm comin' through my door,"],[86.82,"I'm a hurricane you ain't seen before,"],[90.52,"I've got thunder in my chest tonight,"],[92.52,"But I'll burn it down in the songs I write."],[97.52,"Here's a much angrier version."],[101.08,"The violence is all in the imagery, like fire,"],[105.54,"storms and smashing things,"],[107.72,"so the fury comes through but no one is ever named as the target."],[114.48,"\"Paper Storm\" (the angry cut)"],[124.26,"You kicked my door with a paper boot,"],[126.9,"Now I'm a lit fuse, I'm a loaded root,"],[130.6,"You poked the bear and you heard her roar,"],[133.7,"I'm tearin' the hinges right off the door."],[136.82,"Burn it, burn it, watch the paper bleed,"],[140.58,"I'm the wildfire you didn't need,"],[144.34,"I'll smash every window in this town,"],[148.1,"Then I'll scream till the sky comes down."],[153.3,"Blood-red sky and my knuckles raw,"],[156.72,"Punchin' the walls till I break my jaw,"],[159.74,"You wanna judge me, then judge the flame,"],[162.48,"'Cause the devil himself won't say my name."],[167.36,"Bridge (shouted)"],[167.56,"Rip it. Tear it. Light it up."],[170.7,"Pour that gasoline in my coffee cup."],[174.3,"Burn it, burn it, I'm a hurricane,"],[176.9,"Ain't no clipboard gonna hold my pain,"],[180.56,"I'll leave nothin' but smoke and ash,"],[184.2,"And walk away from the wreck and crash."],[187.56,"I can make it even rawer,"],[191.08,"or shape it into country rock or rap,"],[194.74,"whichever you'd like to record."],[199.74,"You judge a mother by a single page,"],[203.38,"You never felt this kind of rage,"],[205.98,"So I'll sing it loud till the fire's gone,"],[209.62,"'Cause my love for her is the strongest one."],[213.9,"Let 'em talk, let 'em file,"],[216.12,"let 'em scribble my name,"],[218.0,"I'm still standin', I'm still here,"],[222.62,"and I'll never be tame."]]},{"id":"5fdb702e-2032-4be0-a0e4-cc720901146f","title":"Sweet Juices Cotton Candy","lines":[[6.56,"Sweet drip it, flow"],[8.3,"Cotton candy below"],[12.98,"Thugger on my lip"],[14.5,"Got me movin' real flow"],[16.48,"King clouds drip, pin"],[21.1,"Baby, steal the show"],[25.72,"Every little taste"],[26.6,"Got me cravin' more"],[38.56,"Sweet drip it, flow"],[40.26,"Cotton candy below"],[44.94,"Melt into the night"],[45.92,"Like a candy glow"],[51.34,"Honey in the air"],[52.54,"Let the rhythm go"],[57.78,"Sweet like a thin"],[59.16,"But you already know"]]},{"id":"3a2b12c9-addf-43b7-abbf-025cfd7ac00e","title":"Talk Is Cheap","lines":[[11.9,"This little piggy went to the soup kitchen,"],[15.74,"This little piggy stayed home with the box,"],[19.58,"This little piggy had the Weet-Bix from charity,"],[23.42,"This little piggy said “Sorry, love…"],[25.56,"not the kind you like,”"],[26.72,"And this little piggy cried “Snob. Snob. Snob.”"],[42.08,"all the way home…"],[43.24,"But a few years back when the cupboard was thin,"],[46.64,"Same little piggy ate the free ones with a grin,"],[50.5,"Dad said “Sorry it’s not the brand you prefer,”"],[53.8,"Teaching her daughter how to turn up her nose at the poor."],[58.58,"Now he points the finger from his high little chair,"],[62.84,"Calls me a snob while the kettle’s still there,"],[66.82,"Coffee break mum with the charity bowl,"],[70.58,"Stirring the past while he polishes his soul."],[74.32,"This little piggy went “Hypocrite, mate,”"],[77.38,"This little piggy laughed at the plate,"],[82.02,"This little piggy remembered the day"],[85.88,"He taught snobbery the soft-spoken way…"],[89.44,"And this little piggy just sipped her coffee and said"],[93.02,"“Talk is cheap when the Weet-Bix was free.”"]]},{"id":"d33db55f-2f28-40af-874a-a3e596fa1987","title":"That's My Naughty Girl","lines":[[2.5,"Well, well, well… Who let the pressure out?"],[7.18,"💋 Was that a little gust of wind, darling?"],[11.0,"Or did somebody just turn up the heat? Hehehe…"],[14.26,"behave yourself. Actually, don't. 😉"],[19.38,"She's got a little sparkle and a wicked little grin,"],[48.12,"One sip of her coffee and the trouble rolls in."],[49.98,"She's a sweet little cherry with a hell of a bite,"],[50.5,"Blows a kiss to the devil and dances all night."],[50.83,"She's got red lips, ringlets, heels on the floor,"],[51.03,"Says she's an angel, then she locks the door."],[51.23,"One little whistle, one cheeky blast, Boy, better buckle up,"],[51.43,"'cause she's coming in fast."],[51.63,"There's a pressure building, can you feel that breeze?"],[51.83,"She's shaking up the room with her naughty-girl tease."],[52.16,"One little wink and the temperature climbs,"],[52.36,"She's blowing your mind one cheeky line at a time."],[52.56,"Blast. Blast. Blow the roof off the place."],[52.83,"That's my naughty girl with the dangerous face. Boom. Boom."],[53.16,"Hear that whistle blow."],[54.24,"She's got a little wild side that she won't keep low."],[57.06,"Blast that horn, let the whole town know,"],[59.1,"She's a sweet little devil putting on a show."],[60.08,"With a wink and a grin and a hip-swing swirl,"],[63.84,"That's my naughty, naughty, naughty girl. ☕💋"],[66.68,"Who's a bad girl?"],[67.8,"ME."],[68.76,"Who's got the big attitude?"],[70.44,"ME."],[71.12,"Who's going to behave tonight?"],[72.96,"…Darling, let's not get ridiculous."],[75.58,"He's got his boots on, trying to act tough,"],[77.84,"She says, “Oh, honey,"],[78.86,"are you man enough?” He blows his whistle,"],[81.36,"she gives him a stare, Says,"],[82.46,"“That little noise won't get you nowhere.”"],[85.02,"She's got a shock wave hiding in her smile,"],[87.14,"Can turn a quiet gentleman wild in a while."],[89.66,"A blast of perfume, a dangerous twirl,"],[91.78,"Lord have mercy on that naughty girl."],[94.24,"A gust in the kitchen. A boom in the hall."],[96.28,"She's got that man answering every call."],[98.98,"A horn in the distance. A crack in the night."],[101.44,"CoffeeBreak's queen bringing trouble tonight."],[103.2,"He says, “Sweetheart, you're a handful, it's true.”"],[105.28,"She says, “Baby, I'm the whole damn zoo.” 🐆"],[108.38,"Blast. Blast. Blow the roof off the place."],[110.46,"That's my naughty girl with the dangerous face. Boom. Boom."],[113.76,"Let the whole world know."],[114.76,"She's got that country-girl fire and a rock 'n' roll soul."],[117.64,"Blast that horn, let the whole town swirl,"],[119.7,"Make some noise for my naughty girl. Sweet as sugar,"],[123.12,"wild as a storm,"],[124.28,"She's a whole lot of trouble in a fabulous form."],[128.24,"Blast…"],[130.32,"Boom…"],[132.34,"One last little whistle…"],[134.9,"That's my naughty girl."],[135.54,"COFFEEBREAK. ☕💋🍒"],[156.04,"That's my naughty girl."],[157.4,"COFFEEBREAK. ☕💋🍒"]]},{"id":"7f7f627a-7954-42ef-878a-53a3f2cb87c3","title":"Thunder in My Hands","lines":[[5.56,"Yes, songs are perfect for that."],[9.54,"Some ways to keep it discreet:"],[12.9,"Use metaphor: a storm, a fire,"],[15.34,"a broken bottle or a burned bridge can stand in for the anger."],[20.76,"Change the details: use a made-up name, place or story,"],[24.22,"so no one can tell who it's about."],[25.9,"Aim it at the feeling: sing about the rage itself rather than the person,"],[30.8,"like \"I've got thunder in my hands tonight.\""],[35.34,"Let the music carry it: a hard beat or a growl in your voice says it without the words spelling it out."],[42.56,"If you'd like, tell me what the feeling's about,"],[45.06,"even vaguely,"],[45.8,"and I'll write you a verse that hides it."]]}];
+const $=id=>document.getElementById(id);
+const st=t=>$('status').textContent=t;
+let estimated=false, mode=null, yt=null, ytReady=false, lines=[], offset=0, curIdx=-1, plainForSync=[], tapI=0;
+let ac=null, media=null, srcNode=null, dryG, wetG, masterG, recDest=null, curKey='';
+
+function fmt(s){s=Math.max(0,s||0);return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0')}
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+
+/* ---------- lyrics ---------- */
+function normLyrics(txt){
+  txt=String(txt||'').replace(/^\uFEFF/,'').replace(/\r\n?/g,'\n').replace(/\u2028|\u2029/g,'\n')
+    .replace(/<br\s*\/?>/gi,'\n').replace(/<\/(p|div|li)>/gi,'\n').replace(/<[^>]+>/g,'')
+    .replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&#39;|&apos;/g,"'").replace(/&quot;/g,'"').replace(/\t/g,' ');
+  const nonEmpty=txt.split('\n').filter(l=>l.trim());
+  // one long line with " / " or " | " separators, as copied from many lyric sites
+  if(nonEmpty.length<=2&&/\s[\/|]\s/.test(txt)) txt=txt.split(/\s+[\/|]\s+/).join('\n');
+  return txt;
+}
+function parseSubs(txt){
+  // SRT or WebVTT subtitles: 00:00:12,340 --> 00:00:15,000
+  const out=[];const re=/(?:(\d+):)?(\d{1,2}):(\d{2})[.,](\d{1,3})\s*-->[^\n]*\n([\s\S]*?)(?=\n\s*\n|$)/g;let m;
+  while(m=re.exec(txt)){const t=(+(m[1]||0))*3600+(+m[2])*60+(+m[3])+(+('0.'+m[4]));
+    const text=m[5].split('\n').filter(l=>l.trim()&&!/^\d+$/.test(l.trim())).join(' ').replace(/<[^>]+>|\{[^}]*\}/g,'').trim();
+    if(text) out.push([+t.toFixed(2),text])}
+  return out;
+}
+function parseLyrics(txt){
+  txt=normLyrics(txt);
+  if(/-->/.test(txt)){const sub=parseSubs(txt);if(sub.length) return {timed:true,lines:sub.sort((a,b)=>a[0]-b[0])}}
+  const out=[];let timed=false,off=0;
+  const om=txt.match(/\[offset:\s*([+-]?\d+)\s*\]/i);if(om) off=-(+om[1])/1000;
+  txt.split('\n').forEach(raw=>{
+    const tags=[...raw.matchAll(/\[(\d{1,3}):(\d{1,2}(?:[.:]\d{1,3})?)\]/g)];
+    const text=raw.replace(/\[[^\]]*\]/g,'').replace(/<\d{1,3}:\d{1,2}(?:[.:]\d{1,3})?>/g,'').replace(/\s+/g,' ').trim();
+    if(tags.length){timed=true;tags.forEach(m=>{const sec=m[2].replace(/:(\d+)$/,'.$1');out.push([Math.max(0,+m[1]*60+ +sec+off),text])})}
+    else{
+      const t=raw.trim();
+      if(!t||/^\[(ar|ti|al|au|by|re|ve|offset|length|#):/i.test(t)) return;
+      if(/^[\[(]\s*(verse|chorus|pre-?chorus|bridge|intro|outro|hook|refrain|instrumental|interlude|break|solo)[^\])]*[\])]$/i.test(t)) return; // section headers
+      if(/^\d+\s+contributors?|^you might also like$|^\d*embed$/i.test(t)) return; // copied page junk
+      out.push([null,text||t]);
+    }
+  });
+  if(timed) return {timed:true,lines:out.filter(l=>l[0]!==null&&l[1]).sort((a,b)=>a[0]-b[0])};
+  return {timed:false,lines:out};
+}
+function toLrc(){return lines.map(l=>{const t=l[0]||0;const m=Math.floor(t/60),s=(t%60).toFixed(2).padStart(5,'0');return '['+String(m).padStart(2,'0')+':'+s+']'+l[1]}).join('\n')}
+function setLines(ls,timed){
+  lines=ls; curIdx=-1;
+  const box=$('lyrics');
+  if(!ls.length){box.innerHTML='<div class="empty">No lyrics yet. Search, paste or open a lyrics file.</div>';$('lyrText').value='';return}
+  box.innerHTML='<div id="lyrInner">'+ls.map((l,i)=>'<div class="ln" data-i="'+i+'">'+esc(l[1]||'\u266a')+'</div>').join('')+'</div>';
+  $('lyrText').value=timed?toLrc():ls.map(l=>l[1]).join('\n');
+  if(!timed){plainForSync=ls.map(l=>l[1]);tapI=0;
+    const d=(typeof duration==='function'&&mode&&mode!=='suno-embed'&&duration()>20)?duration():0;
+    const start=d?Math.min(10,d*.05):2, step=d?Math.max(2,(d-start-5)/ls.length):4;
+    lines=ls.map((l,i)=>[+(start+i*step).toFixed(2),l[1]]);estimated=true;
+    $('tapInfo').textContent='Lyrics are scrolling at an even pace. For exact timing, press Play and tap here as each line starts.'}
+  else estimated=false;
+  if(!$('kTitle').value&&ls.length){const g=(ls.find(l=>l[1]&&l[1].length>2)||ls[0])[1];$('kTitle').value=g.replace(/[^\p{L}\p{N}' ]+/gu,' ').trim().split(/\s+/).slice(0,8).join(' ')}
+  if(timed&&curKey) try{localStorage.setItem('cbk:'+curKey,toLrc())}catch(e){}
+  if(ls.length) autoSave();
+}
+function updateLyrics(t){
+  if(!lines.length||lines[0][0]===null) return;
+  t=t-offset;let i=-1;
+  for(let k=0;k<lines.length;k++){if(lines[k][0]<=t)i=k;else break}
+  if(i===curIdx) return; curIdx=i;
+  const els=document.querySelectorAll('#lyrics .ln');
+  els.forEach((e,k)=>{e.classList.toggle('on',k===i);e.classList.toggle('done',k<i)});
+  const inner=$('lyrInner');
+  if(inner&&els[Math.max(i,0)]){const el=els[Math.max(i,0)];inner.style.transform='translateY('+(150-el.offsetTop)+'px)';inner.style.transition='transform .35s'}
+  $('bigCur').textContent=i>=0?(lines[i][1]||'\u266a'):'Get ready';
+  $('bigNxt').textContent=lines[i+1]?lines[i+1][1]:'';
+}
+async function searchLyrics(q){
+  if(!q){$('results').textContent='Type a song title first.';return}
+  $('results').textContent='Searching...';showTab('find');
+  try{
+    let r,d;
+    for(let a=0;a<3;a++){r=await fetch('https://lrclib.net/api/search?q='+encodeURIComponent(q));if(r.ok)break;$('results').textContent='Lyrics service is busy, trying again...';await new Promise(z=>setTimeout(z,1500*(a+1)))}
+    if(!r.ok){$('results').textContent='The lyrics service is busy right now. Paste the lyrics in the Paste lyrics box instead.';showTab('paste');return}
+    d=await r.json();
+    if(!Array.isArray(d)||!d.length){$('results').textContent='No lyrics found for that title. Paste the lyrics in the Paste lyrics box.';showTab('paste');return}
+    $('results').innerHTML='';
+    d.slice(0,8).forEach(x=>{
+      const b=document.createElement('button');b.className='pick';b.style.margin='4px 0';b.style.width='100%';
+      b.innerHTML=esc(x.trackName)+'<small>'+esc(x.artistName||'')+(x.syncedLyrics?' \u00b7 timed lyrics':' \u00b7 words only')+'</small>';
+      b.onclick=()=>{const p=parseLyrics(x.syncedLyrics||x.plainLyrics||'');setLines(p.lines,p.timed);st('Lyrics loaded: '+x.trackName)};
+      $('results').appendChild(b);
+    });
+    if(!lines.length){const best=d.find(x=>x.syncedLyrics)||d.find(x=>x.plainLyrics);
+      if(best){const p=parseLyrics(best.syncedLyrics||best.plainLyrics);setLines(p.lines,p.timed);
+        $('results').insertAdjacentHTML('afterbegin','<div style="margin-bottom:6px">Loaded: '+esc(best.trackName)+'. Wrong song? Pick another below or paste your own.</div>')}}
+  }catch(e){$('results').textContent='Lyrics search is offline right now. Paste the lyrics in the Paste lyrics box instead.';showTab('paste')}
+}
+
+/* ---------- audio engine ---------- */
+function ensureAC(){
+  if(ac) return ac;
+  ac=new (window.AudioContext||window.webkitAudioContext)();
+  masterG=ac.createGain();masterG.gain.value=.9;masterG.connect(ac.destination);
+  recDest=ac.createMediaStreamDestination();masterG.connect(recDest);
+  return ac;
+}
+function buildGraph(el){
+  ensureAC();
+  srcNode=ac.createMediaElementSource(el);
+  dryG=ac.createGain();wetG=ac.createGain();
+  srcNode.connect(dryG);dryG.connect(masterG);
+  // vocals-off: side channel (L-R) removes centre vocals, keep centred bass
+  const sp=ac.createChannelSplitter(2), inv=ac.createGain(); inv.gain.value=-1;
+  const side=ac.createGain();
+  srcNode.connect(sp); sp.connect(side,0); sp.connect(inv,1); inv.connect(side);
+  const mid=ac.createGain(); mid.gain.value=.5; sp.connect(mid,0); sp.connect(mid,1);
+  const lp=ac.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=140; mid.connect(lp);
+  const mono=ac.createGain(); side.connect(mono); lp.connect(mono);
+  const up=ac.createChannelMerger(2); mono.connect(up,0,0); mono.connect(up,0,1);
+  up.connect(wetG); wetG.connect(masterG);
+  el._dry=dryG; el._wet=wetG;
+  if(!vizRaf) startViz();
+}
+function setVocals(){
+  const v=$('voc').value/100;
+  $('vocv').textContent=v>.95?'On':v<.05?'Off':Math.round(v*100)+'%';
+  if(dryG){dryG.gain.value=v;wetG.gain.value=1-v}
+}
+let vizRaf=0;
+function startViz(){
+  const c=$('viz'),g=c.getContext('2d'),an=ac.createAnalyser();an.fftSize=256;masterG.connect(an);
+  const data=new Uint8Array(an.frequencyBinCount);
+  cancelAnimationFrame(vizRaf);
+  (function draw(){
+    vizRaf=requestAnimationFrame(draw);
+    if(c.style.display==='none')return;
+    c.width=c.clientWidth;c.height=c.clientHeight;an.getByteFrequencyData(data);
+    g.fillStyle='#120a16';g.fillRect(0,0,c.width,c.height);
+    const w=c.width/data.length;
+    for(let i=0;i<data.length;i++){const h=data[i]/255*c.height*.85;g.fillStyle='hsl('+(320+i)+',85%,'+(45+data[i]/8)+'%)';g.fillRect(i*w,c.height-h,w-1,h)}
+    g.fillStyle='#fff';g.font='bold 20px system-ui';g.textAlign='center';g.fillText(curTitle,c.width/2,34);
+  })();
+}
+let curTitle='';
+
+/* ---------- loading ---------- */
+function resetStage(){
+  ['ph','ytwrap','sunoframe','vid'].forEach(i=>$(i).classList.add('hide'));$('viz').style.display='none';
+  if(media){media.pause()}
+  if(yt&&yt.stopVideo) try{yt.stopVideo()}catch(e){}
+  ['play','back','fwd'].forEach(i=>$(i).disabled=false);
+  $('voc').disabled=false;
+  $('ytOpen').classList.add('hide');$('timerBtn').classList.add('hide');embedRunning=false;
+}
+function loadMediaUrl(url,title,isVideo,cors){
+  resetStage();mode='media';curTitle=title||'Your song';
+  const el=isVideo?$('vid'):(media&&media.tagName==='AUDIO'?media:new Audio());
+  if(cors) el.crossOrigin='anonymous'; else el.removeAttribute('crossorigin');
+  if(isVideo){el.classList.remove('hide')} else {$('viz').style.display='block'}
+  el.preservesPitch=true; el.src=url; media=el;
+  if(!el._graph){try{buildGraph(el);el._graph=true}catch(e){}}
+  if(el._dry){dryG=el._dry;wetG=el._wet}
+  if(window._oldPlain){_oldPlain.pause()}
+  setVocals();
+  el.ontimeupdate=()=>{};el.onloadedmetadata=()=>{$('seek').max=el.duration||100};
+  el.onerror=()=>{if(el._onfail)el._onfail()};
+  el.playbackRate=$('speed').value/100;
+  $('mode').textContent=isVideo?'Video loaded':'Song loaded';
+  st('Ready. Press Play. Slide Vocals to the left to turn the singer down.');
+  return el;
+}
+function plainFallback(u,onFail){
+  const a=new Audio();a.src=u;a.preservesPitch=true;window._oldPlain=a;media=a;mode='media';
+  $('voc').disabled=true;$('vocv').textContent='Not here';
+  a.onerror=()=>onFail?onFail():st('That link could not be played. Try uploading the file instead.');
+  a.onloadedmetadata=()=>st('That site does not allow the vocals switch, so the song plays as normal. Upload the file for vocals off.');
+}
+function ytId(u){const m=u.match(/(?:youtu\.be\/|v=|\/embed\/|\/shorts\/|\/live\/)([\w-]{11})/);return m&&m[1]}
+function sunoId(u){const m=u.match(/suno\.(?:com|ai)\/(?:song|embed)\/([0-9a-f-]{36})/i);return m&&m[1]}
+function loadYouTube(id,url){
+  resetStage();mode='yt';$('ytwrap').classList.remove('hide');
+  $('voc').disabled=true;$('vocv').textContent='Video';
+  $('mode').textContent='YouTube video';
+  st('YouTube video loaded. Lyrics scroll alongside it. Paste the words in section 2 if they do not appear.');
+  $('ytOpen').href='https://www.youtube.com/watch?v='+id;$('ytOpen').classList.remove('hide');$('timerBtn').classList.remove('hide');
+  const ytFail=()=>st('This video will not play inside the app'+(location.protocol==='file:'?' when it is opened as a file on your computer':'')+'. Press "Open video on YouTube", then press "Start lyrics timer" when the singing starts.');
+  if(location.protocol==='file:') ytFail();
+  const make=()=>{
+    if(yt){yt.loadVideoById(id);return}
+    yt=new YT.Player('yt',{host:'https://www.youtube-nocookie.com',videoId:id,width:'100%',height:'100%',playerVars:Object.assign({playsinline:1,rel:0},/^https?:/.test(location.protocol)?{origin:location.origin}:{}),events:{onReady:()=>{ytReady=true;yt.setVolume($('vol').value)},onError:ytFail}});
+  };
+  if(window.YT&&YT.Player) make(); else {window.onYouTubeIframeAPIReady=make;const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';s.onerror=ytFail;document.head.appendChild(s)}
+  fetch('https://www.youtube.com/oembed?format=json&url='+encodeURIComponent(url)).then(r=>r.json()).then(d=>{
+    const t=(d.title||'').replace(/\(.*?\)|\[.*?\]|official|video|lyrics?|audio|hd|4k|remaster(ed)?/gi,' ').replace(/\s+/g,' ').trim();
+    curTitle=d.title||'';$('q').value=t;if(!$('kTitle').value)$('kTitle').value=t;if(!lines.length)searchLyrics(t);autoSave();
+  }).catch(()=>{if(!lines.length){$('results').textContent='Could not read the video title. Paste the lyrics in the Paste lyrics box.';showTab('paste')}});
+}
+function loadSuno(id){
+  curKey='suno:'+id;
+  const pick=SONGS.find(s=>s.id===id);
+  const el=loadMediaUrl('https://cdn1.suno.ai/'+id+'.mp3',pick?pick.title:'Suno song',false,true);
+  $('mode').textContent='Suno song';
+  let stage=0;
+  el._onfail=()=>{
+    if(stage===0){stage=1;st('Trying Suno player...');plainFallback('https://cdn1.suno.ai/'+id+'.mp3',()=>showSunoEmbed(id))}
+  };
+  if(pick){setLines(pick.lines,true)} else restoreSaved();
+}
+function showSunoEmbed(id){
+  ['viz'].forEach(i=>$(i).style.display='none');
+  $('sunoframe').src='https://suno.com/embed/'+id;$('sunoframe').classList.remove('hide');mode='suno-embed';
+  ['play','back','fwd'].forEach(i=>$(i).disabled=true);$('voc').disabled=true;
+  st('This Suno song plays in the Suno player. For the vocals-off switch, download it from Suno and upload it here. Lyrics timing runs from the Start lyrics timer button.');
+  $('play').disabled=false;$('play').textContent='Start lyrics timer';
+}
+function restoreSaved(){try{const s=localStorage.getItem('cbk:'+curKey);if(s){const p=parseLyrics(s);setLines(p.lines,p.timed)}}catch(e){}}
+function go(){
+  const u=$('link').value.trim();if(!u){st('Paste a link first.');return}
+  if(!/^https?:\/\//i.test(u)&&(/\n/.test(u)||/\s[\/|]\s/.test(u)||u.split(/\s+/).length>3)){
+    $('lyrText').value=$('link').value;$('link').value='';showTab('paste');$('useLyr').click();
+    st('That looked like lyrics, so they have been added to the lyrics box. Now paste a song or video link, or upload a song.');return}
+  if(/genius\.com|azlyrics|lyrics\.com|musixmatch|metrolyrics|songlyrics|lyricfind|letras|google\.[a-z.]+\/search/i.test(u)){
+    st('Lyrics websites do not let apps read their pages. Open the page, copy the words, and paste them in the Paste lyrics here box.');showTab('paste');$('lyrText').focus();return}
+  const keep=lines.length&&$('lyrText').value.trim()&&!curKey.startsWith('suno:');
+  const kept=keep?parseLyrics($('lyrText').value):null;
+  setLines([],false);offset=0;$('offv').textContent='Offset 0.0s';
+  let id;
+  if(id=ytId(u)){curKey='yt:'+id;loadYouTube(id,u);restoreSaved()}
+  else if(id=sunoId(u)){loadSuno(id)}
+  else if(/suno\.com\/s\//i.test(u)){st('That is a Suno share link. Open it, then copy the full link from the address bar (it has /song/ in it) and paste that here.')}
+  else if(/^https?:\/\//i.test(u)){curKey='url:'+u;const el=loadMediaUrl(u,decodeURIComponent(u.split('/').pop().split('?')[0]),/\.(mp4|webm|mov)(\?|$)/i.test(u),true);
+    el._onfail=()=>plainFallback(u);restoreSaved()}
+  else st('That does not look like a link. It should start with https://. To add words, use the Paste lyrics here box.');
+  if(kept&&!lines.length&&!(id&&SONGS.find(s=>s.id===id))){setLines(kept.lines,kept.timed)}
+  libAfterLink(u);
+}
+$('go').onclick=go;$('link').onkeydown=e=>{if(e.key==='Enter')go()};
+$('file').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;curKey='file:'+f.name+':'+f.size;
+  setLines([],false);loadMediaUrl(URL.createObjectURL(f),f.name.replace(/\.[^.]+$/,''),f.type.startsWith('video'),false);
+  $('q').value=f.name.replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ');restoreSaved();
+  if(!lines.length) searchLyrics($('q').value);
+};
+
+/* ---------- transport ---------- */
+let embedT0=0, embedRunning=false;
+function now(){
+  if((mode==='yt'||!mode)&&embedRunning) return (performance.now()-embedT0)/1000;
+  if(mode==='yt'&&yt&&ytReady&&yt.getCurrentTime) return yt.getCurrentTime();
+  if(mode==='media'&&media) return media.currentTime;
+  if(mode==='suno-embed') return embedRunning?(performance.now()-embedT0)/1000:0;
+  return 0;
+}
+function duration(){if(mode==='yt'&&yt&&ytReady)return yt.getDuration()||0;if(mode==='media'&&media)return media.duration||0;return 300}
+function isPlaying(){if(mode==='yt'&&yt&&ytReady)return yt.getPlayerState()===1;if(mode==='media'&&media)return !media.paused;return embedRunning}
+$('play').onclick=()=>{
+  if(ac&&ac.state==='suspended')ac.resume();
+  if(mode==='media'){media.paused?media.play().catch(()=>st('Press Play again to start.')):media.pause()}
+  else if(mode==='yt'&&ytReady){isPlaying()?yt.pauseVideo():yt.playVideo()}
+  else if(mode==='suno-embed'){embedRunning=!embedRunning;if(embedRunning)embedT0=performance.now()}
+};
+function seekBy(d){const t=now()+d;if(mode==='media')media.currentTime=Math.max(0,t);else if(mode==='yt'&&ytReady)yt.seekTo(Math.max(0,t),true)}
+$('back').onclick=()=>seekBy(-5);$('fwd').onclick=()=>seekBy(5);
+$('seek').oninput=e=>{const t=+e.target.value;if(mode==='media')media.currentTime=t;else if(mode==='yt'&&ytReady)yt.seekTo(t,true)};
+$('voc').oninput=setVocals;
+$('speed').oninput=e=>{const v=e.target.value/100;$('speedv').textContent=e.target.value+'%';if(media)media.playbackRate=v;if(yt&&ytReady)yt.setPlaybackRate(v)};
+$('vol').oninput=e=>{$('volv').textContent=e.target.value;if(masterG)masterG.gain.value=e.target.value/100;if(yt&&ytReady)yt.setVolume(+e.target.value)};
+$('offm').onclick=()=>{offset-=.5;$('offv').textContent='Offset '+offset.toFixed(1)+'s';curIdx=-2};
+$('offp').onclick=()=>{offset+=.5;$('offv').textContent='Offset '+offset.toFixed(1)+'s';curIdx=-2};
+let estD=0;
+setInterval(()=>{
+  const t=now(),d=duration();
+  if(estimated&&tapI===0&&plainForSync.length&&mode&&mode!=='suno-embed'&&d>20&&Math.abs(d-estD)>1){estD=d;setLines(plainForSync.map(x=>[null,x]),false)}
+  if(mode&&mode!=='suno-embed'){$('seek').max=d||100;if(document.activeElement!==$('seek'))$('seek').value=t}
+  $('time').textContent=fmt(t)+(d&&mode!=='suno-embed'?' / '+fmt(d):'');
+  if(mode!=='suno-embed')$('play').textContent=isPlaying()?'Pause':'Play';
+  else $('play').textContent=embedRunning?'Stop lyrics timer':'Start lyrics timer';
+  $('timerBtn').textContent=embedRunning?'Stop lyrics timer':'Start lyrics timer';
+  updateLyrics(t);
+},120);
+
+/* ---------- tabs and lyrics tools ---------- */
+function showTab(n){document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('act',b.dataset.tab===n));document.querySelectorAll('[data-pane]').forEach(p=>p.classList.toggle('hide',p.dataset.pane!==n))}
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+$('search').onclick=()=>searchLyrics($('q').value.trim());$('q').onkeydown=e=>{if(e.key==='Enter')searchLyrics($('q').value.trim())};
+$('useLyr').onclick=()=>{const raw=$('lyrText').value;const p=parseLyrics(raw);
+  if(!p.lines.length){st('The lyrics box is empty. Paste the song words first.');return}
+  if(/^\s*https?:\/\/\S+\s*$/.test(raw)){st('That is a link, not lyrics. Put links in box 1, and paste the song words here.');return}
+  setLines(p.lines,p.timed);
+  const msg=p.timed?'Timed lyrics loaded.':'Lyrics loaded ('+p.lines.length+' lines). They scroll at an even pace when you press Play. Use Tap to sync for exact timing.';
+  st(msg);$('tapInfo').textContent=p.timed?'':$('tapInfo').textContent;
+  if(!mode){$('timerBtn').classList.remove('hide');st(msg+' Now add a song link, upload a song, or use Find karaoke video. Or press Start lyrics timer to sing along now.')}};
+$('timerBtn').onclick=()=>{embedRunning=!embedRunning;if(embedRunning){embedT0=performance.now();curIdx=-2;st('Lyrics timer running. Use Lyrics earlier / later if they drift.')}};
+$('findKara').onclick=()=>{
+  let t=$('kTitle').value.trim();
+  if(!t){const p=parseLyrics($('lyrText').value);t=(p.lines[0]||[0,''])[1]||'';$('kTitle').value=t}
+  if(!t){st('Type the song title first.');$('kTitle').focus();return}
+  const q=(t+' '+$('kArtist').value.trim()+' karaoke').replace(/\s+/g,' ').trim();
+  window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(q),'_blank','noopener');
+  st('YouTube search opened in a new tab. Copy the link of the karaoke video you like and paste it in the box under Find karaoke video.');
+};
+const useKara=()=>{const u=$('karaLink').value.trim();if(!ytId(u)){st('Paste a YouTube video link, for example https://www.youtube.com/watch?v=...');return}
+  if($('lyrText').value.trim()&&!lines.length)$('useLyr').click();
+  $('link').value=u;go();window.scrollTo({top:0,behavior:'smooth'})};
+$('useKara').onclick=useKara;$('karaLink').onkeydown=e=>{if(e.key==='Enter')useKara()};
+$('lrcfile').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{$('lyrText').value=t;$('useLyr').click()})};
+$('saveLrc').onclick=()=>{if(!lines.length||lines[0][0]===null){st('Sync the lyrics first, then save.');return}const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([toLrc()],{type:'text/plain'}));a.download=(curTitle||'lyrics').replace(/[^\w ]+/g,'')+'.lrc';a.click()};
+function tap(){
+  if(!plainForSync.length){$('tapInfo').textContent='Paste plain lyrics first.';return}
+  if(tapI===0){lines=plainForSync.map(x=>[null,x])}
+  if(tapI>=plainForSync.length){$('tapInfo').textContent='All lines timed. Press Save as .lrc to keep them.';return}
+  lines[tapI][0]=Math.max(0,now()-0.15);tapI++;
+  if(tapI===plainForSync.length){const l=lines.slice();setLines(l,true);$('tapInfo').textContent='All lines timed. Press Save as .lrc to keep them.'}
+  else{$('tapInfo').textContent='Line '+tapI+' of '+plainForSync.length+' timed. Next: '+plainForSync[tapI];
+    document.querySelectorAll('#lyrics .ln').forEach((e,k)=>{e.classList.toggle('on',k===tapI-1);e.classList.toggle('done',k<tapI-1)})}
+}
+$('tap').onclick=tap;$('tapReset').onclick=()=>{tapI=0;$('tapInfo').textContent='Ready. Press Play, then tap as each line starts.'};
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)&&!$('tap').closest('.hide')){e.preventDefault();tap()}});
+$('full').onclick=()=>{$('bigstage').style.display='flex';curIdx=-2;if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{})};
+$('closeBig').onclick=()=>{$('bigstage').style.display='none';if(document.fullscreenElement)document.exitFullscreen()};
+
+/* ---------- mic ---------- */
+let micStream=null,micG=null,micSrc=null,recorder=null,chunks=[],score=0;
+$('mic').onclick=async()=>{
+  ensureAC();if(ac.state==='suspended')ac.resume();
+  if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null;$('mic').textContent='Turn mic on';$('rec').disabled=true;$('micStatus').textContent='Mic off.';return}
+  try{
+    micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});
+    micSrc=ac.createMediaStreamSource(micStream);micG=ac.createGain();micG.gain.value=$('micvol').value/100;
+    const delay=ac.createDelay(1);delay.delayTime.value=.18;const fb=ac.createGain();fb.gain.value=$('echo').value/250;const echoG=ac.createGain();echoG.gain.value=$('echo').value/100;
+    micSrc.connect(micG);micG.connect(masterG);micG.connect(delay);delay.connect(fb);fb.connect(delay);delay.connect(echoG);echoG.connect(masterG);
+    window._echo=[fb,echoG];
+    const an=ac.createAnalyser();an.fftSize=512;micSrc.connect(an);const buf=new Uint8Array(an.fftSize);
+    (function lvl(){if(!micStream)return;an.getByteTimeDomainData(buf);let m=0;for(const v of buf)m=Math.max(m,Math.abs(v-128));const p=Math.min(100,m*1.6);$('meter').firstElementChild.style.width=p+'%';if(p>20&&isPlaying())score+=p/400;$('score').textContent=Math.round(score);requestAnimationFrame(lvl)})();
+    $('mic').textContent='Turn mic off';$('rec').disabled=false;$('micStatus').textContent='Mic on. Sing away. Headphones stop the mic picking up the music.';
+  }catch(e){$('micStatus').textContent='The mic could not start. Allow microphone access in your browser and try again.'}
+};
+$('micvol').oninput=e=>{$('micvolv').textContent=e.target.value;if(micG)micG.gain.value=e.target.value/100};
+$('echo').oninput=e=>{$('echov').textContent=e.target.value;if(window._echo){_echo[0].gain.value=e.target.value/250;_echo[1].gain.value=e.target.value/100}};
+$('rec').onclick=()=>{
+  if(recorder&&recorder.state==='recording'){recorder.stop();return}
+  chunks=[];recorder=new MediaRecorder(recDest.stream);
+  recorder.ondataavailable=e=>chunks.push(e.data);
+  recorder.onstop=()=>{const b=new Blob(chunks,{type:'audio/webm'});const a=$('dl');a.href=URL.createObjectURL(b);a.classList.remove('hide');$('rec').textContent='Record my performance';$('micStatus').textContent='Recording ready to download.'};
+  recorder.start();$('rec').textContent='Stop recording';
+  $('micStatus').textContent=mode==='yt'?'Recording your voice. YouTube sound cannot be recorded, so only the mic is saved.':'Recording your voice and the music.';
+};
+
+/* ---------- quick picks ---------- */
+SONGS.forEach(s=>{
+  const b=document.createElement('button');b.className='pick';
+  b.innerHTML=esc(s.title)+'<small>Coffeebreak \u00b7 '+s.lines.length+' lyric lines</small>';
+  b.onclick=()=>{$('link').value='https://suno.com/song/'+s.id;go();window.scrollTo({top:0,behavior:'smooth'})};
+  $('picks').appendChild(b);
+});
+
+/* ---------- my saved songs (remembered on this device) ---------- */
+const LIB_KEY='cbk:library';
+let curSongId=null, libLoading=false, saveT=0, titleT=0;
+function libGet(){try{const a=JSON.parse(localStorage.getItem(LIB_KEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
+function libPut(a){try{localStorage.setItem(LIB_KEY,JSON.stringify(a));return true}catch(e){$('savedStatus').textContent='Could not save on this device (storage is full or turned off).';return false}}
+function linkKey(u){u=(u||'').trim();if(!u)return '';let id;
+  if(id=ytId(u))return 'yt:'+id;if(id=sunoId(u))return 'suno:'+id.toLowerCase();
+  if(/^https?:\/\//i.test(u))return 'url:'+u.replace(/#.*$/,'');return ''}
+function normT(t){return (t||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/\b(karaoke|lyrics?|official|video|audio)\b/g,' ').replace(/[^\p{L}\p{N}]+/gu,' ').trim()}
+function curLink(){const v=$('link').value.trim();return linkKey(v)?v:''}
+function curLyricsText(){
+  if(lines.length&&!estimated&&lines.every(l=>l[0]!==null)) return toLrc();
+  return $('lyrText').value.trim();
+}
+function findByLink(k,a){return k?(a||libGet()).find(e=>e.key===k):null}
+function findByTitle(t,a){const n=normT(t);if(!n)return null;a=a||libGet();
+  return a.find(e=>normT(e.title)===n)||a.find(e=>e.artist&&normT(e.title+' '+e.artist)===n)||a.find(e=>e.artist&&normT(e.artist+' '+e.title)===n)}
+function autoSave(){if(libLoading)return;clearTimeout(saveT);saveT=setTimeout(saveNow,250)}
+function saveNow(){
+  if(libLoading)return;
+  const lyr=curLyricsText(); if(!lyr) return;
+  const link=curLink(), key=linkKey(link);
+  if(key.startsWith('suno:')&&SONGS.find(s=>'suno:'+s.id===key)) return; // built-in quick picks are already here
+  let title=$('kTitle').value.trim()||curTitle||'';
+  if(!title){const p=parseLyrics(lyr);title=((p.lines.find(l=>l[1])||[0,''])[1]||'').slice(0,60)}
+  if(!title&&!key) return;
+  const a=libGet();
+  let e=curSongId?a.find(x=>x.id===curSongId):null;
+  if(e&&key&&e.key&&e.key!==key) e=null;            // a different video, so a different song
+  if(!e&&key) e=findByLink(key,a);
+  if(!e) {const t=findByTitle(title,a);if(t&&(!t.key||!key))e=t}
+  if(!e){e={id:'s'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),created:Date.now()};a.unshift(e)}
+  e.title=title;e.artist=$('kArtist').value.trim();
+  if(link){e.link=link;e.key=key}else{e.link=e.link||'';e.key=e.key||''}
+  e.lyrics=lyr;e.timed=/^\s*\[\d+:\d+/m.test(lyr);e.updated=Date.now();
+  curSongId=e.id;
+  if(libPut(a)){$('savedStatus').textContent='Saved: '+e.title+(e.timed?' (with timings)':'');renderLib()}
+}
+function loadEntry(e,why){
+  if(!e)return;
+  libLoading=true;curSongId=e.id;
+  try{
+    $('kTitle').value=e.title||'';$('kArtist').value=e.artist||'';$('q').value=((e.title||'')+' '+(e.artist||'')).trim();
+    if(e.link){
+      const lk=linkKey($('link').value);
+      if(lk!==e.key||!mode){$('link').value=e.link;$('karaLink').value=ytId(e.link)?e.link:$('karaLink').value;go()}
+    }
+    const p=parseLyrics(e.lyrics||'');
+    if(p.lines.length){setLines(p.lines,p.timed);showTab('paste')}
+  }finally{libLoading=false}
+  st((why||'Loaded from My saved songs')+': '+e.title+(e.artist?' by '+e.artist:'')+'. Press Play to sing.');
+  $('savedStatus').textContent='Loaded: '+e.title;
+  renderLib();
+}
+function libAfterLink(u){ // called at the end of go()
+  if(libLoading)return;
+  const k=linkKey(u);const e=findByLink(k);
+  if(e){loadEntry(e,'Found your saved song');return}
+  const cur=curSongId?libGet().find(x=>x.id===curSongId):null;
+  if(cur&&cur.key&&cur.key!==k)curSongId=null;
+  autoSave();
+}
+function renderLib(){
+  const box=$('savedList'),f=normT($('savedFilter').value);
+  const a=libGet().sort((x,y)=>(y.updated||0)-(x.updated||0));
+  box.innerHTML='';
+  if(!a.length){box.innerHTML='<div class="empty">No saved songs yet. Paste lyrics and a link and they are saved here automatically.</div>';return}
+  const shown=a.filter(e=>!f||normT(e.title+' '+(e.artist||'')).includes(f));
+  if(!shown.length){box.innerHTML='<div class="empty">No saved song matches that search.</div>';return}
+  shown.forEach(e=>{
+    const row=document.createElement('div');row.className='saved-row';
+    const b=document.createElement('button');b.className='pick'+(e.id===curSongId?' cur':'');b.title='Load '+e.title;
+    b.appendChild(document.createTextNode(e.title||'Untitled'));
+    const sm=document.createElement('small');
+    const kind=e.key.startsWith('yt:')?'YouTube video':e.key.startsWith('suno:')?'Suno song':e.key?'Song link':'Lyrics only';
+    sm.textContent=[e.artist,kind,e.timed?'timed lyrics':'words only'].filter(Boolean).join(' \u00b7 ');
+    b.appendChild(sm);
+    b.onclick=()=>{loadEntry(e);window.scrollTo({top:0,behavior:'smooth'})};
+    const rm=document.createElement('button');rm.className='rm';rm.textContent='Remove';rm.setAttribute('aria-label','Remove '+e.title);
+    rm.onclick=()=>{if(!confirm('Remove "'+e.title+'" from My saved songs?'))return;
+      libPut(libGet().filter(x=>x.id!==e.id));if(curSongId===e.id)curSongId=null;
+      $('savedStatus').textContent='Removed: '+e.title;renderLib()};
+    row.appendChild(b);row.appendChild(rm);box.appendChild(row);
+  });
+}
+function titleTyped(v){
+  const e=findByTitle(v);
+  if(e&&e.id!==curSongId){loadEntry(e,'Found your saved song');return true}
+  return false;
+}
+$('savedFilter').oninput=renderLib;
+$('lyrText').addEventListener('input',()=>{clearTimeout(saveT);saveT=setTimeout(()=>{if(!/^\s*https?:\/\/\S+\s*$/.test($('lyrText').value))saveNow()},900)});
+['kTitle','kArtist'].forEach(id=>$(id).addEventListener('input',()=>{
+  clearTimeout(titleT);titleT=setTimeout(()=>{
+    if(titleTyped(($('kTitle').value+' '+(id==='kArtist'?$('kArtist').value:'')).trim())||titleTyped($('kTitle').value))return;
+    const n=normT($('kTitle').value);
+    if(id==='kTitle'&&n&&libGet().some(x=>x.id!==curSongId&&normT(x.title).startsWith(n)))return; // still typing another saved title
+    saveNow()},700)}));
+$('q').addEventListener('input',()=>{clearTimeout(titleT);titleT=setTimeout(()=>titleTyped($('q').value),700)});
+$('link').addEventListener('input',()=>{const k=linkKey($('link').value);const e=findByLink(k);
+  if(e&&(k!==curKey||e.id!==curSongId))setTimeout(go,50)});
+$('karaLink').addEventListener('input',()=>{const k=linkKey($('karaLink').value);const e=findByLink(k);
+  if(e&&e.id!==curSongId)setTimeout(useKara,50)});
+renderLib();
+const params=new URLSearchParams(location.search);if(params.get('link')){$('link').value=params.get('link');go()}
+</script>
+<section class="coffee-tip" style="margin:16px 0;padding:14px;background:#fff0f7;border:2px solid #ffb3d1;border-radius:16px;text-align:center"><h2 style="color:#d6336c;margin:0 0 6px">Buy Karen a coffee tip</h2><p style="margin:0">Free for now. Tip via PayID (Teachers Mutual Bank): <strong>darkokaz@gmx.com</strong></p></section>
+</body>
+</html>

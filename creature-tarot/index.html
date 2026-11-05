@@ -1,0 +1,112 @@
+<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Coffeebreak Creature Tarot</title><link rel="icon" href="assets/logo.png"><style>
+:root{--pink:#e7548a;--pink2:#f7a8c4;--blush:#fff0f5;--cream:#fffaf3;--ink:#3b2430;--mute:#8a6a78;--card:#fff;--line:#f3cfe0}
+*{box-sizing:border-box}html,body{margin:0}body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:linear-gradient(180deg,var(--blush),var(--cream) 60%);color:var(--ink);min-height:100vh}
+a{color:var(--pink)}
+header.cb{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:10px 16px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:2px solid var(--line)}
+header.cb img{width:48px;height:48px;border-radius:12px;object-fit:cover;box-shadow:0 2px 8px #e7548a33}
+header.cb .t{flex:1;min-width:0}header.cb h1{font-family:Georgia,serif;font-size:1.15rem;margin:0;color:var(--pink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header.cb small{color:var(--mute);font-size:.78rem}
+.btn{appearance:none;border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-size:.95rem;cursor:pointer;background:var(--pink);color:#fff;box-shadow:0 3px 10px #e7548a44;transition:transform .1s}
+.btn:active{transform:scale(.96)}.btn.alt{background:#fff;color:var(--pink);border:2px solid var(--pink2);box-shadow:none}.btn.sm{padding:6px 12px;font-size:.82rem}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+nav.tabs{display:flex;gap:8px;overflow-x:auto;padding:10px 16px}nav.tabs button{white-space:nowrap}
+main{max-width:1100px;margin:0 auto;padding:12px 16px 40px}
+.hero{border-radius:22px;padding:22px;background:linear-gradient(135deg,#ffd6e6,#fff3f8);border:2px solid var(--line);margin-bottom:18px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.hero h2{font-family:Georgia,serif;margin:0 0 6px;color:var(--pink);font-size:1.6rem}.hero p{margin:0;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.card{background:var(--card);border-radius:18px;border:2px solid var(--line);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 14px #e7548a14}
+.card img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:var(--blush)}
+.card .b{padding:12px 14px;display:flex;flex-direction:column;gap:6px;flex:1}.card h3{margin:0;font-size:1rem}.card p{margin:0;font-size:.85rem;color:var(--mute);flex:1}
+.price{font-weight:800;color:var(--pink)}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+select,input,textarea{font:inherit;border:2px solid var(--line);border-radius:12px;padding:8px 10px;background:#fff;color:var(--ink);width:100%}
+textarea{min-height:90px;resize:vertical}label{font-size:.82rem;color:var(--mute);display:block;margin:8px 0 3px}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--blush);border:1px solid var(--line);font-size:.75rem;color:var(--mute)}
+.note{background:#fff;border-left:5px solid var(--pink2);border-radius:12px;padding:10px 14px;font-size:.85rem;color:var(--mute);margin:14px 0}
+footer.cb{max-width:1100px;margin:0 auto;padding:20px 16px 40px;font-size:.78rem;color:var(--mute);text-align:center;border-top:2px dashed var(--line)}
+footer.cb img{width:40px;height:40px;border-radius:10px;vertical-align:middle;margin-right:6px}
+.modal{position:fixed;inset:0;background:#3b243088;display:none;align-items:flex-end;justify-content:center;z-index:50}
+.modal.on{display:flex}.sheet{background:#fff;width:min(560px,100%);max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:18px 18px 26px}
+@media(min-width:700px){.modal{align-items:center}.sheet{border-radius:22px}}
+.sheet h2{margin:0 0 10px;color:var(--pink);font-family:Georgia,serif}
+.line{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:.9rem}
+.payid{background:linear-gradient(135deg,#ffe3ee,#fff);border:2px solid var(--pink2);border-radius:16px;padding:14px;margin:12px 0;font-size:.92rem}
+.payid b.id{font-size:1.1rem;color:var(--pink);word-break:break-all}
+.cartbtn{position:relative}.cartbtn .n{position:absolute;top:-6px;right:-6px;background:var(--ink);color:#fff;border-radius:999px;font-size:.7rem;padding:2px 6px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:.88rem;opacity:0;transition:opacity .25s;z-index:60;pointer-events:none}.toast.on{opacity:1}
+.hidden{display:none}
+.tcard{perspective:900px;width:150px;aspect-ratio:3/4;cursor:pointer}.tcard .in{position:relative;width:100%;height:100%;transition:transform .7s;transform-style:preserve-3d}.tcard.f .in{transform:rotateY(180deg)}
+.tcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px;backface-visibility:hidden;box-shadow:0 6px 18px #3b243033}.tcard .fr{transform:rotateY(180deg)}.tcard.rv .fr{transform:rotateY(180deg) rotate(180deg)}
+.spread{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:18px 0}.slot{text-align:center;max-width:170px}.slot h4{margin:8px 0 2px;color:var(--pink)}.slot p{margin:0;font-size:.82rem;color:var(--mute)}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}.gal div{text-align:center;font-size:.8rem}.gal img{width:100%;border-radius:10px;cursor:pointer}
+@media(max-width:520px){.tcard{width:100px}}</style></head><body><header class="cb"><img src="assets/logo.png" alt="Coffeebreak logo"><div class="t"><h1>Coffeebreak Creature Tarot</h1><small>Original creature tarot deck and digital readings</small></div><button class="btn cartbtn" id="cartb">Cart <span class="n" id="cn">0</span></button></header>
+<nav class="tabs"><button class="btn sm" data-t="read">Reading</button><button class="btn sm alt" data-t="deck">The deck</button><button class="btn sm alt" data-t="shop">Shop</button><button class="btn sm alt" data-t="saved">Saved readings</button></nav><main>
+<section id="t-read"><div class="hero"><img src="assets/tarot-back.jpg" alt="" style="width:90px;border-radius:12px"><div style="flex:1;min-width:220px"><h2>Ask the creatures</h2><p>Think of your question, choose a spread, shuffle and tap each card to turn it over.</p></div></div>
+<label>Your question (optional)</label><input id="q" placeholder="What do I need to know today?"><div class="row" style="margin-top:10px">
+<select id="sp" style="width:auto"><option value="1">One card</option><option value="3">Past, present, future</option><option value="5">Five card cross</option></select>
+<label style="margin:0"><input type="checkbox" id="rev" style="width:auto"> Allow reversed cards</label><button class="btn" id="shuf">Shuffle and deal</button><button class="btn alt" id="savr" disabled>Save reading</button></div>
+<div class="spread" id="spread"></div><div id="summary" class="note hidden"></div></section>
+<section id="t-deck" class="hidden"><h2 style="color:var(--pink);font-family:Georgia,serif">The 22 creature cards</h2><div class="gal" id="gal"></div></section>
+<section id="t-shop" class="hidden"><div class="hero"><img src="assets/tarot-star.jpg" style="width:90px;border-radius:12px" alt=""><div><h2>Take the deck home</h2><p>A printed deck of every creature card, plus prints and accessories.</p></div></div><div id="cats" class="row" style="margin-bottom:14px"></div><div class="grid" id="grid"></div><div class="note">Shipping Australia-wide: A$8.95, free over A$80.</div></section>
+<section id="t-saved" class="hidden"><div id="savedl"></div></section>
+<div class="note">Every creature in this deck is an original Coffeebreak character. This deck has no connection to any video game, trading card or anime franchise. Readings are for reflection and fun, and are not advice.</div>
+</main>
+<div class="modal" id="cartm"><div class="sheet"><h2>Your cart</h2><div id="cartlist"></div><div class="row" style="margin-top:14px"><button class="btn" id="tocheck">Checkout</button><button class="btn alt x">Keep shopping</button></div></div></div>
+<div class="modal" id="checkm"><div class="sheet"><h2>Checkout</h2><label>Name</label><input id="cname"><label>Email</label><input id="cemail" type="email"><label>Delivery address</label><textarea id="caddr"></textarea><div class="payid">Pay by PayID (Teachers Mutual Bank)<br><b class="id">darkokaz@gmx.com</b><br>Total <b id="chsum"></b></div><div class="row"><button class="btn" id="pay">Place order</button><button class="btn alt x">Back</button></div></div></div>
+<div class="modal" id="doneM"><div class="sheet" id="done"></div></div>
+<div class="modal" id="cardm"><div class="sheet" id="cardd"></div></div><footer class="cb"><p><img src="assets/logo.png" alt="">Made in Newcastle NSW by Coffeebreak. More apps at <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p><p>© Karen (Coffeebreak). Karen keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Karen claims no ownership of any third-party brands named here; all trademarks belong to their owners.</p></footer><div class="toast" id="toast"></div><script>const KEY='cbtarot';const P=[{"id": "md", "name": "Creature Tarot Major Arcana Deck", "cat": "Decks", "price": 49, "img": "tarot-fool", "desc": "All 22 illustrated creature cards, gilded pink edges, in a keepsake box.", "opts": [{"name": "Finish", "vals": ["Matte", "Gloss"]}]}, {"id": "dx", "name": "Deluxe Set: Deck, Guidebook and Bag", "cat": "Decks", "price": 69, "img": "tarot-star", "desc": "The deck with a full-colour guidebook and a pink velvet reading bag."}, {"id": "pr", "name": "Art Print (A4)", "cat": "Prints", "price": 25, "img": "tarot-sun", "desc": "Choose any card as a giclee-style art print.", "opts": [{"name": "Card", "vals": ["The Fool", "The Magician", "The High Priestess", "The Empress", "The Emperor", "The Hierophant", "The Lovers", "The Chariot", "Strength", "The Hermit", "Wheel of Fortune", "Justice", "The Hanged One", "Transformation", "Temperance", "The Devil", "The Tower", "The Star", "The Moon", "The Sun", "Judgement", "The World"]}]}, {"id": "cl", "name": "Reading Cloth", "cat": "Accessories", "price": 29, "img": "tarot-back", "desc": "Soft 60 cm reading cloth printed with the Coffeebreak card back design."}];const SHIP=s=>s>=80?0:8.95;const CARDS=[{"f": "tarot-fool", "n": 0, "t": "The Fool", "cr": "Pipkit the Wanderpup", "up": "New beginnings, trust, a leap of faith", "rv": "Hesitation, holding back, carelessness"}, {"f": "tarot-magician", "n": 1, "t": "The Magician", "cr": "Sparkwhisk", "up": "Skill, focus, making things happen", "rv": "Scattered energy, unused talent"}, {"f": "tarot-priestess", "n": 2, "t": "The High Priestess", "cr": "Lunavell", "up": "Intuition, quiet knowing, secrets", "rv": "Ignoring your gut, confusion"}, {"f": "tarot-empress", "n": 3, "t": "The Empress", "cr": "Bloomaroo", "up": "Care, creativity, abundance", "rv": "Burnout, giving too much"}, {"f": "tarot-emperor", "n": 4, "t": "The Emperor", "cr": "Rambrook", "up": "Structure, leadership, steadiness", "rv": "Rigidity, control, stubbornness"}, {"f": "tarot-hierophant", "n": 5, "t": "The Hierophant", "cr": "Shellwool the Elder", "up": "Tradition, learning, faith", "rv": "Questioning rules, your own path"}, {"f": "tarot-lovers", "n": 6, "t": "The Lovers", "cr": "Twinflutter", "up": "Love, choice, harmony", "rv": "Imbalance, a hard choice"}, {"f": "tarot-chariot", "n": 7, "t": "The Chariot", "cr": "Dashmane", "up": "Drive, willpower, moving forward", "rv": "Lost direction, pushing too hard"}, {"f": "tarot-strength", "n": 8, "t": "Strength", "cr": "Gentleroar", "up": "Courage, patience, gentle power", "rv": "Self-doubt, low energy"}, {"f": "tarot-hermit", "n": 9, "t": "The Hermit", "cr": "Quillglow", "up": "Reflection, solitude, inner light", "rv": "Isolation, avoiding others"}, {"f": "tarot-wheel", "n": 10, "t": "Wheel of Fortune", "cr": "Spinnet and friends", "up": "Change, cycles, luck turning", "rv": "Resistance to change, a slow patch"}, {"f": "tarot-justice", "n": 11, "t": "Justice", "cr": "Cranebalance", "up": "Fairness, truth, cause and effect", "rv": "Unfairness, avoiding responsibility"}, {"f": "tarot-hanged", "n": 12, "t": "The Hanged One", "cr": "Dangleloth", "up": "Pause, surrender, a new view", "rv": "Stalling, feeling stuck"}, {"f": "tarot-death", "n": 13, "t": "Transformation", "cr": "Duskwing", "up": "Endings that make room, transformation", "rv": "Clinging on, fear of change"}, {"f": "tarot-temperance", "n": 14, "t": "Temperance", "cr": "Pourpip", "up": "Balance, patience, healing flow", "rv": "Excess, impatience"}, {"f": "tarot-devil", "n": 15, "t": "The Devil", "cr": "Gobbit", "up": "Temptation, habits, playful shadow", "rv": "Breaking free, letting go"}, {"f": "tarot-tower", "n": 16, "t": "The Tower", "cr": "Puffdrift", "up": "Sudden change, revelation, release", "rv": "Avoiding upheaval, delayed change"}, {"f": "tarot-star", "n": 17, "t": "The Star", "cr": "Glimmerfin", "up": "Hope, renewal, calm", "rv": "Discouragement, lost faith"}, {"f": "tarot-moon", "n": 18, "t": "The Moon", "cr": "Nocturnelle", "up": "Dreams, intuition, the unknown", "rv": "Clarity returning, fears fading"}, {"f": "tarot-sun", "n": 19, "t": "The Sun", "cr": "Sunnibun", "up": "Joy, success, warmth", "rv": "A cloudy day, temporary setback"}, {"f": "tarot-judgement", "n": 20, "t": "Judgement", "cr": "Trumplume", "up": "Awakening, a calling, fresh start", "rv": "Self-criticism, ignoring the call"}, {"f": "tarot-world", "n": 21, "t": "The World", "cr": "Ribbonpaw", "up": "Completion, wholeness, celebration", "rv": "Loose ends, almost there"}];
+
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const money=n=>'A$'+n.toFixed(2);
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)}
+let cart=[];try{cart=JSON.parse(localStorage.getItem(KEY+'-cart')||'[]')}catch(e){cart=[]}
+function save(){localStorage.setItem(KEY+'-cart',JSON.stringify(cart));$('#cn').textContent=cart.reduce((a,c)=>a+c.q,0)}
+function optsFor(p){return (p.opts||[]).map((o,i)=>`<label>${o.name}</label><select data-o="${i}">${o.vals.map(v=>`<option>${v}</option>`).join('')}</select>`).join('')}
+let filter='All';
+function render(){
+  const cats=['All',...new Set(P.map(p=>p.cat))];
+  $('#cats').innerHTML=cats.map(c=>`<button class="btn sm ${c===filter?'':'alt'}" data-c="${c}">${c}</button>`).join('');
+  $$('#cats button').forEach(b=>b.onclick=()=>{filter=b.dataset.c;render()});
+  $('#grid').innerHTML=P.filter(p=>filter==='All'||p.cat===filter).map(p=>`<div class="card" data-id="${p.id}"><img src="assets/${p.img}.jpg" alt="${p.name}" loading="lazy"><div class="b"><span class="pill">${p.cat}</span><h3>${p.name}</h3><p>${p.desc}</p>${optsFor(p)}<div class="row" style="justify-content:space-between;margin-top:6px"><span class="price">${money(p.price)}</span><button class="btn sm add">Add to cart</button></div></div></div>`).join('');
+  $$('#grid .add').forEach(b=>b.onclick=()=>{const c=b.closest('.card'),p=P.find(x=>x.id===c.dataset.id);const o=[...c.querySelectorAll('select')].map(s=>s.value).join(', ');const ex=(o.match(/\+A\$(\d+)/g)||[]).reduce((a,m)=>a+ +m.slice(3),0);const k=p.id+'|'+o;const f=cart.find(x=>x.k===k);if(f)f.q++;else cart.push({k,id:p.id,name:p.name,o,price:p.price+ex,q:1});save();toast('Added '+p.name)});
+}
+function openCart(){
+  const sub=cart.reduce((a,c)=>a+c.price*c.q,0),ship=cart.length?SHIP(sub):0;
+  $('#cartlist').innerHTML=cart.length?cart.map((c,i)=>`<div class="line"><span>${c.name}${c.o?' <small style="color:#8a6a78">('+c.o+')</small>':''}</span><span class="row"><button class="btn sm alt" data-m="${i}">-</button>${c.q}<button class="btn sm alt" data-p="${i}">+</button> ${money(c.price*c.q)}</span></div>`).join('')+`<div class="line"><span>Shipping</span><span>${money(ship)}</span></div><div class="line"><b>Total</b><b>${money(sub+ship)}</b></div>`:'<p>Your cart is empty.</p>';
+  $$('[data-m]').forEach(b=>b.onclick=()=>{const c=cart[b.dataset.m];c.q--;if(c.q<1)cart.splice(b.dataset.m,1);save();openCart()});
+  $$('[data-p]').forEach(b=>b.onclick=()=>{cart[b.dataset.p].q++;save();openCart()});
+  $('#tocheck').disabled=!cart.length;$('#cartm').classList.add('on');
+}
+function checkout(){
+  const f=['cname','cemail','caddr'].map(i=>$('#'+i).value.trim());
+  if(!f[0]||!/.+@.+\..+/.test(f[1])||!f[2]){toast('Please fill in your name, email and address');return}
+  const sub=cart.reduce((a,c)=>a+c.price*c.q,0),ship=SHIP(sub),tot=sub+ship;
+  const ref='CB-'+KEY.slice(0,3).toUpperCase()+'-'+Date.now().toString(36).toUpperCase().slice(-6);
+  const lines=cart.map(c=>`${c.q} x ${c.name}${c.o?' ('+c.o+')':''} - ${money(c.price*c.q)}`).join('\n');
+  const body=`Order ${ref}\n\n${lines}\nShipping: ${money(ship)}\nTotal: ${money(tot)}\n\nName: ${f[0]}\nEmail: ${f[1]}\nAddress: ${f[2]}\n\nPaid by PayID (Teachers Mutual Bank) to ${PAYID}, reference ${ref}`;
+  $('#done').innerHTML=`<h2>Order ready</h2><p>Order reference <b>${ref}</b></p><div class="payid">Pay by PayID (Teachers Mutual Bank)<br><b class="id">${PAYID}</b><br>Amount <b>${money(tot)}</b><br>Use reference <b>${ref}</b> so your payment can be matched.</div><pre style="white-space:pre-wrap;background:#fff7fa;border-radius:12px;padding:10px;font-size:.8rem">${body.replace(/</g,'&lt;')}</pre><div class="row"><a class="btn" href="mailto:${PAYID}?subject=${encodeURIComponent('Coffeebreak order '+ref)}&body=${encodeURIComponent(body)}">Email my order</a><button class="btn alt" id="copyo">Copy order</button><button class="btn alt" id="closed">Close</button></div><p class="note">Your order is sent once your PayID payment arrives. No card details are taken in this app.</p>`;
+  $('#copyo').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(body).then(()=>toast('Copied'),()=>toast('Copy not available'))};
+  $('#closed').onclick=()=>{$('#doneM').classList.remove('on')};
+  const hist=JSON.parse(localStorage.getItem(KEY+'-orders')||'[]');hist.push({ref,tot,date:new Date().toISOString()});localStorage.setItem(KEY+'-orders',JSON.stringify(hist));
+  cart=[];save();$('#checkm').classList.remove('on');$('#doneM').classList.add('on');
+}
+const PAYID='darkokaz@gmx.com';
+document.addEventListener('DOMContentLoaded',()=>{render();save();
+  $('#cartb').onclick=openCart;$('#tocheck').onclick=()=>{$('#cartm').classList.remove('on');const sub=cart.reduce((a,c)=>a+c.price*c.q,0);$('#chsum').textContent=money(sub+SHIP(sub));$('#checkm').classList.add('on')};
+  $('#pay').onclick=checkout;$$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m||e.target.matches('.x'))m.classList.remove('on')}));
+});
+
+const POS={1:['Your card'],3:['Past','Present','Future'],5:['Now','Challenge','Root','Advice','Outcome']};let last=null;
+function showCard(c){$('#cardd').innerHTML=`<img src="assets/${c.f}.jpg" style="width:100%;max-width:300px;display:block;margin:0 auto;border-radius:14px"><h2 style="text-align:center">${c.n}. ${c.t}</h2><p style="text-align:center;color:#8a6a78">${c.cr}</p><p><b>Upright:</b> ${c.up}</p><p><b>Reversed:</b> ${c.rv}</p><button class="btn x">Close</button>`;$('#cardm').classList.add('on')}
+function deal(){const n=+$('#sp').value,rv=$('#rev').checked;const d=[...CARDS];for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]]}
+ const pick=d.slice(0,n).map((c,i)=>({c,pos:POS[n][i],r:rv&&Math.random()<.3}));last={q:$('#q').value.trim(),date:new Date().toLocaleString('en-AU'),pick};
+ $('#spread').innerHTML=pick.map((p,i)=>`<div class="slot"><div class="tcard ${p.r?'rv':''}" data-i="${i}"><div class="in"><img src="assets/tarot-back.jpg" alt="card back"><img class="fr" src="assets/${p.c.f}.jpg" alt="${p.c.t}"></div></div><h4>${p.pos}</h4><p class="m hidden">${p.c.t}${p.r?' (reversed)':''}<br>${p.r?p.c.rv:p.c.up}</p></div>`).join('');
+ $('#summary').classList.add('hidden');$('#savr').disabled=true;
+ $$('.tcard').forEach(t=>t.onclick=()=>{if(t.classList.contains('f')){showCard(pick[t.dataset.i].c);return}t.classList.add('f');t.parentNode.querySelector('.m').classList.remove('hidden');if($$('.tcard.f').length===pick.length)summ()})}
+function summ(){const s=$('#summary');s.innerHTML='<b>Your reading'+(last.q?' on "'+last.q.replace(/</g,'&lt;')+'"':'')+'</b><br>'+last.pick.map(p=>`${p.pos}: ${p.c.t}${p.r?' reversed':''}, ${(p.r?p.c.rv:p.c.up).toLowerCase()}.`).join('<br>');s.classList.remove('hidden');$('#savr').disabled=false}
+function saved(){const L=JSON.parse(localStorage.getItem('cbtarot-saved')||'[]');$('#savedl').innerHTML=L.length?L.slice().reverse().map(r=>`<div class="note"><b>${r.date}</b>${r.q?' - '+r.q.replace(/</g,'&lt;'):''}<br>${r.pick.map(p=>p.pos+': '+p.c.t+(p.r?' (reversed)':'')).join(', ')}</div>`).join('')+'<button class="btn alt" id="clr">Clear saved readings</button>':'<p>No saved readings yet.</p>';const c=$('#clr');if(c)c.onclick=()=>{if(confirm('Clear all saved readings?')){localStorage.removeItem('cbtarot-saved');saved()}}}
+document.addEventListener('DOMContentLoaded',()=>{
+ $$('nav.tabs button').forEach(b=>b.onclick=()=>{$$('nav.tabs button').forEach(x=>x.classList.toggle('alt',x!==b));$$('main>section').forEach(s=>s.classList.add('hidden'));$('#t-'+b.dataset.t).classList.remove('hidden');if(b.dataset.t==='saved')saved()});
+ $('#gal').innerHTML=CARDS.map((c,i)=>`<div><img src="assets/${c.f}.jpg" data-i="${i}" loading="lazy" alt="${c.t}">${c.n}. ${c.t}<br><small>${c.cr}</small></div>`).join('');
+ $$('#gal img').forEach(im=>im.onclick=()=>showCard(CARDS[im.dataset.i]));
+ $('#shuf').onclick=deal;$('#savr').onclick=()=>{const L=JSON.parse(localStorage.getItem('cbtarot-saved')||'[]');L.push(last);localStorage.setItem('cbtarot-saved',JSON.stringify(L));$('#savr').disabled=true;toast('Reading saved')};
+});</script></body></html>

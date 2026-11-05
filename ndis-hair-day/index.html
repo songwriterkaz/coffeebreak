@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak Hair Day</title>
+<style>
+:root{--bg:#fff7f3;--ink:#3b2a24;--muted:#6f5850;--pink:#d9708d;--pinkd:#b8516e;--brown:#6b4636;--line:#ecd9d2;--ok:#3f8f5a}
+*{box-sizing:border-box}
+html{font-size:17px}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+a{color:var(--pinkd)}
+:focus-visible{outline:3px solid #2b6cb0;outline-offset:2px}
+header.top{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#fff;border-bottom:3px solid var(--pink);position:sticky;top:0;z-index:5}
+header.top img{height:52px}
+header.top h1{font-size:1.15rem;margin:0;color:var(--brown)}
+header.top small{display:block;color:var(--muted);font-weight:400;font-size:.8rem}
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;background:#fbeee9}
+nav.tabs button{border:1px solid var(--line);background:#fff;color:var(--brown);padding:9px 14px;border-radius:999px;font-size:1rem;cursor:pointer}
+nav.tabs button.on{background:var(--pink);color:#fff;border-color:var(--pink)}
+main{max-width:960px;margin:0 auto;padding:16px}
+section.view{display:none}section.view.on{display:block}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+h2{color:var(--brown);margin:.2rem 0 .6rem;font-size:1.3rem}h3{color:var(--brown);margin:.2rem 0 .4rem}
+label{display:block;font-weight:600;margin:12px 0 4px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #cdb3aa;border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+textarea{min-height:80px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.row{grid-template-columns:1fr}header.top img{height:42px}}
+.btn{display:inline-block;border:0;background:var(--pink);color:#fff;padding:11px 18px;border-radius:10px;font:inherit;font-weight:600;cursor:pointer;margin:4px 4px 4px 0}
+.btn:hover{background:var(--pinkd)}.btn.alt{background:#fff;color:var(--brown);border:1px solid var(--line)}
+.note{background:#fdf0f3;border-left:4px solid var(--pink);padding:10px 12px;border-radius:8px;margin:10px 0}
+.free{display:inline-block;background:var(--ok);color:#fff;font-weight:700;border-radius:8px;padding:3px 10px}
+.chk{display:flex;align-items:center;gap:8px;font-weight:500}.chk input{width:auto;transform:scale(1.2)}
+.muted{color:var(--muted);font-size:.92rem}
+.hidden{display:none}
+table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}th{color:var(--brown)}
+.tw{overflow-x:auto}
+.ev{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.date{background:var(--pink);color:#fff;border-radius:12px;padding:8px 12px;text-align:center;min-width:78px}
+.date b{display:block;font-size:1.5rem;line-height:1}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--brown);color:#fff;padding:10px 16px;border-radius:10px;display:none;z-index:9;max-width:90%}
+footer{max-width:960px;margin:10px auto 30px;padding:0 16px;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<header class="top"><img src="assets/logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Hair Day<small>Free haircuts and perms for NDIS participants, Newcastle and the Hunter</small></h1></header>
+<nav class="tabs" id="tabs">
+  <button data-v="events" class="on">Hair days</button>
+  <button data-v="join">Book a free spot</button>
+  <button data-v="vol">Hairdressers: volunteer</button>
+  <button data-v="admin">Organiser</button>
+  <button data-v="about">About</button>
+</nav>
+<main>
+<section class="view on" id="v-events">
+  <div class="card">
+    <h2>Free hair days <span class="free">Free</span></h2>
+    <p>Volunteer hairdressers and salons give free haircuts and perms to NDIS participants. There is no cost to participants and you never need to pay or use your plan funds. Support workers are welcome to come along.</p>
+    <div class="note">Perms take longer, often two to three hours, and the hairdresser may do a quick strand test first. Tell us about any access needs when you book, such as quiet time, wheelchair access, sensory needs or a short appointment, and we will do our best to match you with the right salon.</div>
+  </div>
+  <div id="evList"></div>
+  <p id="evEmpty" class="muted hidden">New hair days are being organised. You can still book a spot now and tell us your preferred day, and we will contact you when a day is set.</p>
+</section>
+
+<section class="view" id="v-join">
+  <div class="card">
+    <h2>Book a free spot</h2>
+    <p class="muted">Participants, family members or support workers can fill this in. Only the organiser sees these details.</p>
+    <form id="pForm">
+      <div class="row"><div><label for="p_name">Participant name *</label><input id="p_name" required autocomplete="name"></div>
+      <div><label for="p_contact">Best contact (phone or email) *</label><input id="p_contact" required></div></div>
+      <div class="row"><div><label for="p_service">Preferred service *</label><select id="p_service" required><option value="">Choose</option><option>Haircut</option><option>Perm</option><option>Haircut and perm</option><option>Trim and tidy up</option><option>Not sure, happy to chat</option></select></div>
+      <div><label for="p_day">Preferred day *</label><select id="p_day" required></select></div></div>
+      <label for="p_access">Accessibility needs</label><textarea id="p_access" placeholder="For example wheelchair access, quiet room, sensory friendly, shorter appointment, communication support, Auslan"></textarea>
+      <div class="row"><div><label for="p_sw">Will a support worker attend? *</label><select id="p_sw" required><option value="">Choose</option><option>Yes</option><option>No</option><option>Not sure yet</option></select></div>
+      <div><label for="p_swname">Support worker name and contact (optional)</label><input id="p_swname"></div></div>
+      <label for="p_notes">Anything else we should know</label><textarea id="p_notes" placeholder="Hair length, the style you would like, best times"></textarea>
+      <label class="chk"><input type="checkbox" id="p_ok" required> I agree the organiser can contact me about this booking.</label>
+      <button class="btn" type="submit">Book my free spot</button>
+    </form>
+    <div class="note hidden" id="pDone"></div>
+  </div>
+</section>
+
+<section class="view" id="v-vol">
+  <div class="card">
+    <h2>Hairdressers and salons: volunteer</h2>
+    <p>Donate a few hours to give free cuts and perms to NDIS participants. Your salon is thanked by name on the hair day page and on Coffeebreak socials if you would like.</p>
+    <form id="vForm">
+      <div class="row"><div><label for="v_name">Your name *</label><input id="v_name" required></div><div><label for="v_salon">Salon, school or business</label><input id="v_salon"></div></div>
+      <div class="row"><div><label for="v_contact">Phone or email *</label><input id="v_contact" required></div><div><label for="v_suburb">Suburb *</label><input id="v_suburb" required></div></div>
+      <label>Services you can offer *</label>
+      <label class="chk"><input type="checkbox" class="v_s" value="Haircuts"> Haircuts</label>
+      <label class="chk"><input type="checkbox" class="v_s" value="Perms"> Perms</label>
+      <label class="chk"><input type="checkbox" class="v_s" value="Trims"> Trims</label>
+      <label class="chk"><input type="checkbox" class="v_s" value="Mobile or home visits"> Mobile or home visits</label>
+      <div class="row"><div><label for="v_days">Days you are free *</label><input id="v_days" required placeholder="e.g. Mondays, or Saturday mornings"></div><div><label for="v_spots">Clients you could see per day</label><input id="v_spots" type="number" min="1" max="50" value="4"></div></div>
+      <label for="v_access">Venue access</label><select id="v_access"><option value="">Choose</option><option>Step free and wheelchair accessible</option><option>Some steps</option><option>Not sure</option><option>Mobile, I travel to clients</option></select>
+      <label for="v_notes">Notes</label><textarea id="v_notes" placeholder="Products donated, quiet hours available, experience with sensory needs"></textarea>
+      <button class="btn" type="submit">Sign up to volunteer</button>
+    </form>
+    <div class="note hidden" id="vDone"></div>
+  </div>
+</section>
+
+<section class="view" id="v-admin">
+  <div class="card" id="lockCard"><h2>Organiser</h2><p class="muted" id="lockMsg"></p>
+    <label for="pass">Passcode</label><input id="pass" type="password"><button class="btn" id="unlock">Unlock</button>
+    <p class="muted">The passcode and all data are stored only in this browser on this device.</p></div>
+  <div id="adminArea" class="hidden">
+    <div class="card"><h2>Add a hair day</h2>
+      <div class="row"><div><label for="e_date">Date *</label><input id="e_date" type="date"></div><div><label for="e_time">Time</label><input id="e_time" placeholder="e.g. 9 am to 2 pm"></div></div>
+      <div class="row"><div><label for="e_venue">Venue and address *</label><input id="e_venue"></div><div><label for="e_salon">Hosting salon or volunteers</label><input id="e_salon"></div></div>
+      <div class="row"><div><label for="e_services">Services</label><input id="e_services" value="Haircuts and perms"></div><div><label for="e_spots">Spots available</label><input id="e_spots" type="number" min="1" value="10"></div></div>
+      <label for="e_access">Access information</label><input id="e_access" placeholder="e.g. step free entry, quiet room, parking out front">
+      <button class="btn" id="addEv">Add hair day</button>
+    </div>
+    <div class="card"><h2>Hair days</h2><div class="tw" id="aEv"></div></div>
+    <div class="card"><h2>Participant bookings</h2><div class="tw" id="aP"></div>
+      <button class="btn alt" data-exp="p">Export bookings CSV</button></div>
+    <div class="card"><h2>Volunteer hairdressers</h2><div class="tw" id="aV"></div>
+      <button class="btn alt" data-exp="v">Export volunteers CSV</button></div>
+    <div class="card"><h2>Backup</h2><button class="btn alt" id="expJ">Export all JSON</button>
+      <label class="btn alt" style="display:inline-block">Import JSON<input type="file" id="imp" accept=".json,application/json" class="hidden"></label>
+      <button class="btn alt" id="lock">Lock</button>
+      <p class="muted">Keep exported files private. They contain personal details and access needs.</p></div>
+  </div>
+</section>
+
+<section class="view" id="v-about">
+  <div class="card">
+    <h2>About Coffeebreak Hair Day</h2>
+    <p>Coffeebreak Hair Day is a community service organised by Karen O'Brien, a Coffeebreak songwriter and creator from Newcastle NSW. Local hairdressers, salons and hairdressing students donate their time so NDIS participants can get a fresh cut or a perm for free, in a friendly and accessible setting.</p>
+    <p>It is free for participants. No one will ever ask a participant for payment or plan details.</p>
+    <h3>Disclaimer and rights</h3>
+    <p>© Karen O'Brien (Coffeebreak). All rights reserved. Karen O'Brien keeps all rights to this app, its designs, the Coffeebreak name and the Coffeebreak logo. You may not copy it or make your own versions. Coffeebreak Hair Day is an independent community initiative and is not run by, affiliated with or endorsed by the NDIS or the National Disability Insurance Agency. No claim is made to any third-party brands or organisations named; all names and trademarks belong to their respective owners. Services are provided by independent volunteer hairdressers.</p>
+    <p>Data entered here is stored in this browser only. Nothing is sent anywhere by the app.</p>
+    <p>More from Coffeebreak at <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+  </div>
+</section>
+</main>
+<footer>
+  <p>© Karen O'Brien (Coffeebreak). Free community service. Not affiliated with the NDIS or NDIA.</p>
+  <p>Check out <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>.</p>
+</footer>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+var K={p:'cb_hairday_participants',v:'cb_hairday_volunteers',e:'cb_hairday_events',pass:'cb_hairday_pass'};
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function load(k){try{var d=JSON.parse(localStorage.getItem(K[k])||'[]');return Array.isArray(d)?d:[]}catch(e){return []}}
+function save(k,d){localStorage.setItem(K[k],JSON.stringify(d))}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function toast(m){var t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(function(){t.style.display='none'},2600)}
+function download(name,text,type){var b=new Blob([text],{type:type});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)}
+function fmtDate(d){try{return new Date(d+'T00:00:00').toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}catch(e){return d}}
+function upcoming(){var today=new Date().toISOString().slice(0,10);return load('e').filter(function(e){return e.date>=today}).sort(function(a,b){return a.date.localeCompare(b.date)})}
+function booked(id){return load('p').filter(function(p){return p.day===id}).length}
+document.querySelectorAll('#tabs button').forEach(function(b){b.addEventListener('click',function(){show(b.getAttribute('data-v'))})});
+function show(v){document.querySelectorAll('#tabs button').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v)});document.querySelectorAll('section.view').forEach(function(s){s.classList.toggle('on',s.id==='v-'+v)});if(v==='events')renderEvents();if(v==='join')fillDays();if(v==='admin')initLock();window.scrollTo(0,0)}
+function renderEvents(){var l=upcoming();
+  $('evList').innerHTML=l.map(function(e){var d=new Date(e.date+'T00:00:00');var left=Math.max(0,(+e.spots||0)-booked(e.id));
+    return '<div class="card ev"><div class="date">'+esc(d.toLocaleDateString('en-AU',{month:'short'}))+'<b>'+d.getDate()+'</b>'+esc(d.toLocaleDateString('en-AU',{weekday:'short'}))+'</div><div style="flex:1;min-width:220px"><h3>'+esc(fmtDate(e.date))+'</h3><p>'+(e.time?'<b>Time:</b> '+esc(e.time)+'<br>':'')+'<b>Where:</b> '+esc(e.venue)+'<br>'+(e.salon?'<b>Hairdressers:</b> '+esc(e.salon)+'<br>':'')+'<b>Services:</b> '+esc(e.services)+'<br>'+(e.access?'<b>Access:</b> '+esc(e.access)+'<br>':'')+'<b>Spots left:</b> '+left+' <span class="free">Free</span></p><button class="btn" data-book="'+esc(e.id)+'">Book this day</button></div></div>'}).join('');
+  $('evEmpty').classList.toggle('hidden',l.length>0)}
+$('evList').addEventListener('click',function(e){var id=e.target.getAttribute&&e.target.getAttribute('data-book');if(id){show('join');$('p_day').value=id}});
+function fillDays(){var cur=$('p_day').value;var o='<option value="">Choose</option>'+upcoming().map(function(e){return '<option value="'+esc(e.id)+'">'+esc(fmtDate(e.date))+' at '+esc(e.venue)+'</option>'}).join('')+['Any weekday','Weekday morning','Weekday afternoon','Saturday','Whenever suits'].map(function(x){return '<option>'+x+'</option>'}).join('');$('p_day').innerHTML=o;if(cur)$('p_day').value=cur}
+function dayLabel(v){var e=load('e').filter(function(x){return x.id===v})[0];return e?fmtDate(e.date)+' at '+e.venue:v}
+$('pForm').addEventListener('submit',function(ev){ev.preventDefault();var g=function(id){return $(id).value.trim()};
+  var p={id:uid(),created:new Date().toISOString(),name:g('p_name'),contact:g('p_contact'),service:g('p_service'),day:g('p_day'),access:g('p_access'),supportWorker:g('p_sw'),supportWorkerDetails:g('p_swname'),notes:g('p_notes'),status:'new'};
+  var d=load('p');d.push(p);save('p',d);$('pForm').reset();fillDays();
+  $('pDone').classList.remove('hidden');$('pDone').innerHTML='Thank you, '+esc(p.name)+'. Your free spot request is saved for '+esc(dayLabel(p.day))+'. The organiser will contact you on '+esc(p.contact)+' to confirm a time.';toast('Booking saved')});
+$('vForm').addEventListener('submit',function(ev){ev.preventDefault();var s=[].slice.call(document.querySelectorAll('.v_s:checked')).map(function(x){return x.value});if(!s.length){toast('Choose at least one service');return}
+  var g=function(id){return $(id).value.trim()};var v={id:uid(),created:new Date().toISOString(),name:g('v_name'),salon:g('v_salon'),contact:g('v_contact'),suburb:g('v_suburb'),services:s.join(', '),days:g('v_days'),perDay:g('v_spots'),access:g('v_access'),notes:g('v_notes')};
+  var d=load('v');d.push(v);save('v',d);$('vForm').reset();$('vDone').classList.remove('hidden');$('vDone').textContent='Thank you, '+v.name+'. Your volunteer details are saved and the organiser will be in touch.';toast('Volunteer saved')});
+async function hash(s){if(window.crypto&&crypto.subtle){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('cbhd:'+s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return 'x'+h}
+var unlocked=false;
+function initLock(){if(unlocked){$('lockCard').classList.add('hidden');$('adminArea').classList.remove('hidden');renderAdmin();return}$('lockCard').classList.remove('hidden');$('adminArea').classList.add('hidden');$('lockMsg').textContent=localStorage.getItem(K.pass)?'Enter the organiser passcode.':'First time here: choose an organiser passcode (at least 4 characters).'}
+$('unlock').onclick=async function(){var p=$('pass').value;if(p.length<4){toast('Passcode needs at least 4 characters');return}var h=await hash(p),s=localStorage.getItem(K.pass);if(!s){localStorage.setItem(K.pass,h);unlocked=true}else if(s===h)unlocked=true;else{toast('That passcode is not right');return}$('pass').value='';initLock()};
+$('pass').addEventListener('keydown',function(e){if(e.key==='Enter')$('unlock').click()});
+$('lock').onclick=function(){unlocked=false;initLock()};
+$('addEv').onclick=function(){var g=function(id){return $(id).value.trim()};if(!g('e_date')||!g('e_venue')){toast('Add a date and venue');return}var d=load('e');d.push({id:uid(),date:g('e_date'),time:g('e_time'),venue:g('e_venue'),salon:g('e_salon'),services:g('e_services')||'Haircuts and perms',spots:+g('e_spots')||10,access:g('e_access')});save('e',d);['e_date','e_time','e_venue','e_salon','e_access'].forEach(function(i){$(i).value=''});renderAdmin();toast('Hair day added')};
+var PCOLS=[['created','Booked'],['name','Name'],['contact','Contact'],['service','Service'],['day','Preferred day'],['access','Access needs'],['supportWorker','Support worker'],['supportWorkerDetails','Support worker details'],['notes','Notes'],['status','Status']];
+var VCOLS=[['created','Signed up'],['name','Name'],['salon','Salon'],['contact','Contact'],['suburb','Suburb'],['services','Services'],['days','Days'],['perDay','Per day'],['access','Venue access'],['notes','Notes']];
+function cell(k,r){var v=r[k];if(k==='created')return new Date(v).toLocaleDateString('en-AU');if(k==='day')return dayLabel(v);return v}
+function renderAdmin(){var ev=load('e').sort(function(a,b){return a.date.localeCompare(b.date)});
+  $('aEv').innerHTML=ev.length?'<table><tr><th>Date</th><th>Venue</th><th>Spots</th><th>Booked</th><th></th></tr>'+ev.map(function(e){return '<tr><td>'+esc(fmtDate(e.date))+'<br>'+esc(e.time)+'</td><td>'+esc(e.venue)+'<br><span class="muted">'+esc(e.salon)+'</span></td><td>'+esc(e.spots)+'</td><td>'+booked(e.id)+'</td><td><button class="btn alt" data-del-e="'+esc(e.id)+'">Remove</button></td></tr>'}).join('')+'</table>':'<p class="muted">No hair days yet.</p>';
+  var p=load('p');$('aP').innerHTML=p.length?'<table><tr>'+PCOLS.map(function(c){return '<th>'+c[1]+'</th>'}).join('')+'<th></th></tr>'+p.map(function(r){return '<tr>'+PCOLS.map(function(c){if(c[0]==='status')return '<td><select data-st="'+esc(r.id)+'">'+['new','contacted','confirmed','done','cancelled'].map(function(s){return '<option'+(r.status===s?' selected':'')+'>'+s+'</option>'}).join('')+'</select></td>';return '<td>'+esc(cell(c[0],r))+'</td>'}).join('')+'<td><button class="btn alt" data-del-p="'+esc(r.id)+'">Delete</button></td></tr>'}).join('')+'</table>':'<p class="muted">No bookings yet.</p>';
+  var v=load('v');$('aV').innerHTML=v.length?'<table><tr>'+VCOLS.map(function(c){return '<th>'+c[1]+'</th>'}).join('')+'<th></th></tr>'+v.map(function(r){return '<tr>'+VCOLS.map(function(c){return '<td>'+esc(cell(c[0],r))+'</td>'}).join('')+'<td><button class="btn alt" data-del-v="'+esc(r.id)+'">Delete</button></td></tr>'}).join('')+'</table>':'<p class="muted">No volunteers yet.</p>'}
+$('adminArea').addEventListener('click',function(e){var t=e.target;['e','p','v'].forEach(function(k){var id=t.getAttribute&&t.getAttribute('data-del-'+k);if(id&&confirm('Remove this item from this device?')){save(k,load(k).filter(function(x){return x.id!==id}));renderAdmin()}});
+  var x=t.getAttribute&&t.getAttribute('data-exp');if(x){var cols=x==='p'?PCOLS:VCOLS;var rows=load(x);var q=function(s){s=String(s==null?'':s);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};var csv=cols.map(function(c){return q(c[1])}).join(',')+'\n'+rows.map(function(r){return cols.map(function(c){return q(cell(c[0],r))}).join(',')}).join('\n');download('coffeebreak-hair-day-'+(x==='p'?'bookings':'volunteers')+'-'+new Date().toISOString().slice(0,10)+'.csv','\ufeff'+csv,'text/csv')}});
+$('adminArea').addEventListener('change',function(e){var id=e.target.getAttribute('data-st');if(id){var d=load('p');d.forEach(function(r){if(r.id===id)r.status=e.target.value});save('p',d)}});
+$('expJ').onclick=function(){download('coffeebreak-hair-day-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({app:'Coffeebreak Hair Day',exported:new Date().toISOString(),events:load('e'),participants:load('p'),volunteers:load('v')},null,2),'application/json')};
+$('imp').onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var j=JSON.parse(r.result),n=0;[['e','events'],['p','participants'],['v','volunteers']].forEach(function(m){var arr=j[m[1]];if(Array.isArray(arr)){var d=load(m[0]),ids={};d.forEach(function(x){ids[x.id]=1});arr.forEach(function(x){if(x&&x.id&&!ids[x.id]){d.push(x);n++}});save(m[0],d)}});renderAdmin();toast('Imported '+n+' items')}catch(err){toast('That file could not be read')}e.target.value=''};r.readAsText(f)};
+renderEvents();fillDays();
+})();
+</script>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body>
+</html>

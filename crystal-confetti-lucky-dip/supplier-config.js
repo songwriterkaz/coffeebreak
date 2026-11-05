@@ -1,0 +1,3 @@
+// Supplier codes only. Costs, profit and real links: private-suppliers/luckydip.json (never shipped).
+window.SUPPLIER_CONFIG = { approved: false, supplier: "" };
+window.CB_SUPPLY={"p0":{"supplier":"S2","supplierUrl":"S2-p0","priced":true},"p1":{"supplier":"S2","supplierUrl":"S2-p1","priced":true},"p2":{"supplier":"S2","supplierUrl":"S2-p2","priced":true},"p3":{"supplier":"S1","supplierUrl":"S1-p3","priced":true},"p4":{"supplier":"S1","supplierUrl":"S1-p4","priced":true},"p5":{"supplier":"S2","supplierUrl":"S2-p5","priced":true},"p6":{"supplier":"S2","supplierUrl":"S2-p6","priced":true},"p8":{"supplier":"S2","supplierUrl":"S2-p8","priced":true},"p9":{"supplier":"S2","supplierUrl":"S2-p9","priced":true}};

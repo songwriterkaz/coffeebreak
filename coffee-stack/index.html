@@ -1,0 +1,38 @@
+<!doctype html><html><head><script src="cb-demo.js" data-url="https://coffeebreaks.itch.io/coffeebreak-coffee-stack" data-mode="game" data-plays="3" data-minutes="10"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Coffee Stack by Coffeebreak (Free Demo)</title>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#fff4e0;font-family:sans-serif;touch-action:none;user-select:none}button{background:#ff6fae;color:#fff;border:0;border-radius:24px;padding:14px 28px;font-size:20px;font-weight:bold}a{color:#d6336c}#fsb{position:fixed;top:10px;right:10px;padding:8px 12px;font-size:14px;z-index:9}</style></head><body>
+<canvas id="c"></canvas><button id="fsb" onclick="window.cbFullscreen&&cbFullscreen.toggle()">Fullscreen</button>
+<div id="title" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,244,224,.95);color:#d6336c;text-align:center;padding:20px;gap:12px"><img src="cb-logo.jpg" alt="Coffeebreak" style="width:140px;border-radius:50%"><h1 style="margin:0">Coffee Stack</h1><p style="max-width:320px">Tap to drop each coffee cup on the tower. Line them up perfectly to keep them wide.</p><p>Best: <b id="hi">0</b></p><button id="pb">Play</button><button id="sh2" style="background:#d6336c;font-size:16px">Share</button><a href="https://coffeebreaks.itch.io" target="_blank">Support Coffeebreak</a></div>
+<div id="over" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,244,224,.95);color:#d6336c;text-align:center;padding:20px;gap:12px;display:none"><img src="cb-logo.jpg" alt="Coffeebreak" style="width:80px;border-radius:50%"><h2 style="margin:0">Score <span id="fs"></span></h2><p>Best <span id="fh"></span></p><button id="ag">Play again</button><button id="sh">Share score</button><a href="https://coffeebreaks.itch.io" target="_blank">Support Coffeebreak</a></div>
+<script>var SLUG='coffeestack',NAME='Coffee Stack';
+var C=document.getElementById('c'),X=C.getContext('2d'),W,H,DPR;
+function rs(){DPR=Math.min(2,window.devicePixelRatio||1);W=innerWidth;H=innerHeight;C.width=W*DPR;C.height=H*DPR;C.style.width=W+'px';C.style.height=H+'px';X.setTransform(DPR,0,0,DPR,0,0)}
+addEventListener('resize',rs);rs();
+var AC;function snd(f,d,t,v){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();var o=AC.createOscillator(),g=AC.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.value=v||.15;g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+(d||.15));o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+(d||.15))}catch(e){}}
+var P=[],shake=0;function burst(x,y,n,col){for(var i=0;i<n;i++)P.push({x:x,y:y,vx:(Math.random()-.5)*8,vy:(Math.random()-1)*7,l:40,c:col||['#ff6fae','#ffd1e3','#7a4a2e','#fff4e0'][i%4]})}
+function drawP(){for(var i=P.length-1;i>=0;i--){var p=P[i];p.x+=p.vx;p.y+=p.vy;p.vy+=.3;p.l--;X.globalAlpha=Math.max(0,p.l/40);X.fillStyle=p.c;X.fillRect(p.x,p.y,5,5);if(p.l<=0)P.splice(i,1)}X.globalAlpha=1}
+var KEY='cb_hi_'+SLUG,hi=+localStorage.getItem(KEY)||0,state='title',score=0;
+function $(i){return document.getElementById(i)}
+function show(id){['title','over'].forEach(function(k){$(k).style.display=k===id?'flex':'none'})}
+function gameOver(){state='over';if(score>hi){hi=score;localStorage.setItem(KEY,hi)}$('fs').textContent=score;$('fh').textContent=hi;snd(150,.5,'sawtooth');shake=15;show('over')}
+function share(){var t='I scored '+score+' in '+NAME+' by Coffeebreak. Can you beat it? https://coffeebreaks.itch.io/'+SLUG;if(navigator.share)navigator.share({title:NAME,text:t}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){$('sh').textContent='Copied'});else prompt('Copy this',t)}
+function start(){score=0;P=[];show('none');state='play';reset();T0=performance.now()}
+var T0=0;
+function loop(){X.save();if(shake>0){X.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake*=.85;if(shake<.5)shake=0}
+X.fillStyle='#fff4e0';X.fillRect(-20,-20,W+40,H+40);if(state==='play'){update();var left=Math.max(0,60-(performance.now()-T0)/1000|0);if(left<=0&&TIMED)gameOver()}draw();drawP();
+X.fillStyle='#d6336c';X.font='bold 28px sans-serif';X.textAlign='center';if(state==='play'){X.fillText(score,W/2,44);if(TIMED){X.font='16px sans-serif';X.fillText(Math.max(0,60-((performance.now()-T0)/1000|0))+'s',W/2,66)}}
+X.restore();requestAnimationFrame(loop)}
+$('hi').textContent=hi;$('pb').onclick=start;$('ag').onclick=start;$('sh').onclick=share;$('sh2').onclick=share;
+requestAnimationFrame(loop);
+
+var TIMED=false,cups,cur,dir,sp,cam;
+function reset(){cups=[{x:W/2-70,w:140}];sp=2.5;dir=1;cam=0;nx()}
+function nx(){var l=cups[cups.length-1];cur={x:dir>0?-l.w:W,w:l.w}}
+function tap(){if(state!=='play')return;var l=cups[cups.length-1],a=Math.max(cur.x,l.x),b=Math.min(cur.x+cur.w,l.x+l.w);if(b<=a){gameOver();return}
+var perfect=Math.abs(cur.x-l.x)<5;if(perfect){a=l.x;b=l.x+l.w;snd(880,.2,'triangle');burst(W/2,yOf(cups.length),25)}else{snd(300+score*20,.12,'square');shake=4;burst(cur.x<l.x?a:b,yOf(cups.length),10,'#7a4a2e')}
+cups.push({x:a,w:b-a});score++;sp+=.25;dir=-dir;nx()}
+function yOf(i){return H-80-i*34+cam}
+function update(){cur.x+=sp*dir;if(cur.x>W+10||cur.x<-cur.w-10)dir=-dir;var t=Math.max(0,cups.length*34-H*.5);cam+=(t-cam)*.1}
+function cup(x,y,w){X.fillStyle='#ff6fae';X.fillRect(x,y,w,30);X.fillStyle='#7a4a2e';X.fillRect(x,y,w,7);X.fillStyle='#fff';X.fillRect(x,y+14,w,4)}
+function draw(){if(state!=='play'&&!cups)return;cups.forEach(function(c,i){cup(c.x,yOf(i),c.w)});if(state==='play')cup(cur.x,yOf(cups.length),cur.w)}
+C.addEventListener('pointerdown',tap);addEventListener('keydown',function(e){if(e.code==='Space')tap()});
+</script><script src="cb-fullscreen.js"></script><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Coffeestack" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

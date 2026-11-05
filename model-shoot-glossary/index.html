@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak Model Shoot Glossary</title>
+<style>
+:root{--bg:#fff7f3;--ink:#3b2a24;--muted:#7a6259;--pink:#e7849e;--pinkd:#c9617d;--brown:#6b4636;--line:#ecd9d2}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+header.top{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#fff;border-bottom:3px solid var(--pink);position:sticky;top:0;z-index:5}
+header.top img{height:52px}
+header.top h1{font-size:1.15rem;margin:0;color:var(--brown)}
+header.top small{display:block;color:var(--muted);font-weight:400;font-size:.8rem}
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;background:#fbeee9}
+nav.tabs button{border:1px solid var(--line);background:#fff;color:var(--brown);padding:8px 14px;border-radius:999px;font-size:.95rem;cursor:pointer}
+nav.tabs button.on{background:var(--pink);color:#fff;border-color:var(--pink)}
+main{max-width:1080px;margin:0 auto;padding:16px}
+section.view{display:none}section.view.on{display:block}
+input,select{padding:10px;border:1px solid #d9c3bb;border-radius:10px;font:inherit;width:100%}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.bar>*{flex:1 1 200px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.term{perspective:900px;cursor:pointer;height:340px}
+.inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.term.flip .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 2px 8px rgba(107,70,54,.1)}
+.front img{width:100%;height:78%;object-fit:cover;display:block}
+.front .lbl{padding:8px 10px}
+.front h3{margin:0;color:var(--brown);font-size:1.05rem}
+.tag{font-size:.75rem;color:#fff;background:var(--pink);border-radius:999px;padding:2px 8px;display:inline-block;margin-top:3px}
+.back{transform:rotateY(180deg);padding:14px;display:flex;flex-direction:column;background:linear-gradient(#fff,#fdf0f3)}
+.back h3{margin:0 0 6px;color:var(--brown)}
+.back p{margin:0 0 8px;font-size:.95rem}
+.back .ex{font-size:.88rem;color:var(--muted);font-style:italic}
+.back img.logo{height:30px;width:auto;margin-top:auto;align-self:flex-end;opacity:.85}
+.fc{max-width:460px;margin:0 auto}
+.fc .term{height:520px}
+.ctl{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0}
+.btn{border:0;background:var(--pink);color:#fff;padding:10px 16px;border-radius:10px;font:inherit;font-weight:600;cursor:pointer}
+.btn.alt{background:#fff;color:var(--brown);border:1px solid var(--line)}
+.btn:hover{filter:brightness(.95)}
+.quiz{max-width:560px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.quiz img{width:100%;max-height:300px;object-fit:cover;border-radius:10px}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;background:#fff;color:var(--ink);border:1px solid var(--line);padding:10px 12px;border-radius:10px;font:inherit;cursor:pointer}
+.opt.right{background:#dff3e5;border-color:#3f8f5a}.opt.wrong{background:#f9e0de;border-color:#b8463f}
+.muted{color:var(--muted);font-size:.9rem}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+footer{max-width:1080px;margin:10px auto 30px;padding:0 16px;color:var(--muted);font-size:.85rem}
+footer a{color:var(--pinkd)}
+@media(max-width:600px){header.top img{height:42px}.grid{grid-template-columns:repeat(2,1fr);gap:10px}.term{height:290px}.fc .term{height:460px}.back p{font-size:.86rem}}
+</style>
+</head>
+<body>
+<header class="top"><img src="assets/logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Model Shoot Glossary<small>Shoot terms in plain words, with Karen from the Coffeebreak TV Series</small></h1></header>
+<nav class="tabs" id="tabs">
+  <button data-v="all" class="on">All terms</button>
+  <button data-v="cards">Flash cards</button>
+  <button data-v="quiz">Quiz</button>
+  <button data-v="about">About and disclaimer</button>
+</nav>
+<main>
+<section class="view on" id="v-all">
+  <div class="bar"><input id="q" placeholder="Search terms or meanings"><select id="cat"></select></div>
+  <p class="muted">Tap a card to flip it and read the meaning.</p>
+  <div class="grid" id="grid"></div>
+</section>
+<section class="view" id="v-cards">
+  <div class="fc"><div id="fcHolder"></div>
+  <div class="ctl"><button class="btn alt" id="prev">Previous</button><button class="btn" id="flipBtn">Flip</button><button class="btn alt" id="next">Next</button><button class="btn alt" id="shuf">Shuffle</button></div>
+  <p class="muted" style="text-align:center" id="fcPos"></p></div>
+</section>
+<section class="view" id="v-quiz">
+  <div class="quiz" id="quiz"></div>
+</section>
+<section class="view" id="v-about">
+  <div class="card">
+    <h2 style="color:var(--brown)">About</h2>
+    <p>Twenty terms you will hear on a model shoot, from the call sheet to the day rate, each explained in plain words and pictured with Karen O'Brien from the Coffeebreak TV Series. Use the grid to browse, the flash cards to practise, and the quiz to test yourself.</p>
+    <p>Karen O'Brien is a Coffeebreak songwriter and creator from Newcastle NSW. More apps, games and stores at <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a>.</p>
+    <p class="muted">These meanings are a general guide only. Terms and contracts vary between agencies and clients, so always read your own paperwork and ask if anything is unclear. This is not legal advice.</p>
+    <h3 style="color:var(--brown)">Disclaimer and rights</h3>
+    <p>© Karen O'Brien (Coffeebreak). All rights reserved. Karen O'Brien keeps all rights to this app, its designs, its photos, the Coffeebreak name and the Coffeebreak logo. You may not copy it or make your own versions. No claim is made to any third-party brands; all trademarks belong to their respective owners.</p>
+    <p>Support Coffeebreak: Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+  </div>
+</section>
+</main>
+<footer>
+  <p>© Karen O'Brien (Coffeebreak). More from Coffeebreak at <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+  <p>Check out <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>.</p>
+</footer>
+<script>
+(function(){
+var T=[
+['call-sheet','Call Sheet','The job','A one page plan for the shoot day. It lists the address, start times, who is on the team, the looks being shot and anything you need to bring.','Read it the night before so nothing on the day is a surprise.'],
+['call-time','Call Time','The job','The time you are expected to arrive on set, ready to start. It is your arrival time, not the time the camera starts rolling.','A 7 am call time means walking in the door at 7, not 7.15.'],
+['casting','Casting','The job','A short meeting where a client looks at you and your book to decide who suits a particular job.','You might walk, pose for a few quick shots and leave within ten minutes.'],
+['call-back','Call Back or Recall','The job','A second invitation after a casting, because the client is down to a shortlist and wants another look.','A call back is a good sign that you are being seriously considered.'],
+['option','Option','The job','A pencilled hold on your dates while the client decides. It is not a booking yet, so the job can still fall through.','A first option means you are the client\u2019s top pick for those dates.'],
+['confirmation','Confirmation','The job','The moment the client locks the job in. The dates, the pay and the details are now agreed and you are booked.','Once confirmed, treat the date as fixed in your diary.'],
+['art-director','Art Director','The team','The person who shapes the look and mood of the whole shoot, from colours and props to how each image should feel.','They often stand beside the photographer and guide each set up.'],
+['makeup-artist','Makeup Artist','The team','The professional who prepares your skin and makeup so it reads well on camera and matches the brief.','Arrive with a clean, bare face unless you are told otherwise.'],
+['photographer','Photographer','The team','The person taking the pictures. They set the lighting and framing and often direct your poses and expression.','Listen for small cues like chin down or turn to the light.'],
+['editorial-shoot','Editorial Shoot','Shoot types','A story driven shoot for a magazine, website or campaign, where mood and creativity matter more than selling one product.','Expect bold styling and a strong theme across the images.'],
+['commercial-shoot','Commercial Shoot','Shoot types','A shoot made to sell a product or service, usually bright, friendly and relatable so people picture themselves in it.','Think catalogues, billboards and online store photos.'],
+['fit-model','Fit Model','Shoot types','A model whose measurements are used by designers to test how clothes sit and move before they go into full production.','Fit work is more about consistent measurements than photos.'],
+['test-shoot','Test Shoot','Shoot types','A shoot done to build up portfolios, often with no fee, so the model and crew can try new looks and show their range.','Agree in writing who can use the photos and where.'],
+['model-release','Model Release','Paperwork','A signed form giving permission for photos of you to be used. It should say who can use them and for what.','Never sign a release you have not read in full.'],
+['usage','Usage','Paperwork','How, where and for how long the images can be used, such as online only, in print, in which countries and for how many months.','Wider usage usually means a bigger fee.'],
+['buyout','Buyout','Paperwork','An extra payment for the client\u2019s right to use your images for the agreed usage, on top of or included in your shoot fee.','A long or worldwide buyout should be priced higher.'],
+['comp-card','Comp Card','Your kit','A printed or digital card with your best photos, your measurements and your agency contact, used like a business card.','Bring a few to every casting and go-see.'],
+['go-see','Go-See','Your kit','A visit to meet a client, photographer or brand so they can get to know you, even when there is no specific job yet.','Treat it like a friendly job interview and bring your book.'],
+['digitals','Digitals','Your kit','Simple, unedited photos that show how you look right now, usually in plain clothes with little or no makeup.','Update them whenever your hair or look changes.'],
+['day-rate','Day Rate','Your kit','The agreed fee for a full working day on set, usually about eight hours. Overtime and usage may be extra.','Check what counts as a full day before you agree.']
+].map(function(t){return{id:t[0],term:t[1],cat:t[2],def:t[3],ex:t[4],img:'assets/photos/'+t[0]+'.jpg'}});
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function cardHTML(t){return '<div class="term" data-id="'+t.id+'" tabindex="0" role="button" aria-label="'+esc(t.term)+', tap to flip"><div class="inner"><div class="face front"><img src="'+t.img+'" alt="Karen from the Coffeebreak TV Series, '+esc(t.term)+'" loading="lazy"><div class="lbl"><h3>'+esc(t.term)+'</h3><span class="tag">'+esc(t.cat)+'</span></div></div><div class="face back"><h3>'+esc(t.term)+'</h3><p>'+esc(t.def)+'</p><p class="ex">'+esc(t.ex)+'</p><img class="logo" src="assets/logo.png" alt=""></div></div></div>'}
+var cats=['All categories'];T.forEach(function(t){if(cats.indexOf(t.cat)<0)cats.push(t.cat)});
+$('cat').innerHTML=cats.map(function(c,i){return '<option value="'+(i?esc(c):'')+'">'+esc(c)+'</option>'}).join('');
+function renderGrid(){var q=$('q').value.trim().toLowerCase(),c=$('cat').value;
+  var l=T.filter(function(t){return(!c||t.cat===c)&&(!q||(t.term+' '+t.def+' '+t.ex).toLowerCase().indexOf(q)>-1)});
+  $('grid').innerHTML=l.length?l.map(cardHTML).join(''):'<p class="muted">No terms match that search.</p>'}
+$('q').addEventListener('input',renderGrid);$('cat').addEventListener('change',renderGrid);
+document.addEventListener('click',function(e){var c=e.target.closest('.term');if(c)c.classList.toggle('flip')});
+document.addEventListener('keydown',function(e){var c=document.activeElement;if(c&&c.classList&&c.classList.contains('term')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();c.classList.toggle('flip')}});
+// flash cards
+var order=T.slice(),pos=0;
+function renderFC(){$('fcHolder').innerHTML=cardHTML(order[pos]);$('fcPos').textContent='Card '+(pos+1)+' of '+order.length}
+$('prev').onclick=function(){pos=(pos-1+order.length)%order.length;renderFC()};
+$('next').onclick=function(){pos=(pos+1)%order.length;renderFC()};
+$('flipBtn').onclick=function(){var c=document.querySelector('#fcHolder .term');if(c)c.classList.toggle('flip')};
+$('shuf').onclick=function(){for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var x=order[i];order[i]=order[j];order[j]=x}pos=0;renderFC()};
+// quiz
+var score=0,asked=0,cur=null;
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var x=a[i];a[i]=a[j];a[j]=x}return a}
+function newQ(){cur=T[Math.floor(Math.random()*T.length)];var opts=shuffle([cur].concat(shuffle(T.filter(function(t){return t!==cur})).slice(0,3)));
+  $('quiz').innerHTML='<p class="muted">Score '+score+' of '+asked+'</p><img src="'+cur.img+'" alt="Karen from the Coffeebreak TV Series"><h3>Which term means this?</h3><p>'+esc(cur.def)+'</p>'+opts.map(function(o){return '<button class="opt" data-id="'+o.id+'">'+esc(o.term)+'</button>'}).join('')+'<p id="qmsg" class="muted"></p><div class="ctl"><button class="btn" id="qnext">Next question</button></div>';
+  $('qnext').onclick=newQ;
+  document.querySelectorAll('#quiz .opt').forEach(function(b){b.onclick=function(){if($('quiz').dataset.done==='1')return;$('quiz').dataset.done='1';asked++;var ok=b.getAttribute('data-id')===cur.id;if(ok)score++;
+    document.querySelectorAll('#quiz .opt').forEach(function(x){if(x.getAttribute('data-id')===cur.id)x.classList.add('right')});if(!ok)b.classList.add('wrong');
+    $('qmsg').textContent=(ok?'Correct. ':'Not quite. The answer is '+cur.term+'. ')+'Score '+score+' of '+asked+'.'}});
+  $('quiz').dataset.done='0';}
+// tabs
+document.querySelectorAll('#tabs button').forEach(function(b){b.addEventListener('click',function(){var v=b.getAttribute('data-v');document.querySelectorAll('#tabs button').forEach(function(x){x.classList.toggle('on',x===b)});document.querySelectorAll('section.view').forEach(function(s){s.classList.toggle('on',s.id==='v-'+v)});if(v==='cards')renderFC();if(v==='quiz'&&!cur)newQ();window.scrollTo(0,0)})});
+renderGrid();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Records: Virtual Album Store</title>
+<meta name="description" content="Coffeebreak Records, a retro virtual record shop of original songs by Karen (Coffeebreak), songwriter from Newcastle NSW. Free 30-second previews. Albums $10, singles $2, everything $20.">
+<meta name="author" content="Karen (Coffeebreak)">
+<link rel="icon" href="img/logo.png">
+<style>
+:root{--pink:#ff4fa3;--pink2:#ff8cc6;--deep:#7a0a4a;--ink:#3b0a28;--glass:rgba(255,140,198,.18);--line:rgba(255,255,255,.55)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:
+ radial-gradient(1200px 600px at 80% -10%,#ffd1e8 0,transparent 60%),
+ radial-gradient(900px 500px at -10% 30%,#ffc0dd 0,transparent 60%),
+ linear-gradient(180deg,#fff0f7,#ffd9ea 60%,#ffc4df);min-height:100vh;overflow-x:hidden}
+a{color:var(--deep)}
+button{font:inherit;cursor:pointer;border:0;border-radius:999px;padding:10px 16px;background:rgba(255,255,255,.7);color:var(--deep);font-weight:700;box-shadow:0 2px 0 rgba(122,10,74,.15)}
+button:focus-visible,a:focus-visible{outline:3px solid var(--deep);outline-offset:2px}
+.btn-hot{background:linear-gradient(135deg,#ff4fa3,#ff86c3);color:#fff;box-shadow:0 6px 18px rgba(255,79,163,.45)}
+.btn-dark{background:var(--deep);color:#fff}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+header{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(255,225,240,.75);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 0}
+.logo{width:54px;height:54px;border-radius:50%;object-fit:cover;border:3px solid var(--pink);background:#fff;box-shadow:0 0 18px rgba(255,79,163,.5)}
+.brand b{display:block;font-size:clamp(16px,4.6vw,20px);white-space:nowrap;color:var(--deep);letter-spacing:.5px}
+.brand span{font-size:12px;opacity:.8}
+.bar .sp{flex:1}
+#cartBtn{position:relative;white-space:nowrap}
+#cartCount{display:inline-block;min-width:22px;padding:1px 6px;border-radius:99px;background:var(--pink);color:#fff;font-size:12px;margin-left:4px}
+.today{margin:14px 0 0;padding:12px 16px;border-radius:18px;background:linear-gradient(90deg,rgba(255,79,163,.9),rgba(255,140,198,.85));color:#fff;font-weight:600;box-shadow:0 8px 24px rgba(255,79,163,.35)}
+.today small{display:block;font-weight:400;opacity:.95}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:center;padding:22px 0}
+.hero h1{font-size:40px;line-height:1.05;margin:0 0 10px;color:var(--deep)}
+.hero p{margin:0 0 14px}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 10px 30px rgba(122,10,74,.12)}
+/* turntable: pink acrylic */
+.deck{perspective:900px;padding:18px}
+.plinth{position:relative;aspect-ratio:1.25;border-radius:26px;transform:rotateX(28deg) rotateZ(-4deg);transform-style:preserve-3d;
+ background:linear-gradient(135deg,rgba(255,160,210,.55),rgba(255,79,163,.35) 55%,rgba(255,200,230,.5));border:2px solid rgba(255,255,255,.75);
+ box-shadow:0 30px 40px rgba(122,10,74,.35),inset 0 0 40px rgba(255,255,255,.45),inset 0 -10px 30px rgba(255,79,163,.35)}
+.plinth:before{content:"";position:absolute;inset:0;border-radius:26px;background:linear-gradient(115deg,rgba(255,255,255,.65) 0,transparent 30%,transparent 70%,rgba(255,255,255,.3));pointer-events:none}
+.platter{position:absolute;left:7%;top:8%;width:68%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);box-shadow:0 10px 20px rgba(122,10,74,.25)}
+.vinyl{position:relative;width:100%;aspect-ratio:1;border-radius:50%;
+ background:
+  radial-gradient(circle at 50% 50%,transparent 0 17%,rgba(255,255,255,.0) 17%),
+  repeating-radial-gradient(circle at 50% 50%,rgba(255,60,150,.55) 0 2px,rgba(255,120,190,.38) 2px 4px),
+  radial-gradient(circle,rgba(255,79,163,.7),rgba(255,140,198,.35));
+ box-shadow:0 0 30px rgba(255,79,163,.55),inset 0 0 30px rgba(255,255,255,.35);
+ -webkit-mask:radial-gradient(circle,transparent 0 3%,#000 3.2%);mask:radial-gradient(circle,transparent 0 3%,#000 3.2%)}
+.vinyl:after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 20deg,rgba(255,255,255,.55),transparent 12%,transparent 45%,rgba(255,255,255,.4) 52%,transparent 62%,transparent);mix-blend-mode:screen}
+.vinyl .lbl{position:absolute;inset:32%;border-radius:50%;background:#fff6fb center/cover no-repeat;border:3px solid rgba(255,79,163,.8);box-shadow:0 0 0 6px rgba(255,255,255,.25)}
+.spin{animation:spin 1.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tonearm{position:absolute;right:9%;top:8%;width:8%;height:62%;transform-origin:50% 6%;transform:rotate(8deg);transition:transform .8s ease}
+.tonearm i{position:absolute;left:40%;top:0;width:20%;height:100%;border-radius:8px;background:linear-gradient(90deg,#fff,#ffd0e6,#fff);box-shadow:0 4px 8px rgba(122,10,74,.3)}
+.tonearm b{position:absolute;left:0;top:-6%;width:100%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#fff,#ff8cc6);border:2px solid #fff}
+.tonearm u{position:absolute;left:10%;bottom:-4%;width:80%;height:12%;border-radius:4px;background:var(--deep)}
+.playing .tonearm{transform:rotate(30deg)}
+.knobs{position:absolute;right:6%;bottom:8%;display:flex;gap:8px}
+.knobs span{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#ff8cc6);border:1px solid #fff}
+.now{margin-top:12px;padding:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.now .t{flex:1;min-width:160px}
+.now .t b{display:block}
+.prog{height:6px;border-radius:9px;background:rgba(255,255,255,.6);overflow:hidden;margin-top:6px}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--pink2))}
+/* crate of sleeves */
+h2{color:var(--deep);margin:26px 0 10px}
+.crate{perspective:1100px;height:420px;position:relative;margin:0 auto;max-width:520px;touch-action:pan-y;overflow:hidden}
+.sleeve{position:absolute;left:50%;top:10px;width:300px;height:300px;margin-left:-150px;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s;cursor:pointer}
+.sleeve .case{position:absolute;inset:0;border-radius:10px;background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,140,198,.25) 40%,rgba(255,79,163,.2));border:2px solid rgba(255,255,255,.8);box-shadow:0 20px 30px rgba(122,10,74,.25),inset 0 0 30px rgba(255,255,255,.4);overflow:hidden}
+.sleeve .case img{position:absolute;inset:14px;width:calc(100% - 28px);height:calc(100% - 28px);object-fit:cover;border-radius:6px;opacity:.88}
+.sleeve .case:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.7) 0,transparent 25%,transparent 60%,rgba(255,255,255,.25) 75%,transparent)}
+.sleeve .peek{position:absolute;top:20px;left:40px;width:260px;height:260px;transform:translateZ(-8px);transition:transform .6s}
+.sleeve.front .peek{transform:translateX(70px) translateZ(-8px) rotate(40deg)}
+.sleeve .peek .vinyl .lbl{inset:33%}
+.crateNav{display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:wrap}
+.crateNav .cap{min-width:0;flex:1;max-width:320px;text-align:center}
+.crateNav{flex-wrap:nowrap!important}
+.crateNav .cap b{display:block;color:var(--deep)}
+/* offers */
+.offers{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+.offer{padding:18px;position:relative}
+.offer.main{background:linear-gradient(135deg,rgba(255,79,163,.85),rgba(255,140,198,.7));color:#fff;border:2px solid #fff}
+.offer.main h3{font-size:26px;margin:4px 0}
+.offer .price{font-size:34px;font-weight:800}
+.ribbon{display:inline-block;background:#fff;color:var(--deep);border-radius:99px;padding:3px 10px;font-size:12px;font-weight:800}
+.offer ul{margin:8px 0 12px;padding-left:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.acard{padding:12px;cursor:pointer;transition:transform .3s}
+.acard:hover{transform:translateY(-4px) rotateX(4deg)}
+.acard img{width:100%;border-radius:12px;display:block}
+.acard b{display:block;margin-top:8px;color:var(--deep)}
+.muted{opacity:.8;font-size:14px}
+/* album page and dialogs */
+.ov{position:fixed;inset:0;z-index:40;background:rgba(59,10,40,.45);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:20px 10px}
+.ov.on{display:flex}
+.dlg{background:linear-gradient(180deg,#fff5fa,#ffe2f0);border-radius:24px;max-width:760px;width:100%;padding:20px;border:2px solid #fff;box-shadow:0 30px 60px rgba(59,10,40,.4)}
+.dlg .x{float:right}
+.ahead{display:flex;gap:16px;flex-wrap:wrap}
+.ahead img{width:200px;max-width:100%;border-radius:14px}
+.tracks{list-style:none;margin:14px 0 0;padding:0}
+.tracks li{display:flex;align-items:center;gap:8px;padding:8px 6px;border-bottom:1px solid rgba(122,10,74,.12)}
+.tracks li .n{width:22px;text-align:right;opacity:.7}
+.tracks li .nm{flex:1}
+.tracks li button{padding:7px 12px;font-size:14px}
+.cartl{list-style:none;padding:0;margin:10px 0}
+.cartl li{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(122,10,74,.12)}
+.cartl li span{flex:1}
+.upsell{padding:12px;border-radius:16px;background:rgba(255,79,163,.15);border:1px dashed var(--pink);margin:10px 0}
+label{display:block;font-weight:600;margin:10px 0 4px}
+input,textarea{width:100%;font:inherit;padding:10px;border-radius:12px;border:1px solid rgba(122,10,74,.3);background:#fff}
+.payid{padding:14px;border-radius:16px;background:#fff;border:2px solid var(--pink);margin:12px 0}
+.share{display:flex;gap:8px;flex-wrap:wrap}
+.share a,.share button{text-decoration:none;font-weight:700;font-size:14px;padding:8px 14px;border-radius:99px;background:rgba(255,255,255,.75);color:var(--deep)}
+footer{margin-top:40px;padding:24px 0 40px;font-size:13px;background:rgba(255,255,255,.35);border-top:1px solid var(--line)}
+footer .links a{margin-right:14px;font-weight:700}
+.hp{position:absolute;left:-9999px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--deep);color:#fff;padding:10px 16px;border-radius:99px;z-index:60;display:none}
+@media (max-width:760px){
+ .hero,.offers{grid-template-columns:1fr}
+ .hero h1{font-size:30px}
+ .grid3{grid-template-columns:1fr 1fr}
+ .crate{height:340px}
+ .sleeve{width:230px;height:230px;margin-left:-115px}
+ .sleeve .peek{width:200px;height:200px;left:15px}
+ .sleeve.front .peek{transform:translateX(35px) translateZ(-8px) rotate(40deg)}
+ .brand span{display:none}
+}
+@media (max-width:420px){.grid3{grid-template-columns:1fr}.bar{gap:8px}.logo{width:44px;height:44px}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:6s}.sleeve{transition:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap bar">
+ <img class="logo" src="img/logo.png" alt="Coffeebreak logo">
+ <div class="brand"><b>Coffeebreak Records</b><span>Virtual album store · Newcastle NSW</span></div>
+ <div class="sp"></div>
+ <button id="cartBtn" aria-label="Open cart">Cart <span id="cartCount">0</span></button>
+</div></header>
+
+<main class="wrap">
+ <div class="today" id="today" hidden></div>
+
+ <section class="hero">
+  <div>
+   <h1>Flip through the crates. Drop the needle. Take the album home.</h1>
+   <p>Original songs written by Karen (Coffeebreak), a songwriter from Newcastle NSW. Every track has a free 30-second preview. Pay by PayID and your music files are emailed to you.</p>
+   <p><b>Albums $10 · Singles $2 · Everything Bundle $20</b> <span class="muted">(AUD)</span></p>
+   <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn-hot" data-add="bundle">Get the Everything Bundle, $20</button>
+    <button id="heroPlay">Play a preview</button>
+   </div>
+  </div>
+  <div>
+   <div class="deck"><div class="plinth" id="plinth">
+    <div class="platter"><div class="vinyl" id="deckVinyl"><div class="lbl" id="deckLabel" style="background-image:url(img/album-sessions.jpg)"></div></div></div>
+    <div class="tonearm"><b></b><i></i><u></u></div>
+    <div class="knobs"><span></span><span></span><span></span></div>
+   </div></div>
+   <div class="now glass">
+    <button class="btn-hot" id="playBtn" aria-label="Play preview">Play</button>
+    <div class="t"><b id="nowT">Coffee Break Ride</b><span class="muted" id="nowA">Coffeebreak Sessions Vol. 1 · 30-second preview</span><div class="prog"><i id="prog"></i></div></div>
+    <button id="nowBuy">Add single $2</button>
+   </div>
+  </div>
+ </section>
+
+ <h2>The crate</h2>
+ <p class="muted">Swipe or use the arrows to flip through the see-through sleeves. Tap the front sleeve to open the album.</p>
+ <div class="crate" id="crate"></div>
+ <div class="crateNav">
+  <button id="prev" aria-label="Previous sleeve">&#9664;</button>
+  <div class="cap" id="crateCap"></div>
+  <button id="next" aria-label="Next sleeve">&#9654;</button>
+ </div>
+
+ <h2>Best value</h2>
+ <div class="offers">
+  <div class="offer main glass">
+   <span class="ribbon">Best value</span>
+   <h3>Everything Bundle</h3>
+   <div class="price">$20</div>
+   <ul><li>All 3 albums, all 23 tracks</li><li>Bought separately: 3 albums $30, or 23 singles $46</li><li>You save $10 against buying the 3 albums</li></ul>
+   <button class="btn-dark" data-add="bundle">Add the bundle to cart</button>
+  </div>
+  <div class="offer glass">
+   <span class="ribbon">Optional</span>
+   <h3>Signed Supporter Pack</h3>
+   <div class="price">$50</div>
+   <ul><li>The Everything Bundle (23 tracks)</li><li>A personal thank-you video recorded by Karen, sent to your email</li><li>Directly supports new Coffeebreak songs</li></ul>
+   <button class="btn-hot" data-add="supporter">Add the Supporter Pack</button>
+   <p class="muted">The video is made by hand after your payment arrives, so it can take a few days.</p>
+  </div>
+ </div>
+
+ <h2>Albums</h2>
+ <div class="grid3" id="albums"></div>
+
+ <h2>Share the shop</h2>
+ <div class="share" id="share"></div>
+ <p class="muted">Also on itch.io: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+</main>
+
+<div class="ov" id="albumOv" role="dialog" aria-modal="true" aria-label="Album"><div class="dlg" id="albumDlg"></div></div>
+<div class="ov" id="cartOv" role="dialog" aria-modal="true" aria-label="Cart"><div class="dlg" id="cartDlg"></div></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<audio id="aud" preload="none"></audio>
+
+<footer><div class="wrap">
+ <p><b>Disclaimer.</b> Karen (Coffeebreak) keeps all rights to the songs, recordings, artwork, this store, the Coffeebreak name and the Coffeebreak logo. Buying gives you a personal licence to listen to the music files. Buyers may not copy, share, upload, resell or redistribute the music files, and may not copy or make their own versions of this store or its designs. Previews are for listening in this store only. itch.io, PayID, Teachers Mutual Bank, FormSubmit, Tesla, Starlink and any other third-party names and trademarks belong to their respective owners and are named only to describe this store. Coffeebreak is not affiliated with, endorsed by or sponsored by them. Prices are in Australian dollars. No results, sales or earnings are promised by any offer here.</p>
+ <p><b>AI disclosure.</b> Yes. AI tools were used to help produce some of the music (Suno), the artwork and this store. The songs are written and released by Karen (Coffeebreak).</p>
+ <p class="links"><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a><a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
+ <p>&copy; 2026 Karen (Coffeebreak), Newcastle NSW. All rights reserved.</p>
+</div></footer>
+
+<script>
+(function(){
+'use strict';
+var PAYID='darkokaz@gmx.com', BANK='Teachers Mutual Bank';
+var ORDER_TO='songwriterkaz@gmail.com', ORDER_CC='coffeebreakhq@mail.grokbot.com';
+var ITCH='https://coffeebreaks.itch.io/coffeebreak-records-store';
+/* Launch-day offer: shows only on this date (Sydney time). Edit or clear to turn off. */
+var TODAY_ONLY={date:'2026-11-03',label:'Tue 3 Nov'};
+var P={album:10,single:2,bundle:20,supporter:50};
+var ALBUMS=[
+ {id:'sessions',title:'Coffee Break Ride',sub:'Coffeebreak Sessions Vol. 1',img:'img/album-sessions.jpg',about:'Country and pop road songs with a coffee in hand.',tracks:[
+  ['coffee-break-ride','Coffee Break Ride'],['coffeebreak-grind','Coffeebreak Grind'],['restless-engine','Restless Engine'],['kicking-marshmallows-up-the-mud','Kicking Marshmallows Up the Mud'],['fussell-st','Fussell St'],['coffeebreak-after-dark','Coffeebreak After Dark'],['drip-drip-drip-country','Drip Drip Drip Country'],['sweet-juices-cotton-candy','Sweet Juices Cotton Candy']]},
+ {id:'fever',title:'Sugar-Coated Fever',sub:'Coffeebreak Sessions Vol. 2',img:'img/album-fever.jpg',about:'Sweet, loud and a little bit chaotic.',tracks:[
+  ['sugar-coated-fever','Sugar-Coated Fever'],['coffee-break','Coffee Break'],['coffee','Coffee'],['a-delicious-disaster','A Delicious Disaster'],['coffeebreak-car','Coffeebreak Car'],['coffeebreak-generator','Coffeebreak Generator'],['coffeebreak-moments','Coffeebreak Moments'],['talk-is-cheap','Talk Is Cheap'],['thunder-in-my-hands','Thunder in My Hands']]},
+ {id:'naughty',title:'Naughty Girl',sub:"That's My Naughty Girl EP",img:'img/album-naughty.jpg',about:'Hip hop and R&B after hours, with three alternate takes.',tracks:[
+  ['thats-my-naughty-girl-hip-hop',"That's My Naughty Girl (Hip Hop)"],['naughty-girl-take-1',"That's My Naughty Girl (Take 1)"],['naughty-girl-take-3',"That's My Naughty Girl (Take 3)"],['naughty-girl-take-4',"That's My Naughty Girl (Take 4)"],['im-weak-you-control-my-body-now','I\u2019m Weak (You Control My Body Now)'],['cinnamon-candy','Cinnamon Candy']]}
+];
+var TRACKS={};ALBUMS.forEach(function(a){a.tracks.forEach(function(t){TRACKS[t[0]]={id:t[0],title:t[1],album:a}})});
+var NT=Object.keys(TRACKS).length;
+function $(s,r){return (r||document).querySelector(s)}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function money(n){return '$'+(Math.round(n*100)/100).toFixed(n%1?2:0)}
+var store={get:function(k,d){try{var v=localStorage.getItem('cbrec-'+k);return v?JSON.parse(v):d}catch(e){return d}},set:function(k,v){try{localStorage.setItem('cbrec-'+k,JSON.stringify(v))}catch(e){}}};
+var cart=store.get('cart',[]);
+function toast(t){var el=$('#toast');el.textContent=t;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(function(){el.style.display='none'},2200)}
+function sydDate(){try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Australia/Sydney',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}catch(e){return new Date().toISOString().slice(0,10)}}
+var offerOn=TODAY_ONLY.date&&sydDate()===TODAY_ONLY.date;
+if(offerOn){var b=$('#today');b.hidden=false;b.innerHTML='Today only ('+esc(TODAY_ONLY.label)+', Sydney time): launch day. Buy any album and get one single from another album free.<small>The free single is taken off in the cart automatically. The offer ends at midnight tonight and prices stay the same.</small>'}
+
+/* items */
+function item(key){
+ if(key==='bundle')return {key:key,title:'Everything Bundle (all 3 albums, '+NT+' tracks)',price:P.bundle};
+ if(key==='supporter')return {key:key,title:'Signed Supporter Pack (Everything Bundle plus a personal thank-you video from Karen)',price:P.supporter};
+ var m=key.split(':');
+ if(m[0]==='album'){var a=ALBUMS.filter(function(x){return x.id===m[1]})[0];return a&&{key:key,title:'Album: '+a.title+' ('+a.sub+', '+a.tracks.length+' tracks)',price:P.album,album:a.id}}
+ if(m[0]==='single'){var t=TRACKS[m[1]];return t&&{key:key,title:'Single: '+t.title,price:P.single,album:t.album.id}}
+}
+function hasAll(){return cart.indexOf('bundle')>-1||cart.indexOf('supporter')>-1}
+function add(key){
+ if(cart.indexOf(key)>-1){toast('Already in your cart');return}
+ if(hasAll()&&key!=='supporter'&&key!=='bundle'){toast('The bundle in your cart already includes this');return}
+ if(key==='bundle'||key==='supporter'){cart=[key];}
+ else{
+  var it=item(key); if(!it)return;
+  if(it.album&&key.indexOf('single:')===0&&cart.indexOf('album:'+it.album)>-1){toast('That album is already in your cart');return}
+  if(key.indexOf('album:')===0){cart=cart.filter(function(k){var i=item(k);return !(k.indexOf('single:')===0&&i&&i.album===it.album)})}
+  cart.push(key);
+ }
+ save();toast('Added to cart');
+}
+function save(){store.set('cart',cart);$('#cartCount').textContent=cart.length;if($('#cartOv').classList.contains('on'))renderCart()}
+function totals(){
+ var items=cart.map(item).filter(Boolean),sub=items.reduce(function(s,i){return s+i.price},0),disc=0,why='';
+ if(offerOn&&!hasAll()){
+  var albums=items.filter(function(i){return i.key.indexOf('album:')===0}).map(function(i){return i.album});
+  var free=items.filter(function(i){return i.key.indexOf('single:')===0&&albums.length&&albums.indexOf(i.album)<0})[0];
+  if(free){disc=P.single;why='Launch day: '+free.title.replace('Single: ','')+' free'}
+ }
+ return {items:items,sub:sub,disc:disc,why:why,total:sub-disc};
+}
+
+/* audio */
+var aud=$('#aud'),cur=null;
+function load(id){cur=TRACKS[id];aud.src='previews/'+id+'.mp3';$('#nowT').textContent=cur.title;$('#nowA').textContent=cur.album.sub+' · 30-second preview';$('#deckLabel').style.backgroundImage='url('+cur.album.img+')';$('#nowBuy').textContent=hasAll()?'In your bundle':'Add single $2'}
+function play(id){if(id&&(!cur||cur.id!==id))load(id);var p=aud.play();if(p&&p.catch)p.catch(function(){toast('Tap Play to start the preview')})}
+aud.addEventListener('play',function(){$('#deckVinyl').classList.add('spin');$('#plinth').classList.add('playing');$('#playBtn').textContent='Pause';markTracks()});
+aud.addEventListener('pause',function(){$('#deckVinyl').classList.remove('spin');$('#plinth').classList.remove('playing');$('#playBtn').textContent='Play';markTracks()});
+aud.addEventListener('ended',function(){$('#prog').style.width='0'});
+aud.addEventListener('timeupdate',function(){if(aud.currentTime>=30)aud.pause();$('#prog').style.width=Math.min(100,aud.currentTime/30*100)+'%'});
+aud.addEventListener('error',function(){if(aud.getAttribute('src'))toast('This preview could not load')});
+$('#playBtn').onclick=function(){if(!cur)load('coffee-break-ride');aud.paused?play():aud.pause()};
+$('#heroPlay').onclick=function(){if(!cur)load('coffee-break-ride');play();$('#plinth').scrollIntoView({behavior:'smooth',block:'center'})};
+$('#nowBuy').onclick=function(){if(cur)add('single:'+cur.id)};
+function markTracks(){document.querySelectorAll('[data-play]').forEach(function(b){b.textContent=(cur&&b.dataset.play===cur.id&&!aud.paused)?'Pause':'Preview'})}
+
+/* crate */
+var idx=0,crate=$('#crate');
+crate.innerHTML=ALBUMS.map(function(a,i){return '<div class="sleeve" data-i="'+i+'" role="button" tabindex="0" aria-label="'+esc(a.title)+' sleeve"><div class="peek"><div class="vinyl"><div class="lbl" style="background-image:url('+a.img+')"></div></div></div><div class="case"><img src="'+a.img+'" alt="'+esc(a.title)+' cover art"></div></div>'}).join('');
+var sleeves=[].slice.call(crate.querySelectorAll('.sleeve'));
+function layout(){sleeves.forEach(function(s,i){var d=(i-idx+ALBUMS.length)%ALBUMS.length;s.classList.toggle('front',d===0);
+ s.style.transform=d===0?'translateY(0) rotateX(0deg) translateZ(40px)':'translateY('+(-12*d)+'px) rotateX('+(-58+6*d)+'deg) translateZ('+(-60*d)+'px)';
+ s.style.zIndex=10-d;s.style.opacity=d===0?1:.85});
+ var a=ALBUMS[idx];$('#crateCap').innerHTML='<b>'+esc(a.title)+'</b><span class="muted">'+esc(a.sub)+' · '+a.tracks.length+' tracks · $10</span>'}
+function go(n){idx=(idx+n+ALBUMS.length)%ALBUMS.length;layout()}
+$('#prev').onclick=function(){go(-1)};$('#next').onclick=function(){go(1)};
+sleeves.forEach(function(s){function open(){var i=+s.dataset.i;if(i===idx)openAlbum(ALBUMS[i].id);else{idx=i;layout()}}s.onclick=open;s.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}}});
+var sx=null;crate.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+crate.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40)go(dx<0?1:-1);sx=null});
+layout();
+
+/* album cards and pages */
+$('#albums').innerHTML=ALBUMS.map(function(a){return '<div class="acard glass" data-open="'+a.id+'" role="button" tabindex="0"><img src="'+a.img+'" alt="'+esc(a.title)+' cover art"><b>'+esc(a.title)+'</b><span class="muted">'+esc(a.sub)+' · '+a.tracks.length+' tracks · $10</span></div>'}).join('')+
+ '<div class="acard glass" data-addc="bundle" role="button" tabindex="0"><img src="img/bundle.jpg" alt="Everything Bundle art"><b>Everything Bundle</b><span class="muted">All '+NT+' tracks · $20</span></div>';
+document.querySelectorAll('[data-open]').forEach(function(c){c.onclick=function(){openAlbum(c.dataset.open)};c.onkeydown=function(e){if(e.key==='Enter')openAlbum(c.dataset.open)}});
+document.querySelectorAll('[data-addc]').forEach(function(c){c.onclick=function(){add(c.dataset.addc)}});
+function openAlbum(id){
+ var a=ALBUMS.filter(function(x){return x.id===id})[0];
+ $('#albumDlg').innerHTML='<button class="x" data-close>Close</button><div class="ahead"><img src="'+a.img+'" alt="'+esc(a.title)+' cover art"><div><span class="ribbon">Album</span><h2 style="margin:6px 0">'+esc(a.title)+'</h2><p class="muted">'+esc(a.sub)+' · Coffeebreak · '+a.tracks.length+' tracks</p><p>'+esc(a.about)+'</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn-hot" data-add="album:'+a.id+'">Buy album $10</button><button data-add="bundle">Or all 3 albums for $20</button></div></div></div>'+
+ '<ul class="tracks">'+a.tracks.map(function(t,i){return '<li><span class="n">'+(i+1)+'</span><span class="nm">'+esc(t[1])+'</span><button data-play="'+t[0]+'">Preview</button><button data-add="single:'+t[0]+'">$2</button></li>'}).join('')+'</ul>'+
+ '<p class="muted">Previews are 30 seconds. Full tracks are sent as MP3 files by email after payment.</p>';
+ $('#albumOv').classList.add('on');markTracks();
+}
+$('#cartBtn').onclick=function(){renderCart();$('#cartOv').classList.add('on')};
+
+function renderCart(){
+ var t=totals(),h='<button class="x" data-close>Close</button><h2 style="margin-top:0">Your cart</h2>';
+ if(!t.items.length){h+='<p>Your cart is empty.</p><div class="upsell"><b>Start with the Everything Bundle.</b> All '+NT+' tracks from 3 albums for $20.<br><button class="btn-hot" data-add="bundle" style="margin-top:8px">Add the bundle, $20</button></div>';$('#cartDlg').innerHTML=h;return}
+ h+='<ul class="cartl">'+t.items.map(function(i){return '<li><span>'+esc(i.title)+'</span><b>'+money(i.price)+'</b><button data-rm="'+esc(i.key)+'" aria-label="Remove">Remove</button></li>'}).join('')+'</ul>';
+ if(t.disc)h+='<p>'+esc(t.why)+': <b>-'+money(t.disc)+'</b></p>';
+ h+='<p style="font-size:20px">Total: <b>'+money(t.total)+' AUD</b></p>';
+ if(!hasAll()){
+  var diff=P.bundle-t.total;
+  h+='<div class="upsell"><b>Add the bundle and save.</b> '+(diff<=0?'Your cart costs '+money(t.total)+'. The Everything Bundle gets you all '+NT+' tracks for $20, which saves you '+money(-diff)+'.':'For '+money(diff)+' more you get all 3 albums and all '+NT+' tracks instead.')+'<br><button class="btn-hot" data-swap="bundle" style="margin-top:8px">Switch to the Everything Bundle, $20</button></div>';
+ }else if(cart[0]==='bundle'){
+  h+='<div class="upsell"><b>Want a personal thank-you?</b> The Signed Supporter Pack is the same bundle plus a thank-you video recorded by Karen, for $50 in total (+$30). Optional.<br><button data-swap="supporter" style="margin-top:8px">Upgrade to the Supporter Pack</button></div>';
+ }
+ h+='<form id="orderForm" novalidate><input class="hp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">'+
+  '<label for="oName">Your name</label><input id="oName" name="name" required autocomplete="name">'+
+  '<label for="oEmail">Email for your music files</label><input id="oEmail" name="email" type="email" required autocomplete="email">'+
+  '<label for="oNote">Note for Karen (optional)</label><textarea id="oNote" name="note" rows="2"></textarea>'+
+  '<p><button class="btn-hot" type="submit" id="orderGo">Place order and pay by PayID</button></p><p class="muted" id="orderSt"></p></form>'+
+  '<p class="muted">PayID only. This store never asks for card details. Karen checks each payment by hand and emails your files.</p>';
+ $('#cartDlg').innerHTML=h;
+ $('#orderForm').addEventListener('submit',submitOrder);
+}
+function orderNo(){var d=sydDate().replace(/-/g,'').slice(2),r='';for(var i=0;i<4;i++)r+='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)];return 'CBR-'+d+'-'+r}
+function submitOrder(e){
+ e.preventDefault();var f=e.target,st=$('#orderSt');
+ if(f._honey.value)return;
+ var name=$('#oName').value.trim(),email=$('#oEmail').value.trim(),note=$('#oNote').value.trim();
+ if(!name||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){st.textContent='Please enter your name and a valid email.';return}
+ var t=totals(),no=orderNo();
+ var lines=t.items.map(function(i){return '- '+i.title+': '+money(i.price)}).join('\n')+(t.disc?'\n- '+t.why+': -'+money(t.disc):'');
+ var d={_subject:'Coffeebreak Records order '+no+' ('+money(t.total)+' AUD)',_cc:ORDER_CC,_template:'table',_captcha:'false',_replyto:email,
+  order_number:no,name:name,email:email,items:lines,total:money(t.total)+' AUD',payment:'Pay by PayID ('+BANK+'): '+PAYID+', reference '+no,note:note||'-',store:'Coffeebreak Records: Virtual Album Store',sent:new Date().toISOString()};
+ var btn=$('#orderGo');btn.disabled=true;st.textContent='Sending your order…';
+ var orders=store.get('orders',[]);orders.unshift({no:no,total:t.total,items:lines,at:Date.now()});store.set('orders',orders.slice(0,20));
+ function done(sent){cart=[];store.set('cart',cart);$('#cartCount').textContent=0;showPay(no,t.total,lines,sent,name,email)}
+ fetch('https://formsubmit.co/ajax/'+ORDER_TO,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(d)})
+  .then(function(r){return r.json()}).then(function(j){done(!!(j&&(j.success===true||j.success==='true')))}).catch(function(){done(false)});
+}
+function showPay(no,total,lines,sent,name,email){
+ var body=encodeURIComponent('Hi Karen,\n\nCoffeebreak Records order '+no+'\nName: '+name+'\nEmail: '+email+'\n\n'+lines+'\n\nTotal: '+money(total)+' AUD\nI am paying by PayID with reference '+no+'.\n\nThanks');
+ var mail='mailto:'+ORDER_TO+'?cc='+ORDER_CC+'&subject='+encodeURIComponent('Coffeebreak Records order '+no)+'&body='+body;
+ $('#cartDlg').innerHTML='<button class="x" data-close>Close</button><h2 style="margin-top:0">Order '+esc(no)+'</h2>'+
+ (sent?'<p>Your order has been sent to Karen.</p>':'<p>We could not send the order automatically. Please <a href="'+mail+'">email it to Karen</a> so she can match your payment.</p>')+
+ '<div class="payid"><b>Pay by PayID ('+BANK+'): '+PAYID+'</b><br>Amount: <b>'+money(total)+' AUD</b><br>Reference: <b>'+esc(no)+'</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button data-cp="'+PAYID+'">Copy PayID</button><button data-cp="'+esc(no)+'">Copy reference</button><button data-cp="'+money(total).slice(1)+'">Copy amount</button></div></div>'+
+ '<ol><li>Open your banking app and choose Pay to PayID.</li><li>Enter '+PAYID+' and check the name shown is Karen.</li><li>Pay '+money(total)+' and put <b>'+esc(no)+'</b> in the description.</li><li>Karen checks the payment and emails your music files to '+esc(email)+'.</li></ol>'+
+ '<p class="muted">Payments are checked by hand, so it can take a little while. Keep your order number.</p><h3>Tell a friend</h3><div class="share" id="share2"></div>';
+ shareBar($('#share2'));
+}
+
+/* share */
+function shareBar(el){
+ var url=/^https?:/.test(location.href)&&!/localhost|127\.0\.0\.1|itch\.zone|hwcdn/.test(location.host)?location.href.split('#')[0]:ITCH;
+ var txt='Coffeebreak Records: original songs by Karen from Newcastle NSW. Free previews, albums $10, everything $20.';
+ var u=encodeURIComponent(url),t=encodeURIComponent(txt);
+ el.innerHTML=(navigator.share?'<button data-native>Share</button>':'')+'<button data-cp="'+esc(url)+'">Copy link</button>'+
+  '<a target="_blank" rel="noopener" href="https://x.com/intent/post?text='+t+'&url='+u+'">X</a>'+
+  '<a target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u='+u+'">Facebook</a>'+
+  '<a target="_blank" rel="noopener" href="https://wa.me/?text='+t+'%20'+u+'">WhatsApp</a>'+
+  '<a href="mailto:?subject='+encodeURIComponent('Coffeebreak Records')+'&body='+t+'%20'+u+'">Email</a>';
+ var n=el.querySelector('[data-native]');if(n)n.onclick=function(){navigator.share({title:'Coffeebreak Records',text:txt,url:url}).catch(function(){})};
+}
+shareBar($('#share'));
+
+/* delegated clicks */
+document.addEventListener('click',function(e){
+ var b=e.target.closest('[data-add],[data-play],[data-rm],[data-swap],[data-close],[data-cp]');
+ if(!b){if(e.target.classList&&e.target.classList.contains('ov'))e.target.classList.remove('on');return}
+ if(b.dataset.add)add(b.dataset.add);
+ else if(b.dataset.play){var id=b.dataset.play;if(cur&&cur.id===id&&!aud.paused)aud.pause();else play(id)}
+ else if(b.dataset.rm){cart=cart.filter(function(k){return k!==b.dataset.rm});save()}
+ else if(b.dataset.swap){cart=[b.dataset.swap];save();toast('Cart updated')}
+ else if(b.hasAttribute('data-close'))b.closest('.ov').classList.remove('on');
+ else if(b.dataset.cp){var v=b.dataset.cp;(navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(v):Promise.reject()).then(function(){toast('Copied')}).catch(function(){prompt('Copy this:',v)})}
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.ov.on').forEach(function(o){o.classList.remove('on')})});
+$('#cartCount').textContent=cart.length;
+load('coffee-break-ride');
+})();
+</script>
+</body>
+</html>

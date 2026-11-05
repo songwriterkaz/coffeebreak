@@ -1,0 +1,48 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><title>Coffeebreak Virtual Brick Castle</title><style>
+html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,sans-serif;background:#1b1410;color:#fff;touch-action:none}
+#top{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;gap:10px;padding:6px 10px;background:rgba(20,12,8,.75);z-index:5;font-size:15px}
+#top img{height:40px;border-radius:6px}
+#disc{position:fixed;bottom:0;left:0;right:0;font-size:11px;text-align:center;padding:4px;background:rgba(0,0,0,.6);z-index:5}
+.btn{background:#c58b4e;color:#fff;border:0;border-radius:8px;padding:10px 18px;font-size:16px;cursor:pointer;margin:4px}
+#ov{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(20,12,8,.85);z-index:6;text-align:center;padding:20px}
+#ov img{width:140px;border-radius:12px}
+canvas{display:block}
+</style><style>#tools{position:fixed;top:56px;left:6px;z-index:5;display:flex;flex-wrap:wrap;gap:4px;max-width:96vw}#tools .btn{padding:6px 10px;font-size:14px;margin:0}.sw{width:30px;height:30px;border-radius:6px;border:3px solid transparent;cursor:pointer}.sw.on{border-color:#fff}.on.btn{background:#7a4a1e}</style></head><body>
+<div id="top"><img src="logo.jpg" alt="Coffeebreak logo"><b>Virtual Brick Castle</b><span style="font-size:12px;opacity:.8">Tap a surface to add. Drag to rotate, pinch or scroll to zoom.</span></div>
+<div id="tools"><button class="btn on" id="add">Add</button><button class="btn" id="rem">Remove</button><button class="btn" id="starter">Starter castle</button><button class="btn" id="clr">Clear</button><button class="btn" id="sav">Save</button><button class="btn" id="lod">Load</button><span id="pal"></span></div>
+<div id="disc">© 2026 Karen O'Brien / Coffeebreak. All rights to this game, its design, name and logo are kept by Karen O'Brien / Coffeebreak. Players may not copy it or make their own versions.</div>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const sc=new THREE.Scene();sc.background=new THREE.Color(0x9fd3f5);const cam=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,.1,500);cam.position.set(22,22,26);
+const rd=new THREE.WebGLRenderer({antialias:true});rd.setPixelRatio(Math.min(2,devicePixelRatio));rd.setSize(innerWidth,innerHeight);rd.shadowMap.enabled=true;document.body.appendChild(rd.domElement);
+const ctl=new OrbitControls(cam,rd.domElement);ctl.target.set(0,3,0);ctl.enableDamping=true;
+sc.add(new THREE.HemisphereLight(0xffffff,0x557755,1.2));const dl=new THREE.DirectionalLight(0xffffff,1.5);dl.position.set(15,30,10);dl.castShadow=true;dl.shadow.camera.left=dl.shadow.camera.bottom=-20;dl.shadow.camera.right=dl.shadow.camera.top=20;sc.add(dl);
+const N=20,HU=1.2;const base=new THREE.Mesh(new THREE.BoxGeometry(N,.4,N),new THREE.MeshStandardMaterial({color:0x3c9a3c}));base.position.y=-.2;base.receiveShadow=true;sc.add(base);
+const sg=new THREE.CylinderGeometry(.3,.3,.2,16);const bs=new THREE.InstancedMesh(sg,base.material,N*N);let k=0;const m4=new THREE.Matrix4();for(let i=0;i<N;i++)for(let j=0;j<N;j++){m4.setPosition(i-N/2+.5,.1,j-N/2+.5);bs.setMatrixAt(k++,m4)}sc.add(bs);
+const COLS=[0xd32f2f,0x1976d2,0xfbc02d,0x388e3c,0xffffff,0x9e9e9e,0x424242,0x8d5524,0xff9800,0x7b1fa2];let col=COLS[5],mode='add';
+COLS.forEach((cc,i)=>{const s=document.createElement('span');s.className='sw'+(cc==col?' on':'');s.style.display='inline-block';s.style.background='#'+cc.toString(16).padStart(6,'0');s.onclick=()=>{col=cc;document.querySelectorAll('.sw').forEach(e=>e.classList.remove('on'));s.classList.add('on')};pal.appendChild(s)});
+const bg=new THREE.BoxGeometry(.98,HU,.98),mats={};const bricks=new Map();
+function key(a,b,c){return a+','+b+','+c}
+function put(i,y,j,cc){if(Math.abs(i)>=N/2||Math.abs(j)>=N/2||y<0||y>40)return;const kk=key(i,y,j);if(bricks.has(kk))return;mats[cc]=mats[cc]||new THREE.MeshStandardMaterial({color:cc,roughness:.4});const g=new THREE.Group();const b=new THREE.Mesh(bg,mats[cc]);const s=new THREE.Mesh(sg,mats[cc]);s.position.y=HU/2+.1;b.castShadow=b.receiveShadow=s.castShadow=true;g.add(b,s);g.position.set(i+.5,y*HU+HU/2,j+.5);g.userData={i,y,j,c:cc};sc.add(g);bricks.set(kk,g)}
+function del(kk){const g=bricks.get(kk);if(g){sc.remove(g);bricks.delete(kk)}}
+function clear(){[...bricks.keys()].forEach(del)}
+function starter(){clear();const R=5;for(let i=-R;i<R;i++)for(let j=-R;j<R;j++){const edge=i==-R||i==R-1||j==-R||j==R-1;if(!edge)continue;const gate=j==R-1&&(i==-1||i==0);for(let y=0;y<4;y++)if(!(gate&&y<3))put(i,y,j,0x9e9e9e);if((i+j)%2==0)put(i,4,j,0x9e9e9e)}
+[[-R,-R],[R-2,-R],[-R,R-2],[R-2,R-2]].forEach(([a,b])=>{for(let y=0;y<7;y++)for(let p=0;p<2;p++)for(let q=0;q<2;q++)put(a+p,y,b+q,y==6?0xd32f2f:0x757575)});
+for(let y=0;y<9;y++)for(let p=-1;p<1;p++)for(let q=-1;q<1;q++)put(p,y,q,y>=8?0x1976d2:0x9e9e9e);put(-1,9,-1,0xfbc02d);put(-1,10,-1,0xd32f2f)}
+const ray=new THREE.Raycaster(),mv=new THREE.Vector2();let down;
+rd.domElement.addEventListener('pointerdown',e=>down=[e.clientX,e.clientY]);
+rd.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>6)return;mv.set(e.clientX/innerWidth*2-1,-e.clientY/innerHeight*2+1);ray.setFromCamera(mv,cam);
+const objs=[base,...[...bricks.values()].flatMap(g=>g.children)];const h=ray.intersectObjects(objs)[0];if(!h)return;
+if(h.object==base){if(mode=='add')put(Math.floor(h.point.x),0,Math.floor(h.point.z),col);return}
+const u=h.object.parent.userData;if(mode=='rem'){del(key(u.i,u.y,u.j));return}
+const n=h.face.normal.clone().transformDirection(h.object.matrixWorld);let i=u.i,y=u.y,j=u.j;if(n.y>.5)y++;else if(n.y<-.5)y--;else if(Math.abs(n.x)>Math.abs(n.z))i+=Math.sign(n.x);else j+=Math.sign(n.z);put(i,y,j,col)});
+add.onclick=()=>{mode='add';add.classList.add('on');rem.classList.remove('on')};rem.onclick=()=>{mode='rem';rem.classList.add('on');add.classList.remove('on')};
+document.getElementById('starter').onclick=starter;clr.onclick=clear;
+sav.onclick=()=>{localStorage.cbcastle=JSON.stringify([...bricks.values()].map(g=>g.userData));sav.textContent='Saved';setTimeout(()=>sav.textContent='Save',1200)};
+lod.onclick=()=>{const d=JSON.parse(localStorage.cbcastle||'[]');clear();d.forEach(u=>put(u.i,u.y,u.j,u.c))};
+if(localStorage.cbcastle)lod.onclick();else starter();
+onresize=()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();rd.setSize(innerWidth,innerHeight)};
+(function a(){ctl.update();rd.render(sc,cam);requestAnimationFrame(a)})();window.ok3=1;
+</script><div id="cb-legal" style="position:fixed;left:0;right:0;bottom:0;z-index:2147483000;background:rgba(25,10,25,.9);color:#fff;font:11px/1.35 system-ui,Arial,sans-serif;padding:5px 32px 5px 8px;display:flex;gap:8px;align-items:center"><img src="cb-logo.jpg" alt="Coffeebreak logo" style="height:28px;width:28px;border-radius:50%;object-fit:cover;flex:none"><span>© Karen (Coffeebreak). Karen keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Karen claims no ownership of any third-party brands named here, which belong to their owners.</span><button type="button" aria-label="Hide notice" onclick="this.parentNode.remove()" style="position:absolute;right:6px;top:3px;background:none;border:0;color:#fff;font-size:18px;cursor:pointer">&times;</button></div>
+<div style="max-width:760px;margin:20px auto;padding:16px 20px;background:#fff0f6;border:2px solid #ff4f9a;border-radius:18px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>Free for now.</b> Enjoying this app? &#9749; Send Karen a coffee tip by PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</div></body></html>

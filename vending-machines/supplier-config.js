@@ -1,0 +1,3 @@
+// Supplier codes only. Costs, profit and real links: private-suppliers/vending.json (never shipped).
+window.SUPPLIER_CONFIG = { approved: false, supplier: "" };
+window.CB_SUPPLY={"p0":{"supplier":"S1","supplierUrl":"S1-p0","priced":true},"p1":{"supplier":"S1","supplierUrl":"S1-p1","priced":true},"p2":{"supplier":"S1","supplierUrl":"S1-p2","priced":true},"p3":{"supplier":"S1","supplierUrl":"S1-p3","priced":true},"p4":{"supplier":"S1","supplierUrl":"S1-p4","priced":true},"p6":{"supplier":"S1","supplierUrl":"S1-p6","priced":true},"p9":{"supplier":"S1","supplierUrl":"S1-p9","priced":true},"p10":{"supplier":"S1","supplierUrl":"S1-p10","priced":true}};

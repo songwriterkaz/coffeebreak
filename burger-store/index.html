@@ -1,0 +1,120 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Burger Store</title>
+<style>
+:root{--pink:#ff5fa2;--pink2:#ffd1e6;--pink3:#fff0f7;--ink:#4a1030;--deep:#c2185b}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,#fff0f7,#ffe3f0);color:var(--ink)}
+header{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border-bottom:3px solid var(--pink2);position:sticky;top:0;z-index:5}
+header img{height:48px;width:auto}header h1{font-size:1.25rem;margin:0;color:var(--deep)}header .sub{font-size:.8rem;opacity:.8}
+.cartbtn{margin-left:auto;background:var(--pink);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer;white-space:nowrap}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.hero{background:#fff;border-radius:18px;padding:16px;border:2px solid var(--pink2);margin-bottom:14px}
+.hero h2{margin:0 0 6px;color:var(--deep)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+.tabs button{border:2px solid var(--pink);background:#fff;color:var(--deep);border-radius:999px;padding:7px 14px;cursor:pointer;font-weight:600}
+.tabs button.on{background:var(--pink);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.card{background:#fff;border-radius:16px;border:2px solid var(--pink2);padding:12px;display:flex;flex-direction:column;gap:8px}
+.art{height:130px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:56px;background:linear-gradient(135deg,var(--pink3),var(--pink2))}
+.card h3{margin:0;font-size:1.05rem}.card p{margin:0;font-size:.88rem;line-height:1.35}
+.price{font-weight:800;color:var(--deep);font-size:1.1rem}
+.opts label{display:block;font-size:.85rem;margin:2px 0}
+select,input,textarea{font:inherit;border:2px solid var(--pink2);border-radius:10px;padding:7px;width:100%;background:#fff;color:var(--ink)}
+.btn{background:var(--pink);color:#fff;border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+.btn.alt{background:#fff;color:var(--deep);border:2px solid var(--pink)}
+.row{display:flex;gap:8px;align-items:center}
+#drawer{position:fixed;inset:0;background:rgba(74,16,48,.45);display:none;z-index:20}
+#drawer.open{display:block}
+#panel{position:absolute;right:0;top:0;bottom:0;width:min(440px,100%);background:#fff;padding:16px;overflow:auto}
+.line{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--pink2);padding:8px 0;font-size:.9rem}
+.line .q{display:flex;gap:4px;align-items:center}.line .q button{width:28px;height:28px;border-radius:8px;border:1px solid var(--pink);background:#fff;cursor:pointer}
+.tot{font-weight:800;font-size:1.05rem}
+.payid{background:var(--pink3);border:2px dashed var(--pink);border-radius:14px;padding:12px;margin-top:10px}
+.payid b{color:var(--deep)}
+.note{font-size:.8rem;opacity:.85}
+footer{max-width:1100px;margin:20px auto;padding:16px;font-size:.8rem;line-height:1.45;background:#fff;border-radius:16px;border:2px solid var(--pink2)}
+footer a{color:var(--deep);font-weight:700}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--deep);color:#fff;padding:10px 16px;border-radius:999px;display:none;z-index:30}
+.hist{font-size:.85rem}
+</style></head><body>
+<header><img src="assets/logo.png" alt="Coffeebreak logo"><div><h1>Coffeebreak Burger Store</h1><div class="sub" id="tag"></div></div>
+<button class="cartbtn" id="openCart">Cart (<span id="cc">0</span>)</button></header>
+<main>
+<section class="hero"><h2 id="heroT"></h2><div id="heroP"></div></section>
+<div class="tabs" id="tabs"></div>
+<div class="grid" id="grid"></div>
+<section class="hero" style="margin-top:16px"><h2>My orders</h2><div id="hist" class="hist">No orders yet.</div></section>
+</main>
+<div id="drawer"><div id="panel">
+<div class="row"><h2 style="margin:0;color:var(--deep)">Your cart</h2><button class="btn alt" id="closeCart" style="margin-left:auto">Close</button></div>
+<div id="lines"></div>
+<div id="extra"></div>
+<div class="line"><span>Subtotal</span><span id="sub"></span></div>
+<div class="line"><span id="shipL">Shipping</span><span id="ship"></span></div>
+<div class="line tot"><span>Total</span><span id="tot"></span></div>
+<h3>Checkout</h3>
+<label>Name<input id="cName" autocomplete="name"></label>
+<label>Email<input id="cEmail" type="email" autocomplete="email"></label>
+<label id="addrL">Delivery address<textarea id="cAddr" rows="2"></textarea></label>
+<label>Notes<textarea id="cNotes" rows="2"></textarea></label>
+<div class="payid"><b>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</b><br>
+<span class="note">Pay the total to the PayID above from your banking app. Use your order reference as the payment description.</span>
+<div style="margin-top:6px">Order reference: <b id="ref"></b></div>
+<div class="row" style="margin-top:8px;flex-wrap:wrap"><button class="btn alt" id="copyPay">Copy PayID</button><button class="btn" id="place">Place order (PayID)</button></div></div>
+<p class="note" id="checkNote"></p>
+<div id="done"></div>
+</div></div>
+<footer><p id="extraFoot"></p><p>Karen O&#x27;Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought but may not copy them or make their own versions. Third-party trademarks and brand names belong to their owners and are used only to describe products.</p>
+<p>Payments: PayID only (Teachers Mutual Bank). More Coffeebreak apps, games and stores: <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+<p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p></footer>
+<div class="toast" id="toast"></div>
+<script>
+const CFG={"key": "cbBurger", "title": "Coffeebreak Burger Store", "cur": "A$", "refPrefix": "CBB", "tag": "Pink burgers, chips and shakes · order online, pay by PayID", "heroT": "Order your Coffeebreak burgers", "heroP": "Pick your burgers, sides and shakes, add extras, then choose pickup or delivery. Your cart stays saved in this browser. <b>Checkout is by PayID only.</b> Orders are confirmed by email before we start cooking.", "foot": "Prices in Australian dollars and include GST. Menu pictures are illustrations. Tell us about any allergies in the order notes before you pay.", "checkNote": "Your order is confirmed by email after the PayID payment arrives. Pickup times are given in the confirmation.", "modes": [{"id": "pickup", "label": "Pickup", "fee": 0, "addr": false}, {"id": "delivery", "label": "Local delivery", "fee": 6.0, "addr": true}], "products": [{"id": "classic", "cat": "Burgers", "art": "🍔", "name": "The Coffeebreak Classic", "price": 14.9, "desc": "Beef patty, cheese, lettuce, tomato, pickles and pink house sauce on a toasted bun.", "addons": [["Extra cheese", 2.0], ["Bacon", 3.0], ["Gluten-free bun", 2.0]], "choice": ["As it comes", "No onion", "No pickles", "No sauce"], "choiceLabel": "Make it"}, {"id": "double", "cat": "Burgers", "art": "🍔🍔", "name": "Double Pink Cheese", "price": 18.9, "desc": "Two beef patties, double cheese, caramelised onion and pink sauce.", "addons": [["Bacon", 3.0], ["Fried egg", 2.0], ["Gluten-free bun", 2.0]]}, {"id": "lot", "cat": "Burgers", "art": "🥚", "name": "Aussie With The Lot", "price": 19.9, "desc": "Beef, bacon, egg, beetroot, pineapple, cheese, lettuce and tomato.", "addons": [["Extra patty", 5.0], ["Gluten-free bun", 2.0]], "choice": ["With beetroot", "No beetroot", "No pineapple"], "choiceLabel": "Make it"}, {"id": "chicken", "cat": "Burgers", "art": "🍗", "name": "Crispy Chicken Burger", "price": 16.9, "desc": "Crispy chicken, slaw, cheese and sweet chilli mayo.", "addons": [["Bacon", 3.0], ["Avocado", 2.5], ["Gluten-free bun", 2.0]]}, {"id": "veg", "cat": "Burgers", "art": "🍄", "name": "Mushroom Veggie Burger", "price": 15.9, "desc": "Grilled mushroom and veggie patty, cheese, rocket and aioli.", "addons": [["Avocado", 2.5], ["Vegan cheese", 2.0], ["Gluten-free bun", 2.0]]}, {"id": "kids", "cat": "Burgers", "art": "🧒", "name": "Little Cheeseburger", "price": 9.9, "desc": "Small beef patty with cheese and sauce. Kids size.", "addons": [["Add small chips", 3.0]]}, {"id": "chips", "cat": "Sides", "art": "🍟", "name": "Chips", "price": 5.9, "desc": "Golden chips with chicken salt or plain salt.", "choice": ["Chicken salt", "Plain salt"], "choiceLabel": "Salt", "addons": [["Gravy", 2.0], ["Cheese sauce", 2.0]]}, {"id": "sweetpot", "cat": "Sides", "art": "🍠", "name": "Sweet Potato Fries", "price": 7.9, "desc": "Crunchy sweet potato fries with aioli."}, {"id": "rings", "cat": "Sides", "art": "🧅", "name": "Onion Rings", "price": 6.9, "desc": "Six battered onion rings with pink sauce."}, {"id": "shake", "cat": "Drinks", "art": "🥤", "name": "Thick Shake", "price": 8.5, "desc": "Thick shake made with ice cream.", "choice": ["Strawberry", "Chocolate", "Vanilla", "Caramel"], "choiceLabel": "Flavour", "addons": [["Whipped cream", 1.0]]}, {"id": "icedcoffee", "cat": "Drinks", "art": "☕", "name": "Coffeebreak Iced Coffee", "price": 7.5, "desc": "Espresso, milk, ice cream and cream.", "addons": [["Extra shot", 1.0]]}, {"id": "soft", "cat": "Drinks", "art": "🥫", "name": "Soft Drink Can", "price": 4.0, "desc": "375 ml can.", "choice": ["Cola", "Lemonade", "Orange", "Sugar free cola"], "choiceLabel": "Drink"}, {"id": "donut", "cat": "Desserts", "art": "🍩", "name": "Pink Iced Donut", "price": 4.5, "desc": "Fluffy donut with pink icing and sprinkles."}, {"id": "sundae", "cat": "Desserts", "art": "🍨", "name": "Strawberry Sundae", "price": 6.5, "desc": "Soft serve with strawberry topping."}, {"id": "meal", "cat": "Meal deals", "art": "🎁", "name": "Classic Meal Deal", "price": 24.9, "desc": "Coffeebreak Classic, chips and a thick shake.", "choice": ["Strawberry shake", "Chocolate shake", "Vanilla shake", "Caramel shake"], "choiceLabel": "Shake"}, {"id": "family", "cat": "Meal deals", "art": "👨‍👩‍👧", "name": "Party Pack", "price": 64.9, "desc": "Four Classic burgers, two large chips and four soft drinks."}]};
+const KEY=CFG.key, $=s=>document.querySelector(s);
+const money=n=>CFG.cur+n.toFixed(2);
+let cart=JSON.parse(localStorage.getItem(KEY+'_cart')||'[]');
+let orders=JSON.parse(localStorage.getItem(KEY+'_orders')||'[]');
+let cat='All', mode=localStorage.getItem(KEY+'_mode')||(CFG.modes?CFG.modes[0].id:'ship');
+$('#tag').textContent=CFG.tag;$('#heroT').textContent=CFG.heroT;$('#heroP').innerHTML=CFG.heroP;$('#extraFoot').textContent=CFG.foot||'';
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',1800)}
+function save(){localStorage.setItem(KEY+'_cart',JSON.stringify(cart));localStorage.setItem(KEY+'_orders',JSON.stringify(orders));localStorage.setItem(KEY+'_mode',mode)}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function tabs(){const cats=['All',...new Set(CFG.products.map(p=>p.cat))];$('#tabs').innerHTML=cats.map(c=>`<button class="${c===cat?'on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join('');
+ $('#tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{cat=b.dataset.c;tabs();grid()})}
+function grid(){$('#grid').innerHTML=CFG.products.filter(p=>cat==='All'||p.cat===cat).map(p=>`<div class="card" data-id="${p.id}">
+ <div class="art">${p.art}</div><h3>${esc(p.name)}</h3><p>${esc(p.desc)}</p>
+ <div class="opts">${(p.choice||[]).length?`<label>${esc(p.choiceLabel||'Choose')}<select class="ch">${p.choice.map(c=>`<option>${esc(c)}</option>`).join('')}</select></label>`:''}
+ ${(p.addons||[]).map((a,i)=>`<label><input type="checkbox" class="ad" data-i="${i}" style="width:auto"> ${esc(a[0])} (+${money(a[1])})</label>`).join('')}</div>
+ <div class="row"><span class="price">${money(p.price)}</span><button class="btn add" style="margin-left:auto">Add to cart</button></div></div>`).join('');
+ $('#grid').querySelectorAll('.add').forEach(b=>b.onclick=()=>{const c=b.closest('.card'),p=CFG.products.find(x=>x.id===c.dataset.id);
+  const ch=c.querySelector('.ch'),ads=[...c.querySelectorAll('.ad:checked')].map(x=>p.addons[+x.dataset.i]);
+  const opt=[ch?ch.value:'',...ads.map(a=>a[0])].filter(Boolean).join(', ');const unit=p.price+ads.reduce((s,a)=>s+a[1],0);
+  const ex=cart.find(l=>l.id===p.id&&l.opt===opt);if(ex)ex.q++;else cart.push({id:p.id,name:p.name,opt,unit,q:1});save();render();toast('Added '+p.name)})}
+function totals(){const sub=cart.reduce((s,l)=>s+l.unit*l.q,0);let ship=0,label='Shipping';
+ if(CFG.modes){const m=CFG.modes.find(m=>m.id===mode)||CFG.modes[0];ship=sub>0?m.fee:0;label=m.label}
+ else{ship=sub===0||sub>=CFG.freeOver?0:CFG.ship;label=sub>=CFG.freeOver?'Shipping (free over '+money(CFG.freeOver)+')':'Shipping'}
+ return {sub,ship,tot:sub+ship,label}}
+function ref(){let r=localStorage.getItem(KEY+'_ref');if(!r){r=CFG.refPrefix+'-'+Math.random().toString(36).slice(2,7).toUpperCase();localStorage.setItem(KEY+'_ref',r)}return r}
+function render(){$('#cc').textContent=cart.reduce((s,l)=>s+l.q,0);
+ $('#lines').innerHTML=cart.length?cart.map((l,i)=>`<div class="line"><div><b>${esc(l.name)}</b>${l.opt?'<br><span class="note">'+esc(l.opt)+'</span>':''}</div>
+ <div class="q"><button data-i="${i}" data-d="-1" aria-label="less">-</button>${l.q}<button data-i="${i}" data-d="1" aria-label="more">+</button> ${money(l.unit*l.q)}</div></div>`).join(''):'<p>Your cart is empty.</p>';
+ $('#lines').querySelectorAll('button').forEach(b=>b.onclick=()=>{const l=cart[+b.dataset.i];l.q+=+b.dataset.d;if(l.q<=0)cart.splice(+b.dataset.i,1);save();render()});
+ if(CFG.modes){$('#extra').innerHTML='<label>Order type<select id="mode">'+CFG.modes.map(m=>`<option value="${m.id}" ${m.id===mode?'selected':''}>${esc(m.label)} (${m.fee?'+'+money(m.fee):'free'})</option>`).join('')+'</select></label>';
+  $('#mode').onchange=e=>{mode=e.target.value;save();render()};$('#addrL').style.display=(CFG.modes.find(m=>m.id===mode)||{}).addr?'block':'none'}
+ const t=totals();$('#sub').textContent=money(t.sub);$('#ship').textContent=money(t.ship);$('#shipL').textContent=t.label;$('#tot').textContent=money(t.tot);$('#ref').textContent=ref();$('#checkNote').textContent=CFG.checkNote||'';
+ $('#hist').innerHTML=orders.length?orders.slice().reverse().map(o=>`<div class="line"><span>${esc(o.ref)} · ${esc(o.date)}<br><span class="note">${o.items.map(i=>i.q+' x '+esc(i.name)).join(', ')}</span></span><b>${money(o.tot)}</b></div>`).join(''):'No orders yet.'}
+$('#openCart').onclick=()=>{$('#drawer').classList.add('open');render()};$('#closeCart').onclick=()=>$('#drawer').classList.remove('open');
+$('#drawer').onclick=e=>{if(e.target.id==='drawer')$('#drawer').classList.remove('open')};
+$('#copyPay').onclick=()=>{const v='darkokaz@gmx.com';(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(()=>toast('PayID copied'),()=>toast('PayID: '+v))};
+$('#place').onclick=()=>{if(!cart.length)return toast('Your cart is empty');const n=$('#cName').value.trim(),em=$('#cEmail').value.trim();
+ const needAddr=CFG.modes?(CFG.modes.find(m=>m.id===mode)||{}).addr:true;
+ if(!n||!/^\S+@\S+\.\S+$/.test(em)||(needAddr&&!$('#cAddr').value.trim()))return toast('Please add name, email'+(needAddr?' and address':''));
+ const t=totals(),o={ref:ref(),date:new Date().toLocaleString(),items:cart.map(l=>({name:l.name+(l.opt?' ('+l.opt+')':''),q:l.q,unit:l.unit})),sub:t.sub,ship:t.ship,tot:t.tot,name:n,email:em,addr:$('#cAddr').value.trim(),notes:$('#cNotes').value.trim(),mode};
+ orders.push(o);const txt=CFG.title+' order '+o.ref+'\n'+o.items.map(i=>i.q+' x '+i.name+' '+money(i.unit*i.q)).join('\n')+'\nShipping/fee: '+money(o.ship)+'\nTotal: '+money(o.tot)+'\nPay by PayID (Teachers Mutual Bank): darkokaz@gmx.com\nReference: '+o.ref+'\nName: '+n+'\nEmail: '+em+(o.addr?'\nAddress: '+o.addr:'')+(o.notes?'\nNotes: '+o.notes:'');
+ cart=[];localStorage.removeItem(KEY+'_ref');save();
+ $('#done').innerHTML=`<div class="payid"><b>Order ${esc(o.ref)} saved.</b><br>Now pay <b>${money(o.tot)}</b>. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com. Use <b>${esc(o.ref)}</b> as the description, then send the order summary below so we can confirm it.<textarea id="sum" rows="7" readonly>${esc(txt)}</textarea>
+ <div class="row" style="margin-top:6px;flex-wrap:wrap"><button class="btn alt" id="copySum">Copy order summary</button><a class="btn" style="text-decoration:none" href="mailto:darkokaz@gmx.com?subject=${encodeURIComponent(CFG.title+' order '+o.ref)}&body=${encodeURIComponent(txt)}">Email order</a></div></div>`;
+ $('#copySum').onclick=()=>{const s=$('#sum');s.select();(navigator.clipboard?navigator.clipboard.writeText(s.value):Promise.reject()).then(()=>toast('Copied'),()=>{document.execCommand&&document.execCommand('copy');toast('Copied')})};
+ render();toast('Order saved')};
+tabs();grid();render();
+</script></body></html>
