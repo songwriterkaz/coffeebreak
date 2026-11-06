@@ -532,4 +532,55 @@
   if (!('DeviceOrientationEvent' in window) && !('DeviceMotionEvent' in window) && !('Magnetometer' in window)) {
     setStatus(false, 'This browser exposes no orientation, motion or magnetometer APIs. Rods cannot move here. Try Chrome or Safari on a phone.');
   }
+
+  function isAngelEntry(e) {
+    var a = String((e && e.app) || '').toLowerCase();
+    return a.indexOf('angel') >= 0;
+  }
+  function escapeAngel(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function renderAngelsTab() {
+    var box = $('angelList');
+    if (!box) return;
+    var items = [];
+    try {
+      if (window.CBGhostJournal) items = CBGhostJournal.load().filter(isAngelEntry)
+        .sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
+    } catch (e) {}
+    if (!items.length) {
+      box.textContent = 'No angel readings in Ghost Journal yet.';
+      return;
+    }
+    box.innerHTML = items.map(function (e) {
+      var when = '';
+      try { when = new Date(e.ts || e.date).toLocaleString(); } catch (err) { when = e.date || ''; }
+      return '<div style="margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid #1c7a3533">' +
+        '<b style="color:var(--g)">' + escapeAngel(e.app) + '</b><br>' +
+        '<span class="muted">' + escapeAngel(when) + '</span><br>' +
+        escapeAngel(e.readings || '') +
+        (e.notes ? '<br><span class="muted">' + escapeAngel(String(e.notes).slice(0, 400)) + '</span>' : '') +
+        '</div>';
+    }).join('');
+  }
+  function setDowsingTab(name) {
+    document.querySelectorAll('.tabs button').forEach(function (b) {
+      b.classList.toggle('on', b.dataset.tab === name);
+    });
+    var rods = $('panel-rods');
+    var ang = $('panel-angels');
+    if (rods) rods.classList.toggle('on', name === 'rods');
+    if (ang) ang.classList.toggle('on', name === 'angels');
+    if (name === 'angels') renderAngelsTab();
+  }
+  if ($('tabRods')) $('tabRods').onclick = function () { setDowsingTab('rods'); };
+  if ($('tabAngels')) $('tabAngels').onclick = function () { setDowsingTab('angels'); };
+  if ($('btnRefreshAngels')) $('btnRefreshAngels').onclick = renderAngelsTab;
+  try {
+    var params = new URLSearchParams(location.search);
+    if (params.get('tab') === 'angels') setDowsingTab('angels');
+  } catch (e) {}
+
 })();

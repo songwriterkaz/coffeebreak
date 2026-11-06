@@ -185,7 +185,66 @@
     }
   };
 
-  window.addEventListener('cb-ghost-journal-changed', render);
+  window.addEventListener('cb-ghost-journal-changed', function () { render(); renderAngels(); });
+
+  function isAngelEntry(e) {
+    var a = String((e && e.app) || '').toLowerCase();
+    return a.indexOf('angel') >= 0 || a.indexOf('connecting with angels') >= 0;
+  }
+
+  function renderAngels() {
+    var items = J.load().filter(isAngelEntry).sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
+    var meta = $('angelMeta');
+    var list = $('angelList');
+    if (!meta || !list) return;
+    meta.textContent = items.length + ' angel reading' + (items.length === 1 ? '' : 's') + ' in this journal';
+    if (!items.length) {
+      list.innerHTML = '<div class="empty">No angel readings yet. Roll the dice in Connecting with Angels and tap “Also save to Ghost Journal”.</div>';
+      return;
+    }
+    list.innerHTML = items.map(function (e) {
+      var when = '';
+      try { when = new Date(e.ts || e.date).toLocaleString(); } catch (err) { when = e.date || ''; }
+      return '<article class="card entry" style="border-left-color:#d4a84b">' +
+        '<h3 style="color:#f5e6b8">✨ ' + esc(e.app || 'Angels') + '</h3>' +
+        '<div class="meta">' + esc(when) + (e.location ? ' · 📍 ' + esc(e.location) : '') + '</div>' +
+        (e.readings ? '<p><b>Reading:</b> ' + esc(e.readings) + '</p>' : '') +
+        (e.notes ? '<p style="white-space:pre-wrap">' + esc(e.notes) + '</p>' : '') +
+        '<div class="row noprint"><button type="button" class="danger del" data-id="' + esc(e.id) + '">Delete</button></div>' +
+        '</article>';
+    }).join('');
+  }
+
+  function setMainTab(name) {
+    document.querySelectorAll('.tabs button').forEach(function (b) {
+      b.classList.toggle('on', b.dataset.tab === name);
+    });
+    var inv = $('panel-investigations');
+    var ang = $('panel-angels');
+    if (inv) inv.classList.toggle('on', name === 'investigations');
+    if (ang) ang.classList.toggle('on', name === 'angels');
+    if (name === 'angels') renderAngels();
+  }
+
+  if ($('tabInvestigations')) $('tabInvestigations').onclick = function () { setMainTab('investigations'); };
+  if ($('tabAngels')) $('tabAngels').onclick = function () { setMainTab('angels'); };
+  if ($('btnRefreshAngels')) $('btnRefreshAngels').onclick = renderAngels;
+  if ($('angelList')) {
+    $('angelList').onclick = function (e) {
+      var btn = e.target.closest('.del');
+      if (!btn) return;
+      if (!confirm('Delete this angel entry?')) return;
+      J.remove(btn.getAttribute('data-id'));
+      render();
+      renderAngels();
+    };
+  }
+
+  // honour ?tab=angels
+  try {
+    var params = new URLSearchParams(location.search);
+    if (params.get('tab') === 'angels') setMainTab('angels');
+  } catch (e) {}
   $('fDate').value = toLocalInputValue(new Date());
   render();
 })();

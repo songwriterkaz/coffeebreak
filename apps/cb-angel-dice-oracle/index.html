@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-AU"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Connecting with Angels — Dice Oracle Board · Coffeebreak</title>
+<link rel="icon" href="cb-logo.png">
+<style>
+:root{
+  --bg1:#fff7fb;--bg2:#f3e7ff;--gold:#d4a84b;--gold2:#f5e6b8;--pink:#f7b6d2;--pink2:#ffe6f1;
+  --lilac:#c9b6f2;--ink:#5a3a55;--muted:#9a7590;--white:#fffefb;--glow:#ffe9a8;
+}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.45 system-ui,Segoe UI,sans-serif;color:var(--ink);
+  background:radial-gradient(ellipse at 50% -10%,#fff 0%,var(--pink2) 35%,var(--bg2) 70%,#e8d5ff 100%);
+  min-height:100vh}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(90deg,#fffaf0,var(--pink2));
+  border-bottom:2px solid var(--gold2);position:sticky;top:0;z-index:8;box-shadow:0 4px 18px #d4a84b22}
+header img{height:44px;width:44px;border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 0 16px var(--glow)}
+header h1{margin:0;font-size:16px;flex:1;color:#8a5a2b;letter-spacing:.3px}
+.badge{background:linear-gradient(#f5e6b8,#d4a84b);color:#5a3a10;border-radius:999px;padding:3px 10px;font-size:.72em;font-weight:800}
+.disc{background:#fff9ee;color:#8a6a55;font-size:12px;padding:7px 12px;text-align:center;border-bottom:1px solid var(--gold2)}
+main{max-width:860px;margin:auto;padding:12px 12px 48px}
+.card{background:linear-gradient(160deg,#fffefbcc,#fff5facc);border:1px solid #f0d4a8;border-radius:16px;padding:14px;margin-bottom:12px;
+  box-shadow:0 8px 28px #d4a84b18, inset 0 0 40px #fff8}
+h2{margin:4px 0 10px;font-size:18px;color:#9a5a2a;text-shadow:0 0 12px #ffe9a866}
+.muted{color:var(--muted);font-size:.92em}
+label{display:block;font-size:12px;color:var(--muted);margin-top:8px}
+input,textarea,select{width:100%;background:#fff;color:var(--ink);border:1px solid #e8c9a0;border-radius:10px;padding:9px;font:inherit;margin:4px 0}
+button,.btn{background:linear-gradient(#fff8e8,#f5e6b8);color:#6a4010;border:1px solid var(--gold);border-radius:999px;padding:9px 14px;
+  font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+button.primary,.btn.primary{background:linear-gradient(#ffd6ea,#f7b6d2);border-color:#e89ab8;color:#6a2048}
+button:hover,.btn:hover{box-shadow:0 0 14px #d4a84b55}
+button:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;align-items:center}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.tabs button{background:#fff;border:1px solid #e8c9a0}
+.tabs button.on{background:linear-gradient(#ffe9a8,#f7b6d2);border-color:var(--gold);box-shadow:0 0 10px #d4a84b44}
+.board-wrap{position:relative;max-width:520px;margin:0 auto}
+#board{width:100%;aspect-ratio:1;border-radius:50%;display:block;background:#fffaf0;
+  box-shadow:0 0 0 6px #f5e6b8,0 0 0 10px #d4a84b55,0 0 40px #f7b6d266, inset 0 0 60px #fff;
+  border:2px solid #d4a84b}
+.dice-tray{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:14px 0;min-height:90px;perspective:600px}
+.die{width:64px;height:64px;position:relative;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.die.rolling{animation:tumble 0.9s linear}
+@keyframes tumble{0%{transform:rotateX(0) rotateY(0)}100%{transform:rotateX(720deg) rotateY(540deg)}}
+.face{position:absolute;width:64px;height:64px;border-radius:12px;background:linear-gradient(145deg,#fff,#ffe9c8);
+  border:2px solid #d4a84b;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#8a5a2b;
+  box-shadow:inset 0 0 12px #fff8,0 4px 10px #d4a84b33;backface-visibility:hidden}
+.face.f1{transform:rotateY(0deg) translateZ(32px)}
+.face.f2{transform:rotateY(90deg) translateZ(32px)}
+.face.f3{transform:rotateY(180deg) translateZ(32px)}
+.face.f4{transform:rotateY(-90deg) translateZ(32px)}
+.face.f5{transform:rotateX(90deg) translateZ(32px)}
+.face.f6{transform:rotateX(-90deg) translateZ(32px)}
+.result{background:linear-gradient(160deg,#fff,#fff5f8);border:1px dashed #e8c9a0;border-radius:14px;padding:14px;margin-top:10px}
+.result h3{margin:0 0 6px;color:#b06a2a;font-size:17px}
+.angel-name{font-size:20px;color:#9a4080;font-weight:800;text-shadow:0 0 10px #f7b6d288}
+.affirm{font-style:italic;color:#7a5080;margin:8px 0;padding:10px;background:#fff8fc;border-radius:10px;border-left:3px solid var(--pink)}
+.feathers{position:absolute;pointer-events:none;inset:0;overflow:hidden;border-radius:16px;opacity:.35}
+.journal-entry{border-left:3px solid var(--gold);padding:8px 10px;margin:8px 0;background:#fffaf5;border-radius:0 10px 10px 0}
+.journal-entry h4{margin:0 0 4px;color:#9a5a2a;font-size:14px}
+.meta{font-size:12px;color:var(--muted)}
+.cbfoot{text-align:center;color:#9a7590;font-size:12px;padding:20px 12px 48px;line-height:1.55;max-width:720px;margin:0 auto}
+.cbfoot a{color:#b06a2a}
+.rays{position:absolute;inset:-8%;background:conic-gradient(from 0deg,#ffe9a844,transparent 12%,#f7b6d233 20%,transparent 32%,#c9b6f233 40%,transparent 52%,#ffe9a844 60%,transparent 72%,#f7b6d233 80%,transparent 92%,#ffe9a844);
+  border-radius:50%;animation:spin 48s linear infinite;pointer-events:none;opacity:.55}
+@keyframes spin{to{transform:rotate(360deg)}}
+.panel{display:none}.panel.on{display:block}
+@media(max-width:640px){header h1{font-size:13px}.die{width:54px;height:54px}.face{width:54px;height:54px;font-size:18px}
+  .face.f1{transform:rotateY(0deg) translateZ(27px)}.face.f2{transform:rotateY(90deg) translateZ(27px)}
+  .face.f3{transform:rotateY(180deg) translateZ(27px)}.face.f4{transform:rotateY(-90deg) translateZ(27px)}
+  .face.f5{transform:rotateX(90deg) translateZ(27px)}.face.f6{transform:rotateX(-90deg) translateZ(27px)}}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body>
+<header>
+  <img src="cb-logo.png" alt="Coffeebreak logo">
+  <h1>Connecting with Angels · Dice Oracle</h1>
+  <span class="badge">FREE</span>
+</header>
+<div class="disc">Entertainment and inspiration only. Original Coffeebreak angel messages — not medical, financial or spiritual advice. Dice rolls use your device’s secure random generator.</div>
+
+<main>
+<section class="card">
+  <div class="tabs" role="tablist">
+    <button type="button" class="on" data-tab="oracle" id="tabOracle">Oracle board</button>
+    <button type="button" data-tab="journal" id="tabJournal">Angel journal</button>
+    <button type="button" data-tab="about" id="tabAbout">About</button>
+  </div>
+
+  <div class="panel on" id="panel-oracle">
+    <h2>Ask · Roll · Receive</h2>
+    <p class="muted">Hold a quiet question in mind. Choose a 1, 2 or 3-dice spread, then roll. Each die lands on a board section and brings an original angel message plus an affirmation.</p>
+    <label for="question">Your question</label>
+    <textarea id="question" rows="2" placeholder="What would you like gentle guidance on today?"></textarea>
+    <div class="row">
+      <label style="margin:0">Spread
+        <select id="spread" style="width:auto;display:inline-block;margin-left:6px">
+          <option value="1">1 die — single light</option>
+          <option value="2" selected>2 dice — path &amp; gift</option>
+          <option value="3">3 dice — past · present · next step</option>
+        </select>
+      </label>
+      <button type="button" class="primary" id="btnRoll">Roll the dice ✨</button>
+      <button type="button" id="btnChime" title="Toggle soft chime">Chime: on</button>
+    </div>
+    <p class="muted" id="rollStatus"></p>
+
+    <div class="board-wrap">
+      <div class="rays" aria-hidden="true"></div>
+      <canvas id="board" width="520" height="520" aria-label="Angel oracle board"></canvas>
+    </div>
+    <div class="dice-tray" id="diceTray" aria-live="polite"></div>
+    <div class="result" id="result" hidden></div>
+    <div class="row">
+      <button type="button" class="primary" id="btnSaveLocal" disabled>Save to Angel journal</button>
+      <button type="button" id="btnSaveGhost" disabled>Also save to Ghost Journal</button>
+      <a class="btn" href="../cb-ghost-journal/">Open Ghost Journal</a>
+    </div>
+    <p class="muted" id="saveStatus"></p>
+  </div>
+
+  <div class="panel" id="panel-journal">
+    <h2>Angel journal</h2>
+    <p class="muted">Readings saved on this device. You can also push a copy into the shared Ghost Investigation Journal.</p>
+    <div class="row">
+      <input id="jq" placeholder="Search questions &amp; messages…" style="flex:2;min-width:160px">
+      <button type="button" id="btnSearchJ">Search</button>
+      <button type="button" id="btnExportJ">Export JSON</button>
+      <button type="button" id="btnClearJ">Clear journal</button>
+    </div>
+    <div id="journalList"></div>
+  </div>
+
+  <div class="panel" id="panel-about">
+    <h2>About this board</h2>
+    <p>A soft luminous angel oracle board in pastel gold, white and pink — feathers, light rays and original Coffeebreak angel names, art and messages. Nothing here copies another creator’s decks, card titles or wording.</p>
+    <p class="muted">Board sections include Love, Guidance, Healing, Abundance, Protection, Purpose, Courage, Peace, Clarity, Gratitude, Hope and New Beginnings. Fair rolls use <code>crypto.getRandomValues</code>.</p>
+    <div class="row">
+      <a class="btn" href="../cb-angel-dice-oracle-free-demo/">Free demo (3 rolls)</a>
+      <a class="btn" href="../cb-angel-dice-oracle-buy/">Buy page · $10</a>
+      <a class="btn" href="../cb-dowsing-rods/">Dowsing Rod Spirit Talker</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="cbfoot">
+  <p><img src="cb-logo.png" alt="Coffeebreak logo" style="height:48px;border-radius:10px;background:#fff"></p>
+  <p><b>Disclaimer:</b> Entertainment and inspiration only. Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named; trademarks belong to their owners.</p>
+  <p>© Coffeebreak · Free for Karen (owner) · For entertainment only</p>
+  <p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> · <a href="https://songwriterkaz.github.io/coffeebreak/yellow-pages/">Yellow Pages</a></p>
+</footer>
+
+<script src="ghost-journal.js"></script>
+<script src="app.js"></script>
+</body></html>

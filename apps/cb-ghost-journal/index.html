@@ -29,6 +29,12 @@ button.danger{border-color:#a33;color:#fcc}
 .thumb{max-width:100%;max-height:160px;border-radius:8px;border:1px solid #1c7a3533;margin:4px 4px 4px 0}
 audio{width:100%;margin-top:6px}
 .empty{text-align:center;padding:24px;color:var(--muted)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.tabs button{background:var(--panel2);color:var(--cream);border:1px solid var(--gd);border-radius:8px;padding:8px 12px;font:inherit;cursor:pointer}
+.tabs button.on{background:var(--gd);color:#000;box-shadow:0 0 12px var(--glow)}
+.panel{display:none}.panel.on{display:block}
+.angel-banner{background:linear-gradient(90deg,#1a1220,#122018);border:1px solid #d4a84b55;border-radius:10px;padding:10px;margin-bottom:10px;color:#f5e6b8}
+
 .cbfoot{text-align:center;color:#6a8a72;font-size:12px;padding:20px 12px 40px;line-height:1.5;max-width:720px;margin:0 auto}
 .cbfoot a{color:var(--g)}
 #printArea{display:none}
@@ -50,6 +56,12 @@ audio{width:100%;margin-top:6px}
 <div class="disc">For entertainment only. This journal only stores what you save — no fake readings are added. Shared with Ghost Hunter and CB Ghost Scanner on this device.</div>
 
 <main>
+<div class="tabs" role="tablist">
+  <button type="button" class="on" id="tabInvestigations" data-tab="investigations">Investigations</button>
+  <button type="button" id="tabAngels" data-tab="angels">Angels ✨</button>
+</div>
+
+<div class="panel on" id="panel-investigations">
 <section class="card">
   <h2>New investigation entry</h2>
   <p class="muted">Record a real session from any Coffeebreak ghost app. Photos and audio stay on this device (browser storage).</p>
@@ -111,10 +123,28 @@ audio{width:100%;margin-top:6px}
   <div class="row">
     <a class="btn" href="../ghosthunter/">Ghost Hunter</a>
     <a class="btn" href="../cb-ghost-scanner/">CB Ghost Scanner</a>
+    <a class="btn" href="../cb-dowsing-rods/">Dowsing Rod Spirit Talker</a>
+    <a class="btn" href="../cb-angel-dice-oracle/">Connecting with Angels</a>
     <a class="btn" href="../../">Coffeebreak hub</a>
     <a class="btn" href="../../yellow-pages/">Yellow Pages</a>
   </div>
 </section>
+</div><!-- /panel-investigations -->
+
+<div class="panel" id="panel-angels">
+<section class="card">
+  <h2>Angels ✨</h2>
+  <div class="angel-banner">Angel readings saved from <b>Connecting with Angels · Dice Oracle</b> appear here. Entertainment and inspiration only — original Coffeebreak messages.</div>
+  <div class="row">
+    <a class="btn primary" href="../cb-angel-dice-oracle/">Open Angel Dice Oracle</a>
+    <a class="btn" href="../cb-angel-dice-oracle-free-demo/">Free demo (3 rolls)</a>
+    <a class="btn" href="../cb-dowsing-rods/">Dowsing rods · Angels tab</a>
+    <button type="button" id="btnRefreshAngels">Refresh</button>
+  </div>
+  <p class="muted" id="angelMeta"></p>
+  <div id="angelList"></div>
+</section>
+</div><!-- /panel-angels -->
 </main>
 
 <div id="printArea"></div>

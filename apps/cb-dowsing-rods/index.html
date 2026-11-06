@@ -37,6 +37,11 @@ button.on{background:var(--gd);color:#000}
 .cal .box{background:#06100a;border:1px solid #1c7a3533;border-radius:8px;padding:8px;text-align:center}
 .cal b{color:var(--g)}
 .logbox{max-height:180px;overflow:auto;background:#020604;border-radius:8px;padding:8px;font-family:ui-monospace,monospace;font-size:.85em;border:1px solid #1c7a3533}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.tabs button{background:var(--panel2);color:var(--cream);border:1px solid var(--gd);border-radius:8px;padding:8px 12px;font:inherit;cursor:pointer}
+.tabs button.on{background:var(--gd);color:#000;box-shadow:0 0 12px var(--glow)}
+.panel{display:none}.panel.on{display:block}
+.angel-banner{background:linear-gradient(90deg,#1a1220,#122018);border:1px solid #d4a84b55;border-radius:10px;padding:10px;margin-bottom:10px;color:#f5e6b8;font-size:13px}
 .cbfoot{text-align:center;color:#6a8a72;font-size:12px;padding:20px 12px 40px;line-height:1.5;max-width:720px;margin:0 auto}
 .cbfoot a{color:var(--g)}
 @media(max-width:640px){header h1{font-size:13px}.cal{grid-template-columns:1fr}}
@@ -51,6 +56,12 @@ button.on{background:var(--gd);color:#000}
 <div class="disc">For entertainment only. Rods move only from your phone’s real sensors (tilt, motion, magnetometer). No random movement. Not a detector of spirits.</div>
 
 <main>
+<div class="tabs" role="tablist">
+  <button type="button" class="on" id="tabRods" data-tab="rods">Dowsing rods</button>
+  <button type="button" id="tabAngels" data-tab="angels">Angels ✨</button>
+</div>
+
+<div class="panel on" id="panel-rods">
 <section class="card">
   <h2>Sensors</h2>
   <div id="sensorStatus" class="status">Checking sensors…</div>
@@ -121,6 +132,26 @@ button.on{background:var(--gd);color:#000}
   <b style="color:var(--g);font-size:13px">This session</b>
   <div class="logbox" id="sessionLog"></div>
 </section>
+</div><!-- /panel-rods -->
+
+<div class="panel" id="panel-angels">
+<section class="card">
+  <h2>Angels ✨</h2>
+  <div class="angel-banner">Connect with the Angel Dice Oracle board. Readings you save there can also land in the Ghost Journal Angels tab. Rods here still move only from real sensors — nothing fake is added.</div>
+  <p class="muted">Open the oracle to ask a question and roll fair dice onto Love, Guidance, Healing, Abundance, Protection, Purpose and more. Original Coffeebreak angel messages only.</p>
+  <div class="row">
+    <a class="btn primary" href="../cb-angel-dice-oracle/">Open Connecting with Angels</a>
+    <a class="btn" href="../cb-angel-dice-oracle-free-demo/">Free demo (3 rolls)</a>
+    <a class="btn" href="../cb-ghost-journal/?tab=angels">Ghost Journal · Angels</a>
+  </div>
+  <h2 style="margin-top:16px">Angel readings on this device</h2>
+  <p class="muted">Shows Ghost Journal entries whose app name mentions Angels (same browser).</p>
+  <div class="row">
+    <button type="button" id="btnRefreshAngels">Refresh</button>
+  </div>
+  <div id="angelList" class="logbox" style="max-height:320px;white-space:pre-wrap;font-family:system-ui,sans-serif"></div>
+</section>
+</div><!-- /panel-angels -->
 </main>
 
 <footer class="cbfoot">
