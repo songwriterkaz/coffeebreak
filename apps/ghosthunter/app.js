@@ -183,7 +183,7 @@ var old=localStorage.getItem('cb_ghost_log'); if(old){localStorage.setItem(KEY,o
 function save(l){mem=l;try{localStorage.setItem(KEY,JSON.stringify(l))}catch(e){}}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function render(){var l=load();$('llist').innerHTML=l.length?l.slice().reverse().map(function(e){return '<div class="card"><b>'+esc(e.t)+'</b> · '+esc(e.p||'Unknown place')+'<br><small>'+esc(e.d)+'</small><div>'+esc(e.n)+'</div></div>'}).join(''):'<small>No evidence entries yet.</small>'}
-function addEvidence(type, notes, place){var l=load();l.push({p:place||$('lp').value||'Field',t:type,n:notes||'',d:new Date().toLocaleString()});save(l);render(); if($('lt')){/* keep form */} }
+function addEvidence(type, notes, place){var l=load();l.push({p:place||$('lp').value||'Field',t:type,n:notes||'',d:new Date().toLocaleString()});save(l);render(); try{if(window.CBGhostJournal&&CBGhostJournal.saveFromApp){CBGhostJournal.saveFromApp('Coffeebreak Ghost Hunter',type,notes||'',place||($('lp')&&$('lp').value)||'');}}catch(e){} if($('lt')){/* keep form */} }
 $('ladd').onclick=function(){addEvidence($('lt').value,$('ln').value,$('lp').value);$('ln').value=''};
 $('lclr').onclick=function(){if(confirm('Clear the whole evidence log?')){save([]);render()}};render();
 

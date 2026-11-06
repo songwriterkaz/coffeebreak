@@ -37,7 +37,7 @@ if(localStorage.cbglow)document.body.classList.add('glow');
 $('gRec').onclick=function(){G.rec=!G.rec;if(G.rec){G.session=[];note('session','recording started');this.textContent='Stop recording'}else{note('session','recording stopped');this.textContent='Record session';save()}};
 function logText(){var s=G.session.length?G.session:G.words.map(function(w){return{local:'',type:'word',text:w}});return 'Coffeebreak CB Ghost Scanner session\nFor entertainment only\n'+new Date().toString()+'\n\n'+s.map(function(e){return (e.local||'')+'  '+e.type+'  '+e.text}).join('\n')}
 G.logText=logText;
-function save(){var b=new Blob([logText()],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ghost-session-'+Date.now()+'.txt';document.body.appendChild(a);a.click();a.remove();try{localStorage.cbglast=logText()}catch(e){}}
+function save(){var b=new Blob([logText()],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ghost-session-'+Date.now()+'.txt';document.body.appendChild(a);a.click();a.remove();try{localStorage.cbglast=logText()}catch(e){}try{if(window.CBGhostJournal&&CBGhostJournal.saveFromApp){var words=(G.words||[]).slice(-20).join(', ');var readings=words?('Captured words: '+words):'Session log saved';var notes=logText().slice(0,4000);CBGhostJournal.saveFromApp('CB Ghost Scanner',readings,notes,'');}}catch(e){}}
 G.save=save;
 $('gSave').onclick=save;$('gClear').onclick=function(){$('glog').textContent='';G.words=[]};
 // mode switch

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en-AU"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Ghost Investigation Journal</title>
+<link rel="icon" href="cb-logo.png">
+<style>
+:root{--bg:#050806;--panel:#0b140e;--panel2:#122018;--g:#39ff6a;--gd:#1c7a35;--glow:#39ff6a88;--cream:#d8f5e0;--muted:#8fb89a}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 0,#0d1a12,#050806 65%);color:var(--cream);font:15px system-ui,sans-serif;min-height:100vh}
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--panel);border-bottom:2px solid var(--gd);position:sticky;top:0;z-index:5}
+header img{height:40px;width:40px;border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 0 14px var(--glow)}
+header h1{font-size:17px;margin:0;color:var(--g);text-shadow:0 0 10px var(--glow);flex:1}
+.badge{display:inline-block;background:var(--gd);color:#041;border-radius:999px;padding:2px 8px;font-size:.72em;font-weight:800}
+.disc{background:#06100a;color:#9fb;font-size:12px;padding:6px 12px;text-align:center;border-bottom:1px solid #1c7a3555}
+main{max-width:820px;margin:auto;padding:12px 12px 40px}
+.card{background:#0a1510cc;border:1px solid #1c7a3555;border-radius:12px;padding:12px;margin-bottom:12px;box-shadow:0 0 18px #39ff6a14}
+h2{color:var(--g);margin:6px 0 10px;font-size:18px;text-shadow:0 0 8px #39ff6a44}
+label{display:block;font-size:12px;color:var(--muted);margin-top:8px}
+input,textarea,select{width:100%;background:#06100a;color:var(--cream);border:1px solid var(--gd);border-radius:8px;padding:8px;font:inherit;margin:4px 0}
+button,.btn{background:var(--panel2);color:var(--cream);border:1px solid var(--gd);border-radius:8px;padding:9px 12px;font:inherit;cursor:pointer;text-decoration:none;display:inline-block}
+button:hover,.btn:hover,button.primary{background:var(--gd);color:#000;box-shadow:0 0 12px var(--glow)}
+button.danger{border-color:#a33;color:#fcc}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;align-items:center}
+.row>*{flex:0 1 auto}
+.muted{color:var(--muted);font-size:.9em}
+.entry{border-left:3px solid var(--g)}
+.entry h3{margin:0 0 4px;color:var(--g);font-size:15px}
+.meta{font-size:12px;color:var(--muted);margin-bottom:6px}
+.thumb{max-width:100%;max-height:160px;border-radius:8px;border:1px solid #1c7a3533;margin:4px 4px 4px 0}
+audio{width:100%;margin-top:6px}
+.empty{text-align:center;padding:24px;color:var(--muted)}
+.cbfoot{text-align:center;color:#6a8a72;font-size:12px;padding:20px 12px 40px;line-height:1.5;max-width:720px;margin:0 auto}
+.cbfoot a{color:var(--g)}
+#printArea{display:none}
+@media print{
+  body *{visibility:hidden}
+  #printArea,#printArea *{visibility:visible}
+  #printArea{display:block;position:absolute;left:0;top:0;width:100%;color:#000;background:#fff}
+  header,.disc,main,.cbfoot,.noprint{display:none!important}
+}
+@media(max-width:640px){header h1{font-size:14px}}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body>
+<header>
+<img src="cb-logo.png" alt="Coffeebreak logo">
+<h1>Ghost Investigation Journal 👻</h1>
+<span class="badge">FREE</span>
+</header>
+<div class="disc">For entertainment only. This journal only stores what you save — no fake readings are added. Shared with Ghost Hunter and CB Ghost Scanner on this device.</div>
+
+<main>
+<section class="card">
+  <h2>New investigation entry</h2>
+  <p class="muted">Record a real session from any Coffeebreak ghost app. Photos and audio stay on this device (browser storage).</p>
+  <label for="fDate">Date &amp; time</label>
+  <input id="fDate" type="datetime-local">
+  <label for="fLoc">Location</label>
+  <input id="fLoc" placeholder="e.g. Fort Scratchley, Newcastle NSW" autocomplete="off">
+  <label for="fApp">App used</label>
+  <select id="fApp">
+    <option>Coffeebreak Ghost Hunter</option>
+    <option>CB Ghost Scanner</option>
+    <option>Manual / other</option>
+    <option>Ghost Talker</option>
+    <option>Ghost Box</option>
+    <option>Ghost Detector</option>
+    <option>Spirit Talker</option>
+    <option>EVP Studio</option>
+    <option>Thermal Cam</option>
+    <option>Other Coffeebreak ghost app</option>
+  </select>
+  <label for="fAppCustom" class="muted">Or type another app name</label>
+  <input id="fAppCustom" placeholder="Custom app name (optional)">
+  <label for="fRead">Readings</label>
+  <textarea id="fRead" rows="2" placeholder="What the tools showed (EMF, words, EVP notes…) — only what you actually saw"></textarea>
+  <label for="fNotes">Notes</label>
+  <textarea id="fNotes" rows="3" placeholder="What happened, who was there, weather, feelings…"></textarea>
+  <label for="fPhoto">Photos</label>
+  <input id="fPhoto" type="file" accept="image/*" multiple>
+  <label for="fAudio">Audio</label>
+  <input id="fAudio" type="file" accept="audio/*" multiple>
+  <div class="row">
+    <button type="button" class="primary" id="btnSave">Save entry</button>
+    <button type="button" id="btnClearForm">Clear form</button>
+  </div>
+  <p class="muted" id="formStatus"></p>
+</section>
+
+<section class="card">
+  <h2>Journal</h2>
+  <div class="row">
+    <input id="q" placeholder="Search notes, location, readings…" style="flex:2;min-width:160px">
+    <select id="filterApp" style="flex:1;min-width:140px"><option value="">All apps</option></select>
+    <button type="button" id="btnSearch">Search</button>
+  </div>
+  <div class="row noprint">
+    <button type="button" id="btnExportJson">Export JSON</button>
+    <button type="button" id="btnExportPdf">Export PDF</button>
+    <label class="btn" for="importFile" style="cursor:pointer">Import JSON</label>
+    <input id="importFile" type="file" accept="application/json,.json" hidden>
+    <button type="button" class="danger" id="btnClearAll">Clear journal</button>
+  </div>
+  <p class="muted" id="listMeta"></p>
+  <div id="list"></div>
+</section>
+
+<section class="card">
+  <h2>Linked ghost apps</h2>
+  <p class="muted">Saving evidence in these apps also writes into this journal (same browser / device).</p>
+  <div class="row">
+    <a class="btn" href="../ghosthunter/">Ghost Hunter</a>
+    <a class="btn" href="../cb-ghost-scanner/">CB Ghost Scanner</a>
+    <a class="btn" href="../../">Coffeebreak hub</a>
+    <a class="btn" href="../../yellow-pages/">Yellow Pages</a>
+  </div>
+</section>
+</main>
+
+<div id="printArea"></div>
+
+<footer class="cbfoot">
+<p><img src="cb-logo.png" alt="Coffeebreak logo" style="height:48px;border-radius:10px;background:#fff"></p>
+<p><b>Disclaimer:</b> For entertainment only. Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named; trademarks belong to their owners.</p>
+<p>© Coffeebreak · Completely free · For entertainment only</p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> · <a href="https://songwriterkaz.github.io/coffeebreak/yellow-pages/">Yellow Pages</a></p>
+</footer>
+
+<script src="ghost-journal.js"></script>
+<script src="app.js"></script>
+</body></html>
