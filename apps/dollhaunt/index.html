@@ -1,22 +1,166 @@
-<!doctype html><html lang=en><head><meta name="viewport" content="width=device-width,initial-scale=1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Coffeebreak: The Haunted Doll</title><style>body{margin:0;font-family:system-ui,sans-serif;background:#1a0d2a;color:#f3e9ff}main{max-width:960px;margin:auto;padding:12px}header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#8c3cc8}header img{width:46px;height:46px;border-radius:10px}h1{margin:.3em 0}.sub{opacity:.85}.card{background:#ffffff14;border-radius:12px;padding:12px;margin:10px 0}button{background:#ff5fa2;color:#fff;border:0;border-radius:18px;padding:8px 13px;margin:3px;font-weight:700;cursor:pointer}button:disabled{opacity:.4}input,select{padding:6px;border-radius:8px;border:1px solid #8c3cc8}canvas{max-width:100%;display:block;margin:auto}footer{text-align:center;opacity:.7;font-size:12px;padding:14px}</style><script src="cb-fullscreen.js"></script><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
-</head><body><!--cbplus--><style>#cbPlus{position:fixed;top:8px;right:8px;z-index:99997;font:13px system-ui,sans-serif}#cbPlus>button{background:#8c3cc8;color:#fff;border:0;border-radius:18px;padding:7px 11px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px #0006}#cbPlusP{background:#fff;color:#222;border:2px solid #8c3cc8;border-radius:12px;padding:10px;margin-top:6px;width:270px;max-height:70vh;overflow:auto}#cbPlusP button{border:0;border-radius:16px;padding:6px 10px;font-weight:700;cursor:pointer;margin:3px 2px}#cbToast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#ffd54a;color:#222;padding:8px 14px;border-radius:18px;font:bold 14px system-ui;z-index:99999;display:none}</style>
-<div id="cbPlus"><button onclick="CB.toggle()">🏆 ☕ Plus</button><div id="cbPlusP" hidden><img src="cb-logo.jpg" onerror="this.remove()" style="width:56px;float:right;border-radius:8px"><b>Coffeebreak Membership – $50 AUD</b><br><small>Optional. Supports Coffeebreak and unlocks a Member badge.</small><br><span class="cb-payid">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</span><button style="background:#ff5fa2;color:#fff" onclick="this.nextElementSibling.hidden=!this.nextElementSibling.hidden">PayID</button><div hidden>PayID: <b>darkokaz@gmx.com</b><br>Amount $50.00 AUD, ref: your name + "CB Member"</div><br><button style="background:#eee" onclick="CB.member()">I've paid – add my badge</button><hr><b>🌟 Sponsor me</b><br><small>Sponsor Coffeebreak any amount.</small><br><span class="cb-payid">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</span> or PayID darkokaz@gmx.com<hr><b>🏆 Trophies</b><div id="cbTro"></div></div></div><div id="cbToast"></div>
-<script>window.CB=window.CB||{};(function(C){var K='cbTrophies',L={first:'☕ First Sip – opened a Coffeebreak app',back:'🔁 Regular – came back 3 times',ten:'⏱️ Ten Minute Break – played 10 min',click50:'👆 Busy Bean – 50 taps',member:'💜 Coffeebreak Member',sponsor:'🌟 Sponsor Spotter – opened sponsor panel'};function g(){try{return JSON.parse(localStorage.getItem(K)||'{}')}catch(e){return{}}}function s(o){try{localStorage.setItem(K,JSON.stringify(o))}catch(e){}}C.trophy=function(id,label){if(label)L[id]=label;var o=g();if(o[id])return;o[id]=Date.now();s(o);var t=document.getElementById('cbToast');if(t){t.textContent='🏆 Trophy: '+(L[id]||id);t.style.display='block';setTimeout(function(){t.style.display='none'},2600)}C.draw()};C.draw=function(){var e=document.getElementById('cbTro');if(!e)return;var o=g(),h='';for(var k in L)h+='<div>'+(o[k]?'✅ ':'🔒 ')+L[k]+'</div>';for(var k in o)if(!L[k])h+='<div>✅ '+k+'</div>';e.innerHTML=h};C.toggle=function(){var p=document.getElementById('cbPlusP');p.hidden=!p.hidden;C.draw();if(!p.hidden)C.trophy('sponsor')};C.member=function(){C.trophy('member');alert('Thanks. Your Member badge is added on this device. Karen will confirm your payment.')};addEventListener('load',function(){C.trophy('first');var n=+(localStorage.getItem('cbVisits')||0)+1;localStorage.setItem('cbVisits',n);if(n>=3)C.trophy('back');setTimeout(function(){C.trophy('ten')},600000);var c=0;addEventListener('pointerdown',function(){if(++c==50)C.trophy('click50')});C.draw()})})(window.CB)</script><!--/cbplus-->
-<header><img src="cb-logo.jpg" alt="Coffeebreak"><b>☕ COFFEEBREAK</b></header><main><h1>Coffeebreak: The Haunted Doll</h1><p class=sub>Something in the antique shop keeps moving. Every time you look away, Rosie the porcelain doll gets closer. Find the 5 charms and lock her music box before midnight.</p>
-<div class=card><div id=scene style="font-size:1.15em;min-height:120px"></div><div id=ch></div><p id=st class=sub></p></div>
+<!DOCTYPE html>
+<html lang="en-AU"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Haunted Doll — Coffeebreak</title>
+<link rel="icon" href="cb-logo.png">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,system-ui,serif;background:radial-gradient(circle at top,#2a1030 0%,#120510 55%,#0a0610 100%);color:#fde6f3;min-height:100vh}
+a{color:#ff8fcf}
+header{text-align:center;padding:14px 12px 4px}
+header img.logo{height:72px;border-radius:14px;background:#fff;box-shadow:0 0 22px #ff5fb088}
+h1{margin:8px 0 2px;font-size:1.7rem;color:#ff8fcf;text-shadow:0 0 12px #ff2d9588;letter-spacing:1px}
+.sub{color:#d9a6c4;font-style:italic;margin:0 0 10px}
+.wrap{max-width:1100px;margin:0 auto;padding:8px 16px 40px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+button,.btn{background:linear-gradient(#ff5fb0,#b0186a);color:#fff;border:1px solid #ffb6dd;border-radius:22px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+button.alt,.btn.alt{background:#2a0b22}
+button:disabled{opacity:.45}
+.panel{background:#22091ccc;border:1px solid #ff8fcf66;border-radius:14px;padding:14px;margin:10px 0;line-height:1.45}
+.panel h2,.panel h3{color:#ff8fcf;margin:4px 0 8px}
+input,select,textarea{background:#120510;color:#fde6f3;border:1px solid #ff8fcf88;border-radius:8px;padding:8px;font:inherit;width:100%;max-width:100%}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.card{background:#1a0816;border:1px solid #ff8fcf44;border-radius:12px;padding:12px}
+.card h4{margin:0 0 6px;color:#ffb6dd}
+.muted{color:#c9a0b8;font-size:.9em}
+.badge{display:inline-block;background:#ff4f9a;color:#fff;border-radius:999px;padding:2px 8px;font-size:.75em;font-weight:700}
+.meter{height:14px;background:#120510;border-radius:8px;overflow:hidden;border:1px solid #ff8fcf55}
+.meter>i{display:block;height:100%;background:linear-gradient(90deg,#5ff,#ff5fb0,#ff2);width:0%;transition:width .25s}
+.log{max-height:220px;overflow:auto;background:#0d050c;border-radius:8px;padding:8px;font-family:ui-monospace,monospace;font-size:.85em}
+.tools-list{max-height:420px;overflow:auto}
+.tool-row{display:flex;justify-content:space-between;gap:8px;padding:8px;border-bottom:1px solid #ff8fcf22;cursor:pointer}
+.tool-row:hover{background:#ff8fcf18}
+.cbfoot{text-align:center;color:#a07890;font-size:.85em;padding:24px 12px 40px;line-height:1.5}
+.cbfoot a{color:#ff8fcf}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.tabs button.on{outline:2px solid #fff}
+.ghost-cup{font-size:3rem;filter:drop-shadow(0 0 12px #ff8fcf)}
+.steam{animation:steam 2s ease-in-out infinite}
+@keyframes steam{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(-8px)}}
+.board-ghost{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center}
+.coffee-panel{min-width:260px;max-width:340px}
+.canvas-wrap{background:#0d050c;border-radius:12px;border:1px solid #ff8fcf44;padding:8px;text-align:center}
+canvas{max-width:100%;border-radius:8px;background:#111}
+.price{font-size:1.6rem;font-weight:800;color:#ff4f9a}
+.payid{background:#2a0b22;border:1px solid #f5a0c4;border-radius:10px;padding:10px 12px;margin:12px 0}
+@media(max-width:640px){h1{font-size:1.35rem}}
+</style>
+
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body>
+<header>
+<img class="logo" src="cb-logo.png" alt="Coffeebreak logo">
+<h1>The Haunted Doll</h1>
+<p class="sub">Story desk for one haunted doll.</p>
+</header>
+<p class="bar muted">Owner copy free for Karen · Customers $10 USD · PayID darkokaz@gmx.com</p>
+<main class="wrap">
+
+<div class="panel">
+  <h2>Haunted doll circle</h2>
+  <p class="muted">Pick a doll and share a gentle chat. Fiction only.</p>
+  <div class="grid"><div class='card'><h4>Mabel</h4><p class='muted'>Café apron ghost doll</p><p>Loves latte art and soft jazz.</p><button onclick="talk('Mabel')">Talk</button></div><div class='card'><h4>Twin Porcelain</h4><p class='muted'>Shelf twin</p><p>Finishes each other's sentences.</p><button onclick="talk('Twin Porcelain')">Talk</button></div><div class='card'><h4>Harbour Sailor</h4><p class='muted'>Fog-coated doll</p><p>Hums sea shanties.</p><button onclick="talk('Harbour Sailor')">Talk</button></div><div class='card'><h4>Attic Violin</h4><p class='muted'>Velvet case doll</p><p>Plays one note at midnight.</p><button onclick="talk('Attic Violin')">Talk</button></div><div class='card'><h4>Sugarskull Poet</h4><p class='muted'>Pink sugar bloom</p><p>Leaves kind rhymes.</p><button onclick="talk('Sugarskull Poet')">Talk</button></div><div class='card'><h4>Lantern Keeper</h4><p class='muted'>Glass-chest doll</p><p>Guides lost cups home.</p><button onclick="talk('Lantern Keeper')">Talk</button></div></div>
+  <div id="chat" class="panel">The dolls wait politely.</div>
+</div>
+
+<div class="panel">
+  <h2>Ghost hunting tools catalogue</h2>
+  <p class="muted">Searchable set of 12,000 Coffeebreak tools for entertainment play. EMF meters, spirit boxes, EVP recorders, thermal cams and many variants.</p>
+  <div class="bar">
+    <input id="q" placeholder="Search tools (EMF, thermal, latte, rare…)" style="max-width:420px">
+    <select id="cat"><option value="">All categories</option></select>
+    <button id="go">Search</button>
+    <button class="alt" id="prev">Prev</button>
+    <button class="alt" id="next">Next</button>
+  </div>
+  <p class="muted" id="meta"></p>
+  <div class="tools-list" id="list"></div>
+</div>
+<div class="panel">
+  <h3>Active tool</h3>
+  <div id="active" class="muted">Pick a tool to take a reading.</div>
+  <div class="meter" style="margin:10px 0"><i id="needle"></i></div>
+  <button id="use">Take reading</button>
+  <div class="log" id="log"></div>
+</div>
 <script>
-let s={room:'shop',charms:[],time:0,doll:3};const R={shop:{d:'The old Coffeebreak antique shop. Dust, ticking clocks, and a glass cabinet. Rosie sits on the counter… her head was facing the window a second ago.',g:{attic:'Creak up to the attic',cellar:'Go down to the cellar',back:'Back room'},c:'🕯️ candle'},attic:{d:'Rafters, trunks and a rocking horse that rocks on its own.',g:{shop:'Back down to the shop',nursery:'Little door to the nursery'},c:'🧂 salt pouch'},cellar:{d:'Cold. Jars of pickled onions. A child\'s humming echoes from nowhere.',g:{shop:'Up to the shop',well:'The old well'},c:'🔔 tiny bell'},back:{d:'Wallpaper peeling into faces if you squint. A music box sits open, silent.',g:{shop:'Back to the shop'},c:'',box:1},nursery:{d:'Rows of dolls, all turned to the wall. Except one gap.',g:{attic:'Back to the attic'},c:'🧸 old teddy'},well:{d:'A bricked-over well with a rope. Something tugs it from below.',g:{cellar:'Back to the cellar'},c:'🍀 iron horseshoe'}};
-function go(r){s.room=r;s.time++;s.doll-=Math.random()<.45?1:0;draw()}
-function draw(){const r=R[s.room];if(s.doll<=0){scene.innerHTML='<b>👁️ A cold little hand grabs your sleeve. "Play with me."</b><br>Rosie found you. Game over.';ch.innerHTML='<button onclick="location.reload()">Try again</button>';return}
-if(s.time>16){scene.innerHTML='🕛 The clocks strike midnight. Every doll in the shop turns around… Game over.';ch.innerHTML='<button onclick="location.reload()">Try again</button>';return}
-scene.innerHTML=r.d+'<br><br>'+['','<b>👣 Tiny footsteps right behind you!</b>','<b>🎶 You hear the music box tinkle somewhere close.</b>','You sense Rosie is a few rooms away.'][Math.min(3,s.doll)];
-let h='';for(const k in r.g)h+=`<button onclick="go('${k}')">${r.g[k]}</button>`;if(r.c&&!s.charms.includes(r.c))h+=`<button onclick="s.charms.push('${r.c}');draw()">Take ${r.c}</button>`;h+=`<button onclick="hide()">🙈 Hide & listen</button>`;if(r.box)h+=`<button onclick="lock()">🔒 Lock the music box</button>`;ch.innerHTML=h;st.textContent=`Charms ${s.charms.length}/5: ${s.charms.join(' ')}   Hour: ${11+ (s.time/16)|0}:${String((s.time*3.75%60)|0).padStart(2,'0')} pm`}
-function hide(){s.time++;if(Math.random()<.6){s.doll++;scene.innerHTML='You hold your breath… the footsteps pass by.'}draw()}
-function lock(){if(s.charms.length<5){scene.innerHTML='The lid won\'t stay shut. You need all 5 charms.';return}scene.innerHTML='<b>🎶 The music box plays one last lullaby and clicks shut. Rosie slumps, just a doll again. You survived!</b>';ch.innerHTML='<button onclick="location.reload()">Play again</button>';CB.trophy&&CB.trophy('doll','🪆 Locked away the haunted doll')}
-draw();
+(function(){
+  const DEMO=false;
+  const MAX=12000;
+  let offset=0, limit=40, lastQ='', lastCat='';
+  const cat=document.getElementById('cat');
+  CBGhostTools.categories().forEach(c=>{
+    const o=document.createElement('option'); o.value=c.id; o.textContent=c.label; cat.appendChild(o);
+  });
+  let current=null;
+  function render(res){
+    const list=document.getElementById('list'); list.innerHTML='';
+    res.items.filter(t=>t.id<=MAX).forEach(t=>{
+      const row=document.createElement('div'); row.className='tool-row';
+      row.innerHTML='<div><b>'+t.name+'</b><br><span class="muted">'+t.sku+' · '+t.catLabel+' · '+t.rarity+' · power '+t.power+'</span><br><span class="muted">'+t.blurb+'</span></div><button class="alt">Use</button>';
+      row.onclick=()=>select(t);
+      list.appendChild(row);
+    });
+    document.getElementById('meta').textContent=(DEMO?'Demo shows first '+MAX.toLocaleString()+' tools. ':'')+'Showing '+res.items.length+' of '+Math.min(res.total,MAX).toLocaleString()+(res.query?' for "'+res.query+'"':'')+' · offset '+res.offset;
+  }
+  function select(t){
+    if(t.id>MAX){alert('Unlock the full version for this tool.');return}
+    current=t;
+    document.getElementById('active').innerHTML='<b>'+t.name+'</b><br>'+t.blurb;
+  }
+  function load(){
+    lastQ=document.getElementById('q').value;
+    lastCat=cat.value;
+    let res;
+    if(lastCat){
+      res=CBGhostTools.byCat(lastCat, limit, offset);
+      if(lastQ){
+        res.items=res.items.filter(t=>(t.name+' '+t.sku+' '+t.color).toLowerCase().includes(lastQ.toLowerCase()));
+      }
+      res.items=res.items.filter(t=>t.id<=MAX);
+      res.total=Math.min(res.total, MAX);
+    } else {
+      res=CBGhostTools.search(lastQ, limit, offset);
+      res.items=res.items.filter(t=>t.id<=MAX);
+      if(!lastQ) res.total=Math.min(CBGhostTools.TOTAL, MAX);
+      else {
+        // recount within MAX
+        let n=0; for(let i=0;i<MAX;i++){const t=CBGhostTools.toolAt(i); const hay=(t.name+' '+t.catLabel+' '+t.series+' '+t.color+' '+t.sku+' '+t.rarity).toLowerCase(); if(hay.includes(lastQ.toLowerCase())) n++;}
+        res.total=n;
+      }
+    }
+    render(res);
+  }
+  document.getElementById('go').onclick=()=>{offset=0;load()};
+  document.getElementById('prev').onclick=()=>{offset=Math.max(0,offset-limit);load()};
+  document.getElementById('next').onclick=()=>{offset=offset+limit;load()};
+  document.getElementById('use').onclick=()=>{
+    if(!current){document.getElementById('log').textContent='Pick a tool first.';return}
+    const r=CBGhostTools.useTool(current);
+    document.getElementById('needle').style.width=r.reading+'%';
+    const line=document.createElement('div');
+    line.textContent=new Date().toLocaleTimeString()+' · '+r.tool+' · '+r.reading+' · '+r.note;
+    const log=document.getElementById('log'); log.prepend(line);
+  };
+  load();
+})();
 </script>
-</main><footer>© Coffeebreak · made by Coffeebreak · AI-assisted</footer><script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Dollhaunt" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
-<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
-<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
-<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
-<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>
+
+
+<script>
+function talk(n){
+  const lines=['nods slowly','whispers thank you','asks for a pink ribbon','points at the tool catalogue','sips imaginary coffee'];
+  document.getElementById('chat').innerHTML='<b>'+n+'</b> '+lines[Math.floor(Math.random()*lines.length)]+'.';
+}
+</script>
+
+<p class="bar"><a class="btn alt" href="../dollhaunt-buy/">Get full version $10 USD</a> <a class="btn alt" href="https://kazmelody.gumroad.com">Gumroad store</a></p>
+</main>
+<footer class="cbfoot">
+<p><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named; trademarks belong to their owners. For entertainment only.</p>
+<p>© Coffeebreak · Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com · No PayPal · Apps $10 USD · Karen gets them free as owner</p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> · <a href="https://songwriterkaz.github.io/coffeebreak/yellow-pages/">Yellow Pages</a></p>
+</footer>
+<script src="ghost-tools.js"></script>
+
+</body></html>

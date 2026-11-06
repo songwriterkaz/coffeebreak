@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en-AU"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ghost Box — Coffeebreak</title>
+<link rel="icon" href="cb-logo.png">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,system-ui,serif;background:radial-gradient(circle at top,#2a1030 0%,#120510 55%,#0a0610 100%);color:#fde6f3;min-height:100vh}
+a{color:#ff8fcf}
+header{text-align:center;padding:14px 12px 4px}
+header img.logo{height:72px;border-radius:14px;background:#fff;box-shadow:0 0 22px #ff5fb088}
+h1{margin:8px 0 2px;font-size:1.7rem;color:#ff8fcf;text-shadow:0 0 12px #ff2d9588;letter-spacing:1px}
+.sub{color:#d9a6c4;font-style:italic;margin:0 0 10px}
+.wrap{max-width:1100px;margin:0 auto;padding:8px 16px 40px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+button,.btn{background:linear-gradient(#ff5fb0,#b0186a);color:#fff;border:1px solid #ffb6dd;border-radius:22px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+button.alt,.btn.alt{background:#2a0b22}
+button:disabled{opacity:.45}
+.panel{background:#22091ccc;border:1px solid #ff8fcf66;border-radius:14px;padding:14px;margin:10px 0;line-height:1.45}
+.panel h2,.panel h3{color:#ff8fcf;margin:4px 0 8px}
+input,select,textarea{background:#120510;color:#fde6f3;border:1px solid #ff8fcf88;border-radius:8px;padding:8px;font:inherit;width:100%;max-width:100%}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.card{background:#1a0816;border:1px solid #ff8fcf44;border-radius:12px;padding:12px}
+.card h4{margin:0 0 6px;color:#ffb6dd}
+.muted{color:#c9a0b8;font-size:.9em}
+.badge{display:inline-block;background:#ff4f9a;color:#fff;border-radius:999px;padding:2px 8px;font-size:.75em;font-weight:700}
+.meter{height:14px;background:#120510;border-radius:8px;overflow:hidden;border:1px solid #ff8fcf55}
+.meter>i{display:block;height:100%;background:linear-gradient(90deg,#5ff,#ff5fb0,#ff2);width:0%;transition:width .25s}
+.log{max-height:220px;overflow:auto;background:#0d050c;border-radius:8px;padding:8px;font-family:ui-monospace,monospace;font-size:.85em}
+.tools-list{max-height:420px;overflow:auto}
+.tool-row{display:flex;justify-content:space-between;gap:8px;padding:8px;border-bottom:1px solid #ff8fcf22;cursor:pointer}
+.tool-row:hover{background:#ff8fcf18}
+.cbfoot{text-align:center;color:#a07890;font-size:.85em;padding:24px 12px 40px;line-height:1.5}
+.cbfoot a{color:#ff8fcf}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.tabs button.on{outline:2px solid #fff}
+.ghost-cup{font-size:3rem;filter:drop-shadow(0 0 12px #ff8fcf)}
+.steam{animation:steam 2s ease-in-out infinite}
+@keyframes steam{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(-8px)}}
+.board-ghost{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center}
+.coffee-panel{min-width:260px;max-width:340px}
+.canvas-wrap{background:#0d050c;border-radius:12px;border:1px solid #ff8fcf44;padding:8px;text-align:center}
+canvas{max-width:100%;border-radius:8px;background:#111}
+.price{font-size:1.6rem;font-weight:800;color:#ff4f9a}
+.payid{background:#2a0b22;border:1px solid #f5a0c4;border-radius:10px;padding:10px 12px;margin:12px 0}
+@media(max-width:640px){h1{font-size:1.35rem}}
+</style>
+
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body>
+<header>
+<img class="logo" src="cb-logo.png" alt="Coffeebreak logo">
+<h1>Ghost Box <span class="badge">FREE DEMO</span></h1>
+<p class="sub">Spirit-box style sweeps with tool locker. (demo limits)</p>
+</header>
+<main class="wrap">
+
+<div class="panel">
+  <h2>Ghost amps</h2>
+  <p class="muted">Boost spirit-box style audio sweeps for entertainment.</p>
+  <label>Gain <input id="gain" type="range" min="0" max="100" value="40"></label>
+  <div class="bar"><button id="sweep">Start sweep</button><button class="alt" id="stop">Stop</button></div>
+  <div class="meter"><i id="needle"></i></div>
+  <div class="log" id="log"></div>
+</div>
+
+<div class="panel">
+  <h2>Ghost hunting tools catalogue</h2>
+  <p class="muted">Searchable set of 200 Coffeebreak tools for entertainment play. EMF meters, spirit boxes, EVP recorders, thermal cams and many variants.</p>
+  <div class="bar">
+    <input id="q" placeholder="Search tools (EMF, thermal, latte, rare…)" style="max-width:420px">
+    <select id="cat"><option value="">All categories</option></select>
+    <button id="go">Search</button>
+    <button class="alt" id="prev">Prev</button>
+    <button class="alt" id="next">Next</button>
+  </div>
+  <p class="muted" id="meta"></p>
+  <div class="tools-list" id="list"></div>
+</div>
+<div class="panel">
+  <h3>Active tool</h3>
+  <div id="active" class="muted">Pick a tool to take a reading.</div>
+  <div class="meter" style="margin:10px 0"><i id="needle"></i></div>
+  <button id="use">Take reading</button>
+  <div class="log" id="log"></div>
+</div>
+<script>
+(function(){
+  const DEMO=true;
+  const MAX=200;
+  let offset=0, limit=40, lastQ='', lastCat='';
+  const cat=document.getElementById('cat');
+  CBGhostTools.categories().forEach(c=>{
+    const o=document.createElement('option'); o.value=c.id; o.textContent=c.label; cat.appendChild(o);
+  });
+  let current=null;
+  function render(res){
+    const list=document.getElementById('list'); list.innerHTML='';
+    res.items.filter(t=>t.id<=MAX).forEach(t=>{
+      const row=document.createElement('div'); row.className='tool-row';
+      row.innerHTML='<div><b>'+t.name+'</b><br><span class="muted">'+t.sku+' · '+t.catLabel+' · '+t.rarity+' · power '+t.power+'</span><br><span class="muted">'+t.blurb+'</span></div><button class="alt">Use</button>';
+      row.onclick=()=>select(t);
+      list.appendChild(row);
+    });
+    document.getElementById('meta').textContent=(DEMO?'Demo shows first '+MAX.toLocaleString()+' tools. ':'')+'Showing '+res.items.length+' of '+Math.min(res.total,MAX).toLocaleString()+(res.query?' for "'+res.query+'"':'')+' · offset '+res.offset;
+  }
+  function select(t){
+    if(t.id>MAX){alert('Unlock the full version for this tool.');return}
+    current=t;
+    document.getElementById('active').innerHTML='<b>'+t.name+'</b><br>'+t.blurb;
+  }
+  function load(){
+    lastQ=document.getElementById('q').value;
+    lastCat=cat.value;
+    let res;
+    if(lastCat){
+      res=CBGhostTools.byCat(lastCat, limit, offset);
+      if(lastQ){
+        res.items=res.items.filter(t=>(t.name+' '+t.sku+' '+t.color).toLowerCase().includes(lastQ.toLowerCase()));
+      }
+      res.items=res.items.filter(t=>t.id<=MAX);
+      res.total=Math.min(res.total, MAX);
+    } else {
+      res=CBGhostTools.search(lastQ, limit, offset);
+      res.items=res.items.filter(t=>t.id<=MAX);
+      if(!lastQ) res.total=Math.min(CBGhostTools.TOTAL, MAX);
+      else {
+        // recount within MAX
+        let n=0; for(let i=0;i<MAX;i++){const t=CBGhostTools.toolAt(i); const hay=(t.name+' '+t.catLabel+' '+t.series+' '+t.color+' '+t.sku+' '+t.rarity).toLowerCase(); if(hay.includes(lastQ.toLowerCase())) n++;}
+        res.total=n;
+      }
+    }
+    render(res);
+  }
+  document.getElementById('go').onclick=()=>{offset=0;load()};
+  document.getElementById('prev').onclick=()=>{offset=Math.max(0,offset-limit);load()};
+  document.getElementById('next').onclick=()=>{offset=offset+limit;load()};
+  document.getElementById('use').onclick=()=>{
+    if(!current){document.getElementById('log').textContent='Pick a tool first.';return}
+    const r=CBGhostTools.useTool(current);
+    document.getElementById('needle').style.width=r.reading+'%';
+    const line=document.createElement('div');
+    line.textContent=new Date().toLocaleTimeString()+' · '+r.tool+' · '+r.reading+' · '+r.note;
+    const log=document.getElementById('log'); log.prepend(line);
+  };
+  load();
+})();
+</script>
+
+
+<script>
+(function(){
+  let t=null;
+  const words=['coffee','yes','mabel','warm','stay','pink','door','thanks','latte','home'];
+  document.getElementById('sweep').onclick=()=>{
+    clearInterval(t);
+    t=setInterval(()=>{
+      const g=+document.getElementById('gain').value;
+      document.getElementById('needle').style.width=g+'%';
+      if(Math.random()<g/120){
+        const w=words[Math.floor(Math.random()*words.length)];
+        const d=document.createElement('div'); d.textContent=new Date().toLocaleTimeString()+' · fragment: '+w;
+        document.getElementById('log').prepend(d);
+      }
+    },400);
+  };
+  document.getElementById('stop').onclick=()=>clearInterval(t);
+})();
+</script>
+
+<p class="bar"><a class="btn alt" href="../ghost-box-buy/">Get full version $10 USD</a> <a class="btn alt" href="https://kazmelody.gumroad.com">Gumroad store</a></p>
+</main>
+<footer class="cbfoot">
+<p><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named; trademarks belong to their owners. For entertainment only.</p>
+<p>© Coffeebreak · Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com · No PayPal · Apps $10 USD · Karen gets them free as owner</p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> · <a href="https://songwriterkaz.github.io/coffeebreak/yellow-pages/">Yellow Pages</a></p>
+</footer>
+<script src="ghost-tools.js"></script>
+
+</body></html>

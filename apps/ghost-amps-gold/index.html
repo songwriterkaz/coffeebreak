@@ -1,61 +1,181 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ghost Amps Gold - Coffeebreak pre-order store</title>
+<!DOCTYPE html>
+<html lang="en-AU"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ghost Amps Gold — Coffeebreak</title>
+<link rel="icon" href="cb-logo.png">
 <style>
-body{margin:0;background:#0b0614;color:#e8d9ff;font-family:system-ui,sans-serif}
-header{display:flex;align-items:center;gap:14px;padding:16px 22px;background:#1a0f2e;border-bottom:2px solid #7b2cff}
-header img{height:54px}h1{margin:0;font-size:1.6em;color:#ffd75e;text-shadow:0 0 10px #b14dff}
-.note{margin:16px 22px;padding:12px;border:1px solid #39ff88;border-radius:10px;background:#120a22;font-size:.92em}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;padding:0 22px}
-.card{background:#1a0f2e;border:1px solid #7b2cff;border-radius:14px;padding:14px;box-shadow:0 0 14px #7b2cff55}
-.card svg{width:100%;height:170px;background:#0b0614;border-radius:10px}.cr{font-size:.75em;color:#39ff88}
-.price{font-size:1.3em;color:#ffd75e}button{background:#7b2cff;color:#fff;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;font-weight:600}
-button:hover{background:#b14dff}section{margin:22px;padding:16px;background:#1a0f2e;border-radius:14px;border:1px solid #39ff88}
-input,textarea{width:100%;box-sizing:border-box;margin:4px 0 10px;padding:8px;border-radius:6px;border:1px solid #7b2cff;background:#0b0614;color:#e8d9ff}
-a{color:#39ff88}footer{padding:22px;font-size:.8em;opacity:.8}
-</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,system-ui,serif;background:radial-gradient(circle at top,#2a1030 0%,#120510 55%,#0a0610 100%);color:#fde6f3;min-height:100vh}
+a{color:#ff8fcf}
+header{text-align:center;padding:14px 12px 4px}
+header img.logo{height:72px;border-radius:14px;background:#fff;box-shadow:0 0 22px #ff5fb088}
+h1{margin:8px 0 2px;font-size:1.7rem;color:#ff8fcf;text-shadow:0 0 12px #ff2d9588;letter-spacing:1px}
+.sub{color:#d9a6c4;font-style:italic;margin:0 0 10px}
+.wrap{max-width:1100px;margin:0 auto;padding:8px 16px 40px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+button,.btn{background:linear-gradient(#ff5fb0,#b0186a);color:#fff;border:1px solid #ffb6dd;border-radius:22px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+button.alt,.btn.alt{background:#2a0b22}
+button:disabled{opacity:.45}
+.panel{background:#22091ccc;border:1px solid #ff8fcf66;border-radius:14px;padding:14px;margin:10px 0;line-height:1.45}
+.panel h2,.panel h3{color:#ff8fcf;margin:4px 0 8px}
+input,select,textarea{background:#120510;color:#fde6f3;border:1px solid #ff8fcf88;border-radius:8px;padding:8px;font:inherit;width:100%;max-width:100%}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.card{background:#1a0816;border:1px solid #ff8fcf44;border-radius:12px;padding:12px}
+.card h4{margin:0 0 6px;color:#ffb6dd}
+.muted{color:#c9a0b8;font-size:.9em}
+.badge{display:inline-block;background:#ff4f9a;color:#fff;border-radius:999px;padding:2px 8px;font-size:.75em;font-weight:700}
+.meter{height:14px;background:#120510;border-radius:8px;overflow:hidden;border:1px solid #ff8fcf55}
+.meter>i{display:block;height:100%;background:linear-gradient(90deg,#5ff,#ff5fb0,#ff2);width:0%;transition:width .25s}
+.log{max-height:220px;overflow:auto;background:#0d050c;border-radius:8px;padding:8px;font-family:ui-monospace,monospace;font-size:.85em}
+.tools-list{max-height:420px;overflow:auto}
+.tool-row{display:flex;justify-content:space-between;gap:8px;padding:8px;border-bottom:1px solid #ff8fcf22;cursor:pointer}
+.tool-row:hover{background:#ff8fcf18}
+.cbfoot{text-align:center;color:#a07890;font-size:.85em;padding:24px 12px 40px;line-height:1.5}
+.cbfoot a{color:#ff8fcf}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.tabs button.on{outline:2px solid #fff}
+.ghost-cup{font-size:3rem;filter:drop-shadow(0 0 12px #ff8fcf)}
+.steam{animation:steam 2s ease-in-out infinite}
+@keyframes steam{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(-8px)}}
+.board-ghost{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center}
+.coffee-panel{min-width:260px;max-width:340px}
+.canvas-wrap{background:#0d050c;border-radius:12px;border:1px solid #ff8fcf44;padding:8px;text-align:center}
+canvas{max-width:100%;border-radius:8px;background:#111}
+.price{font-size:1.6rem;font-weight:800;color:#ff4f9a}
+.payid{background:#2a0b22;border:1px solid #f5a0c4;border-radius:10px;padding:10px 12px;margin:12px 0}
+@media(max-width:640px){h1{font-size:1.35rem}}
+</style>
+
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
 </head><body>
-<header><img src="logo.png" alt="Coffeebreak logo"><div><h1>Ghost Amps Gold</h1><div>Gold-finish Bluetooth speakers styled as haunted amps, from the world of the <a href="https://coffeebreaks.itch.io/ghost-amps" target="_blank">Ghost Amps game - play it free</a></div></div></header>
-<div class="note"><b>Pre-orders, made to order.</b> These speakers have a gold-finish (gold-coloured coating), they are not solid gold. Each one is made by a manufacturing partner after you order, and your delivery estimate is confirmed by email. Pictures are concept renders. Pay by PayID to <b>darkokaz@gmx.com</b> using your order number as the reference.</div>
-<div class="grid" id="grid"></div>
-<section><h2>Your cart</h2><div id="cart">Your cart is empty.</div><p class="price" id="total"></p>
-<h3>Checkout</h3>
-<label>Name<input id="cName"></label><label>Email<input id="cEmail" type="email"></label><label>Delivery address (not needed for the digital skin)<textarea id="cAddr" rows="2"></textarea></label>
-<button id="order">Email my pre-order</button><p id="msg"></p></section>
-<footer>Coffeebreak - Ghost Amps Gold. Product images are concept renders, final products may differ. Gold-finish, not solid gold. Pre-order items are made by a manufacturing partner, delivery estimates are confirmed by email. Digital skin codes are emailed after PayID payment is received.<section id="rights" style="max-width:760px;margin:12px auto;padding:10px 14px;border:1px solid #888;border-radius:8px;font-size:.8rem;line-height:1.4"><strong>Rights and resale</strong><p style="margin:6px 0 0">Karen O'Brien (Coffeebreak) keeps all rights to the products, designs, apps, the Coffeebreak name and logo. Buyers and fans may resell the physical products and phones they bought, but may not copy them or make their own versions.</p></section></footer>
+<header>
+<img class="logo" src="cb-logo.png" alt="Coffeebreak logo">
+<h1>Ghost Amps Gold</h1>
+<p class="sub">Gold-tier sweep desk.</p>
+</header>
+<p class="bar muted">Owner copy free for Karen · Customers $10 USD · PayID darkokaz@gmx.com</p>
+<main class="wrap">
+
+<div class="panel">
+  <h2>Ghost amps</h2>
+  <p class="muted">Boost spirit-box style audio sweeps for entertainment.</p>
+  <label>Gain <input id="gain" type="range" min="0" max="100" value="40"></label>
+  <div class="bar"><button id="sweep">Start sweep</button><button class="alt" id="stop">Stop</button></div>
+  <div class="meter"><i id="needle"></i></div>
+  <div class="log" id="log"></div>
+</div>
+
+<div class="panel">
+  <h2>Ghost hunting tools catalogue</h2>
+  <p class="muted">Searchable set of 12,000 Coffeebreak tools for entertainment play. EMF meters, spirit boxes, EVP recorders, thermal cams and many variants.</p>
+  <div class="bar">
+    <input id="q" placeholder="Search tools (EMF, thermal, latte, rare…)" style="max-width:420px">
+    <select id="cat"><option value="">All categories</option></select>
+    <button id="go">Search</button>
+    <button class="alt" id="prev">Prev</button>
+    <button class="alt" id="next">Next</button>
+  </div>
+  <p class="muted" id="meta"></p>
+  <div class="tools-list" id="list"></div>
+</div>
+<div class="panel">
+  <h3>Active tool</h3>
+  <div id="active" class="muted">Pick a tool to take a reading.</div>
+  <div class="meter" style="margin:10px 0"><i id="needle"></i></div>
+  <button id="use">Take reading</button>
+  <div class="log" id="log"></div>
+</div>
 <script>
-const EMAIL='songwriterkaz@gmail.com',PAYID='darkokaz@gmx.com';
-const P=[
-{id:'mini',n:"Ghost Amps Gold Mini",p:89,d:'Portable gold-finish Bluetooth speaker, pocket amp style.',s:.55,stack:0},
-{id:'classic',n:"Ghost Amps Gold Classic",p:199,d:'Desktop amp-style Bluetooth speaker with LED ghost glow.',s:.8,stack:0},
-{id:'stack',n:"Ghost Amps Gold Stack",p:449,d:'Twin speaker stack with a built-in karaoke mic input.',s:.62,stack:1},
-{id:'coll',n:"Ghost Amps Gold Collector's Edition",p:799,d:'Numbered edition, matte gold finish, gift box included.',s:.85,stack:0,matte:1},
-{id:'skin',n:'Gold Amps digital skin code',p:3,d:'Unlocks the Gold Amps skin in the Ghost Amps game. Emailed code.',digital:1}];
-function amp(x,y,w,h,m){const g=m?'#c9a646':'url(#gd)';return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="${g}" stroke="#ffe9a0"/><rect x="${x+8}" y="${y+h*.3}" width="${w-16}" height="${h*.62}" rx="5" fill="#1a0f2e"/><circle cx="${x+w/2}" cy="${y+h*.61}" r="${h*.22}" fill="#2a1a46" stroke="#7b2cff"/>`+[0,1,2].map(i=>`<circle cx="${x+14+i*12}" cy="${y+h*.15}" r="4" fill="#0b0614"/>`).join('')}
-function ghost(x,y,c){return `<g transform="translate(${x},${y})"><path d="M-14 12 v-14 a14 14 0 0 1 28 0 v14 l-5 -4 -5 4 -4 -4 -5 4 -4-4z" fill="${c}" opacity=".9"/><circle cx="-5" cy="-3" r="2.5" fill="#0b0614"/><circle cx="5" cy="-3" r="2.5" fill="#0b0614"/></g>`}
-function art(q){let s='<defs><linearGradient id="gd" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff0a8"/><stop offset=".5" stop-color="#e0b23c"/><stop offset="1" stop-color="#8a6414"/></linearGradient></defs>';
-if(q.digital){s+=`<rect x="70" y="40" width="160" height="90" rx="12" fill="#1a0f2e" stroke="#39ff88"/><text x="150" y="80" fill="#ffd75e" font-size="20" text-anchor="middle" font-weight="700">GOLD AMPS</text><text x="150" y="105" fill="#39ff88" font-size="13" text-anchor="middle">skin code</text>`+ghost(240,40,'#39ff88');}
-else if(q.stack){s+=amp(95,20,110,62)+amp(95,88,110,62)+`<rect x="215" y="70" width="8" height="45" rx="4" fill="#ccc"/><circle cx="219" cy="64" r="9" fill="#888"/>`+ghost(60,50,'#39ff88');}
-else{const w=200*q.s,h=130*q.s;s+=amp(150-w/2,160-h-10,w,h,q.matte)+ghost(150+w/2+14,40,'#39ff88')+ghost(150-w/2-16,60,'#b14dff');if(q.matte)s+='<text x="150" y="165" fill="#ffd75e" font-size="11" text-anchor="middle">No. 001 / gift box</text>'}
-return `<svg viewBox="0 0 300 170" role="img" aria-label="concept render of ${q.n}">${s}</svg>`}
-let cart=JSON.parse(localStorage.getItem('gagCart')||'{}');
-const $=i=>document.getElementById(i);
-$('grid').innerHTML=P.map(q=>`<div class="card">${art(q)}<div class="cr">concept render</div><h3>${q.n}</h3><p>${q.d}</p><p>${q.digital?'Digital item':'Pre-order, made to order'}</p><div class="price">AU$${q.p}</div><button data-id="${q.id}">Add to cart</button></div>`).join('');
-$('grid').onclick=e=>{const id=e.target.dataset.id;if(id){cart[id]=(cart[id]||0)+1;save()}};
-function save(){localStorage.setItem('gagCart',JSON.stringify(cart));draw()}
-function lines(){return P.filter(q=>cart[q.id]).map(q=>({q,c:cart[q.id]}))}
-function draw(){const L=lines();if(!L.length){$('cart').textContent='Your cart is empty.';$('total').textContent='';return}
-$('cart').innerHTML=L.map(l=>`<div>${l.c} x ${l.q.n} - AU$${l.c*l.q.p} <button data-r="${l.q.id}">-</button></div>`).join('');
-$('total').textContent='Total AU$'+L.reduce((a,l)=>a+l.c*l.q.p,0)}
-$('cart').onclick=e=>{const r=e.target.dataset.r;if(r){cart[r]--;if(cart[r]<1)delete cart[r];save()}};
-const v=i=>$(i).value.trim();
-$('order').onclick=()=>{const L=lines();if(!L.length){$('msg').textContent='Add something to your cart first.';return}
-if(!v('cName')||!v('cEmail')){$('msg').textContent='Please add your name and email.';return}
-const r='GAG-'+Date.now().toString(36).toUpperCase(),t=L.reduce((a,l)=>a+l.c*l.q.p,0);
-const body=`Ghost Amps Gold pre-order ${r}\n\n`+L.map(l=>`${l.c} x ${l.q.n} - AU$${l.c*l.q.p}`).join('\n')+`\n\nTotal: AU$${t}\nName: ${v('cName')}\nEmail: ${v('cEmail')}\nAddress: ${v('cAddr')}\n\nI will pay AU$${t} by PayID to ${PAYID} with reference ${r}. I understand these are gold-finish pre-orders made to order, with delivery estimates confirmed by email.`;
-location.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('Ghost Amps Gold pre-order '+r+' - '+v('cName'))+'&body='+encodeURIComponent(body);
-$('msg').textContent=`Order ${r}: pay AU$${t} by PayID to ${PAYID} with reference ${r}.`};
-draw();
-</script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
-<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
-<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
-<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
-<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>
+(function(){
+  const DEMO=false;
+  const MAX=12000;
+  let offset=0, limit=40, lastQ='', lastCat='';
+  const cat=document.getElementById('cat');
+  CBGhostTools.categories().forEach(c=>{
+    const o=document.createElement('option'); o.value=c.id; o.textContent=c.label; cat.appendChild(o);
+  });
+  let current=null;
+  function render(res){
+    const list=document.getElementById('list'); list.innerHTML='';
+    res.items.filter(t=>t.id<=MAX).forEach(t=>{
+      const row=document.createElement('div'); row.className='tool-row';
+      row.innerHTML='<div><b>'+t.name+'</b><br><span class="muted">'+t.sku+' · '+t.catLabel+' · '+t.rarity+' · power '+t.power+'</span><br><span class="muted">'+t.blurb+'</span></div><button class="alt">Use</button>';
+      row.onclick=()=>select(t);
+      list.appendChild(row);
+    });
+    document.getElementById('meta').textContent=(DEMO?'Demo shows first '+MAX.toLocaleString()+' tools. ':'')+'Showing '+res.items.length+' of '+Math.min(res.total,MAX).toLocaleString()+(res.query?' for "'+res.query+'"':'')+' · offset '+res.offset;
+  }
+  function select(t){
+    if(t.id>MAX){alert('Unlock the full version for this tool.');return}
+    current=t;
+    document.getElementById('active').innerHTML='<b>'+t.name+'</b><br>'+t.blurb;
+  }
+  function load(){
+    lastQ=document.getElementById('q').value;
+    lastCat=cat.value;
+    let res;
+    if(lastCat){
+      res=CBGhostTools.byCat(lastCat, limit, offset);
+      if(lastQ){
+        res.items=res.items.filter(t=>(t.name+' '+t.sku+' '+t.color).toLowerCase().includes(lastQ.toLowerCase()));
+      }
+      res.items=res.items.filter(t=>t.id<=MAX);
+      res.total=Math.min(res.total, MAX);
+    } else {
+      res=CBGhostTools.search(lastQ, limit, offset);
+      res.items=res.items.filter(t=>t.id<=MAX);
+      if(!lastQ) res.total=Math.min(CBGhostTools.TOTAL, MAX);
+      else {
+        // recount within MAX
+        let n=0; for(let i=0;i<MAX;i++){const t=CBGhostTools.toolAt(i); const hay=(t.name+' '+t.catLabel+' '+t.series+' '+t.color+' '+t.sku+' '+t.rarity).toLowerCase(); if(hay.includes(lastQ.toLowerCase())) n++;}
+        res.total=n;
+      }
+    }
+    render(res);
+  }
+  document.getElementById('go').onclick=()=>{offset=0;load()};
+  document.getElementById('prev').onclick=()=>{offset=Math.max(0,offset-limit);load()};
+  document.getElementById('next').onclick=()=>{offset=offset+limit;load()};
+  document.getElementById('use').onclick=()=>{
+    if(!current){document.getElementById('log').textContent='Pick a tool first.';return}
+    const r=CBGhostTools.useTool(current);
+    document.getElementById('needle').style.width=r.reading+'%';
+    const line=document.createElement('div');
+    line.textContent=new Date().toLocaleTimeString()+' · '+r.tool+' · '+r.reading+' · '+r.note;
+    const log=document.getElementById('log'); log.prepend(line);
+  };
+  load();
+})();
+</script>
+
+
+<script>
+(function(){
+  let t=null;
+  const words=['coffee','yes','mabel','warm','stay','pink','door','thanks','latte','home'];
+  document.getElementById('sweep').onclick=()=>{
+    clearInterval(t);
+    t=setInterval(()=>{
+      const g=+document.getElementById('gain').value;
+      document.getElementById('needle').style.width=g+'%';
+      if(Math.random()<g/120){
+        const w=words[Math.floor(Math.random()*words.length)];
+        const d=document.createElement('div'); d.textContent=new Date().toLocaleTimeString()+' · fragment: '+w;
+        document.getElementById('log').prepend(d);
+      }
+    },400);
+  };
+  document.getElementById('stop').onclick=()=>clearInterval(t);
+})();
+</script>
+
+<p class="bar"><a class="btn alt" href="../ghost-amps-gold-buy/">Get full version $10 USD</a> <a class="btn alt" href="https://kazmelody.gumroad.com">Gumroad store</a></p>
+</main>
+<footer class="cbfoot">
+<p><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named; trademarks belong to their owners. For entertainment only.</p>
+<p>© Coffeebreak · Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com · No PayPal · Apps $10 USD · Karen gets them free as owner</p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> · <a href="https://songwriterkaz.github.io/coffeebreak/yellow-pages/">Yellow Pages</a></p>
+</footer>
+<script src="ghost-tools.js"></script>
+
+</body></html>

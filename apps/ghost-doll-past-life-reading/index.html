@@ -1,127 +1,169 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Coffeebreak Ghost Doll Past Life Reading</title>
+<!DOCTYPE html>
+<html lang="en-AU"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ghost Doll Past Life Reading — Coffeebreak</title>
+<link rel="icon" href="cb-logo.png">
 <style>
-*{box-sizing:border-box}html,body{margin:0;background:#050505;color:#e8e2d8;font-family:Georgia,'Times New Roman',serif;min-height:100%}
-#app{max-width:460px;margin:0 auto;display:flex;flex-direction:column;min-height:100vh;padding:8px}
-header{display:flex;align-items:center;gap:8px;justify-content:center}header img{height:44px;filter:grayscale(1) contrast(1.1)}
-h1{font-size:18px;margin:0;color:#f1ebe0;text-shadow:0 0 6px #a01020;letter-spacing:.5px}
-canvas{width:100%;border:2px solid #3a1015;border-radius:10px;display:block;margin-top:6px}
-#cards{display:flex;gap:8px;justify-content:center;margin:10px 0}
-.card{width:30%;aspect-ratio:2/3.3;perspective:600px;cursor:pointer}
-.in{position:relative;width:100%;height:100%;transition:transform .8s;transform-style:preserve-3d}
-.card.up .in{transform:rotateY(180deg)}
-.f,.b{position:absolute;inset:0;border-radius:8px;backface-visibility:hidden;border:2px solid #c9c2b5;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4px}
-.b{background:repeating-linear-gradient(45deg,#111 0 6px,#1d1d1d 6px 12px);box-shadow:inset 0 0 0 5px #000,inset 0 0 0 7px #8a1020}
-.b:after{content:'';width:34%;aspect-ratio:1;border:2px solid #b51a2a;border-radius:50%;box-shadow:0 0 10px #b51a2a}
-.f{transform:rotateY(180deg);background:radial-gradient(#f2ece0,#b8b0a2);color:#111}
-.f .sym{font-size:30px;color:#8a1020}.f .t{font-size:11px;letter-spacing:1px;text-transform:uppercase}.f .n{font-size:12px;font-style:italic;margin-top:4px}
-#text{min-height:110px;background:#0d0d0d;border:1px solid #3a1015;border-radius:8px;padding:10px;font-size:15px;line-height:1.45}
-#text b{color:#d0303f}
-.btns{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}
-button{background:#1a0a0c;color:#f1ebe0;border:1px solid #a01020;border-radius:20px;padding:10px 14px;font:15px Georgia;cursor:pointer}
-button:active{background:#a01020}
-#gal{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:4px}
-.sp{background:#e9e3d6;color:#111;border-radius:6px;padding:5px;font-size:11px;text-align:center;border:2px solid #8a1020}
-.sp b{display:block;font-size:13px;color:#8a1020}
-h2{font-size:15px;margin:12px 0 4px;color:#d0303f;text-align:center}
-footer{font-size:10px;opacity:.7;text-align:center;margin-top:auto;padding:12px 4px}
-</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
-</head><body><div id="app">
-<header><img src="logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Ghost Doll Past Life Reading</h1></header>
-<canvas id="c" width="440" height="300"></canvas>
-<div id="cards"></div>
-<div id="text">The candles are lit. The porcelain doll waits across the table. Tap Shuffle to begin her reading.</div>
-<div class="btns" id="act"><button id="shuf">Shuffle the deck</button></div>
-<h2>Gallery of Freed Spirits <span id="cnt"></span></h2><div id="gal"></div>
-<footer>&copy; Karen O'Brien / Coffeebreak. Karen O'Brien / Coffeebreak keeps all rights to this game, its name and logo. Please do not copy it or make your own version. For entertainment only.</footer>
-</div><script>
-const $=s=>document.querySelector(s),R=a=>a[Math.random()*a.length|0];
-const P={
-name:['Rosalie','Clementine','Evangeline','Marguerite','Ottilie','Wilhelmina','Beatrix','Seraphine','Florence','Annabel','Imogen','Lavinia','Delphine','Cordelia','Odette','Henrietta','Violet','Mirabel','Theodora','Elspeth'],
-sur:['Ashcombe','Vane','Holloway','Marchetti','Greaves','Lisle','Dunmore','Featherstone','Blackwood','Carrow','Ellery','Thorne','Wren','Dufresne','Pembury'],
-era:['the 1850s','the 1870s','the 1880s','the 1890s','the 1900s','the 1910s','the 1920s','the 1930s'],
-place:['a windswept seaside town','a fog-bound river port','a crumbling vineyard estate','a travelling circus','a lamplit opera house','a lighthouse on a lonely cape','a goldfields boomtown','a convent school on a hill','a dressmaker\'s shop in a narrow lane','a grand hotel by the pier','a snowbound mountain village','a paddle steamer on a slow brown river'],
-role:['a music-box maker\'s daughter','a chorus girl','a governess','a lighthouse keeper\'s niece','a seamstress','a ballet student','a fortune teller\'s apprentice','a parlour pianist','a flower seller','a heiress kept indoors','a telegraph girl','a trapeze artist'],
-love:['a sailor with salt in his hair','a violinist who played beneath her window','a young doctor who never wrote back','her sister, whom she was parted from','a painter who sketched her by candlelight','a soldier who promised to return by spring','a stable boy with a crooked grin','a poet who signed his letters with a pressed violet','the conductor of the evening train','a clockmaker who mended her heart and her music box'],
-death:['a winter fever that came with the first snow','the tide that took the pier one stormy night','a fall from the theatre gallery during the final waltz','a fire that swept through the east wing','a broken heart, the doctors whispered','the great influenza','a carriage overturned on the cliff road','sleep, and simply never waking, with the candle still burning','a cold swim at midnight on a dare','a poisoned cup meant for someone else'],
-wish:['to dance one last waltz','to have her unsent letter delivered','to hear her music box play again','to be remembered by name','to see the sea once more','to say goodbye to her sister','to know that he waited too','to have a candle lit in her window','to return the ring she never wore','to finish the song she was writing'],
-token:['a cracked locket','a dried violet','a silver thimble','a lock of dark hair tied in red ribbon','a train ticket never used','a music-box key','a seashell','a pearl button']};
-const helps=[['waltz','Play her waltz'],['letter','Deliver her letter'],['candle','Light a candle']];
-const CARDS=[['Past','\u263E'],['Death','\u2620'],['Unfinished Wish','\u2727']];
-let reading=null,stage=0,freeing=0,glow=0;
-// ---- audio music box ----
-let ac,mus=null;function A(){if(!ac)ac=new(AudioContext||webkitAudioContext)();ac.resume();return ac}
-function note(f,t,d=1.2,v=.12){const a=A(),o=a.createOscillator(),o2=a.createOscillator(),g=a.createGain();o.type='sine';o2.type='sine';o.frequency.value=f;o2.frequency.value=f*4.01;
- const g2=a.createGain();g2.gain.value=.15;o2.connect(g2).connect(g);o.connect(g).connect(a.destination);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.0005,t+d);o.start(t);o2.start(t);o.stop(t+d);o2.stop(t+d)}
-const MEL=[659,622,659,494,587,523,440,0,262,330,440,494,0,330,415,494,523,0,330,659,622,659,494,587,523,440];
-function playBox(speed=.32,vol=.1){const a=A();let t=a.currentTime+.05;MEL.forEach((f,i)=>{if(f)note(f*(1-i*.0015),t,1.4,vol);t+=speed})}
-function startMusic(){if(mus)return;playBox(.38,.06);mus=setInterval(()=>playBox(.38,.06),MEL.length*380+1500)}
-function chime(){const a=A();[523,659,784,1047].forEach((f,i)=>note(f,a.currentTime+i*.15,2,.1))}
-function swish(){const a=A(),b=a.createBuffer(1,a.sampleRate*.3,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length)*.3;const s=a.createBufferSource(),f=a.createBiquadFilter();f.type='bandpass';f.frequency.value=1800;s.buffer=b;s.connect(f).connect(a.destination);s.start()}
-// ---- scene ----
-const cv=$('#c'),g=cv.getContext('2d');let blink=0,head=0,headT=0,t0=0;
-function scene(t){t0=t;const W=440,H=300;g.fillStyle='#0a0a0a';g.fillRect(0,0,W,H);
- // wallpaper
- g.globalAlpha=.08;g.strokeStyle='#ccc';for(let x=0;x<W;x+=30){g.beginPath();g.moveTo(x,0);g.lineTo(x,200);g.stroke()}g.globalAlpha=1;
- const fl=.85+Math.sin(t/90)*.05+Math.random()*.08;
- const lg=g.createRadialGradient(220,200,10,220,180,260*fl);lg.addColorStop(0,'rgba(255,230,200,.28)');lg.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=lg;g.fillRect(0,0,W,H);
- // doll
- headT+=(Math.sin(t/2300)*.12+(freeing?Math.sin(t/200)*.05:0)-head)*.05;head=headT;
- const fade=freeing?Math.max(0,1-freeing/120):1;g.globalAlpha=fade;
- g.fillStyle='#d8d2c8';g.beginPath();g.moveTo(180,210);g.lineTo(260,210);g.lineTo(245,130);g.lineTo(195,130);g.fill();// dress
- g.fillStyle='#8a1020';g.fillRect(195,140,50,6);
- g.save();g.translate(220,100);g.rotate(head);
- g.fillStyle='#1a1414';g.beginPath();g.ellipse(0,-6,40,42,0,0,7);g.fill();// hair
- g.fillStyle='#efe9df';g.beginPath();g.ellipse(0,4,30,34,0,0,7);g.fill();
- g.strokeStyle='#777';g.lineWidth=1;g.beginPath();g.moveTo(14,-14);g.lineTo(8,0);g.lineTo(12,8);g.stroke();// crack
- const bl=(t%4200)<140;g.fillStyle='#111';
- for(const ex of[-11,11]){if(bl){g.fillRect(ex-7,-1,14,2)}else{g.beginPath();g.ellipse(ex,0,7,8,0,0,7);g.fill();g.fillStyle='#fff';g.beginPath();g.arc(ex-2,-3,2,0,7);g.fill();g.fillStyle='#111'}}
- g.fillStyle='rgba(180,30,50,.35)';g.beginPath();g.arc(-17,13,5,0,7);g.arc(17,13,5,0,7);g.fill();
- g.fillStyle='#8a1020';g.beginPath();g.ellipse(0,20,5,3,0,0,7);g.fill();
- g.fillStyle='#8a1020';g.beginPath();g.moveTo(-6,-38);g.lineTo(-24,-46);g.lineTo(-22,-30);g.fill();g.beginPath();g.moveTo(6,-38);g.lineTo(24,-46);g.lineTo(22,-30);g.fill();
- g.restore();g.globalAlpha=1;
- if(freeing){g.globalAlpha=Math.min(1,freeing/60)*.6;for(let i=0;i<14;i++){const y=130-((t/8+i*40)%140);g.fillStyle='#fff';g.beginPath();g.arc(220+Math.sin(t/300+i)*40,y,2,0,7);g.fill()}g.globalAlpha=1;freeing++}
- // table
- g.fillStyle='#160606';g.fillRect(0,210,W,90);g.fillStyle='#3a0c12';g.fillRect(0,208,W,5);
- // crystal ball
- glow+=((stage>0?1:.4)-glow)*.02;const cb=g.createRadialGradient(220,240,4,220,245,40);cb.addColorStop(0,`rgba(255,255,255,${.5*glow+.2})`);cb.addColorStop(.5,`rgba(200,40,60,${.35*glow*(.8+.2*Math.sin(t/400))})`);cb.addColorStop(1,'rgba(40,40,40,.6)');
- g.fillStyle=cb;g.beginPath();g.arc(220,245,28,0,7);g.fill();g.fillStyle='#222';g.fillRect(200,270,40,10);
- // candles
- for(const[x,h]of[[70,60],[110,40],[330,45],[370,65]]){g.fillStyle='#e8e2d5';g.fillRect(x-7,262-h,14,h);const f=1+Math.sin(t/70+x)*.15+Math.random()*.1;
-  const cg=g.createRadialGradient(x,248-h,1,x,250-h,28*f);cg.addColorStop(0,'rgba(255,220,160,.6)');cg.addColorStop(1,'rgba(255,120,60,0)');g.fillStyle=cg;g.beginPath();g.arc(x,250-h,28*f,0,7);g.fill();
-  g.fillStyle='#ffe8b0';g.beginPath();g.ellipse(x+Math.sin(t/120+x),252-h,3,8*f,0,0,7);g.fill()}
- g.fillStyle=`rgba(0,0,0,${.06*Math.random()})`;g.fillRect(0,0,W,H);// film flicker
- requestAnimationFrame(scene)}
-requestAnimationFrame(scene);
-// ---- reading ----
-function makeReading(){const n=R(P.name),s=R(P.sur),love=R(P.love),wish=R(P.wish);return{n,full:n+' '+s,era:R(P.era),place:R(P.place),role:R(P.role),love,death:R(P.death),wish,token:R(P.token),help:wish.includes('waltz')||wish.includes('music')||wish.includes('song')?'waltz':wish.includes('letter')||wish.includes('goodbye')||wish.includes('he waited')||wish.includes('remembered')?'letter':'candle'}}
-function cardText(i,r){return i==0?`Her name was <b>${r.full}</b>. In ${r.era} she was ${r.role} in ${r.place}, and she loved ${r.love}.`
- :i==1?`She was taken by ${r.death}. In her porcelain hand she still clutches ${r.token}.`
- :`She lingers here because she wishes <b>${r.wish}</b>. The doll turns her head toward you and waits.`}
-function deal(){A();startMusic();swish();reading=makeReading();stage=0;freeing=0;const c=$('#cards');c.innerHTML='';
- CARDS.forEach(([t,sy],i)=>{const d=document.createElement('div');d.className='card';d.innerHTML=`<div class="in"><div class="b"></div><div class="f"><div class="t">${t}</div><div class="sym">${sy}</div><div class="n">${i==0?reading.n:i==1?'The Last Night':'The Wish'}</div></div></div>`;
-  d.onclick=()=>flip(i,d);c.appendChild(d)});$('#text').innerHTML='The deck is shuffled. Turn the cards from left to right: Past, Death, Unfinished Wish.';$('#act').innerHTML=''}
-function flip(i,d){if(i!=stage||d.classList.contains('up'))return;d.classList.add('up');swish();note([392,330,262][i],A().currentTime,2,.12);stage++;
- $('#text').innerHTML=[0,1,2].slice(0,stage).map(k=>cardText(k,reading)).join('<br><br>');
- if(stage==3){$('#text').innerHTML+=`<br><br>How will you help ${reading.n} rest`;const a=$('#act');a.innerHTML='';helps.forEach(([k,l])=>{const b=document.createElement('button');b.textContent=l;b.onclick=()=>help(k);a.appendChild(b)})}}
-function help(k){const r=reading,a=$('#act');a.innerHTML='';let msg;
- if(k=='waltz'){playBox(.28,.14);msg=`You wind the little key. The waltz drifts through the parlour and ${r.n} sways, one last dance with ${r.love.replace(/^a |^the |^her /,'the ')} at last.`}
- else if(k=='letter'){swish();msg=`You fold her letter, seal it with red wax and slip it beneath the crystal ball. The words she never sent finally find their way home.`}
- else{note(784,A().currentTime,2,.1);msg=`You light a fresh candle in the window. Its glow reaches all the way back to ${r.era}, and ${r.n} sees that someone remembered.`}
- const matched=k==r.help;setTimeout(()=>{freeing=1;chime();
-  $('#text').innerHTML=msg+`<br><br><b>${r.full}</b> closes her porcelain eyes and rests.`+(matched?' You guessed her true wish, so her spirit card shines with a red seal.':'');
-  save({name:r.full,era:r.era,wish:r.wish,seal:matched,d:Date.now()});
-  a.innerHTML='';const b=document.createElement('button');b.textContent='Read another doll';b.onclick=deal;a.appendChild(b);
-  const sh=document.createElement('button');sh.textContent='Tag a friend';sh.onclick=()=>share(r);a.appendChild(sh)},900)}
-function share(r){const t=`I freed the ghost of ${r.full} from ${r.era} in Coffeebreak Ghost Doll Past Life Reading. She wished ${r.wish}. Tag a friend and see whose spirit waits for you.`;
- if(navigator.share)navigator.share({text:t}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>$('#text').innerHTML+='<br><br>Share text copied.');}
-function load(){try{return JSON.parse(localStorage.getItem('cbgd_spirits'))||[]}catch(e){return[]}}
-function save(s){const l=load();l.unshift(s);localStorage.setItem('cbgd_spirits',JSON.stringify(l.slice(0,60)));gallery()}
-function gallery(){const l=load();$('#cnt').textContent='('+l.length+')';$('#gal').innerHTML=l.length?l.map(s=>`<div class="sp">${s.seal?'\u2764 ':''}<b>${s.name}</b>${s.era}<br><i>${s.wish}</i></div>`).join(''):'<div style="grid-column:1/4;text-align:center;opacity:.6;font-size:13px">No spirits freed yet.</div>'}
-$('#shuf').onclick=deal;gallery();
-</script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
-<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
-<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
-<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
-<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,system-ui,serif;background:radial-gradient(circle at top,#2a1030 0%,#120510 55%,#0a0610 100%);color:#fde6f3;min-height:100vh}
+a{color:#ff8fcf}
+header{text-align:center;padding:14px 12px 4px}
+header img.logo{height:72px;border-radius:14px;background:#fff;box-shadow:0 0 22px #ff5fb088}
+h1{margin:8px 0 2px;font-size:1.7rem;color:#ff8fcf;text-shadow:0 0 12px #ff2d9588;letter-spacing:1px}
+.sub{color:#d9a6c4;font-style:italic;margin:0 0 10px}
+.wrap{max-width:1100px;margin:0 auto;padding:8px 16px 40px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+button,.btn{background:linear-gradient(#ff5fb0,#b0186a);color:#fff;border:1px solid #ffb6dd;border-radius:22px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+button.alt,.btn.alt{background:#2a0b22}
+button:disabled{opacity:.45}
+.panel{background:#22091ccc;border:1px solid #ff8fcf66;border-radius:14px;padding:14px;margin:10px 0;line-height:1.45}
+.panel h2,.panel h3{color:#ff8fcf;margin:4px 0 8px}
+input,select,textarea{background:#120510;color:#fde6f3;border:1px solid #ff8fcf88;border-radius:8px;padding:8px;font:inherit;width:100%;max-width:100%}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.card{background:#1a0816;border:1px solid #ff8fcf44;border-radius:12px;padding:12px}
+.card h4{margin:0 0 6px;color:#ffb6dd}
+.muted{color:#c9a0b8;font-size:.9em}
+.badge{display:inline-block;background:#ff4f9a;color:#fff;border-radius:999px;padding:2px 8px;font-size:.75em;font-weight:700}
+.meter{height:14px;background:#120510;border-radius:8px;overflow:hidden;border:1px solid #ff8fcf55}
+.meter>i{display:block;height:100%;background:linear-gradient(90deg,#5ff,#ff5fb0,#ff2);width:0%;transition:width .25s}
+.log{max-height:220px;overflow:auto;background:#0d050c;border-radius:8px;padding:8px;font-family:ui-monospace,monospace;font-size:.85em}
+.tools-list{max-height:420px;overflow:auto}
+.tool-row{display:flex;justify-content:space-between;gap:8px;padding:8px;border-bottom:1px solid #ff8fcf22;cursor:pointer}
+.tool-row:hover{background:#ff8fcf18}
+.cbfoot{text-align:center;color:#a07890;font-size:.85em;padding:24px 12px 40px;line-height:1.5}
+.cbfoot a{color:#ff8fcf}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.tabs button.on{outline:2px solid #fff}
+.ghost-cup{font-size:3rem;filter:drop-shadow(0 0 12px #ff8fcf)}
+.steam{animation:steam 2s ease-in-out infinite}
+@keyframes steam{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(-8px)}}
+.board-ghost{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center}
+.coffee-panel{min-width:260px;max-width:340px}
+.canvas-wrap{background:#0d050c;border-radius:12px;border:1px solid #ff8fcf44;padding:8px;text-align:center}
+canvas{max-width:100%;border-radius:8px;background:#111}
+.price{font-size:1.6rem;font-weight:800;color:#ff4f9a}
+.payid{background:#2a0b22;border:1px solid #f5a0c4;border-radius:10px;padding:10px 12px;margin:12px 0}
+@media(max-width:640px){h1{font-size:1.35rem}}
+</style>
+
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body>
+<header>
+<img class="logo" src="cb-logo.png" alt="Coffeebreak logo">
+<h1>Ghost Doll Past Life Reading</h1>
+<p class="sub">Fictional past-life notes for doll characters.</p>
+</header>
+<p class="bar muted">Owner copy free for Karen · Customers $10 USD · PayID darkokaz@gmx.com</p>
+<main class="wrap">
+
+<div class="panel">
+  <h2>Ghost doll past-life reading</h2>
+  <p class="muted">Entertainment reading for a doll character you invent.</p>
+  <input id="doll" placeholder="Doll name">
+  <div class="bar"><button id="read">Read past life</button></div>
+  <div id="out" class="panel">Waiting…</div>
+</div>
+
+<div class="panel">
+  <h2>Ghost hunting tools catalogue</h2>
+  <p class="muted">Searchable set of 12,000 Coffeebreak tools for entertainment play. EMF meters, spirit boxes, EVP recorders, thermal cams and many variants.</p>
+  <div class="bar">
+    <input id="q" placeholder="Search tools (EMF, thermal, latte, rare…)" style="max-width:420px">
+    <select id="cat"><option value="">All categories</option></select>
+    <button id="go">Search</button>
+    <button class="alt" id="prev">Prev</button>
+    <button class="alt" id="next">Next</button>
+  </div>
+  <p class="muted" id="meta"></p>
+  <div class="tools-list" id="list"></div>
+</div>
+<div class="panel">
+  <h3>Active tool</h3>
+  <div id="active" class="muted">Pick a tool to take a reading.</div>
+  <div class="meter" style="margin:10px 0"><i id="needle"></i></div>
+  <button id="use">Take reading</button>
+  <div class="log" id="log"></div>
+</div>
+<script>
+(function(){
+  const DEMO=false;
+  const MAX=12000;
+  let offset=0, limit=40, lastQ='', lastCat='';
+  const cat=document.getElementById('cat');
+  CBGhostTools.categories().forEach(c=>{
+    const o=document.createElement('option'); o.value=c.id; o.textContent=c.label; cat.appendChild(o);
+  });
+  let current=null;
+  function render(res){
+    const list=document.getElementById('list'); list.innerHTML='';
+    res.items.filter(t=>t.id<=MAX).forEach(t=>{
+      const row=document.createElement('div'); row.className='tool-row';
+      row.innerHTML='<div><b>'+t.name+'</b><br><span class="muted">'+t.sku+' · '+t.catLabel+' · '+t.rarity+' · power '+t.power+'</span><br><span class="muted">'+t.blurb+'</span></div><button class="alt">Use</button>';
+      row.onclick=()=>select(t);
+      list.appendChild(row);
+    });
+    document.getElementById('meta').textContent=(DEMO?'Demo shows first '+MAX.toLocaleString()+' tools. ':'')+'Showing '+res.items.length+' of '+Math.min(res.total,MAX).toLocaleString()+(res.query?' for "'+res.query+'"':'')+' · offset '+res.offset;
+  }
+  function select(t){
+    if(t.id>MAX){alert('Unlock the full version for this tool.');return}
+    current=t;
+    document.getElementById('active').innerHTML='<b>'+t.name+'</b><br>'+t.blurb;
+  }
+  function load(){
+    lastQ=document.getElementById('q').value;
+    lastCat=cat.value;
+    let res;
+    if(lastCat){
+      res=CBGhostTools.byCat(lastCat, limit, offset);
+      if(lastQ){
+        res.items=res.items.filter(t=>(t.name+' '+t.sku+' '+t.color).toLowerCase().includes(lastQ.toLowerCase()));
+      }
+      res.items=res.items.filter(t=>t.id<=MAX);
+      res.total=Math.min(res.total, MAX);
+    } else {
+      res=CBGhostTools.search(lastQ, limit, offset);
+      res.items=res.items.filter(t=>t.id<=MAX);
+      if(!lastQ) res.total=Math.min(CBGhostTools.TOTAL, MAX);
+      else {
+        // recount within MAX
+        let n=0; for(let i=0;i<MAX;i++){const t=CBGhostTools.toolAt(i); const hay=(t.name+' '+t.catLabel+' '+t.series+' '+t.color+' '+t.sku+' '+t.rarity).toLowerCase(); if(hay.includes(lastQ.toLowerCase())) n++;}
+        res.total=n;
+      }
+    }
+    render(res);
+  }
+  document.getElementById('go').onclick=()=>{offset=0;load()};
+  document.getElementById('prev').onclick=()=>{offset=Math.max(0,offset-limit);load()};
+  document.getElementById('next').onclick=()=>{offset=offset+limit;load()};
+  document.getElementById('use').onclick=()=>{
+    if(!current){document.getElementById('log').textContent='Pick a tool first.';return}
+    const r=CBGhostTools.useTool(current);
+    document.getElementById('needle').style.width=r.reading+'%';
+    const line=document.createElement('div');
+    line.textContent=new Date().toLocaleTimeString()+' · '+r.tool+' · '+r.reading+' · '+r.note;
+    const log=document.getElementById('log'); log.prepend(line);
+  };
+  load();
+})();
+</script>
+
+
+<script>
+document.getElementById('read').onclick=()=>{
+  const n=document.getElementById('doll').value.trim()||'A quiet doll';
+  const lives=['a harbour cartographer','a café violin tutor','a lantern keeper on a fog ferry','a pastry poet','a pink-raincoat detective'];
+  const L=lives[Math.floor(Math.random()*lives.length)];
+  document.getElementById('out').innerHTML='<b>'+n+'</b> remembers being <b>'+L+'</b>. They still love warm cups and soft music.';
+};
+</script>
+
+<p class="bar"><a class="btn alt" href="../ghost-doll-past-life-reading-buy/">Get full version $10 USD</a> <a class="btn alt" href="https://kazmelody.gumroad.com">Gumroad store</a></p>
+</main>
+<footer class="cbfoot">
+<p><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named; trademarks belong to their owners. For entertainment only.</p>
+<p>© Coffeebreak · Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com · No PayPal · Apps $10 USD · Karen gets them free as owner</p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> · <a href="https://songwriterkaz.github.io/coffeebreak/yellow-pages/">Yellow Pages</a></p>
+</footer>
+<script src="ghost-tools.js"></script>
+
+</body></html>

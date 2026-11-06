@@ -1,104 +1,216 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Past Life Ghost Detector</title>
+<!DOCTYPE html>
+<html lang="en-AU"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Past Life Ghost Detector — Coffeebreak</title>
+<link rel="icon" href="cb-logo.png">
 <style>
-*{box-sizing:border-box}body{margin:0;font:16px/1.5 Verdana,Arial,sans-serif;background:#1a1028;color:#f3e9ff}
-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#2b1840}header img{width:48px;height:48px;border-radius:10px;background:#fff}
-h1{font-size:19px;margin:0}main{max-width:620px;margin:auto;padding:10px}
-.warn{background:#3a2050;border:1px dashed #c9a2ff;border-radius:10px;padding:8px 10px;font-size:14px;margin:8px 0}
-.host{display:flex;gap:10px;align-items:flex-start;margin:10px 0}.host img{width:84px;height:84px;border-radius:50%;border:3px solid #b3262e;flex:none;object-fit:cover}
-.bub{background:#fff;color:#2a1a2a;border-radius:16px;padding:10px 12px;position:relative;flex:1}.bub:before{content:"";position:absolute;left:-10px;top:24px;border:10px solid transparent;border-right-color:#fff;border-left:0}
-.tabs{display:flex;gap:6px;flex-wrap:wrap}button,input,select{font:inherit;padding:9px 12px;border-radius:9px;border:1px solid #8a6aa8}
-button{background:#b3262e;color:#fff;cursor:pointer}button.alt{background:#4a2f66}
-#scan{position:relative;width:100%;aspect-ratio:3/4;max-height:70vh;background:#000;border-radius:14px;overflow:hidden;margin-top:8px}
-#scan video,#scan canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-#meter{display:flex;gap:10px;align-items:center;margin:8px 0}#needle{width:150px;height:84px}
-#lvl{flex:1;height:16px;background:#2b1840;border-radius:8px;overflow:hidden}#lvlb{height:100%;width:10%;background:linear-gradient(90deg,#6f6,#ff6,#f6c)}
-.card{background:#2b1840;border-radius:12px;padding:12px;margin:8px 0}input{width:100%;margin:4px 0}
-.hide{display:none}footer{font-size:12px;padding:12px;max-width:620px;margin:auto;opacity:.85}a{color:#ffb3d1}
-</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,system-ui,serif;background:radial-gradient(circle at top,#2a1030 0%,#120510 55%,#0a0610 100%);color:#fde6f3;min-height:100vh}
+a{color:#ff8fcf}
+header{text-align:center;padding:14px 12px 4px}
+header img.logo{height:72px;border-radius:14px;background:#fff;box-shadow:0 0 22px #ff5fb088}
+h1{margin:8px 0 2px;font-size:1.7rem;color:#ff8fcf;text-shadow:0 0 12px #ff2d9588;letter-spacing:1px}
+.sub{color:#d9a6c4;font-style:italic;margin:0 0 10px}
+.wrap{max-width:1100px;margin:0 auto;padding:8px 16px 40px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+button,.btn{background:linear-gradient(#ff5fb0,#b0186a);color:#fff;border:1px solid #ffb6dd;border-radius:22px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+button.alt,.btn.alt{background:#2a0b22}
+button:disabled{opacity:.45}
+.panel{background:#22091ccc;border:1px solid #ff8fcf66;border-radius:14px;padding:14px;margin:10px 0;line-height:1.45}
+.panel h2,.panel h3{color:#ff8fcf;margin:4px 0 8px}
+input,select,textarea{background:#120510;color:#fde6f3;border:1px solid #ff8fcf88;border-radius:8px;padding:8px;font:inherit;width:100%;max-width:100%}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.card{background:#1a0816;border:1px solid #ff8fcf44;border-radius:12px;padding:12px}
+.card h4{margin:0 0 6px;color:#ffb6dd}
+.muted{color:#c9a0b8;font-size:.9em}
+.badge{display:inline-block;background:#ff4f9a;color:#fff;border-radius:999px;padding:2px 8px;font-size:.75em;font-weight:700}
+.meter{height:14px;background:#120510;border-radius:8px;overflow:hidden;border:1px solid #ff8fcf55}
+.meter>i{display:block;height:100%;background:linear-gradient(90deg,#5ff,#ff5fb0,#ff2);width:0%;transition:width .25s}
+.log{max-height:220px;overflow:auto;background:#0d050c;border-radius:8px;padding:8px;font-family:ui-monospace,monospace;font-size:.85em}
+.tools-list{max-height:420px;overflow:auto}
+.tool-row{display:flex;justify-content:space-between;gap:8px;padding:8px;border-bottom:1px solid #ff8fcf22;cursor:pointer}
+.tool-row:hover{background:#ff8fcf18}
+.cbfoot{text-align:center;color:#a07890;font-size:.85em;padding:24px 12px 40px;line-height:1.5}
+.cbfoot a{color:#ff8fcf}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.tabs button.on{outline:2px solid #fff}
+.ghost-cup{font-size:3rem;filter:drop-shadow(0 0 12px #ff8fcf)}
+.steam{animation:steam 2s ease-in-out infinite}
+@keyframes steam{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(-8px)}}
+.board-ghost{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center}
+.coffee-panel{min-width:260px;max-width:340px}
+.canvas-wrap{background:#0d050c;border-radius:12px;border:1px solid #ff8fcf44;padding:8px;text-align:center}
+canvas{max-width:100%;border-radius:8px;background:#111}
+.price{font-size:1.6rem;font-weight:800;color:#ff4f9a}
+.payid{background:#2a0b22;border:1px solid #f5a0c4;border-radius:10px;padding:10px 12px;margin:12px 0}
+@media(max-width:640px){h1{font-size:1.35rem}}
+</style>
+
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
 </head><body>
-<header><img src="logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Past Life Ghost Detector</h1></header>
-<main>
-<div class="warn"><b>For entertainment only. It does not detect real ghosts or reveal real past lives.</b></div>
-<div class="host"><img src="host.jpg" alt="Coffeebreak pin-up ghost hunter"><div class="bub" id="say">Evening, darling. I am your Coffeebreak ghost hunter. Pick a mode and we will see who is floating about.</div></div>
-<div class="tabs"><button onclick="tab('s')">Ghost scan</button><button onclick="tab('r')">Past Life Reading</button><button class="alt" id="snd" onclick="sound()">Spooky sound: off</button><button class="alt" onclick="tab('p')">Pro</button></div>
+<header>
+<img class="logo" src="cb-logo.png" alt="Coffeebreak logo">
+<h1>Past Life Ghost Detector</h1>
+<p class="sub">EMF-style detector with past-life flavoured notes.</p>
+</header>
+<p class="bar muted">Owner copy free for Karen · Customers $10 USD · PayID darkokaz@gmx.com</p>
+<main class="wrap">
 
-<section id="s"><div id="scan"><video id="vid" playsinline muted></video><canvas id="cv"></canvas></div>
-<div id="meter"><svg id="needle" viewBox="0 0 150 84"><path d="M10 80 A65 65 0 0 1 140 80" fill="none" stroke="#c9a2ff" stroke-width="6"/><path d="M110 30 A65 65 0 0 1 140 80" fill="none" stroke="#f6c" stroke-width="6"/><line id="nd" x1="75" y1="80" x2="75" y2="20" stroke="#fff" stroke-width="3"/><text x="4" y="12" font-size="10" fill="#ccc">EMF-style meter</text></svg>
-<div style="flex:1">Spirit level<div id="lvl"><div id="lvlb"></div></div></div></div>
-<button onclick="startCam()">Start camera scan</button> <span id="camnote" style="font-size:13px"></span></section>
+<div class="panel">
+  <h2>EMF Ghost Detector simulator</h2>
+  <p class="muted">Entertainment simulation only. No real sensors are used.</p>
+  <div class="canvas-wrap"><canvas id="cv" width="640" height="360"></canvas></div>
+  <div class="bar">
+    <button id="scan">Scan room</button>
+    <button class="alt" id="calm">Calm room</button>
+    <label class="muted">Sensitivity <input id="sens" type="range" min="1" max="100" value="55" style="width:140px"></label>
+  </div>
+  <div class="meter"><i id="needle"></i></div>
+  <div class="log" id="log"></div>
+</div>
 
-<section id="r" class="hide"><div class="card">Your name<input id="nm" maxlength="40" placeholder="Name"><br>Your birthday<input id="bd" type="date"><br>
-<button onclick="read(0)">Reveal my past life</button> <button class="alt hide" id="more" onclick="read(1)">Pro: next past life</button>
-<div id="res"></div><button class="alt hide" id="dl" onclick="card()">Download result card (PNG)</button></div></section>
-
-<section id="p" class="hide"><div class="card"><b>Pro unlock, AU$3</b><br>Extra past life readings, plus ghost skins: Glam Pink, Neon Green and Vintage Sepia.<br>
-1. Pay AU$3 by PayID to <b>darkokaz@gmx.com</b> with reference <b id="ref"></b>.<br>
-2. <a id="ml" href="#">Email your order and receipt</a> to songwriterkaz@gmail.com. Your code comes back by email.<br>
-3. Enter it here: <input id="code" placeholder="GHOST-XXXXXX"><button onclick="unlock()">Unlock</button> <span id="pmsg"></span>
-<div id="skins" class="hide" style="margin-top:8px">Ghost skin <select id="skin"><option value="0">Classic White</option><option value="1">Glam Pink</option><option value="2">Neon Green</option><option value="3">Vintage Sepia</option></select></div></div></section>
-
-<div class="card">Meet the doll version of your host: <a href="https://coffeebreaks.itch.io/coffeebreak-rag-doll" target="_blank" rel="noopener">Coffeebreak Rag Doll</a>. More apps and games at <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></div>
-</main>
-<footer><b>Rights and resale.</b> Karen O'Brien (Coffeebreak) keeps all rights to the products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy or make their own versions.<br>For entertainment only. It does not detect real ghosts or reveal real past lives.</footer>
-<script src="hashes.js"></script>
+<div class="panel">
+  <h2>Ghost hunting tools catalogue</h2>
+  <p class="muted">Searchable set of 12,000 Coffeebreak tools for entertainment play. EMF meters, spirit boxes, EVP recorders, thermal cams and many variants.</p>
+  <div class="bar">
+    <input id="q" placeholder="Search tools (EMF, thermal, latte, rare…)" style="max-width:420px">
+    <select id="cat"><option value="">All categories</option></select>
+    <button id="go">Search</button>
+    <button class="alt" id="prev">Prev</button>
+    <button class="alt" id="next">Next</button>
+  </div>
+  <p class="muted" id="meta"></p>
+  <div class="tools-list" id="list"></div>
+</div>
+<div class="panel">
+  <h3>Active tool</h3>
+  <div id="active" class="muted">Pick a tool to take a reading.</div>
+  <div class="meter" style="margin:10px 0"><i id="needle"></i></div>
+  <button id="use">Take reading</button>
+  <div class="log" id="log"></div>
+</div>
 <script>
-const $=id=>document.getElementById(id);let pro=false;try{pro=localStorage.cbghostpro==='1'}catch(e){}
-const say=t=>$('say').textContent=t;
-function tab(t){['s','r','p'].forEach(x=>$(x).classList.toggle('hide',x!==t));say({s:'Point your camera around the room. If the needle swings, someone may want a chat. Just pretend, of course.',r:'Tell me your name and birthday, sweetheart, and I will peek into the old days.',p:'Three dollars buys you more readings and some very fashionable ghosts.'}[t])}
-// scan
-const cv=$('cv'),cx=cv.getContext('2d'),vid=$('vid');let cam=false,g=null,t0=0,lvl=.1;
-const skins=[['#fff','#000'],['#ffc0e0','#7a1d4a'],['#9fffa0','#064'],['#e8d3a8','#4a3510']];
-function startCam(){if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$('camnote').textContent='No camera here, so I am using the haunted parlour view.';return}
-navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false}).then(s=>{vid.srcObject=s;vid.play();cam=true;$('camnote').textContent='Scanning.'}).catch(()=>{$('camnote').textContent='Camera not allowed, so I am using the haunted parlour view.'})}
-const bg=new Image();bg.src='host.jpg';
-function ghost(x,y,s,a,k){const[c,e]=skins[k];cx.save();cx.globalAlpha=a;cx.translate(x,y);cx.scale(s,s);cx.fillStyle=c;cx.beginPath();cx.arc(0,0,40,Math.PI,0);cx.lineTo(40,50);for(let i=0;i<4;i++)cx.quadraticCurveTo(30-i*20,62-(i%2)*14,20-i*20,50);cx.closePath();cx.fill();cx.fillStyle=e;cx.beginPath();cx.arc(-14,-4,6,0,7);cx.arc(14,-4,6,0,7);cx.fill();cx.fillStyle='#f8a';cx.beginPath();cx.arc(-22,8,5,0,7);cx.arc(22,8,5,0,7);cx.fill();cx.strokeStyle=e;cx.lineWidth=3;cx.beginPath();cx.arc(0,8,7,0,Math.PI);cx.stroke();cx.restore()}
-function loop(t){const W=cv.width=cv.clientWidth,H=cv.height=cv.clientHeight;
-if(!cam){cx.globalAlpha=.55;const s=Math.max(W,H);cx.drawImage(bg,(W-s)/2,(H-s)/2,s,s);cx.globalAlpha=1}
-const gr=cx.createRadialGradient(W/2,H/2,H*.2,W/2,H/2,H*.75);gr.addColorStop(0,'rgba(80,0,120,0)');gr.addColorStop(1,'rgba(40,0,70,.75)');cx.fillStyle=gr;cx.fillRect(0,0,W,H);
-cx.fillStyle='rgba(180,255,200,.07)';for(let y=(t/20)%8;y<H;y+=8)cx.fillRect(0,y,W,1);
-if(!g&&Math.random()<.006){g={x:Math.random()*W*.7+W*.15,y:Math.random()*H*.6+H*.2,b:t};const m=['Ooh, a chilly spot. Say hello nicely.','There, darling. A shy little spirit.','Someone fancies your outfit.','A ghost from the jazz age, I would say.'];say(m[Math.random()*m.length|0]);if(snd)boo()}
-let a=0;if(g){const d=(t-g.b)/1000;a=d<1?d:d>4?5-d:1;if(d>5)g=null;else ghost(g.x+Math.sin(d*2)*20,g.y+Math.sin(d*3)*10,Math.min(W,H)/300,a*.85,+$('skin').value)}
-lvl+=((a*.8+.1+Math.random()*.15)-lvl)*.05;$('lvlb').style.width=(lvl*100|0)+'%';
-const ang=(-70+lvl*140+Math.sin(t/90)*4)*Math.PI/180;$('nd').setAttribute('x2',75+60*Math.sin(ang));$('nd').setAttribute('y2',80-60*Math.cos(ang));
-cx.fillStyle='#cfc';cx.font='12px monospace';cx.fillText('SCAN '+(cam?'CAMERA':'PARLOUR')+'  SPIRIT '+(lvl*100|0)+'%',10,H-10);requestAnimationFrame(loop)}
-requestAnimationFrame(loop);
-// sound
-let ac=null,snd=false,mg=null;
-function sound(){if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();mg=ac.createGain();mg.gain.value=0;mg.connect(ac.destination);
-[55,82.4,110.5].forEach((f,i)=>{const o=ac.createOscillator(),l=ac.createOscillator(),lg=ac.createGain();o.type='sine';o.frequency.value=f;l.frequency.value=.1+i*.07;lg.gain.value=3;l.connect(lg).connect(o.frequency);const gg=ac.createGain();gg.gain.value=.12;o.connect(gg).connect(mg);o.start();l.start()})}
-snd=!snd;ac.resume();mg.gain.setTargetAtTime(snd?.5:0,ac.currentTime,.3);$('snd').textContent='Spooky sound: '+(snd?'on':'off')}
-function boo(){const o=ac.createOscillator(),gg=ac.createGain();o.type='triangle';o.frequency.setValueAtTime(600,ac.currentTime);o.frequency.exponentialRampToValueAtTime(180,ac.currentTime+1.4);gg.gain.setValueAtTime(.0001,ac.currentTime);gg.gain.exponentialRampToValueAtTime(.15,ac.currentTime+.2);gg.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+1.5);o.connect(gg).connect(mg);o.start();o.stop(ac.currentTime+1.6)}
-// reading
-function hash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
-function rng(seed){return()=>{seed=Math.imul(seed^seed>>>15,1|seed);seed^=seed+Math.imul(seed^seed>>>7,61|seed);return((seed^seed>>>14)>>>0)/4294967296}}
-const E=['the 1920s jazz age','Victorian London','Ancient Egypt','the Renaissance','the 1940s swing era','Viking times','Ancient Rome','the Wild West','Edo period Japan','the 1960s'];
-const PL=['a moonlit seaside village','a grand riverside city','a desert trading post','a misty mountain town','a candlelit palace','a busy harbour','a travelling circus','a tiny island'];
-const J=['lamplighter','court singer','perfume maker','sea captain','travelling magician','clockmaker','tea merchant','dance hall star','map maker','royal baker','lighthouse keeper','theatre costume maker'];
-const F1=['Madame','Captain','Lady','Sir','Professor','Duchess','Maestro','Countess'],F2=['Velvet','Rosalind','Ambrose','Marigold','Lucian','Opaline','Bartholomew','Clementine'],F3=['Fairweather','Moonbury','Quill','Starling','Blackwood','Honeyvale','Larkspur','Whitlock'];
-const B=['Wisp, a giggly little spirit who loves hats','Earl Grey, a polite ghost who haunts teapots','Boo-Boo, a sleepy ghost who naps in curtains','Dottie, a polka-dot ghost who adores jazz','Sir Flutter, a ghost butler with perfect manners','Pip, a ghost kitten made of fog'];
-const T=['You were famous for a song nobody can remember now.','You once hid a secret love letter in a hatbox.','You threw the best parties in town.','You always arrived fashionably late.','You were known for kindness to strangers.','You invented a dessert that is still a mystery.'];
-let n=0,last=null;
-function read(next){const nm=$('nm').value.trim(),bd=$('bd').value;if(!nm||!bd){say('I need both your name and birthday, darling.');return}
-if(next&&!pro){tab('p');return}n=next?n+1:0;const r=rng(hash(nm.toLowerCase()+'|'+bd+'|'+n)),p=a=>a[r()*a.length|0];
-last={nm,n,era:p(E),place:p(PL),job:p(J),self:p(F1)+' '+p(F2)+' '+p(F3),bud:p(B),fact:p(T)};
-$('res').innerHTML=`<h3>${esc(nm)}, past life ${n+1}</h3><p>Era: <b>${last.era}</b><br>Place: <b>${last.place}</b><br>Job: <b>${last.job}</b><br>You were: <b>${last.self}</b> (fictional)<br>Ghost buddy: <b>${last.bud}</b><br>${last.fact}</p>`;
-say('Well, look at you. '+last.self+', the '+last.job+'. I always knew you had style.');$('dl').classList.remove('hide');$('more').classList.toggle('hide',false)}
-function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function wrap(c,t,x,y,w,lh){let l='';for(const wd of t.split(' ')){if(c.measureText(l+wd).width>w){c.fillText(l,x,y);y+=lh;l=''}l+=wd+' '}c.fillText(l,x,y);return y+lh}
-function card(){if(!last)return;const c=document.createElement('canvas');c.width=1080;c.height=1350;const x=c.getContext('2d');x.fillStyle='#1a1028';x.fillRect(0,0,1080,1350);
-x.drawImage(bg,290,60,500,500);const lg=new Image();lg.src='logo.png';x.drawImage(lg,920,30,130,130);x.fillStyle='#ffb3d1';x.font='bold 52px Verdana';x.textAlign='center';x.fillText('Past Life Reading',540,640);
-x.fillStyle='#fff';x.font='40px Verdana';x.fillText(last.nm,540,700);x.textAlign='left';x.font='34px Verdana';let y=780;
-[['Era',last.era],['Place',last.place],['Job',last.job],['You were',last.self],['Ghost buddy',last.bud],['',last.fact]].forEach(([k,v])=>{y=wrap(x,(k?k+': ':'')+v,80,y,920,46)+6});
-x.fillStyle='#c9a2ff';x.font='24px Verdana';x.fillText('For entertainment only. It does not detect real ghosts or reveal real past lives.',40,1290);x.fillText('Coffeebreak Past Life Ghost Detector  coffeebreaks.itch.io',40,1325);
-const a=document.createElement('a');a.download='past-life-'+last.nm.replace(/\W+/g,'-')+'.png';a.href=c.toDataURL('image/png');a.click()}
-// pro
-const ref='GD'+Date.now().toString(36).toUpperCase();$('ref').textContent=ref;
-$('ml').href='mailto:songwriterkaz@gmail.com?subject='+encodeURIComponent('Ghost Detector Pro order '+ref)+'&body='+encodeURIComponent('Hi, I paid AU$3 by PayID to darkokaz@gmx.com, reference '+ref+'. Please send my Pro code. Receipt attached.');
-async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(v=>v.toString(16).padStart(2,'0')).join('')}
-async function unlock(){const h=await sha($('code').value.trim().toUpperCase());if(PRO_HASHES.includes(h)){pro=true;try{localStorage.cbghostpro='1'}catch(e){}setPro();$('pmsg').textContent='Pro unlocked.';say('Welcome to the VIP séance, darling.')}else $('pmsg').textContent='That code did not match.'}
-function setPro(){$('skins').classList.toggle('hide',!pro)}setPro();
-</script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
-<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
-<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
-<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
-<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>
+(function(){
+  const DEMO=false;
+  const MAX=12000;
+  let offset=0, limit=40, lastQ='', lastCat='';
+  const cat=document.getElementById('cat');
+  CBGhostTools.categories().forEach(c=>{
+    const o=document.createElement('option'); o.value=c.id; o.textContent=c.label; cat.appendChild(o);
+  });
+  let current=null;
+  function render(res){
+    const list=document.getElementById('list'); list.innerHTML='';
+    res.items.filter(t=>t.id<=MAX).forEach(t=>{
+      const row=document.createElement('div'); row.className='tool-row';
+      row.innerHTML='<div><b>'+t.name+'</b><br><span class="muted">'+t.sku+' · '+t.catLabel+' · '+t.rarity+' · power '+t.power+'</span><br><span class="muted">'+t.blurb+'</span></div><button class="alt">Use</button>';
+      row.onclick=()=>select(t);
+      list.appendChild(row);
+    });
+    document.getElementById('meta').textContent=(DEMO?'Demo shows first '+MAX.toLocaleString()+' tools. ':'')+'Showing '+res.items.length+' of '+Math.min(res.total,MAX).toLocaleString()+(res.query?' for "'+res.query+'"':'')+' · offset '+res.offset;
+  }
+  function select(t){
+    if(t.id>MAX){alert('Unlock the full version for this tool.');return}
+    current=t;
+    document.getElementById('active').innerHTML='<b>'+t.name+'</b><br>'+t.blurb;
+  }
+  function load(){
+    lastQ=document.getElementById('q').value;
+    lastCat=cat.value;
+    let res;
+    if(lastCat){
+      res=CBGhostTools.byCat(lastCat, limit, offset);
+      if(lastQ){
+        res.items=res.items.filter(t=>(t.name+' '+t.sku+' '+t.color).toLowerCase().includes(lastQ.toLowerCase()));
+      }
+      res.items=res.items.filter(t=>t.id<=MAX);
+      res.total=Math.min(res.total, MAX);
+    } else {
+      res=CBGhostTools.search(lastQ, limit, offset);
+      res.items=res.items.filter(t=>t.id<=MAX);
+      if(!lastQ) res.total=Math.min(CBGhostTools.TOTAL, MAX);
+      else {
+        // recount within MAX
+        let n=0; for(let i=0;i<MAX;i++){const t=CBGhostTools.toolAt(i); const hay=(t.name+' '+t.catLabel+' '+t.series+' '+t.color+' '+t.sku+' '+t.rarity).toLowerCase(); if(hay.includes(lastQ.toLowerCase())) n++;}
+        res.total=n;
+      }
+    }
+    render(res);
+  }
+  document.getElementById('go').onclick=()=>{offset=0;load()};
+  document.getElementById('prev').onclick=()=>{offset=Math.max(0,offset-limit);load()};
+  document.getElementById('next').onclick=()=>{offset=offset+limit;load()};
+  document.getElementById('use').onclick=()=>{
+    if(!current){document.getElementById('log').textContent='Pick a tool first.';return}
+    const r=CBGhostTools.useTool(current);
+    document.getElementById('needle').style.width=r.reading+'%';
+    const line=document.createElement('div');
+    line.textContent=new Date().toLocaleTimeString()+' · '+r.tool+' · '+r.reading+' · '+r.note;
+    const log=document.getElementById('log'); log.prepend(line);
+  };
+  load();
+})();
+</script>
+
+
+<script>
+(function(){
+  const kind="EMF Ghost Detector";
+  const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+  let level=10, ghost=null, raf=0;
+  function draw(){
+    ctx.fillStyle='#0d050c'; ctx.fillRect(0,0,cv.width,cv.height);
+    // grid
+    ctx.strokeStyle='#ff8fcf22';
+    for(let x=0;x<cv.width;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,cv.height);ctx.stroke()}
+    for(let y=0;y<cv.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cv.width,y);ctx.stroke()}
+    if(kind.indexOf('Thermal')>=0){
+      const g=ctx.createRadialGradient(200,180,10,200,180,120);
+      g.addColorStop(0,'#5ff'); g.addColorStop(.5,'#ff5fb0'); g.addColorStop(1,'transparent');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(200+level,180,80+level/2,0,6.28); ctx.fill();
+    } else if(kind.indexOf('Radar')>=0){
+      ctx.strokeStyle='#ff8fcf'; ctx.beginPath(); ctx.arc(320,180,40+level,0,6.28); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(320,180); ctx.lineTo(320+Math.cos(Date.now()/400)* (60+level), 180+Math.sin(Date.now()/400)*(60+level)); ctx.stroke();
+      if(ghost){ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(ghost.x,ghost.y,6,0,6.28); ctx.fill()}
+    } else if(kind.indexOf('EVP')>=0){
+      ctx.strokeStyle='#ffb6dd'; ctx.beginPath();
+      for(let x=0;x<cv.width;x++){
+        const y=180+Math.sin(x/12+Date.now()/200)* (10+level/3) + Math.sin(x/3)* (level/8);
+        if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    } else {
+      // EMF bars
+      for(let i=0;i<24;i++){
+        const h=20+Math.random()*level*1.5;
+        ctx.fillStyle=i%3? '#ff5fb0':'#5ff';
+        ctx.fillRect(30+i*25, 320-h, 18, h);
+      }
+    }
+    document.getElementById('needle').style.width=Math.min(100,level)+'%';
+    raf=requestAnimationFrame(draw);
+  }
+  document.getElementById('scan').onclick=()=>{
+    const sens=+document.getElementById('sens').value;
+    level=Math.min(100, 20+sens*Math.random());
+    ghost={x:80+Math.random()*480,y:60+Math.random()*220};
+    const notes=['Soft spike near the counter.','Static shaped like a hello.','Cold ribbon across the floor.','Quiet — only the fridge hum.','A giggle in the pink static.'];
+    const line=document.createElement('div');
+    line.textContent=new Date().toLocaleTimeString()+' · '+kind+' · '+Math.round(level)+' · '+notes[Math.floor(Math.random()*notes.length)];
+    document.getElementById('log').prepend(line);
+  };
+  document.getElementById('calm').onclick=()=>{level=8; ghost=null};
+  draw();
+})();
+</script>
+
+<p class="bar"><a class="btn alt" href="../ghost-detector-buy/">Get full version $10 USD</a> <a class="btn alt" href="https://kazmelody.gumroad.com">Gumroad store</a></p>
+</main>
+<footer class="cbfoot">
+<p><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named; trademarks belong to their owners. For entertainment only.</p>
+<p>© Coffeebreak · Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com · No PayPal · Apps $10 USD · Karen gets them free as owner</p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> · <a href="https://songwriterkaz.github.io/coffeebreak/yellow-pages/">Yellow Pages</a></p>
+</footer>
+<script src="ghost-tools.js"></script>
+
+</body></html>
