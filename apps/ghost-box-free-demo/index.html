@@ -1,172 +1,136 @@
 <!DOCTYPE html>
 <html lang="en-AU"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ghost Box — Coffeebreak</title>
 <link rel="icon" href="cb-logo.png">
+<meta name="description" content="Spirit-box first desk with radio sweep audio and soft replies. (demo limits)">
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Georgia,system-ui,serif;background:radial-gradient(circle at top,#2a1030 0%,#120510 55%,#0a0610 100%);color:#fde6f3;min-height:100vh}
-a{color:#ff8fcf}
-header{text-align:center;padding:14px 12px 4px}
-header img.logo{height:72px;border-radius:14px;background:#fff;box-shadow:0 0 22px #ff5fb088}
-h1{margin:8px 0 2px;font-size:1.7rem;color:#ff8fcf;text-shadow:0 0 12px #ff2d9588;letter-spacing:1px}
-.sub{color:#d9a6c4;font-style:italic;margin:0 0 10px}
-.wrap{max-width:1100px;margin:0 auto;padding:8px 16px 40px}
-.bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
-button,.btn{background:linear-gradient(#ff5fb0,#b0186a);color:#fff;border:1px solid #ffb6dd;border-radius:22px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
-button.alt,.btn.alt{background:#2a0b22}
+html,body{margin:0;min-height:100%;font-family:Georgia,"Segoe UI",system-ui,serif;background:#07040c;color:#fde6f3}
+a{color:#ff9fd0}
+header{text-align:center;padding:12px 12px 0;position:relative;z-index:2}
+header img.logo{height:64px;border-radius:14px;background:#fff;box-shadow:0 0 24px #ff5fb066}
+h1{margin:8px 0 2px;font-size:clamp(1.25rem,4vw,1.85rem);color:#ff9fd0;letter-spacing:1px;text-shadow:0 0 18px #ff2d9588}
+.sub{color:#c9a0b8;font-style:italic;margin:0 0 8px;font-size:.95rem}
+.badge{display:inline-block;background:#ff4f9a;color:#fff;border-radius:999px;padding:2px 10px;font-size:.72rem;font-weight:700;margin-left:6px}
+.wrap{max-width:980px;margin:0 auto;padding:8px 14px 36px;position:relative;z-index:2}
+.stage{position:relative;border-radius:18px;overflow:hidden;border:1px solid #ff8fcf55;box-shadow:0 0 40px #ff2d9533;margin:10px 0}
+.stage canvas{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#0a0610}
+.overlay-hud{position:absolute;left:10px;right:10px;bottom:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;pointer-events:none}
+.emf-wrap{background:#120810cc;border:1px solid #ff8fcf66;border-radius:12px;padding:8px 12px;min-width:160px;pointer-events:auto}
+.emf-label{font-size:.75rem;color:#c9a0b8;margin-bottom:4px}
+.emf-meter{position:relative;height:54px;width:140px}
+.emf-meter svg{width:140px;height:54px}
+.freq{font-family:ui-monospace,monospace;font-size:.85rem;color:#9ff}
+.panel{background:#160a14ee;border:1px solid #ff8fcf44;border-radius:16px;padding:14px;margin:12px 0;backdrop-filter:blur(6px)}
+.panel h2,.panel h3{margin:0 0 8px;color:#ff9fd0;font-size:1.05rem}
+.muted{color:#c9a0b8;font-size:.9rem}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+button,.btn{appearance:none;border:1px solid #ffb6dd;background:linear-gradient(180deg,#ff6fb8,#b0186a);color:#fff;border-radius:999px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+button.alt,.btn.alt{background:#24101f}
 button:disabled{opacity:.45}
-.panel{background:#22091ccc;border:1px solid #ff8fcf66;border-radius:14px;padding:14px;margin:10px 0;line-height:1.45}
-.panel h2,.panel h3{color:#ff8fcf;margin:4px 0 8px}
-input,select,textarea{background:#120510;color:#fde6f3;border:1px solid #ff8fcf88;border-radius:8px;padding:8px;font:inherit;width:100%;max-width:100%}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
-.card{background:#1a0816;border:1px solid #ff8fcf44;border-radius:12px;padding:12px}
-.card h4{margin:0 0 6px;color:#ffb6dd}
-.muted{color:#c9a0b8;font-size:.9em}
-.badge{display:inline-block;background:#ff4f9a;color:#fff;border-radius:999px;padding:2px 8px;font-size:.75em;font-weight:700}
-.meter{height:14px;background:#120510;border-radius:8px;overflow:hidden;border:1px solid #ff8fcf55}
-.meter>i{display:block;height:100%;background:linear-gradient(90deg,#5ff,#ff5fb0,#ff2);width:0%;transition:width .25s}
-.log{max-height:220px;overflow:auto;background:#0d050c;border-radius:8px;padding:8px;font-family:ui-monospace,monospace;font-size:.85em}
-.tools-list{max-height:420px;overflow:auto}
-.tool-row{display:flex;justify-content:space-between;gap:8px;padding:8px;border-bottom:1px solid #ff8fcf22;cursor:pointer}
-.tool-row:hover{background:#ff8fcf18}
-.cbfoot{text-align:center;color:#a07890;font-size:.85em;padding:24px 12px 40px;line-height:1.5}
-.cbfoot a{color:#ff8fcf}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0}
-.tabs button.on{outline:2px solid #fff}
-.ghost-cup{font-size:3rem;filter:drop-shadow(0 0 12px #ff8fcf)}
-.steam{animation:steam 2s ease-in-out infinite}
-@keyframes steam{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(-8px)}}
-.board-ghost{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center}
-.coffee-panel{min-width:260px;max-width:340px}
-.canvas-wrap{background:#0d050c;border-radius:12px;border:1px solid #ff8fcf44;padding:8px;text-align:center}
-canvas{max-width:100%;border-radius:8px;background:#111}
-.price{font-size:1.6rem;font-weight:800;color:#ff4f9a}
-.payid{background:#2a0b22;border:1px solid #f5a0c4;border-radius:10px;padding:10px 12px;margin:12px 0}
-@media(max-width:640px){h1{font-size:1.35rem}}
+button.danger{background:#4a1030}
+input[type=text],textarea{width:100%;background:#0d0710;color:#fde6f3;border:1px solid #ff8fcf66;border-radius:12px;padding:12px;font:inherit}
+input[type=range]{accent-color:#ff5fb0;width:140px}
+.log{max-height:200px;overflow:auto;background:#0a0610;border-radius:10px;padding:10px;font-family:ui-monospace,monospace;font-size:.8rem;line-height:1.45}
+.log div{border-bottom:1px solid #ff8fcf18;padding:4px 0}
+.ghost-reply{min-height:64px;font-size:1.05rem;line-height:1.5}
+.ouija{position:relative;background:linear-gradient(160deg,#2a1810,#1a0e0a);border:2px solid #c9a06a;border-radius:14px;padding:12px;user-select:none;touch-action:none}
+.ouija-row{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin:4px 0}
+.ouija-row span{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:#3a2418;color:#f5e6c8;font-size:.85rem;border:1px solid #c9a06a55}
+.ouija-row span.wide{width:auto;padding:0 10px}
+.planchette{position:absolute;left:0;top:0;width:44px;height:44px;border-radius:50% 50% 50% 50%;background:radial-gradient(circle at 40% 35%,#ffe6c8,#c08a4a 60%,#6a4020);border:2px solid #fff8;box-shadow:0 4px 12px #0008;pointer-events:none;transform:translate(12px,12px);z-index:3}
+.planchette:after{content:"";position:absolute;inset:10px;border-radius:50%;border:2px solid #2a181088;background:#fff2}
+.tools-mini{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.tool-chip{background:#1a0c18;border:1px solid #ff8fcf33;border-radius:10px;padding:8px;font-size:.85rem;cursor:pointer}
+.tool-chip:hover{border-color:#ff8fcf}
+.cbfoot{text-align:center;color:#a07890;font-size:.82rem;padding:22px 12px 48px;line-height:1.55}
+.cbfoot a{color:#ff9fd0}
+.payid{background:#1a0c18;border:1px solid #f5a0c4;border-radius:10px;padding:10px;margin:8px 0}
+.wave{height:36px;display:flex;align-items:flex-end;gap:2px}
+.wave i{display:block;width:3px;background:#ff8fcf;border-radius:2px;height:20%;transition:height .1s}
+@media(max-width:640px){
+  .ouija-row span{width:24px;height:24px;font-size:.75rem}
+  header img.logo{height:52px}
+  .panel{padding:12px}
+  button,.btn{padding:10px 12px;font-size:.92rem}
+}
 </style>
-
 <script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
 </head><body>
 <header>
 <img class="logo" src="cb-logo.png" alt="Coffeebreak logo">
 <h1>Ghost Box <span class="badge">FREE DEMO</span></h1>
-<p class="sub">Spirit-box style sweeps with tool locker. (demo limits)</p>
+<p class="sub">Spirit-box first desk with radio sweep audio and soft replies. (demo limits)</p>
+<p class="muted">Owner copy free for Karen · Customers $10 USD · PayID darkokaz@gmx.com</p>
 </header>
 <main class="wrap">
-
-<div class="panel">
-  <h2>Ghost amps</h2>
-  <p class="muted">Boost spirit-box style audio sweeps for entertainment.</p>
-  <label>Gain <input id="gain" type="range" min="0" max="100" value="40"></label>
-  <div class="bar"><button id="sweep">Start sweep</button><button class="alt" id="stop">Stop</button></div>
-  <div class="meter"><i id="needle"></i></div>
-  <div class="log" id="log"></div>
-</div>
-
-<div class="panel">
-  <h2>Ghost hunting tools catalogue</h2>
-  <p class="muted">Searchable set of 200 Coffeebreak tools for entertainment play. EMF meters, spirit boxes, EVP recorders, thermal cams and many variants.</p>
-  <div class="bar">
-    <input id="q" placeholder="Search tools (EMF, thermal, latte, rare…)" style="max-width:420px">
-    <select id="cat"><option value="">All categories</option></select>
-    <button id="go">Search</button>
-    <button class="alt" id="prev">Prev</button>
-    <button class="alt" id="next">Next</button>
+<section class="stage" aria-label="Atmosphere">
+<canvas id="fx" width="960" height="540"></canvas>
+<div class="overlay-hud">
+  <div class="emf-wrap">
+    <div class="emf-label">EMF field</div>
+    <div class="emf-meter" aria-live="polite">
+      <svg viewBox="0 0 140 54" id="emfSvg">
+        <path d="M10,48 A60,60 0 0,1 130,48" fill="none" stroke="#ff8fcf44" stroke-width="8"/>
+        <path id="emfArc" d="M10,48 A60,60 0 0,1 130,48" fill="none" stroke="#ff5fb0" stroke-width="8" stroke-dasharray="0 200"/>
+        <line id="needle" x1="70" y1="48" x2="70" y2="12" stroke="#ffe6f3" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="70" cy="48" r="5" fill="#ff9fd0"/>
+      </svg>
+    </div>
+    <div class="freq" id="freqRead">88.0 MHz · quiet</div>
   </div>
-  <p class="muted" id="meta"></p>
-  <div class="tools-list" id="list"></div>
+  <div class="emf-wrap">
+    <div class="emf-label">Spirit box wave</div>
+    <div class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
 </div>
-<div class="panel">
-  <h3>Active tool</h3>
-  <div id="active" class="muted">Pick a tool to take a reading.</div>
-  <div class="meter" style="margin:10px 0"><i id="needle"></i></div>
-  <button id="use">Take reading</button>
-  <div class="log" id="log"></div>
+</section>
+
+<section class="panel">
+<h2>Ask the box spirit</h2>
+<p class="muted">Type a question or use the mic. Answers are fictional entertainment with soft voice, spirit-box sweep and planchette spelling.</p>
+<textarea id="ask" rows="2" placeholder="Ask something kind…"></textarea>
+<div class="bar">
+  <button id="btnAsk" type="button">Ask</button>
+  <button class="alt" id="btnMic" type="button">Speak question</button>
+  <button class="alt" id="btnSpeak" type="button">Hear last reply</button>
 </div>
-<script>
-(function(){
-  const DEMO=true;
-  const MAX=200;
-  let offset=0, limit=40, lastQ='', lastCat='';
-  const cat=document.getElementById('cat');
-  CBGhostTools.categories().forEach(c=>{
-    const o=document.createElement('option'); o.value=c.id; o.textContent=c.label; cat.appendChild(o);
-  });
-  let current=null;
-  function render(res){
-    const list=document.getElementById('list'); list.innerHTML='';
-    res.items.filter(t=>t.id<=MAX).forEach(t=>{
-      const row=document.createElement('div'); row.className='tool-row';
-      row.innerHTML='<div><b>'+t.name+'</b><br><span class="muted">'+t.sku+' · '+t.catLabel+' · '+t.rarity+' · power '+t.power+'</span><br><span class="muted">'+t.blurb+'</span></div><button class="alt">Use</button>';
-      row.onclick=()=>select(t);
-      list.appendChild(row);
-    });
-    document.getElementById('meta').textContent=(DEMO?'Demo shows first '+MAX.toLocaleString()+' tools. ':'')+'Showing '+res.items.length+' of '+Math.min(res.total,MAX).toLocaleString()+(res.query?' for "'+res.query+'"':'')+' · offset '+res.offset;
-  }
-  function select(t){
-    if(t.id>MAX){alert('Unlock the full version for this tool.');return}
-    current=t;
-    document.getElementById('active').innerHTML='<b>'+t.name+'</b><br>'+t.blurb;
-  }
-  function load(){
-    lastQ=document.getElementById('q').value;
-    lastCat=cat.value;
-    let res;
-    if(lastCat){
-      res=CBGhostTools.byCat(lastCat, limit, offset);
-      if(lastQ){
-        res.items=res.items.filter(t=>(t.name+' '+t.sku+' '+t.color).toLowerCase().includes(lastQ.toLowerCase()));
-      }
-      res.items=res.items.filter(t=>t.id<=MAX);
-      res.total=Math.min(res.total, MAX);
-    } else {
-      res=CBGhostTools.search(lastQ, limit, offset);
-      res.items=res.items.filter(t=>t.id<=MAX);
-      if(!lastQ) res.total=Math.min(CBGhostTools.TOTAL, MAX);
-      else {
-        // recount within MAX
-        let n=0; for(let i=0;i<MAX;i++){const t=CBGhostTools.toolAt(i); const hay=(t.name+' '+t.catLabel+' '+t.series+' '+t.color+' '+t.sku+' '+t.rarity).toLowerCase(); if(hay.includes(lastQ.toLowerCase())) n++;}
-        res.total=n;
-      }
-    }
-    render(res);
-  }
-  document.getElementById('go').onclick=()=>{offset=0;load()};
-  document.getElementById('prev').onclick=()=>{offset=Math.max(0,offset-limit);load()};
-  document.getElementById('next').onclick=()=>{offset=offset+limit;load()};
-  document.getElementById('use').onclick=()=>{
-    if(!current){document.getElementById('log').textContent='Pick a tool first.';return}
-    const r=CBGhostTools.useTool(current);
-    document.getElementById('needle').style.width=r.reading+'%';
-    const line=document.createElement('div');
-    line.textContent=new Date().toLocaleTimeString()+' · '+r.tool+' · '+r.reading+' · '+r.note;
-    const log=document.getElementById('log'); log.prepend(line);
-  };
-  load();
-})();
-</script>
+<div class="ghost-reply panel" id="reply" style="margin:8px 0 0">The room waits. Candle smoke curls into a shy shape.</div>
+</section>
 
+<section class="panel">
+<h2>Spirit box sweep</h2>
+<p class="muted">Synthesized radio static and soft fragments. Not a real radio link.</p>
+<div class="bar">
+  <button id="btnSweep" type="button">Start sweep</button>
+  <button class="alt" id="btnStop" type="button">Stop</button>
+  <label class="muted">Gain <input id="gain" type="range" min="10" max="100" value="48"></label>
+</div>
+<div id="frag" class="muted">Fragments will appear here.</div>
+</section>
 
-<script>
-(function(){
-  let t=null;
-  const words=['coffee','yes','mabel','warm','stay','pink','door','thanks','latte','home'];
-  document.getElementById('sweep').onclick=()=>{
-    clearInterval(t);
-    t=setInterval(()=>{
-      const g=+document.getElementById('gain').value;
-      document.getElementById('needle').style.width=g+'%';
-      if(Math.random()<g/120){
-        const w=words[Math.floor(Math.random()*words.length)];
-        const d=document.createElement('div'); d.textContent=new Date().toLocaleTimeString()+' · fragment: '+w;
-        document.getElementById('log').prepend(d);
-      }
-    },400);
-  };
-  document.getElementById('stop').onclick=()=>clearInterval(t);
-})();
-</script>
+<section class="panel">
+<h2>Ouija planchette</h2>
+<p class="muted">Watch the planchette spell the short answer. Entertainment board only.</p>
+<div class="ouija" id="ouija">
+  <div class="ouija-row"><span data-ch="A">A</span><span data-ch="B">B</span><span data-ch="C">C</span><span data-ch="D">D</span><span data-ch="E">E</span><span data-ch="F">F</span><span data-ch="G">G</span><span data-ch="H">H</span><span data-ch="I">I</span></div><div class="ouija-row"><span data-ch="J">J</span><span data-ch="K">K</span><span data-ch="L">L</span><span data-ch="M">M</span><span data-ch="N">N</span><span data-ch="O">O</span><span data-ch="P">P</span><span data-ch="Q">Q</span><span data-ch="R">R</span></div><div class="ouija-row"><span data-ch="S">S</span><span data-ch="T">T</span><span data-ch="U">U</span><span data-ch="V">V</span><span data-ch="W">W</span><span data-ch="X">X</span><span data-ch="Y">Y</span><span data-ch="Z">Z</span></div><div class="ouija-row"><span data-ch="1">1</span><span data-ch="2">2</span><span data-ch="3">3</span><span data-ch="4">4</span><span data-ch="5">5</span><span data-ch="6">6</span><span data-ch="7">7</span><span data-ch="8">8</span><span data-ch="9">9</span><span data-ch="0">0</span></div><div class="ouija-row"><span class="wide" data-ch=" ">SPACE</span><span data-ch="•">•</span><span class="wide" data-ch="Y">YES</span><span class="wide" data-ch="N">NO</span></div>
+  <div class="planchette" id="planchette" aria-hidden="true"></div>
+</div>
+<p class="muted" id="spelled">Spelled: —</p>
+</section>
+
+<section class="panel">
+<h2>Session log</h2>
+<div class="bar"><button class="alt" id="btnClearLog" type="button">Clear log</button>
+<button class="alt" id="btnExport" type="button">Export JSON</button></div>
+<div class="log" id="log"></div>
+</section>
+
+<section class="panel">
+<h2>Quick tools</h2>
+<div class="tools-mini" id="tools"></div>
+</section>
 
 <p class="bar"><a class="btn alt" href="../ghost-box-buy/">Get full version $10 USD</a> <a class="btn alt" href="https://kazmelody.gumroad.com">Gumroad store</a></p>
 </main>
@@ -175,6 +139,147 @@ canvas{max-width:100%;border-radius:8px;background:#111}
 <p>© Coffeebreak · Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com · No PayPal · Apps $10 USD · Karen gets them free as owner</p>
 <p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> · <a href="https://songwriterkaz.github.io/coffeebreak/yellow-pages/">Yellow Pages</a></p>
 </footer>
+<script src="spirit-talker-core.js"></script>
 <script src="ghost-tools.js"></script>
+<script>
+(function(){
+  const DEMO = true;
+  const THEME = "ghost-box";
+  const VOICE = "soft";
+  const MAX_ASKS = 5;
+  const MAX_SWEEP_MS = 45000;
+  const KEY = "cb-spirit-log:" + THEME;
+  let asks = 0, lastReply = "", sweepStarted = 0;
 
+  const fx = document.getElementById("fx");
+  function fit(){
+    const r = fx.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio||1, 2);
+    fx.width = Math.floor(r.width * dpr) || 960;
+    fx.height = Math.floor((r.width * 9/16) * dpr) || 540;
+  }
+  fit(); window.addEventListener("resize", fit);
+  const atmos = new CBSpirit.Atmosphere(fx); atmos.start();
+  const audio = new CBSpirit.SpiritAudio();
+  const ouija = new CBSpirit.Ouija(document.getElementById("ouija"), document.getElementById("planchette"));
+  setTimeout(()=>ouija.moveTo("•", 10), 100);
+
+  function setEmf(v){
+    atmos.setEmf(v);
+    const arc = document.getElementById("emfArc");
+    const needle = document.getElementById("needle");
+    const len = 188;
+    const dash = (v/100)*len;
+    arc.setAttribute("stroke-dasharray", dash + " " + len);
+    const ang = (-90 + (v/100)*180) * Math.PI/180;
+    const x2 = 70 + Math.cos(ang)*34;
+    const y2 = 48 + Math.sin(ang)*34;
+    needle.setAttribute("x2", x2); needle.setAttribute("y2", y2);
+    const mhz = (88 + v/5).toFixed(1);
+    document.getElementById("freqRead").textContent = mhz + " MHz · " + (v>70?"hot":v>35?"active":"quiet");
+    document.querySelectorAll("#wave i").forEach((el,i)=>{
+      el.style.height = (12 + (Math.sin(Date.now()/120+i)+1)*20 + v/4) + "%";
+    });
+  }
+  setEmf(12);
+  setInterval(()=>{ if(audio.sweeping) setEmf(30+Math.random()*70); }, 180);
+
+  function loadLog(){ try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){return []} }
+  function saveLog(arr){ localStorage.setItem(KEY, JSON.stringify(arr.slice(-200))); }
+  function renderLog(){
+    const el = document.getElementById("log"); el.innerHTML="";
+    loadLog().slice().reverse().forEach(e=>{
+      const d=document.createElement("div");
+      d.textContent = e.at + " · Q: " + e.q + " · A: " + e.letters + " · " + e.short;
+      el.appendChild(d);
+    });
+  }
+  renderLog();
+
+  function logEntry(q, ans){
+    const all = loadLog();
+    all.push({at:new Date().toISOString(), q:q||"(silence)", short:ans.short, letters:ans.letters, long:ans.long, theme:THEME});
+    saveLog(all); renderLog();
+  }
+
+  async function ask(q){
+    if(DEMO && asks >= MAX_ASKS){
+      document.getElementById("reply").textContent = "Demo session limit reached. Open the full version for longer talks.";
+      return;
+    }
+    asks++;
+    const ans = CBSpirit.answerFor(q, THEME);
+    lastReply = ans.long + " Short signal: " + ans.short + ".";
+    document.getElementById("reply").innerHTML = "<b>You:</b> " + (q||"(silent pause)") + "<br><b>box spirit:</b> " + ans.long + "<br><span class='muted'>Signal: " + ans.short + " · Board: " + ans.letters + "</span>";
+    setEmf(55 + Math.random()*40);
+    audio.blip();
+    CBSpirit.speak(ans.long, VOICE);
+    document.getElementById("spelled").textContent = "Spelled: ";
+    await ouija.spell(ans.letters, function(ch){
+      document.getElementById("spelled").textContent += ch;
+      setEmf(40 + Math.random()*50);
+    });
+    logEntry(q, ans);
+  }
+
+  document.getElementById("btnAsk").onclick = function(){
+    ask(document.getElementById("ask").value);
+  };
+  document.getElementById("btnSpeak").onclick = function(){
+    if(lastReply) CBSpirit.speak(lastReply, VOICE);
+  };
+  document.getElementById("btnMic").onclick = function(){
+    document.getElementById("reply").textContent = "Listening…";
+    CBSpirit.listenOnce(function(text){
+      document.getElementById("ask").value = text;
+      ask(text);
+    }, function(err){
+      document.getElementById("reply").textContent = "Mic unavailable (" + err + "). You can still type a question.";
+    });
+  };
+
+  document.getElementById("btnSweep").onclick = function(){
+    if(DEMO && sweepStarted && (Date.now()-sweepStarted) > MAX_SWEEP_MS){
+      document.getElementById("frag").textContent = "Demo sweep time finished. Full version keeps sweeping longer.";
+      return;
+    }
+    if(!sweepStarted) sweepStarted = Date.now();
+    const g = +document.getElementById("gain").value;
+    audio.onFragment = function(frag){
+      document.getElementById("frag").textContent = "Fragment: …" + frag + "…";
+      setEmf(50 + Math.random()*45);
+    };
+    audio.startSweep(g);
+    setEmf(40);
+  };
+  document.getElementById("btnStop").onclick = function(){ audio.stopSweep(); setEmf(10); };
+  document.getElementById("btnClearLog").onclick = function(){ saveLog([]); renderLog(); };
+  document.getElementById("btnExport").onclick = function(){
+    const blob = new Blob([JSON.stringify(loadLog(),null,2)], {type:"application/json"});
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "cb-spirit-session.json"; a.click();
+  };
+
+  // quick tools from catalogue if present
+  const box = document.getElementById("tools");
+  if(window.CBGhostTools){
+    for(let i=0;i<(DEMO?6:12);i++){
+      const t = CBGhostTools.toolAt(i*97);
+      const d = document.createElement("div"); d.className="tool-chip";
+      d.innerHTML = "<b>"+t.name+"</b><br><span class='muted'>"+t.sku+" · "+t.catLabel+"</span>";
+      d.onclick = function(){
+        const r = CBGhostTools.useTool(t);
+        setEmf(r.reading);
+        document.getElementById("frag").textContent = t.name + " · " + r.note;
+        audio.blip();
+      };
+      box.appendChild(d);
+    }
+  } else {
+    box.innerHTML = "<p class='muted'>Tool locker loading optional.</p>";
+  }
+
+  // expose for verification
+  window.__cbSpiritTest = function(q){ return ask(q||"hello"); };
+})();
+</script>
 </body></html>
