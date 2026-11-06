@@ -12,9 +12,11 @@
 <section class="panel show" id="toolsPanel"><h2>Design</h2>
  <label>Start from a preset</label><div class="tools"><button data-preset="mansion">Mansion</button><button data-preset="castle">Castle mansion</button><button data-preset="beach">Beach house</button><button data-preset="cottage">Cottage</button><button data-preset="blank">Blank</button></div>
  <h3>Paint tool</h3><div class="tools" id="tools">
-  <button data-tool="room" class="on">▭ Room</button><button data-tool="2">Wall</button><button data-tool="3">Door</button><button data-tool="4">Window</button><button data-tool="1">Floor</button><button data-tool="5">Stairs</button><button data-tool="6">Pool</button><button data-tool="7">Garden</button><button data-tool="8">Tree</button><button data-tool="9">Path</button><button data-tool="0">Erase</button><button data-tool="pan">✋ Scroll</button></div>
- <div class="row"><button id="rotStair">Stair dir: ↑</button></div>
- <p class="small">Room: drag a rectangle to make walls + floor. Pool, garden, tree and path go on the ground floor. Two stair squares in a row climb one storey.</p>
+  <button data-tool="pen" class="on">Pen</button><button data-tool="room">Room</button><button data-tool="2">Wall</button><button data-tool="3">Door</button><button data-tool="4">Window</button><button data-tool="1">Floor</button><button data-tool="5">Stairs</button><button data-tool="6">Pool</button><button data-tool="7">Garden</button><button data-tool="8">Tree</button><button data-tool="9">Path</button><button data-tool="0">Eraser</button><button data-tool="pan">Pan</button></div>
+ <div class="row"><label class="small" style="display:flex;align-items:center;gap:6px;margin:0"><input type="checkbox" id="penSnap" checked> Snap pen to grid axes</label>
+ <select id="penInk"><option value="2">Ink: Wall</option><option value="3">Ink: Door</option><option value="4">Ink: Window</option><option value="1">Ink: Floor</option><option value="0">Ink: Erase</option></select></div>
+ <div class="row"><button id="rotStair">Stair dir: ↑</button><button id="fillFloors">Fill floors inside walls</button><button id="clearFloor">Clear this storey</button></div>
+ <p class="small">Pen: freehand draw on the plan (mouse, touch or stylus). Cells snap to the 0.5 m grid. With snap on, strokes lock to straight rows and columns. Room: drag a rectangle for walls + floor. Pool, garden, tree and path go on the ground floor.</p>
  <h3>Storey</h3><div class="row"><select id="floorSel"></select></div><div class="row"><button id="addFloor">+ Storey</button><button id="delFloor">− Top storey</button></div>
  <label>Roof</label><select id="roof"><option value="hip">Hip roof</option><option value="gable">Gable roof</option><option value="flat">Flat with parapet</option><option value="castle">Castle battlements</option></select>
  <label>Plot size (0.5 m squares)</label><div class="row"><input type="number" id="pw" min="8" max="64"><input type="number" id="ph" min="8" max="64"><button id="resize">Set</button></div>
@@ -27,7 +29,7 @@
 </section>
 <section class="panel" id="planPanel"><h2>Floor plan <span class="small" id="planLbl"></span></h2>
  <div class="row"><button id="zout">−</button><button id="zin">+</button><button id="undo">Undo</button></div>
- <div id="planBox"><canvas id="plan"></canvas></div>
+ <div id="planBox" style="touch-action:none"><canvas id="plan" style="touch-action:none;cursor:crosshair"></canvas></div>
  <div class="legend small" id="legend"></div></section>
 <section class="panel" id="viewPanel"><h2>3D view</h2>
  <div class="row"><select id="viewMode"><option value="color">Colour view</option><option value="print">Print preview (exact STL)</option></select><button id="cutaway">Show all storeys</button></div>

@@ -1,6 +1,6 @@
 {
   "built": "2026-11-05",
-  "count": 904,
+  "count": 906,
   "items": [
     {
       "t": "Coffeebreak 1930 Vintage Flash",
@@ -2097,22 +2097,22 @@
       "u": "https://songwriterkaz.github.io/coffeebreak/apps/cb-lifesize-3d-free-demo/",
       "img": "",
       "p": "Free",
-      "d": "Design life-size houses, dresses and fabric, animals and boats. Auto-split into bed-sized interlocking labelled parts. Export STL/3MF. Demo limits whole export to 400 mm.",
+      "d": "Life-size houses (with drawing pen), dresses, animals and boats. Auto-split parts. Demo export up to 400 mm.",
       "web": true,
       "c": "Studios & Makers",
       "n": true,
-      "src": "hub"
+      "src": "pages"
     },
     {
       "t": "Coffeebreak Life-Size 3D Print Studio",
       "u": "https://songwriterkaz.github.io/coffeebreak/apps/cb-lifesize-3d/",
       "img": "",
       "p": "$10",
-      "d": "Full life-size houses, dresses and fabric, animals and boats with auto-split interlocking parts, STL/3MF, USB Marlin and OctoPrint/Moonraker.",
+      "d": "Full life-size studio with house drawing pen, dresses, animals, boats, unlimited scale export.",
       "web": true,
       "c": "Studios & Makers",
       "n": true,
-      "src": "hub"
+      "src": "pages"
     },
     {
       "t": "Coffeebreak Life-Size 3D Print Studio Buy",
@@ -9937,14 +9937,36 @@
     },
     {
       "t": "Coffeebreak House Maker",
-      "u": "https://songwriterkaz.github.io/coffeebreak/apps/cb-house-maker-free-demo/",
+      "u": "https://songwriterkaz.github.io/coffeebreak/apps/cb-house-maker/",
       "img": "",
-      "p": "Free demo · $10",
-      "d": "Design houses and mansions in 3D and export watertight STL/3MF or send to your 3D printer.",
+      "p": "$10",
+      "d": "Full House Maker: drawing pen, 6 storeys, mansions and castles, STL/3MF export and print tools.",
       "web": true,
       "c": "Studios & Makers",
       "n": true,
-      "src": "hub"
+      "src": "pages"
+    },
+    {
+      "t": "Coffeebreak House Maker Free Demo",
+      "u": "https://songwriterkaz.github.io/coffeebreak/apps/cb-house-maker-free-demo/",
+      "img": "",
+      "p": "Free",
+      "d": "Draw house floor plans with a freehand pen, rooms, doors and windows. Extrude to 3D, export STL/3MF. Demo: up to 2 storeys.",
+      "web": true,
+      "c": "Studios & Makers",
+      "n": false,
+      "src": "pages"
+    },
+    {
+      "t": "Coffeebreak House Maker Buy",
+      "u": "https://songwriterkaz.github.io/coffeebreak/apps/cb-house-maker-buy/",
+      "img": "",
+      "p": "$10",
+      "d": "Buy page",
+      "web": true,
+      "c": "Studios & Makers",
+      "n": false,
+      "src": "pages"
     }
   ]
 }

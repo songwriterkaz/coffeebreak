@@ -20,11 +20,29 @@
 
  <div id="houseOpts">
   <label>House preset</label>
-  <div class="tools"><button data-hpreset="cottage" class="on">Cottage</button><button data-hpreset="beach">Beach</button><button data-hpreset="mansion">Mansion</button><button data-hpreset="castle">Castle</button></div>
+  <div class="tools"><button data-hpreset="cottage" class="on">Cottage</button><button data-hpreset="beach">Beach</button><button data-hpreset="mansion">Mansion</button><button data-hpreset="castle">Castle</button><button data-hpreset="drawn">Drawn plan</button></div>
   <label>Size vs life size</label>
   <select id="hScale"><option value="0.05">5% of life size</option><option value="0.1" selected>10% of life size</option><option value="0.2">20% of life size</option><option value="0.5">50% of life size</option><option value="1">100% life size</option></select>
   <label>Base plate (mm at print scale)</label><select id="hBase"><option value="0">None</option><option value="2" selected>2 mm</option><option value="3">3 mm</option></select>
-  <p class="small">House plans reuse Coffeebreak House Maker. At 100% life size a cottage is about 11 × 9 m and splits into many bed-sized interlocking wall and roof parts.</p>
+  <label>Roof</label><select id="hRoof"><option value="hip">Hip</option><option value="gable" selected>Gable</option><option value="flat">Flat</option><option value="castle">Castle</option></select>
+  <div id="housePenBox" hidden>
+   <label>Drawing pen (top-down floor plan)</label>
+   <div class="tools" id="hPenTools">
+    <button data-hpen="pen" class="on">Pen</button>
+    <button data-hpen="room">Room</button>
+    <button data-hpen="3">Door</button>
+    <button data-hpen="4">Window</button>
+    <button data-hpen="0">Eraser</button>
+   </div>
+   <div class="row"><label class="small" style="display:flex;align-items:center;gap:6px;margin:0"><input type="checkbox" id="hPenSnap" checked> Snap to axes</label>
+    <select id="hPenInk"><option value="2">Ink: Wall</option><option value="3">Ink: Door</option><option value="4">Ink: Window</option><option value="1">Ink: Floor</option><option value="0">Ink: Erase</option></select></div>
+   <div class="row"><button id="hUndo">Undo</button><button id="hFill">Fill floors</button><button id="hClear">Clear plan</button></div>
+   <div id="hPlanBox" style="touch-action:none;overflow:auto;max-height:320px;border:2px solid #2a1030;border-radius:12px;background:#fff;margin:8px 0">
+    <canvas id="hPlan" width="360" height="280" style="touch-action:none;cursor:crosshair;display:block;margin:auto"></canvas>
+   </div>
+   <p class="small">Draw walls freehand (mouse, touch or stylus). Cells are 0.5 m. Closed loops can be filled as floors. Then Build model to extrude walls, slabs and roof into 3D.</p>
+  </div>
+  <p class="small">House plans reuse Coffeebreak House Maker. Choose Drawn plan to sketch your own. At 100% life size a cottage is about 11 × 9 m and splits into many bed-sized interlocking wall and roof parts.</p>
  </div>
 
  <div id="dressOpts" hidden>

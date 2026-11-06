@@ -3,6 +3,14 @@
 var C=window.CBLS, FULL=!!window.CB_FULL, $=function(id){return document.getElementById(id);};
 var cat='house', hPreset='cottage', animal='dog', boat='kayak';
 var model=null, parts=[], selectedPart=-1, sliced=null, need3d=true;
+/* Drawn house plan (House Maker Design) */
+var hDesign=null, hTool='pen', hHist=[], hDrag=null, hPenLast=null, hCell=12;
+function ensureHDesign(){var HM=window.CBHM;if(!HM)throw new Error('House Maker core missing');
+ if(!hDesign){try{var _hs=localStorage.getItem('cbls-hdesign');if(_hs)hDesign=HM.Design.fromJSON(JSON.parse(_hs));}catch(e){}
+  if(!hDesign){hDesign=new HM.Design(24,18,1);hDesign.roof='gable';}}
+ return hDesign;}
+function hSnap(){if(!hDesign)return;try{localStorage.setItem('cbls-hdesign',JSON.stringify(hDesign.toJSON()));}catch(e){}}
+function hSnapshot(){if(!hDesign)return;hHist.push(JSON.stringify(hDesign.toJSON()));if(hHist.length>40)hHist.shift();}
 
 function toast(t){var e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(function(){e.style.display='none';},3500);}
 function download(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},2500);}
@@ -31,14 +39,19 @@ function showOpts(){
 document.querySelectorAll('#cats button').forEach(function(b){b.onclick=function(){
  cat=b.dataset.cat;document.querySelectorAll('#cats button').forEach(function(x){x.classList.toggle('on',x===b);});showOpts();
 };});
-document.querySelectorAll('[data-hpreset]').forEach(function(b){b.onclick=function(){hPreset=b.dataset.hpreset;document.querySelectorAll('[data-hpreset]').forEach(function(x){x.classList.toggle('on',x===b);});};});
+document.querySelectorAll('[data-hpreset]').forEach(function(b){b.onclick=function(){hPreset=b.dataset.hpreset;document.querySelectorAll('[data-hpreset]').forEach(function(x){x.classList.toggle('on',x===b);});var box=$('housePenBox');if(box){box.hidden=hPreset!=='drawn';if(hPreset==='drawn'){ensureHDesign();drawHPlan();}}};});
+function showHousePen(){var box=$('housePenBox');if(box){box.hidden=hPreset!=='drawn';if(hPreset==='drawn'){ensureHDesign();drawHPlan();}}}
+showHousePen();
 document.querySelectorAll('[data-animal]').forEach(function(b){b.onclick=function(){animal=b.dataset.animal;document.querySelectorAll('[data-animal]').forEach(function(x){x.classList.toggle('on',x===b);});};});
 document.querySelectorAll('[data-boat]').forEach(function(b){b.onclick=function(){boat=b.dataset.boat;document.querySelectorAll('[data-boat]').forEach(function(x){x.classList.toggle('on',x===b);});};});
 
 function buildModel(){
  try{
   if(cat==='house'){
-   model=C.models.house({preset:hPreset,lifeScale:+$('hScale').value,base:+$('hBase').value});
+   var hop={preset:hPreset,lifeScale:+$('hScale').value,base:+$('hBase').value};
+   if(hPreset==='drawn'){ensureHDesign();hDesign.roof=$('hRoof').value;hop.design=hDesign;hop.preset='drawn';}
+   else if($('hRoof'))hop.roof=$('hRoof').value;
+   model=C.models.house(hop);
   } else if(cat==='dress'){
    model=C.models.dress({style:$('dStyle').value,bust:+$('dBust').value,waist:+$('dWaist').value,hips:+$('dHips').value,length:+$('dLen').value,sleeve:+$('dSleeve').value,pitch:+$('dPitch').value});
   } else if(cat==='animal'){
@@ -250,5 +263,41 @@ if(!FULL){document.querySelector('#printPanel h2').insertAdjacentHTML('afterend'
 showOpts();init3d();updBtns();
 // Default small cottage so first paint is quick
 setTimeout(buildModel,60);
-window.CBLS_APP={get model(){return model;},get parts(){return parts;},buildModel:buildModel};
+
+/* ---- House drawing pen (top-down) ---- */
+var Tiles=window.CBHM&&window.CBHM.T;
+var HCOL={0:'#ffffff',1:'#f3e2c7',2:'#7a3b55',3:'#b5651d',4:'#6ec6ff'};
+function drawHPlan(){var pc=$('hPlan');if(!pc||!hDesign)return;var px=pc.getContext('2d');var W=hDesign.W,H=hDesign.H;hCell=Math.max(8,Math.min(18,Math.floor(340/Math.max(W,H))));pc.width=W*hCell;pc.height=H*hCell;px.fillStyle='#fff8fb';px.fillRect(0,0,pc.width,pc.height);
+ var A=hDesign.floors[0];
+ for(var z=0;z<H;z++)for(var x=0;x<W;x++){var t=A[z*W+x];if(!t)continue;px.fillStyle=HCOL[t]||'#ccc';px.fillRect(x*hCell,z*hCell,hCell,hCell);}
+ px.strokeStyle='#00000018';px.lineWidth=1;px.beginPath();for(x=0;x<=W;x++){px.moveTo(x*hCell+.5,0);px.lineTo(x*hCell+.5,pc.height);}for(z=0;z<=H;z++){px.moveTo(0,z*hCell+.5);px.lineTo(pc.width,z*hCell+.5);}px.stroke();
+ if(hDrag&&hTool==='room'){px.strokeStyle='#ff4f9a';px.lineWidth=2;var x0=Math.min(hDrag.x0,hDrag.x1),z0=Math.min(hDrag.z0,hDrag.z1),x1=Math.max(hDrag.x0,hDrag.x1),z1=Math.max(hDrag.z0,hDrag.z1);px.strokeRect(x0*hCell,z0*hCell,(x1-x0+1)*hCell,(z1-z0+1)*hCell);}}
+function hCellAt(e){var pc=$('hPlan'),r=pc.getBoundingClientRect();return [Math.floor((e.clientX-r.left)/hCell),Math.floor((e.clientY-r.top)/hCell)];}
+function hInk(){if(hTool==='pen')return +$('hPenInk').value;return +hTool;}
+function hPaint(x,z,t){if(!hDesign||x<0||z<0||x>=hDesign.W||z>=hDesign.H)return;hDesign.set(0,x,z,t);}
+function hLine(x0,z0,x1,z1){var dx=Math.abs(x1-x0),dz=Math.abs(z1-z0),sx=x0<x1?1:-1,sz=z0<z1?1:-1,err=dx-dz,x=x0,z=z0,out=[];for(;;){out.push([x,z]);if(x===x1&&z===z1)break;var e2=2*err;if(e2>-dz){err-=dz;x+=sx;}if(e2<dx){err+=dx;z+=sz;}}return out;}
+function hSnapAxis(x0,z0,x1,z1){if(!$('hPenSnap')||!$('hPenSnap').checked)return [x1,z1];if(Math.abs(x1-x0)>=Math.abs(z1-z0))return [x1,z0];return [x0,z1];}
+function hStroke(x,z){var t=hInk();if(!hPenLast){hPaint(x,z,t);hPenLast=[x,z];return;}var s=hSnapAxis(hPenLast[0],hPenLast[1],x,z);hLine(hPenLast[0],hPenLast[1],s[0],s[1]).forEach(function(p){hPaint(p[0],p[1],t);});hPenLast=s;}
+(function wireHousePen(){var pc=$('hPlan');if(!pc)return;
+ document.querySelectorAll('#hPenTools button').forEach(function(b){b.onclick=function(){hTool=b.dataset.hpen;document.querySelectorAll('#hPenTools button').forEach(function(x){x.classList.toggle('on',x===b);});};});
+ $('hUndo').onclick=function(){if(!hHist.length)return toast('Nothing to undo');hDesign=window.CBHM.Design.fromJSON(JSON.parse(hHist.pop()));drawHPlan();hSnap();};
+ $('hClear').onclick=function(){ensureHDesign();hSnapshot();hDesign.floors[0].fill(0);hDesign.dirs[0].fill(0);drawHPlan();hSnap();toast('Plan cleared');};
+ $('hFill').onclick=function(){ensureHDesign();hSnapshot();var A=hDesign.floors[0],W=hDesign.W,H=hDesign.H,seen=new Uint8Array(W*H),q=[],fill=0,T=window.CBHM.T;
+  function wallish(t){return t===T.WALL||t===T.DOOR||t===T.WINDOW||t===T.STAIR;}
+  function push(x,z){if(x<0||z<0||x>=W||z>=H)return;var i=z*W+x;if(seen[i]||wallish(A[i]))return;seen[i]=1;q.push(i);}
+  for(var x=0;x<W;x++){push(x,0);push(x,H-1);}for(var z=0;z<H;z++){push(0,z);push(W-1,z);}
+  while(q.length){var i=q.pop();x=i%W;z=(i/W)|0;push(x+1,z);push(x-1,z);push(x,z+1);push(x,z-1);}
+  for(z=0;z<H;z++)for(x=0;x<W;x++){i=z*W+x;if(!seen[i]&&!wallish(A[i])){A[i]=T.FLOOR;fill++;}}
+  drawHPlan();hSnap();toast(fill?'Filled '+fill+' floor cells':'Draw a closed wall loop first');};
+ pc.addEventListener('pointerdown',function(e){e.preventDefault();ensureHDesign();hSnapshot();var c=hCellAt(e);hDrag={x0:c[0],z0:c[1],x1:c[0],z1:c[1]};hPenLast=null;pc.setPointerCapture(e.pointerId);
+  if(hTool==='pen'){hStroke(c[0],c[1]);drawHPlan();}else if(hTool!=='room'){hPaint(c[0],c[1],hInk());drawHPlan();}});
+ pc.addEventListener('pointermove',function(e){if(!hDrag)return;var c=hCellAt(e);if(c[0]===hDrag.x1&&c[1]===hDrag.z1)return;hDrag.x1=c[0];hDrag.z1=c[1];
+  if(hTool==='pen'){hStroke(c[0],c[1]);drawHPlan();}else if(hTool==='room')drawHPlan();else{hPaint(c[0],c[1],hInk());drawHPlan();}});
+ pc.addEventListener('pointerup',function(){if(!hDrag)return;if(hTool==='room'){var x0=Math.min(hDrag.x0,hDrag.x1),z0=Math.min(hDrag.z0,hDrag.z1),x1=Math.max(hDrag.x0,hDrag.x1),z1=Math.max(hDrag.z0,hDrag.z1);var T=window.CBHM.T;
+   if(x1-x0>=2&&z1-z0>=2){for(var z=z0;z<=z1;z++)for(var x=x0;x<=x1;x++){var edge=x===x0||x===x1||z===z0||z===z1;var c=hDesign.get(0,x,z);if(edge){if(c!==T.DOOR&&c!==T.WINDOW)hDesign.set(0,x,z,T.WALL);}else if(c===0||c===T.FLOOR)hDesign.set(0,x,z,T.FLOOR);}}else toast('Drag a bigger room (at least 3 × 3)');}
+  hDrag=null;hPenLast=null;drawHPlan();hSnap();});
+ pc.addEventListener('pointercancel',function(){hDrag=null;hPenLast=null;});
+})();
+
+window.CBLS_APP={get model(){return model;},get parts(){return parts;},buildModel:buildModel,get hDesign(){return hDesign;}};
 })();

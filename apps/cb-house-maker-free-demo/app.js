@@ -3,7 +3,7 @@
 var C=window.CBHM,T=C.T,FULL=!!window.CB_FULL;var $=function(id){return document.getElementById(id);};
 var COL={0:'#ffffff',1:'#f3e2c7',2:'#7a3b55',3:'#b5651d',4:'#6ec6ff',5:'#ff9fc8',6:'#2f8fe0',7:'#7cc66b',8:'#2e7d32',9:'#d9c9a8'};
 var NAME={0:'Empty',1:'Floor',2:'Wall',3:'Door',4:'Window',5:'Stairs',6:'Pool',7:'Garden',8:'Tree',9:'Path'};
-var D=C.PRESETS.mansion(),F=0,tool='room',stairDir=0,hist=[],cell=12,showAll=true;
+var D=C.PRESETS.mansion(),F=0,tool='pen',stairDir=0,hist=[],cell=12,showAll=true,penLast=null;
 function toast(t){var e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(function(){e.style.display='none';},3200);}
 function opts(){return {scale:+$('scale').value,base:+$('base').value,bold:$('bold').value==='1'};}
 function snapshot(){hist.push(JSON.stringify(D.toJSON()));if(hist.length>40)hist.shift();}
@@ -47,11 +47,26 @@ function drawPlan(){if(!cell)fitCell();pc.width=D.W*cell;pc.height=D.H*cell;px.f
  if(drag&&tool==='room'){px.strokeStyle='#ff4f9a';px.lineWidth=3;var r=rect();px.strokeRect(r[0]*cell,r[1]*cell,(r[2]-r[0]+1)*cell,(r[3]-r[1]+1)*cell);}}
 var drag=null;function rect(){return [Math.min(drag.x0,drag.x1),Math.min(drag.z0,drag.z1),Math.max(drag.x0,drag.x1),Math.max(drag.z0,drag.z1)];}
 function cellAt(e){var r=pc.getBoundingClientRect();return [Math.floor((e.clientX-r.left)/cell),Math.floor((e.clientY-r.top)/cell)];}
-function paint(x,z){var t=+tool;if(t>=6&&F!==0){toast('Pool, garden, tree and path go on the ground floor');return;}D.set(F,x,z,t,t===T.STAIR?stairDir:0);}
-pc.addEventListener('pointerdown',function(e){if(tool==='pan')return;e.preventDefault();var c=cellAt(e);snapshot();drag={x0:c[0],z0:c[1],x1:c[0],z1:c[1]};pc.setPointerCapture(e.pointerId);if(tool!=='room'){paint(c[0],c[1]);drawPlan();}});
-pc.addEventListener('pointermove',function(e){if(!drag)return;var c=cellAt(e);if(c[0]===drag.x1&&c[1]===drag.z1)return;drag.x1=c[0];drag.z1=c[1];if(tool!=='room')paint(c[0],c[1]);drawPlan();});
+function inkTile(){if(tool==='pen')return +$('penInk').value;return +tool;}
+function paintCell(x,z,t){if(x<0||z<0||x>=D.W||z>=D.H)return;if(t>=6&&F!==0){toast('Pool, garden, tree and path go on the ground floor');return;}D.set(F,x,z,t,t===T.STAIR?stairDir:0);}
+function paint(x,z){paintCell(x,z,inkTile());}
+function lineCells(x0,z0,x1,z1){var pts=[],dx=Math.abs(x1-x0),dz=Math.abs(z1-z0),sx=x0<x1?1:-1,sz=z0<z1?1:-1,err=dx-dz,x=x0,z=z0;for(;;){pts.push([x,z]);if(x===x1&&z===z1)break;var e2=2*err;if(e2>-dz){err-=dz;x+=sx;}if(e2<dx){err+=dx;z+=sz;}}return pts;}
+function snapAxis(x0,z0,x1,z1){if(!$('penSnap')||!$('penSnap').checked)return [x1,z1];if(Math.abs(x1-x0)>=Math.abs(z1-z0))return [x1,z0];return [x0,z1];}
+function strokeTo(x,z){if(!penLast){paint(x,z);penLast=[x,z];return;}var s=snapAxis(penLast[0],penLast[1],x,z);lineCells(penLast[0],penLast[1],s[0],s[1]).forEach(function(p){paint(p[0],p[1]);});penLast=s;}
+pc.addEventListener('pointerdown',function(e){if(tool==='pan')return;e.preventDefault();var c=cellAt(e);snapshot();drag={x0:c[0],z0:c[1],x1:c[0],z1:c[1]};penLast=null;pc.setPointerCapture(e.pointerId);if(tool==='pen'){strokeTo(c[0],c[1]);drawPlan();}else if(tool!=='room'){paint(c[0],c[1]);drawPlan();}});
+pc.addEventListener('pointermove',function(e){if(!drag)return;var c=cellAt(e);if(c[0]===drag.x1&&c[1]===drag.z1)return;drag.x1=c[0];drag.z1=c[1];if(tool==='pen'){strokeTo(c[0],c[1]);drawPlan();}else if(tool!=='room'){paint(c[0],c[1]);drawPlan();}else drawPlan();});
 pc.addEventListener('pointerup',function(){if(!drag)return;if(tool==='room'){var r=rect();if(r[2]-r[0]>=2&&r[3]-r[1]>=2){for(var z=r[1];z<=r[3];z++)for(var x=r[0];x<=r[2];x++){var edge=x===r[0]||x===r[2]||z===r[1]||z===r[3];var c=D.get(F,x,z);if(edge){if(c!==T.DOOR&&c!==T.WINDOW&&c!==T.STAIR)D.set(F,x,z,T.WALL);}else if(!C.BUILD(c)||c===T.FLOOR)D.set(F,x,z,T.FLOOR);}}else toast('Drag a bigger rectangle (at least 3 × 3 squares)');}
- drag=null;changed();});
+ drag=null;penLast=null;changed();});
+pc.addEventListener('pointercancel',function(){drag=null;penLast=null;});
+$('clearFloor').onclick=function(){snapshot();D.floors[F].fill(0);D.dirs[F].fill(0);changed();toast('Storey cleared');};
+$('fillFloors').onclick=function(){snapshot();var A=D.floors[F],W=D.W,H=D.H,seen=new Uint8Array(W*H),q=[],fill=0;
+ function wallish(t){return t===T.WALL||t===T.DOOR||t===T.WINDOW||t===T.STAIR;}
+ // mark outside via flood from edges through non-walls
+ function tryPush(x,z){if(x<0||z<0||x>=W||z>=H)return;var i=z*W+x;if(seen[i]||wallish(A[i]))return;seen[i]=1;q.push(i);}
+ for(var x=0;x<W;x++){tryPush(x,0);tryPush(x,H-1);}for(var z=0;z<H;z++){tryPush(0,z);tryPush(W-1,z);}
+ while(q.length){var i=q.pop(),x=i%W,z=(i/W)|0;tryPush(x+1,z);tryPush(x-1,z);tryPush(x,z+1);tryPush(x,z-1);}
+ for(z=0;z<H;z++)for(x=0;x<W;x++){i=z*W+x;if(!seen[i]&&!wallish(A[i])&&A[i]!==T.POOL){if(A[i]===0||A[i]===T.FLOOR){A[i]=T.FLOOR;fill++;}}}
+ changed();toast(fill?'Filled '+fill+' floor cells inside walls':'No enclosed rooms found (draw a closed wall loop first)');};
 
 /* ---------- 3D ---------- */
 var R3,scene,cam,ctl,group,plane;

@@ -13,7 +13,8 @@ function houseGrid(opts){
  opts=opts||{};
  var HM=G.CBHM; if(!HM) throw new Error('House Maker core missing');
  var preset=opts.preset||'cottage';
- var design=opts.design||(preset==='blank'?new HM.Design(16,14,1):HM.PRESETS[preset]());
+ var design=opts.design||(preset==='blank'||preset==='drawn'?new HM.Design(24,18,1):(HM.PRESETS[preset]?HM.PRESETS[preset]():HM.PRESETS.cottage()));
+ if(opts.roof)design.roof=opts.roof;
  var lifeScale=opts.lifeScale!=null?opts.lifeScale:0.1; // 10% of life size default
  // House Maker scale N means 1:N. We want physical size = life / N_effective.
  // At HM scale=1, vs=250mm and cell=0.5m → true life size for the plan.
@@ -21,7 +22,7 @@ function houseGrid(opts){
  var hmScale=Math.max(1,Math.round(1/Math.max(0.01,lifeScale)));
  var g=HM.build(design,{scale:hmScale,base:opts.base!=null?opts.base:2,bold:!!opts.bold});
  // HM build already returns {v,X,Y,Z,vs,...} compatible with CBLS
- return {grid:g, design:design, hmScale:hmScale, lifeScale:lifeScale, kind:'house', name:preset};
+ return {grid:g, design:design, hmScale:hmScale, lifeScale:lifeScale, kind:'house', name:preset==='drawn'?'drawn-plan':preset};
 }
 
 /* ---- Dresses & fabric: wearable chainmail / lattice sized to body (mm) ---- */
