@@ -1,0 +1,9 @@
+{
+  "name": "Coffeebreak Responder Toolkit",
+  "short_name": "CB Responder",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0e1a24",
+  "theme_color": "#0e1a24",
+  "icons": [{ "src": "cb-logo.png", "sizes": "192x192", "type": "image/png" }]
+}
