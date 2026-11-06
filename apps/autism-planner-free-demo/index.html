@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-AU"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Autism Planner (Free Demo)</title>
+<link rel="icon" href="cb-logo.png">
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--ink:#1a2740;--muted:#5a6a84;--accent:#5b8def;--ok:#3a9a6a;--soft:#e8eef8}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#eef3fb,#f7f9fc);color:var(--ink);font:16px/1.45 system-ui,sans-serif;min-height:100vh}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-bottom:2px solid var(--soft);position:sticky;top:0;z-index:5}
+header img{height:42px;width:42px;border-radius:50%;object-fit:cover;background:#fff}
+header h1{font-size:17px;margin:0;flex:1;color:#2a4a7a}
+.badge{background:var(--accent);color:#fff;border-radius:999px;padding:3px 10px;font-size:.75em;font-weight:700}
+.disc{background:#eaf1ff;color:#334;font-size:13px;padding:8px 14px;text-align:center}
+main{max-width:760px;margin:auto;padding:14px 14px 40px}
+.card{background:var(--card);border:1px solid #d7e0f0;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px #00000008}
+h2{margin:0 0 10px;font-size:18px;color:#2a4a7a}
+label{display:block;font-size:13px;color:var(--muted);margin-top:8px}
+input,select,textarea{width:100%;border:1px solid #c5d2e8;border-radius:10px;padding:10px;font:inherit;background:#fbfcff;margin:4px 0}
+button,.btn{background:var(--accent);color:#fff;border:0;border-radius:10px;padding:10px 14px;font:inherit;cursor:pointer;text-decoration:none;display:inline-block;font-weight:600}
+button.ghost{background:#eef3fb;color:#2a4a7a}
+button:disabled{opacity:.45}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.muted{color:var(--muted);font-size:.92em}
+.nowNext{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.slot{border:2px solid #c5d2e8;border-radius:14px;padding:14px;min-height:110px;background:#fbfcff}
+.slot.now{border-color:var(--accent);background:#eef5ff}
+.slot.next{border-color:#b7dcc8;background:#f3faf6}
+.slot h3{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.slot .title{font-size:22px;font-weight:700}
+.steps{list-style:none;padding:0;margin:0}
+.steps li{display:flex;gap:10px;align-items:center;padding:10px;border-radius:12px;border:1px solid #e0e7f2;margin-bottom:8px;background:#fff}
+.steps li.done{opacity:.55;text-decoration:line-through}
+.dot{width:28px;height:28px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;font-weight:700;color:#2a4a7a;flex:0 0 auto}
+.cbfoot{text-align:center;color:#6a7690;font-size:12px;padding:20px 12px 40px;line-height:1.5;max-width:720px;margin:0 auto}
+.cbfoot a{color:#2a4a7a}
+@media(max-width:640px){.nowNext{grid-template-columns:1fr}header h1{font-size:14px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<script>window.CB_DEMO=true;</script>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body>
+<header>
+<img src="cb-logo.png" alt="Coffeebreak logo">
+<h1>Autism Planner</h1>
+<span class="badge">FREE DEMO</span>
+</header>
+<div class="disc">Calm visual daily planner. Sound off by default. No sudden pop-ups. Your routines stay on this device. For entertainment and personal organising only — not medical advice.</div>
+<main>
+<section class="card">
+  <h2>Now / Next</h2>
+  <div class="nowNext">
+    <div class="slot now"><h3>Now</h3><div class="title" id="nowTitle">—</div><p class="muted" id="nowMeta"></p></div>
+    <div class="slot next"><h3>Next</h3><div class="title" id="nextTitle">—</div><p class="muted" id="nextMeta"></p></div>
+  </div>
+  <div class="row">
+    <button type="button" id="btnDone">Mark Now done</button>
+    <button type="button" class="ghost" id="btnSkip">Skip Now</button>
+  </div>
+</section>
+<section class="card">
+  <h2>Today's routine</h2>
+  <p class="muted" id="demoNote"></p>
+  <ol class="steps" id="stepList"></ol>
+</section>
+<section class="card">
+  <h2>Edit routine</h2>
+  <label for="routineName">Routine name</label>
+  <input id="routineName" value="Morning">
+  <label for="stepsIn">Steps (one per line)</label>
+  <textarea id="stepsIn" rows="6" placeholder="Wake up&#10;Brush teeth&#10;Get dressed&#10;Breakfast&#10;Bag"></textarea>
+  <div class="row">
+    <button type="button" id="btnSaveRoutine">Save routine</button>
+    <button type="button" class="ghost" id="btnLoadMorning">Load Morning sample</button>
+    <button type="button" class="ghost" id="btnLoadSchool">Load After-school sample</button>
+  </div>
+  <p class="muted" id="editStatus"></p>
+</section>
+<section class="card">
+  <h2>Calm options</h2>
+  <div class="row">
+    <button type="button" class="ghost" id="btnBig">Bigger text</button>
+    <button type="button" class="ghost" id="btnResetText">Normal text</button>
+  </div>
+  <p class="muted">Reduce motion follows your system setting. Owner: open the full app free on your own device after PayID purchase.</p>
+  <p><a class="btn" href="../autism-planner-buy/">Buy full version $10</a>
+  <a class="btn" style="background:#eef3fb;color:#2a4a7a" href="../autism-planner-free-demo/">Free demo</a></p>
+</section>
+</main>
+<footer class="cbfoot">
+<p><img src="cb-logo.png" alt="Coffeebreak logo" style="height:48px;border-radius:10px;background:#fff"></p>
+<p><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named; trademarks belong to their owners.</p>
+<p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com · No PayPal</p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a></p>
+</footer>
+<script src="app.js"></script>
+</body></html>
