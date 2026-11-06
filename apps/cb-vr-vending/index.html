@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Coffeebreak VR Snack Vending</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#2a0f1f;font-family:system-ui,sans-serif;color:#fff}
+canvas{display:block;touch-action:none}
+#hud{position:fixed;top:8px;left:8px;right:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;pointer-events:none;z-index:5}
+#hud img{width:44px;height:44px;border-radius:50%;background:#fff}
+#hud .t{background:rgba(0,0,0,.45);padding:6px 10px;border-radius:12px;font-size:14px}
+#hud a,#hud button{pointer-events:auto}
+#cartBtn{margin-left:auto;background:#ff4fa3;color:#fff;border:0;border-radius:20px;padding:8px 14px;font-weight:700;font-size:14px;cursor:pointer}
+#msg{position:fixed;top:64px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.65);padding:8px 14px;border-radius:12px;font-size:14px;z-index:5;max-width:90%;text-align:center;display:none}
+#pre{position:fixed;top:100px;left:50%;transform:translateX(-50%);background:#ffe066;color:#6b3a00;font-weight:800;padding:4px 12px;border-radius:12px;font-size:13px;z-index:5;letter-spacing:.3px}
+#panel{position:fixed;right:10px;bottom:78px;width:min(300px,92vw);background:rgba(42,16,32,.94);border:2px solid #ff8fc8;border-radius:16px;padding:10px;z-index:6;display:none}
+#panel h2{margin:0 0 6px;font-size:16px;color:#ffcf6a}
+#scr{background:#0f2a12;color:#7dff8a;font-family:monospace;font-size:15px;padding:8px;border-radius:8px;min-height:36px}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:8px 0}
+.keys button{padding:10px 0;font-size:16px;font-weight:700;border-radius:10px;border:0;background:#ffd1e8;color:#5a1d3e;cursor:pointer}
+.keys button:active{transform:scale(.94)}
+#cartBox{max-height:120px;overflow:auto;font-size:13px;margin:6px 0;line-height:1.4}
+.pay{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.pay a,.pay button{display:block;text-align:center;text-decoration:none;border:0;border-radius:18px;padding:9px 12px;font-weight:700;font-size:13px;cursor:pointer;color:#fff}
+.payid{background:#7a2350}
+.gum{background:#ff4fa3}
+.note{font-size:11px;color:#ffb3d6;margin:6px 0 0;line-height:1.35}
+#foot{position:fixed;bottom:0;left:0;right:0;background:rgba(20,5,15,.9);font-size:11px;padding:6px 10px;text-align:center;z-index:5;line-height:1.45}
+#foot a{color:#ffb3d6}
+#joy{position:fixed;left:16px;bottom:78px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,179,214,.6);z-index:4;display:none;touch-action:none}
+#knob{position:absolute;left:35px;top:35px;width:40px;height:40px;border-radius:50%;background:#ff4fa3}
+#start{position:fixed;inset:0;background:radial-gradient(#7a2350,#2a0f1f);z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;overflow:auto}
+#start img{width:110px;border-radius:50%;background:#fff}
+#start button{margin:8px;padding:12px 22px;border-radius:24px;border:0;background:#ff4fa3;color:#fff;font-size:17px;font-weight:700;cursor:pointer}
+#start .badge{background:#ffe066;color:#6b3a00;font-weight:800;padding:4px 12px;border-radius:12px;display:inline-block;margin:6px 0}
+#start a{color:#ffb3d6}
+#VRButton{z-index:6;bottom:70px!important}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<div id="start">
+  <img src="cb-logo.png" alt="Coffeebreak logo">
+  <h1>Coffeebreak VR Snack Vending</h1>
+  <span class="badge">PRE-ORDER</span>
+  <p>Walk up to the glossy pink CB vending machine, pick a snack on the keypad, watch the coil turn and the snack drop, then check out for real snacks posted in Australia.</p>
+  <p style="font-size:13px">Laptop: WASD or arrows to move, drag to look, click machine to open the keypad. Phone: left stick to move, drag right side to look. VR: ENTER VR, look and use the thumbstick or tap to walk.</p>
+  <p style="font-size:13px">Also try the <a href="https://songwriterkaz.github.io/coffeebreak/apps/snack-vending/">2D Snack Vending Machine</a>.</p>
+  <button id="play">Enter the pink room</button>
+</div>
+<div id="hud">
+  <img src="cb-logo.png" alt="CB">
+  <span class="t" id="hint">Walk to the machine</span>
+  <span class="t" id="codeLbl">Code --</span>
+  <button id="cartBtn" type="button">Cart (0)</button>
+</div>
+<div id="pre">PRE-ORDER · real snacks by post in Australia</div>
+<div id="msg" aria-live="polite"></div>
+<div id="panel">
+  <h2>CB Vending</h2>
+  <div id="scr">PICK A CODE</div>
+  <div class="keys" id="keys"></div>
+  <div id="cartBox"><b>Cart:</b> empty</div>
+  <div class="pay">
+    <button type="button" class="payid" id="payidBtn">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</button>
+    <a class="gum" href="https://kazmelody.gumroad.com" target="_blank" rel="noopener">Pay on Gumroad</a>
+  </div>
+  <p class="note">Orders are fulfilled by post in Australia. Stock and supplier are still being set up, so every item is a Pre-order. Add your delivery name, phone and Australian address in the PayID payment description or Gumroad note. No PayPal.</p>
+  <p class="note"><a href="https://songwriterkaz.github.io/coffeebreak/apps/snack-vending/" style="color:#ffb3d6">Open 2D Snack Vending</a></p>
+</div>
+<div id="joy"><div id="knob"></div></div>
+<footer id="foot">
+  <img src="cb-logo.png" alt="Coffeebreak logo" width="28" height="28" style="border-radius:50%;background:#fff;vertical-align:middle">
+  Coffeebreak © Karen O'Brien. Karen keeps all rights to products, designs, apps, name and logo. Buyers may resell physical products bought but may not copy or make their own versions. She claims no ownership of third-party brands named.
+  · <a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a>
+  · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a>
+  · <a href="https://songwriterkaz.github.io/coffeebreak/yellow-pages/">Yellow Pages</a>
+</footer>
+<script type="module">
+import * as THREE from './three.module.min.js';
+import {VRButton} from './VRButton.js';
+
+const SNACKS=[
+  {code:'A1',name:'CB Salt Chips',price:4.5,kind:'chips',col:0xffe066},
+  {code:'A2',name:'CB BBQ Chips',price:4.5,kind:'chips',col:0xff8c42},
+  {code:'A3',name:'CB Sour Cream Chips',price:4.5,kind:'chips',col:0xfff0c2},
+  {code:'A4',name:'CB Cheese Twists',price:4.0,kind:'chips',col:0xffcf6a},
+  {code:'B1',name:'CB Milk Choc Bar',price:3.5,kind:'choc',col:0x6b3a1f},
+  {code:'B2',name:'CB Dark Choc Bar',price:3.5,kind:'choc',col:0x3b2212},
+  {code:'B3',name:'CB Caramel Choc',price:3.8,kind:'choc',col:0x8a4a20},
+  {code:'B4',name:'CB White Choc Bar',price:3.5,kind:'choc',col:0xffe8c8},
+  {code:'C1',name:'CB Fruit Lolly Pack',price:2.5,kind:'lolly',col:0xff6fb5},
+  {code:'C2',name:'CB Berry Gummies',price:2.8,kind:'lolly',col:0xd6336c},
+  {code:'C3',name:'CB Mint Chews',price:2.5,kind:'lolly',col:0x7dff8a},
+  {code:'C4',name:'CB Rainbow Drops',price:2.8,kind:'lolly',col:0x9b59ff},
+  {code:'D1',name:'CB Cola Can',price:3.0,kind:'drink',col:0xc0392b},
+  {code:'D2',name:'CB Lemonade Can',price:3.0,kind:'drink',col:0xffe066},
+  {code:'D3',name:'CB Iced Coffee Can',price:4.0,kind:'drink',col:0x8b5a2b},
+  {code:'D4',name:'CB Sparkling Water',price:2.8,kind:'drink',col:0x8ecae6}
+];
+
+const $=id=>document.getElementById(id);
+const msg=t=>{$('msg').textContent=t;$('msg').style.display='block';clearTimeout(msg._t);msg._t=setTimeout(()=>$('msg').style.display='none',2800)};
+
+const R=new THREE.WebGLRenderer({antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,1.6));
+R.setSize(innerWidth,innerHeight);
+R.xr.enabled=true;
+R.outputColorSpace=THREE.SRGBColorSpace;
+document.body.appendChild(R.domElement);
+document.body.appendChild(VRButton.createButton(R));
+
+const S=new THREE.Scene();
+S.background=new THREE.Color(0xffd0e8);
+S.fog=new THREE.Fog(0xffd0e8,12,28);
+const cam=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,.08,80);
+const rig=new THREE.Group();
+rig.add(cam);
+cam.position.y=1.55;
+S.add(rig);
+
+S.add(new THREE.HemisphereLight(0xffffff,0xff9ccf,1.05));
+const dl=new THREE.DirectionalLight(0xffffff,.85);
+dl.position.set(3,8,4);
+S.add(dl);
+const pinkFill=new THREE.PointLight(0xff6fb5,.55,18);
+pinkFill.position.set(0,2.4,-1);
+S.add(pinkFill);
+
+const M=(c,opts={})=>new THREE.MeshStandardMaterial({color:c,roughness:opts.r??.55,metalness:opts.m??.05,...opts});
+const box=(w,h,d,mat,x,y,z,solid=false)=>{
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
+  m.position.set(x,y,z);
+  S.add(m);
+  if(solid) walls.push(m);
+  return m;
+};
+const walls=[];
+
+// Cosy pink room
+box(10,.12,10,M(0xf7c6dc,{r:.8}),0,0,0);
+box(10,.12,10,M(0xffe8f3,{r:.9}),0,3.2,0);
+box(10,3.2,.18,M(0xffb3d6,{r:.75}),0,1.6,-4.9,1);
+box(10,3.2,.18,M(0xffc2dd,{r:.75}),0,1.6,4.9,1);
+box(.18,3.2,10,M(0xffa8cf,{r:.75}),-4.9,1.6,0,1);
+box(.18,3.2,10,M(0xffa8cf,{r:.75}),4.9,1.6,0,1);
+// rug + soft sofa
+box(3.2,.05,2.2,M(0xff4fa3,{r:.7}),-2.2,.03,2.2);
+box(2.4,.55,1.0,M(0xff6fb5,{r:.65}),-2.4,.35,3.5,1);
+box(2.4,.35,.25,M(0xffd1e8,{r:.6}),-2.4,.85,3.1);
+// plant
+const pot=new THREE.Mesh(new THREE.CylinderGeometry(.18,.22,.25,12),M(0x8a4b6b,{r:.5}));
+pot.position.set(3.6,.15,3.6);S.add(pot);
+const leaf=new THREE.Mesh(new THREE.SphereGeometry(.35,10,8),M(0x5fbf5f,{r:.8}));
+leaf.position.set(3.6,.7,3.6);S.add(leaf);
+
+// Glossy pink vending machine body
+const vm=new THREE.Group();
+vm.position.set(0,0,-3.35);
+S.add(vm);
+const glossPink=M(0xff4fa3,{r:.22,m:.55});
+const glossDark=M(0x5a1d3e,{r:.35,m:.25});
+const chrome=M(0xffd1e8,{r:.18,m:.7});
+const body=new THREE.Mesh(new THREE.BoxGeometry(1.7,2.35,.85),glossPink);
+body.position.y=1.2;vm.add(body);
+const trim=new THREE.Mesh(new THREE.BoxGeometry(1.78,2.42,.08),chrome);
+trim.position.set(0,1.2,.42);vm.add(trim);
+// glass window
+const glass=new THREE.Mesh(new THREE.PlaneGeometry(1.25,1.45),new THREE.MeshPhysicalMaterial({color:0x99ddff,transparent:true,opacity:.28,roughness:.05,metalness:.1,transmission:.55,thickness:.2}));
+glass.position.set(-.12,1.45,.44);vm.add(glass);
+const glassBack=new THREE.Mesh(new THREE.PlaneGeometry(1.25,1.45),M(0x2a1020,{r:.7}));
+glassBack.position.set(-.12,1.45,.05);vm.add(glassBack);
+// keypad panel
+const panel3d=new THREE.Mesh(new THREE.BoxGeometry(.38,.9,.12),glossDark);
+panel3d.position.set(.62,1.35,.48);vm.add(panel3d);
+const screen3d=new THREE.Mesh(new THREE.PlaneGeometry(.3,.16),M(0x0f2a12,{r:.4,m:.2,emissive:0x145c22,emissiveIntensity:.5}));
+screen3d.position.set(.62,1.72,.55);vm.add(screen3d);
+// tray
+const tray=new THREE.Mesh(new THREE.BoxGeometry(1.1,.12,.35),glossDark);
+tray.position.set(0,.28,.55);vm.add(tray);
+const trayHole=new THREE.Mesh(new THREE.BoxGeometry(.95,.08,.28),M(0x1a0812,{r:.9}));
+trayHole.position.set(0,.32,.58);vm.add(trayHole);
+// CB logo disc on machine
+const logoTex=new THREE.TextureLoader().load('cb-logo.png');
+logoTex.colorSpace=THREE.SRGBColorSpace;
+const logoMat=new THREE.MeshBasicMaterial({map:logoTex});
+const logo=new THREE.Mesh(new THREE.CircleGeometry(.18,32),logoMat);
+logo.position.set(0,2.22,.44);vm.add(logo);
+const logoBadge=new THREE.Mesh(new THREE.BoxGeometry(.7,.16,.04),M(0xffe066,{r:.4,m:.2}));
+logoBadge.position.set(0,2.48,.44);vm.add(logoBadge);
+
+// Spiral coils + snacks
+const coils=[];
+const snackMeshes={};
+const cols=4,rows=4;
+const startX=-.55,startY=1.95,gapX=.28,gapY=.28;
+function makeSnack(s){
+  const g=new THREE.Group();
+  if(s.kind==='chips'){
+    const bag=new THREE.Mesh(new THREE.BoxGeometry(.14,.18,.05),M(s.col,{r:.45}));
+    g.add(bag);
+    const top=new THREE.Mesh(new THREE.BoxGeometry(.14,.03,.05),M(0xff4fa3,{r:.4}));
+    top.position.y=.1;g.add(top);
+  }else if(s.kind==='choc'){
+    const bar=new THREE.Mesh(new THREE.BoxGeometry(.16,.05,.08),M(s.col,{r:.35,m:.15}));
+    g.add(bar);
+    const wrap=new THREE.Mesh(new THREE.BoxGeometry(.17,.02,.09),M(0xff4fa3,{r:.4}));
+    wrap.position.y=.03;g.add(wrap);
+  }else if(s.kind==='lolly'){
+    for(let i=0;i<3;i++){
+      const bead=new THREE.Mesh(new THREE.SphereGeometry(.03,10,8),M(s.col,{r:.3,m:.1}));
+      bead.position.set((i-1)*.04,.02,0);g.add(bead);
+    }
+  }else{
+    const can=new THREE.Mesh(new THREE.CylinderGeometry(.045,.045,.14,16),M(s.col,{r:.25,m:.35}));
+    g.add(can);
+    const rim=new THREE.Mesh(new THREE.CylinderGeometry(.046,.046,.02,16),M(0xffd1e8,{r:.2,m:.6}));
+    rim.position.y=.07;g.add(rim);
+  }
+  return g;
+}
+SNACKS.forEach((s,i)=>{
+  const c=i%cols,r=Math.floor(i/cols);
+  const x=startX+c*gapX,y=startY-r*gapY;
+  const coil=new THREE.Group();
+  coil.position.set(x,y,.18);
+  const wire=new THREE.Mesh(new THREE.TorusGeometry(.07,.008,8,24),M(0xc0c0c0,{r:.25,m:.8}));
+  wire.rotation.x=Math.PI/2;coil.add(wire);
+  const snack=makeSnack(s);
+  snack.position.set(0,0,.02);
+  coil.add(snack);
+  glassBack.add(coil);
+  coils.push({mesh:coil,wire,snack,s,busy:false});
+  snackMeshes[s.code]=snack;
+});
+
+// Click targets for machine
+const clickables=[body,panel3d,glass,tray,logo];
+
+let cart=[];
+let code='';
+let busy=0;
+let panelOpen=false;
+
+function money(n){return '$'+n.toFixed(2)}
+function cartTotal(){return cart.reduce((a,c)=>a+c.price,0)}
+function renderCart(){
+  $('cartBtn').textContent='Cart ('+cart.length+')';
+  if(!cart.length){$('cartBox').innerHTML='<b>Cart:</b> empty';return}
+  $('cartBox').innerHTML='<b>Cart (Pre-order):</b><br>'+cart.map(c=>c.code+' '+c.name+' '+money(c.price)).join('<br>')+'<br><b>Total '+money(cartTotal())+'</b>';
+}
+function showScr(t){$('scr').textContent=t||(code?'CODE '+code:'PICK A CODE');$('codeLbl').textContent='Code '+(code||'--')}
+function openPanel(on){
+  panelOpen=!!on;
+  $('panel').style.display=on?'block':'none';
+  if(on)showScr();
+}
+
+const keyRow=['A','B','C','D','1','2','3','4'];
+keyRow.forEach(k=>{
+  const b=document.createElement('button');
+  b.type='button';b.textContent=k;
+  b.onclick=()=>{if(busy)return;code=(code+k).slice(-2);showScr();snd(620,.05)};
+  $('keys').appendChild(b);
+});
+const clr=document.createElement('button');clr.type='button';clr.textContent='CLR';clr.style.gridColumn='span 2';
+clr.onclick=()=>{code='';showScr();snd(400,.05)};
+const ok=document.createElement('button');ok.type='button';ok.textContent='OK';ok.style.gridColumn='span 2';
+ok.onclick=()=>vend();
+$('keys').append(clr,ok);
+
+let ac;
+function snd(f,d,t='square'){
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.type=t;o.frequency.value=f;
+    g.gain.setValueAtTime(.12,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);
+    o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d);
+  }catch(e){}
+}
+
+function vend(){
+  if(busy)return;
+  const item=SNACKS.find(s=>s.code===code);
+  const coil=coils.find(c=>c.s.code===code);
+  if(!item||!coil){showScr('TRY A1 TO D4');snd(150,.25);code='';return}
+  if(coil.busy){showScr('EMPTY SLOT');snd(150,.25);code='';return}
+  busy=1;showScr('VENDING '+item.name.toUpperCase());
+  let n=0;const spin=setInterval(()=>{
+    coil.wire.rotation.z+=.55;
+    coil.snack.position.z+=.01;
+    snd(90+n*8,.08,'sawtooth');
+    if(++n>10)clearInterval(spin);
+  },90);
+  setTimeout(()=>{
+    const drop=coil.snack.clone();
+    drop.position.copy(coil.mesh.getWorldPosition(new THREE.Vector3()));
+    S.add(drop);
+    coil.snack.visible=false;
+    coil.busy=true;
+    const start=performance.now();
+    const from=drop.position.clone();
+    const to=new THREE.Vector3(0,.38,-2.85);
+    function fall(now){
+      const t=Math.min(1,(now-start)/700);
+      drop.position.lerpVectors(from,to,t);
+      drop.rotation.x=t*2.2;drop.rotation.z=t*1.2;
+      if(t<1)requestAnimationFrame(fall);
+      else{
+        snd(70,.3,'sine');
+        setTimeout(()=>{S.remove(drop);cart.push({...item});renderCart();showScr('PRE-ORDER ADDED');msg(item.name+' added to cart · Pre-order');busy=0;code='';showScr()},400);
+      }
+    }
+    requestAnimationFrame(fall);
+  },1000);
+}
+
+$('cartBtn').onclick=()=>openPanel(!panelOpen);
+$('payidBtn').onclick=()=>{
+  const t='PayID (Teachers Mutual Bank): darkokaz@gmx.com';
+  const detail=cart.length?('Pre-order total '+money(cartTotal())+' · '+cart.map(c=>c.code).join(', ')):'Open cart empty · tip or pre-order';
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText('darkokaz@gmx.com').then(()=>msg('PayID copied · '+t+' · '+detail)).catch(()=>msg(t+' · '+detail));
+  }else msg(t+' · '+detail);
+};
+
+// Input / look / move
+const keys={};addEventListener('keydown',e=>keys[e.code]=1);addEventListener('keyup',e=>keys[e.code]=0);
+let yaw=0,pitch=0,look=null,joy={x:0,y:0},joyId=null;
+const el=R.domElement;
+el.addEventListener('pointerdown',e=>{
+  if(e.pointerType==='touch'&&e.clientX<innerWidth/2)return;
+  look={x:e.clientX,y:e.clientY,id:e.pointerId};
+});
+addEventListener('pointermove',e=>{
+  if(look&&e.pointerId===look.id){
+    yaw-=(e.clientX-look.x)*.005;
+    pitch=Math.max(-1.2,Math.min(1.2,pitch-(e.clientY-look.y)*.005));
+    look.x=e.clientX;look.y=e.clientY;
+  }
+});
+addEventListener('pointerup',e=>{if(look&&e.pointerId===look.id)look=null});
+
+const J=$('joy');
+if(matchMedia('(pointer:coarse)').matches)J.style.display='block';
+J.addEventListener('pointerdown',e=>{joyId=e.pointerId;J.setPointerCapture(e.pointerId);mj(e)});
+J.addEventListener('pointermove',e=>{if(e.pointerId===joyId)mj(e)});
+J.addEventListener('pointerup',()=>{joyId=null;joy={x:0,y:0};$('knob').style.left='35px';$('knob').style.top='35px'});
+function mj(e){
+  const r=J.getBoundingClientRect();
+  let x=(e.clientX-r.left-55)/45,y=(e.clientY-r.top-55)/45;
+  const l=Math.hypot(x,y);if(l>1){x/=l;y/=l}
+  joy={x,y};$('knob').style.left=35+x*35+'px';$('knob').style.top=35+y*35+'px';
+}
+
+let vrWalk=false;
+R.xr.addEventListener('sessionstart',()=>{rig.position.y=0});
+const ctl=R.xr.getController(0);
+ctl.addEventListener('selectstart',()=>{vrWalk=true;tryClickVR()});
+ctl.addEventListener('selectend',()=>vrWalk=false);
+rig.add(ctl);
+
+const ray=new THREE.Raycaster();
+const ndc=new THREE.Vector2();
+el.addEventListener('click',e=>{
+  if($('start').style.display!=='none'&&$('start').style.display!=='')return;
+  ndc.x=(e.clientX/innerWidth)*2-1;ndc.y=-(e.clientY/innerHeight)*2+1;
+  ray.setFromCamera(ndc,cam);
+  const hits=ray.intersectObjects(clickables,true);
+  if(hits.length){openPanel(true);msg('Keypad open · pick a code like A1');snd(800,.06,'triangle')}
+});
+function tryClickVR(){
+  const tmp=new THREE.Vector3();
+  ctl.getWorldDirection(tmp);
+  ray.set(ctl.getWorldPosition(new THREE.Vector3()),tmp);
+  const hits=ray.intersectObjects(clickables,true);
+  if(hits.length){openPanel(true);msg('Keypad open · pick a code like A1')}
+}
+
+$('play').onclick=()=>{
+  $('start').style.display='none';
+  msg('Walk up to the pink CB machine and click it');
+  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(e){}
+};
+
+rig.position.set(0,0,2.8);
+const clock=new THREE.Clock(),dir=new THREE.Vector3(),fw=new THREE.Vector3();
+
+function blocked(x,z){
+  if(x<-4.5||x>4.5||z<-4.5||z>4.5)return true;
+  // machine footprint
+  if(Math.abs(x-0)<1.05&&z<-2.7&&z>-3.9)return true;
+  for(const w of walls){
+    const p=w.position,g=w.geometry.parameters;
+    if(Math.abs(x-p.x)<g.width/2+.28&&Math.abs(z-p.z)<g.depth/2+.28)return true;
+  }
+  return false;
+}
+
+R.setAnimationLoop(()=>{
+  const dt=Math.min(clock.getDelta(),.05);
+  let mx=0,mz=0;
+  if(R.xr.isPresenting){
+    const s=R.xr.getSession();
+    for(const src of s.inputSources){
+      const a=src.gamepad&&src.gamepad.axes;
+      if(a&&a.length>=4){mx+=a[2];mz+=a[3]}
+    }
+    if(vrWalk)mz-=1;
+    R.xr.getCamera(cam).getWorldDirection(fw);
+  }else{
+    cam.rotation.set(pitch,0,0);
+    rig.rotation.y=yaw;
+    mz=(keys.KeyS||keys.ArrowDown?1:0)-(keys.KeyW||keys.ArrowUp?1:0)+joy.y;
+    mx=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0)+joy.x;
+    cam.getWorldDirection(fw);
+  }
+  fw.y=0;fw.normalize();
+  const rt=new THREE.Vector3(-fw.z,0,fw.x);
+  dir.set(0,0,0).addScaledVector(fw,-mz).addScaledVector(rt,mx);
+  if(dir.lengthSq()>1)dir.normalize();
+  const sp=2.8*dt,nx=rig.position.x+dir.x*sp,nz=rig.position.z+dir.z*sp;
+  if(!blocked(nx,rig.position.z))rig.position.x=nx;
+  if(!blocked(rig.position.x,nz))rig.position.z=nz;
+  const near=Math.hypot(rig.position.x,rig.position.z+3.35)<2.2;
+  $('hint').textContent=near?(panelOpen?'Use the keypad':'Click the machine'):'Walk to the machine';
+  // gentle coil idle spin
+  const t=clock.elapsedTime;
+  coils.forEach((c,i)=>{if(!c.busy)c.wire.rotation.z=t*.4+i*.2});
+  R.render(S,cam);
+});
+
+addEventListener('resize',()=>{
+  cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();R.setSize(innerWidth,innerHeight);
+});
+
+window.__cbVrVending={SNACKS,cart,rig,coils};
+</script>
+</body>
+</html>
