@@ -113,11 +113,9 @@ var A=window.alert,C=window.confirm;window.alert=function(m){var t=Date.now();tr
 <div class="row"><button id="tgo">Search</button><button id="tprev">Prev</button><button id="tnext">Next</button></div>
 <p class="muted" id="tmeta"></p>
 <div class="tools-list" id="tlist"></div>
-<h3 style="color:var(--g);margin:12px 0 6px">Active tool</h3>
-<div id="tactive" class="muted">Pick a tool to take a reading.</div>
-<div class="meter"><i id="tneedle"></i></div>
-<div class="row"><button id="tuse">Take reading</button></div>
-<div class="logbox" id="tlog"></div>
+<h3 style="color:var(--g);margin:12px 0 6px">Active tool panel</h3>
+<p class="muted">Tap any tool below to open a working panel in this app. Uses real sensors when available; otherwise it says the sensor is not available. No fake readings.</p>
+<div id="tactive" class="muted">Pick a tool to open its mini panel.</div>
 </div></section>
 
 <section id="log"><h2>Evidence Log</h2><div class="card">
@@ -137,5 +135,6 @@ var A=window.alert,C=window.confirm;window.alert=function(m){var t=Date.now();tr
 
 <script>window.CB_GHOSTHUNTER_DEMO=false;window.CB_GHOSTHUNTER_MAX=12000;window.CB_GHOSTHUNTER_FREE=true;</script>
 <script src="ghost-tools.js"></script>
+<script src="tool-engine.js"></script>
 <script src="app.js"></script>
 </body></html>

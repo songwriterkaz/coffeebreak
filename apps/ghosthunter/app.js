@@ -118,13 +118,36 @@ $('thCalm').onclick=function(){thLevel=8;thSpot=null};
 
 // Tools catalogue
 var toolsReady=false, toffset=0, tlimit=40, tcurrent=null;
+
+var activeToolApi=null;
+function openActiveTool(t){
+  tcurrent=t;
+  var mount=$('tactive');
+  if(!mount){ alert('Tool panel missing'); return; }
+  if(!window.CBGhostToolEngine){
+    mount.innerHTML='<b>'+t.name+'</b><br>'+t.blurb+'<p style="color:#f6a">Tool engine failed to load. Check tool-engine.js.</p>';
+    return;
+  }
+  try{
+    activeToolApi=CBGhostToolEngine.openTool(t, mount, {
+      save:function(type, notes, place){
+        if(typeof addEvidence==='function') addEvidence(type, notes, place||t.sku);
+        else if(typeof alert==='function') alert(type+': '+notes);
+      }
+    });
+  }catch(e){
+    mount.innerHTML='<p style="color:#f6a">Could not open tool: '+(e&&e.message?e.message:e)+'</p>';
+  }
+}
+
+
 function toolsInit(){if(!window.CBGhostTools){if($('tmeta'))$('tmeta').textContent='Tool catalogue failed to load.';return}
 if(toolsReady){tload();return}toolsReady=true;
 CBGhostTools.categories().forEach(function(c){var o=document.createElement('option');o.value=c.id;o.textContent=c.label;$('tcat').appendChild(o)});
-$('tgo').onclick=function(){toffset=0;tload()};
-$('tprev').onclick=function(){toffset=Math.max(0,toffset-tlimit);tload()};
-$('tnext').onclick=function(){toffset=toffset+tlimit;tload()};
-$('tuse').onclick=function(){if(!tcurrent){$('tlog').textContent='Pick a tool first.';return}var r=CBGhostTools.useTool(tcurrent);$('tneedle').style.width=r.reading+'%';var line=document.createElement('div');line.textContent=new Date().toLocaleTimeString()+' · '+r.tool+' · '+r.reading+' · '+r.note;$('tlog').prepend(line)};
+if($('tgo')) $('tgo').onclick=function(){toffset=0;tload()};
+if($('tprev')) $('tprev').onclick=function(){toffset=Math.max(0,toffset-tlimit);tload()};
+if($('tnext')) $('tnext').onclick=function(){toffset=toffset+tlimit;tload()};
+if($('tuse')) $('tuse').onclick=function(){ if(tcurrent) openActiveTool(tcurrent); };
 if($('tq')) $('tq').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();toffset=0;tload()}});
 tload()}
 function tload(){if(!window.CBGhostTools)return;var q=($('tq').value||'').trim(), cat=$('tcat').value, res, ql=q.toLowerCase();
@@ -150,7 +173,7 @@ if(cat){
 }
 var list=$('tlist');list.innerHTML='';
 if(!res.items.length){list.innerHTML='<div class="muted" style="padding:10px">No tools on this page. Try Prev or a different search.</div>'}
-res.items.forEach(function(t){var row=document.createElement('div');row.className='tool-row';row.innerHTML='<div><b>'+t.name+'</b><br><span class="muted">'+t.sku+' · '+t.catLabel+' · '+t.rarity+' · power '+t.power+'</span><br><span class="muted">'+t.blurb+'</span></div><button type="button">Use</button>';row.onclick=function(){tcurrent=t;$('tactive').innerHTML='<b>'+t.name+'</b><br>'+t.blurb};list.appendChild(row)});
+res.items.forEach(function(t){var row=document.createElement('div');row.className='tool-row';row.innerHTML='<div><b>'+t.name+'</b><br><span class="muted">'+t.sku+' · '+t.catLabel+' · '+t.rarity+' · power '+t.power+'</span><br><span class="muted">'+t.blurb+'</span></div><button type="button">Use</button>';row.onclick=function(){ openActiveTool(t); };list.appendChild(row)});
 $('tmeta').textContent='Showing '+res.items.length+' of '+res.total.toLocaleString()+(res.query?' for "'+res.query+'"':'')+' · offset '+res.offset}
 
 // Evidence log
@@ -179,6 +202,8 @@ var places=[
 $('plist').innerHTML=places.map(function(p){return '<div class="card"><b style="color:#39ff6a">'+p[0]+'</b><div>'+p[1]+'</div></div>'}).join('');
 
 show('emf');
+if(!window.CBGhostToolEngine) console.warn('CBGhostToolEngine missing');
+
 (function loop(){try{if(cur=='emf')emfTick();if(cur=='radar')radar();if(cur=='thermal')thDraw();remTick()}catch(e){console.error(e)}requestAnimationFrame(loop)})();
 
 })();
