@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en-AU"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Dowsing Rod Spirit Talker</title>
+<link rel="icon" href="cb-logo.png">
+<style>
+:root{--bg:#050806;--panel:#0b140e;--panel2:#122018;--g:#39ff6a;--gd:#1c7a35;--glow:#39ff6a88;--cream:#d8f5e0;--muted:#8fb89a;--brass:#c9a227;--brass2:#8a6a12}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 0,#0d1a12,#050806 65%);color:var(--cream);font:15px system-ui,sans-serif;min-height:100vh}
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--panel);border-bottom:2px solid var(--gd);position:sticky;top:0;z-index:5}
+header img{height:40px;width:40px;border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 0 14px var(--glow)}
+header h1{font-size:16px;margin:0;color:var(--g);text-shadow:0 0 10px var(--glow);flex:1}
+.badge{display:inline-block;background:var(--gd);color:#041;border-radius:999px;padding:2px 8px;font-size:.72em;font-weight:800}
+.disc{background:#06100a;color:#9fb;font-size:12px;padding:6px 12px;text-align:center;border-bottom:1px solid #1c7a3555}
+main{max-width:820px;margin:auto;padding:12px 12px 40px}
+.card{background:#0a1510cc;border:1px solid #1c7a3555;border-radius:12px;padding:12px;margin-bottom:12px;box-shadow:0 0 18px #39ff6a14}
+h2{color:var(--g);margin:6px 0 10px;font-size:18px;text-shadow:0 0 8px #39ff6a44}
+label{display:block;font-size:12px;color:var(--muted);margin-top:8px}
+input,textarea,select{width:100%;background:#06100a;color:var(--cream);border:1px solid var(--gd);border-radius:8px;padding:8px;font:inherit;margin:4px 0}
+button,.btn{background:var(--panel2);color:var(--cream);border:1px solid var(--gd);border-radius:8px;padding:9px 12px;font:inherit;cursor:pointer;text-decoration:none;display:inline-block}
+button:hover,.btn:hover,button.primary{background:var(--gd);color:#000;box-shadow:0 0 12px var(--glow)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.on{background:var(--gd);color:#000}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;align-items:center}
+.muted{color:var(--muted);font-size:.9em}
+#stageWrap{position:relative;max-width:520px;margin:0 auto;aspect-ratio:1;background:radial-gradient(circle at 50% 55%,#0f1f14,#020604 70%);border-radius:50%;border:2px solid var(--gd);box-shadow:inset 0 0 40px #39ff6a22,0 0 24px #39ff6a22;overflow:hidden}
+#rods{display:block;width:100%;height:100%}
+#sensorBar{font-family:ui-monospace,monospace;font-size:12px;color:var(--g);text-align:center;min-height:1.4em;margin-top:8px}
+#answerBig{font-size:42px;text-align:center;color:var(--g);text-shadow:0 0 16px var(--glow);min-height:52px;font-weight:800;letter-spacing:2px}
+.hand{font-family:"Segoe Script","Bradley Hand","Comic Sans MS",cursive;font-size:22px;line-height:1.7;color:#c8f0d0;background:#06100a;border:1px dashed #1c7a3555;border-radius:8px;padding:14px 16px;min-height:120px;white-space:pre-wrap;word-break:break-word}
+.hand .cursor{display:inline-block;width:10px;border-bottom:2px solid var(--g);animation:blink 1s step-end infinite;margin-left:2px}
+@keyframes blink{50%{opacity:0}}
+.status{padding:8px;border-radius:8px;background:#06100a;border:1px solid #1c7a3533;font-size:13px}
+.status.ok{border-color:#39ff6a66;color:var(--g)}
+.status.bad{border-color:#a33;color:#fcc}
+.cal{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cal .box{background:#06100a;border:1px solid #1c7a3533;border-radius:8px;padding:8px;text-align:center}
+.cal b{color:var(--g)}
+.logbox{max-height:180px;overflow:auto;background:#020604;border-radius:8px;padding:8px;font-family:ui-monospace,monospace;font-size:.85em;border:1px solid #1c7a3533}
+.cbfoot{text-align:center;color:#6a8a72;font-size:12px;padding:20px 12px 40px;line-height:1.5;max-width:720px;margin:0 auto}
+.cbfoot a{color:var(--g)}
+@media(max-width:640px){header h1{font-size:13px}.cal{grid-template-columns:1fr}}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body>
+<header>
+<img src="cb-logo.png" alt="Coffeebreak logo">
+<h1>Dowsing Rod Spirit Talker 🪄</h1>
+<span class="badge">FREE</span>
+</header>
+<div class="disc">For entertainment only. Rods move only from your phone’s real sensors (tilt, motion, magnetometer). No random movement. Not a detector of spirits.</div>
+
+<main>
+<section class="card">
+  <h2>Sensors</h2>
+  <div id="sensorStatus" class="status">Checking sensors…</div>
+  <div class="row">
+    <button type="button" class="primary" id="btnEnable">Enable phone sensors</button>
+    <button type="button" id="btnMag">Try magnetometer</button>
+  </div>
+  <p class="muted" id="sensorDetail">Rods stay still until real orientation / motion / magnetometer data arrives.</p>
+  <div id="sensorBar">β — · γ — · mag — · cross —</div>
+</section>
+
+<section class="card">
+  <h2>Brass L-rods</h2>
+  <p class="muted">Hold your phone flat. Tilt left/right and forward/back, or turn near metal/magnets. The rods follow those real readings only.</p>
+  <div id="stageWrap"><canvas id="rods" width="520" height="520" aria-label="Dowsing rods and letter board"></canvas></div>
+  <div id="answerBig">—</div>
+  <p class="muted" style="text-align:center" id="pointLabel">Pointing: —</p>
+</section>
+
+<section class="card">
+  <h2>Yes / No calibration</h2>
+  <p class="muted">Ask a known yes, hold the phone so the rods show how you want “YES” to look, then tap Calibrate YES. Do the same for NO. Later answers compare the live rod cross to those real positions.</p>
+  <div class="cal">
+    <div class="box"><b>YES</b><div id="calYes">Not set</div><button type="button" id="btnCalYes">Calibrate YES</button></div>
+    <div class="box"><b>NO</b><div id="calNo">Not set</div><button type="button" id="btnCalNo">Calibrate NO</button></div>
+  </div>
+  <div class="row">
+    <button type="button" id="btnClearCal">Clear calibration</button>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Ask a yes/no question</h2>
+  <label for="q">Question</label>
+  <input id="q" placeholder="Type a yes/no question…">
+  <div class="row">
+    <button type="button" class="primary" id="btnAsk">Read answer from rods</button>
+    <button type="button" id="btnSpeak">🎤 Speak question</button>
+    <button type="button" id="btnStopSpeak">Stop mic</button>
+  </div>
+  <p class="muted" id="speechStatus"></p>
+  <div id="askResult" class="muted"></div>
+</section>
+
+<section class="card">
+  <h2>Spirit Writing</h2>
+  <p class="muted">The letter board around the rods is A–Z, 0–9, YES and NO. When your real sensor reading settles, the glyph the rods point to is written below — nothing is invented.</p>
+  <div class="row">
+    <button type="button" class="primary" id="btnWriteOn">Start spirit writing</button>
+    <button type="button" id="btnWriteOff">Pause</button>
+    <button type="button" id="btnSpace">Space</button>
+    <button type="button" id="btnBack">Backspace</button>
+    <button type="button" id="btnClearWrite">Clear page</button>
+  </div>
+  <div class="hand" id="spiritPage" aria-live="polite"><span class="cursor"></span></div>
+  <p class="muted" id="writeStatus">Writing paused. Enable sensors, then Start spirit writing.</p>
+</section>
+
+<section class="card">
+  <h2>Session &amp; Ghost Journal</h2>
+  <label for="loc">Location (optional)</label>
+  <input id="loc" placeholder="Where are you investigating?">
+  <div class="row">
+    <button type="button" class="primary" id="btnSave">Save session to Ghost Journal</button>
+    <a class="btn" href="../cb-ghost-journal/">Open Ghost Journal</a>
+  </div>
+  <p class="muted" id="saveStatus"></p>
+  <b style="color:var(--g);font-size:13px">This session</b>
+  <div class="logbox" id="sessionLog"></div>
+</section>
+</main>
+
+<footer class="cbfoot">
+<p><img src="cb-logo.png" alt="Coffeebreak logo" style="height:48px;border-radius:10px;background:#fff"></p>
+<p><b>Disclaimer:</b> For entertainment only. Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named; trademarks belong to their owners.</p>
+<p>© Coffeebreak · Completely free · For entertainment only</p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> · <a href="https://songwriterkaz.github.io/coffeebreak/yellow-pages/">Yellow Pages</a></p>
+</footer>
+
+<script src="ghost-journal.js"></script>
+<script src="app.js"></script>
+</body></html>
