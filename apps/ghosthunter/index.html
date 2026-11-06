@@ -45,11 +45,8 @@ canvas{width:100%;max-width:420px;display:block;margin:auto;background:#020604;b
 .thermal-wrap{max-width:480px;margin:auto}
 input,textarea,select{width:100%;background:#06100a;color:var(--cream);border:1px solid var(--gd);border-radius:8px;padding:8px;font:inherit;margin:4px 0}
 small,.muted{color:var(--muted)}
-.buyrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0}
 .cbfoot{text-align:center;color:#6a8a72;font-size:12px;padding:20px 12px 40px;line-height:1.5;max-width:720px;margin:0 auto}
 .cbfoot a{color:var(--g)}
-.price{font-size:1.5rem;font-weight:800;color:var(--g)}
-.payid{background:#0a1510;border:1px solid var(--gd);border-radius:10px;padding:10px 12px;margin:12px 0}
 ul{padding-left:18px}li{margin:4px 0}
 @media(max-width:640px){header h1{font-size:15px}}
 </style>
@@ -70,8 +67,7 @@ var A=window.alert,C=window.confirm;window.alert=function(m){var t=Date.now();tr
 <div class="topbar">
   <button type="button" id="glowBtn">Green glow</button>
   <button type="button" id="fsBtn">Full screen</button>
-  <a class="btn" href="../ghosthunter-buy/">Buy $10</a>
-  <a class="btn" href="../ghosthunter-free-demo/">Free demo</a>
+  <span class="badge" style="align-self:center">FREE</span>
 </div>
 <nav id="nav"></nav>
 
@@ -133,19 +129,13 @@ var A=window.alert,C=window.confirm;window.alert=function(m){var t=Date.now();tr
 <section id="places"><h2>Haunted Places of Newcastle &amp; Australia</h2><div id="plist"></div>
 <small>Public history only. Check each site for tour times and tickets before you go.</small></section>
 
-<div class="buyrow">
-  <a class="btn" href="../ghosthunter-buy/">Get full version $10 USD</a>
-  <a class="btn" href="https://kazmelody.gumroad.com">Gumroad store</a>
-  <a class="btn" href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a>
-</div>
-
 <footer class="cbfoot">
 <p><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named; trademarks belong to their owners. For entertainment only.</p>
-<p>© Coffeebreak · Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com · No PayPal · Apps $10 USD · Karen gets them free as owner</p>
+<p>© Coffeebreak · Completely free · For entertainment only</p>
 <p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> · <a href="https://songwriterkaz.github.io/coffeebreak/yellow-pages/">Yellow Pages</a></p>
 </footer>
 
-<script>window.CB_GHOSTHUNTER_DEMO=false;window.CB_GHOSTHUNTER_MAX=12000;</script>
+<script>window.CB_GHOSTHUNTER_DEMO=false;window.CB_GHOSTHUNTER_MAX=12000;window.CB_GHOSTHUNTER_FREE=true;</script>
 <script src="ghost-tools.js"></script>
 <script src="app.js"></script>
 </body></html>

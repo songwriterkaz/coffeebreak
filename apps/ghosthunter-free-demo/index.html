@@ -1,151 +1,29 @@
 <!DOCTYPE html>
 <html lang="en-AU"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Coffeebreak Ghost Hunter — Free Demo</title>
+<meta charset="utf-8">
+<meta http-equiv="refresh" content="0; url=../ghosthunter/">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Ghost Hunter — Free</title>
 <link rel="icon" href="cb-logo.png">
 <style>
-:root{--bg:#050806;--panel:#0b140e;--panel2:#122018;--g:#39ff6a;--gd:#1c7a35;--glow:#39ff6a88;--cream:#d8f5e0;--muted:#8fb89a}
-*{box-sizing:border-box}
-body{margin:0;background:radial-gradient(circle at 50% 0,#0d1a12,#050806 65%);color:var(--cream);font:15px system-ui,sans-serif;min-height:100vh}
-body.glow{background:radial-gradient(circle at 50% 10%,#0a3a1a,#000 70%);box-shadow:inset 0 0 80px #2bff6a33}
-body.nv{background:#000}
-header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--panel);border-bottom:2px solid var(--gd);position:sticky;top:0;z-index:5}
-header img{height:40px;width:40px;border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 0 14px var(--glow)}
-header h1{font-size:18px;margin:0;color:var(--g);text-shadow:0 0 10px var(--glow);flex:1}
-.badge{display:inline-block;background:var(--gd);color:#041;border-radius:999px;padding:2px 8px;font-size:.72em;font-weight:800;margin-left:6px}
-.disc{background:#06100a;color:#9fb;font-size:12px;padding:6px 12px;text-align:center;border-bottom:1px solid #1c7a3555}
-.topbar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:8px;background:#06100acc}
-.topbar button{min-width:auto;flex:0 1 auto}
-nav#nav{display:flex;flex-wrap:wrap;gap:6px;padding:8px}nav#nav button{flex:1 1 30%;min-width:96px}
-button,.btn{background:var(--panel2);color:var(--cream);border:1px solid var(--gd);border-radius:8px;padding:9px 10px;font:inherit;cursor:pointer;text-decoration:none;display:inline-block}
-button:hover,button.on,.btn:hover{background:var(--gd);color:#000;box-shadow:0 0 12px var(--glow)}
-section{display:none;padding:10px 12px 28px;max-width:760px;margin:auto}section.on{display:block}
-h2{color:var(--g);margin:6px 0 10px;font-size:19px;text-shadow:0 0 8px #39ff6a44}
-.card{background:#0a1510cc;border:1px solid #1c7a3555;border-radius:12px;padding:12px;margin-bottom:12px;box-shadow:0 0 18px #39ff6a14}
-canvas{width:100%;max-width:420px;display:block;margin:auto;background:#020604;border-radius:12px;border:1px solid var(--gd)}
-.big{font-size:28px;text-align:center;color:var(--g);font-family:ui-monospace,monospace;min-height:40px;text-shadow:0 0 10px var(--glow)}
-.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0}
-.leds{display:flex;gap:6px;justify-content:center}.led{width:22px;height:22px;border-radius:50%;background:#222;border:1px solid #444}
-.led.l1{background:#3f6}.led.l2{background:#9f3}.led.l3{background:#ff3}.led.l4{background:#f93}.led.l5{background:#f33}
-#board{position:relative;aspect-ratio:16/10;max-width:480px;margin:auto;background:linear-gradient(#122018,#0a1510);border:2px solid #1c7a35;border-radius:40% 40% 12px 12px/30% 30% 12px 12px;font-family:Georgia,serif;color:#b8e0c4;user-select:none}
-#board span{position:absolute;transform:translate(-50%,-50%);font-size:clamp(11px,3.4vw,18px)}
-#plan{position:absolute;width:44px;height:52px;transform:translate(-50%,-50%);transition:left 1s ease,top 1s ease;pointer-events:none}
-.meter{height:14px;background:#020604;border-radius:8px;overflow:hidden;border:1px solid #1c7a3555;margin:8px 0}
-.meter>i{display:block;height:100%;background:linear-gradient(90deg,#1c7a35,#39ff6a,#cfff9a);width:0%;transition:width .25s;box-shadow:0 0 10px var(--glow)}
-.tools-list{max-height:360px;overflow:auto;border:1px solid #1c7a3533;border-radius:8px}
-.tool-row{display:flex;justify-content:space-between;gap:8px;padding:8px;border-bottom:1px solid #1c7a3522;cursor:pointer}
-.tool-row:hover{background:#39ff6a14}
-.tool-row b{color:var(--g)}
-.logbox{max-height:200px;overflow:auto;background:#020604;border-radius:8px;padding:8px;font-family:ui-monospace,monospace;font-size:.85em;border:1px solid #1c7a3533}
-.nv-wrap{position:relative;max-width:480px;margin:auto;border-radius:12px;overflow:hidden;border:1px solid var(--gd);background:#000;aspect-ratio:4/3}
-.nv-wrap video,.nv-wrap canvas{width:100%;height:100%;object-fit:cover;display:block}
-.nv-wrap.night video{filter:grayscale(1) brightness(.85) contrast(1.35) sepia(1) hue-rotate(70deg) saturate(3)}
-.nv-hud{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 60px #39ff6a55;border:2px solid #39ff6a44}
-.nv-hud::before{content:'NV · GREEN';position:absolute;top:8px;left:10px;color:#39ff6a;font:700 12px ui-monospace,monospace;text-shadow:0 0 8px #39ff6a}
-.thermal-wrap{max-width:480px;margin:auto}
-input,textarea,select{width:100%;background:#06100a;color:var(--cream);border:1px solid var(--gd);border-radius:8px;padding:8px;font:inherit;margin:4px 0}
-small,.muted{color:var(--muted)}
-.buyrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0}
-.cbfoot{text-align:center;color:#6a8a72;font-size:12px;padding:20px 12px 40px;line-height:1.5;max-width:720px;margin:0 auto}
-.cbfoot a{color:var(--g)}
-.price{font-size:1.5rem;font-weight:800;color:var(--g)}
-.payid{background:#0a1510;border:1px solid var(--gd);border-radius:10px;padding:10px 12px;margin:12px 0}
-ul{padding-left:18px}li{margin:4px 0}
-@media(max-width:640px){header h1{font-size:15px}}
+body{margin:0;font-family:system-ui,sans-serif;background:radial-gradient(circle at top,#0d1a12,#050806);color:#d8f5e0;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+a{color:#39ff6a} .card{background:#0b140e;border:1px solid #1c7a3566;border-radius:16px;padding:24px;max-width:420px;box-shadow:0 0 28px #39ff6a22}
+img{height:64px;border-radius:12px;background:#fff;box-shadow:0 0 16px #39ff6a66}
+h1{color:#39ff6a;text-shadow:0 0 12px #39ff6a88}
+.badge{display:inline-block;background:#1c7a35;color:#041;border-radius:999px;padding:4px 10px;font-weight:800}
+footer{margin-top:18px;font-size:12px;color:#6a8a72;line-height:1.5}
 </style>
-<!--cb-frame-fix--><script>/*cb-frame-fix: storage + dialogs safe inside itch iframe*/(function(){function mem(){var d={};return{getItem:function(k){k=String(k);return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[String(k)]=String(v)},removeItem:function(k){delete d[String(k)]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}}
-function px(st){return new Proxy(st,{get:function(t,k){if(k in t)return typeof t[k]=='function'?t[k].bind(t):t[k];return t.getItem(k)===null?undefined:t.getItem(k)},set:function(t,k,v){t.setItem(k,v);return true}})}
-['localStorage','sessionStorage'].forEach(function(n){var ok=false;try{var s=window[n];s.setItem('__cbt','1');s.removeItem('__cbt');ok=true}catch(e){}if(!ok){try{Object.defineProperty(window,n,{value:px(mem()),configurable:true})}catch(e){}}});
-function toast(m){try{var t=document.createElement('div');t.textContent=String(m);t.style.cssText='position:fixed;left:50%;top:16px;transform:translateX(-50%);max-width:90%;background:#0b140e;color:#39ff6a;padding:12px 18px;border-radius:10px;z-index:2147483647;font:15px system-ui;border:1px solid #39ff6a;box-shadow:0 0 16px #39ff6a66';(document.body||document.documentElement).appendChild(t);setTimeout(function(){t.remove()},4500)}catch(e){}}
-var A=window.alert,C=window.confirm;window.alert=function(m){var t=Date.now();try{A.call(window,m)}catch(e){}if(Date.now()-t<30)toast(m)};window.confirm=function(m){var t=Date.now(),r=false;try{r=C.call(window,m)}catch(e){}if(!r&&Date.now()-t<30)return true;return r};
-})();</script>
-<script src="cb-fullscreen.js"></script>
-<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+<script>location.replace('../ghosthunter/');</script>
 </head><body>
-<header>
-<img src="cb-logo.png" alt="Coffeebreak logo" onerror="this.src='cb-sports-logo.png'">
-<h1>Coffeebreak Ghost Hunter 👻 <span class="badge">FREE DEMO</span></h1>
-</header>
-<div class="disc">For entertainment only. Readings are simulated or random and do not detect ghosts or spirits. Optional device sensors only add wobble.</div>
-<div class="topbar">
-  <button type="button" id="glowBtn">Green glow</button>
-  <button type="button" id="fsBtn">Full screen</button>
-  <a class="btn" href="../ghosthunter-buy/">Buy $10</a>
-  <a class="btn" href="../ghosthunter/">Full version</a>
-</div>
-<nav id="nav"></nav>
-
-<section id="emf" class="on"><h2>EMF Meter</h2><div class="card"><canvas id="emfc" width="400" height="230"></canvas><div class="big" id="emfv">0.0 mG</div><div class="leds" id="leds"></div>
-<div class="row"><button id="emfSensor">Use device sensors</button><button id="emfSave">Save to evidence</button></div><small id="emfs">Simulated readings. Sensors are optional and only add wobble.</small></div></section>
-
-<section id="box"><h2>Spirit Box</h2><div class="card"><div class="big" id="freq">87.5 FM</div><div class="big" id="word" style="font-size:34px">&nbsp;</div>
-<div class="row"><button id="boxBtn">▶ Start sweep</button><label style="width:auto">Speed <select id="spd" style="width:auto"><option value="150">Fast</option><option value="250" selected>Normal</option><option value="400">Slow</option></select></label></div>
-<div class="row"><button id="boxSave">Save caught word</button></div><b style="color:var(--g);font-size:13px">Caught words</b><div class="logbox" id="caught"></div><small>Static is generated by your device. Words are picked at random from a word bank (caught words).</small></div></section>
-
-<section id="evp"><h2>EVP Recorder</h2><div class="card"><canvas id="evpc" width="400" height="120"></canvas>
-<div class="row"><button id="rec">● Record 10s</button><button id="pn">▶ Play</button><button id="pr">◀ Reversed</button><button id="ps">🐢 Slowed</button><button id="evpSave">Save to evidence</button></div>
-<div id="evps" style="text-align:center"></div>
-<small>Mic needs permission. Inside itch's window the mic may be blocked — open fullscreen or use the demo clip.</small></div></section>
-
-<section id="ouija"><h2>Spirit Word Board</h2><div class="card"><div id="board"><svg id="plan" viewBox="0 0 44 52"><path d="M22 2 L42 40 Q22 54 2 40 Z" fill="#0a1510cc" stroke="#39ff6a"/><circle cx="22" cy="28" r="8" fill="#0008" stroke="#d8f5e0"/></svg></div>
-<input id="oq" placeholder="Ask a question…"><div class="row"><button id="ask">Ask the board</button></div><div class="big" id="ans" style="font-size:22px"></div><small>A game. The planchette moves at random.</small></div></section>
-
-<section id="radar"><h2>Ghost Radar</h2><div class="card"><canvas id="radc" width="360" height="360"></canvas><div class="big" id="radw" style="font-size:18px"></div><small>Blips are random entertainment contacts.</small></div></section>
-
-<section id="rem"><h2>REM Pod &amp; Temperature</h2><div class="card"><div class="big" id="temp">21.0 °C</div><div class="leds" id="remleds"></div><div class="row"><button id="remBtn">Arm REM Pod</button></div><div id="rems" style="text-align:center"></div><small>Simulated. Real temperature is not read.</small></div></section>
-
-<section id="nv"><h2>Green Night Vision</h2><div class="card">
-<div class="nv-wrap night" id="nvWrap"><video id="nvVid" playsinline webkit-playsinline muted autoplay></video><canvas id="nvCanvas" style="display:none"></canvas><div class="nv-hud"></div></div>
-<div class="row"><button id="nvCam">Start camera NV</button><button id="nvSim">Simulated NV</button><button id="nvStop">Stop</button></div>
-<small id="nvs">Uses your camera with a green night-vision look when allowed. Otherwise a simulated green feed.</small>
-</div></section>
-
-<section id="thermal"><h2>Thermal Cam (sim)</h2><div class="card thermal-wrap">
-<canvas id="thc" width="480" height="320"></canvas>
-<div class="row"><button id="thScan">Scan heat</button><button id="thCalm">Calm</button></div>
-<div class="meter"><i id="thNeedle"></i></div>
-<div class="logbox" id="thLog"></div>
-<small>Fake heat blooms for play. No real thermal sensor.</small>
-</div></section>
-
-<section id="tools"><h2>Ghost Hunting Tools <span class="badge">DEMO 200</span></h2><div class="card">
-<p class="muted">Searchable Coffeebreak catalogue — EMF meters, spirit boxes, EVP recorders, thermal cams and many variants. Entertainment only.</p>
-<div class="row">
-<input id="tq" placeholder="Search tools (EMF, thermal, latte, rare…)" style="max-width:320px">
-<select id="tcat" style="max-width:180px"><option value="">All categories</option></select>
-</div>
-<div class="row"><button id="tgo">Search</button><button id="tprev">Prev</button><button id="tnext">Next</button></div>
-<p class="muted" id="tmeta"></p>
-<div class="tools-list" id="tlist"></div>
-<h3 style="color:var(--g);margin:12px 0 6px">Active tool</h3>
-<div id="tactive" class="muted">Pick a tool to take a reading.</div>
-<div class="meter"><i id="tneedle"></i></div>
-<div class="row"><button id="tuse">Take reading</button></div>
-<div class="logbox" id="tlog"></div>
-</div></section>
-
-<section id="log"><h2>Evidence Log</h2><div class="card">
-<input id="lp" placeholder="Location"><select id="lt"><option>EMF spike</option><option>Spirit box word</option><option>EVP</option><option>Cold spot</option><option>Footsteps</option><option>Shadow figure</option><option>Night vision</option><option>Thermal bloom</option><option>Other</option></select>
-<textarea id="ln" rows="3" placeholder="Notes"></textarea>
-<div class="row"><button id="ladd">Save entry</button><button id="lclr">Clear log</button></div></div>
-<div id="llist"></div></section>
-
-<section id="places"><h2>Haunted Places of Newcastle &amp; Australia</h2><div id="plist"></div>
-<small>Public history only. Check each site for tour times and tickets before you go.</small></section>
-
-<div class="buyrow">
-  <a class="btn" href="../ghosthunter-buy/">Get full version $10 USD</a>
-  <a class="btn" href="https://kazmelody.gumroad.com">Gumroad store</a>
-  <a class="btn" href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a>
-</div>
-
-<footer class="cbfoot">
-<p><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named; trademarks belong to their owners. For entertainment only.</p>
-<p>© Coffeebreak · Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com · No PayPal · Apps $10 USD · Karen gets them free as owner</p>
-<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> · <a href="https://songwriterkaz.github.io/coffeebreak/yellow-pages/">Yellow Pages</a></p>
+<div class="card">
+<p><img src="cb-logo.png" alt="Coffeebreak logo"></p>
+<h1>Coffeebreak Ghost Hunter</h1>
+<p><span class="badge">FREE</span></p>
+<p>This app is completely free. Opening the full Ghost Hunter…</p>
+<p><a href="../ghosthunter/">Continue to Ghost Hunter</a></p>
+<footer>
+<p><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. For entertainment only.</p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a></p>
 </footer>
-
-<script>window.CB_GHOSTHUNTER_DEMO=true;window.CB_GHOSTHUNTER_MAX=200;</script>
-<script src="ghost-tools.js"></script>
-<script src="app.js"></script>
+</div>
 </body></html>

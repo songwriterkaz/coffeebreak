@@ -1,7 +1,7 @@
 (function(){
 var $=function(i){return document.getElementById(i)};
-var DEMO=!!window.CB_GHOSTHUNTER_DEMO;
-var MAX=window.CB_GHOSTHUNTER_MAX|| (DEMO?200:12000);
+var DEMO=false;
+var MAX=12000;
 var tabs=[
   ['emf','📟 EMF'],['box','📻 Spirit Box'],['evp','🎙 EVP'],['ouija','🔮 Word Board'],
   ['radar','📡 Radar'],['rem','🌡 REM Pod'],['nv','🟢 Night Vision'],['thermal','🔥 Thermal'],
@@ -150,8 +150,8 @@ if(cat){
 }
 var list=$('tlist');list.innerHTML='';
 if(!res.items.length){list.innerHTML='<div class="muted" style="padding:10px">No tools on this page. Try Prev or a different search.</div>'}
-res.items.forEach(function(t){var row=document.createElement('div');row.className='tool-row';row.innerHTML='<div><b>'+t.name+'</b><br><span class="muted">'+t.sku+' · '+t.catLabel+' · '+t.rarity+' · power '+t.power+'</span><br><span class="muted">'+t.blurb+'</span></div><button type="button">Use</button>';row.onclick=function(){if(t.id>MAX){alert('Unlock the full version for this tool.');return}tcurrent=t;$('tactive').innerHTML='<b>'+t.name+'</b><br>'+t.blurb};list.appendChild(row)});
-$('tmeta').textContent=(DEMO?'Demo shows first '+MAX.toLocaleString()+' tools. ':'')+'Showing '+res.items.length+' of '+res.total.toLocaleString()+(res.query?' for "'+res.query+'"':'')+' · offset '+res.offset+(DEMO?' · Full version unlocks all 12,000.':'')}
+res.items.forEach(function(t){var row=document.createElement('div');row.className='tool-row';row.innerHTML='<div><b>'+t.name+'</b><br><span class="muted">'+t.sku+' · '+t.catLabel+' · '+t.rarity+' · power '+t.power+'</span><br><span class="muted">'+t.blurb+'</span></div><button type="button">Use</button>';row.onclick=function(){tcurrent=t;$('tactive').innerHTML='<b>'+t.name+'</b><br>'+t.blurb};list.appendChild(row)});
+$('tmeta').textContent='Showing '+res.items.length+' of '+res.total.toLocaleString()+(res.query?' for "'+res.query+'"':'')+' · offset '+res.offset}
 
 // Evidence log
 var KEY='cb_ghost_evidence_log',mem=[];
