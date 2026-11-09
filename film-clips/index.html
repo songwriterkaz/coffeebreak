@@ -13,10 +13,17 @@ input,select,textarea{font-size:1rem;padding:9px;border:2px solid #ffb3d6;border
 <div class="price card" role="note">Full version $5 AUD &middot; Pay by PayID (Teachers Mutual Bank): <b>darkokaz@gmx.com</b><br><span class="muted">Put "Coffeebreak Film Clips" and your email in the payment description.</span></div></main>
 <footer><p>&copy; Coffeebreak. All rights reserved. Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell what they bought but may not copy it or make their own versions. Third-party trademarks belong to their owners and are used only to describe items.</p>
 <p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a><a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">Coffeebreak on itch</a></p></footer>
-<script>const P='https://suno.com/@coffeebreakkobs',S=[['Coffee Break',''],['Coffeebreak After Dark',''],['Im Weak',''],['Knee Deep Mashup','27efb7f0-6374-4082-98dc-9d3e825bec05'],['Drip Drip Drip (Country)','57ed9d0b-1040-407b-93b4-4210db11c13f'],['Cinnamon Candy','f029b889-404c-433e-9d67-44016d2e4252'],['Sweet Juices Cotton Candy','14933c53-4633-4132-9bc9-be99be992840']];
+<script>const P='https://suno.com/@coffeebreakkobs',S=[
+['Coffee Break','','../records-store/previews/coffee-break.mp3','30-second preview. The full master is not in this library.'],
+['Coffeebreak After Dark','','../records-store/previews/coffeebreak-after-dark.mp3','30-second preview. The full master is not in this library.'],
+['Im Weak','','../records-store/previews/im-weak-you-control-my-body-now.mp3','30-second preview. The full master is not in this library.'],
+['Knee Deep Mashup','27efb7f0-6374-4082-98dc-9d3e825bec05','','This recording is not in the library.'],
+['Drip Drip Drip (Country)','57ed9d0b-1040-407b-93b4-4210db11c13f','media/s5.mp3',''],
+['Cinnamon Candy','f029b889-404c-433e-9d67-44016d2e4252','media/s6.mp3',''],
+['Sweet Juices Cotton Candy','14933c53-4633-4132-9bc9-be99be992840','media/s7.mp3','']];
 const $=i=>document.getElementById(i),au=$('au'),c=$('cv').getContext('2d');let ac,an,cur=0,img=new Image(),t=0;
-$('list').innerHTML=S.map((s,i)=>`<div class="song card"><${s[1]?`img src="media/c${i+1}.jpg" alt=""`:'div class="ph"'}>${s[1]?'':'☕</div>'}<div style="flex:1"><b>${s[0]}</b><br><a href="${s[1]?'https://suno.com/song/'+s[1]:P}" target="_blank" rel="noopener">Open on Suno</a></div><button onclick="load(${i},1)" aria-label="Play ${s[0]}">▶</button></div>`).join('');
-function load(i,go){cur=(i+S.length)%S.length;au.src='media/s'+(cur+1)+'.mp3';$('ttl').textContent=S[cur][0];img=new Image();if(S[cur][1])img.src='media/c'+(cur+1)+'.jpg';if(go)play()}
+$('list').innerHTML=S.map((s,i)=>`<div class="song card"><${s[1]?`img src="media/c${i+1}.jpg" alt=""`:'div class="ph"'}>${s[1]?'':'☕</div>'}<div style="flex:1"><b>${s[0]}</b>${s[3]?'<br><small>'+s[3]+'</small>':''}<br><a href="${s[1]?'https://suno.com/song/'+s[1]:P}" target="_blank" rel="noopener">Open on Suno</a></div><button onclick="load(${i},1)" aria-label="Play ${s[0]}" ${s[2]?'':'disabled'}>${s[2]?'▶':'Unavailable'}</button></div>`).join('');
+function load(i,go){cur=(i+S.length)%S.length;if(!S[cur][2]){au.removeAttribute('src');$('ttl').textContent=S[cur][0]+' — not in the library';return}$('ttl').textContent=S[cur][0];au.src=S[cur][2];img=new Image();if(S[cur][1])img.src='media/c'+(cur+1)+'.jpg';if(go)play()}
 function play(){if(!ac){ac=new AudioContext();an=ac.createAnalyser();an.fftSize=256;ac.createMediaElementSource(au).connect(an);an.connect(ac.destination)}ac.resume();au.play()}
 au.onplay=()=>$('pp').textContent='⏸ Pause';au.onpause=()=>$('pp').textContent='▶ Play';au.onended=()=>load(cur+1,1);
 $('pp').onclick=()=>au.paused?play():au.pause();$('nx').onclick=()=>load(cur+1,1);

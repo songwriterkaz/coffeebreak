@@ -27,10 +27,11 @@ var A=new Audio();A.preload='auto';['timeupdate','seeked','play','loadedmetadata
 function fmt(t){t=Math.max(0,t|0);return (t/60|0)+':'+('0'+t%60).slice(-2)}
 function msg(t){$('cbmsMsg').textContent=t||''}
 function list(){var q=$('cbmsQ').value.toLowerCase(),h='';S.forEach(function(s,i){if(q&&s.title.toLowerCase().indexOf(q)<0)return;var lk=LIMIT&&i>=LIMIT;h+='<div class="cbmsI'+(i==cur?' cur':'')+(lk?' lk':'')+'" data-i="'+i+'">'+(lk?'🔒 ':'🎵 ')+s.title+'<small>'+fmt(s.dur)+'</small></div>'});$('cbmsItems').innerHTML=h||'<div style="opacity:.7;padding:8px">No songs match.</div>'}
-function load(i,play){if(i<0||i>=S.length)return;if(LIMIT&&i>=LIMIT){msg('This song is in the full version. Buy for $5'+(BUY?' at '+BUY:'')+'. '+PAY+'.');if(BUY)window.open(BUY,'_blank');return}
+function load(i,play){if(i<0||i>=S.length)return;if(LIMIT&&i>=LIMIT){msg('This song is in the full version. Buy for $5. '+PAY+'.');return}
 cur=i;var s=S[i];lines=s.lines||[];$('cbmsT').textContent=s.title;$('cbmsSync').textContent=s.sync=='instrumental'?'Instrumental - sing along your own way':(s.sync=='heard'?'Lyrics written down by ear from the recording':'Lyrics timed to the vocals');
 var h='';lines.forEach(function(l,j){h+='<div class="cbmsL" id="cbmsL'+j+'">'+esc(l.x)+'</div>'});$('cbmsLyIn').innerHTML=h||'<div class="cbmsL now" style="color:#fff">♪ Instrumental ♪</div>';$('cbmsLyIn').style.top='40%';
-lastN=-2;A.src=BASE+s.file;A.load();msg('Loading '+s.title);list();if(play)A.play().then(function(){msg('')}).catch(function(){msg('Press Play to start.')})}
+lastN=-2;if(!s.file){A.removeAttribute('src');msg('This recording is not in the library.');list();return}
+A.src=BASE+s.file;A.load();msg('Loading '+s.title);list();if(play)A.play().then(function(){msg('')}).catch(function(){msg('Press Play to start.')})}
 function esc(t){return String(t).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
 var lastN=-2;function tick(){draw();raf=requestAnimationFrame(tick)}
 function draw(){var t=A.currentTime||0,d=A.duration||S[cur]&&S[cur].dur||0;$('cbmsBar').firstChild.style.width=(d?t/d*100:0)+'%';$('cbmsTime').textContent=fmt(t)+' / '+fmt(d);
