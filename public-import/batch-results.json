@@ -1,6 +1,12 @@
 {
-  "deployment": "Branch only. https://songwriterkaz.github.io/coffeebreak/ stays on main until this branch is merged.",
-  "payment": "No payment check was added. Public GitHub files can be opened without paying. PayID label only. Stripe was not changed.",
+  "deployment": "Not published. https://songwriterkaz.github.io/coffeebreak/ stays on main until this branch is merged and Pages is checked.",
+  "payment": "No payment check was added. Public GitHub files can be opened without paying. Full new downloads were not added. PayID label only. Stripe was not changed.",
+  "counts": {
+    "unchanged": 80,
+    "blocked": 3,
+    "imported": 2
+  },
+  "count_note": "Each slug has one status. Makeup cart is blocked. Play Tracker is unchanged because its existing host was left in place. Those are not two extra blocked rows.",
   "products": [
     {
       "slug": "aussie-dash",
@@ -567,7 +573,7 @@
     {
       "slug": "coffeebreak-app-clips-full",
       "status": "imported",
-      "reason": "Draw pen (Pink, White, Gold, Mint, Rainbow, Thin/Medium/Thick, Undo), studio and report scripts added onto the existing app. Existing playlist, login config and phone page kept. Nine safe tracks the playlist already named were added because the files were missing. App is not fully functional: other playlist tracks are still absent, and the published client key is not a login key. No daily upgrade was started.",
+      "reason": "Draw pen (Pink, White, Gold, Mint, Rainbow, Thin/Medium/Thick, Undo), studio and report scripts are on the existing public app. Playlist entries were kept. The audio files were not added, because this site does not check the $10 payment. Social login does not authenticate. Not fully working. Not published until this branch is merged and Pages is checked. No daily upgrade was started.",
       "public_url": "https://songwriterkaz.github.io/coffeebreak/apps/clips/",
       "deployment": "branch-only until merge",
       "draw": true,
@@ -602,7 +608,16 @@
         "suno-sweet-juices-cotton-candy-v7.mp3",
         "suno-sweet-juices-cotton-candy-v8.mp3",
         "suno-sweet-juices-cotton-candy-v9.mp3",
-        "user-upload-2.mp3"
+        "user-upload-1.mp3",
+        "user-upload-2.mp3",
+        "track1.mp3",
+        "track2.mp3",
+        "track3.mp3",
+        "track4.mp3",
+        "track5.mp3",
+        "suno-coffee-break-v1.mp3",
+        "suno-cinnamon-candy-v1.mp3",
+        "suno-sweet-juices-cotton-candy-v1.mp3"
       ],
       "repackage": true,
       "repackage_note": "Resend only the missing audio files. Do not resend game.js or the tracks now in the repo."
@@ -620,19 +635,23 @@
     },
     {
       "slug": "coffeebreak-tv",
-      "status": "imported",
-      "reason": "Complete TV package added. Sampled lyric videos show title cards and objects, not explicit imagery. Store links point at this GitHub site.",
-      "public_url": "https://songwriterkaz.github.io/coffeebreak/coffeebreak-tv/",
-      "deployment": "branch-only until merge",
-      "repackage": false
+      "status": "blocked",
+      "reason": "Full TV package and videos were removed from this branch. There is no payment check, so the full app is not hosted here. No separate live URL was verified.",
+      "public_url": null,
+      "gated_delivery": "full TV package withheld",
+      "repackage": true,
+      "repackage_note": "Stage only if a protected delivery path exists. Do not treat filename wording as a content finding."
     },
     {
       "slug": "coffeebreak-virtual-music-studio",
-      "status": "imported",
-      "reason": "Page was already newer. Only the missing Coffee Break song file referenced by that page was added. Other songs were already identical.",
+      "status": "unchanged",
+      "reason": "The newer page was already public, including its other songs. The missing Coffee Break file was not added, so a new full download was not published.",
       "public_url": "https://songwriterkaz.github.io/coffeebreak/virtual-music-studio/",
-      "deployment": "branch-only until merge",
-      "repackage": false
+      "deployment": "already on main for the page; song file still absent",
+      "repackage": false,
+      "missing_files": [
+        "songs/coffee-break.mp3"
+      ]
     },
     {
       "slug": "coffeebreak-mail",

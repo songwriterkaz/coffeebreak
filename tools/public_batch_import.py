@@ -50,11 +50,8 @@ EXACT_RETARGET = {
     "https://coffeebreaks.itch.io/coffeebreak-makeup-range": SITE + "makeup-range/",
 }
 
-SAFE_CLIPS_AUDIO = [
-    "track1.mp3", "track2.mp3", "track3.mp3", "track4.mp3", "track5.mp3",
-    "suno-coffee-break-v1.mp3", "suno-cinnamon-candy-v1.mp3",
-    "suno-sweet-juices-cotton-candy-v1.mp3", "user-upload-1.mp3",
-]
+# Full song files stay off this public repo until payment is actually checked.
+SAFE_CLIPS_AUDIO = []
 # Playlist entries kept. Files were not in this batch. Filename flags are not
 # treated as proof, and nothing already listed is deleted.
 CLIPS_AUDIO_STILL_MISSING = [
@@ -73,7 +70,10 @@ CLIPS_AUDIO_STILL_MISSING = [
     "suno-sweet-juices-cotton-candy-v4.mp3", "suno-sweet-juices-cotton-candy-v5.mp3",
     "suno-sweet-juices-cotton-candy-v6.mp3", "suno-sweet-juices-cotton-candy-v7.mp3",
     "suno-sweet-juices-cotton-candy-v8.mp3", "suno-sweet-juices-cotton-candy-v9.mp3",
-    "user-upload-2.mp3",
+    "user-upload-1.mp3", "user-upload-2.mp3",
+    "track1.mp3", "track2.mp3", "track3.mp3", "track4.mp3", "track5.mp3",
+    "suno-coffee-break-v1.mp3", "suno-cinnamon-candy-v1.mp3",
+    "suno-sweet-juices-cotton-candy-v1.mp3",
 ]
 MAIL_STILL_MISSING = [
     "assets/three.min.js",
@@ -294,14 +294,6 @@ def apply_catalogue(slugs, notes):
             "d": "Demo of the Coffeebreak camera. Three clips. Full app is separate and does not verify payment.",
             "web": True, "c": "Apps & Tools", "n": True, "src": "github",
         },
-        {
-            "t": "Coffeebreak TV",
-            "u": SITE + "coffeebreak-tv/",
-            "img": SITE + "coffeebreak-tv/new-test.png",
-            "p": "$10",
-            "d": "Lyric videos and creator tools. " + PAYID + ". Payment is not checked on this page.",
-            "web": True, "c": "Music & Radio", "n": True, "src": "github",
-        },
     ]
     for item in extra:
         if ensure_item(data["items"], item):
@@ -326,7 +318,6 @@ def apply_catalogue(slugs, notes):
     html, m, pages = load_pages()
     new_pages = [
         page_entry(SITE + "apps/clips-demo/", "Coffeebreak camera demo", "Apps & More", "☕", "C"),
-        page_entry(SITE + "coffeebreak-tv/", "Coffeebreak TV", "Music", "🎵", "C"),
         page_entry(ORIGIN + "/coffeebreak-fan-club/", "Coffeebreak Fan Club", "Social & Mail", "💌", "F"),
         page_entry(ORIGIN + "/coffeebreak-sugarloaf-vr/", "Coffeebreak Mount Sugarloaf VR Map", "Travel & Places", "🧭", "M"),
         page_entry(ORIGIN + "/coffeebreak-vr-studio/", "Coffeebreak VR Studio", "Creative Tools", "🎨", "V"),
@@ -347,7 +338,6 @@ def apply_catalogue(slugs, notes):
     links = [
         (SITE + "apps/clips/", "Coffeebreak camera"),
         (SITE + "apps/clips-demo/", "Coffeebreak camera demo"),
-        (SITE + "coffeebreak-tv/", "Coffeebreak TV"),
         (ORIGIN + "/coffeebreak-fan-club/", "Fan Club"),
         (ORIGIN + "/coffeebreak-fashion-3d-print/", "Fashion 3D Print"),
         (ORIGIN + "/coffeebreak-sugarloaf-vr/", "Mount Sugarloaf VR"),
@@ -394,9 +384,7 @@ def restore_clips(staged: Path, notes: list) -> None:
         notes.append("clips game.js left unchanged (unknown hash)")
     for name in ("cb-plus.js", "cb-studio-pro.js", "cbreport.js", "cb-plus-logo.png"):
         copy_if_missing(full / name, ROOT / "apps" / "clips" / name, notes)
-    music = ROOT / "apps" / "clips" / "assets" / "music"
-    for name in SAFE_CLIPS_AUDIO:
-        copy_if_missing(full / "assets" / "music" / name, music / name, notes)
+    notes.append("full camera audio files were not copied; payment is not checked on this site")
     index = ROOT / "apps" / "clips" / "index.html"
     html = index.read_text(encoding="utf-8")
     if "cb-studio-pro.js" not in html:
@@ -438,33 +426,11 @@ def restore_clips(staged: Path, notes: list) -> None:
 
 
 def restore_studio_song(staged: Path, notes: list) -> None:
-    src = staged / "coffeebreak-virtual-music-studio" / "songs" / "coffee-break.mp3"
-    dest = ROOT / "virtual-music-studio" / "songs" / "coffee-break.mp3"
-    if src.is_file():
-        copy_if_missing(src, dest, notes)
+    notes.append("virtual-music-studio song file was not added; the newer page stays as it is")
 
 
 def restore_tv(staged: Path, notes: list) -> None:
-    src = staged / "coffeebreak-tv"
-    dest = ROOT / "coffeebreak-tv"
-    if (dest / "index.html").is_file():
-        notes.append("coffeebreak-tv already present")
-        return
-    if not (src / "index.html").is_file():
-        notes.append("tv staging missing")
-        return
-    shutil.copytree(src, dest)
-    html = (dest / "index.html").read_text(encoding="utf-8")
-    html = html.replace("https://coffeebreaks.itch.io", SITE.rstrip("/"))
-    html = html.replace("coffeebreaks.itch.io", "Coffeebreak on GitHub")
-    if "cb-pages-bar.js" not in html:
-        html = html.replace(
-            "</head>",
-            '<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script></head>',
-            1,
-        )
-    (dest / "index.html").write_text(html, encoding="utf-8")
-    notes.append("added coffeebreak-tv")
+    notes.append("coffeebreak-tv full package was not published; no payment check")
 
 
 def batch1_slugs(summary_path: Path | None) -> list[str]:
@@ -566,7 +532,7 @@ def write_results(slugs: list[str]) -> None:
         {
             "slug": "coffeebreak-app-clips-full",
             "status": "imported",
-            "reason": "Draw pen (Pink, White, Gold, Mint, Rainbow, Thin/Medium/Thick, Undo), studio and report scripts added onto the existing app. Existing playlist, login config and phone page kept. Nine safe tracks the playlist already named were added because the files were missing. App is not fully functional: other playlist tracks are still absent, and the published client key is not a login key. No daily upgrade was started.",
+            "reason": "Draw pen (Pink, White, Gold, Mint, Rainbow, Thin/Medium/Thick, Undo), studio and report scripts are on the existing public app. Playlist entries were kept. The audio files were not added, because this site does not check the $10 payment. Social login does not authenticate. Not fully working. Not published until this branch is merged and Pages is checked. No daily upgrade was started.",
             "public_url": SITE + "apps/clips/",
             "deployment": "branch-only until merge",
             "draw": True,
@@ -589,19 +555,21 @@ def write_results(slugs: list[str]) -> None:
         },
         {
             "slug": "coffeebreak-tv",
-            "status": "imported",
-            "reason": "Complete TV package added. Sampled lyric videos show title cards and objects, not explicit imagery. Store links point at this GitHub site.",
-            "public_url": SITE + "coffeebreak-tv/",
-            "deployment": "branch-only until merge",
-            "repackage": False,
+            "status": "blocked",
+            "reason": "Full TV package and videos were removed from this branch. There is no payment check, so the full app is not hosted here. No separate live URL was verified.",
+            "public_url": None,
+            "gated_delivery": "full TV package withheld",
+            "repackage": True,
+            "repackage_note": "Stage only if a protected delivery path exists. Do not treat filename wording as a content finding.",
         },
         {
             "slug": "coffeebreak-virtual-music-studio",
-            "status": "imported",
-            "reason": "Page was already newer. Only the missing Coffee Break song file referenced by that page was added. Other songs were already identical.",
+            "status": "unchanged",
+            "reason": "The newer page was already public, including its other songs. The missing Coffee Break file was not added, so a new full download was not published.",
             "public_url": SITE + "virtual-music-studio/",
-            "deployment": "branch-only until merge",
+            "deployment": "already on main for the page; song file still absent",
             "repackage": False,
+            "missing_files": ["songs/coffee-break.mp3"],
         },
         {
             "slug": "coffeebreak-mail",
@@ -614,9 +582,14 @@ def write_results(slugs: list[str]) -> None:
             "repackage_note": "Send the missing media and 3D library. The core HTML and JS were already reviewed.",
         },
     ])
+    counts = {}
+    for row in rows:
+        counts[row["status"]] = counts.get(row["status"], 0) + 1
     results = {
-        "deployment": "Branch only. https://songwriterkaz.github.io/coffeebreak/ stays on main until this branch is merged.",
-        "payment": "No payment check was added. Public GitHub files can be opened without paying. PayID label only. Stripe was not changed.",
+        "deployment": "Not published. https://songwriterkaz.github.io/coffeebreak/ stays on main until this branch is merged and Pages is checked.",
+        "payment": "No payment check was added. Public GitHub files can be opened without paying. Full new downloads were not added. PayID label only. Stripe was not changed.",
+        "counts": counts,
+        "count_note": "Each slug has one status. Makeup cart is blocked. Play Tracker is unchanged because its existing host was left in place. Those are not two extra blocked rows.",
         "products": rows,
     }
     (out_dir / "batch-results.json").write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")

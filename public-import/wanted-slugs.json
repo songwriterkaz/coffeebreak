@@ -81,7 +81,6 @@
     "wifiphone-contacts",
     "wifiphone-jumbo",
     "coffeebreak-app-clips-demo",
-    "coffeebreak-tv",
     "coffeebreak-virtual-music-studio"
   ],
   "still_wanted": [
@@ -117,8 +116,22 @@
         "suno-sweet-juices-cotton-candy-v7.mp3",
         "suno-sweet-juices-cotton-candy-v8.mp3",
         "suno-sweet-juices-cotton-candy-v9.mp3",
-        "user-upload-2.mp3"
+        "user-upload-1.mp3",
+        "user-upload-2.mp3",
+        "track1.mp3",
+        "track2.mp3",
+        "track3.mp3",
+        "track4.mp3",
+        "track5.mp3",
+        "suno-coffee-break-v1.mp3",
+        "suno-cinnamon-candy-v1.mp3",
+        "suno-sweet-juices-cotton-candy-v1.mp3"
       ]
+    },
+    {
+      "slug": "coffeebreak-tv",
+      "why": "Stage only if a protected delivery path exists. Do not treat filename wording as a content finding.",
+      "missing_files": []
     },
     {
       "slug": "coffeebreak-mail",
