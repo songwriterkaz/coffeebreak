@@ -336,74 +336,52 @@ sync();
 #cbco small{color:#7a3a62}
 .cbco-foot{text-align:center;font:14px system-ui,sans-serif;padding:10px;color:#7a3a62}.cbco-foot a{color:#d81b7a;margin:0 6px}
 </style>
-<button id="cbco-open" type="button">Order a real coffee</button>
+<button id="cbco-open" type="button">Coffee</button>
 <div id="cbco" hidden role="dialog" aria-modal="true" aria-labelledby="cbco-h"><div class="bx">
-<h2 id="cbco-h">Order a real coffee</h2>
-<small>Waiting on an appointment, or just finished one. Order a coffee from Coffeebreak for pickup or delivery.</small>
-<h3>Menu (AUD)</h3><div id="cbco-menu"></div>
-<small id="cbco-maxnote">Max 3 cups per order. Delivery fee: $5.50 for 1 cup, $1.50 for 2 cups, free for 3 cups.</small>
-<div class="row"><div><label for="cbco-size">Size</label><select id="cbco-size"><option value="0">Small</option><option value="0.5">Regular (+$0.50)</option><option value="1">Large (+$1.00)</option></select></div>
-<div><label for="cbco-milk">Milk</label><select id="cbco-milk"><option>Full cream</option><option>Skim</option><option>Oat</option><option>Soy</option><option>Almond</option></select></div></div>
-<div class="row"><div><label for="cbco-sugar">Sugar</label><select id="cbco-sugar"><option>No sugar</option><option>1 sugar</option><option>2 sugars</option><option>3 sugars</option></select></div>
-<div><label><input type="checkbox" id="cbco-shot" style="width:auto"> Extra shot (+$1.00)</label></div></div>
-<h3>Your cart</h3><div id="cbco-cart"><small>Nothing added yet.</small></div>
-<div id="cbco-feel" class="it" hidden><span>Delivery fee</span><span>$<span id="cbco-fee">0.00</span></span></div>
-<div class="tot">Total: $<span id="cbco-total">0.00</span></div>
-<h3>Pickup or delivery</h3>
-<div class="row"><div><label for="cbco-mode">Choose</label><select id="cbco-mode"><option>Pickup</option><option>Delivery</option></select></div>
-<div><label for="cbco-time">Time</label><input type="time" id="cbco-time"></div></div>
-<div id="cbco-addrw" hidden><label for="cbco-addr">Delivery address</label><input id="cbco-addr" type="text"></div>
-<div class="row"><div><label for="cbco-name">Name</label><input id="cbco-name" type="text" autocomplete="name"></div>
-<div><label for="cbco-phone">Phone</label><input id="cbco-phone" type="tel" autocomplete="tel"></div></div>
-<div class="pay"><b>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</b><br>Amount: $<span id="cbco-pamt">0.00</span> AUD<br>Reference: <b id="cbco-ref"></b></div>
+<h2 id="cbco-h">Coffee</h2>
+<p>Physical coffee orders are unavailable. There is no fulfilment partner, no supplier PayID, and no agreed commission rate. This page will not take a drink order, a deposit, or a payment for a drink, and it does not email an order.</p>
+<h3>Menu prices (not for sale)</h3><div id="cbco-menu"></div>
 <p class="msg" id="cbco-msg" role="status"></p>
-<div class="row"><button type="button" id="cbco-send">Send order</button><button type="button" class="alt" id="cbco-close">Close</button></div>
-<h3>My coffee orders</h3><div id="cbco-hist"></div>
-<small>Orders are sent by email from your own email app. Your order is only confirmed once Coffeebreak replies. Coffeebreak by Karen O'Brien keeps all rights to this app. You may resell what you buy but not copy the app. Brand names belong to their owners.</small>
+<h3>Optional tip (not an order)</h3>
+<p><small>The app stays free. A tip is not a coffee order and not a marketplace sale. Coffeebreak Pay only shows manual bank-transfer instructions for the amount you type. It is not instant or automatic. It does not take the money or confirm a transfer.</small></p>
+<label for="cbco-tip">Tip amount (AUD)</label><input id="cbco-tip" type="number" min="0" step="0.01" inputmode="decimal">
+<div class="row"><button type="button" id="cbco-tipgo">Open tip instructions</button><button type="button" class="alt" id="cbco-close">Close</button></div>
+<small>Coffeebreak by Karen O'Brien keeps all rights to this app. You may not copy the app. Brand names belong to their owners.</small>
+
 </div></div>
 <div class="cbco-foot"><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> <a href="https://songwriterkaz.github.io/coffeebreak" target="_blank" rel="noopener">Coffeebreak on itch</a></div>
 <script>
 (function(){'use strict';
 var M=[['Flat white',10.5],['Cappuccino',10.5],['Latte',10.5],['Long black',10],['Iced coffee',11.5],['Hot chocolate',10.5]];
-var MAX=3,cart=[],KEY='cbBookingsCoffeeOrders',ref;function g(i){return document.getElementById(i)}
-function f(n){return n.toFixed(2)}function e(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function newRef(){ref='CB'+Date.now().toString().slice(-6);g('cbco-ref').textContent=ref}
-function hist(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(x){return[]}}
-function drawHist(){var h=hist();g('cbco-hist').innerHTML=h.length?h.slice().reverse().map(function(o){return '<div class="it"><span>'+e(o.ref)+' &middot; '+e(o.when)+' &middot; '+o.items.length+' item(s)</span><b>$'+f(o.total)+'</b></div>'}).join(''):'<small>No orders yet.</small>'}
-function cups(){return cart.length}
-function drinkTotal(){return cart.reduce(function(a,c){return a+c.price},0)}
-function deliveryFee(){var n=cups();return n===1?5.5:n===2?1.5:0}
-function total(){return drinkTotal()+deliveryFee()}
-function paintMenu(){var full=cups()>=MAX;g('cbco-menu').innerHTML=M.map(function(m,i){return '<div class="it"><span>'+m[0]+' <b>$'+f(m[1])+'</b></span><button type="button" data-add="'+i+'"'+(full?' disabled':'')+'>'+(full?'Max 3':'Add')+'</button></div>'}).join('')}
-function draw(){var fee=deliveryFee(),parts=[];
-if(cart.length){parts=cart.map(function(c,i){return '<div class="it"><span>'+e(c.desc)+'</span><span>$'+f(c.price)+' <button type="button" class="alt" data-rm="'+i+'">Remove</button></span></div>'})}
-else{parts=['<small>Nothing added yet.</small>']}
-g('cbco-cart').innerHTML=parts.join('');
-var fl=g('cbco-feel');if(fl){fl.hidden=!cart.length;if(cart.length){g('cbco-fee').textContent=f(fee)}}
-g('cbco-total').textContent=g('cbco-pamt').textContent=f(total());
-paintMenu()}
-paintMenu();
-g('cbco').addEventListener('click',function(ev){var t=ev.target,a=t.getAttribute('data-add'),r=t.getAttribute('data-rm');
-if(a!==null){if(cups()>=MAX){g('cbco-msg').textContent='Max 3 cups per order.';return}
-var m=M[+a],s=g('cbco-size'),sz=+s.value,sh=g('cbco-shot').checked,milk=m[0]==='Long black'?'':', '+g('cbco-milk').value;
-cart.push({desc:s.options[s.selectedIndex].text.split(' (')[0]+' '+m[0]+milk+', '+g('cbco-sugar').value+(sh?', extra shot':''),price:m[1]+sz+(sh?1:0)});draw();g('cbco-msg').textContent=m[0]+' added.'+(cups()>=MAX?' Max 3 cups per order.':'')}
-if(r!==null){cart.splice(+r,1);draw();g('cbco-msg').textContent='Item removed.'}if(t===g('cbco'))close()});
-g('cbco-mode').addEventListener('change',function(){g('cbco-addrw').hidden=this.value!=='Delivery'});
+var PAYAPP='https://songwriterkaz.github.io/coffeebreak/apps/pay/';
+var TIP={n:"Coffeebreak (Karen O'Brien)",p:'darkokaz@gmx.com',b:'Teachers Mutual Bank'};
+function g(i){return document.getElementById(i)}
+function f(n){return Number(n).toFixed(2)}
+function payEnc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o))))}
+g('cbco-menu').innerHTML=M.map(function(m){return '<div class="it"><span>'+m[0]+' <b>$'+f(m[1])+'</b></span><button type="button" disabled>Unavailable</button></div>'}).join('');
 function close(){g('cbco').hidden=true}
-g('cbco-open').addEventListener('click',function(){g('cbco').hidden=false;drawHist()});g('cbco-close').addEventListener('click',close);
-g('cbco-send').addEventListener('click',function(){var n=g('cbco-name').value.trim(),p=g('cbco-phone').value.trim(),tm=g('cbco-time').value,md=g('cbco-mode').value,ad=g('cbco-addr').value.trim();
-if(!cart.length){g('cbco-msg').textContent='Add at least one drink first.';return}
-if(cups()>MAX){g('cbco-msg').textContent='Max 3 cups per order.';return}
-if(!n||!p||!tm){g('cbco-msg').textContent='Please enter your name, phone and a time.';return}
-if(md==='Delivery'&&!ad){g('cbco-msg').textContent='Please enter a delivery address.';return}
-var fee=deliveryFee(),o={ref:ref,when:new Date().toLocaleString('en-AU'),name:n,phone:p,mode:md,time:tm,addr:ad,items:cart.slice(),fee:fee,total:total()};
-var body='Coffee order '+o.ref+'\n\n'+o.items.map(function(c){return '- '+c.desc+'  $'+f(c.price)}).join('\n')+'\nDelivery fee: $'+f(fee)+'\n\nTotal: $'+f(o.total)+' AUD\n'+md+' at '+tm+(ad?'\nAddress: '+ad:'')+'\nName: '+n+'\nPhone: '+p+'\n\nPay by PayID (Teachers Mutual Bank): darkokaz@gmx.com\nReference: '+o.ref;
-var h=hist();h.push(o);try{localStorage.setItem(KEY,JSON.stringify(h))}catch(x){}
-var url='mailto:darkokaz@gmx.com?subject='+encodeURIComponent('Coffee order '+o.ref)+'&body='+encodeURIComponent(body);window.__cbcoLast=url;
-try{window.location.href=url}catch(x){}
-g('cbco-msg').textContent='Order '+o.ref+' saved. Your email app should open. Press send there, then pay $'+f(o.total)+' by PayID with reference '+o.ref+'.';
-cart=[];draw();newRef();drawHist()});
-newRef();draw();drawHist();})();
+function open(){g('cbco').hidden=false}
+g('cbco-open').addEventListener('click',open);
+var nav=g('navCoffee'),nudge=g('coffeeNudgeBtn');
+if(nav)nav.addEventListener('click',open);
+if(nudge)nudge.addEventListener('click',open);
+g('cbco-close').addEventListener('click',close);
+g('cbco').addEventListener('click',function(ev){if(ev.target===g('cbco'))close()});
+g('cbco-tipgo').addEventListener('click',function(){
+  var amt=Number(g('cbco-tip').value);
+  if(!(amt>0)){g('cbco-msg').textContent='Enter a tip amount. This does not order a coffee.';return}
+  var ref='TIP'+Date.now().toString().slice(-6);
+  var payload={n:TIP.n,p:TIP.p,b:TIP.b,a:amt.toFixed(2),w:'Tip',r:ref,co:1};
+  var url=PAYAPP+'#pay='+payEnc(payload);
+  window.__cbcoPay=url;
+  var opened=window.open(url,'_blank','noopener');
+  g('cbco-msg').textContent='';
+  var note=document.createElement('span');
+  note.textContent='Tip instructions for $'+amt.toFixed(2)+' to '+TIP.p+' ('+TIP.b+'), reference '+ref+'. Item: Tip. This is not a coffee order. Coffeebreak Pay does not take the money or confirm a bank transfer.';
+  g('cbco-msg').appendChild(note);
+  if(!opened){var a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.textContent=' Open Coffeebreak Pay';g('cbco-msg').appendChild(a)}
+});
+})();
 </script>
 <!-- CB COFFEE ORDER END -->
 

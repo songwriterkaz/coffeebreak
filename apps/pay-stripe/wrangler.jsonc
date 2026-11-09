@@ -1,0 +1,11 @@
+{
+  // Not deployed. GitHub Pages cannot create Stripe Checkout Sessions.
+  // Secrets are set with `wrangler secret put`, never in this file.
+  "name": "coffeebreak-pay-stripe",
+  "main": "worker.js",
+  "compatibility_date": "2026-11-09",
+  "observability": {
+    "enabled": true,
+    "traces": { "enabled": true }
+  }
+}

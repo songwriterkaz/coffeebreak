@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Stripe checkout</title>
+<style>body{margin:0;font-family:system-ui,sans-serif;background:#fff7fb;color:#3a1030}main{max-width:720px;margin:auto;padding:24px}h1{color:#d81b7a}a{color:#d81b7a}.card{background:#fff;border:2px solid #ffd0e6;border-radius:16px;padding:16px;margin:12px 0}code{background:#fff0f6;padding:1px 4px}</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body><main>
+<p><a href="./">&larr; Coffeebreak Pay</a></p>
+<h1>Stripe checkout is not live</h1>
+<div class="card" id="status"><p>Checking the checkout server…</p></div>
+<div class="card"><h2>What has to exist before a real charge</h2>
+<ul>
+<li>Karen's own Stripe platform account, with Connect enabled, and the secret key stored only as a server secret.</li>
+<li>A webhook signing secret on that same server. Events are accepted only after the signature matches.</li>
+<li>Each seller's own connected account id. The browser cannot choose an account that the server does not already have.</li>
+<li>An agreed platform fee in basis points. No rate is stored here, so no share is calculated.</li>
+<li>A deliberate server flag before any Checkout Session is created.</li>
+</ul>
+<p>Until those are set, this page does not start a payment, transfer, or payout. PayID stays available as a separate manual bank transfer. It is not instant and it is not automatic.</p>
+<p><a href="./">Open manual PayID instructions</a></p>
+</div>
+<footer><p>Coffeebreak. <a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a></p>
+<p><small>Disclaimer: not a bank. Stripe and PayID are named only to describe payment methods. Coffeebreak does not hold the money on this page.</small></p></footer>
+</main>
+<script>
+var box=document.getElementById("status");
+box.innerHTML="<p><b>Checkout server:</b> not deployed. No session can be created from GitHub Pages alone.</p><p>The prepared Worker is in the repo at apps/pay-stripe and it refuses checkout while the fee rate, seller accounts, and Stripe secrets are missing.</p>";
+</script></body></html>

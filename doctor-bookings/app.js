@@ -110,7 +110,7 @@ function wireApptCards(root,after){root.querySelectorAll('[data-appt]').forEach(
 /* navigation */
 function show(p){$$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));$$('.pane').forEach(x=>x.classList.toggle('on',x.id===p));
   const f={find:renderClinics,reception:renderReception,mine:renderMine,wait:renderWait,dash:renderDash,setup:renderSetup,health:renderHealth,chatp:renderChat,fax:renderFax}[p];if(f)f();window.scrollTo(0,0)}
-$$('#nav button').forEach(b=>b.onclick=()=>show(b.dataset.p));
+$$('#nav button').forEach(b=>{if(b.dataset.p)b.onclick=()=>show(b.dataset.p)});
 function clinicOpts(sel,val){sel.innerHTML=S.clinics.map(c=>'<option value="'+c.id+'">'+esc(c.name)+'</option>').join('');if(val&&clinic(val))sel.value=val}
 
 /* find & book */
