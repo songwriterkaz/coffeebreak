@@ -58,18 +58,13 @@ function openCheckout(){if(!S.coffee.cart.length){toast('Your cart is empty');re
  if(CF.appt){$('#cflink').value='appt';$('#cfq').value=CF.appt.ref}
  $('#cfCoTotal').textContent=money(cfTotal(S.coffee.cart));cfRenderLink();$('#cfDone').innerHTML='';$('#cfCheckout').scrollIntoView({behavior:'smooth',block:'start'})}
 function placeOrder(){const c=S.coffee.cart;if(!c.length){toast('Your cart is empty');return}
- const p=cfPickup();if(!p){toast($('#cflink').value==='appt'?'Find your booking first (mobile, email or booking ref)':'Choose a pickup date and time');return}
- const name=$('#cfname').value.trim(),phone=$('#cfphone').value.trim();if(!name){toast('Please enter a name for the order');return}
- const pay=$('input[name=cfpay]:checked').value;
- const o={id:uid(),ref:cfRef(),venueId:p.venueId,apptId:p.appt?p.appt.id:null,apptRef:p.appt?p.appt.ref:'',name,phone,date:p.date,time:p.time,lines:c.map(l=>({item:l.item,size:l.size,milk:l.milk,sugar:l.sugar,qty:l.qty,each:cfPrice(l)})),total:cfTotal(c),pay,paid:false,status:'new',note:$('#cfnote').value.trim(),created:Date.now()};
- S.coffee.orders.push(o);S.coffee.cart=[];CF.appt=null;save();renderCart();$('#cfCheckout').classList.remove('hide');
- const cl=venue(o.venueId);
- $('#cfDone').innerHTML='<div class="card" style="border:2px solid var(--ok)"><h3>Saved on this device. Payment pending.</h3><p>Reference <b>'+o.ref+'</b> for '+esc(o.name)+'. Status: <b>new</b>. Paid: <b>no</b>. Nothing was sent to a cafe, a bank, or an email. Pickup time on this screen is only what you typed'+(cl?' for '+esc(cl.name):'')+': <b>'+fmtD(o.date)+' at '+fmtT(o.time)+'</b>'+(o.apptRef?' (booking '+esc(o.apptRef)+')':'')+'.</p>'+
-  '<ul>'+o.lines.map(l=>'<li>'+l.qty+' x '+esc(cfDesc(l))+' '+money(l.each*l.qty)+'</li>').join('')+'</ul><p><b>Total '+money(o.total)+' AUD</b></p>'+
-  (pay==='payid'?'<div class="msgbox"><b>Pay by PayID ('+CF_BANK+')</b><br>PayID: <b>'+CF_PAYID+'</b> <button class="sm ghost" type="button" data-cfcopy="'+CF_PAYID+'">Copy PayID</button><br>Amount: <b>'+money(o.total)+'</b><br>Reference: <b>'+o.ref+'</b> <button class="sm ghost" type="button" data-cfcopy="'+o.ref+'">Copy reference</button><br>Open your banking app, choose Pay to PayID, enter the email above, check the name shown, and use the reference so the front desk can match your payment. You can also pay at the counter instead.</div>':'<div class="msgbox"><b>Pay at the counter</b> when you collect your coffee. Total '+money(o.total)+'.</div>')+
-  '<div class="quick"><button class="sm ghost" type="button" id="cfAgain">Order another</button></div></div>';
- $('#cfAgain').onclick=()=>{$('#cfCheckout').classList.add('hide');$('#cfDone').innerHTML='';window.scrollTo(0,0)};
- $('#cfCheckout').classList.add('hide');$('#cfDoneWrap').scrollIntoView({behavior:'smooth',block:'start'});renderQueue();toast('Saved on this device. Ref '+o.ref+'. Still unpaid.')}
+ const total=cfTotal(c);
+ $('#cfDone').innerHTML='<div class="card" style="border:2px solid var(--warn, #a60)"><h3>Purchase closed. Payment not taken.</h3><p>Cart total <b>'+money(total)+' AUD</b>. Paid: <b>no</b>. No order was saved. No bank transfer was started.</p>'+
+  '<ul>'+c.map(l=>'<li>'+l.qty+' x '+esc(cfDesc(l))+' '+money(cfLineTotal(l))+'</li>').join('')+'</ul>'+
+  '<div class="msgbox"><b>PayID already saved in this cart</b><br>'+CF_BANK+'<br>PayID: <b>'+CF_PAYID+'</b> <button class="sm ghost" type="button" data-cfcopy="'+CF_PAYID+'">Copy PayID</button><br>Amount on screen: <b>'+money(total)+'</b><br>Stripe is not connected. Cafe fulfilment, delivery fees, refunds, commission and the Stripe fee are not confirmed, so this cart stops here.</div>'+
+  '<div class="quick"><button class="sm ghost" type="button" id="cfAgain">Back to the cart</button></div></div>';
+ $('#cfAgain').onclick=()=>{$('#cfDone').innerHTML='';window.scrollTo(0,0)};
+ $('#cfDoneWrap').scrollIntoView({behavior:'smooth',block:'start'});toast('Purchase closed. Payment was not taken.')}
 
 function renderQueue(){const sel=$('#cfqvenue');const v=sel.value;sel.innerHTML='<option value="all">All '+esc(W.venues)+'</option>'+S.venues.map(c=>'<option value="'+c.id+'">'+esc(c.name)+'</option>').join('');sel.value=v&&(v==='all'||venue(v))?v:'all';
  if(!$('#cfqday').value)$('#cfqday').value=today();const day=$('#cfqday').value,show=$('#cfqshow').value,cid=sel.value;
@@ -84,7 +79,7 @@ function renderQueue(){const sel=$('#cfqvenue');const v=sel.value;sel.innerHTML=
 
 function renderCoffee(){renderCoffeeMenu();renderCart();renderQueue()}
 function openCoffee(apptId){const a=apptId?S.appts.find(x=>x.id===apptId):null;CF.appt=a||null;show('coffee');renderCoffee();
- if(a){const n=$('#cfLinkNote');n.innerHTML='Ordering for booking <b>'+esc(a.ref)+'</b>: '+esc(apptLine(a))+'. Add drinks to the cart, then press Buy it now.';n.classList.remove('hide')}else $('#cfLinkNote').classList.add('hide')}
+ if(a){const n=$('#cfLinkNote');n.innerHTML='Cart for booking <b>'+esc(a.ref)+'</b>: '+esc(apptLine(a))+'. Add drinks, then review payment. Purchase stays closed.';n.classList.remove('hide')}else $('#cfLinkNote').classList.add('hide')}
 
 /* wire up */
 $('#nav [data-p=coffee]').addEventListener('click',()=>{CF.appt=null;$('#cfLinkNote').classList.add('hide');renderCoffee()});
