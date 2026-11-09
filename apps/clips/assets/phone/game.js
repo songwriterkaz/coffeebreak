@@ -57,7 +57,7 @@ input.ti{width:100%;box-sizing:border-box;padding:8px;border-radius:10px;border:
 document.head.appendChild(st);
 const ph=document.createElement('div');ph.id='ph';ph.innerHTML='<div id="phHead"><b>📞 Coffeebreak Phone</b><div id="phNum" style="font-size:24px;color:#fff;font-weight:bold;letter-spacing:1px"></div><div><button id="bCopy">📋 Copy</button> <button id="bShare">📤 Share</button></div><small>App number for Coffeebreak Phone only, not a real mobile number</small><small id="phSt"></small></div><div id="phBody"></div><div id="phTabs"></div>';
 c.parentNode.insertBefore(ph,c);
-const shareTxt=()=>'Call me on Coffeebreak Phone (app-to-app wifi calls, not a real mobile number): '+fmt(MYNUM)+' https://coffeebreaks.itch.io/coffeebreak-phone';
+const shareTxt=()=>'Call me on Coffeebreak Phone (app-to-app wifi calls, not a real mobile number): '+fmt(MYNUM)+' https://songwriterkaz.github.io/coffeebreak/apps/clips/';
 function copyNum(){const t=fmt(MYNUM);(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>setSt('📋 Copied '+t),()=>{prompt('Copy your Coffeebreak number:',t)})}
 $('bCopy').onclick=copyNum;$('bShare').onclick=()=>{if(navigator.share)navigator.share({title:'My Coffeebreak number',text:shareTxt()}).catch(()=>{});else{(navigator.clipboard?navigator.clipboard.writeText(shareTxt()):Promise.reject()).then(()=>setSt('📤 Share message copied'),()=>prompt('Share this:',shareTxt()))}};
 const cs=document.createElement('div');cs.id='callScr';document.body.appendChild(cs);
@@ -154,7 +154,7 @@ function sendMsg(num,text){if(DEMO){upsell('Text messages');return}text=text.tri
  const r=TR().joinRoom(RTC,'line-'+num);const L=wire(r,false);let done=false;
  L.onJoin=id=>setTimeout(()=>{if(done)return;if(L.hello&&L.hello[id]&&L.hello[id]!==num)return;done=true;L.sMsg({from:MYNUM,text},id);m.st='delivered';LS.set('msgs',P.msgs);render();setTimeout(()=>r.leave(),1500)},400);
  setTimeout(()=>{if(!done){done=true;m.st='not delivered (they are offline)';LS.set('msgs',P.msgs);render();r.leave()}},30000)}
-function upsell(what){cs.innerHTML='<h2>🔒 '+esc(what)+' are in the full version</h2><p>The free demo includes voice calls. Get video calls, text messages and all 38 Coffeebreak songs for $4.99.</p><a href="https://coffeebreaks.itch.io/coffeebreak-phone" target="_blank" rel="noopener"><button class="big green">Get the full version</button></a><button class="big" onclick="this.parentNode.style.display=\'none\'">Close</button>';cs.style.display='flex'}
+function upsell(what){cs.innerHTML='<h2>'+esc(what)+'</h2><p>The flagship Coffeebreak camera is US$96.99. This page does not check payment or unlock anything. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com.</p><button class="big" onclick="this.parentNode.style.display=\'none\'">Close</button>';cs.style.display='flex'}
 // ---- screens ----
 function render(){$('phNum').textContent=fmt(MYNUM);$('phSt').textContent=P.status;
  $('phTabs').innerHTML=TABS.map(([k,l])=>'<button data-t="'+k+'" class="'+(P.tab===k?'sel':'')+'">'+l+(DEMO&&k==='msgs'?' 🔒':'')+'</button>').join('');

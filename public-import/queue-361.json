@@ -1,0 +1,5497 @@
+{
+  "compared_queue": 360,
+  "published_basis": "origin/main plus public GitHub Pages HTTP checks. This branch is not live.",
+  "do_not_claim": "HTTP 200 or an index.html means a page is present. It is not a test that the app works.",
+  "counts": {
+    "healthy_skip": 259,
+    "truly_missing": 99,
+    "damaged": 0,
+    "source_needed": 2
+  },
+  "healthy_skip": [
+    {
+      "slug": "3d-converter",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/3d-converter/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-3d-converter/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/3d-converter/",
+        "https://coffeebreaks.itch.io/coffeebreak-3d-converter"
+      ],
+      "github_repos": [
+        "coffeebreak-3d-converter"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "accessible-playlist",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "accessible-playlist/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-accessible-playlist/",
+        "https://songwriterkaz.github.io/coffeebreak/accessible-playlist/"
+      ],
+      "github_repos": [
+        "coffeebreak-accessible-playlist"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "actingstudio",
+      "evidence": "same name as an existing page after ignoring hyphens: acting-studio",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "acting-studio"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "alicevr",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/alicevr/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/alicevr/",
+        "https://coffeebreaks.itch.io/coffeebreak-alicevr"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "angeltarot",
+      "evidence": "same name as an existing page after ignoring hyphens: angel-tarot",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "angel-tarot"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "animedraw",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/animedraw/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/animedraw/",
+        "https://coffeebreaks.itch.io/coffeebreak-animedraw"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "animeoutfits",
+      "evidence": "same name as an existing page after ignoring hyphens: anime-outfits",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "anime-outfits"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "antiques",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/antiques/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/antiques/",
+        "https://coffeebreaks.itch.io/coffeebreak-antiques"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "arena",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/arena/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/arena/",
+        "https://coffeebreaks.itch.io/coffeebreak-arena"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "artsupplies",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/artsupplies/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/artsupplies/",
+        "https://coffeebreaks.itch.io/coffeebreak-artsupplies"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "aussieproperty",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/aussieproperty/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/aussieproperty/",
+        "https://coffeebreaks.itch.io/coffeebreak-aussieproperty"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "babydoll",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/babydoll/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/babydoll/",
+        "https://coffeebreaks.itch.io/coffeebreak-babydoll"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "ballerina-ghost",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/ballerina-ghost/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/ballerina-ghost/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "ballerina-plush",
+      "evidence": "public page returned HTTP 200; not a full function test",
+      "monorepo_index": [],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-ballerina-plush/"
+      ],
+      "github_repos": [
+        "coffeebreak-ballerina-plush"
+      ],
+      "http_200": [
+        "https://songwriterkaz.github.io/coffeebreak-ballerina-plush/"
+      ],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "bargains",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/bargains/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/bargains/",
+        "https://coffeebreaks.itch.io/coffeebreak-bargains"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "beaniebabies",
+      "evidence": "same name as an existing page after ignoring hyphens: beanie-babies",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "beanie-babies"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "beanieclub",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/beanieclub/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/beanieclub/",
+        "https://coffeebreaks.itch.io/coffeebreak-beanieclub"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "beanjuan",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/beanjuan/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/beanjuan/",
+        "https://coffeebreaks.itch.io/coffeebreak-beanjuan"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "beat-maker",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/beat-maker/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/beat-maker/",
+        "https://coffeebreaks.itch.io/coffeebreak-beat-maker"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "biblejournal",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/biblejournal/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/biblejournal/",
+        "https://coffeebreaks.itch.io/coffeebreak-biblejournal"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "bigbanana",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/bigbanana/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/coffeebreak-bigbanana/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/bigbanana/",
+        "https://coffeebreaks.itch.io/coffeebreak-bigbanana"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "boats",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/boats/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/boats/",
+        "https://coffeebreaks.itch.io/coffeebreak-boats"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "bonsai",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/bonsai/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/bonsai/",
+        "https://coffeebreaks.itch.io/coffeebreak-bonsai"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "book-a-doctor",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/book-a-doctor/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/book-a-doctor/",
+        "https://coffeebreaks.itch.io/coffeebreak-book-a-doctor"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "bookstore",
+      "evidence": "same name as an existing page after ignoring hyphens: book-store",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "book-store"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "burgerbar",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/burgerbar/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/burgerbar/",
+        "https://coffeebreaks.itch.io/coffeebreak-burgerbar"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "bush-cruiser",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/bush-cruiser/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-bush-cruiser/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/bush-cruiser/",
+        "https://coffeebreaks.itch.io/coffeebreak-bush-cruiser"
+      ],
+      "github_repos": [
+        "coffeebreak-bush-cruiser"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "cafetycoon",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/cafetycoon/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/cafetycoon/",
+        "https://coffeebreaks.itch.io/coffeebreak-cafetycoon"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "camping",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/camping/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/camping/",
+        "https://coffeebreaks.itch.io/coffeebreak-camping"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "candy",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/candy/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/candy/",
+        "https://coffeebreaks.itch.io/coffeebreak-candy"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "canva-games",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "canva-games/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/canva-games/"
+      ],
+      "github_repos": [
+        "coffeebreak-canva-games"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "cardgames",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/cardgames/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/cardgames/",
+        "https://coffeebreaks.itch.io/coffeebreak-cardgames"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "cardshop",
+      "evidence": "same name as an existing page after ignoring hyphens: card-shop",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "card-shop"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "castles",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/castles/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/castles/",
+        "https://coffeebreaks.itch.io/coffeebreak-castles"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "catclans",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/catclans/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/catclans/",
+        "https://coffeebreaks.itch.io/coffeebreak-catclans"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "cbbank",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/cbbank/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/cbbank/",
+        "https://coffeebreaks.itch.io/coffeebreak-cbbank"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "chantbook",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/chantbook/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/chantbook/",
+        "https://coffeebreaks.itch.io/coffeebreak-chantbook"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "character-sim",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "character-sim/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-character-sim/",
+        "https://songwriterkaz.github.io/coffeebreak/character-sim/"
+      ],
+      "github_repos": [
+        "coffeebreak-character-sim"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "chat",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/chat/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-chat/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/chat/",
+        "https://coffeebreaks.itch.io/coffeebreak-chat"
+      ],
+      "github_repos": [
+        "coffeebreak-chat"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "chess",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/chess/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/chess/",
+        "https://coffeebreaks.itch.io/coffeebreak-chess"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "chess-thriller",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/chess-thriller/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/chess-thriller/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "chocolate",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/chocolate/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/chocolate/",
+        "https://coffeebreaks.itch.io/coffeebreak-chocolate"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "church",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/church/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/church/",
+        "https://coffeebreaks.itch.io/coffeebreak-church"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "cleaning",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/cleaning/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/cleaning/",
+        "https://coffeebreaks.itch.io/coffeebreak-cleaning"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "clips",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/clips/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/clips/",
+        "https://coffeebreaks.itch.io/coffeebreak-clips"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "clown-flash",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/clown-flash/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/clown-flash/",
+        "https://coffeebreaks.itch.io/coffeebreak-clown-flash"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "coffee-card-game",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "coffee-card-game/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/coffee-card-game/",
+        "https://coffeebreaks.itch.io/coffeebreak-coffee-card-game"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "coffeeshop",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/coffeeshop/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/coffeeshop/",
+        "https://coffeebreaks.itch.io/coffeebreak-coffeeshop"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "coffeevan",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/coffeevan/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/coffeevan/",
+        "https://coffeebreaks.itch.io/coffeebreak-coffeevan"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "cokecollect",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/cokecollect/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/cokecollect/",
+        "https://coffeebreaks.itch.io/coffeebreak-cokecollect"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "cosplay",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/cosplay/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/cosplay/",
+        "https://coffeebreaks.itch.io/coffeebreak-cosplay"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "criminology",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/criminology/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/criminology/",
+        "https://coffeebreaks.itch.io/coffeebreak-criminology"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "critterchess",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/critterchess/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/critterchess/",
+        "https://coffeebreaks.itch.io/coffeebreak-critterchess"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "crittergo",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/crittergo/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/crittergo/",
+        "https://coffeebreaks.itch.io/coffeebreak-crittergo"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "crittersnap",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/crittersnap/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/crittersnap/",
+        "https://coffeebreaks.itch.io/coffeebreak-crittersnap"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "crittertarot",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/crittertarot/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/crittertarot/",
+        "https://coffeebreaks.itch.io/coffeebreak-crittertarot"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "crittertrader",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/crittertrader/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/crittertrader/",
+        "https://coffeebreaks.itch.io/coffeebreak-crittertrader"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "cruises",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/cruises/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/cruises/",
+        "https://coffeebreaks.itch.io/coffeebreak-cruises"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "crystal-confetti-store",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/crystal-confetti-store/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/crystal-confetti-store/",
+        "https://coffeebreaks.itch.io/coffeebreak-crystal-confetti-store"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "cuisines",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/cuisines/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/cuisines/",
+        "https://coffeebreaks.itch.io/coffeebreak-cuisines"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "denim",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/denim/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/denim/",
+        "https://coffeebreaks.itch.io/coffeebreak-denim"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "diamondoutfits",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/diamondoutfits/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/diamondoutfits/",
+        "https://coffeebreaks.itch.io/coffeebreak-diamondoutfits"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "dictionary",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/dictionary/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/dictionary/",
+        "https://coffeebreaks.itch.io/coffeebreak-dictionary"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "digital-sim",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/digital-sim/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/digital-sim/",
+        "https://coffeebreaks.itch.io/coffeebreak-digital-sim"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "disneycollect",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/disneycollect/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/disneycollect/",
+        "https://coffeebreaks.itch.io/coffeebreak-disneycollect"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": true,
+      "review_note": "Slug text only. Not a finding about the file contents."
+    },
+    {
+      "slug": "dj-mixer",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/dj-mixer/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/dj-mixer/",
+        "https://coffeebreaks.itch.io/coffeebreak-dj-mixer"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "dog-racing-vr",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/dog-racing-vr/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/dog-racing-vr/",
+        "https://coffeebreaks.itch.io/coffeebreak-dog-racing-vr"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "dogpacks",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/dogpacks/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/dogpacks/",
+        "https://coffeebreaks.itch.io/coffeebreak-dogpacks"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "doll-physical",
+      "evidence": "public page returned HTTP 200; not a full function test",
+      "monorepo_index": [],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-doll-physical/"
+      ],
+      "github_repos": [
+        "coffeebreak-doll-physical"
+      ],
+      "http_200": [
+        "https://songwriterkaz.github.io/coffeebreak-doll-physical/"
+      ],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "donkey",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/donkey/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/donkey/",
+        "https://coffeebreaks.itch.io/coffeebreak-donkey"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "dreadlock-wigs",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "dreadlock-wigs/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/dreadlock-wigs/",
+        "https://coffeebreaks.itch.io/coffeebreak-dreadlock-wigs"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "dreadlock-wigs-store",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/dreadlock-wigs-store/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/dreadlock-wigs-store/",
+        "https://songwriterkaz.github.io/coffeebreak-dreadlock-wigs-store/",
+        "https://coffeebreaks.itch.io/coffeebreak-dreadlock-wigs-store"
+      ],
+      "github_repos": [
+        "coffeebreak-dreadlock-wigs-store"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "emu",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/emu/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/emu/",
+        "https://coffeebreaks.itch.io/coffeebreak-emu"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "energy",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/energy/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/energy/",
+        "https://coffeebreaks.itch.io/coffeebreak-energy"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "fairyfloss",
+      "evidence": "same name as an existing page after ignoring hyphens: fairy-floss",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "fairy-floss"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "fanchat",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/fanchat/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/fanchat/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "fashion-kit",
+      "evidence": "public page returned HTTP 200; not a full function test",
+      "monorepo_index": [],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-fashion-kit/",
+        "https://coffeebreaks.itch.io/coffeebreak-fashion-kit"
+      ],
+      "github_repos": [
+        "coffeebreak-fashion-kit"
+      ],
+      "http_200": [
+        "https://songwriterkaz.github.io/coffeebreak-fashion-kit/"
+      ],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "fashion-lookbook",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "fashion-lookbook/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/fashion-lookbook/",
+        "https://coffeebreaks.itch.io/coffeebreak-fashion-lookbook",
+        "https://songwriterkaz.github.io/coffeebreak-fashion-lookbook/"
+      ],
+      "github_repos": [
+        "coffeebreak-fashion-lookbook"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "fashionsketch",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/fashionsketch/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/fashionsketch/",
+        "https://coffeebreaks.itch.io/coffeebreak-fashionsketch"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "film-clips",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "film-clips/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/film-clips/"
+      ],
+      "github_repos": [
+        "coffeebreak-film-clips"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "flick_the_bean",
+      "evidence": "same name as an existing page after ignoring hyphens: flick-the-bean",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "flick-the-bean"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "flirtcoach",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/flirtcoach/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/flirtcoach/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "flirtydice",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/flirtydice/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/flirtydice/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "flowers",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/flowers/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/flowers/",
+        "https://coffeebreaks.itch.io/coffeebreak-flowers"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "formaldresses",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/formaldresses/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/formaldresses/",
+        "https://coffeebreaks.itch.io/coffeebreak-formaldresses"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "fundraiser",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/fundraiser/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/fundraiser/",
+        "https://coffeebreaks.itch.io/coffeebreak-fundraiser"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "gaming",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/gaming/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/gaming/",
+        "https://coffeebreaks.itch.io/coffeebreak-gaming"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "gamingoutfits",
+      "evidence": "same name as an existing page after ignoring hyphens: gaming-outfits",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "gaming-outfits"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "garden",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/garden/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/garden/",
+        "https://coffeebreaks.itch.io/coffeebreak-garden"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "ghost-talker",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/ghost-talker/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/ghost-talker/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "ghostdetectorpro",
+      "evidence": "same name as an existing page after ignoring hyphens: ghost-detector-pro",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "ghost-detector-pro"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "ghosthunter",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/ghosthunter/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/ghosthunter/",
+        "https://coffeebreaks.itch.io/coffeebreak-ghosthunter"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "gingerbread",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/gingerbread/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/gingerbread/",
+        "https://coffeebreaks.itch.io/coffeebreak-gingerbread"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "go-to-school",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "go-to-school/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-go-to-school/",
+        "https://songwriterkaz.github.io/coffeebreak/go-to-school/"
+      ],
+      "github_repos": [
+        "coffeebreak-go-to-school"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "goatpuppets",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/goatpuppets/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/goatpuppets/",
+        "https://coffeebreaks.itch.io/coffeebreak-goatpuppets"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "gymwear",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/gymwear/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/gymwear/",
+        "https://coffeebreaks.itch.io/coffeebreak-gymwear"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "hairsalons",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/hairsalons/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/hairsalons/",
+        "https://coffeebreaks.itch.io/coffeebreak-hairsalons"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "hats",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/hats/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/hats/",
+        "https://coffeebreaks.itch.io/coffeebreak-hats"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "haunted-dolls",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/haunted-dolls/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/haunted-dolls/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "haunted-mansion-3d",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/haunted-mansion-3d/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/haunted-mansion-3d/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "haunteddolls",
+      "evidence": "same name as an existing page after ignoring hyphens: haunted-dolls",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "haunted-dolls"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "hauntedmansion",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/hauntedmansion/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/hauntedmansion/",
+        "https://coffeebreaks.itch.io/coffeebreak-hauntedmansion"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "helping-hands",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/helping-hands/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/helping-hands/",
+        "https://coffeebreaks.itch.io/coffeebreak-helping-hands"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "homewares",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/homewares/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/homewares/",
+        "https://coffeebreaks.itch.io/coffeebreak-homewares"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "honeycaramel",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/honeycaramel/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/honeycaramel/",
+        "https://coffeebreaks.itch.io/coffeebreak-honeycaramel"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "horrorhallway",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/horrorhallway/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/horrorhallway/",
+        "https://coffeebreaks.itch.io/coffeebreak-horrorhallway"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "hotdogs",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/hotdogs/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/hotdogs/",
+        "https://coffeebreaks.itch.io/coffeebreak-hotdogs"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "housos",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/housos/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/housos/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "hub",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/hub/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-hub/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/hub/",
+        "https://coffeebreaks.itch.io/coffeebreak-hub"
+      ],
+      "github_repos": [
+        "coffeebreak-hub"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "hymns-karaoke",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "hymns-karaoke/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-hymns-karaoke/",
+        "https://songwriterkaz.github.io/coffeebreak/hymns-karaoke/",
+        "https://songwriterkaz.github.io/coffeebreak-hub/apps/hymns-karaoke/"
+      ],
+      "github_repos": [
+        "coffeebreak-hymns-karaoke"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "icecream",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/icecream/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/icecream/",
+        "https://coffeebreaks.itch.io/coffeebreak-icecream"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "internet",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/internet/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/internet/",
+        "https://coffeebreaks.itch.io/coffeebreak-internet"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "iphone",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/iphone/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/iphone/",
+        "https://coffeebreaks.itch.io/coffeebreak-iphone"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "irishcards",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/irishcards/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/irishcards/",
+        "https://coffeebreaks.itch.io/coffeebreak-irishcards"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "jade",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/jade/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/jade/",
+        "https://coffeebreaks.itch.io/coffeebreak-jade"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "judo",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/judo/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/judo/",
+        "https://coffeebreaks.itch.io/coffeebreak-judo"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "jukebox",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "jukebox/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-jukebox/",
+        "https://songwriterkaz.github.io/coffeebreak/jukebox/",
+        "https://songwriterkaz.github.io/coffeebreak-hub/apps/jukebox/"
+      ],
+      "github_repos": [
+        "coffeebreak-jukebox"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "karaoke",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/karaoke/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/karaoke/",
+        "https://coffeebreaks.itch.io/coffeebreak-karaoke"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "karaoke-12000-tools",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "karaoke-12000-tools/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/karaoke-12000-tools/",
+        "https://songwriterkaz.github.io/coffeebreak-karaoke-12000-tools/"
+      ],
+      "github_repos": [
+        "coffeebreak-karaoke-12000-tools"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "karaoke-amp",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/karaoke-amp/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/karaoke-amp/",
+        "https://coffeebreaks.itch.io/coffeebreak-karaoke-amp"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "kediamonds",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/kediamonds/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/kediamonds/",
+        "https://coffeebreaks.itch.io/coffeebreak-kediamonds"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "keep-it-simple-susan-wifiphone",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/keep-it-simple-susan-wifiphone/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/keep-it-simple-susan-wifiphone/",
+        "https://coffeebreaks.itch.io/coffeebreak-keep-it-simple-susan-wifiphone"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "kidsdraw",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/kidsdraw/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/kidsdraw/",
+        "https://coffeebreaks.itch.io/coffeebreak-kidsdraw"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "kidsmaths",
+      "evidence": "same name as an existing page after ignoring hyphens: kids-maths",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "kids-maths"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "kidstoys",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/kidstoys/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/kidstoys/",
+        "https://coffeebreaks.itch.io/coffeebreak-kidstoys"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "koala",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/koala/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/koala/",
+        "https://coffeebreaks.itch.io/coffeebreak-koala"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "koalakids",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/koalakids/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/koalakids/",
+        "https://coffeebreaks.itch.io/coffeebreak-koalakids"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "laptop",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/laptop/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/laptop/",
+        "https://coffeebreaks.itch.io/coffeebreak-laptop"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "laptops",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/laptops/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/laptops/",
+        "https://coffeebreaks.itch.io/coffeebreak-laptops"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "leatherjackets",
+      "evidence": "same name as an existing page after ignoring hyphens: leather-jackets",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "leather-jackets"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "legocollect",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/legocollect/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/legocollect/",
+        "https://coffeebreaks.itch.io/coffeebreak-legocollect"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "life",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "life/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/life/",
+        "https://coffeebreaks.itch.io/coffeebreak-life"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "lingerie",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/lingerie/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/lingerie/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": true,
+      "review_note": "Slug text only. Not a finding about the file contents."
+    },
+    {
+      "slug": "liquorice-flash",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/liquorice-flash/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/liquorice-flash/",
+        "https://coffeebreaks.itch.io/coffeebreak-liquorice-flash"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "lollipop",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/lollipop/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/lollipop/",
+        "https://coffeebreaks.itch.io/coffeebreak-lollipop"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "looper",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/looper/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/looper/",
+        "https://coffeebreaks.itch.io/coffeebreak-looper"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "loveknots",
+      "evidence": "same name as an existing page after ignoring hyphens: love-knots",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "love-knots"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "lucifer-flash",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/lucifer-flash/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/lucifer-flash/",
+        "https://coffeebreaks.itch.io/coffeebreak-lucifer-flash"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "lyric-writer",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/lyric-writer/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/lyric-writer/",
+        "https://coffeebreaks.itch.io/coffeebreak-lyric-writer"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "magician",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/magician/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/magician/",
+        "https://coffeebreaks.itch.io/coffeebreak-magician"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "mail-signature-pen",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "mail-signature-pen/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-mail-signature-pen/",
+        "https://songwriterkaz.github.io/coffeebreak/mail-signature-pen/"
+      ],
+      "github_repos": [
+        "coffeebreak-mail-signature-pen"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "makeup-magazine",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "makeup-magazine/index.html",
+        "apps/makeup-magazine/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/makeup-magazine/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/makeup-magazine/",
+        "https://coffeebreaks.itch.io/coffeebreak-makeup-magazine"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "makeup-range",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "makeup-range/index.html",
+        "apps/makeup-range/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/makeup-range/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/makeup-range/",
+        "https://coffeebreaks.itch.io/coffeebreak-makeup-range"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "manifest-atm",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/manifest-atm/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/manifest-atm/",
+        "https://coffeebreaks.itch.io/coffeebreak-manifest-atm"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "mansions",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/mansions/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/mansions/",
+        "https://coffeebreaks.itch.io/coffeebreak-mansions"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "marshmallows",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/marshmallows/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/marshmallows/",
+        "https://coffeebreaks.itch.io/coffeebreak-marshmallows"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "master-studio",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/master-studio/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/master-studio/",
+        "https://coffeebreaks.itch.io/coffeebreak-master-studio"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "merch",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/merch/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/merch/",
+        "https://coffeebreaks.itch.io/coffeebreak-merch"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "micsamps",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/micsamps/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/micsamps/",
+        "https://coffeebreaks.itch.io/coffeebreak-micsamps"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "moulin-rouge-flash",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/moulin-rouge-flash/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/moulin-rouge-flash/",
+        "https://coffeebreaks.itch.io/moulin-rouge-flash"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": true,
+      "review_note": "Slug text only. Not a finding about the file contents."
+    },
+    {
+      "slug": "movies",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/movies/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/movies/",
+        "https://coffeebreaks.itch.io/coffeebreak-movies"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "music-hub",
+      "evidence": "public page returned HTTP 200; not a full function test",
+      "monorepo_index": [],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-music-hub/",
+        "https://coffeebreaks.itch.io/coffeebreak-music-hub"
+      ],
+      "github_repos": [
+        "coffeebreak-music-hub"
+      ],
+      "http_200": [
+        "https://songwriterkaz.github.io/coffeebreak-music-hub/"
+      ],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "music-licensing",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/music-licensing/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/music-licensing/",
+        "https://coffeebreaks.itch.io/coffeebreak-music-licensing"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "music-production-pro",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "music-production-pro/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/music-production-pro/"
+      ],
+      "github_repos": [
+        "coffeebreak-music-production-pro"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "music-store",
+      "evidence": "public page returned HTTP 200; not a full function test",
+      "monorepo_index": [],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-music-store/",
+        "https://coffeebreaks.itch.io/coffeebreak-music-store"
+      ],
+      "github_repos": [
+        "coffeebreak-music-store"
+      ],
+      "http_200": [
+        "https://songwriterkaz.github.io/coffeebreak-music-store/"
+      ],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "musicgear",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/musicgear/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/musicgear/",
+        "https://coffeebreaks.itch.io/coffeebreak-musicgear"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "musician-bookings",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "musician-bookings/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/musician-bookings/",
+        "https://coffeebreaks.itch.io/coffeebreak-musician-bookings"
+      ],
+      "github_repos": [
+        "coffeebreak-musician-bookings"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "musicpro",
+      "evidence": "public page returned HTTP 200 at coffeebreak-hub; not a full function test",
+      "monorepo_index": [],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-hub/apps/musicpro/"
+      ],
+      "github_repos": [],
+      "http_200": [
+        "https://songwriterkaz.github.io/coffeebreak-hub/apps/musicpro/"
+      ],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "musicstudio",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/musicstudio/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/musicstudio/",
+        "https://coffeebreaks.itch.io/coffeebreak-musicstudio"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "naughtychurch",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/naughtychurch/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/naughtychurch/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": true,
+      "review_note": "Slug text only. Not a finding about the file contents."
+    },
+    {
+      "slug": "nintendo",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/nintendo/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/nintendo/",
+        "https://coffeebreaks.itch.io/coffeebreak-nintendo"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "offering-bowl",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/offering-bowl/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/offering-bowl/",
+        "https://coffeebreaks.itch.io/coffeebreak-offering-bowl"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "opals",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/opals/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/opals/",
+        "https://coffeebreaks.itch.io/coffeebreak-opals"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "opshop",
+      "evidence": "same name as an existing page after ignoring hyphens: op-shop",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "op-shop"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "outbackhats",
+      "evidence": "same name as an existing page after ignoring hyphens: outback-hats",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "outback-hats"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "ozquiz",
+      "evidence": "same name as an existing page after ignoring hyphens: oz-quiz",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "oz-quiz"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "paris-perfume-samples",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "paris-perfume-samples/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/paris-perfume-samples/",
+        "https://coffeebreaks.itch.io/coffeebreak-paris-perfume-samples"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "park-builder",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/park-builder/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-park-builder/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/park-builder/",
+        "https://coffeebreaks.itch.io/coffeebreak-park-builder"
+      ],
+      "github_repos": [
+        "coffeebreak-park-builder"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "pawnshop",
+      "evidence": "same name as an existing page after ignoring hyphens: pawn-shop",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "pawn-shop"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "perfume",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/perfume/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/perfume/",
+        "https://coffeebreaks.itch.io/coffeebreak-perfume"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "phone",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/phone/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-phone/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/clips/assets/phone/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/phone/"
+      ],
+      "github_repos": [
+        "coffeebreak-phone"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "phone-store",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/phone-store/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/phone-store/",
+        "https://coffeebreaks.itch.io/coffeebreak-phone-store"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "phone2",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/phone2/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/phone2/",
+        "https://coffeebreaks.itch.io/coffeebreak-phone2"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "phonex",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/phonex/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/phonex/",
+        "https://coffeebreaks.itch.io/coffeebreak-phonex"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "piano-trainer",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/piano-trainer/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/piano-trainer/",
+        "https://coffeebreaks.itch.io/coffeebreak-piano-trainer"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "pies",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/pies/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/pies/",
+        "https://coffeebreaks.itch.io/coffeebreak-pies"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "pink-bowling",
+      "evidence": "public page returned HTTP 200; not a full function test",
+      "monorepo_index": [],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-pink-bowling/"
+      ],
+      "github_repos": [
+        "coffeebreak-pink-bowling"
+      ],
+      "http_200": [
+        "https://songwriterkaz.github.io/coffeebreak-pink-bowling/"
+      ],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "pink-dancer-flash",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/pink-dancer-flash/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/pink-dancer-flash/",
+        "https://coffeebreaks.itch.io/pink-dancer-flash"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": true,
+      "review_note": "Slug text only. Not a finding about the file contents."
+    },
+    {
+      "slug": "plush-and-tattoo-flash",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "plush-and-tattoo-flash/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/plush-and-tattoo-flash/",
+        "https://coffeebreaks.itch.io/coffeebreak-plush-and-tattoo-flash"
+      ],
+      "github_repos": [
+        "coffeebreak-plush-and-tattoo-flash"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "plush-flash-cards",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "plush-flash-cards/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-plush-flash-cards/",
+        "https://songwriterkaz.github.io/coffeebreak/plush-flash-cards/"
+      ],
+      "github_repos": [
+        "coffeebreak-plush-flash-cards"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "plushtoys",
+      "evidence": "same name as an existing page after ignoring hyphens: plush-toys",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "plush-toys"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "pool",
+      "evidence": "public page returned HTTP 200; not a full function test",
+      "monorepo_index": [],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-pool/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/coffeebreak-pool/",
+        "https://coffeebreaks.itch.io/coffeebreak-pool"
+      ],
+      "github_repos": [
+        "coffeebreak-pool"
+      ],
+      "http_200": [
+        "https://songwriterkaz.github.io/coffeebreak-pool/"
+      ],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "pooltables",
+      "evidence": "same name as an existing page after ignoring hyphens: pool-tables",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "pool-tables"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "poptoys",
+      "evidence": "same name as an existing page after ignoring hyphens: pop-toys",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "pop-toys"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "prayer",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/prayer/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/prayer/",
+        "https://coffeebreaks.itch.io/coffeebreak-prayer"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "prayer-journal",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/prayer-journal/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/prayer-journal/",
+        "https://coffeebreaks.itch.io/coffeebreak-prayer-journal"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "pro-studio",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/pro-studio/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/pro-studio/",
+        "https://coffeebreaks.itch.io/coffeebreak-pro-studio"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "projector-games",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/projector-games/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-projector-games/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/projector-games/",
+        "https://coffeebreaks.itch.io/coffeebreak-projector-games"
+      ],
+      "github_repos": [
+        "coffeebreak-projector-games"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "radio",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "radio/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/radio/",
+        "https://coffeebreaks.itch.io/coffeebreak-radio"
+      ],
+      "github_repos": [
+        "coffeebreak-radio"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "radio-edit-studio",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/radio-edit-studio/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/radio-edit-studio/",
+        "https://coffeebreaks.itch.io/coffeebreak-radio-edit-studio"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "radio-pitch-builder",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "radio-pitch-builder/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/radio-pitch-builder/",
+        "https://coffeebreaks.itch.io/coffeebreak-radio-pitch-builder"
+      ],
+      "github_repos": [
+        "coffeebreak-radio-pitch-builder"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "radio-scanner",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "radio-scanner/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/radio-scanner/",
+        "https://coffeebreaks.itch.io/coffeebreak-radio-scanner"
+      ],
+      "github_repos": [
+        "coffeebreak-radio-scanner"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "rag-doll",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/rag-doll/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/rag-doll/",
+        "https://coffeebreaks.itch.io/coffeebreak-rag-doll"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "rc-car-music",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "rc-car-music/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-rc-car-music/",
+        "https://songwriterkaz.github.io/coffeebreak/rc-car-music/"
+      ],
+      "github_repos": [
+        "coffeebreak-rc-car-music"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "recording-studio-pro",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/recording-studio-pro/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/recording-studio-pro/",
+        "https://coffeebreaks.itch.io/coffeebreak-recording-studio-pro"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "records",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/records/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/records/",
+        "https://coffeebreaks.itch.io/coffeebreak-records"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "records-store",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "records-store/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/records-store/",
+        "https://coffeebreaks.itch.io/coffeebreak-records-store",
+        "https://songwriterkaz.github.io/coffeebreak-records-store/"
+      ],
+      "github_repos": [
+        "coffeebreak-records-store"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "redridinghood",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/redridinghood/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/redridinghood/",
+        "https://coffeebreaks.itch.io/redridinghood",
+        "https://coffeebreaks.itch.io/coffeebreak-redridinghood"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "reiki",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/reiki/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/reiki/",
+        "https://coffeebreaks.itch.io/coffeebreak-reiki"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "reported",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/reported/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/reported/",
+        "https://coffeebreaks.itch.io/coffeebreak-reported"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "resume-builder",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/resume-builder/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/resume-builder/",
+        "https://coffeebreaks.itch.io/coffeebreak-resume-builder"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "ring-maker",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/ring-maker/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/ring-maker/",
+        "https://coffeebreaks.itch.io/coffeebreak-ring-maker"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "roastchat",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/roastchat/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/roastchat/",
+        "https://coffeebreaks.itch.io/roastchat",
+        "https://coffeebreaks.itch.io/coffeebreak-roastchat"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "sensoryroom",
+      "evidence": "same name as an existing page after ignoring hyphens: sensory-room",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "sensory-room"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "sexed",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/sexed/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/sexed/",
+        "https://coffeebreaks.itch.io/sexed",
+        "https://coffeebreaks.itch.io/coffeebreak-sexed"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "sexwellbeing",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/sexwellbeing/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/sexwellbeing/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "sketch",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/sketch/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/sketch/",
+        "https://coffeebreaks.itch.io/coffeebreak-sketch"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "sketchsew",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/sketchsew/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/sketchsew/",
+        "https://coffeebreaks.itch.io/sketchsew",
+        "https://coffeebreaks.itch.io/coffeebreak-sketchsew"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "slime",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/slime/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/slime/",
+        "https://coffeebreaks.itch.io/coffeebreak-slime"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "snake-skull-roses-flash",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/snake-skull-roses-flash/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/snake-skull-roses-flash/",
+        "https://coffeebreaks.itch.io/snake-skull-roses-flash"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "social",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "social/index.html",
+        "apps/social/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/social/",
+        "https://coffeebreaks.itch.io/coffeebreak-social"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "socks",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/socks/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/socks/",
+        "https://coffeebreaks.itch.io/coffeebreak-socks"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "song-studio",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/song-studio/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/song-studio/",
+        "https://coffeebreaks.itch.io/coffeebreak-song-studio"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "songsmoney",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/songsmoney/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/songsmoney/",
+        "https://coffeebreaks.itch.io/coffeebreak-songsmoney"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "sos-flash",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/sos-flash/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/sos-flash/",
+        "https://coffeebreaks.itch.io/coffeebreak-sos-flash"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "spa",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/spa/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/spa/",
+        "https://coffeebreaks.itch.io/coffeebreak-spa"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "spell-book",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/spell-book/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-spell-book/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/spell-book/",
+        "https://coffeebreaks.itch.io/coffeebreak-spell-book"
+      ],
+      "github_repos": [
+        "coffeebreak-spell-book"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "spell-cauldron",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/spell-cauldron/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/spell-cauldron/",
+        "https://coffeebreaks.itch.io/coffeebreak-spell-cauldron"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "spellbook",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/spellbook/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/spellbook/",
+        "https://coffeebreaks.itch.io/coffeebreak-spellbook"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "spicythisorthat",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/spicythisorthat/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/spicythisorthat/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "spicywyr",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/spicywyr/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/spicywyr/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "sports",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/sports/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/sports/",
+        "https://coffeebreaks.itch.io/coffeebreak-sports"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "stocks",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/stocks/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/stocks/",
+        "https://coffeebreaks.itch.io/coffeebreak-stocks"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "stream",
+      "evidence": "public page returned HTTP 200; not a full function test",
+      "monorepo_index": [],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-stream/",
+        "https://coffeebreaks.itch.io/coffeebreak-stream"
+      ],
+      "github_repos": [
+        "coffeebreak-stream"
+      ],
+      "http_200": [
+        "https://songwriterkaz.github.io/coffeebreak-stream/"
+      ],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "streetwear",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/streetwear/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-streetwear/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/streetwear/",
+        "https://coffeebreaks.itch.io/coffeebreak-streetwear"
+      ],
+      "github_repos": [
+        "coffeebreak-streetwear"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "studio",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/studio/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/studio/",
+        "https://coffeebreaks.itch.io/coffeebreak-studio"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "studio-espresso",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/studio-espresso/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/studio-espresso/",
+        "https://coffeebreaks.itch.io/coffeebreak-studio-espresso"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "sweet-skulls-flash",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/sweet-skulls-flash/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/sweet-skulls-flash/",
+        "https://coffeebreaks.itch.io/coffeebreak-sweet-skulls-flash"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "sweets",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/sweets/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/sweets/",
+        "https://coffeebreaks.itch.io/coffeebreak-sweets"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "synth",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/synth/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/synth/",
+        "https://coffeebreaks.itch.io/coffeebreak-synth"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "tarot",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/tarot/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/tarot/",
+        "https://coffeebreaks.itch.io/coffeebreak-tarot"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "tattoo-flash",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/tattoo-flash/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/tattoo-flash/",
+        "https://coffeebreaks.itch.io/coffeebreak-tattoo-flash"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "tattoopractice",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/tattoopractice/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/tattoopractice/",
+        "https://coffeebreaks.itch.io/tattoopractice",
+        "https://coffeebreaks.itch.io/coffeebreak-tattoopractice"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "textchat",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/textchat/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/textchat/",
+        "https://coffeebreaks.itch.io/textchat",
+        "https://coffeebreaks.itch.io/coffeebreak-textchat"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "thriller",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/thriller/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/thriller/",
+        "https://coffeebreaks.itch.io/coffeebreak-thriller"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "titanic-games",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/titanic-games/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/titanic-games/",
+        "https://coffeebreaks.itch.io/coffeebreak-titanic-games"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "titanic-grand-cruise",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/titanic-grand-cruise/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-titanic-grand-cruise/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/titanic-grand-cruise/",
+        "https://coffeebreaks.itch.io/coffeebreak-titanic-grand-cruise"
+      ],
+      "github_repos": [
+        "coffeebreak-titanic-grand-cruise"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "titanic-iceberg-escape",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/titanic-iceberg-escape/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-titanic-iceberg-escape/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/titanic-iceberg-escape/",
+        "https://coffeebreaks.itch.io/coffeebreak-titanic-iceberg-escape"
+      ],
+      "github_repos": [
+        "coffeebreak-titanic-iceberg-escape"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "titanic-lifeboat-rescue",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/titanic-lifeboat-rescue/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-titanic-lifeboat-rescue/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/titanic-lifeboat-rescue/",
+        "https://coffeebreaks.itch.io/coffeebreak-titanic-lifeboat-rescue"
+      ],
+      "github_repos": [
+        "coffeebreak-titanic-lifeboat-rescue"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "titanic-ship-builder",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/titanic-ship-builder/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-titanic-ship-builder/",
+        "https://songwriterkaz.github.io/coffeebreak/apps/titanic-ship-builder/",
+        "https://coffeebreaks.itch.io/coffeebreak-titanic-ship-builder"
+      ],
+      "github_repos": [
+        "coffeebreak-titanic-ship-builder"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "titanic-thriller",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/titanic-thriller/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/titanic-thriller/",
+        "https://coffeebreaks.itch.io/coffeebreak-titanic-thriller"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "titanic-treasure",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/titanic-treasure/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/titanic-treasure/",
+        "https://coffeebreaks.itch.io/coffeebreak-titanic-treasure"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "travel",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/travel/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/travel/",
+        "https://coffeebreaks.itch.io/coffeebreak-travel"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "treats",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/treats/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/treats/",
+        "https://coffeebreaks.itch.io/coffeebreak-treats"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "vending",
+      "evidence": "public page returned HTTP 200; not a full function test",
+      "monorepo_index": [],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-vending/"
+      ],
+      "github_repos": [
+        "coffeebreak-vending"
+      ],
+      "http_200": [
+        "https://songwriterkaz.github.io/coffeebreak-vending/"
+      ],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "viralcoffee",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/viralcoffee/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/viralcoffee/",
+        "https://coffeebreaks.itch.io/coffeebreak-viralcoffee"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "visionboard",
+      "evidence": "same name as an existing page after ignoring hyphens: vision-board",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [
+        "vision-board"
+      ],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "voices",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/voices/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/voices/",
+        "https://coffeebreaks.itch.io/coffeebreak-voices"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "vr-helicopter",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/vr-helicopter/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/vr-helicopter/",
+        "https://coffeebreaks.itch.io/coffeebreak-vr-helicopter"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "vrbowling",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/vrbowling/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/vrbowling/",
+        "https://coffeebreaks.itch.io/vrbowling",
+        "https://coffeebreaks.itch.io/coffeebreak-vrbowling"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "vrfooty",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/vrfooty/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/vrfooty/",
+        "https://coffeebreaks.itch.io/vrfooty",
+        "https://coffeebreaks.itch.io/coffeebreak-vrfooty"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "weddingplanner",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/weddingplanner/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/weddingplanner/",
+        "https://coffeebreaks.itch.io/coffeebreak-weddingplanner"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "wifiphone",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/wifiphone/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/wifiphone/",
+        "https://coffeebreaks.itch.io/coffeebreak-wifiphone"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "wifiphone-kids",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/wifiphone-kids/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/wifiphone-kids/",
+        "https://coffeebreaks.itch.io/coffeebreak-wifiphone-kids"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "wifiphone-kids-apple",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/wifiphone-kids-apple/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/wifiphone-kids-apple/",
+        "https://coffeebreaks.itch.io/coffeebreak-wifiphone-kids-apple"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "wifiphone-lite",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/wifiphone-lite/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/wifiphone-lite/",
+        "https://coffeebreaks.itch.io/coffeebreak-wifiphone-lite"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "wigs",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/wigs/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/wigs/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "work-hub",
+      "evidence": "public page returned HTTP 200; not a full function test",
+      "monorepo_index": [],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak-work-hub/"
+      ],
+      "github_repos": [
+        "coffeebreak-work-hub"
+      ],
+      "http_200": [
+        "https://songwriterkaz.github.io/coffeebreak-work-hub/"
+      ],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "yoghurt",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/yoghurt/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/yoghurt/",
+        "https://coffeebreaks.itch.io/coffeebreak-yoghurt"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    }
+  ],
+  "truly_missing": [
+    {
+      "slug": "art-auction",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "bakery",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "bargainstore",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "bathtub-titanic",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "beanflick",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "bubblegum-flash",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "bullion",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "cake",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "candy-yuck1029",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "cbphone",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "chord-progressions",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "clips-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "coaster",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "coffee",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "coffeebreak_plush_game",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "coffeebreak_tarot",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "coffeebreakrecords",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "collectible-coins",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "confessbooth",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "cp-roast-flash",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "digital-sim-esim",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "dreams-board-store",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "dreams-book",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "endlesstale-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "explicit-studio",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "explorer",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "explorer-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "fire",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "fire-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "flick-the-coffee-bean",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "furry",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "good-girls-flash",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": true,
+      "review_note": "Slug text only. Not a finding about the file contents."
+    },
+    {
+      "slug": "guitar-tuner",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "hairbooking",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "haunted-plushies",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "heart",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "heart-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "honey-sim",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "honey-sim-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "horsesponsor",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "kazstory-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "kazwork-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "kidsmarine",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "kidsplay",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "kidssmash",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "kidsspell-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "kidstreasure",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "mastering",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "maze",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "maze-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "meltdown",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "meltdown-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "militaria",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "moto",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "moto-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "mystictarot-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "pasta",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "pink-wigs",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "play-test",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "prayers",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "print3d-drawing",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "print3d-drawing-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "print3d-fashion",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "print3d-fashion-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "print3d-orthotics",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "print3d-orthotics-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "print3d-prosthetic",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "print3d-prosthetic-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "printhomes",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "psychicai",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "rayban",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "rescue-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "ringdesign",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "rockdip",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "sinks",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "sole-trader",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "speedster-game",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "spell-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "spells",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "spirit-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "spiritual",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "studio-x",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "studiogear",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "studiopro-jumbo",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "tattoo-survey",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "tattoos",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "thriller-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "thriller-maze",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "titanic",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "titanicpack",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "titanicvr",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "visuals",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "visuals-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "vocal-pitch",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "voodoo-full",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "vrheli",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "weddings",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "wifi",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "will",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    }
+  ],
+  "damaged": [],
+  "source_needed": [
+    {
+      "slug": "eats-indian",
+      "evidence": "named in a repo or catalogue, no verified page in the monorepo",
+      "monorepo_index": [],
+      "catalogue_urls": [
+        "https://coffeebreaks.itch.io/coffeebreak-eats-indian"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    },
+    {
+      "slug": "virus-scanner",
+      "evidence": "named in a repo or catalogue, no verified page in the monorepo",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [
+        "coffeebreak-virus-scanner"
+      ],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": false,
+      "review_note": null
+    }
+  ],
+  "review_needed": [
+    {
+      "slug": "pink-dancer-flash",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/pink-dancer-flash/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/pink-dancer-flash/",
+        "https://coffeebreaks.itch.io/pink-dancer-flash"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": true,
+      "review_note": "Slug text only. Not a finding about the file contents.",
+      "group": "healthy_skip"
+    },
+    {
+      "slug": "moulin-rouge-flash",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/moulin-rouge-flash/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/moulin-rouge-flash/",
+        "https://coffeebreaks.itch.io/moulin-rouge-flash"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": true,
+      "review_note": "Slug text only. Not a finding about the file contents.",
+      "group": "healthy_skip"
+    },
+    {
+      "slug": "good-girls-flash",
+      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
+      "monorepo_index": [],
+      "catalogue_urls": [],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": true,
+      "review_note": "Slug text only. Not a finding about the file contents.",
+      "group": "truly_missing"
+    },
+    {
+      "slug": "disneycollect",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/disneycollect/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/disneycollect/",
+        "https://coffeebreaks.itch.io/coffeebreak-disneycollect"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": true,
+      "review_note": "Slug text only. Not a finding about the file contents.",
+      "group": "healthy_skip"
+    },
+    {
+      "slug": "lingerie",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/lingerie/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/lingerie/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": true,
+      "review_note": "Slug text only. Not a finding about the file contents.",
+      "group": "healthy_skip"
+    },
+    {
+      "slug": "naughtychurch",
+      "evidence": "index.html on origin/main",
+      "monorepo_index": [
+        "apps/naughtychurch/index.html"
+      ],
+      "catalogue_urls": [
+        "https://songwriterkaz.github.io/coffeebreak/apps/naughtychurch/"
+      ],
+      "github_repos": [],
+      "http_200": [],
+      "alias_of": [],
+      "review_needed": true,
+      "review_note": "Slug text only. Not a finding about the file contents.",
+      "group": "healthy_skip"
+    }
+  ],
+  "recoverable_dependencies": {
+    "coffeebreak-app-clips": {
+      "note": "Playlist entries kept. These relative files are not in the public repo. Filename wording is not a content finding. after-dark, im-weak and knee-deep are review-needed, not classified from the name alone.",
+      "missing_relative_files": [
+        "assets/music/suno-coffeebreak-after-dark-v1.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v2.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v3.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v4.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v5.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v6.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v7.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v8.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v9.mp3",
+        "assets/music/suno-drip-drip-drip-country-v1.mp3",
+        "assets/music/suno-drip-drip-drip-country-v2.mp3",
+        "assets/music/suno-drip-drip-drip-country-v3.mp3",
+        "assets/music/suno-drip-drip-drip-country-v4.mp3",
+        "assets/music/suno-drip-drip-drip-country-v5.mp3",
+        "assets/music/suno-im-weak-v1.mp3",
+        "assets/music/suno-im-weak-v2.mp3",
+        "assets/music/suno-knee-deep-mashup-v1.mp3",
+        "assets/music/suno-knee-deep-mashup-v2.mp3",
+        "assets/music/suno-knee-deep-mashup-v3.mp3",
+        "assets/music/suno-knee-deep-mashup-v4.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v2.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v3.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v4.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v5.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v6.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v7.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v8.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v9.mp3",
+        "assets/music/track1.mp3",
+        "assets/music/track2.mp3",
+        "assets/music/track3.mp3",
+        "assets/music/track4.mp3",
+        "assets/music/track5.mp3",
+        "assets/music/suno-coffee-break-v1.mp3",
+        "assets/music/suno-cinnamon-candy-v1.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v1.mp3",
+        "assets/music/user-upload-1.mp3",
+        "assets/music/user-upload-2.mp3"
+      ],
+      "review_needed_relative_files": [
+        "assets/music/suno-coffeebreak-after-dark-v1.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v2.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v3.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v4.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v5.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v6.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v7.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v8.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v9.mp3",
+        "assets/music/suno-im-weak-v1.mp3",
+        "assets/music/suno-im-weak-v2.mp3",
+        "assets/music/suno-knee-deep-mashup-v1.mp3",
+        "assets/music/suno-knee-deep-mashup-v2.mp3",
+        "assets/music/suno-knee-deep-mashup-v3.mp3",
+        "assets/music/suno-knee-deep-mashup-v4.mp3"
+      ]
+    },
+    "coffeebreak-mail": {
+      "note": "Core was reviewed and not published. These relative files are still required before the desk can be considered. A static page still cannot send mail.",
+      "missing_relative_files": [
+        "assets/three.min.js",
+        "assets/music/a-delicious-disaster.mp3",
+        "assets/music/cinnamon-candy.mp3",
+        "assets/music/coffee-break-ride.mp3",
+        "assets/music/coffee-break.mp3",
+        "assets/music/drip-drip-drip-country.mp3",
+        "assets/music/fussell-st.mp3",
+        "assets/music/kicking-marshmallows-up-the-mud.mp3",
+        "assets/music/restless-engine.mp3",
+        "assets/music/sugar-coated-fever.mp3",
+        "assets/music/sweet-juices-cotton-candy.mp3",
+        "assets/music/talk-is-cheap.mp3",
+        "assets/music/thunder-in-my-hands.mp3",
+        "assets/movies/v05-singing.mp4",
+        "assets/movies/v07-barista.mp4",
+        "assets/movies/v11-dancing.mp4",
+        "assets/movies/v18-newcastle-sunset.mp4",
+        "assets/movies/v20-karaoke.mp4",
+        "assets/movies/v21-guitar.mp4"
+      ]
+    },
+    "virtual-music-studio": {
+      "note": "Page already public. This one relative file is still absent and was not added.",
+      "missing_relative_files": [
+        "songs/coffee-break.mp3"
+      ]
+    }
+  },
+  "previous_batch_do_not_repackage_count": 83,
+  "note": "No local paths. review_needed is the slug text only, not a content ruling. Do not delete a healthy_skip copy because of that flag. Slug src is tooling directories, not a product, and is not in the missing list.",
+  "invalid_not_a_product": [
+    "src"
+  ]
+}

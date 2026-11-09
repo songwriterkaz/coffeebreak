@@ -1,5 +1,5 @@
 (function(){
-var C=window.CB_GAME||{},K='cbStats_'+(C.key||'game'),YT='https://www.youtube.com/@coffeebreakTVSERIES?sub_confirmation=1',TIP='https://coffeebreaks.itch.io/'+C.slug+'/purchase';
+var C=window.CB_GAME||{},K='cbStats_'+(C.key||'game'),YT='https://www.youtube.com/@coffeebreakTVSERIES?sub_confirmation=1',TIP='https://songwriterkaz.github.io/coffeebreak/apps/clips/';
 function load(){try{return Object.assign(def(),JSON.parse(localStorage.getItem(K)||'{}'))}catch(e){return def()}}
 function def(){return {played:0,best:null,last:null,time:0,level:0,songs:0}}
 var S=load();function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
