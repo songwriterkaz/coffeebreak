@@ -8,13 +8,13 @@
 <div class="card" id="status"><p>Checking the checkout server…</p></div>
 <div class="card"><h2>What has to exist before a real charge</h2>
 <ul>
-<li>Karen's own Stripe platform account, with Connect enabled, and the secret key stored only as a server secret.</li>
-<li>A webhook signing secret on that same server. Events are accepted only after the signature matches.</li>
-<li>Each seller's own connected account id. The browser cannot choose an account that the server does not already have.</li>
-<li>An agreed platform fee in basis points. No rate is stored here, so no share is calculated.</li>
-<li>A deliberate server flag before any Checkout Session is created.</li>
+<li>An isolated Stripe sandbox and a restricted rk_test_ key stored only on the server. A live or unrestricted secret key is not used.</li>
+<li>A webhook signing secret. A paid Checkout Session is not treated as complete until that signature matches.</li>
+<li>A chosen charge pattern. Own-brand sales and third-party sellers are different, and neither direct, destination, nor separate charges are selected.</li>
+<li>For other people's sales: Accounts v2 onboarding, who pays Stripe's fee, and who is liable for refunds and losses. Those are not set.</li>
+<li>An agreed platform fee. No rate is stored, and GST is not collected.</li>
 </ul>
-<p>Until those are set, this page does not start a payment, transfer, or payout. PayID stays available as a separate manual bank transfer. It is not instant and it is not automatic.</p>
+<p>Until those decisions are made, this page does not start a card payment, transfer, or payout. PayID stays available as a separate manual bank transfer. It is not instant and it is not automatic.</p>
 <p><a href="./">Open manual PayID instructions</a></p>
 </div>
 <footer><p>Coffeebreak. <a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a></p>

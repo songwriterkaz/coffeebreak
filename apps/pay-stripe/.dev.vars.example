@@ -1,9 +1,8 @@
-# Copy to .dev.vars for local wrangler only. Do not commit .dev.vars.
-# Leave these blank until Karen's Stripe account, a connected seller,
-# and an agreed fee rate exist. Checkout stays off while any line is empty
-# or CHECKOUT_ENABLED is not exactly true.
-STRIPE_SECRET_KEY=
+# Local only. Do not commit .dev.vars. Do not put a live or unrestricted secret key here.
+# Checkout stays off until the charge pattern, fee, refund liability, and seller
+# accounts are agreed. An rk_test_ key does not turn checkout on.
+STRIPE_RESTRICTED_KEY=
 STRIPE_WEBHOOK_SECRET=
+CHARGE_PATTERN=
 PLATFORM_FEE_BPS=
 SELLERS=
-CHECKOUT_ENABLED=

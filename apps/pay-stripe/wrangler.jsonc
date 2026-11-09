@@ -1,5 +1,6 @@
 {
-  // Not deployed. GitHub Pages cannot create Stripe Checkout Sessions.
+  // Not deployed. Checkout creation is refused until charge type, fee,
+  // refund liability, and seller accounts are agreed.
   // Secrets are set with `wrangler secret put`, never in this file.
   "name": "coffeebreak-pay-stripe",
   "main": "worker.js",
