@@ -351,8 +351,3 @@ $('#fxlog').onclick=()=>{const d=fxData();if(!d.to&&!d.num){toast('Enter who the
 
 /* init */
 save();renderClinics();
-
-/* free sample build: set window.CB_DEMO=1 before app.js. Sample clinics only, clinic setup and restore locked. */
-if(window.CB_DEMO){const bn=$('#sampleBanner');bn.innerHTML='<b>FREE SAMPLE:</b> try everything with the made-up sample clinics. Adding your own clinic, doctors, appointment types and restoring backups are in the full version ($1 USD).';
-  ['#ssave','#saddClinic','#sdelClinic','#ndadd','#ntadd','#clearSample'].forEach(s=>{const e=$(s);e.onclick=ev=>{ev.preventDefault();toast('Clinic setup is in the full version ($1 USD).')};e.textContent+=' (full version)'});
-  $('#imp').disabled=true;S.sample=true;save()}
