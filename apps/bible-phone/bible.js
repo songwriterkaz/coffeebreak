@@ -1,5 +1,10 @@
 (function(){
 var $=function(i){return document.getElementById(i)},B=window.KJV;
+if(!B||!B.length){
+  var missing=document.getElementById('page');
+  if(missing) missing.innerHTML='<h1>Bible text unavailable</h1><p>kjv.js is not in this app. The King James text has not been added, and no other translation has been substituted, so chapters cannot open.</p>';
+  return;
+}
 var LS=function(k,d){try{var v=JSON.parse(localStorage.getItem('cbb_'+k));return v==null?d:v}catch(e){return d}},SV=function(k,v){localStorage.setItem('cbb_'+k,JSON.stringify(v))};
 var pos=LS('pos',{b:0,c:0}),view='read',WALLS=['wall0.jpg','wall1.jpg','wall4.jpg','wall10.jpg'];
 var flat=[];B.forEach(function(b,bi){b[1].forEach(function(c,ci){flat.push([bi,ci])})});

@@ -151,7 +151,7 @@ function speakNext(){if(!synth||!playing||paused)return;
   u.onerror=function(e){if(my!==token)return;if(e.error==="interrupted"||e.error==="canceled")return;qi++;speakNext();};
   status("Playing: "+(label==="script"?SCRIPTS[+sel.value].title:label)+" ("+(qi+1)+"/"+queue.length+")");
   synth.speak(u);}
-function startQueue(list,lbl){if(!synth)return;token++;synth.cancel();queue=list;qi=0;label=lbl;playing=true;paused=false;setBtn();setTimeout(speakNext,60);}
+function startQueue(list,lbl){if(!synth)return;token++;synth.cancel();queue=list;qi=0;label=lbl;playing=true;paused=false;setBtn();speakNext();}
 function speakList(list,lbl){startQueue(list,lbl);}
 function stopSpeak(){if(synth){token++;synth.cancel();}playing=false;paused=false;qi=0;mark(-1);setBtn();status("Stopped.");}
 $("spPlay").onclick=function(){if(!synth)return;

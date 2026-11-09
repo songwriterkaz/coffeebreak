@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Stripe checkout</title>
+<style>body{margin:0;font-family:system-ui,sans-serif;background:#fff7fb;color:#3a1030}main{max-width:720px;margin:auto;padding:24px}h1{color:#d81b7a}a{color:#d81b7a}.card{background:#fff;border:2px solid #ffd0e6;border-radius:16px;padding:16px;margin:12px 0}code{background:#fff0f6;padding:1px 4px}</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head><body><main>
+<p><a href="./">&larr; Coffeebreak Pay</a></p>
+<h1>Stripe checkout is not live</h1>
+<div class="card" id="status"><p>Checking the checkout server…</p></div>
+<div class="card"><h2>What has to exist before a real charge</h2>
+<ul>
+<li>An isolated Stripe sandbox and a restricted rk_test_ key stored only on the server. A live or unrestricted secret key is not used.</li>
+<li>A webhook signing secret. A paid Checkout Session is not treated as complete until that signature matches.</li>
+<li>A chosen charge pattern. Own-brand sales and third-party sellers are different, and neither direct, destination, nor separate charges are selected.</li>
+<li>For other people's sales: Accounts v2 onboarding, who pays Stripe's fee, and who is liable for refunds and losses. Those are not set.</li>
+<li>An agreed platform fee. No rate is stored, and GST is not collected.</li>
+</ul>
+<p>A sandbox Checkout path exists only for three fixed tips ($5, $10, $20). It runs only when a server holds an rk_test_ key and a webhook secret. That key is not here, so no session is opened from this page. Connect, a platform fee, and tax are not configured. PayID stays a separate manual bank transfer. It is not instant and it is not automatic.</p>
+<p><a href="./">Open manual PayID instructions</a></p>
+</div>
+<footer><p>Coffeebreak. <a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a></p>
+<p><small>Disclaimer: not a bank. Stripe and PayID are named only to describe payment methods. Coffeebreak does not hold the money on this page.</small></p></footer>
+</main>
+<script>
+var box=document.getElementById("status");
+box.innerHTML="<p><b>Checkout server:</b> not deployed. No session can be created from GitHub Pages alone.</p><p>The prepared Worker is in the repo at apps/pay-stripe and it refuses checkout while the fee rate, seller accounts, and Stripe secrets are missing.</p>";
+</script></body></html>
