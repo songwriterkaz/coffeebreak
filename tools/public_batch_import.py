@@ -55,25 +55,25 @@ SAFE_CLIPS_AUDIO = []
 # Playlist entries kept. Files were not in this batch. Filename flags are not
 # treated as proof, and nothing already listed is deleted.
 CLIPS_AUDIO_STILL_MISSING = [
-    "suno-coffeebreak-after-dark-v1.mp3", "suno-coffeebreak-after-dark-v2.mp3",
-    "suno-coffeebreak-after-dark-v3.mp3", "suno-coffeebreak-after-dark-v4.mp3",
-    "suno-coffeebreak-after-dark-v5.mp3", "suno-coffeebreak-after-dark-v6.mp3",
-    "suno-coffeebreak-after-dark-v7.mp3", "suno-coffeebreak-after-dark-v8.mp3",
-    "suno-coffeebreak-after-dark-v9.mp3",
-    "suno-im-weak-v1.mp3", "suno-im-weak-v2.mp3",
-    "suno-knee-deep-mashup-v1.mp3", "suno-knee-deep-mashup-v2.mp3",
-    "suno-knee-deep-mashup-v3.mp3", "suno-knee-deep-mashup-v4.mp3",
-    "suno-drip-drip-drip-country-v1.mp3", "suno-drip-drip-drip-country-v2.mp3",
-    "suno-drip-drip-drip-country-v3.mp3", "suno-drip-drip-drip-country-v4.mp3",
-    "suno-drip-drip-drip-country-v5.mp3",
-    "suno-sweet-juices-cotton-candy-v2.mp3", "suno-sweet-juices-cotton-candy-v3.mp3",
-    "suno-sweet-juices-cotton-candy-v4.mp3", "suno-sweet-juices-cotton-candy-v5.mp3",
-    "suno-sweet-juices-cotton-candy-v6.mp3", "suno-sweet-juices-cotton-candy-v7.mp3",
-    "suno-sweet-juices-cotton-candy-v8.mp3", "suno-sweet-juices-cotton-candy-v9.mp3",
-    "user-upload-1.mp3", "user-upload-2.mp3",
-    "track1.mp3", "track2.mp3", "track3.mp3", "track4.mp3", "track5.mp3",
-    "suno-coffee-break-v1.mp3", "suno-cinnamon-candy-v1.mp3",
-    "suno-sweet-juices-cotton-candy-v1.mp3",
+    "assets/music/suno-coffeebreak-after-dark-v1.mp3", "assets/music/suno-coffeebreak-after-dark-v2.mp3",
+    "assets/music/suno-coffeebreak-after-dark-v3.mp3", "assets/music/suno-coffeebreak-after-dark-v4.mp3",
+    "assets/music/suno-coffeebreak-after-dark-v5.mp3", "assets/music/suno-coffeebreak-after-dark-v6.mp3",
+    "assets/music/suno-coffeebreak-after-dark-v7.mp3", "assets/music/suno-coffeebreak-after-dark-v8.mp3",
+    "assets/music/suno-coffeebreak-after-dark-v9.mp3",
+    "assets/music/suno-im-weak-v1.mp3", "assets/music/suno-im-weak-v2.mp3",
+    "assets/music/suno-knee-deep-mashup-v1.mp3", "assets/music/suno-knee-deep-mashup-v2.mp3",
+    "assets/music/suno-knee-deep-mashup-v3.mp3", "assets/music/suno-knee-deep-mashup-v4.mp3",
+    "assets/music/suno-drip-drip-drip-country-v1.mp3", "assets/music/suno-drip-drip-drip-country-v2.mp3",
+    "assets/music/suno-drip-drip-drip-country-v3.mp3", "assets/music/suno-drip-drip-drip-country-v4.mp3",
+    "assets/music/suno-drip-drip-drip-country-v5.mp3",
+    "assets/music/suno-sweet-juices-cotton-candy-v2.mp3", "assets/music/suno-sweet-juices-cotton-candy-v3.mp3",
+    "assets/music/suno-sweet-juices-cotton-candy-v4.mp3", "assets/music/suno-sweet-juices-cotton-candy-v5.mp3",
+    "assets/music/suno-sweet-juices-cotton-candy-v6.mp3", "assets/music/suno-sweet-juices-cotton-candy-v7.mp3",
+    "assets/music/suno-sweet-juices-cotton-candy-v8.mp3", "assets/music/suno-sweet-juices-cotton-candy-v9.mp3",
+    "assets/music/user-upload-1.mp3", "assets/music/user-upload-2.mp3",
+    "assets/music/track1.mp3", "assets/music/track2.mp3", "assets/music/track3.mp3", "assets/music/track4.mp3", "assets/music/track5.mp3",
+    "assets/music/suno-coffee-break-v1.mp3", "assets/music/suno-cinnamon-candy-v1.mp3",
+    "assets/music/suno-sweet-juices-cotton-candy-v1.mp3",
 ]
 MAIL_STILL_MISSING = [
     "assets/three.min.js",
@@ -608,7 +608,7 @@ def write_results(slugs: list[str]) -> None:
         "do_not_repackage": skip,
         "still_wanted": wanted,
         "uncompared_remaining_reported_by_intake": 361,
-        "note": "Compared batches only. Slugs in do_not_repackage are already on GitHub and should not be packed again.",
+        "note": "The first 85 slugs are in this file. The later 361-slug groups are in queue-361.json. Do not pack do_not_repackage slugs again. review_needed there is slug text only, not a content ruling.",
     }
     (out_dir / "wanted-slugs.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
