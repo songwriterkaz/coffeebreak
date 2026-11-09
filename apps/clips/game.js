@@ -57,6 +57,10 @@ function drawEffect(g,nm,t){if(!nm||nm==='None'){FXP.n='';FXP.p=[];return}const 
   else if(nm==='Floating Hearts'){q.y-=q.v*1.2;q.x+=Math.sin(t/600+q.a)*0.9;g.font=Math.round(18+q.s*1.6)+'px serif';g.fillText(['💗','💖','🩷'][Math.floor(q.a*10)%3],q.x,q.y)}
   if(q.y>H+30){q.y=-30;q.x=R()*W}else if(q.y<-30){q.y=H+30;q.x=R()*W}}
  g.restore()}
+const PENS={Pink:'#ff6fae',White:'#ffffff',Gold:'#ffd23f',Mint:'#7cffc4'};
+function drawStrokes(g,L,t){g.save();g.lineCap='round';g.lineJoin='round';for(const k of L){if(!k.p.length)continue;const rb=k.c==='Rainbow';g.lineWidth=k.w;g.shadowBlur=14;
+ g.beginPath();g.moveTo(k.p[0][0],k.p[0][1]);for(let i=1;i<k.p.length;i++)g.lineTo(k.p[i][0],k.p[i][1]);if(k.p.length===1)g.lineTo(k.p[0][0]+0.1,k.p[0][1]);
+ const col=rb?`hsl(${(t/8)%360},95%,62%)`:PENS[k.c]||'#fff';g.strokeStyle=col;g.shadowColor=col;g.stroke()}g.restore()}
 const FRAMES=['None','Polaroid','Film Strip','Coffee Beans','Love Hearts','Gold Glam','Comic Pop'];
 function drawFrame(g,nm,t){if(!nm||nm==='None')return;const W=540,H=960;g.save();g.textAlign='center';g.textBaseline='middle';
  if(nm==='Polaroid'){g.fillStyle='#fbf8f1';g.fillRect(0,0,W,28);g.fillRect(0,0,28,H);g.fillRect(W-28,0,28,H);g.fillRect(0,H-150,W,150);g.strokeStyle='#d8d0c0';g.lineWidth=2;g.strokeRect(28,28,W-56,H-178);g.fillStyle='#5a3a28';g.font='italic 34px Georgia,serif';g.fillText('Coffeebreak ☕ '+new Date().toLocaleDateString('en-AU'),W/2,H-112)}
@@ -150,14 +154,14 @@ async create(){const all=await allClips(),n=all.length;if(DEMO&&n>=MAXC){M.inner
  M.innerHTML=`<div class="cbPane"><div class="cbStage" id="stg"><canvas id="rc" width="540" height="960"></canvas></div>
  <div class="cbRow"><button id="cam">📷 Camera</button><button id="flip">🔄 Flip</button><button id="upb">📁 Upload</button><input type="file" id="up" accept="video/*" style="display:none"><button id="rec">⏺️ Record</button>
  ⏱️<select id="tmr"><option value="0">No timer</option><option value="3">3s</option><option value="10">10s</option></select> ⚡<select id="spd"><option value="0.5">0.5x slow</option><option value="1" selected>1x</option><option value="2">2x fast</option><option value="3">3x</option></select><span id="rs"></span></div>
- <div class="cbRow">🎨<select id="flt">${Object.keys(FILTERS).map(k=>`<option>${k}</option>`).join('')}</select> ✨Beauty<input type="range" id="bty" min="0" max="100" value="0" style="width:80px"> 🎭Face<select id="fce">${Object.keys(FACES).map(k=>`<option>${k}</option>`).join('')}</select> 🖼️Frame<select id="frm">${FRAMES.map(k=>`<option>${k}</option>`).join('')}</select> 🌨️Effect<select id="efx">${EFFECTS.map(k=>`<option>${k}</option>`).join('')}</select>
+ <div class="cbRow">🎨<select id="flt">${Object.keys(FILTERS).map(k=>`<option>${k}</option>`).join('')}</select> ✨Beauty<input type="range" id="bty" min="0" max="100" value="0" style="width:80px"> 🎭Face<select id="fce">${Object.keys(FACES).map(k=>`<option>${k}</option>`).join('')}</select> 🖼️Frame<select id="frm">${FRAMES.map(k=>`<option>${k}</option>`).join('')}</select> 🌨️Effect<select id="efx">${EFFECTS.map(k=>`<option>${k}</option>`).join('')}</select> ✏️Draw<select id="pen"><option>Off</option>${Object.keys(PENS).map(k=>`<option>${k}</option>`).join('')}<option>Rainbow</option></select><select id="penw"><option value="6">Thin</option><option value="12" selected>Medium</option><option value="22">Thick</option></select><button id="pundo">↩️ Undo</button>
  🟩<button id="gsb">Green screen bg</button><input type="file" id="gsf" accept="image/*" style="display:none"><button id="gso">Off</button> 👯Duet<select id="dut"><option value="">None</option>${pub.map(c=>`<option value="${c.id}">${esc((c.cap||'clip').slice(0,24))}</option>`).join('')}</select></div>
  <div class="cbRow">${STK.map(e=>`<button class="sk">${e}</button>`).join('')}</div>
  <div class="cbRow">🔤<input id="txt" maxlength="40" placeholder="Text overlay" style="width:140px"><input type="color" id="tcol" value="#ffffff" style="width:40px;padding:0"><select id="tsz"><option value="40">S</option><option value="60" selected>M</option><option value="90">L</option></select><button id="tadd">Add text</button><button id="clr">🧽 Clear</button><span class="cbNote" id="hint">Tap a sticker/text, then tap the video to place it.</span></div>
  <div class="cbRow">🎵<select id="snd"><option value="">Original sound</option></select><input id="cap" maxlength="150" placeholder="Caption… #coffeebreak" style="flex:1"><button id="dft" disabled>📝 Draft</button><button id="post" disabled>✅ Post</button></div>
  <p class="cbNote">${DEMO?`Demo: ${n}/3 clips used. `:''}Max 60s. Clips are saved only on this device. Green screen works best with a plain green wall or sheet behind you.</p></div>`;
  const rc=$('rc'),g=rc.getContext('2d',{willReadFrequently:true}),src=document.createElement('video');src.playsInline=true;src.muted=true;
- let stream=null,facing='user',items=[],tool=null,rec=null,chunks=[],out=null,fileBlob=null,raf,bgImg=null,duet=null,face=null,count=0,mix=null;
+ let stream=null,facing='user',items=[],strokes=[],curS=null,tool=null,rec=null,chunks=[],out=null,fileBlob=null,raf,bgImg=null,duet=null,face=null,count=0,mix=null;
  const o=document.createElement('canvas'),og=o.getContext('2d',{willReadFrequently:true}),bgc=document.createElement('canvas'),bgg=bgc.getContext('2d');
  const fd=('FaceDetector' in window)?new FaceDetector({fastMode:true,maxDetectedFaces:1}):null;let fdBusy=false,lastFd=0;
  function cover(ctx,el,w,h,vw,vh,mir){const s=Math.max(w/vw,h/vh);ctx.save();if(mir){ctx.translate(w,0);ctx.scale(-1,1)}ctx.drawImage(el,(w-vw*s)/2,(h-vh*s)/2,vw*s,vh*s);ctx.restore()}
@@ -171,6 +175,7 @@ async create(){const all=await allClips(),n=all.length;if(DEMO&&n>=MAXC){M.inner
   if(duet&&duet.readyState>=2){g.save();g.translate(270,0);g.beginPath();g.rect(0,0,270,960);g.clip();cover(g,duet,270,960,duet.videoWidth,duet.videoHeight);g.restore();g.fillStyle='#fff';g.fillRect(269,0,2,960)}
   const fe=FACES[$('fce').value];if(fe){const fx=face?face.x+face.width/2:(window.__fx||half/2),fy=face?face.y:(window.__fy||260),fs=face?face.width*1.1:200;g.font=fs+'px serif';g.textAlign='center';g.textBaseline='middle';g.globalAlpha=.92;g.fillText(fe,fx,fy-fs*.15);g.globalAlpha=1}
   g.textAlign='center';g.textBaseline='middle';for(const s of items){if(s.txt){g.font='bold '+s.sz+'px sans-serif';g.lineWidth=s.sz/9;g.strokeStyle='#000';g.strokeText(s.e,s.x*5.4,s.y*9.6);g.fillStyle=s.col;g.fillText(s.e,s.x*5.4,s.y*9.6)}else{g.font='80px serif';g.fillText(s.e,s.x*5.4,s.y*9.6)}}g.textBaseline='alphabetic';
+  drawStrokes(g,strokes,performance.now());
   drawEffect(g,$('efx')&&$('efx').value,performance.now());
   drawFrame(g,$('frm')&&$('frm').value,performance.now());
   const cp=$('cap')&&$('cap').value;if(cp){g.font='bold 30px sans-serif';g.fillStyle='#fff';g.strokeStyle='#000';g.lineWidth=5;g.strokeText(cp.slice(0,40),270,900);g.fillText(cp.slice(0,40),270,900)}
@@ -184,8 +189,13 @@ async create(){const all=await allClips(),n=all.length;if(DEMO&&n>=MAXC){M.inner
  $('dut').onchange=async e=>{if(duet){duet.pause();duet=null}const c1=pub.find(c=>c.id===e.target.value);if(c1){duet=vidFor(c1);duet.muted=true;duet.play().catch(()=>{})}o.width=0};
  M.querySelectorAll('.sk').forEach(b=>b.onclick=()=>{tool={e:b.textContent};$('hint').textContent='Tap the video to place '+b.textContent});
  $('tadd').onclick=()=>{const v=$('txt').value.trim();if(!v)return;tool={e:v,txt:1,col:$('tcol').value,sz:+$('tsz').value};$('hint').textContent='Tap the video to place your text'};
- $('clr').onclick=()=>items=[];
- rc.onclick=e=>{const r=rc.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*100,py=(e.clientY-r.top)/r.height*100;if(tool){items.push(Object.assign({x:px,y:py},tool));return}if(FACES[$('fce').value]&&!face){window.__fx=px*5.4;window.__fy=py*9.6}};
+ $('clr').onclick=()=>{items=[];strokes=[]};$('pundo').onclick=()=>{strokes.pop()};
+ $('pen').onchange=()=>{const on=$('pen').value!=='Off';rc.style.touchAction=on?'none':'';$('hint').textContent=on?'Draw on the video with your finger or mouse. It is saved into your clip.':'Tap a sticker/text, then tap the video to place it.'};
+ const pxy=e=>{const r=rc.getBoundingClientRect();return[(e.clientX-r.left)/r.width*540,(e.clientY-r.top)/r.height*960]};
+ rc.addEventListener('pointerdown',e=>{if($('pen').value==='Off')return;e.preventDefault();try{rc.setPointerCapture(e.pointerId)}catch(_){}curS={c:$('pen').value,w:+$('penw').value,p:[pxy(e)]};strokes.push(curS);if(strokes.length>200)strokes.shift()});
+ rc.addEventListener('pointermove',e=>{if(!curS)return;e.preventDefault();if(curS.p.length<2000)curS.p.push(pxy(e))});
+ const endS=()=>{curS=null};rc.addEventListener('pointerup',endS);rc.addEventListener('pointercancel',endS);
+ rc.onclick=e=>{if($('pen')&&$('pen').value!=='Off')return;const r=rc.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*100,py=(e.clientY-r.top)/r.height*100;if(tool){items.push(Object.assign({x:px,y:py},tool));return}if(FACES[$('fce').value]&&!face){window.__fx=px*5.4;window.__fy=py*9.6}};
  function audioMix(){const ac=new AudioContext(),dst=ac.createMediaStreamDestination(),stops=[];
   const sid=$('snd').value,so=sid&&SONGS.find(z=>z.id===sid);
   if(so){const au=new Audio(songURL(so));ac.createMediaElementSource(au).connect(dst);au.play().catch(()=>{});stops.push(()=>au.pause())}
