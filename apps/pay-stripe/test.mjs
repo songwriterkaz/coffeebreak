@@ -1,51 +1,87 @@
 import assert from "node:assert/strict";
 import { webcrypto } from "node:crypto";
-import { blockers, verifyStripeSignature } from "./worker.js";
+import worker, { checkoutBody, sandboxReady, rememberedEvent, verifyStripeSignature } from "./worker.js";
 
 if (!globalThis.crypto) globalThis.crypto = webcrypto;
 
-const empty = blockers({});
-assert.equal(empty.ready, false);
-assert.ok(empty.missing.some((m) => m.includes("CHARGE_PATTERN")));
-assert.ok(empty.missing.some((m) => m.includes("PLATFORM_FEE_BPS")));
-assert.ok(empty.missing.some((m) => m.includes("rk_test_")));
+assert.equal(sandboxReady({}), false);
+assert.equal(sandboxReady({ STRIPE_RESTRICTED_KEY: "sk_live_x", STRIPE_WEBHOOK_SECRET: "whsec_x" }), false);
+assert.equal(sandboxReady({ STRIPE_RESTRICTED_KEY: "rk_test_x", STRIPE_WEBHOOK_SECRET: "whsec_x" }), true);
 
-const filled = blockers({
-  STRIPE_RESTRICTED_KEY: "rk_test_example",
-  STRIPE_WEBHOOK_SECRET: "whsec_example",
-  CHARGE_PATTERN: "direct",
-  PLATFORM_FEE_BPS: "250",
-  SELLERS: JSON.stringify({ cafe: "acct_example" })
-});
-assert.equal(filled.ready, false);
-assert.equal(filled.sandbox, true);
-assert.ok(filled.missing.some((m) => m.includes("not activated")));
+const fields = checkoutBody("tip-5");
+assert.equal(fields.get("line_items[0][price_data][unit_amount]"), "500");
+assert.equal(fields.get("line_items[0][price_data][product_data][name]"), "Coffeebreak tip");
+assert.equal(fields.get("mode"), "payment");
+assert.equal([...fields.keys()].some((k) => k.includes("application_fee") || k.includes("transfer_data") || k.includes("automatic_tax")), false);
+assert.equal(checkoutBody("flat-white"), null);
 
-const secret = "whsec_test";
-const raw = JSON.stringify({ type: "checkout.session.completed" });
-const t = "1700000000";
+const env = { STRIPE_RESTRICTED_KEY: "rk_test_example", STRIPE_WEBHOOK_SECRET: "whsec_example" };
+const blocked = await worker.fetch(new Request("https://pay.example/checkout", {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({ productId: "tip-5" })
+}), {});
+assert.equal(blocked.status, 403);
+
+let called = null;
+const fakeFetch = async (url, opts) => {
+  called = { url, body: opts.body.toString(), auth: opts.headers.authorization };
+  return { ok: true, json: async () => ({ url: "https://checkout.stripe.com/c/pay/cs_test_example" }) };
+};
+const opened = await worker.fetch(new Request("https://pay.example/checkout", {
+  method: "POST",
+  headers: { "content-type": "application/json", origin: "https://songwriterkaz.github.io" },
+  body: JSON.stringify({ productId: "tip-10", amountCents: 1 })
+}), env, { fetchImpl: fakeFetch });
+const openedBody = await opened.json();
+assert.equal(opened.status, 200);
+assert.equal(openedBody.mode, "test");
+assert.equal(openedBody.url.includes("cs_test_"), true);
+const sent = new URLSearchParams(called.body);
+assert.equal(called.url, "https://api.stripe.com/v1/checkout/sessions");
+assert.equal(sent.get("line_items[0][price_data][unit_amount]"), "1000");
+assert.equal(sent.get("line_items[0][price_data][product_data][name]"), "Coffeebreak tip");
+assert.equal(called.body.includes("amountCents"), false);
+assert.equal(called.body.includes("application_fee"), false);
+assert.equal(called.body.includes("transfer_data"), false);
+assert.equal(called.auth, "Basic " + Buffer.from("rk_test_example:").toString("base64"));
+
+const coffee = await worker.fetch(new Request("https://pay.example/checkout", {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({ productId: "flat-white" })
+}), env, { fetchImpl: fakeFetch });
+assert.equal(coffee.status, 400);
+
+const secret = "whsec_example";
+const raw = JSON.stringify({ id: "evt_1", type: "checkout.session.completed", data: { object: { payment_status: "paid" } } });
+const t = String(Math.floor(Date.now() / 1000));
 const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
 const mac = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(t + "." + raw));
 const hex = [...new Uint8Array(mac)].map((b) => b.toString(16).padStart(2, "0")).join("");
-assert.equal(await verifyStripeSignature(raw, "t=" + t + ",v1=" + hex, secret, 1700000000 * 1000), true);
-assert.equal(await verifyStripeSignature(raw, "t=" + t + ",v1=" + hex, secret, (1700000000 + 400) * 1000), false);
-
-const worker = (await import("./worker.js")).default;
-const status = await worker.fetch(new Request("https://pay.example/status"), {});
-const body = await status.json();
-assert.equal(body.checkout, "unavailable");
-assert.equal(body.chargePattern, "not selected");
-assert.equal(body.tax, "off");
-assert.equal(JSON.stringify(body).includes("rk_test_example"), false);
-
-const refused = await worker.fetch(new Request("https://pay.example/checkout", {
+const hook = await worker.fetch(new Request("https://pay.example/webhook", {
   method: "POST",
-  headers: { "content-type": "application/json", origin: "https://songwriterkaz.github.io" },
-  body: JSON.stringify({ item: "Flat white", amountCents: 1050 })
-}), { STRIPE_RESTRICTED_KEY: "rk_test_example", STRIPE_WEBHOOK_SECRET: "whsec_example" });
-assert.equal(refused.status, 403);
-const refusedBody = await refused.json();
-assert.equal(refusedBody.checkout, "unavailable");
-assert.equal("url" in refusedBody, false);
+  headers: { "stripe-signature": "t=" + t + ",v1=" + hex },
+  body: raw
+}), env);
+const hookBody = await hook.json();
+assert.equal(hook.status, 200);
+assert.equal(hookBody.verified, true);
+assert.equal(hookBody.paymentStatus, "paid");
+assert.equal(hookBody.fulfillment, "not promised");
+assert.equal(rememberedEvent("evt_1").type, "checkout.session.completed");
+const again = await worker.fetch(new Request("https://pay.example/webhook", {
+  method: "POST",
+  headers: { "stripe-signature": "t=" + t + ",v1=" + hex },
+  body: raw
+}), env);
+assert.equal((await again.json()).duplicate, true);
+assert.equal(await verifyStripeSignature(raw, "t=" + t + ",v1=00", secret), false);
 
-console.log("pay-stripe hold tests passed");
+const status = await worker.fetch(new Request("https://pay.example/status"), {});
+const statusBody = await status.json();
+assert.equal(statusBody.live, false);
+assert.equal(statusBody.sandbox, false);
+assert.equal(statusBody.tax, "off");
+
+console.log("sandbox checkout tests passed");

@@ -1,8 +1,6 @@
-# Local only. Do not commit .dev.vars. Do not put a live or unrestricted secret key here.
-# Checkout stays off until the charge pattern, fee, refund liability, and seller
-# accounts are agreed. An rk_test_ key does not turn checkout on.
+# Local wrangler only. Do not commit .dev.vars.
+# rk_test_ is an isolated sandbox restricted key. Leave blank here.
+# Checkout for the fixed tips stays off until both lines are set on the server.
+# Do not put a live key, a fee rate, or a connected account id in this file.
 STRIPE_RESTRICTED_KEY=
 STRIPE_WEBHOOK_SECRET=
-CHARGE_PATTERN=
-PLATFORM_FEE_BPS=
-SELLERS=
