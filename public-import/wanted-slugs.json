@@ -86,7 +86,7 @@
   "still_wanted": [
     {
       "slug": "coffeebreak-app-clips-full",
-      "why": "Resend only the missing audio files. Do not resend game.js or the tracks now in the repo.",
+      "why": "Audio files are not in the full camera folder on this tip. Do not describe them as already imported.",
       "missing_files": [
         "assets/music/suno-coffeebreak-after-dark-v1.mp3",
         "assets/music/suno-coffeebreak-after-dark-v2.mp3",

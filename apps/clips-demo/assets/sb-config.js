@@ -1,1 +1,0 @@
-window.SB_URL="https://eeuwzrphsktandqphcku.supabase.co";window.SB_KEY="eeuwzrphsktandqphcku";

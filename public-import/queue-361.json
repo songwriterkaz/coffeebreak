@@ -1,10 +1,10 @@
 {
-  "compared_queue": 361,
+  "compared_queue": 360,
   "published_basis": "origin/main plus public GitHub Pages HTTP checks. This branch is not live.",
   "do_not_claim": "HTTP 200 or an index.html means a page is present. It is not a test that the app works.",
   "counts": {
     "healthy_skip": 259,
-    "truly_missing": 100,
+    "truly_missing": 99,
     "damaged": 0,
     "source_needed": 2
   },
@@ -5073,17 +5073,6 @@
       "review_note": null
     },
     {
-      "slug": "src",
-      "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
-      "monorepo_index": [],
-      "catalogue_urls": [],
-      "github_repos": [],
-      "http_200": [],
-      "alias_of": [],
-      "review_needed": false,
-      "review_note": null
-    },
-    {
       "slug": "studio-x",
       "evidence": "no monorepo index, no catalogue hit, no songwriterkaz repo, no HTTP 200",
       "monorepo_index": [],
@@ -5501,5 +5490,8 @@
     }
   },
   "previous_batch_do_not_repackage_count": 83,
-  "note": "No local paths. review_needed is the slug text only, not a content ruling. Do not delete a healthy_skip copy because of that flag."
+  "note": "No local paths. review_needed is the slug text only, not a content ruling. Do not delete a healthy_skip copy because of that flag. Slug src is tooling directories, not a product, and is not in the missing list.",
+  "invalid_not_a_product": [
+    "src"
+  ]
 }

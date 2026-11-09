@@ -154,7 +154,7 @@ function sendMsg(num,text){if(DEMO){upsell('Text messages');return}text=text.tri
  const r=TR().joinRoom(RTC,'line-'+num);const L=wire(r,false);let done=false;
  L.onJoin=id=>setTimeout(()=>{if(done)return;if(L.hello&&L.hello[id]&&L.hello[id]!==num)return;done=true;L.sMsg({from:MYNUM,text},id);m.st='delivered';LS.set('msgs',P.msgs);render();setTimeout(()=>r.leave(),1500)},400);
  setTimeout(()=>{if(!done){done=true;m.st='not delivered (they are offline)';LS.set('msgs',P.msgs);render();r.leave()}},30000)}
-function upsell(what){cs.innerHTML='<h2>🔒 '+esc(what)+' are in the full camera</h2><p>This page does not unlock them. Customers pay $10 USD. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com. This page does not check payment.</p><a href="https://songwriterkaz.github.io/coffeebreak/apps/clips/"><button class="big green">Open the full camera</button></a><button class="big" onclick="this.parentNode.style.display=\'none\'">Close</button>';cs.style.display='flex'}
+function upsell(what){cs.innerHTML='<h2>'+esc(what)+'</h2><p>The flagship Coffeebreak camera is US$96.99. This page does not check payment or unlock anything. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com.</p><button class="big" onclick="this.parentNode.style.display=\'none\'">Close</button>';cs.style.display='flex'}
 // ---- screens ----
 function render(){$('phNum').textContent=fmt(MYNUM);$('phSt').textContent=P.status;
  $('phTabs').innerHTML=TABS.map(([k,l])=>'<button data-t="'+k+'" class="'+(P.tab===k?'sel':'')+'">'+l+(DEMO&&k==='msgs'?' 🔒':'')+'</button>').join('');

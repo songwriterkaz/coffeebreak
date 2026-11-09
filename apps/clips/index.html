@@ -66,7 +66,7 @@ canvas{flex:1;max-width:100%;min-height:0;touch-action:none}
 var MODE="free",APP=(document.title||location.pathname).slice(0,60),KEY="cb2back:"+location.pathname;
 var $=function(i){return document.getElementById(i)};
 $("cb2b-sub").textContent=MODE==="paid"?"Pay for the full app and get $2 back":"Support Coffeebreak & unlock extras — get $2 back";
-$("cb2b-how").textContent=MODE==="paid"?"Paid $10 for the full unlock? Enter your PayID below and $2 comes back to you.":"Everything in this app stays free. If you'd like to support Coffeebreak and unlock extras, pay $10 to PayID darkokaz@gmx.com, then claim $2 back here.";
+$("cb2b-how").textContent=MODE==="paid"?"The flagship Coffeebreak camera is US$96.99. This page does not check payment.":"The flagship Coffeebreak camera is US$96.99. This page does not check payment or lock the app. Pay by PayID darkokaz@gmx.com if you are paying Karen.";
 function show(c){$("cb2b-form").style.display="none";$("cb2b-done").style.display="block";$("cb2b-refout").textContent=c.ref;$("cb2b-donetxt").textContent="$2 back to "+c.payid+" — status: waiting for Karen to confirm your payment.";}
 var saved=null;try{saved=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){}
 if(saved&&saved.ref)show(saved);
@@ -78,7 +78,7 @@ var ref="CB2B-"+Date.now().toString(36).toUpperCase().slice(-5)+"-"+Math.random(
 var c={ref:ref,payid:p,name:$("cb2b-name").value.trim(),payRef:$("cb2b-pref").value.trim(),app:APP,mode:MODE,amount:2,created:new Date().toISOString(),status:"pending"};
 try{localStorage.setItem(KEY,JSON.stringify(c));var all=JSON.parse(localStorage.getItem("cb2back:all")||"[]");all.push(c);localStorage.setItem("cb2back:all",JSON.stringify(all))}catch(e){}
 show(c);
-var body="App: "+APP+"\nClaim ref: "+ref+"\nPayment ref: "+(c.payRef||"(not given)")+"\nAmount paid: $10\n$2 back to PayID: "+p+"\nName: "+(c.name||"(not given)")+"\nDate: "+c.created;
+var body="App: "+APP+"\nClaim ref: "+ref+"\nPayment ref: "+(c.payRef||"(not given)")+"\nFlagship price listed: US$96.99 (this page does not verify it)\n$2 back to PayID: "+p+"\nName: "+(c.name||"(not given)")+"\nDate: "+c.created;
 try{location.href="mailto:songwriterkaz@gmail.com?subject="+encodeURIComponent("Coffeebreak $2 back claim "+ref)+"&body="+encodeURIComponent(body)}catch(e){}};
 }catch(e){console&&console.warn&&console.warn("cb2back",e)}})();
 </script>

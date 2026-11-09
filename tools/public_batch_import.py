@@ -170,7 +170,13 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+HELD_SUFFIXES = {".mp3", ".mp4", ".m4a", ".wav", ".webm", ".ogg", ".flac", ".aac"}
+
+
 def copy_if_missing(src: Path, dest: Path, notes: list) -> None:
+    if src.suffix.lower() in HELD_SUFFIXES or dest.suffix.lower() in HELD_SUFFIXES:
+        notes.append(f"held {src.name}; audio and video are not copied")
+        return
     if dest.exists():
         notes.append(f"kept existing {dest.relative_to(ROOT)}")
         return
@@ -251,9 +257,12 @@ def ensure_item(items, item) -> bool:
 
 
 def page_entry(url, title, category, icon, letter):
-    path = "/" + url.split("github.io/", 1)[-1]
-    if not path.endswith("/"):
-        path += "/"
+    if "github.io/" in url:
+        path = "/" + url.split("github.io/", 1)[1]
+        if not path.endswith("/"):
+            path += "/"
+    else:
+        path = url if url.endswith("/") else url + "/"
     return {
         "url": url if url.endswith("/") else url + "/",
         "title": title,
@@ -286,14 +295,6 @@ def apply_catalogue(slugs, notes):
             "d": "Browser inbox and coffee note. " + PAYID + ". This page does not run a mail server.",
             "web": True, "c": "Social & Mail", "n": False, "src": "github",
         },
-        {
-            "t": "Coffeebreak camera demo",
-            "u": SITE + "apps/clips-demo/",
-            "img": SITE + "apps/clips/cb-logo.jpg",
-            "p": "Free",
-            "d": "Demo of the Coffeebreak camera. Three clips. Full app is separate and does not verify payment.",
-            "web": True, "c": "Apps & Tools", "n": True, "src": "github",
-        },
     ]
     for item in extra:
         if ensure_item(data["items"], item):
@@ -317,7 +318,6 @@ def apply_catalogue(slugs, notes):
 
     html, m, pages = load_pages()
     new_pages = [
-        page_entry(SITE + "apps/clips-demo/", "Coffeebreak camera demo", "Apps & More", "☕", "C"),
         page_entry(ORIGIN + "/coffeebreak-fan-club/", "Coffeebreak Fan Club", "Social & Mail", "💌", "F"),
         page_entry(ORIGIN + "/coffeebreak-sugarloaf-vr/", "Coffeebreak Mount Sugarloaf VR Map", "Travel & Places", "🧭", "M"),
         page_entry(ORIGIN + "/coffeebreak-vr-studio/", "Coffeebreak VR Studio", "Creative Tools", "🎨", "V"),
@@ -337,7 +337,6 @@ def apply_catalogue(slugs, notes):
     htext = hub.read_text(encoding="utf-8")
     links = [
         (SITE + "apps/clips/", "Coffeebreak camera"),
-        (SITE + "apps/clips-demo/", "Coffeebreak camera demo"),
         (ORIGIN + "/coffeebreak-fan-club/", "Fan Club"),
         (ORIGIN + "/coffeebreak-fashion-3d-print/", "Fashion 3D Print"),
         (ORIGIN + "/coffeebreak-sugarloaf-vr/", "Mount Sugarloaf VR"),
@@ -366,7 +365,6 @@ def apply_catalogue(slugs, notes):
 
 def restore_clips(staged: Path, notes: list) -> None:
     full = staged / "coffeebreak-app-clips-full"
-    demo = staged / "coffeebreak-app-clips-demo"
     if not (full / "game.js").is_file():
         notes.append("clips staging missing; skip file restore")
         return
@@ -385,6 +383,10 @@ def restore_clips(staged: Path, notes: list) -> None:
     for name in ("cb-plus.js", "cb-studio-pro.js", "cbreport.js", "cb-plus-logo.png"):
         copy_if_missing(full / name, ROOT / "apps" / "clips" / name, notes)
     notes.append("full camera audio files were not copied; payment is not checked on this site")
+    # The separate demo tree included full audio files and an unverified paid badge.
+    # Do not copy it, and do not recreate it if a staging folder is present.
+    if (staged / "coffeebreak-app-clips-demo").is_dir():
+        notes.append("clips demo staging ignored; it is not published")
     index = ROOT / "apps" / "clips" / "index.html"
     html = index.read_text(encoding="utf-8")
     if "cb-studio-pro.js" not in html:
@@ -399,30 +401,6 @@ def restore_clips(staged: Path, notes: list) -> None:
         html = html.replace("</body>", tag + "</body>", 1)
         index.write_text(html, encoding="utf-8")
         notes.append("wired report, plus and studio onto clips index")
-    # demo is a complete separate tree. Do not copy its cleared config or short playlist onto the full app.
-    demo_dest = ROOT / "apps" / "clips-demo"
-    if not (demo_dest / "index.html").is_file() and (demo / "index.html").is_file():
-        shutil.copytree(demo, demo_dest, dirs_exist_ok=False)
-        public_cfg = ROOT / "apps" / "clips" / "assets" / "sb-config.js"
-        cfg = demo_dest / "assets" / "sb-config.js"
-        if public_cfg.is_file():
-            shutil.copy2(public_cfg, cfg)
-        dhtml = (demo_dest / "index.html").read_text(encoding="utf-8")
-        dhtml = dhtml.replace(
-            'data-url="https://coffeebreaks.itch.io/coffeebreak-app"',
-            f'data-url="{SITE}apps/clips-demo/"',
-        )
-        dhtml = dhtml.replace('href="https://coffeebreaks.itch.io"', f'href="{SITE}"')
-        if "cb-pages-bar.js" not in dhtml:
-            dhtml = dhtml.replace(
-                "</head>",
-                '<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script></head>',
-                1,
-            )
-        (demo_dest / "index.html").write_text(dhtml, encoding="utf-8")
-        notes.append("added clips demo as its own folder")
-    elif (demo_dest / "index.html").is_file():
-        notes.append("clips demo already present")
 
 
 def restore_studio_song(staged: Path, notes: list) -> None:
@@ -512,7 +490,7 @@ def classify_slug(slug: str) -> dict:
     if local:
         return {
             "slug": slug, "status": "unchanged",
-            "reason": "Repo copy is present. Asset files match the batch except a newer index (site bar or PayID). It was not overwritten.",
+            "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
             "public_url": url,
             "repackage": False,
         }
@@ -532,25 +510,24 @@ def write_results(slugs: list[str]) -> None:
         {
             "slug": "coffeebreak-app-clips-full",
             "status": "imported",
-            "reason": "Draw pen (Pink, White, Gold, Mint, Rainbow, Thin/Medium/Thick, Undo), studio and report scripts are on the existing public app. Playlist entries were kept. The audio files were not added, because this site does not check the $10 payment. Social login does not authenticate. Not fully working. Not published until this branch is merged and Pages is checked. No daily upgrade was started.",
+            "reason": "Draw tools are on the camera app that was already public. apps/clips/assets/music on this tip has playlist.js only, not the audio files. Earlier commits on this public branch did contain audio and a demo; those objects remain in git history and are absent from this tip. Flagship list price is US$96.99. That text does not check payment or lock the app. Social login does not authenticate. Not deployed.",
             "public_url": SITE + "apps/clips/",
-            "deployment": "branch-only until merge",
+            "deployment": "not deployed; branch tip only until merge and a Pages check",
             "draw": True,
             "protected": False,
-            "functional": "partial",
+            "functional": "not fully working",
+            "price_usd": 96.99,
             "missing_files": CLIPS_AUDIO_STILL_MISSING,
             "repackage": True,
-            "repackage_note": "Resend only the missing audio files. Do not resend game.js or the tracks now in the repo.",
+            "repackage_note": "Audio files are not in the full camera folder on this tip. Do not describe them as already imported.",
         },
         {
             "slug": "coffeebreak-app-clips-demo",
-            "status": "imported",
-            "reason": "Complete demo tree placed beside the full app. It does not replace the full app. Login uses the same already-public client config and still does not authenticate.",
-            "public_url": SITE + "apps/clips-demo/",
-            "deployment": "branch-only until merge",
-            "draw": True,
-            "protected": False,
-            "functional": "demo-complete",
+            "status": "blocked",
+            "reason": "Removed from this branch tip, including its three audio files and the unverified I've-paid badge. It was not camera-tested. Earlier commits on this public branch still contain the demo. Do not publish it again until it has no full audio and no fake payment control.",
+            "public_url": None,
+            "deployment": "not on this tip; still present in earlier branch commits",
+            "functional": "withdrawn",
             "repackage": False,
         },
         {
