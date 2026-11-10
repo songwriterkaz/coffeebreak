@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak PayID cart demo</title>
+<link rel="icon" href="../school-bookings/cb-logo.jpg">
+<link rel="stylesheet" href="demo.css">
+</head>
+<body>
+<header class="top">
+<img src="../school-bookings/cb-logo.jpg" alt="Coffeebreak logo" width="56" height="56">
+<div>
+<p class="eyebrow">Coffeebreak</p>
+<h1>PayID cart demo</h1>
+</div>
+</header>
+<main>
+<p class="banner">Demo catalogue. These items are not for sale. Do not send a payment for this page.</p>
+<p class="identity">Published payment label: Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+
+<section aria-labelledby="catalog-title">
+<h2 id="catalog-title">Demo items</h2>
+<div id="catalog"></div>
+</section>
+
+<section aria-labelledby="cart-title">
+<h2 id="cart-title">Cart</h2>
+<div id="lines"></div>
+<p id="total"></p>
+<p id="reference"></p>
+</section>
+
+<section aria-labelledby="manual-title">
+<h2 id="manual-title">Manual workflow</h2>
+<div id="notices"></div>
+<p id="status" role="status" aria-live="polite"></p>
+<div class="actions">
+<button type="button" id="copy-amount">Copy amount</button>
+<button type="button" id="copy-payid">Copy PayID</button>
+<button type="button" id="copy-reference">Copy reference</button>
+<button type="button" id="claim">I have paid</button>
+<button type="button" id="download">Download summary</button>
+</div>
+<p id="mail-note"></p>
+<p><a id="mail" href="#mail-note">Open email draft</a></p>
+</section>
+</main>
+<footer>
+<img src="../school-bookings/cb-logo.jpg" alt="Coffeebreak logo" width="40" height="40">
+<p>© Karen (Coffeebreak). Karen keeps all rights to her products, designs, apps, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p>
+<p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
+</footer>
+<script src="cart.js"></script>
+<script src="demo.js"></script>
+</body>
+</html>
