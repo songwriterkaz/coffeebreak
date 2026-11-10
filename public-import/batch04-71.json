@@ -1,0 +1,495 @@
+{
+  "branch_base": "61ac207b3d1437f523931cbd1810b949414b5b6c",
+  "counts": {
+    "blocked": 6,
+    "imported": 2,
+    "unchanged": 63
+  },
+  "count_note": "71 candidates: 59 public-group products plus 12 earlier app inputs. One status each. Not the earlier 85.",
+  "not_deployed": true,
+  "paid_full_audio_video": "not added",
+  "products": [
+    {
+      "slug": "cp-roast-flash",
+      "status": "blocked",
+      "reason": "Full sheet PDFs and stencil files are a paid flash pack. Reviewed sheet 1: cartoons about paperwork, not pictures of children. The pack was not hosted."
+    },
+    {
+      "slug": "eats-indian",
+      "status": "blocked",
+      "reason": "Order page includes a personal mobile number that is not on the public site. Not published."
+    },
+    {
+      "slug": "explicit-studio",
+      "status": "blocked",
+      "reason": "18+ explicit-language studio. Reviewed the page: it offers adult-theme lyric writing. Not published."
+    },
+    {
+      "slug": "good-girls-flash",
+      "status": "blocked",
+      "reason": "Six cartoon sample images and no app page. The full set was not in this pack. Not hosted."
+    },
+    {
+      "slug": "hairbooking",
+      "status": "blocked",
+      "reason": "Only a short note pointing at a download. No booking app in the files."
+    },
+    {
+      "slug": "tattoo-survey",
+      "status": "blocked",
+      "reason": "Survey script sends HIV-topic comments to a public third-party store. No patient records were in the file. The collector was not published."
+    },
+    {
+      "slug": "horsesponsor",
+      "status": "imported",
+      "public_path": "apps/horse-sponsor/",
+      "reason": "Waitlist only. The page says no payment is taken until a farm partnership exists. The I've-paid badge script was not copied."
+    },
+    {
+      "slug": "pink-wigs",
+      "status": "imported",
+      "public_path": "apps/pink-wigs/",
+      "reason": "Made-to-order PayID wig page. Photorealistic generated model photos removed. Itch links removed. Product drawings kept. Orders are emailed by the customer; this page does not take card payments."
+    },
+    {
+      "slug": "sole-trader",
+      "status": "unchanged",
+      "existing_url": "https://songwriterkaz.github.io/coffeebreak-sole-trader-log/",
+      "reason": "A public page already returns HTTP 200 on its own GitHub Pages site. The sample in this batch was not copied over it."
+    },
+    {
+      "slug": "art-auction",
+      "status": "unchanged",
+      "existing_path": "flash-auction",
+      "existing_files": 14,
+      "reason": "Public page already on main at flash-auction (14 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "bakery",
+      "status": "unchanged",
+      "existing_path": "apps/coffeebreaks-bakery",
+      "existing_files": 14,
+      "reason": "Public page already on main at apps/coffeebreaks-bakery (14 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "bargainstore",
+      "status": "unchanged",
+      "existing_path": "apps/bargains",
+      "existing_files": 53,
+      "reason": "Public page already on main at apps/bargains (53 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "bathtub-titanic",
+      "status": "unchanged",
+      "existing_path": "apps/titanic-treasure",
+      "existing_files": 1,
+      "reason": "Public page already on main at apps/titanic-treasure (1 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "beanflick",
+      "status": "unchanged",
+      "existing_path": "apps/flick-the-bean",
+      "existing_files": 9,
+      "reason": "Public page already on main at apps/flick-the-bean (9 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "bubblegum-flash",
+      "status": "unchanged",
+      "existing_path": "apps/bubblegum-flash-cards",
+      "existing_files": 65,
+      "reason": "Existing flash-card page kept. The incoming full sheet PDF and stencil PDF were not added. Public page already on main at apps/bubblegum-flash-cards (65 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "cake",
+      "status": "unchanged",
+      "existing_path": "apps/dream-cake",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/dream-cake (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "candy-yuck1029",
+      "status": "unchanged",
+      "existing_path": "apps/candy",
+      "existing_files": 154,
+      "reason": "Public page already on main at apps/candy (154 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "cbphone",
+      "status": "unchanged",
+      "existing_path": "apps/cb-ghost-scanner",
+      "existing_files": 22,
+      "reason": "Files in this slug are the ghost scanner, which is already public. Not copied again. Public page already on main at apps/cb-ghost-scanner (22 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "chord-progressions",
+      "status": "unchanged",
+      "existing_path": "apps/chord-progression-maker",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/chord-progression-maker (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "coaster",
+      "status": "unchanged",
+      "existing_path": "apps/rollercoaster",
+      "existing_files": 8,
+      "reason": "Public page already on main at apps/rollercoaster (8 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "coffee",
+      "status": "unchanged",
+      "existing_path": "apps/gourmet-coffee",
+      "existing_files": 1,
+      "reason": "Public page already on main at apps/gourmet-coffee (1 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "coffeebreak_plush_game",
+      "status": "unchanged",
+      "existing_path": "apps/plush-grab",
+      "existing_files": 1,
+      "reason": "Public page already on main at apps/plush-grab (1 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "coffeebreak_tarot",
+      "status": "unchanged",
+      "existing_path": "apps/tarot",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/tarot (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "coffeebreakrecords",
+      "status": "unchanged",
+      "existing_path": "records-store",
+      "existing_files": 29,
+      "reason": "Public page already on main at records-store (29 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "collectible-coins",
+      "status": "unchanged",
+      "existing_path": "apps/collectible-coins-pre-order",
+      "existing_files": 3,
+      "reason": "Public page already on main at apps/collectible-coins-pre-order (3 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "confessbooth",
+      "status": "unchanged",
+      "existing_path": "apps/confession-booth",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/confession-booth (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "digital-sim-esim",
+      "status": "unchanged",
+      "existing_path": "apps/keep-it-simple-susan-wifiphone-esim",
+      "existing_files": 3,
+      "reason": "Public page already on main at apps/keep-it-simple-susan-wifiphone-esim (3 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "dreams-board-store",
+      "status": "unchanged",
+      "existing_path": "dreams-boards-and-books",
+      "existing_files": 12,
+      "reason": "Public page already on main at dreams-boards-and-books (12 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "dreams-book",
+      "status": "unchanged",
+      "existing_path": "dreams-boards-and-books",
+      "existing_files": 12,
+      "reason": "Public page already on main at dreams-boards-and-books (12 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "explorer",
+      "status": "unchanged",
+      "existing_path": "apps/marshmallow-maze-explorer",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/marshmallow-maze-explorer (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "fire",
+      "status": "unchanged",
+      "existing_path": "apps/fire-rescue-heroes",
+      "existing_files": 4,
+      "reason": "Public page already on main at apps/fire-rescue-heroes (4 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "flick-the-coffee-bean",
+      "status": "unchanged",
+      "existing_path": "apps/flick-the-bean",
+      "existing_files": 9,
+      "reason": "Public page already on main at apps/flick-the-bean (9 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "furry",
+      "status": "unchanged",
+      "existing_path": "apps/therian-furry",
+      "existing_files": 73,
+      "reason": "Public page already on main at apps/therian-furry (73 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "guitar-tuner",
+      "status": "unchanged",
+      "existing_path": "apps/guitar-tuner-and-chords",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/guitar-tuner-and-chords (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "haunted-plushies",
+      "status": "unchanged",
+      "existing_path": "apps/haunted-plushies-ghost-talker",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/haunted-plushies-ghost-talker (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "heart",
+      "status": "unchanged",
+      "existing_path": "apps/heart-surgeon",
+      "existing_files": 4,
+      "reason": "Public page already on main at apps/heart-surgeon (4 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "honey-sim",
+      "status": "unchanged",
+      "existing_path": "apps/marshmallow-sim",
+      "existing_files": 36,
+      "reason": "Public page already on main at apps/marshmallow-sim (36 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "kidsmarine",
+      "status": "unchanged",
+      "existing_path": "apps/kids-marine-life",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/kids-marine-life (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "kidsplay",
+      "status": "unchanged",
+      "existing_path": "apps/kids-playground-games",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/kids-playground-games (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "kidssmash",
+      "status": "unchanged",
+      "existing_path": "apps/kids-cake-smash",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/kids-cake-smash (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "kidstreasure",
+      "status": "unchanged",
+      "existing_path": "apps/kids-treasure-hunt",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/kids-treasure-hunt (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "mastering",
+      "status": "unchanged",
+      "existing_path": "apps/mastering-suite",
+      "existing_files": 11,
+      "reason": "Public page already on main at apps/mastering-suite (11 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "maze",
+      "status": "unchanged",
+      "existing_path": "apps/marshmallow-maze",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/marshmallow-maze (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "meltdown",
+      "status": "unchanged",
+      "existing_path": "apps/meltdown-room",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/meltdown-room (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "militaria",
+      "status": "unchanged",
+      "existing_path": "war-antiques-and-militaria",
+      "existing_files": 66,
+      "reason": "Public page already on main at war-antiques-and-militaria (66 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "pasta",
+      "status": "unchanged",
+      "existing_path": "apps/lasagne-pasta-kitchen",
+      "existing_files": 39,
+      "reason": "Public page already on main at apps/lasagne-pasta-kitchen (39 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "prayers",
+      "status": "unchanged",
+      "existing_path": "apps/healing-prayers",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/healing-prayers (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "print3d-drawing",
+      "status": "unchanged",
+      "existing_path": "apps/3d-drawing-studio-free-demo",
+      "existing_files": 15,
+      "reason": "Public page already on main at apps/3d-drawing-studio-free-demo (15 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "print3d-fashion",
+      "status": "unchanged",
+      "existing_path": "apps/3d-fashion-studio-free-demo",
+      "existing_files": 14,
+      "reason": "Public page already on main at apps/3d-fashion-studio-free-demo (14 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "print3d-orthotics",
+      "status": "unchanged",
+      "existing_path": "apps/3d-orthotics-studio-free-demo",
+      "existing_files": 15,
+      "reason": "Public page already on main at apps/3d-orthotics-studio-free-demo (15 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "print3d-prosthetic",
+      "status": "unchanged",
+      "existing_path": "apps/3d-prosthetic-leg-studio-free-demo",
+      "existing_files": 15,
+      "reason": "Existing free demo kept. It already says cosmetic covers only and that a prosthetist must do fitting. Incoming copy was not written over it. Public page already on main at apps/3d-prosthetic-leg-studio-free-demo (15 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "printhomes",
+      "status": "unchanged",
+      "existing_path": "apps/3d-printed-homes",
+      "existing_files": 13,
+      "reason": "Public page already on main at apps/3d-printed-homes (13 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "psychicai",
+      "status": "unchanged",
+      "existing_path": "apps/psychic-line-ai-readers",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/psychic-line-ai-readers (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "rayban",
+      "status": "unchanged",
+      "existing_path": "apps/sunnies-ray-ban",
+      "existing_files": 1,
+      "reason": "Existing sunnies page kept. The incoming shop says it sells genuine Ray-Ban stock and offers PayPal, so that catalogue was not copied. Public page already on main at apps/sunnies-ray-ban (1 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "ringdesign",
+      "status": "unchanged",
+      "existing_path": "apps/ring-designer",
+      "existing_files": 12,
+      "reason": "Public page already on main at apps/ring-designer (12 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "sinks",
+      "status": "unchanged",
+      "existing_path": "sinks-and-basins",
+      "existing_files": 61,
+      "reason": "Public page already on main at sinks-and-basins (61 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "speedster-game",
+      "status": "unchanged",
+      "existing_path": "apps/sparkrunners",
+      "existing_files": 1,
+      "reason": "Public page already on main at apps/sparkrunners (1 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "spiritual",
+      "status": "unchanged",
+      "existing_path": "apps/new-age-spiritual",
+      "existing_files": 44,
+      "reason": "Public page already on main at apps/new-age-spiritual (44 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "studio-x",
+      "status": "unchanged",
+      "existing_path": "apps/studio-x-classic",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/studio-x-classic (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "studiogear",
+      "status": "unchanged",
+      "existing_path": "apps/holostudio",
+      "existing_files": 1,
+      "reason": "Public page already on main at apps/holostudio (1 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "studiopro-jumbo",
+      "status": "unchanged",
+      "existing_path": "apps/studio-pro",
+      "existing_files": 11,
+      "reason": "Public page already on main at apps/studio-pro (11 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "titanic",
+      "status": "unchanged",
+      "existing_path": "apps/titanic-memorabilia",
+      "existing_files": 126,
+      "reason": "Existing memorabilia page kept. Incoming shop text says replicas, not artefacts from the ship, and also offers PayPal, so it was not copied. Public page already on main at apps/titanic-memorabilia (126 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "titanicpack",
+      "status": "unchanged",
+      "existing_path": "apps/titanic-games",
+      "existing_files": 9,
+      "reason": "Public page already on main at apps/titanic-games (9 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "titanicvr",
+      "status": "unchanged",
+      "existing_path": "apps/titanic-vr-cruise",
+      "existing_files": 8,
+      "reason": "Public page already on main at apps/titanic-vr-cruise (8 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "virus-scanner",
+      "status": "unchanged",
+      "existing_path": "apps/safety-checker",
+      "existing_files": 2,
+      "reason": "Public page already on main at apps/safety-checker (2 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "visuals",
+      "status": "unchanged",
+      "existing_path": "apps/visuals-maker",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/visuals-maker (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "vocal-pitch",
+      "status": "unchanged",
+      "existing_path": "apps/vocal-pitch-trainer",
+      "existing_files": 2,
+      "reason": "Public page already on main at apps/vocal-pitch-trainer (2 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "vrheli",
+      "status": "unchanged",
+      "existing_path": "apps/vr-helicopter",
+      "existing_files": 1,
+      "reason": "Public page already on main at apps/vr-helicopter (1 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "weddings",
+      "status": "unchanged",
+      "existing_path": "apps/dream-weddings",
+      "existing_files": 5,
+      "reason": "Public page already on main at apps/dream-weddings (5 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "wifi",
+      "status": "unchanged",
+      "existing_path": "wifi-demo",
+      "existing_files": 2,
+      "reason": "Public page already on main at wifi-demo (2 files, index present). Incoming copy was not written over it."
+    },
+    {
+      "slug": "will",
+      "status": "unchanged",
+      "existing_path": "apps/will-planner",
+      "existing_files": 5,
+      "reason": "Existing will-planner page kept. Incoming demo was not copied, so no new personal will data was added. Public page already on main at apps/will-planner (5 files, index present). Incoming copy was not written over it."
+    }
+  ]
+}
