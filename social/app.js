@@ -12,6 +12,22 @@
   function ago(t) { var s = (Date.now() - t) / 1000; if (s < 60) return "just now"; if (s < 3600) return Math.floor(s / 60) + "m"; if (s < 86400) return Math.floor(s / 3600) + "h"; if (s < 604800) return Math.floor(s / 86400) + "d"; return new Date(t).toLocaleDateString(); }
   function mediaUrl(id) { return API + "/api/media/" + encodeURIComponent(id); }
   function av(name, avatar, big) { return '<span class="av' + (big ? " big" : "") + '">' + (avatar ? '<img src="' + mediaUrl(avatar) + '" alt="">' : esc((name || "?").charAt(0))) + "</span>"; }
+  function postLink(p) { return location.href.split("#")[0] + "#p/" + encodeURIComponent(p.id) + "/" + encodeURIComponent(p.by); }
+  function copyLink(url) {
+    var done = function () { toast("Link copied"); };
+    var fallback = function () { var a = document.createElement("textarea"); a.value = url; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); done(); } catch (e) { toast("Copy the link from the address bar"); } a.remove(); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done).catch(fallback);
+    else fallback();
+  }
+  function shareRow(p) {
+    var u = postLink(p), title = (p.name || ("@" + p.by)) + " on Coffeebreak Social", e = encodeURIComponent;
+    return '<div class="shareline"><button type="button" data-copy="1" data-url="' + esc(u) + '">Copy link</button><button type="button" data-share="1" data-url="' + esc(u) + '" data-title="' + esc(title) + '">Share</button>' +
+      '<a target="_blank" rel="noopener noreferrer" href="https://wa.me/?text=' + e(title + " " + u) + '">WhatsApp</a>' +
+      '<a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/sharer/sharer.php?u=' + e(u) + '">Facebook</a>' +
+      '<a target="_blank" rel="noopener noreferrer" href="https://x.com/intent/post?text=' + e(title) + "&url=" + e(u) + '">X</a>' +
+      '<a href="sms:?&body=' + e(title + " " + u) + '">Text</a>' +
+      '<a href="mailto:?subject=' + e(title) + "&body=" + e(u) + '">Email</a></div>';
+  }
 
   function api(path, opt) {
     opt = opt || {};
@@ -91,13 +107,19 @@
     return '<article class="card post" id="p-' + esc(p.id) + '"><div class="who"><a href="#u/' + esc(p.by) + '">' + av(p.name, p.avatar) + '</a><div class="grow"><a href="#u/' + esc(p.by) + '"><b>' + esc(p.name) + '</b><small>@' + esc(p.by) + " &middot; " + ago(p.t) + "</small></a></div></div>" +
       (p.text ? '<div class="text">' + linkify(p.text) + "</div>" : "") + (m ? '<div class="media">' + m + "</div>" : "") +
       '<div class="acts"><button data-like="' + esc(p.id) + '" class="' + (liked ? "on" : "") + '">&#9829; ' + (p.likes || []).length + '</button><button data-reply="' + esc(p.id) + '">Reply ' + (p.replies || []).length + "</button>" +
-      (mine || (S.me && S.me.admin) ? '<button data-del="' + esc(p.id) + '">Delete</button>' : '<button data-report="' + esc(p.id) + '" data-by="' + esc(p.by) + '">Report</button>') + "</div>" +
+      (mine || (S.me && S.me.admin) ? '<button data-del="' + esc(p.id) + '">Delete</button>' : '<button data-report="' + esc(p.id) + '" data-by="' + esc(p.by) + '">Report</button>') + "</div>" + shareRow(p) +
       (reps ? '<div class="replies">' + reps + "</div>" : "") + '<form class="replyf" data-post="' + esc(p.id) + '" hidden><div class="row"><input type="text" class="grow" maxlength="300" placeholder="Write a reply" aria-label="Reply"><button class="btn small">Send</button></div></form></article>';
   }
   function bindPosts(root, reload) {
     root.onclick = function (e) {
       var b = e.target.closest("button"); if (!b) return;
-      if (b.dataset.like) { if (!S.me) return (location.hash = "#join"); api("posts/" + b.dataset.like + "/like", { body: {} }).then(function (d) { replacePost(d.post); }).catch(function (er) { toast(er.message); }); }
+      if (b.dataset.copy) { copyLink(b.dataset.url); }
+      else if (b.dataset.share) {
+        var url = b.dataset.url, title = b.dataset.title || "Coffeebreak Social";
+        if (navigator.share) navigator.share({ title: title, text: title, url: url }).catch(function () {});
+        else toast("Use WhatsApp, Facebook, X, Text or Email on this post.");
+      }
+      else if (b.dataset.like) { if (!S.me) return (location.hash = "#join"); api("posts/" + b.dataset.like + "/like", { body: {} }).then(function (d) { replacePost(d.post); }).catch(function (er) { toast(er.message); }); }
       else if (b.dataset.reply) { if (!S.me) return (location.hash = "#join"); var f = root.querySelector('.replyf[data-post="' + b.dataset.reply + '"]'); f.hidden = !f.hidden; if (!f.hidden) f.querySelector("input").focus(); }
       else if (b.dataset.del) { if (confirm("Delete this post?")) api("posts/" + b.dataset.del, { method: "DELETE" }).then(function () { var el = document.getElementById("p-" + b.dataset.del); el && el.remove(); toast("Post deleted"); }).catch(function (er) { toast(er.message); }); }
       else if (b.dataset.unreply) { api("posts/" + b.dataset.post + "/unreply", { body: { id: b.dataset.unreply } }).then(function (d) { replacePost(d.post); }).catch(function (er) { toast(er.message); }); }
@@ -267,12 +289,35 @@
     }).catch(function () {});
   }
   function setUnread(n) { var u = document.getElementById("unread"); u.hidden = !n; u.textContent = n; }
+  function findPublicPost(id, handle) {
+    var before = "", pages = 0;
+    function step() {
+      if (pages++ > 30) return Promise.resolve(null);
+      var q = "posts?by=" + encodeURIComponent(handle) + (before ? "&before=" + encodeURIComponent(before) : "");
+      return api(q).then(function (d) {
+        var hit = (d.posts || []).filter(function (p) { return p.id === id; })[0];
+        if (hit) return hit;
+        if (!d.next) return null;
+        before = d.next;
+        return step();
+      });
+    }
+    return step();
+  }
+  function vPost(id, handle) {
+    main.innerHTML = '<p class="muted">Loading public post...</p>';
+    findPublicPost(id, handle).then(function (p) {
+      if (!p) { main.innerHTML = '<div class="empty">That public post is not available.</div><p class="center"><a class="btn" href="#feed">Back to the feed</a></p>'; return; }
+      main.innerHTML = '<p><a href="#feed">Back to the feed</a></p>' + postHtml(p);
+      bindPosts(main);
+    }).catch(function (er) { main.innerHTML = '<div class="empty">' + esc(er.message) + '</div>'; });
+  }
 
   function route() {
     clearInterval(pollT); if (window.CBTools) window.CBTools.cleanup(); if (!/^#?tools/.test(location.hash)) document.title = "Coffeebreak Social Live";
     var h = location.hash.replace(/^#/, "") || "feed", parts = h.split("/"), r = parts[0];
     document.querySelectorAll(".bottom-nav a").forEach(function (a) { a.classList.toggle("on", a.dataset.r === (r === "u" || r === "join" ? "" : r === "dm" ? "messages" : r)); });
-    if (r === "join") vJoin(); else if (r === "people") vPeople(); else if (r === "messages") vMessages(); else if (r === "dm" && parts[1]) vDM(decodeURIComponent(parts[1])); else if (r === "u" && parts[1]) vUser(decodeURIComponent(parts[1])); else if (r === "me") vMe(); else if (r === "tools" && window.CBTools) { window.CBTools.render(document.getElementById("main"), parts); return; } else vFeed();
+    if (r === "join") vJoin(); else if (r === "people") vPeople(); else if (r === "messages") vMessages(); else if (r === "dm" && parts[1]) vDM(decodeURIComponent(parts[1])); else if (r === "p" && parts[1] && parts[2]) vPost(decodeURIComponent(parts[1]), decodeURIComponent(parts[2])); else if (r === "u" && parts[1]) vUser(decodeURIComponent(parts[1])); else if (r === "me") vMe(); else if (r === "tools" && window.CBTools) { window.CBTools.render(document.getElementById("main"), parts); return; } else vFeed();
     window.scrollTo(0, 0);
   }
   window.addEventListener("hashchange", route);
