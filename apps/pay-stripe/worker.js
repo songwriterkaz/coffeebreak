@@ -1,26 +1,40 @@
-// Stripe prep for GitHub Pages. Checkout stays refused.
-// Official refs: docs.stripe.com/connect/charges ,
-// docs.stripe.com/connect/accounts-v2 ,
-// docs.stripe.com/webhooks/signature .
-// Charge type, fee, refund liability, and seller accounts are not selected here.
-// No secret values belong in this file. This Worker does not call Stripe.
+// Own-brand sandbox Checkout only. Not Connect. Not live.
+// Docs: https://docs.stripe.com/checkout/quickstart
+// https://docs.stripe.com/webhooks/signature
+// https://docs.stripe.com/keys#limit-access
+// Amounts are fixed on the server. The browser cannot name a price.
+// No secret values belong in this file.
 
 const ALLOWED_ORIGIN = "https://songwriterkaz.github.io";
+const SUCCESS = "https://songwriterkaz.github.io/coffeebreak/apps/pay/stripe.html?result=success&session_id={CHECKOUT_SESSION_ID}";
+const CANCEL = "https://songwriterkaz.github.io/coffeebreak/apps/pay/stripe.html?result=cancel";
 
-export function blockers(env) {
-  const missing = [];
-  const key = env.STRIPE_RESTRICTED_KEY || "";
-  if (!key) missing.push("STRIPE_RESTRICTED_KEY is not set. Use an isolated sandbox restricted key (rk_test_), not a live secret key.");
-  else if (!key.startsWith("rk_test_")) missing.push("STRIPE_RESTRICTED_KEY must be an rk_test_ sandbox key. Live and unrestricted secret keys are not accepted.");
-  if (!env.STRIPE_WEBHOOK_SECRET) missing.push("STRIPE_WEBHOOK_SECRET is not set, so a Checkout Session cannot be verified.");
-  if (!env.CHARGE_PATTERN) missing.push("CHARGE_PATTERN is unset. Direct, destination, and separate charges are not selected.");
-  else missing.push("CHARGE_PATTERN is present but not activated. Fee payer, loss liability, and seller onboarding are still undecided.");
-  if (env.PLATFORM_FEE_BPS == null || String(env.PLATFORM_FEE_BPS).trim() === "") {
-    missing.push("PLATFORM_FEE_BPS is unset. No commission rate is configured, and none will be assumed.");
-  }
-  if (!env.SELLERS) missing.push("SELLERS is unset. No connected account ids are stored.");
-  missing.push("CHECKOUT is held off. No Session is created, and no tax is collected.");
-  return { ready: false, mode: "unavailable", missing, sandbox: key.startsWith("rk_test_") };
+// Fixed tips already offered on the PayID page. Not a physical coffee order.
+export const CATALOG = {
+  "tip-5": { name: "Coffeebreak tip", amountCents: 500 },
+  "tip-10": { name: "Coffeebreak tip", amountCents: 1000 },
+  "tip-20": { name: "Coffeebreak tip", amountCents: 2000 }
+};
+
+const verified = new Map();
+
+export function sandboxReady(env) {
+  const key = (env && env.STRIPE_RESTRICTED_KEY) || "";
+  return key.startsWith("rk_test_") && !key.includes("live") && !!(env && env.STRIPE_WEBHOOK_SECRET);
+}
+
+export function checkoutBody(productId) {
+  const item = CATALOG[productId];
+  if (!item) return null;
+  const body = new URLSearchParams();
+  body.set("mode", "payment");
+  body.set("line_items[0][quantity]", "1");
+  body.set("line_items[0][price_data][currency]", "aud");
+  body.set("line_items[0][price_data][unit_amount]", String(item.amountCents));
+  body.set("line_items[0][price_data][product_data][name]", item.name);
+  body.set("success_url", SUCCESS);
+  body.set("cancel_url", CANCEL);
+  return body;
 }
 
 export async function verifyStripeSignature(raw, header, secret, now) {
@@ -51,9 +65,30 @@ function json(body, status, origin) {
   return new Response(JSON.stringify(body), { status: status, headers: headers });
 }
 
+async function openSession(env, productId, fetchImpl) {
+  const body = checkoutBody(productId);
+  if (!body) return { status: 400, payload: { error: "Unknown product. Coffee and other goods are not for sale here." } };
+  const response = await fetchImpl("https://api.stripe.com/v1/checkout/sessions", {
+    method: "POST",
+    headers: {
+      authorization: "Basic " + btoa(env.STRIPE_RESTRICTED_KEY + ":"),
+      "content-type": "application/x-www-form-urlencoded"
+    },
+    body: body
+  });
+  const data = await response.json();
+  if (!response.ok || !data.url) return { status: 502, payload: { error: "Stripe did not open a test Checkout Session." } };
+  return { status: 200, payload: { url: data.url, mode: "test" } };
+}
+
+export function rememberedEvent(id) {
+  return verified.get(id) || null;
+}
+
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get("origin");
+    const fetchImpl = (ctx && ctx.fetchImpl) || fetch;
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
@@ -66,29 +101,43 @@ export default {
       });
     }
     const url = new URL(request.url);
-    const state = blockers(env || {});
+    const ready = sandboxReady(env || {});
     if (url.pathname === "/status" && request.method === "GET") {
       return json({
-        checkout: "unavailable",
-        ready: false,
-        mode: state.mode,
-        missing: state.missing,
-        sandboxKeyShape: state.sandbox,
-        chargePattern: "not selected",
+        checkout: ready ? "sandbox" : "unavailable",
+        live: false,
+        sandbox: ready,
+        chargePattern: "own-brand Checkout only; Connect is not configured",
         tax: "off",
+        products: Object.keys(CATALOG),
         holdsMoney: false,
         payid: "optional manual bank transfer, not instant"
       }, 200, origin);
     }
     if (url.pathname === "/checkout" && request.method === "POST") {
-      return json({ checkout: "unavailable", missing: state.missing }, 403, origin);
+      if (!ready) return json({ checkout: "unavailable", live: false, reason: "Sandbox restricted key or webhook secret is missing." }, 403, origin);
+      let input = {};
+      try { input = await request.json(); } catch (e) { return json({ error: "JSON body required." }, 400, origin); }
+      const opened = await openSession(env, input.productId, fetchImpl);
+      return json(opened.payload, opened.status, origin);
     }
     if (url.pathname === "/webhook" && request.method === "POST") {
-      if (!env.STRIPE_WEBHOOK_SECRET) return json({ error: "Webhook secret is not set." }, 503, origin);
+      if (!env || !env.STRIPE_WEBHOOK_SECRET) return json({ error: "Webhook secret is not set." }, 503, origin);
       const raw = await request.text();
       const ok = await verifyStripeSignature(raw, request.headers.get("stripe-signature"), env.STRIPE_WEBHOOK_SECRET);
       if (!ok) return json({ error: "Signature did not match." }, 400, origin);
-      return json({ received: true, acted: false, fulfillment: "not configured" }, 200, origin);
+      let event = {};
+      try { event = JSON.parse(raw); } catch (e) { return json({ error: "Event was not JSON." }, 400, origin); }
+      const id = event.id || "";
+      if (id && verified.has(id)) return json({ received: true, verified: true, duplicate: true, type: event.type || "" }, 200, origin);
+      const state = {
+        verified: true,
+        type: event.type || "",
+        paymentStatus: event.data && event.data.object ? event.data.object.payment_status || "" : "",
+        fulfillment: "not promised"
+      };
+      if (id) verified.set(id, state);
+      return json(Object.assign({ received: true, duplicate: false }, state), 200, origin);
     }
     return json({ error: "Not found." }, 404, origin);
   }

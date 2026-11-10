@@ -1,0 +1,686 @@
+{
+  "deployment": "Not published. https://songwriterkaz.github.io/coffeebreak/ stays on main until this branch is merged and Pages is checked.",
+  "payment": "No payment check was added. Public GitHub files can be opened without paying. Full new downloads were not added. PayID label only. Stripe was not changed.",
+  "counts": {
+    "unchanged": 80,
+    "blocked": 4,
+    "imported": 1
+  },
+  "count_note": "Each slug has one status. Makeup cart is blocked. Play Tracker is unchanged because its existing host was left in place. Those are not two extra blocked rows.",
+  "products": [
+    {
+      "slug": "aussie-dash",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-aussie-dash/",
+      "repackage": false
+    },
+    {
+      "slug": "bible-board",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/bible-board/",
+      "repackage": false
+    },
+    {
+      "slug": "big-toys-creatures",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/big-toys-creatures/",
+      "repackage": false
+    },
+    {
+      "slug": "bill-reminder-tracker",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-bill-reminder-tracker/",
+      "repackage": false
+    },
+    {
+      "slug": "blockbuster-tools",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/blockbuster-tools/",
+      "repackage": false
+    },
+    {
+      "slug": "budget-planner",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-budget-planner/",
+      "repackage": false
+    },
+    {
+      "slug": "burger-store",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/burger-store/",
+      "repackage": false
+    },
+    {
+      "slug": "cb-ghost-scanner",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/cb-ghost-scanner/",
+      "repackage": false
+    },
+    {
+      "slug": "coffee-mail",
+      "status": "unchanged",
+      "reason": "In-repo page is a newer self-contained inbox. It stores mail in the browser and opens the visitor's email app. It is not a mail server. Search entry added.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/coffee-mail/",
+      "repackage": false,
+      "requires_backend": "real mail delivery"
+    },
+    {
+      "slug": "coffee-stack",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/coffee-stack/",
+      "repackage": false
+    },
+    {
+      "slug": "creature-tarot",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/creature-tarot/",
+      "repackage": false
+    },
+    {
+      "slug": "crystal-confetti-lucky-dip",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/crystal-confetti-lucky-dip/",
+      "repackage": false
+    },
+    {
+      "slug": "debate-bill-builder",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/debate-bill-builder/",
+      "repackage": false
+    },
+    {
+      "slug": "debt-payoff-planner",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-debt-payoff-planner/",
+      "repackage": false
+    },
+    {
+      "slug": "dj-bike",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/dj-bike/",
+      "repackage": false
+    },
+    {
+      "slug": "dreams-boards-and-books",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/dreams-boards-and-books/",
+      "repackage": false
+    },
+    {
+      "slug": "eats",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/eats/",
+      "repackage": false
+    },
+    {
+      "slug": "espresso-music-maker",
+      "status": "unchanged",
+      "reason": "This folder redirects to the live sibling site. The older full tree was not written over that redirect.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-espresso-music-maker/",
+      "repackage": false
+    },
+    {
+      "slug": "expense-splitter",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/expense-splitter/",
+      "repackage": false
+    },
+    {
+      "slug": "fan-club",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-fan-club/",
+      "repackage": false
+    },
+    {
+      "slug": "fashion-3d-print",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-fashion-3d-print/",
+      "repackage": false
+    },
+    {
+      "slug": "fashion-3d",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-fashion-3d/",
+      "repackage": false
+    },
+    {
+      "slug": "fashion-studio-3d-print-wigs",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-fashion-studio-3d-print-wigs/",
+      "repackage": false
+    },
+    {
+      "slug": "fashion",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-fashion/",
+      "repackage": false
+    },
+    {
+      "slug": "find-my-way",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/find-my-way/",
+      "repackage": false
+    },
+    {
+      "slug": "fishing-store",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-fishing-store/",
+      "repackage": false
+    },
+    {
+      "slug": "flash-auction",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/flash-auction/",
+      "repackage": false
+    },
+    {
+      "slug": "flash-register",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/flash-register/",
+      "repackage": false
+    },
+    {
+      "slug": "food-delivery",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-food-delivery/",
+      "repackage": false
+    },
+    {
+      "slug": "girl-runway-sim",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/girl-runway-sim/",
+      "repackage": false
+    },
+    {
+      "slug": "grapevine-store",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/grapevine-store/",
+      "repackage": false
+    },
+    {
+      "slug": "hampers",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/hampers/",
+      "repackage": false
+    },
+    {
+      "slug": "holidays",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/holidays/",
+      "repackage": false
+    },
+    {
+      "slug": "hoodies",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/hoodies/",
+      "repackage": false
+    },
+    {
+      "slug": "ice-skate",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/ice-skate/",
+      "repackage": false
+    },
+    {
+      "slug": "journals-store",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-journals-store/",
+      "repackage": false
+    },
+    {
+      "slug": "karaoke-link-converter",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-karaoke-link-converter/",
+      "repackage": false
+    },
+    {
+      "slug": "leather-glasses-store",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-leather-glasses-store/",
+      "repackage": false
+    },
+    {
+      "slug": "leather-glasses",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/leather-glasses/",
+      "repackage": false
+    },
+    {
+      "slug": "makeup-collection",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/makeup-collection/",
+      "repackage": false
+    },
+    {
+      "slug": "makeup-store-cart",
+      "status": "blocked",
+      "reason": "Concept listing is already public at makeup-range. The cart only opens an email and does not take an order. It was not copied.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/makeup-range/",
+      "repackage": false
+    },
+    {
+      "slug": "manifest",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/manifest/",
+      "repackage": false
+    },
+    {
+      "slug": "model-shoot-glossary",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/model-shoot-glossary/",
+      "repackage": false
+    },
+    {
+      "slug": "music-release-desk",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-music-release-desk/",
+      "repackage": false
+    },
+    {
+      "slug": "music-software",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/music-software/",
+      "repackage": false
+    },
+    {
+      "slug": "oneapp-phone",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/oneapp-phone/",
+      "repackage": false
+    },
+    {
+      "slug": "op-shop",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/op-shop/",
+      "repackage": false
+    },
+    {
+      "slug": "outback-hats",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/outback-hats/",
+      "repackage": false
+    },
+    {
+      "slug": "overalls",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/overalls/",
+      "repackage": false
+    },
+    {
+      "slug": "payment-calendar",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/payment-calendar/",
+      "repackage": false
+    },
+    {
+      "slug": "perfect-pour",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/perfect-pour/",
+      "repackage": false
+    },
+    {
+      "slug": "piercing-store",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/piercing-store/",
+      "repackage": false
+    },
+    {
+      "slug": "pinata-party",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/pinata-party/",
+      "repackage": false
+    },
+    {
+      "slug": "play-tracker",
+      "status": "unchanged",
+      "reason": "Working tracker is already hosted with its sync service. The song-match library was not copied here because this site cannot check payment. Microphone listening and APRA file export run on that host, not as a static page.",
+      "public_url": "https://coffeebreak-play-tracker.netlify.app/",
+      "repackage": false,
+      "gated_delivery": "no payment check on the public tracker"
+    },
+    {
+      "slug": "print-your-own-bricks",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/print-your-own-bricks/",
+      "repackage": false
+    },
+    {
+      "slug": "pub-and-servo-manager",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/pub-and-servo-manager/",
+      "repackage": false
+    },
+    {
+      "slug": "radio-pitch-builder-v2",
+      "status": "unchanged",
+      "reason": "radio-pitch-builder on this site is a newer superset of v2, including the pages bar and PayID tip.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/radio-pitch-builder/",
+      "repackage": false
+    },
+    {
+      "slug": "reborn-doll-store",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/reborn-doll-store/",
+      "repackage": false
+    },
+    {
+      "slug": "reborn-dolls",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/reborn-dolls/",
+      "repackage": false
+    },
+    {
+      "slug": "receipt-maker",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/receipt-maker/",
+      "repackage": false
+    },
+    {
+      "slug": "red-paper-clip-tracker",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/red-paper-clip-tracker/",
+      "repackage": false
+    },
+    {
+      "slug": "savings-goals",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-savings-goals/",
+      "repackage": false
+    },
+    {
+      "slug": "shoes",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/shoes/",
+      "repackage": false
+    },
+    {
+      "slug": "sinks-and-basins",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/sinks-and-basins/",
+      "repackage": false
+    },
+    {
+      "slug": "sole-trader-log",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-sole-trader-log/",
+      "repackage": false
+    },
+    {
+      "slug": "song-maker",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/song-maker/",
+      "repackage": false
+    },
+    {
+      "slug": "store-builder",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/store-builder/",
+      "repackage": false
+    },
+    {
+      "slug": "sugarloaf-vr",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-sugarloaf-vr/",
+      "repackage": false
+    },
+    {
+      "slug": "target-range",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/target-range/",
+      "repackage": false
+    },
+    {
+      "slug": "time-zone-quiz",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/time-zone-quiz/",
+      "repackage": false
+    },
+    {
+      "slug": "trophy-store",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/trophy-store/",
+      "repackage": false
+    },
+    {
+      "slug": "two-plates",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/two-plates/",
+      "repackage": false
+    },
+    {
+      "slug": "unit-price-compare",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-unit-price-compare/",
+      "repackage": false
+    },
+    {
+      "slug": "vending-machines",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/vending-machines/",
+      "repackage": false
+    },
+    {
+      "slug": "vent-journal",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/vent-journal/",
+      "repackage": false
+    },
+    {
+      "slug": "virtual-brick-castle",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/virtual-brick-castle/",
+      "repackage": false
+    },
+    {
+      "slug": "vision-board",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/vision-board/",
+      "repackage": false
+    },
+    {
+      "slug": "vr-studio",
+      "status": "unchanged",
+      "reason": "Already live on its own GitHub Pages site. Files were not copied into this repo. Directory links point at that site.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak-vr-studio/",
+      "repackage": false
+    },
+    {
+      "slug": "wifiphone-contacts",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/wifiphone-contacts/",
+      "repackage": false
+    },
+    {
+      "slug": "wifiphone-jumbo",
+      "status": "unchanged",
+      "reason": "An index file is in the repo, so the batch was not copied over it. This row does not mean each asset file was compared.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/wifiphone-jumbo/",
+      "repackage": false
+    },
+    {
+      "slug": "coffeebreak-app-clips-full",
+      "status": "imported",
+      "reason": "Draw tools are on the camera app that was already public. apps/clips/assets/music on this tip has playlist.js only, not the audio files. Earlier commits on this public branch did contain audio and a demo; those objects remain in git history and are absent from this tip. Flagship list price is US$96.99. That text does not check payment or lock the app. Social login does not authenticate. Not deployed.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/apps/clips/",
+      "deployment": "not deployed; branch tip only until merge and a Pages check",
+      "draw": true,
+      "protected": false,
+      "functional": "not fully working",
+      "price_usd": 96.99,
+      "missing_files": [
+        "assets/music/suno-coffeebreak-after-dark-v1.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v2.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v3.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v4.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v5.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v6.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v7.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v8.mp3",
+        "assets/music/suno-coffeebreak-after-dark-v9.mp3",
+        "assets/music/suno-im-weak-v1.mp3",
+        "assets/music/suno-im-weak-v2.mp3",
+        "assets/music/suno-knee-deep-mashup-v1.mp3",
+        "assets/music/suno-knee-deep-mashup-v2.mp3",
+        "assets/music/suno-knee-deep-mashup-v3.mp3",
+        "assets/music/suno-knee-deep-mashup-v4.mp3",
+        "assets/music/suno-drip-drip-drip-country-v1.mp3",
+        "assets/music/suno-drip-drip-drip-country-v2.mp3",
+        "assets/music/suno-drip-drip-drip-country-v3.mp3",
+        "assets/music/suno-drip-drip-drip-country-v4.mp3",
+        "assets/music/suno-drip-drip-drip-country-v5.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v2.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v3.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v4.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v5.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v6.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v7.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v8.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v9.mp3",
+        "assets/music/user-upload-1.mp3",
+        "assets/music/user-upload-2.mp3",
+        "assets/music/track1.mp3",
+        "assets/music/track2.mp3",
+        "assets/music/track3.mp3",
+        "assets/music/track4.mp3",
+        "assets/music/track5.mp3",
+        "assets/music/suno-coffee-break-v1.mp3",
+        "assets/music/suno-cinnamon-candy-v1.mp3",
+        "assets/music/suno-sweet-juices-cotton-candy-v1.mp3"
+      ],
+      "repackage": true,
+      "repackage_note": "Audio files are not in the full camera folder on this tip. Do not describe them as already imported."
+    },
+    {
+      "slug": "coffeebreak-app-clips-demo",
+      "status": "blocked",
+      "reason": "Removed from this branch tip, including its three audio files and the unverified I've-paid badge. It was not camera-tested. Earlier commits on this public branch still contain the demo. Do not publish it again until it has no full audio and no fake payment control.",
+      "public_url": null,
+      "deployment": "not on this tip; still present in earlier branch commits",
+      "functional": "withdrawn",
+      "repackage": false
+    },
+    {
+      "slug": "coffeebreak-tv",
+      "status": "blocked",
+      "reason": "Full TV package and videos were removed from this branch. There is no payment check, so the full app is not hosted here. No separate live URL was verified.",
+      "public_url": null,
+      "gated_delivery": "full TV package withheld",
+      "repackage": true,
+      "repackage_note": "Stage only if a protected delivery path exists. Do not treat filename wording as a content finding."
+    },
+    {
+      "slug": "coffeebreak-virtual-music-studio",
+      "status": "unchanged",
+      "reason": "The newer page was already public, including its other songs. The missing Coffee Break file was not added, so a new full download was not published.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/virtual-music-studio/",
+      "deployment": "already on main for the page; song file still absent",
+      "repackage": false,
+      "missing_files": [
+        "songs/coffee-break.mp3"
+      ]
+    },
+    {
+      "slug": "coffeebreak-mail",
+      "status": "blocked",
+      "reason": "Core only. Songs, videos and the 3D library are still missing, so the desk was not published. It also cannot send mail from a static page. Existing Coffee Mail page was left as it is.",
+      "public_url": "https://songwriterkaz.github.io/coffeebreak/coffee-mail/",
+      "missing_files": [
+        "assets/three.min.js",
+        "assets/music/a-delicious-disaster.mp3",
+        "assets/music/cinnamon-candy.mp3",
+        "assets/music/coffee-break-ride.mp3",
+        "assets/music/coffee-break.mp3",
+        "assets/music/drip-drip-drip-country.mp3",
+        "assets/music/fussell-st.mp3",
+        "assets/music/kicking-marshmallows-up-the-mud.mp3",
+        "assets/music/restless-engine.mp3",
+        "assets/music/sugar-coated-fever.mp3",
+        "assets/music/sweet-juices-cotton-candy.mp3",
+        "assets/music/talk-is-cheap.mp3",
+        "assets/music/thunder-in-my-hands.mp3",
+        "assets/movies/v05-singing.mp4",
+        "assets/movies/v07-barista.mp4",
+        "assets/movies/v11-dancing.mp4",
+        "assets/movies/v18-newcastle-sunset.mp4",
+        "assets/movies/v20-karaoke.mp4",
+        "assets/movies/v21-guitar.mp4"
+      ],
+      "requires_backend": "mail delivery",
+      "repackage": true,
+      "repackage_note": "Send the missing media and 3D library. The core HTML and JS were already reviewed."
+    }
+  ]
+}

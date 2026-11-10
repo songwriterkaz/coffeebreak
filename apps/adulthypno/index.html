@@ -23,11 +23,11 @@ small{color:#9aa}.hide{display:none}input{padding:10px;border-radius:8px;border:
 <div id="warn" class="box hide"><h2>Before you begin</h2><p style="text-align:left">• This is for entertainment and relaxation only. It is <b>not</b> medical, psychological or therapeutic treatment.<br>• Never listen while driving, operating machinery, or anywhere you need to be alert.<br>• Do not use if you have epilepsy or seizures, psychosis or a history of it, dissociative conditions, or trauma triggers related to sexual content or loss of control.<br>• You are always in control. Press <b>Wake up / Stop</b>, open your eyes or use your safe word anytime to end.<br>• Every session finishes with a gentle count-up to full alertness.<br>• Narration is a computer (AI/text-to-speech) voice.</p>
 <label>Your safe word: <input id="safe" value="coffee" maxlength="20"></label>
 <label><input type="checkbox" id="ok"> I am 18+, I consent to adult content, and I've read the warnings.</label><button id="go">Continue</button></div>
-<div id="menu" class="box hide"><h2>Choose a session</h2><div id="list"></div><label><input type="checkbox" id="spin" checked> Slow spiral visual (no flashing)</label><label>Music <input type="range" id="vol" min="0" max="0.6" step="0.05" value="0.25"></label></div>
+<div id="menu" class="box hide"><h2>Choose a session</h2><div id="list"></div><label><input type="checkbox" id="spin" checked> Slow spiral visual (no flashing)</label><label>Music <input type="range" id="vol" min="0" max="0.6" step="0.05" value="0"></label><p><small>Background file audio/afterdark.mp3 is not in this library. Sessions still read the written lines. No other track has been substituted.</small></p></div>
 <div id="play" class="box hide"><h2 id="ptitle"></h2><canvas id="cv" width="260" height="260"></canvas><div id="line"></div><small id="prog"></small></div>
 <button id="wake">Wake up / Stop</button>
 <p><small>© Coffeebreak, Newcastle NSW. Fictional, consensual, adult-only content. No real people depicted.</small></p>
-<audio id="bg" src="audio/afterdark.mp3" loop preload="none"></audio>
+<audio id="bg" loop preload="none"></audio>
 <script src="sessions.js"></script><script>
 const $=i=>document.getElementById(i);let run=0,ang=0,raf;
 const show=id=>['gate','warn','menu','play'].forEach(x=>$(x).classList.toggle('hide',x!==id));
@@ -42,7 +42,7 @@ function voice(){const v=speechSynthesis.getVoices();return v.find(x=>/en-AU/i.t
 function say(t){return new Promise(r=>{if(!('speechSynthesis'in window)){setTimeout(r,4000);return}const u=new SpeechSynthesisUtterance(t);u.voice=voice()||null;u.rate=.8;u.pitch=.9;u.onend=r;u.onerror=r;speechSynthesis.speak(u)})}
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 async function playLines(lines,id,gap){for(let i=0;i<lines.length;i++){if(id!==run)return false;$('line').textContent=lines[i];$('prog').textContent=`${i+1} / ${lines.length}`;await say(lines[i]);await wait(gap)}return true}
-async function start(i){const id=++run;show('play');$('wake').style.display='block';$('ptitle').textContent=SESS[i].t;const bg=$('bg');bg.volume=$('vol').value;bg.play().catch(()=>{});spin();
+async function start(i){const id=++run;show('play');$('wake').style.display='block';$('ptitle').textContent=SESS[i].t;const bg=$('bg');if(bg.getAttribute('src')){bg.volume=$('vol').value;bg.play().catch(()=>{})}spin();
 const L=SESS[i].lines.map(l=>l.replace('say your safe word','say your safe word, '+$('safe').value));if(await playLines(L,id,7000))end()}
 async function wakeUp(){speechSynthesis&&speechSynthesis.cancel();const id=++run;$('ptitle').textContent='Waking up gently';show('play');if(await playLines(EMERGE,id,2500))end()}
 function end(){run++;$('wake').style.display='none';cancelAnimationFrame(raf);let b=$('bg'),f=setInterval(()=>{b.volume=Math.max(0,b.volume-.02);if(b.volume<=0){clearInterval(f);b.pause()}},150);show('menu')}

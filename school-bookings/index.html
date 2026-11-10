@@ -72,9 +72,9 @@ footer img{width:40px;height:40px;border-radius:50%}footer a{color:var(--pd);fon
 </section>
 
 <section class="pane" id="coffee">
-<div class="card"><h2>&#9749; Coffee cart</h2><p class="muted">Grab a coffee for your parent-teacher meeting or school pickup. Choose size, milk and sugar, add to cart, then press Buy it now. Prices in AUD.</p>
+<div class="card"><h2>&#9749; Coffee cart</h2><p class="muted">Choose size, milk and sugar, then add to cart. Prices in AUD. Review payment shows the total and the PayID already saved in this cart. It does not take payment, and it does not place a drink order.</p>
 <div id="cfLinkNote" class="msgbox hide"></div><div class="cfgrid" id="cfMenu"></div></div>
-<div class="card"><h2>Your cart</h2><div id="cfCart"></div><p style="text-align:right"><button id="cfBuy" class="cfbig" type="button" disabled>Buy it now</button></p></div>
+<div class="card"><h2>Your cart</h2><div id="cfCart"></div><p style="text-align:right"><button id="cfBuy" class="cfbig" type="button" disabled>Review payment</button></p></div>
 <div class="card hide" id="cfCheckout"><h2>Checkout</h2>
 <div class="row"><div><label>Pickup tied to</label><select id="cflink"><option value="appt">My booking</option><option value="own">Choose a time myself</option></select></div></div>
 <div id="cfApptBox"><div class="row"><div><label>Your mobile, email or booking ref</label><input id="cfq" placeholder="e.g. 0400000001 or CBXXXXX"></div><div style="display:flex;align-items:flex-end"><button class="ghost" id="cffind" type="button">Find my booking</button></div></div>
@@ -84,11 +84,11 @@ footer img{width:40px;height:40px;border-radius:50%}footer a{color:var(--pd);fon
 <p id="cfPickupLine"></p>
 <div class="row"><div><label>Name for the order *</label><input id="cfname"></div><div><label>Mobile</label><input id="cfphone" placeholder="04xx xxx xxx"></div><div><label>Note for the barista</label><input id="cfnote" placeholder="e.g. extra hot"></div></div>
 <h3>Payment</h3><div class="quick"><label style="margin:0"><input type="radio" name="cfpay" value="payid" checked style="width:auto"> Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</label><label style="margin:0"><input type="radio" name="cfpay" value="counter" style="width:auto"> Pay at the counter</label></div>
-<div id="cfPayIdBox" class="msgbox">Pay by PayID (Teachers Mutual Bank): <b>darkokaz@gmx.com</b>. After you press Buy it now you get the amount and an order reference to use in your banking app. No card details are taken in this app.</div>
+<div id="cfPayIdBox" class="msgbox">PayID already saved in this cart: Teachers Mutual Bank, <b>darkokaz@gmx.com</b>. Review payment shows that address with the cart total. It does not start a bank transfer.</div>
 <p><b>Total: <span id="cfCoTotal">$0.00</span> AUD</b></p>
-<p><button id="cfPlace" class="cfbig" type="button">Buy it now</button></p></div>
+<p><button id="cfPlace" class="cfbig" type="button">Review payment</button></p></div>
 <div id="cfDoneWrap"><div id="cfDone"></div></div>
-<div class="card"><h2>Staff: coffee order queue</h2><p class="muted">For the front desk and the barista. Orders are sorted by pickup time. Mark them ready when made, then collected.</p>
+<div class="card"><h2>Staff: coffee order queue</h2><p class="muted">This list shows coffee orders already stored on this device. New purchases are closed, so Review payment does not add a row.</p>
 <div class="row"><div><label>School</label><select id="cfqvenue"></select></div><div><label>Day</label><input type="date" id="cfqday"></div><div><label>Show</label><select id="cfqshow"><option value="open">Open orders (new, making, ready)</option><option value="all">All orders</option><option value="collected">Collected</option><option value="cancelled">Cancelled</option></select></div><div style="display:flex;align-items:flex-end"><button class="ghost" id="cfqtoday" type="button">Today</button></div></div>
 <div id="cfqstats"></div><div id="cfqlist"></div></div>
 </section>
@@ -115,7 +115,7 @@ footer img{width:40px;height:40px;border-radius:50%}footer a{color:var(--pd);fon
 
 <section class="pane" id="about"><div class="card"><h2>About Coffeebreak School Bookings</h2>
 <p>Coffeebreak School Bookings helps schools, parents and carers. Book parent-teacher meetings with live availability, report absences, and sign excursion permission slips. Staff get a day dashboard with meetings and absences, a smart waitlist and a coffee order queue. Everything runs in your web browser and is saved on your own device.</p>
-<p>Coffee cart: order a coffee, see your cart total and press Buy it now. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com, or pay at the counter. This app takes no card payments.</p>
+<p>Coffee cart: quantities and totals stay on this device. Review payment shows the PayID already saved in this cart (Teachers Mutual Bank: darkokaz@gmx.com) and the total. Purchase is closed. This app takes no card payment and does not confirm a drink.</p>
 <div class="disc"><p><b>Disclaimer and rights.</b> © Karen (Coffeebreak). Karen keeps all rights to her products, designs, apps, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. All third-party trademarks and brand names belong to their respective owners and are mentioned only for reference; Coffeebreak claims no ownership of them and is not affiliated with or endorsed by them.</p>
 <p>This app is a booking tool and does not replace your school's official attendance or permission systems. Check your school's own policies. The sample schools, teachers and bookings are made up. Data stays in this browser unless you export it. Provided "as is" without warranty.</p></div></div></section>
 </main>
