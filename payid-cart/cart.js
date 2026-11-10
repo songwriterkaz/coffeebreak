@@ -370,6 +370,74 @@
     };
   }
 
+  function payidMountUrl(scriptSrc) {
+    var next = String(scriptSrc || '').replace(/\/(?:apps\/[^/]+\/(?:shop\/|assets\/)?|[^/]+\/)cb-pay\.js(?:[?#].*)?$/, '/payid-cart/mount.js');
+    return next && next !== String(scriptSrc || '') ? next : '';
+  }
+
+  function catalogueCheckout(items, options) {
+    options = options || {};
+    var currency = normalizeCurrency(options.currency || '');
+    if (!currency) {
+      return {
+        ok: false,
+        error: 'unsupported-currency',
+        requestsPayment: false,
+        showTransferInstructions: false,
+        paid: false,
+        confirmed: false,
+        bankVerified: false
+      };
+    }
+    var lines = [];
+    var list = Array.isArray(items) ? items : [];
+    for (var i = 0; i < list.length; i++) {
+      var item = list[i] || {};
+      if (item.amount == null || item.amount === '') continue;
+      var unit;
+      try { unit = dollarsToMinor(item.amount); }
+      catch (err) {
+        return {
+          ok: false,
+          error: 'invalid-amount',
+          requestsPayment: false,
+          showTransferInstructions: false,
+          paid: false,
+          confirmed: false,
+          bankVerified: false
+        };
+      }
+      lines.push({
+        id: String(item.id || item.name || ('line-' + i)),
+        name: String(item.name || 'Item'),
+        unitMinor: unit,
+        qty: item.qty == null ? 1 : item.qty
+      });
+    }
+    var state = buildState({
+      storeId: options.storeId || 'store',
+      currency: currency,
+      lines: lines,
+      previous: options.previous,
+      rng: options.rng,
+      customerClaimsPaid: false
+    });
+    if (!state.ok) {
+      state.requestsPayment = false;
+      state.paid = false;
+      state.confirmed = false;
+      return state;
+    }
+    var view = checkout(state, {
+      currency: currency,
+      fulfilmentVerified: options.fulfilmentVerified === true,
+      mode: options.mode,
+      demo: options.demo === true
+    });
+    view.snapshotKey = state.snapshotKey;
+    return view;
+  }
+
   function copyFields(view) {
     view = view || {};
     return {
@@ -400,6 +468,8 @@
     summaryText: summaryText,
     receiptDraft: receiptDraft,
     draftMailto: draftMailto,
-    copyFields: copyFields
+    copyFields: copyFields,
+    payidMountUrl: payidMountUrl,
+    catalogueCheckout: catalogueCheckout
   };
 });

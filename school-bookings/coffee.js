@@ -17,9 +17,12 @@ const CF_ICON={latte:'&#9749;',cap:'&#9749;',fw:'&#9749;',lb:'&#9749;',mocha:'&#
 if(!S.coffee)S.coffee={cart:[],orders:[]};if(!S.coffee.cart)S.coffee.cart=[];if(!S.coffee.orders)S.coffee.orders=[];
 const CF={appt:null};
 const cfItem=id=>CF_MENU.find(m=>m.id===id);
-const cfPrice=l=>{const m=cfItem(l.item);const mk=CF_MILK.find(x=>x[0]===l.milk);return Math.round((m.p[l.size]+(mk?mk[1]:0))*100)/100};
-const cfLineTotal=l=>Math.round(cfPrice(l)*l.qty*100)/100;
-const cfTotal=lines=>Math.round(lines.reduce((s,l)=>s+cfLineTotal(l),0)*100)/100;
+function cfUnitMinor(l){const m=cfItem(l.item);const mk=CF_MILK.find(x=>x[0]===l.milk);return CoffeebreakCart.dollarsToMinor(m.p[l.size])+CoffeebreakCart.dollarsToMinor(mk?mk[1]:0)}
+const cfPrice=l=>Number(CoffeebreakCart.formatMinor(cfUnitMinor(l)));
+const cfLineTotal=l=>Number(CoffeebreakCart.formatMinor(CoffeebreakCart.lineMinor(cfUnitMinor(l),l.qty)));
+const cfTotal=lines=>Number(CoffeebreakCart.formatMinor(CoffeebreakCart.sumMinor(lines.map(l=>CoffeebreakCart.lineMinor(cfUnitMinor(l),l.qty)))));
+let cfSnap=null;
+function cfCartState(c){const built=CoffeebreakCart.buildState({storeId:'school-coffee',currency:'AUD',lines:c.map(l=>({id:l.item+'|'+l.size+'|'+l.milk+'|'+l.sugar,name:cfDesc(l),unitMinor:cfUnitMinor(l),qty:l.qty})),previous:cfSnap});if(built.ok)cfSnap=built;return built}
 const cfDesc=l=>CF_SIZES[l.size]+' '+cfItem(l.item).name.toLowerCase()+', '+l.milk.toLowerCase()+', '+l.sugar.toLowerCase();
 const cfRef=()=>'COF-'+Math.random().toString(36).slice(2,6).toUpperCase();
 const cfAddMin=(date,time,n)=>{const d=parseD(date);d.setMinutes(toMin(time)+n);return{date:ds(d),time:pad(d.getHours())+':'+pad(d.getMinutes())}};
@@ -39,6 +42,7 @@ function renderCart(){const c=S.coffee.cart;const n=c.reduce((s,l)=>s+l.qty,0);$
  $('#cfCart').innerHTML=c.length?'<table><tr><th>Item</th><th>Qty</th><th>Each</th><th>Total</th><th></th></tr>'+c.map(l=>'<tr data-line="'+l.id+'"><td>'+esc(cfDesc(l))+'</td><td style="white-space:nowrap"><button class="sm ghost" data-q="-1" type="button">&minus;</button> '+l.qty+' <button class="sm ghost" data-q="1" type="button">+</button></td><td>'+money(cfPrice(l))+'</td><td><b>'+money(cfLineTotal(l))+'</b></td><td><button class="sm bad" data-q="x" type="button">Remove</button></td></tr>').join('')+
   '<tr><td colspan="3" style="text-align:right"><b>Total (AUD)</b></td><td colspan="2"><b id="cfTotal" style="font-size:18px;color:var(--pd)">'+money(cfTotal(c))+'</b></td></tr></table>':'<p class="muted">Your cart is empty. Pick a drink above and press Add to cart.</p>';
  $('#cfBuy').disabled=!c.length;
+ const co=$('#cfCoTotal');if(co)co.textContent=money(cfTotal(c));
  $$('#cfCart [data-line]').forEach(tr=>tr.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{const l=c.find(x=>x.id===tr.dataset.line);const q=b.dataset.q;if(q==='x'||l.qty+(+q)<1)S.coffee.cart=c.filter(x=>x!==l);else l.qty=Math.min(20,l.qty+(+q));save();renderCart()}));
  if(!c.length)$('#cfCheckout').classList.add('hide')}
 
@@ -58,8 +62,8 @@ function openCheckout(){if(!S.coffee.cart.length){toast('Your cart is empty');re
  if(CF.appt){$('#cflink').value='appt';$('#cfq').value=CF.appt.ref}
  $('#cfCoTotal').textContent=money(cfTotal(S.coffee.cart));cfRenderLink();$('#cfDone').innerHTML='';$('#cfCheckout').scrollIntoView({behavior:'smooth',block:'start'})}
 function placeOrder(){const c=S.coffee.cart;if(!c.length){toast('Your cart is empty');return}
- const total=cfTotal(c);
- $('#cfDone').innerHTML='<div class="card" style="border:2px solid var(--warn, #a60)"><h3>Purchase closed. Payment not taken.</h3><p>Cart total <b>'+money(total)+' AUD</b>. Paid: <b>no</b>. No order was saved. No bank transfer was started.</p>'+
+ const total=cfTotal(c);const snap=cfCartState(c);
+ $('#cfDone').innerHTML='<div class="card" style="border:2px solid var(--warn, #a60)"><h3>Purchase closed. Payment not taken.</h3><p>Cart total <b>'+money(total)+' AUD</b>. Cart reference <b>'+esc(snap.reference||'')+'</b>. Paid: <b>no</b>. No order was saved. No bank transfer was started.</p>'+
   '<ul>'+c.map(l=>'<li>'+l.qty+' x '+esc(cfDesc(l))+' '+money(cfLineTotal(l))+'</li>').join('')+'</ul>'+
   '<div class="msgbox"><b>PayID already saved in this cart</b><br>'+CF_BANK+'<br>PayID: <b>'+CF_PAYID+'</b> <button class="sm ghost" type="button" data-cfcopy="'+CF_PAYID+'">Copy PayID</button><br>Amount on screen: <b>'+money(total)+'</b><br>Stripe is not connected. Cafe fulfilment, delivery fees, refunds, commission and the Stripe fee are not confirmed, so this cart stops here.</div>'+
   '<div class="quick"><button class="sm ghost" type="button" id="cfAgain">Back to the cart</button></div></div>';
