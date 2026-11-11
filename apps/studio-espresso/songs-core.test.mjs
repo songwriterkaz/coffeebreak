@@ -68,14 +68,20 @@ test('a personal library stores and removes songs', async () => {
   assert.equal((await lib.list()).length, 1);
 });
 
-test('SemBridge sings the lyric score as a real WAV', async () => {
-  const score = core.buildScore('sun is up', [{ p: 67, s: 0, l: 1, v: 0.8 }, { p: 69, s: 1, l: 1, v: 0.8 }, { p: 72, s: 2, l: 1, v: 0.8 }], 100);
-  const sung = await core.singSemBridge(score.text, { voiceId: 'en1', steps: 8, seed: 7, timeoutMs: 90000 });
-  assert.equal(sung.model, 'ASLP-lab/SemBridge');
+test('ACE-Step sings the lyrics as audio', async () => {
+  assert.equal(core.vocalSeconds('sun is up on the hill'), 12);
+  const sung = await core.singAceStep('sun is up on the hill', { steps: 16, seconds: 12, seed: 3, timeoutMs: 90000 });
+  assert.equal(sung.model, 'ACE-Step/ACE-Step');
   assert.equal(sung.license, 'Apache-2.0');
-  assert.match(sung.info, /audio/);
-  const stats = core.wavStats(sung.bytes);
-  assert.ok(stats.duration > 1, 'duration ' + stats.duration);
+  assert.ok(sung.bytes.byteLength > 20000);
+  const fs = await import('node:fs');
+  const { execFileSync } = await import('node:child_process');
+  fs.writeFileSync('/tmp/ace-step-vocal-test.mp3', Buffer.from(sung.bytes));
+  const dur = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'default=nw=1:nk=1', '/tmp/ace-step-vocal-test.mp3'], { encoding: 'utf8' });
+  assert.ok(parseFloat(dur) > 8, dur);
+  execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', '/tmp/ace-step-vocal-test.mp3', '-ac', '1', '-ar', '16000', '/tmp/ace-step-vocal-test.wav']);
+  const raw = fs.readFileSync('/tmp/ace-step-vocal-test.wav');
+  const stats = core.wavStats(raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength));
   assert.ok(stats.peak > 0.05, 'peak ' + stats.peak);
   assert.ok(stats.rms > 0.01, 'rms ' + stats.rms);
 });

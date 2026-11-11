@@ -77,16 +77,31 @@ try {
     returnByValue: true,
     timeout: 120000,
     expression: `(() => (async () => {
+      const lyricsLabel = document.querySelector('label[for="createLyrics"]');
       const simple = {
         hasLyrics: !!document.getElementById('createLyrics'),
+        lyricsLabel: lyricsLabel ? lyricsLabel.textContent : '',
+        vocalLabel: (document.getElementById('vocalLabel') || {}).textContent || '',
         button: (document.getElementById('createGo') || {}).textContent || '',
         moreClosed: !!document.getElementById('createMore') && !document.getElementById('createMore').open,
         voiceInsideMore: !!document.querySelector('#createMore #createVoice'),
       };
-      const song = await CBSongs.create({ lyrics: 'sun is up on the hill', steps: 8, seed: 3, autoplay: false });
+      const song = await CBSongs.create({ lyrics: 'sun is up on the hill', steps: 16, seed: 3, autoplay: false });
+      const before = CBSongs.vocalState();
+      await CBSongs.nudgePitch(song.id, 2);
+      const pitched = CBSongs.vocalState();
+      await CBSongs.setLevel(song.id, 0.3);
+      const leveled = CBSongs.vocalState();
+      await CBSongs.nudgeTime(song.id, 1.12);
+      const timed = CBSongs.vocalState();
       const listed = await CBSongs.list();
       const played = await CBSongs.play(song.id);
       const opened = await CBSongs.open(song.id);
+      const found = {
+        lyrics: (document.getElementById('studioLyrics') || {}).textContent || '',
+        vocal: (document.getElementById('studioVocal') || {}).textContent || '',
+        library: (document.getElementById('songList') || {}).innerText || '',
+      };
       CBX.demoSong();
       const demo = await renderSong({ master: false, tail: 0.2 });
       let demoPeak = 0;
@@ -95,7 +110,22 @@ try {
       const tools = buildLib();
       const text = document.body.innerText;
       return {
-        simple, song, listed: listed.map(s => ({ title: s.title, lyrics: s.lyrics })), played, opened,
+        simple, found, song, edits: { before, pitched, leveled, timed },
+        studio: {
+          pitch: !!document.querySelector('#studioVocal [data-act="pitch"]'),
+          level: !!document.querySelector('#studioVocal [data-act="level"]'),
+          time: !!document.querySelector('#studioVocal [data-act="time"]'),
+          resing: !!document.querySelector('#studioVocal [data-act="resing"]'),
+          line: !!document.querySelector('#studioVocal [data-act="line"]'),
+        },
+        library: {
+          pitch: !!document.querySelector('#songList [data-act="pitch"]'),
+          level: !!document.querySelector('#songList [data-act="level"]'),
+          time: !!document.querySelector('#songList [data-act="time"]'),
+          resing: !!document.querySelector('#songList [data-act="resing"]'),
+          line: !!document.querySelector('#songList [data-act="line"]'),
+        },
+        listed: listed.map(s => ({ title: s.title, lyrics: s.lyrics })), played, opened,
         demoPeak, toolCount: tools.length,
         toolsAreFunctions: tools.every(t => typeof t.use === 'function' && t.name && t.cat),
         cart: CBSongs.cart(),
@@ -112,12 +142,28 @@ try {
   const out = run.result.value;
   if (out.error) throw new Error(out.error);
   assert.equal(out.simple.hasLyrics, true);
+  assert.equal(out.simple.lyricsLabel, 'Lyrics');
+  assert.equal(out.simple.vocalLabel, 'Sung vocal');
   assert.equal(out.simple.button, 'Create song');
+  assert.match(out.found.lyrics, /sun is up on the hill/);
+  assert.match(out.found.vocal, /Vocals/);
+  assert.match(out.found.library, /Lyrics/);
+  assert.match(out.found.library, /Vocal/);
+  assert.match(out.found.library, /sun is up on the hill/);
   assert.equal(out.simple.moreClosed, true);
-  assert.equal(out.simple.voiceInsideMore, true);
+  assert.equal(out.simple.voiceInsideMore, false);
   assert.equal(out.song.title, 'Sun is up on the hill');
   assert.equal(out.song.lyrics, 'sun is up on the hill');
-  assert.equal(out.song.vocal.model, 'ASLP-lab/SemBridge');
+  assert.equal(out.song.vocal.model, 'ACE-Step/ACE-Step');
+  assert.notEqual(out.edits.pitched.mark, out.edits.before.mark);
+  assert.ok(out.edits.pitched.peak > 0.02);
+  assert.equal(out.edits.pitched.pitch, 2);
+  assert.ok(Math.abs(out.edits.leveled.vol - 0.3) < 0.001);
+  assert.ok(out.edits.timed.seconds > out.edits.before.seconds * 1.05, 'timing ' + out.edits.timed.seconds + ' vs ' + out.edits.before.seconds);
+  assert.equal(out.studio.pitch && out.studio.level && out.studio.time && out.studio.resing && out.studio.line, true);
+  assert.equal(out.library.pitch && out.library.level && out.library.time && out.library.resing && out.library.line, true);
+  assert.ok(Math.abs(out.opened.vocalLevel - 0.3) < 0.001);
+  assert.equal(out.opened.vocalPitch, 2);
   assert.ok(out.song.tracks.includes('Vocals'));
   assert.ok(out.song.tracks.includes('Drums'));
   assert.ok(out.listed.some(s => s.title === 'Sun is up on the hill' && s.lyrics === 'sun is up on the hill'));

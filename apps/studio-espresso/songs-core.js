@@ -1,5 +1,5 @@
-/* Coffeebreak Studio Espresso - create, library, and SemBridge vocal client.
-   SemBridge (ASLP-lab/SemBridge) is Apache-2.0. This file calls the public
+/* Coffeebreak Studio Espresso - create, library, and ACE-Step vocal client.
+   ACE-Step (ACE-Step/ACE-Step) is Apache-2.0. This file calls the public
    Space. It does not synthesise a singer locally. */
 (function (root, factory) {
   const api = factory();
@@ -8,8 +8,8 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   const PAY_LABEL = 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
   const CART_KEY = 'cbx-espresso-cart';
-  const MODEL = 'ASLP-lab/SemBridge';
-  const ENDPOINT = 'https://aslp-lab-sembridge.hf.space';
+  const MODEL = 'ACE-Step/ACE-Step';
+  const ENDPOINT = 'https://ace-step-ace-step.hf.space';
   const VOICES = [
     { id: 'en1', label: 'English demo voice 1 (GTSinger reference)', api: 'EN singer 1 — GTSinger' },
     { id: 'en2', label: 'English demo voice 2 (Opencpop reference)', api: 'EN singer 2 — Opencpop' },
@@ -167,26 +167,36 @@
     return { event: event, data: data };
   }
 
-  async function singSemBridge(scoreText, opts) {
-    opts = opts || {};
-    if (!scoreText || !String(scoreText).includes('|')) throw new Error('The vocal score is empty.');
-    const endpoint = String(opts.endpoint || ENDPOINT).replace(/\/$/, '');
-    const voice = voiceById(opts.voiceId) || VOICES[0];
-    const steps = opts.steps == null ? 20 : opts.steps;
-    const body = { data: [scoreText, voice.api, null, '', steps, opts.cfg == null ? 2 : opts.cfg, opts.temperature == null ? 1 : opts.temperature, opts.seed == null ? 42 : opts.seed] };
-    const posted = await fetch(endpoint + '/gradio_api/call/svs', {
+  function lyricLines(text) {
+    const lines = String(text || '').split(/\n/).map(s => s.trim()).filter(Boolean);
+    return lines.length ? lines : CWords(text);
+  }
+
+  function CWords(text) {
+    const words = wordsOf(text);
+    return words.length ? [words.join(' ')] : [];
+  }
+
+  function vocalSeconds(lyrics) {
+    const words = Math.max(2, wordsOf(lyrics).length);
+    const lines = Math.max(1, String(lyrics || '').split(/\n/).filter(s => s.trim()).length);
+    return Math.max(12, Math.min(28, Math.round(words * 0.45 + lines * 1.5)));
+  }
+
+  async function callSpace(endpoint, apiName, data, timeoutMs) {
+    const posted = await fetch(endpoint + '/gradio_api/call/' + apiName, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ data: data }),
     });
     if (!posted.ok) throw new Error('The vocal service refused the request (' + posted.status + '). Nothing was saved.');
     const accepted = await posted.json();
     if (!accepted.event_id) throw new Error('The vocal service did not accept the lyrics. Nothing was saved.');
     const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
-    const timer = setTimeout(() => { if (ctrl) ctrl.abort(); }, opts.timeoutMs || 120000);
+    const timer = setTimeout(() => { if (ctrl) ctrl.abort(); }, timeoutMs || 120000);
     let streamed;
     try {
-      streamed = await fetch(endpoint + '/gradio_api/call/svs/' + accepted.event_id, ctrl ? { signal: ctrl.signal } : {});
+      streamed = await fetch(endpoint + '/gradio_api/call/' + apiName + '/' + accepted.event_id, ctrl ? { signal: ctrl.signal } : {});
     } catch (e) {
       throw new Error('The vocal model did not answer in time. Nothing was saved.');
     } finally { clearTimeout(timer); }
@@ -197,13 +207,27 @@
     let parsed;
     try { parsed = JSON.parse(sse.data); } catch (e) { throw new Error('The vocal model sent an unreadable result. Nothing was saved.'); }
     const file = parsed && parsed[0];
-    const info = parsed && parsed[1] ? String(parsed[1]) : '';
     if (!file || !file.url) throw new Error('The vocal model returned no audio. Nothing was saved.');
     const audio = await fetch(file.url);
     if (!audio.ok) throw new Error('The sung audio could not be downloaded. Nothing was saved.');
     const bytes = await audio.arrayBuffer();
-    if (!bytes || bytes.byteLength < 1000) throw new Error('The vocal model returned an empty file. Nothing was saved.');
-    return { bytes: bytes, info: info, voice: voice.api, voiceId: voice.id, model: MODEL, license: 'Apache-2.0' };
+    if (!bytes || bytes.byteLength < 8000) throw new Error('The vocal model returned an empty file. Nothing was saved.');
+    return { bytes: bytes, info: parsed[1] && parsed[1].audio_duration ? Math.round(parsed[1].audio_duration) + 's sung audio' : 'sung audio', model: MODEL, license: 'Apache-2.0' };
+  }
+
+  async function singAceStep(lyrics, opts) {
+    opts = opts || {};
+    const line = opts.line ? String(opts.line).trim() : '';
+    const text = line || String(lyrics || '').trim();
+    if (wordsOf(text).length < 1 || (!line && wordsOf(text).length < 2)) throw new Error('Write at least two words to sing.');
+    const seconds = opts.seconds || (line ? Math.max(8, Math.min(14, Math.round(wordsOf(line).length * 0.8 + 4))) : vocalSeconds(text));
+    const steps = opts.steps == null ? 32 : opts.steps;
+    const prompt = opts.prompt || 'a cappella, solo singing voice only, no instruments, no drums, clear lyrics, natural sung vocal';
+    const endpoint = String(opts.endpoint || ENDPOINT).replace(/\/$/, '');
+    const data = [seconds, prompt, '[Verse]\n' + text + '\n', steps, 15, 'euler', 'apg', 10, opts.seed == null ? 7 : opts.seed, 0.5, 0, 3, true, true, true, null, 0, 0, false, 0.5, null, 'none'];
+    const sung = await callSpace(endpoint, '__call__', data, opts.timeoutMs || 120000);
+    sung.seconds = seconds;
+    return sung;
   }
 
   function wavStats(arrayBuffer) {
@@ -234,7 +258,7 @@
   }
 
   function metaOf(rec) {
-    return { id: rec.id, title: rec.title, created: rec.created, summary: rec.summary, lyrics: rec.lyrics, vocal: rec.vocal ? { model: rec.vocal.model, voice: rec.vocal.voice, info: rec.vocal.info } : null };
+    return { id: rec.id, title: rec.title, created: rec.created, summary: rec.summary, lyrics: rec.lyrics, level: rec.level == null ? 1 : rec.level, pitch: rec.pitch || 0, vocal: rec.vocal ? { model: rec.vocal.model, voice: rec.vocal.voice, info: rec.vocal.info } : null };
   }
 
   function memoryLibrary() {
@@ -262,7 +286,9 @@
     wordsOf: wordsOf,
     voiceById: voiceById,
     defaultVoiceId: defaultVoiceId,
-    singSemBridge: singSemBridge,
+    lyricLines: lyricLines,
+    vocalSeconds: vocalSeconds,
+    singAceStep: singAceStep,
     parseSse: parseSse,
     wavStats: wavStats,
     memoryLibrary: memoryLibrary,
