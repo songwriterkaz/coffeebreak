@@ -1,0 +1,87 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Pink Wigs</title><link rel="icon" href="data:,">
+<meta name="description" content="Coffeebreak Pink Wigs: made-to-order pink wig designs by Karen O'Brien, Newcastle NSW. Pay by PayID.">
+<style>
+*{box-sizing:border-box}html,body{margin:0;overflow-x:hidden}
+body{font-family:Georgia,serif;background:#fff3f8;color:#3a2a33}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#2b1d2e;color:#f7c6d9;position:sticky;top:0;z-index:5}
+header img{height:42px;width:42px;border-radius:8px;background:#fff}
+header h1{font-size:18px;margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:2px}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:11px 16px;background:#d14f8a;color:#fff;font-size:16px}
+button.alt{background:#fff;color:#d14f8a;border:2px solid #d14f8a}
+header button{background:#f7c6d9;color:#2b1d2e;font-weight:700;padding:9px 12px}
+main{max-width:1000px;margin:auto;padding:16px}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center}
+.hero img{width:100%;border-radius:14px;aspect-ratio:3/4;object-fit:cover}
+.hero h2{font-size:30px;color:#d14f8a;margin:0 0 8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-top:10px}
+.p{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px #d14f8a22;display:flex;flex-direction:column}
+.p img{width:100%;aspect-ratio:1;object-fit:cover;background:#fdeaf2}
+.p .b{padding:12px;flex:1;display:flex;flex-direction:column;gap:6px}
+.p h3{margin:0;font-size:18px}.price{font-size:20px;color:#d14f8a;font-weight:700}
+.p small{color:#7a5a6a}.p select{font:inherit;padding:7px;border-radius:8px;border:1px solid #e0b7c9;width:100%}
+.p button{margin-top:auto}
+.tag{display:inline-block;background:#2b1d2e;color:#f7c6d9;font-size:12px;padding:3px 8px;border-radius:10px}
+section.box{background:#fff;border-radius:14px;padding:14px;margin-top:22px;box-shadow:0 2px 8px #d14f8a22}
+h2.t{color:#d14f8a}
+.line{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed #e8c6d6;padding:7px 0;flex-wrap:wrap}
+.line button{padding:4px 10px;font-size:14px}
+label{display:block;margin:8px 0 3px;font-size:14px}
+input,textarea{font:inherit;width:100%;padding:9px;border:1px solid #e0b7c9;border-radius:8px}
+pre{white-space:pre-wrap;background:#fdeaf2;border-radius:10px;padding:12px;font-size:14px;word-break:break-word}
+.payid{background:#2b1d2e;color:#fff;border-radius:12px;padding:12px;font-size:17px;word-break:break-word}
+.disc{font-size:13px;line-height:1.55;color:#5a4450}
+footer{text-align:center;padding:18px;background:#2b1d2e;color:#f7c6d9;margin-top:24px}
+footer a{color:#fff;margin:0 10px}
+@media(max-width:700px){.hero{grid-template-columns:1fr}.hero h2{font-size:24px}header h1{font-size:15px;letter-spacing:1px}}
+</style></head><body>
+<header><img src="logo.jpg" alt="Coffeebreak logo"><h1>COFFEEBREAK PINK WIGS</h1><button onclick="document.getElementById('cart').scrollIntoView({behavior:'smooth'})">Cart (<span id="cc">0</span>)</button></header>
+<main>
+<div class="hero">
+ <img src="img/wig-pink-dreads.png" alt="Flat drawing of the pink dreadlocks wig">
+ <div><h2>Pink, made to order</h2>
+ <p>Karen O'Brien's pink hair designs from Coffeebreak, Newcastle NSW. Every wig is made to order in the design you choose. Pictures show the design; colour and finish can vary slightly by batch.</p>
+ <p><span class="tag">Pay by PayID</span> <span class="tag">Made to order: allow 3 to 6 weeks</span> <span class="tag">Prices in AUD</span></p>
+ <p>Also from Coffeebreak: <a href="https://songwriterkaz.github.io/coffeebreak/" target="_blank" rel="noopener">CB Wigs</a> · <a href="https://songwriterkaz.github.io/coffeebreak/" target="_blank" rel="noopener">Coffeebreak</a></p></div>
+</div>
+<h2 class="t">The pink range</h2>
+<div class="grid" id="grid"></div>
+<section class="box" id="cart"><h2 class="t" style="margin-top:0">Your order</h2><div id="lines"><p>Your cart is empty.</p></div><p><b>Total: <span id="tot">AU$0</span></b></p>
+<label>Your name<input id="nm" autocomplete="name"></label>
+<label>Email or phone<input id="ct" autocomplete="email"></label>
+<label>Delivery address<textarea id="ad" rows="2" autocomplete="street-address"></textarea></label>
+<label>Notes (head size, length, shade)<textarea id="nt" rows="2"></textarea></label>
+<p><button id="mk">Make my order details</button></p>
+<div id="pay" hidden>
+ <div class="payid">Pay by PayID (Teachers Mutual Bank): <b>darkokaz@gmx.com</b></div>
+ <p>1. Copy your order details below. 2. In your banking app, pay the total to the PayID above and put your order reference in the payment description. 3. Paste the order details in an email to <b>songwriterkaz@gmail.com</b> so Karen can make your wig.</p>
+ <pre id="od"></pre><p><button id="cp">Copy order details</button> <button class="alt" id="cpid">Copy PayID</button> <span id="msg"></span></p>
+</div>
+</section>
+<section class="box disc"><b>Disclaimer.</b> Coffeebreak Pink Wigs are designed by Karen O'Brien (Coffeebreak). Karen O'Brien keeps all rights to her products, designs, apps, name and logo. Buyers may resell the physical wigs they bought, but may not copy the designs or make their own versions. Karen claims no copyright or ownership of any third-party brands or products named on this page (for example Teachers Mutual Bank, PayID, Tesla, Starlink); those trademarks belong to their owners and are used only to describe them. Wigs are made to order; pictures are design images and the finished wig can differ slightly in shade and style. Orders are confirmed by email once payment is received. This page does not take card payments and does not collect any data: your order details stay in your browser until you copy them.</section>
+</main>
+<footer>© Karen O'Brien (Coffeebreak), Newcastle NSW<br><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></footer>
+<script>
+const P=[
+ {id:"thin",name:"Thin Real-Hair Wig (Pink Bob)",price:1900,img:"img/wig-pink-bob.png",d:"Thin, lightweight real human hair on a breathable cap, coloured pink and cut in Karen's pink bob design.",opt:["Pink bob","Shoulder length","Long"]},
+ {id:"dreads",name:"Pink Dreadlocks Wig",price:79,img:"img/wig-pink-dreads.png",d:"Karen's long pink dreadlocks design, soft synthetic locks.",opt:["Long","Mid-back","Shoulder"]},
+ {id:"bob",name:"Pink Bob Fun Wig",price:79,img:"img/wig-pink-bob.png",d:"Bright pink bob with a full fringe, soft synthetic fibre.",opt:["Hot pink","Baby pink","Rose"]},
+ {id:"rainbow",name:"Pastel Rainbow Wig (pink crown)",price:79,img:"img/wig-pastel-rainbow.png",d:"Pink crown flowing into pastel rainbow waves, soft synthetic fibre.",opt:["Long","Shoulder"]}
+];
+const $=id=>document.getElementById(id),aud=n=>"AU$"+n.toLocaleString("en-AU");
+let cart=[];try{cart=JSON.parse(localStorage.getItem("cbPinkWigsCart"))||[]}catch(e){}
+$("grid").innerHTML=P.map(p=>`<div class="p"><img src="${p.img}" alt="${p.name} design" loading="lazy"><div class="b"><h3>${p.name}</h3><div class="price">${aud(p.price)}</div><small>${p.d}</small><select id="o-${p.id}" aria-label="Style option">${p.opt.map(o=>`<option>${o}</option>`).join("")}</select><button data-id="${p.id}">Add to cart</button></div></div>`).join("");
+$("grid").onclick=e=>{const b=e.target.closest("button[data-id]");if(!b)return;const p=P.find(x=>x.id===b.dataset.id),o=$("o-"+p.id).value,l=cart.find(x=>x.id===p.id&&x.o===o);l?l.q++:cart.push({id:p.id,o,q:1});draw();b.textContent="Added ✓";setTimeout(()=>b.textContent="Add to cart",1200)};
+function total(){return cart.reduce((s,l)=>s+P.find(p=>p.id===l.id).price*l.q,0)}
+function draw(){try{localStorage.setItem("cbPinkWigsCart",JSON.stringify(cart))}catch(e){}
+ $("cc").textContent=cart.reduce((s,l)=>s+l.q,0);$("tot").textContent=aud(total());
+ $("lines").innerHTML=cart.length?cart.map((l,i)=>{const p=P.find(x=>x.id===l.id);return `<div class="line"><span>${l.q} × ${p.name} (${l.o})</span><span>${aud(p.price*l.q)} <button class="alt" data-m="${i}">−</button> <button class="alt" data-p="${i}">+</button></span></div>`}).join(""):"<p>Your cart is empty.</p>";$("pay").hidden=true}
+$("lines").onclick=e=>{const m=e.target.dataset.m,p=e.target.dataset.p;if(m!=null){cart[m].q--;if(cart[m].q<1)cart.splice(m,1)}if(p!=null)cart[p].q++;draw()};
+$("mk").onclick=()=>{if(!cart.length){alert("Add a wig to your cart first.");return}if(!$("nm").value.trim()||!$("ct").value.trim()||!$("ad").value.trim()){alert("Please fill in your name, contact and delivery address.");return}
+ const ref="CBPW-"+Date.now().toString(36).toUpperCase().slice(-6);
+ $("od").textContent=["COFFEEBREAK PINK WIGS ORDER","Reference: "+ref,"Date: "+new Date().toLocaleString("en-AU"),"",...cart.map(l=>{const p=P.find(x=>x.id===l.id);return `${l.q} x ${p.name} (${l.o}) - ${aud(p.price*l.q)}`}),"","TOTAL: "+aud(total()),"","Name: "+$("nm").value.trim(),"Contact: "+$("ct").value.trim(),"Deliver to: "+$("ad").value.trim(),"Notes: "+($("nt").value.trim()||"-"),"","Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com","Payment description: "+ref,"Email these details to songwriterkaz@gmail.com"].join("\n");
+ $("pay").hidden=false;$("pay").scrollIntoView({behavior:"smooth"})};
+async function copy(t){try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}$("msg").textContent="Copied ✓"}
+$("cp").onclick=()=>copy($("od").textContent);$("cpid").onclick=()=>copy("darkokaz@gmx.com");
+draw();
+</script></body></html>
