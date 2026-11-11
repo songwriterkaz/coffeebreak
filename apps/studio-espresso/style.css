@@ -40,6 +40,19 @@ canvas.view{width:100%;background:var(--tl);border-radius:10px;display:block;tou
 .karaoke{background:var(--tl);color:#fff;border-radius:14px;padding:16px;min-height:200px;text-align:center;font-size:1.5rem;line-height:1.6}.karaoke .cur{color:var(--a);font-weight:800;font-size:1.9rem}
 .feat li{margin:3px 0}.cols{columns:2 320px}
 .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 16px;border-radius:999px;z-index:99;max-width:90vw}
+.song-player canvas{width:100%;height:84px;background:#2e1422;border-radius:10px;display:block}
+.songrow{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--b);flex-wrap:wrap}
+.songrow.playing{background:#fff0f6}
+.songmeta{flex:1;min-width:180px;display:flex;flex-direction:column;gap:2px}
+.paybox{margin-top:10px;padding:8px 10px;border:2px solid var(--a);border-radius:12px}
+.studio-foot{max-width:860px;margin:28px auto 48px;padding:14px 16px;background:#fff;border:2px solid var(--a);border-radius:16px;display:flex;gap:12px;align-items:flex-start}
+.studio-foot img{width:54px;height:54px;border-radius:10px;object-fit:cover;flex:none}
+.studio-foot p{margin:4px 0}
+.studio-foot a{color:var(--a)}
+#createLyrics{min-height:180px;font-size:1.05rem}
+#createGo{font-size:1.05rem;padding:8px 20px}
+#t-create details{margin:10px 0}
+#t-create summary{cursor:pointer;font-weight:700}
 .tuner{font-size:3rem;text-align:center;font-weight:800}
 textarea{width:100%;min-height:220px;font:inherit;border:2px solid var(--a);border-radius:10px;padding:8px;background:var(--card);color:var(--ink)}
 @media (max-width:700px){#heads{width:150px}.th input[type=text]{width:80px}.logo{height:34px}h1{font-size:1rem}.ttl small{display:none}.mini{font-size:.7rem}.hideS{display:none}}

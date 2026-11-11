@@ -17,7 +17,14 @@
 <nav id="tabs"></nav>
 <main id="main"></main>
 <div id="toast" class="toast hidden"></div>
-<script src="lame.min.js"></script><script src="dsp.js"></script><script src="engine.js"></script><script src="fx2.js"></script><script src="ui.js"></script><script src="ui2.js"></script><script src="ui3.js"></script><script src="radio.js"></script>
+<script src="lame.min.js"></script><script src="dsp.js"></script><script src="engine.js"></script><script src="fx2.js"></script><script src="ui.js"></script><script src="ui2.js"></script><script src="ui3.js"></script><script src="songs-core.js"></script><script src="create.js"></script><script src="radio.js"></script>
 <script src="grainy.js"></script>
-<div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
+<footer class="studio-foot" id="studioFoot"><img src="logo.jpg" alt="Coffeebreak"><div>
+<p><b>Rights.</b> Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Coffeebreak claims no ownership of third-party brands named here, which belong to their owners, and is not affiliated with or endorsed by them.</p>
+<p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com. Amount: $10 AUD. Reference: <b data-pay-ref>CB</b>. The cart stores this reference only. It does not mark the payment as received.</p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="../../">Coffeebreak hub</a></p>
+<p><button type="button" id="reportBtn">Report a problem</button></p>
+</div></footer>
+<script src="cbreport.js" data-app="Coffeebreak Studio Espresso" data-version="songs1"></script>
+<script>document.getElementById('reportBtn').onclick=function(){ if(window.__cbreport&&window.__cbreport.open)window.__cbreport.open(); };</script>
 </body></html>
