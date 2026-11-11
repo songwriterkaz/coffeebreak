@@ -8,30 +8,62 @@ button{background:#ff4fa3;color:#fff;border:0;border-radius:8px;padding:8px 14px
 footer{background:#ffb6d9;padding:12px;font-size:13px}
 input,textarea,select{width:95%;padding:6px;margin:4px 0;border:1px solid #f8a;border-radius:6px}
 </style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+<script src="cbreport.js" data-app="Coffeebreak Coffee Mail" defer></script>
+<script type="module" src="../mail-signature-pen/mail-routing.mjs"></script>
 </head><body>
 <header><img src="cb-logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Coffee Mail</h1></header><div class="banner">Full version $5. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com | <a href="https://coffeebreaks.itch.io">https://coffeebreaks.itch.io</a></div>
+<div class="card"><b>On this device.</b> Messages saved here stay in this browser. This page does not send by itself. Outside mail needs a Coffeebreak Mail sign-in, then Send.</div>
 <nav class="card"><button id="tInbox" onclick="show('inbox')">Inbox</button><button onclick="show('compose')">Compose</button><button onclick="show('sent')">Sent</button><button id="tShop" onclick="show('shop')">Coffee Shop</button></nav>
+<section class="card" id="liveCard"><h2>Outside mail</h2><p id="liveStatus">On this device until you sign in.</p><input id="liveN" placeholder="Name" autocomplete="name"><input id="liveH" placeholder="Handle" autocomplete="username"><input id="liveP" placeholder="Password" type="password" autocomplete="current-password"><button id="liveNew" type="button">Create address</button><button id="liveGo" type="button">Sign in</button><button id="liveOff" type="button">Sign out</button><p id="liveMsg"></p></section>
 <section id="inbox" class="card"></section><section id="sent" class="card"></section>
-<section id="compose" class="card"><h2>Compose</h2><input id="to" placeholder="To"><input id="subj" placeholder="Subject"><textarea id="body" rows="5" placeholder="Message"></textarea><button id="sendBtn" onclick="sendMail()">Send</button></section>
-<section id="shop" class="card"><h2>Coffee Menu</h2><div id="menu"></div><h3>Cart</h3><div id="cart"></div><input id="cname" placeholder="Your name"><input id="cnote" placeholder="Pickup or delivery notes"><button id="checkout" onclick="checkout()">Checkout and email order</button><p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p></section>
+<section id="compose" class="card"><h2>Compose</h2><input id="to" placeholder="To"><input id="subj" placeholder="Subject"><textarea id="body" rows="5" placeholder="Message"></textarea><label><input id="alsoOutside" type="checkbox"> Also hand outside addresses to Coffeebreak Mail</label><button id="sendBtn" onclick="sendMail()">Send</button><p id="mailMsg"></p></section>
+<section id="shop" class="card"><h2>Coffee Menu</h2><div id="menu"></div><h3>Cart</h3><div id="cart"></div><input id="cname" placeholder="Your name"><input id="cnote" placeholder="Pickup or delivery notes"><button id="checkout" onclick="checkout()">Save order on this device</button><p id="orderMsg"></p><p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p></section>
 <footer><p><b>Disclaimer:</b> Karen O&#39;Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought but may not copy them. No ownership is claimed of any third-party brands named.</p><p><a href="https://www.tesla.com">Tesla</a> | <a href="https://www.starlink.com">Starlink</a> | <a href="https://coffeebreaks.itch.io">coffeebreaks.itch.io</a></p></footer>
 <script>
-const K='cbcm',S=JSON.parse(localStorage.getItem(K)||'null')||{inbox:[{from:'Coffeebreak',subj:'Welcome to Coffee Mail',body:'Send mail and order a real coffee from the Coffee Shop tab.',t:new Date().toLocaleString()}],sent:[],cart:[]};
+const K='cbcm',S=JSON.parse(localStorage.getItem(K)||'null')||{inbox:[],sent:[],cart:[],orders:[],deviceNotes:[]};
+if(!Array.isArray(S.inbox))S.inbox=[];if(!Array.isArray(S.sent))S.sent=[];if(!Array.isArray(S.cart))S.cart=[];if(!Array.isArray(S.orders))S.orders=[];if(!Array.isArray(S.deviceNotes))S.deviceNotes=[];
 const save=()=>localStorage.setItem(K,JSON.stringify(S));
+(function park(){const keep=[],notes=S.deviceNotes;(S.inbox||[]).forEach(m=>{const seeded=m.from==='Coffeebreak'||(m.from==='Coffeebreak Coffee Shop'&&/receipt/i.test(m.subj||''));(seeded?notes:keep).push(m)});S.inbox=keep;S.deviceNotes=notes})();
 const M=[['Flat White',5],['Cappuccino',5],['Latte',5.5],['Long Black',4.5],['Pink Mocha',6],['Chai Latte',5.5]];
 const SZ=[['Small',0],['Regular',.5],['Large',1]],MK=[['Full cream',0],['Skim',0],['Oat',.7],['Almond',.7]],SG=['No sugar','1 sugar','2 sugars'];
 const opt=a=>a.map((o,i)=>'<option value="'+i+'">'+(Array.isArray(o)?o[0]+(o[1]?' +$'+o[1].toFixed(2):''):o)+'</option>').join('');
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function show(id){['inbox','sent','compose','shop'].forEach(x=>document.getElementById(x).style.display=x==id?'block':'none');render()}
-function list(a,t){return '<h2>'+t+'</h2>'+(a.length?a.slice().reverse().map(m=>'<div class="card"><b>'+esc(m.subj)+'</b><br><small>'+esc(m.from||('To: '+m.to))+' | '+esc(m.t)+'</small><pre style="white-space:pre-wrap">'+esc(m.body)+'</pre></div>').join(''):'<p>Nothing here yet.</p>')}
+function list(a,t){return '<h2>'+t+'</h2>'+(a.length?a.slice().reverse().map(m=>'<div class="card"><b>'+esc(m.subj)+'</b><br><small>'+esc(m.from||('To: '+m.to))+' | '+esc(m.t)+(m.onDevice?' | On this device':'')+'</small><pre style="white-space:pre-wrap">'+esc(m.body)+'</pre></div>').join(''):'<p>Nothing here yet.</p>')}
 function render(){inbox.innerHTML=list(S.inbox,'Inbox');sent.innerHTML=list(S.sent,'Sent');
 menu.innerHTML=M.map((m,i)=>'<div class="card"><b>'+m[0]+'</b> $'+m[1].toFixed(2)+'<br><select id="sz'+i+'">'+opt(SZ)+'</select><select id="mk'+i+'">'+opt(MK)+'</select><select id="sg'+i+'">'+opt(SG)+'</select><button class="add" onclick="add('+i+')">Add</button></div>').join('');
 let tot=0;cart.innerHTML=S.cart.map((c,i)=>{tot+=c.p;return '<div>'+esc(c.d)+' $'+c.p.toFixed(2)+' <button onclick="S.cart.splice('+i+',1);save();render()">Remove</button></div>'}).join('')+'<p><b>Total: $'+tot.toFixed(2)+'</b></p>'}
 function add(i){const s=SZ[document.getElementById('sz'+i).value],k=MK[document.getElementById('mk'+i).value],g=SG[document.getElementById('sg'+i).value];S.cart.push({d:M[i][0]+' ('+s[0]+', '+k[0]+', '+g+')',p:M[i][1]+s[1]+k[1]});save();render()}
-function sendMail(){if(!to.value)return alert('Add a recipient');S.sent.push({to:to.value,subj:subj.value||'(no subject)',body:body.value,t:new Date().toLocaleString()});save();to.value=subj.value=body.value='';show('sent')}
-function checkout(){if(!S.cart.length)return alert('Your cart is empty');const tot=S.cart.reduce((a,c)=>a+c.p,0),id='CB'+Date.now().toString().slice(-6);
+const LIVE_KEY='cbCoffeeMailLive';
+function liveSession(){try{return JSON.parse(localStorage.getItem(LIVE_KEY)||'null')}catch(e){return null}}
+function saveLive(s){if(s&&s.token)localStorage.setItem(LIVE_KEY,JSON.stringify({token:s.token,address:s.address}));else localStorage.removeItem(LIVE_KEY)}
+function liveClient(){return window.CBMailRoute.createLiveClient({onUnauthorized(){saveLive(null);paintLive()}})}
+async function paintLive(){if(!window.CBMailRoute)return;let status=null;try{status=await liveClient().status()}catch(e){status=null}
+ const session=liveSession();document.getElementById('liveStatus').textContent=window.CBMailRoute.describeLiveStatus(status,session&&session.address?{address:session.address}:null)}
+async function liveAuth(mode){const route=window.CBMailRoute,msg=document.getElementById('liveMsg');if(!route){msg.textContent='The mail helper has not loaded.';return}
+ const handle=document.getElementById('liveH').value.trim(),password=document.getElementById('liveP').value,name=document.getElementById('liveN').value.trim();
+ if(mode==='signup'&&!name){msg.textContent='Add your name.';return}
+ msg.textContent='One moment';
+ try{const j=mode==='signup'?await liveClient().signup({handle,name,password}):await liveClient().login({handle,password});saveLive(j);document.getElementById('liveP').value='';msg.textContent='Signed in.';paintLive()}catch(e){msg.textContent=e.message}}
+document.getElementById('liveNew').onclick=()=>liveAuth('signup');
+document.getElementById('liveGo').onclick=()=>liveAuth('login');
+document.getElementById('liveOff').onclick=()=>{saveLive(null);document.getElementById('liveMsg').textContent='Signed out.';paintLive()};
+window.addEventListener('cbmailroute',paintLive);
+async function sendMail(){const route=window.CBMailRoute;if(!to.value){mailMsg.textContent='Add a recipient.';return}
+ if(!route){mailMsg.textContent='The mail helper has not loaded.';return}
+ const plan=route.planRecipients(to.value,[]);if(plan.invalid.length){mailMsg.textContent=plan.invalid[0].reason;return}
+ const sub=subj.value||'(no subject)',text=body.value,session=liveSession(),hand=document.getElementById('alsoOutside').checked&&plan.outside.length&&session;
+ S.sent.push({to:to.value,subj:sub,body:text,t:new Date().toLocaleString(),onDevice:true});save();
+ let accepted=0,error='',waiting=false;
+ if(hand){try{const j=await liveClient().send(session.token,{to:plan.outside.map(x=>x.address).join(', '),subject:sub,text:text});accepted=(j.results||[]).filter(r=>r.ok).length;waiting=j.outsideState==='waiting';error=((j.results||[]).find(r=>!r.ok)||{}).error||''}catch(e){error=e.message}}
+ const note=route.describeSend({localCount:1,outsideCount:plan.outside.length,signedIn:!!hand,accepted,error,waiting});
+ const last=S.sent[S.sent.length-1];last.result=note;last.body=text+'\n\n'+note;save();
+ mailMsg.textContent=note;
+ to.value=subj.value=body.value='';show('sent')}
+function checkout(){if(!S.cart.length){orderMsg.textContent='Your cart is empty.';return}const tot=S.cart.reduce((a,c)=>a+c.p,0),id='CB'+Date.now().toString().slice(-6);
 const b='Order '+id+'\nName: '+(cname.value||'Guest')+'\nNotes: '+cnote.value+'\n\n'+S.cart.map(c=>c.d+' $'+c.p.toFixed(2)).join('\n')+'\n\nTotal: $'+tot.toFixed(2)+'\nPay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
-S.sent.push({to:'darkokaz@gmx.com',subj:'Coffee order '+id,body:b,t:new Date().toLocaleString()});S.inbox.push({from:'Coffeebreak Coffee Shop',subj:'Order receipt '+id,body:'Thanks for your order.\n\n'+b,t:new Date().toLocaleString()});S.cart=[];save();
-window.lastMailto='mailto:darkokaz@gmx.com?subject='+encodeURIComponent('Coffee order '+id)+'&body='+encodeURIComponent(b);if(!window.noMailto)location.href=window.lastMailto;show('inbox')}
+S.orders.push({id:id,body:b,t:new Date().toLocaleString()});S.cart=[];save();
+orderMsg.textContent='Order '+id+' is saved on this device. This page did not email the order. Pay by PayID with reference '+id+'.';
+show('shop')}
 show('inbox');
 </script></body></html>

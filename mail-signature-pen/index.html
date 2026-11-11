@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="CB Mail">
 <link rel="stylesheet" href="style.css">
 <style>.sigimg{max-width:260px;max-height:110px;background:#fff;border-radius:8px;padding:4px}#sigSaved img{height:50px;background:#fff;border-radius:6px;vertical-align:middle}</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+<script src="cbreport.js" data-app="Coffeebreak Mail Signature Pen" defer></script>
 </head><body data-theme="bubblegum">
 <header class="top"><img src="assets/logo-sm.jpg" alt="Coffeebreak logo"><h1>Coffeebreak Mail<small>Bold, pink and packed with real tools</small></h1><div id="who"></div></header>
 <nav class="tabs" id="tabs">
@@ -19,7 +20,7 @@
 <!-- SIGN UP -->
 <section class="view" id="v-signup">
  <div class="hero"><h2>Coffeebreak Mail Signature Pen</h2>
-  <div class="big">Your own bold pink mail desk. One price, every pro feature included. No sign-up needed.</div>
+  <div class="big">Your own bold pink mail desk. One price, every pro feature included. No sign-up is needed for mail on this device. Outside mail needs a Coffeebreak Mail address.</div>
   <span class="count" id="toolCount">0</span><div class="big">real, working tools inside, counted live from the app</div>
   <div><span class="pill">Inbox and folders</span><span class="pill">Coffeebreak Drive</span><span class="pill">Hotspot Helper</span><span class="pill">Karen's songs</span><span class="pill">Movie corner</span><span class="pill">VR lounge</span></div></div>
  <div class="plans">
@@ -38,7 +39,7 @@
   <button class="ghost" id="suSwitch">Switch account</button>
  </div>
  <div class="card"><h3>Good to know</h3>
-  <div class="note"><b>Coming soon:</b> sending to outside email addresses. That needs Coffeebreak's own domain and a sending service, which are being set up. For now, mail is delivered between Coffeebreak Mail accounts on the same device and everything else waits safely in Sent.</div>
+  <div class="note"><b>On this device:</b> handles here are not internet addresses. Mail copied between them stays in this browser. Outside send and receive use Coffeebreak Mail after you sign in on the Mail screen. This page does not send by itself.</div>
   <div class="note"><b>About storage:</b> Coffeebreak Drive keeps files in this browser on your device. Every account gets 10 GB, and your device also needs that much free space.</div>
  </div>
 </section>
@@ -51,7 +52,7 @@
   </div>
   <div class="sendrecv"><button id="composeBtn" class="bigbtn send">✉️ Send<small>Write and send an email</small></button><button id="receiveBtn" class="bigbtn recv">📥 Receive<small>Check for new mail</small></button></div>
   <div id="recvMsg" class="recvmsg" role="status" aria-live="polite"></div>
-  <div class="note">Mail to Coffeebreak handles on this device arrives straight away.</div><div class="note" id="liveBox"></div></div>
+  <div class="note">Mail copied to handles on this device stays on this device. It is not sent over the internet.</div><div class="note" id="liveBox"></div></div>
  <div class="mailwrap"><div class="card side" id="side"></div><div class="card list" id="list"></div><div class="card reader" id="reader"><p class="muted">Pick an email to read it.</p></div></div>
  </div>
 </section>
@@ -198,12 +199,13 @@
 <footer class="legal"><div class="in">
  <p><img src="assets/logo-sm.jpg" alt="Coffeebreak logo"><b>Coffeebreak Mail</b> by Coffeebreak. More apps, games and music at <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">https://coffeebreaks.itch.io</a></p>
  <p>About Coffeebreak: Coffeebreak is Karen, a songwriter and creator from Newcastle NSW. She makes apps, games, stores, tattoo flash and music under the Coffeebreak name.</p>
- <p id="disclaimer">Disclaimer: Coffeebreak Mail is provided as is. Your mail, files and settings are stored in this browser on this device, so keep backups of anything important. Coffeebreak Mail does not provide internet access. Sending to outside email addresses is coming soon and is not live yet. One purchase includes every feature, with nothing extra to buy. Rights: &copy; Karen (Coffeebreak). Karen keeps all rights to her products, designs, apps, songs, videos, name and logo. Buyers may resell physical items they bought but may not copy them or make their own versions.</p>
+ <p id="disclaimer">Disclaimer: Coffeebreak Mail is provided as is. Your mail, files and settings are stored in this browser on this device, so keep backups of anything important. Mail between handles on this device stays on this device and is not sent over the internet. Outside send and receive use Coffeebreak Mail after you sign in on the Mail screen. This page does not send by itself. Coffeebreak Mail does not provide internet access. One purchase includes every feature, with nothing extra to buy. Rights: &copy; Karen (Coffeebreak). Karen keeps all rights to her products, designs, apps, songs, videos, name and logo. Buyers may resell physical items they bought but may not copy them or make their own versions.</p>
  <p id="tmclause">Third-party trademarks: Karen claims no ownership of any third-party brands or trademarks named here, including Tesla, Starlink, YouTube, Spotify, itch.io, Suno, Apple, iPhone, Google, Android, Samsung and WiFi Map, which belong to their owners and are named only for reference.</p>
  <p class="links"><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a><a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
 </div></footer>
 <script src="tools.js" defer></script>
-<script src="app.js" defer></script><script src="sigpen.js" defer></script>
+<script src="sigpen.js" defer></script>
+<script type="module" src="app.js"></script>
 <!-- CB COFFEE ORDER START -->
 <style>
 #cbco-open{position:fixed;left:14px;bottom:14px;z-index:9998;background:#ff4fa3;color:#fff;border:2px solid #d81b7a;border-radius:999px;padding:12px 18px;font:700 16px system-ui,sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(216,27,122,.35)}
@@ -272,9 +274,8 @@ if(md==='Delivery'&&!ad){g('cbco-msg').textContent='Please enter a delivery addr
 var o={ref:ref,when:new Date().toLocaleString('en-AU'),name:n,phone:p,mode:md,time:tm,addr:ad,items:cart.slice(),total:total()};
 var body='Coffee order '+o.ref+'\n\n'+o.items.map(function(c){return '- '+c.desc+'  $'+f(c.price)}).join('\n')+'\n\nTotal: $'+f(o.total)+' AUD\n'+md+' at '+tm+(ad?'\nAddress: '+ad:'')+'\nName: '+n+'\nPhone: '+p+'\n\nPay by PayID (Teachers Mutual Bank): darkokaz@gmx.com\nReference: '+o.ref;
 var h=hist();h.push(o);try{localStorage.setItem(KEY,JSON.stringify(h))}catch(x){}
-var url='mailto:darkokaz@gmx.com?subject='+encodeURIComponent('Coffee order '+o.ref)+'&body='+encodeURIComponent(body);window.__cbcoLast=url;
-try{window.location.href=url}catch(x){}
-g('cbco-msg').textContent='Order '+o.ref+' saved. Your email app should open. Press send there, then pay $'+f(o.total)+' by PayID with reference '+o.ref+'.';
+g('cbco-msg').textContent='Order '+o.ref+' is saved on this device. This page did not email the order. A draft is open in Coffeebreak Mail. It goes out only after you sign in and press Send. Then pay $'+f(o.total)+' by PayID with reference '+o.ref+'.';
+if(window.CBM&&CBM.composeOrder)CBM.composeOrder({to:'darkokaz@gmx.com',subject:'Coffee order '+o.ref,body:body});
 cart=[];draw();newRef();drawHist()});
 newRef();draw();drawHist();})();
 </script>
