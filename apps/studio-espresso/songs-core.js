@@ -46,7 +46,7 @@
     const cart = {
       item: 'Coffeebreak Studio Espresso',
       amount: 10,
-      currency: 'AUD',
+      currency: 'USD',
       reference: reference,
       paid: false,
       status: 'awaiting_transfer',
