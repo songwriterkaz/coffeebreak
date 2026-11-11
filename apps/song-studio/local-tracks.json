@@ -1,0 +1,157 @@
+[
+  {
+    "id": "radio-a-delicious-disaster",
+    "title": "A Delicious Disaster",
+    "audio": "../../radio/music/a-delicious-disaster.mp3"
+  },
+  {
+    "id": "radio-cinnamon-candy",
+    "title": "Cinnamon Candy",
+    "audio": "../../radio/music/cinnamon-candy.mp3"
+  },
+  {
+    "id": "radio-coffee",
+    "title": "Coffee",
+    "audio": "../../radio/music/coffee.mp3"
+  },
+  {
+    "id": "radio-coffeebreak-generator",
+    "title": "Coffeebreak Generator",
+    "audio": "../../radio/music/coffeebreak-generator.mp3"
+  },
+  {
+    "id": "radio-coffeebreak-grind",
+    "title": "Coffeebreak Grind",
+    "audio": "../../radio/music/coffeebreak-grind.mp3"
+  },
+  {
+    "id": "radio-coffeebreak-moments",
+    "title": "Coffeebreak Moments",
+    "audio": "../../radio/music/coffeebreak-moments.mp3"
+  },
+  {
+    "id": "radio-coffeebreak",
+    "title": "Coffeebreak",
+    "audio": "../../radio/music/coffeebreak.mp3"
+  },
+  {
+    "id": "radio-drip-drip-drip-country",
+    "title": "Drip Drip Drip Country",
+    "audio": "../../radio/music/drip-drip-drip-country.mp3"
+  },
+  {
+    "id": "radio-fussell-st",
+    "title": "Fussell St",
+    "audio": "../../radio/music/fussell-st.mp3"
+  },
+  {
+    "id": "radio-kicking-marshmallows-up-the-mud",
+    "title": "Kicking Marshmallows Up The Mud",
+    "audio": "../../radio/music/kicking-marshmallows-up-the-mud.mp3"
+  },
+  {
+    "id": "radio-restless-engine",
+    "title": "Restless Engine",
+    "audio": "../../radio/music/restless-engine.mp3"
+  },
+  {
+    "id": "radio-salsa-glitch",
+    "title": "Salsa Glitch",
+    "audio": "../../radio/music/salsa-glitch.mp3"
+  },
+  {
+    "id": "radio-sweet-juices-cotton-candy",
+    "title": "Sweet Juices Cotton Candy",
+    "audio": "../../radio/music/sweet-juices-cotton-candy.mp3"
+  },
+  {
+    "id": "radio-talk-is-cheap",
+    "title": "Talk Is Cheap",
+    "audio": "../../radio/music/talk-is-cheap.mp3"
+  },
+  {
+    "id": "radio-thats-my-naughty-girl-hip-hop",
+    "title": "Thats My Naughty Girl Hip Hop",
+    "audio": "../../radio/music/thats-my-naughty-girl-hip-hop.mp3"
+  },
+  {
+    "id": "radio-thunder-in-my-hands",
+    "title": "Thunder In My Hands",
+    "audio": "../../radio/music/thunder-in-my-hands.mp3"
+  },
+  {
+    "id": "radio-scanner-suno-cinnamon-candy-v1",
+    "title": "Cinnamon Candy V1",
+    "audio": "../../radio-scanner/assets/music/suno-cinnamon-candy-v1.mp3"
+  },
+  {
+    "id": "radio-scanner-suno-drip-drip-drip-country-v1",
+    "title": "Drip Drip Drip Country V1",
+    "audio": "../../radio-scanner/assets/music/suno-drip-drip-drip-country-v1.mp3"
+  },
+  {
+    "id": "radio-scanner-suno-drip-drip-drip-country-v5",
+    "title": "Drip Drip Drip Country V5",
+    "audio": "../../radio-scanner/assets/music/suno-drip-drip-drip-country-v5.mp3"
+  },
+  {
+    "id": "radio-scanner-suno-sweet-juices-cotton-candy-v1",
+    "title": "Sweet Juices Cotton Candy V1",
+    "audio": "../../radio-scanner/assets/music/suno-sweet-juices-cotton-candy-v1.mp3"
+  },
+  {
+    "id": "radio-scanner-suno-sweet-juices-cotton-candy-v2",
+    "title": "Sweet Juices Cotton Candy V2",
+    "audio": "../../radio-scanner/assets/music/suno-sweet-juices-cotton-candy-v2.mp3"
+  },
+  {
+    "id": "radio-scanner-suno-sweet-juices-cotton-candy-v3",
+    "title": "Sweet Juices Cotton Candy V3",
+    "audio": "../../radio-scanner/assets/music/suno-sweet-juices-cotton-candy-v3.mp3"
+  },
+  {
+    "id": "radio-scanner-suno-sweet-juices-cotton-candy-v4",
+    "title": "Sweet Juices Cotton Candy V4",
+    "audio": "../../radio-scanner/assets/music/suno-sweet-juices-cotton-candy-v4.mp3"
+  },
+  {
+    "id": "radio-scanner-suno-sweet-juices-cotton-candy-v5",
+    "title": "Sweet Juices Cotton Candy V5",
+    "audio": "../../radio-scanner/assets/music/suno-sweet-juices-cotton-candy-v5.mp3"
+  },
+  {
+    "id": "radio-scanner-suno-sweet-juices-cotton-candy-v6",
+    "title": "Sweet Juices Cotton Candy V6",
+    "audio": "../../radio-scanner/assets/music/suno-sweet-juices-cotton-candy-v6.mp3"
+  },
+  {
+    "id": "radio-scanner-suno-sweet-juices-cotton-candy-v8",
+    "title": "Sweet Juices Cotton Candy V8",
+    "audio": "../../radio-scanner/assets/music/suno-sweet-juices-cotton-candy-v8.mp3"
+  },
+  {
+    "id": "radio-scanner-suno-sweet-juices-cotton-candy-v9",
+    "title": "Sweet Juices Cotton Candy V9",
+    "audio": "../../radio-scanner/assets/music/suno-sweet-juices-cotton-candy-v9.mp3"
+  },
+  {
+    "id": "radio-scanner-track3",
+    "title": "Track3",
+    "audio": "../../radio-scanner/assets/music/track3.mp3"
+  },
+  {
+    "id": "radio-scanner-track4",
+    "title": "Track4",
+    "audio": "../../radio-scanner/assets/music/track4.mp3"
+  },
+  {
+    "id": "radio-scanner-track5",
+    "title": "Track5",
+    "audio": "../../radio-scanner/assets/music/track5.mp3"
+  },
+  {
+    "id": "radio-scanner-user-upload-1",
+    "title": "User Upload 1",
+    "audio": "../../radio-scanner/assets/music/user-upload-1.mp3"
+  }
+]
