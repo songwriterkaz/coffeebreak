@@ -508,7 +508,7 @@ window.__cb={W:W,mem:mem,buildIcs:buildIcs,gText:gText};
 <h2 id="cbco-h">Order a coffee</h2>
 <small>While you book or wait, order a coffee for pickup or delivery. The coffee is ordered for you. The drink payment goes to the store. Coffeebreak profit is paid by PayID.</small>
 <h3>Menu (AUD)</h3><div id="cbco-menu"></div>
-<small id="cbco-maxnote">Max 3 cups per order. Delivery fee: $5.50 for 1 cup, $1.50 for 2 cups, free for 3 cups. Coffeebreak profit is $2.00 per cup, paid by PayID.</small>
+<small id="cbco-maxnote">Max 3 drinks per order. Delivery fee: $5.50 for 1 drink, $1.50 for 2 drinks, free for 3 drinks. Coffeebreak profit is $2.00 per drink, paid by PayID.</small>
 <div class="row"><div><label for="cbco-size">Size</label><select id="cbco-size"><option value="0">Small</option><option value="0.5">Regular (+$0.50)</option><option value="1">Large (+$1.00)</option></select></div>
 <div><label for="cbco-milk">Milk</label><select id="cbco-milk"><option>Full cream</option><option>Skim</option><option>Oat</option><option>Soy</option><option>Almond</option></select></div></div>
 <div class="row"><div><label for="cbco-sugar">Sugar</label><select id="cbco-sugar"><option>No sugar</option><option>1 sugar</option><option>2 sugars</option><option>3 sugars</option></select></div>
@@ -527,7 +527,7 @@ window.__cb={W:W,mem:mem,buildIcs:buildIcs,gText:gText};
 <div><label for="cbco-time">Appointment time</label><input type="time" id="cbco-time"></div></div>
 <div class="row"><div><label for="cbco-mode">Coffee pickup or delivery</label><select id="cbco-mode"><option>Delivery to clinic</option><option>Pickup</option></select></div></div>
 <div id="cbco-addrw"><label for="cbco-addr">Coffee delivery address (if different from clinic)</label><input id="cbco-addr" type="text" placeholder="Leave blank to use the clinic address"></div>
-<div class="pay"><b>Pay Coffeebreak profit by PayID (Teachers Mutual Bank): darkokaz@gmx.com</b><br>Profit amount: $<span id="cbco-pamt">2.00</span> AUD <span id="cbco-pamtnote">per cup</span><br>Use order number as reference: <b id="cbco-ref"></b><br><small>The drink payment goes to the store when the coffee is ordered for you.</small></div>
+<div class="pay"><b>Pay Coffeebreak profit by PayID (Teachers Mutual Bank): darkokaz@gmx.com</b><br>Profit amount: $<span id="cbco-pamt">2.00</span> AUD <span id="cbco-pamtnote">per drink</span><br>Use order number as reference: <b id="cbco-ref"></b><br><small>The drink payment goes to the store when the coffee is ordered for you.</small></div>
 <p class="msg" id="cbco-msg" role="status"></p>
 <div class="row"><button type="button" id="cbco-send">Place order</button><button type="button" class="alt" id="cbco-close">Close</button></div>
 <h3>My coffee orders</h3><div id="cbco-hist"></div>
@@ -536,7 +536,7 @@ window.__cb={W:W,mem:mem,buildIcs:buildIcs,gText:gText};
 <div class="cbco-foot"><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> <a href="https://songwriterkaz.github.io/coffeebreak/" target="_blank" rel="noopener">Coffeebreak hub</a></div>
 <script>
 (function(){'use strict';
-var M=[['Flat white',10.5],['Cappuccino',10.5],['Latte',10.5],['Long black',10],['Iced coffee',11.5],['Hot chocolate',10.5]];
+var M=[['Flat white',10.5],['Cappuccino',10.5],['Latte',10.5],['Long black',10],['Iced coffee',11.5],['Hot chocolate',10.5],['Bottle of water',4.5]];
 var MAX=3,PROFIT_PER_CUP=2,cart=[],KEY='cbBookADoctorCoffeeOrders',ref;function g(i){return document.getElementById(i)}
 function f(n){return n.toFixed(2)}function e(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function newRef(){ref='CB'+Date.now().toString().slice(-6);g('cbco-ref').textContent=ref}
@@ -562,9 +562,12 @@ var pn=g('cbco-pamtnote');if(pn)pn.hidden=!!cart.length;
 paintMenu()}
 paintMenu();
 g('cbco').addEventListener('click',function(ev){var t=ev.target,a=t.getAttribute('data-add'),r=t.getAttribute('data-rm');
-if(a!==null){if(cups()>=MAX){g('cbco-msg').textContent='Max 3 cups per order.';return}
-var m=M[+a],s=g('cbco-size'),sz=+s.value,sh=g('cbco-shot').checked,milk=m[0]==='Long black'?'':', '+g('cbco-milk').value;
-cart.push({desc:s.options[s.selectedIndex].text.split(' (')[0]+' '+m[0]+milk+', '+g('cbco-sugar').value+(sh?', extra shot':''),price:m[1]+sz+(sh?1:0)});draw();g('cbco-msg').textContent=m[0]+' added.'+(cups()>=MAX?' Max 3 cups per order.':'')}
+if(a!==null){if(cups()>=MAX){g('cbco-msg').textContent='Max 3 drinks per order.';return}
+var m=M[+a],s=g('cbco-size'),sz=+s.value,sh=g('cbco-shot').checked,water=m[0]==='Bottle of water';
+var desc,price;
+if(water){desc=m[0];price=m[1]}
+else{var milk=m[0]==='Long black'?'':', '+g('cbco-milk').value;desc=s.options[s.selectedIndex].text.split(' (')[0]+' '+m[0]+milk+', '+g('cbco-sugar').value+(sh?', extra shot':'');price=m[1]+sz+(sh?1:0)}
+cart.push({desc:desc,price:price});draw();g('cbco-msg').textContent=m[0]+' added.'+(cups()>=MAX?' Max 3 drinks per order.':'')}
 if(r!==null){cart.splice(+r,1);draw();g('cbco-msg').textContent='Item removed.'}if(t===g('cbco'))close()});
 g('cbco-mode').addEventListener('change',function(){g('cbco-addrw').hidden=this.value==='Pickup'});
 function close(){g('cbco').hidden=true}
@@ -575,7 +578,7 @@ if(nav)nav.addEventListener('click',openCart);
 if(nudge)nudge.addEventListener('click',openCart);
 g('cbco-send').addEventListener('click',function(){var n=g('cbco-name').value.trim(),p=g('cbco-phone').value.trim(),tm=g('cbco-time').value,md=g('cbco-mode').value,ad=g('cbco-addr').value.trim(),cl=g('cbco-clinic').value.trim(),ca=g('cbco-clinicaddr').value.trim(),dt=g('cbco-aptdate').value;
 if(!cart.length){g('cbco-msg').textContent='Add at least one drink first.';return}
-if(cups()>MAX){g('cbco-msg').textContent='Max 3 cups per order.';return}
+if(cups()>MAX){g('cbco-msg').textContent='Max 3 drinks per order.';return}
 if(!n||!p||!tm||!cl||!ca||!dt){g('cbco-msg').textContent='Please enter patient name, phone, clinic name, clinic street address, appointment date and time.';return}
 if(md!=='Pickup'&&!ad&&!ca){g('cbco-msg').textContent='Please enter a coffee delivery address or clinic street address.';return}
 var fee=deliveryFee(),deliverTo=ad||ca,orderNo=ref,btn=g('cbco-send'),st=storeTotal(),pr=profit();
