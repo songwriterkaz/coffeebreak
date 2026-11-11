@@ -540,7 +540,7 @@ function refreshUI(){
 
 
 /* ---------- rights notice ---------- */
-CBG.rightsText="All rights reserved. Karen O'Brien (Coffeebreak) keeps all rights to this app, its designs, name and logo. You may use it, and you may resell physical products you bought, but you may not copy it or make your own versions.";
+CBG.rightsText="Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Coffeebreak claims no ownership of third-party brands named here, which belong to their owners, and is not affiliated with or endorsed by them.";
 const MARK_SVG=`<svg width="100%" height="100%" viewBox="0 0 64 64" aria-label="Coffeebreak logo"><ellipse cx="30" cy="56" rx="24" ry="5" fill="#7a4b32"/><path d="M10 24h40l-4 26a6 6 0 0 1-6 5H20a6 6 0 0 1-6-5z" fill="#f4e6d4" stroke="#1b1214" stroke-width="2"/><path d="M50 30c10 0 10 14 -2 14" fill="none" stroke="#f4e6d4" stroke-width="5"/><ellipse cx="30" cy="24" rx="20" ry="5" fill="#7a4b32"/><rect x="18" y="14" width="11" height="10" rx="3" fill="#fff" stroke="#e7a3b4" stroke-width="2"/><rect x="31" y="12" width="11" height="11" rx="3" fill="#f7d2dc" stroke="#e7a3b4" stroke-width="2"/><path d="M30 33c-6-6-12 2 0 9c12-7 6-15 0-9z" fill="#e7a3b4"/></svg>`;
 function logoNode(cls){
   const d=document.createElement('div');d.className=cls;
