@@ -337,17 +337,39 @@ $('#csend').onclick=()=>{let t=curThread();const txt=$('#cin').value.trim();if(!
 $('#cin').onkeydown=e=>{if(e.key==='Enter')$('#csend').click()};
 
 /* Fax */
-function fxData(){const c=clinic($('#fxclinic').value)||{};return{c,to:$('#fxto').value,num:$('#fxnum').value,from:$('#fxfrom').value||c.fax||'',pages:$('#fxpages').value,sub:$('#fxsub').value,pt:$('#fxpt').value,urg:$('#fxurg').value,msg:$('#fxmsg').value}}
-function fxHTML(){const d=fxData(),c=d.c;return '<div style="font-family:system-ui,Arial,sans-serif"><h1 style="letter-spacing:4px;margin:0">FAX</h1><p><b>'+esc(c.name||'')+'</b><br>'+esc(c.address||'')+'<br>Ph '+esc(c.phone||'')+' · Fax '+esc(d.from)+'</p><table style="width:100%;border-collapse:collapse">'+
-  [['Date',new Date().toLocaleDateString('en-AU')],['To',d.to],['To fax',d.num],['From',c.name||''],['Pages (incl. cover)',d.pages],['Subject',d.sub],['Patient',d.pt],['Urgency',d.urg]].map(r=>'<tr><td style="border:1px solid #999;padding:6px;width:30%"><b>'+r[0]+'</b></td><td style="border:1px solid #999;padding:6px">'+esc(r[1])+'</td></tr>').join('')+'</table><p style="white-space:pre-wrap;min-height:80px;border:1px solid #999;padding:8px;margin-top:10px">'+esc(d.msg)+'</p>'+
-  '<p style="font-size:11px;border-top:2px solid #333;padding-top:6px"><b>CONFIDENTIALITY NOTICE:</b> This fax may contain confidential health information intended only for the named recipient. If you received it in error, please notify the sender by phone immediately and destroy all copies. Any review, use or disclosure by others is prohibited.</p></div>'}
-function renderFax(){clinicOpts($('#fxclinic'),$('#fxclinic').value);const c=clinic($('#fxclinic').value);if(c&&!$('#fxfrom').value)$('#fxfrom').value=c.fax||'';$('#fxsheet').innerHTML=fxHTML();renderFaxLog()}
+const FX_FOOT_DEFAULT='CONFIDENTIALITY NOTICE: This fax may contain confidential health information intended only for the named recipient. If you received it in error, please notify the sender by phone immediately and destroy all copies. Any review, use or disclosure by others is prohibited.';
+function isSampleClinic(c){if(!c)return true;if(c.sample)return true;return /\bsample\b|\(sample\)|\(demo\)/i.test((c.name||'')+' '+(c.address||''))}
+function safeFaxLogo(src){if(!src||typeof src!=='string')return '';const m=src.match(/^data:image\/(png|jpeg|jpg|gif|webp);base64,/i);if(!m||src.length>600000||src.includes(' ')||src.includes('<')||src.includes('"'))return '';return src}
+function defaultFaxLetter(){return{heading:'FAX',letterhead:'',signoff:'',footer:FX_FOOT_DEFAULT,logo:'',showTable:true}}
+function clinicFaxLetter(c){return Object.assign(defaultFaxLetter(),(c&&c.faxLetter)||{})}
+function defaultLetterhead(c){if(!c||isSampleClinic(c))return '';const lines=[c.name,c.address,[c.phone&&('Ph '+c.phone),c.fax&&('Fax '+c.fax)].filter(Boolean).join(' · ')].filter(Boolean);return lines.join('\n')}
+function fxReadLetter(){const c=clinic($('#fxclinic').value);return{heading:$('#fxheading').value.trim()||'FAX',letterhead:$('#fxhead').value,signoff:$('#fxsign').value,footer:$('#fxfoot').value,logo:(c&&c.faxLetter&&c.faxLetter.logo)||'',showTable:$('#fxtable').checked}}
+function fxFillLetter(c){const L=clinicFaxLetter(c);$('#fxheading').value=L.heading||'FAX';$('#fxsign').value=L.signoff||'';$('#fxfoot').value=L.footer||FX_FOOT_DEFAULT;$('#fxtable').checked=L.showTable!==false;$('#fxhead').value=L.letterhead||defaultLetterhead(c);const hint=$('#fxsamplehint');if(hint)hint.textContent=isSampleClinic(c)&&!L.letterhead?'This clinic is still the sample one. Type your real clinic name and address in the letterhead so the word Sample does not appear on the letter.':'These details are saved on this device for this clinic and used on the printed letter.';fxShowLogo(L.logo)}
+function fxShowLogo(src){const ok=safeFaxLogo(src),box=$('#fxlogoprev');if(!box)return;box.innerHTML=ok?'<img alt="Clinic logo" style="max-height:72px;max-width:220px">':'';if(ok)box.querySelector('img').src=ok}
+function fxData(){const c=clinic($('#fxclinic').value)||{};return{c,to:$('#fxto').value,num:$('#fxnum').value,from:$('#fxfrom').value||(!isSampleClinic(c)&&c.fax)||'',pages:$('#fxpages').value,sub:$('#fxsub').value,pt:$('#fxpt').value,urg:$('#fxurg').value,msg:$('#fxmsg').value}}
+function fxHTML(){const d=fxData(),L=fxReadLetter(),logo=safeFaxLogo(L.logo);const head=L.letterhead.trim();const fromName=head?head.split('\n')[0]:'';
+  let h='<div style="font-family:system-ui,Arial,sans-serif">';
+  if(logo){const img=document.createElement('img');img.alt='';img.style.maxHeight='72px';img.style.maxWidth='220px';img.src=logo;h+=img.outerHTML}
+  h+='<h1 style="letter-spacing:4px;margin:8px 0 0">'+esc(L.heading||'FAX')+'</h1>';
+  h+='<p style="white-space:pre-wrap">'+esc(head)+'</p>';
+  if(L.showTable){h+='<table style="width:100%;border-collapse:collapse">'+
+    [['Date',new Date().toLocaleDateString('en-AU')],['To',d.to],['To fax',d.num],['From',fromName||d.from],['Pages (incl. cover)',d.pages],['Subject',d.sub],['Patient',d.pt],['Urgency',d.urg]].map(r=>'<tr><td style="border:1px solid #999;padding:6px;width:30%"><b>'+r[0]+'</b></td><td style="border:1px solid #999;padding:6px">'+esc(r[1])+'</td></tr>').join('')+'</table>'}
+  h+='<p style="white-space:pre-wrap;min-height:80px;border:1px solid #999;padding:8px;margin-top:10px">'+esc(d.msg)+'</p>';
+  if(L.signoff.trim())h+='<p style="white-space:pre-wrap">'+esc(L.signoff)+'</p>';
+  if(L.footer.trim())h+='<p style="font-size:11px;border-top:2px solid #333;padding-top:6px">'+esc(L.footer)+'</p>';
+  return h+'</div>'}
+function renderFax(){clinicOpts($('#fxclinic'),$('#fxclinic').value);const c=clinic($('#fxclinic').value);if(c&&!$('#fxfrom').value&&!isSampleClinic(c))$('#fxfrom').value=c.fax||'';if(c&&isSampleClinic(c)&&/0000 009/.test($('#fxfrom').value||''))$('#fxfrom').value='';fxFillLetter(c);$('#fxsheet').innerHTML=fxHTML();renderFaxLog()}
 function renderFaxLog(){$('#fxlist').innerHTML=S.faxlog.length?'<table><tr><th>Date</th><th>To</th><th>Fax</th><th>Subject</th><th>Pages</th><th>Status</th></tr>'+S.faxlog.slice().reverse().map(f=>'<tr><td>'+esc(f.date)+'</td><td>'+esc(f.to)+'</td><td>'+esc(f.num)+'</td><td>'+esc(f.sub)+'</td><td>'+esc(f.pages)+'</td><td><select data-fx="'+f.id+'">'+['Prepared','Sent','Confirmed','Failed'].map(s=>'<option'+(s===f.status?' selected':'')+'>'+s+'</option>').join('')+'</select></td></tr>').join('')+'</table>':'<p class="muted">No faxes logged yet.</p>';
   $$('[data-fx]').forEach(s=>s.onchange=()=>{S.faxlog.find(f=>f.id===s.dataset.fx).status=s.value;save()})}
-$('#fxclinic').onchange=()=>{const c=clinic($('#fxclinic').value);$('#fxfrom').value=c?c.fax||'':'';$('#fxsheet').innerHTML=fxHTML()};
+$('#fxclinic').onchange=()=>{const c=clinic($('#fxclinic').value);$('#fxfrom').value=(c&&!isSampleClinic(c)&&c.fax)||'';fxFillLetter(c);$('#fxsheet').innerHTML=fxHTML()};
 $('#fxprev').onclick=()=>{$('#fxsheet').innerHTML=fxHTML()};
-$('#fxprint').onclick=()=>printHTML('Fax cover sheet',fxHTML());
+$('#fxprint').onclick=()=>printHTML('Fax letter',fxHTML());
 $('#fxlog').onclick=()=>{const d=fxData();if(!d.to&&!d.num){toast('Enter who the fax is to');return}S.faxlog.push({id:uid(),date:new Date().toLocaleString('en-AU'),to:d.to,num:d.num,sub:d.sub,pages:d.pages,status:'Prepared'});save();renderFaxLog();toast('Added to fax log')};
+$('#fxsaveletter').onclick=()=>{const c=clinic($('#fxclinic').value);if(!c){toast('Add or select a clinic first');return}c.faxLetter=Object.assign(fxReadLetter(),{logo:safeFaxLogo((c.faxLetter&&c.faxLetter.logo)||'')});save();$('#fxsheet').innerHTML=fxHTML();toast('Letter saved for this clinic on this device')};
+$('#fxresetletter').onclick=()=>{const c=clinic($('#fxclinic').value);if(c)delete c.faxLetter;save();fxFillLetter(c);$('#fxsheet').innerHTML=fxHTML();toast('Letter reset')};
+['fxheading','fxhead','fxsign','fxfoot','fxto','fxnum','fxfrom','fxpages','fxsub','fxpt','fxurg','fxmsg','fxtable'].forEach(id=>{const el=$('#'+id);if(!el)return;el.addEventListener('input',()=>{$('#fxsheet').innerHTML=fxHTML()});el.addEventListener('change',()=>{$('#fxsheet').innerHTML=fxHTML()})});
+$('#fxlogo').onchange=()=>{const c=clinic($('#fxclinic').value);const f=$('#fxlogo').files&&$('#fxlogo').files[0];$('#fxlogo').value='';if(!f)return;if(!/^image\/(png|jpeg|jpg|gif|webp)$/i.test(f.type)){toast('Use a PNG, JPG, WebP or GIF logo');return}if(f.size>400000){toast('Logo needs to be under 400 KB');return}const r=new FileReader();r.onload=()=>{const src=safeFaxLogo(String(r.result||''));if(!src){toast('Could not use that image');return}if(!c){toast('Add or select a clinic first');return}c.faxLetter=Object.assign(fxReadLetter(),{logo:src});save();fxShowLogo(src);$('#fxsheet').innerHTML=fxHTML();toast('Logo added to this clinic\'s letter')};r.readAsDataURL(f)};
+$('#fxlogoclear').onclick=()=>{const c=clinic($('#fxclinic').value);if(c&&c.faxLetter)c.faxLetter.logo='';save();fxShowLogo('');$('#fxsheet').innerHTML=fxHTML();toast('Logo removed')};
 
 /* init */
 save();renderClinics();

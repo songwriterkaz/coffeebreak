@@ -104,11 +104,20 @@ footer img{width:40px;height:40px;border-radius:50%}footer a{color:var(--pd);fon
 <div class="row"><div><label>Clinic</label><select id="cclinic"></select></div><div><label>View as</label><select id="cas"><option value="patient">Patient</option><option value="clinic">Clinic reception</option></select></div><div><label>Thread</label><select id="cthread"></select></div><div style="display:flex;align-items:flex-end"><button class="ghost" id="cnew">+ New thread</button></div></div>
 <div class="chat" id="cmsgs" style="height:300px;margin-top:8px"></div>
 <div style="display:flex;gap:6px;margin-top:6px"><input id="cin" placeholder="Write a message"><button id="csend">Send</button></div></div></section>
-<section class="pane" id="fax"><div class="card"><h2>Fax cover sheet</h2><p class="muted">Many referrals and results still go by fax. Fill this in, then print it or save it as a PDF to send with your fax machine or eFax service.</p>
+<section class="pane" id="fax"><div class="card"><h2>Fax letter</h2><p class="muted">Many referrals and results still go by fax. Fill this in, then print it or save it as a PDF to send with your fax machine or eFax service. Each clinic can customise the letterhead and wording so the letter uses their own details, not the sample clinic.</p>
 <div class="row"><div><label>From clinic</label><select id="fxclinic"></select></div><div><label>To (name / practice)</label><input id="fxto"></div><div><label>To fax number</label><input id="fxnum"></div><div><label>Our fax number</label><input id="fxfrom"></div><div><label>Pages (incl. cover)</label><input id="fxpages" type="number" value="2"></div></div>
 <div class="row"><div><label>Subject</label><input id="fxsub" placeholder="Referral / Results / Request"></div><div><label>Patient (initials / ref only)</label><input id="fxpt"></div><div><label>Urgency</label><select id="fxurg"><option>Routine</option><option>Urgent</option><option>For review</option><option>Please reply</option></select></div></div>
 <label>Message</label><textarea id="fxmsg"></textarea>
-<p><button id="fxprev">Preview cover sheet</button> <button id="fxprint">Print / save as PDF</button> <button class="ghost" id="fxlog">Add to fax log</button></p>
+</div>
+<div class="card"><h2>Customise this clinic's letter</h2>
+<p class="muted" id="fxsamplehint"></p>
+<div class="row"><div><label>Heading</label><input id="fxheading" placeholder="FAX"></div><div><label>Sign-off</label><input id="fxsign" placeholder="Kind regards, Dr ..."></div>
+<div><label>Clinic logo</label><input id="fxlogo" type="file" accept="image/png,image/jpeg,image/webp,image/gif" style="width:auto"><button type="button" class="ghost sm" id="fxlogoclear">Remove logo</button><div id="fxlogoprev" style="margin-top:6px"></div></div></div>
+<label>Letterhead (your clinic name and address)</label><textarea id="fxhead" placeholder="Your clinic name&#10;Address&#10;Phone and fax"></textarea>
+<label>Confidentiality footer</label><textarea id="fxfoot"></textarea>
+<p><label><input type="checkbox" id="fxtable" checked> Include the details table on the letter</label></p>
+<p><button type="button" id="fxsaveletter">Save letter for this clinic</button> <button type="button" class="ghost" id="fxresetletter">Reset letter</button></p>
+<p><button id="fxprev">Preview letter</button> <button id="fxprint">Print / save as PDF</button> <button class="ghost" id="fxlog">Add to fax log</button></p>
 <div id="fxsheet" class="card" style="border:2px solid #333"></div></div>
 <div class="card"><h2>Fax log</h2><div id="fxlist"></div></div>
 <div class="card"><h2>eFax service</h2><div class="notactive"><b>NOT ACTIVE: placeholder only.</b> This app cannot send faxes. Use your own fax machine or eFax provider. These settings are stored only on this device and do nothing.
