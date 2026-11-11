@@ -1,7 +1,7 @@
 'use strict';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-const KEY='cbDoctorBookings_v1';
+const KEY='cbDoctorBookings_v2';
 const pad=n=>String(n).padStart(2,'0');
 const ds=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 const parseD=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)};
@@ -28,23 +28,64 @@ function sample(){
   const wk=(a,b,days)=>{const h={};(days||[1,2,3,4,5]).forEach(d=>h[d]=[a,b]);return h};
   const types=()=>[{id:'std',name:'Standard consult',mins:15,tele:true},{id:'long',name:'Long consult',mins:30,tele:true},{id:'script',name:'Script / referral',mins:10,tele:true},{id:'skin',name:'Skin check',mins:30,tele:false},{id:'kids',name:'Child health / immunisation',mins:20,tele:false}];
   const C=[
-   {id:'c1',name:'SAMPLE Coffeebreak Family Clinic',suburb:'Newcastle NSW',address:'1 Sample Street, Newcastle NSW 2300 (sample)',phone:'02 0000 0001',email:'reception@sample-clinic.example',fax:'02 0000 0091',bulk:'all',priv:85,prem:140,payid:'payments@sample-clinic.example',parking:'Free parking behind the clinic, wheelchair access via ramp',
-    doctors:[{id:'d1',name:'Dr Rose Petal (sample)',spec:['General Practice','Women\'s Health'],tele:true,hours:wk('08:30','17:00')},{id:'d2',name:'Dr Sam Brew (sample)',spec:['General Practice','Skin Checks'],tele:true,hours:Object.assign(wk('09:00','18:00',[1,2,3,4]),{6:['09:00','12:00']})},{id:'d3',name:'Dr Lee Latte (sample)',spec:['Paediatrics','General Practice'],tele:false,hours:wk('10:00','16:00',[1,3,5])}],types:types()},
-   {id:'c2',name:'SAMPLE Harbourside Medical',suburb:'Sydney NSW',address:'22 Example Wharf, Sydney NSW 2000 (sample)',phone:'02 0000 0002',email:'hello@sample-harbourside.example',fax:'02 0000 0092',bulk:'some',priv:95,prem:160,payid:'pay@sample-harbourside.example',parking:'Paid parking nearby, near train station',
-    doctors:[{id:'d4',name:'Dr Mia Mocha (sample)',spec:['General Practice','Mental Health'],tele:true,hours:wk('08:00','16:00')},{id:'d5',name:'Dr Ken Cocoa (sample)',spec:['Men\'s Health','General Practice'],tele:true,hours:wk('12:00','20:00')}],types:types()},
-   {id:'c3',name:'SAMPLE Bayside Women\'s & Kids Health',suburb:'Brisbane QLD',address:'5 Demo Parade, Brisbane QLD 4000 (sample)',phone:'07 0000 0003',email:'care@sample-bayside.example',fax:'07 0000 0093',bulk:'none',priv:90,prem:150,payid:'billing@sample-bayside.example',parking:'Street parking, pram friendly',
-    doctors:[{id:'d6',name:'Dr Ava Chai (sample)',spec:['Women\'s Health','Antenatal'],tele:true,hours:wk('09:00','17:00',[2,3,4,5])},{id:'d7',name:'Dr Ben Babycino (sample)',spec:['Paediatrics'],tele:false,hours:wk('08:30','14:30')}],types:types()}];
+   {id:'c1',name:'Coffeebreak Family Clinic',sample:true,suburb:'Newcastle NSW',address:'1 Hunter Street, Newcastle NSW 2300',phone:'02 0000 0001',email:'reception@clinic.example',fax:'02 0000 0091',bulk:'all',priv:85,prem:140,payid:'payments@clinic.example',parking:'Free parking behind the clinic, wheelchair access via ramp',
+    doctors:[{id:'d1',name:'Dr Rose Petal',spec:['General Practice','Women\'s Health'],tele:true,hours:wk('08:30','17:00')},{id:'d2',name:'Dr Sam Brew',spec:['General Practice','Skin Checks'],tele:true,hours:Object.assign(wk('09:00','18:00',[1,2,3,4]),{6:['09:00','12:00']})},{id:'d3',name:'Dr Lee Latte',spec:['Paediatrics','General Practice'],tele:false,hours:wk('10:00','16:00',[1,3,5])}],types:types()},
+   {id:'c2',name:'Harbourside Medical',sample:true,suburb:'Sydney NSW',address:'22 Wharf Street, Sydney NSW 2000',phone:'02 0000 0002',email:'hello@harbourside.example',fax:'02 0000 0092',bulk:'some',priv:95,prem:160,payid:'pay@harbourside.example',parking:'Paid parking nearby, near train station',
+    doctors:[{id:'d4',name:'Dr Mia Mocha',spec:['General Practice','Mental Health'],tele:true,hours:wk('08:00','16:00')},{id:'d5',name:'Dr Ken Cocoa',spec:['Men\'s Health','General Practice'],tele:true,hours:wk('12:00','20:00')}],types:types()},
+   {id:'c3',name:'Bayside Women\'s & Kids Health',sample:true,suburb:'Brisbane QLD',address:'5 Parade Street, Brisbane QLD 4000',phone:'07 0000 0003',email:'care@bayside.example',fax:'07 0000 0093',bulk:'none',priv:90,prem:150,payid:'billing@bayside.example',parking:'Street parking, pram friendly',
+    doctors:[{id:'d6',name:'Dr Ava Chai',spec:['Women\'s Health','Antenatal'],tele:true,hours:wk('09:00','17:00',[2,3,4,5])},{id:'d7',name:'Dr Ben Babycino',spec:['Paediatrics'],tele:false,hours:wk('08:30','14:30')}],types:types()}];
   const S={sample:true,clinics:C,appts:[],waitlist:[],threads:[],faxlog:[],rem:[48,24,2],provider:{},
-    health:{name:'Sample Patient',dob:'1985-05-12',blood:'O+',emerg:'Sample Contact 0400 000 000',meds:[{a:'Sample: Vitamin D',b:'1000 IU daily'}],allergies:[{a:'Sample: Penicillin',b:'Rash'}],conditions:[{a:'Sample: Asthma',b:'Since 2001'}],imms:[{a:'Sample: Influenza',b:'2026-04-10'}],visits:[{a:'2026-09-02',b:'Sample GP check-up, all good'}]}};
-  const pts=[['Sample Patient A','0400000001','a@sample.example'],['Sample Patient B','0400000002','b@sample.example'],['Sample Patient C','0400000003',''],['Sample Patient D','0400000004','d@sample.example'],['Sample Patient E','0400000005','']];
+    health:{name:'',dob:'',blood:'',emerg:'',meds:[],allergies:[],conditions:[],imms:[],visits:[]}};
+  const pts=[['Alex Taylor','0400000001','a@clinic.example'],['Jordan Lee','0400000002','b@clinic.example'],['Sam Morgan','0400000003',''],['Riley Chen','0400000004','d@clinic.example'],['Casey Nguyen','0400000005','']];
   const t=today();const plan=[[t,'d1','09:00','std',0,'checked-in'],[t,'d1','09:30','long',1,'booked'],[t,'d1','11:00','std',2,'booked'],[t,'d2','10:00','skin',3,'booked'],[t,'d2','14:15','script',4,'booked','tele'],[addDays(t,1),'d1','10:00','std',0,'booked'],[addDays(t,-3),'d1','09:00','std',2,'no-show'],[addDays(t,-10),'d2','09:00','std',2,'no-show'],[addDays(t,-5),'d1','09:15','std',1,'done']];
   plan.forEach(([d,doc,tm,ty,p,st,mode])=>{const typ=C[0].types.find(x=>x.id===ty);S.appts.push({id:uid(),ref:ref(),clinicId:'c1',docId:doc,typeId:ty,mins:typ.mins,date:d,time:tm,mode:mode||'in',bill:'bulk',patient:{name:pts[p][0],phone:pts[p][1],email:pts[p][2],dob:'1990-01-01',isNew:false},reason:'',status:st,created:Date.now(),sample:true,jitsi:jitsiUrl()})});
-  S.waitlist.push({id:uid(),clinicId:'c1',docId:'any',typeId:'std',mode:'any',from:t,to:addDays(t,7),name:'Sample Waitlist Patient',phone:'0400000009',email:'w@sample.example',status:'waiting',created:Date.now()});
-  S.threads.push({id:uid(),clinicId:'c1',patient:'Sample Patient A',subject:'Repeat script question (sample)',msgs:[{from:'patient',text:'Hi, can I get my repeat script sent electronically?',t:Date.now()-86400000},{from:'clinic',text:'Yes. Please book a Script / referral appointment (telehealth is fine) and the doctor can send an eScript to your phone.',t:Date.now()-80000000}]});
+  S.waitlist.push({id:uid(),clinicId:'c1',docId:'any',typeId:'std',mode:'any',from:t,to:addDays(t,7),name:'Waitlist Patient',phone:'0400000009',email:'w@clinic.example',status:'waiting',created:Date.now()});
+  S.threads.push({id:uid(),clinicId:'c1',patient:'Alex Taylor',subject:'Repeat script question',msgs:[{from:'patient',text:'Hi, can I get my repeat script sent electronically?',t:Date.now()-86400000},{from:'clinic',text:'Yes. Please book a Script / referral appointment (telehealth is fine) and the doctor can send an eScript to your phone.',t:Date.now()-80000000}]});
   return S}
+function defaultSite(){return{
+  title:'Coffeebreak Doctor Bookings',
+  tagline:'Instant appointments, live availability, smart waitlist and a Personal Reception assistant',
+  promo:'Coffeebreak Doctor Bookings is a brand-new, free booking system for clinics, made by Coffeebreak and hosted on our own site. Patients can book and order a coffee while they wait.',
+  findTitle:'Search clinics',findIntro:'Find a clinic and book a time. Add your own clinic in Clinic setup.',
+  coffeeTitle:'Order a coffee while you wait',coffeeIntro:'This booking app is free. The drink payment goes to the store. Coffeebreak profit is paid by PayID (Teachers Mutual Bank): darkokaz@gmx.com.',
+  recTitle:'Personal Reception (virtual receptionist)',recIntro:'A built-in chat assistant for your clinic\'s website or front desk. It books, reschedules and cancels, answers common questions and points emergencies to 000. It runs on simple rules inside this app. It uses no paid AI service and does not answer real phone calls or send real SMS.',
+  msgTitle:'SMS & email messages',msgIntro:'Ready-to-send confirmations and reminders for each booking. Tap to open your phone\'s SMS or email app with the message filled in, or copy it. Nothing is sent automatically.',
+  scriptTitle:'Call script & voicemail greeting',scriptIntro:'Text for your reception staff and your phone system\'s voicemail, generated from your clinic details.',
+  mineTitle:'My bookings',mineIntro:'Enter the mobile or email used when booking to see upcoming and past appointments.',
+  healthTitle:'My Health (private, on this device)',healthIntro:'Keep your own health summary to show your doctor. It is saved only in this browser and never sent anywhere. This is not My Health Record.',
+  chatTitle:'Patient & clinic chat',chatIntro:'Non-urgent message threads between patients and the clinic, for things like test results questions, repeat scripts or forms. Not for emergencies: call 000. Threads are stored on this device.',
+  faxTitle:'Fax letter',faxIntro:'Many referrals and results still go by fax. Fill this in, then print it or save it as a PDF to send with your fax machine or eFax service. Each clinic can customise the letterhead, logo, wording and footer.',
+  waitTitle:'Join the waitlist',waitIntro:'No suitable time? Join the waitlist. When someone cancels, the first matching person is booked into the freed slot automatically, and a confirmation message is prepared for them.',
+  dashTitle:'Doctor dashboard',dashIntro:'See the day\'s appointments, check patients in, and track no-shows for your clinic.',
+  aboutTitle:'About Coffeebreak Doctor Bookings',aboutIntro:'An appointment booker for medical clinics that runs entirely in your browser: live availability, instant booking, automatic next-available slots, a waitlist that fills cancellations, reminders with calendar files, telehealth, new and returning patient forms, a doctor dashboard with check-in and no-show tracking, multi-clinic search and a Personal Reception chat assistant.'
+}}
+function emptyState(){return{sample:false,clinics:[],appts:[],waitlist:[],threads:[],faxlog:[],rem:[48,24,2],provider:{},health:{name:'',dob:'',blood:'',emerg:'',meds:[],allergies:[],conditions:[],imms:[],visits:[]},site:defaultSite()}}
+function applySite(){const s=Object.assign(defaultSite(),S.site||{});S.site=s;
+  const set=(id,val)=>{const e=$(id);if(e&&val!=null)e.textContent=val};
+  set('#siteTitle',s.title);set('#siteTagline',s.tagline);set('#sitePromo',s.promo);
+  set('#findTitle',s.findTitle);set('#findIntro',s.findIntro);
+  set('#coffeeTitle',s.coffeeTitle);set('#coffeeIntro',s.coffeeIntro);
+  set('#recTitle',s.recTitle);set('#recIntro',s.recIntro);
+  set('#msgTitle',s.msgTitle);set('#msgIntro',s.msgIntro);
+  set('#scriptTitle',s.scriptTitle);set('#scriptIntro',s.scriptIntro);
+  set('#mineTitle',s.mineTitle);set('#mineIntro',s.mineIntro);
+  set('#healthTitle',s.healthTitle);set('#healthIntro',s.healthIntro);
+  set('#chatTitle',s.chatTitle);set('#chatIntro',s.chatIntro);
+  set('#faxTitle',s.faxTitle);set('#faxIntro',s.faxIntro);
+  set('#waitTitle',s.waitTitle);set('#waitIntro',s.waitIntro);
+  set('#dashTitle',s.dashTitle);set('#dashIntro',s.dashIntro);
+  set('#aboutTitle',s.aboutTitle);set('#aboutIntro',s.aboutIntro);
+  if(s.title)document.title=s.title}
+function fillSiteForm(){const s=Object.assign(defaultSite(),S.site||{});
+  const map=[['#csTitle','title'],['#csTag','tagline'],['#csPromo','promo'],['#csFindT','findTitle'],['#csFindI','findIntro'],['#csCofT','coffeeTitle'],['#csCofI','coffeeIntro'],['#csRecT','recTitle'],['#csRecI','recIntro'],['#csMsgT','msgTitle'],['#csMsgI','msgIntro'],['#csScrT','scriptTitle'],['#csScrI','scriptIntro'],['#csMineT','mineTitle'],['#csMineI','mineIntro'],['#csHeaT','healthTitle'],['#csHeaI','healthIntro'],['#csChatT','chatTitle'],['#csChatI','chatIntro'],['#csFaxT','faxTitle'],['#csFaxI','faxIntro'],['#csWaitT','waitTitle'],['#csWaitI','waitIntro'],['#csDashT','dashTitle'],['#csDashI','dashIntro'],['#csAbtT','aboutTitle'],['#csAbtI','aboutIntro']];
+  map.forEach(([id,k])=>{const e=$(id);if(e)e.value=s[k]||''})}
+function readSiteForm(){const o=defaultSite();
+  const map=[['#csTitle','title'],['#csTag','tagline'],['#csPromo','promo'],['#csFindT','findTitle'],['#csFindI','findIntro'],['#csCofT','coffeeTitle'],['#csCofI','coffeeIntro'],['#csRecT','recTitle'],['#csRecI','recIntro'],['#csMsgT','msgTitle'],['#csMsgI','msgIntro'],['#csScrT','scriptTitle'],['#csScrI','scriptIntro'],['#csMineT','mineTitle'],['#csMineI','mineIntro'],['#csHeaT','healthTitle'],['#csHeaI','healthIntro'],['#csChatT','chatTitle'],['#csChatI','chatIntro'],['#csFaxT','faxTitle'],['#csFaxI','faxIntro'],['#csWaitT','waitTitle'],['#csWaitI','waitIntro'],['#csDashT','dashTitle'],['#csDashI','dashIntro'],['#csAbtT','aboutTitle'],['#csAbtI','aboutIntro']];
+  map.forEach(([id,k])=>{const e=$(id);if(e)o[k]=e.value});return o}
 let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
-if(!S||!S.clinics)S=sample();
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Could not save (storage full?)')}$('#sampleBanner').classList.toggle('hide',!S.sample)}
+if(!S||!Array.isArray(S.clinics))S=emptyState();
+S.site=Object.assign(defaultSite(),S.site||{});
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Could not save (storage full?)')}const b=$('#sampleBanner');if(b)b.classList.toggle('hide',!S.sample)}
 
 /* core scheduling */
 const clinic=id=>S.clinics.find(c=>c.id===id);
@@ -127,7 +168,7 @@ function renderClinics(){
     (c.bulk==='all'?'<span class="pill" style="background:#d9f5e5;color:#1d6b40">&#10003; Medicare Bulk Billed</span>':c.bulk==='some'?'<span class="pill" style="background:#fff1d6;color:#8a5a00">Bulk billing for concession, kids &amp; over-65s</span>':'<span class="pill">Private billing</span>')+
     '<div class="muted">Private '+money(f.fee)+' · example rebate '+money(f.rebate)+' · gap about '+money(f.gap)+' · Premium '+money(c.prem)+'</div>'+
     '<div class="muted">'+docs.map(d=>esc(d.name)+' <i>('+esc(d.spec.join(', '))+')</i>'+(d.tele?' 📹':'')).join(' · ')+'</div>'+
-    '<p><b>Next available '+esc(t.name)+':</b> '+(best?fmtD(best.date)+' '+fmtT(best.time)+' with '+esc(docOf(c,best.docId).name):'none in the next 60 days')+'</p><button data-book="'+c.id+'">Book here</button></div>'}).join(''):'<p class="muted">No clinics match. Try clearing the filters.</p>';
+    '<p><b>Next available '+esc(t.name)+':</b> '+(best?fmtD(best.date)+' '+fmtT(best.time)+' with '+esc(docOf(c,best.docId).name):'none in the next 60 days')+'</p><button data-book="'+c.id+'">Book here</button></div>'}).join(''):'<p class="muted">'+(S.clinics.length?'No clinics match. Try clearing the filters.':'No clinics listed yet. Add your clinic in Clinic setup.')+'</p>';
   $$('[data-book]').forEach(b=>b.onclick=()=>openBook(b.dataset.book))}
 ['#fq','#fspec','#fmode','#fbulk','#ftype'].forEach(s=>$(s).addEventListener(s==='#fq'?'input':'change',renderClinics));
 $('#bbBig').onclick=()=>{$('#fbulk').value='yes';renderClinics();toast('Showing Medicare bulk billing clinics');$('#clinicList').scrollIntoView({behavior:'smooth'})};
@@ -168,7 +209,7 @@ $('#confirmBook').onclick=()=>{const p=B.pick;if(!p)return;const c=clinic(B.clin
   $('#bookDone').innerHTML='<h3>Booked instantly ✓</h3>'+apptCard(a)+'<h3>Ready-to-send confirmation</h3>'+msgHTML(a,'confirm');wireApptCards($('#bookDone'),()=>openBook(c.id));toast('Booked! Ref '+a.ref)};
 
 /* my bookings */
-function renderMine(){const q=$('#mq').value.trim().toLowerCase();if(!q){$('#mres').innerHTML='<p class="muted">Enter the mobile or email you booked with. (Sample: 0400000001)</p>';return}
+function renderMine(){const q=$('#mq').value.trim().toLowerCase();if(!q){$('#mres').innerHTML='<p class="muted">Enter the mobile or email you booked with.</p>';return}
   const qp=normPhone(q);const list=S.appts.filter(a=>(qp.length>=8&&normPhone(a.patient.phone)===qp)||(a.patient.email&&a.patient.email.toLowerCase()===q)).sort((x,y)=>(y.date+y.time).localeCompare(x.date+x.time));
   const up=list.filter(a=>a.date>=today()&&a.status==='booked'),past=list.filter(a=>!up.includes(a));
   $('#mres').innerHTML=list.length?'<h3>Upcoming ('+up.length+')</h3>'+up.map(apptCard).join('')+'<h3>Past &amp; cancelled ('+past.length+')</h3>'+past.map(apptCard).join(''):'<p class="muted">No bookings found.</p>';wireApptCards($('#mres'),renderMine)}
@@ -203,7 +244,7 @@ function renderDash(){clinicOpts($('#dclinic'),$('#dclinic').value);const c=clin
 $('#dprev').onclick=()=>{$('#dday').value=addDays($('#dday').value||today(),-1);renderDash()};$('#dnext').onclick=()=>{$('#dday').value=addDays($('#dday').value||today(),1);renderDash()};$('#dtoday').onclick=()=>{$('#dday').value=today();renderDash()};
 
 /* setup */
-function renderSetup(){clinicOpts($('#sclinic'),$('#sclinic').value);const c=clinic($('#sclinic').value);
+function renderSetup(){clinicOpts($('#sclinic'),$('#sclinic').value);fillSiteForm();const c=clinic($('#sclinic').value);
   [$('#rem1'),$('#rem2'),$('#rem3')].forEach((e,i)=>e.value=S.rem[i]||'');
   if(!c){$('#sdocs').innerHTML=$('#stypes').innerHTML='<p class="muted">Add a clinic first.</p>';return}
   $('#sname').value=c.name;$('#ssub').value=c.suburb||'';$('#saddr').value=c.address||'';$('#sphone').value=c.phone||'';$('#semail').value=c.email||'';$('#sbulk').value=c.bulk;$('#sfee').value=c.feeNote||'';$('#spark').value=c.parking||'';$('#spriv').value=c.priv;$('#sprem').value=c.prem;$('#spayid').value=c.payid||'';$('#sfax').value=c.fax||'';
@@ -220,9 +261,11 @@ $('#ndadd').onclick=()=>{const c=clinic($('#sclinic').value);const n=$('#ndname'
 $('#ntadd').onclick=()=>{const c=clinic($('#sclinic').value);const n=$('#ntname').value.trim(),m=Math.max(5,Math.round((+$('#ntmins').value||15)/5)*5);if(!c||!n){toast('Enter a type name');return}c.types.push({id:'t'+uid(),name:n,mins:m,tele:$('#nttele').value==='1'});$('#ntname').value='';$('#ftype').innerHTML='';save();renderSetup()};
 $('#remsave').onclick=()=>{S.rem=[$('#rem1'),$('#rem2'),$('#rem3')].map(e=>+e.value||0).filter(x=>x>0).sort((a,b)=>b-a);save();toast('Reminders saved')};
 $('#exp').onclick=()=>download('coffeebreak-doctor-bookings-backup-'+today()+'.json',JSON.stringify(S,null,1),'application/json');
-$('#imp').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{const d=JSON.parse(t);if(!d.clinics)throw 0;S=d;save();$('#fspec').innerHTML=$('#ftype').innerHTML='';renderSetup();toast('Backup restored')}).catch(()=>toast('That file is not a valid backup'))};
-$('#clearSample').onclick=e=>twoStep(e.target,'Tap again to clear everything',()=>{S={sample:false,clinics:[],appts:[],waitlist:[],threads:[],faxlog:[],rem:[48,24,2],provider:{},health:{meds:[],allergies:[],conditions:[],imms:[],visits:[]}};save();$('#fspec').innerHTML=$('#ftype').innerHTML='';renderSetup();toast('Sample data cleared. Add your clinic.')});
-$('#resetSample').onclick=e=>twoStep(e.target,'Tap again to reload samples',()=>{S=sample();save();$('#fspec').innerHTML=$('#ftype').innerHTML='';renderSetup();toast('Sample data reloaded')});
+$('#imp').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{const d=JSON.parse(t);if(!d.clinics)throw 0;S=d;if(!Array.isArray(S.clinics))S=emptyState();S.site=Object.assign(defaultSite(),S.site||{});save();applySite();$('#fspec').innerHTML=$('#ftype').innerHTML='';renderSetup();toast('Backup restored')}).catch(()=>toast('That file is not a valid backup'))};
+$('#clearSample').onclick=e=>twoStep(e.target,'Tap again to clear everything',()=>{const site=S.site;S=emptyState();if(site)S.site=site;save();applySite();$('#fspec').innerHTML=$('#ftype').innerHTML='';renderSetup();toast('Try-out data cleared. Add your clinic.')});
+$('#resetSample').onclick=e=>twoStep(e.target,'Tap again to load try-out data',()=>{const site=S.site;S=sample();S.site=site||defaultSite();save();applySite();$('#fspec').innerHTML=$('#ftype').innerHTML='';renderSetup();toast('Try-out data loaded. Clear it before patients use this page.')});
+$('#csSave').onclick=()=>{S.site=readSiteForm();save();applySite();toast('Page wording saved on this device')};
+$('#csReset').onclick=()=>{S.site=defaultSite();save();applySite();fillSiteForm();toast('Page wording reset')};
 
 /* Personal Reception (rule-based) */
 let R={step:null,d:{}};
@@ -301,7 +344,7 @@ function renderReception(){clinicOpts($('#rclinic'),$('#rclinic').value);const c
   if(!$('#chat').children.length){bot('Hi! I\'m the Personal Reception assistant for '+c.name+'. I can book, reschedule or cancel appointments and answer questions about hours, bulk billing and location.\nIn an emergency call 000.');quick(QDEF)}
   renderMsgPicker();
   const call='CALL SCRIPT, '+c.name+'\n\n1. "Good '+'morning/afternoon, '+c.name+', this is [name] speaking. How can I help?"\n2. If the caller describes chest pain, trouble breathing, severe bleeding, stroke signs or thoughts of self-harm: "Please hang up and call 000 now."\n3. Booking: "Are you a new or returning patient?" Get full name, date of birth and mobile. Offer the next available time (Find & book > Auto-assign next available).\n4. Billing: '+(c.bulk==='all'?'"We bulk bill all Medicare card holders, please bring your card."':c.bulk==='some'?'"We bulk bill concession card holders, children and over-65s. Otherwise a standard visit is '+money(c.priv)+' and you can claim a Medicare rebate."':'"A standard visit is '+money(c.priv)+' and you can claim a Medicare rebate."')+'\n5. Confirm: read back the date, time, doctor and reference number. Tell them a confirmation message is coming.\n6. Cancellations: "Thanks for letting us know, we\'ll offer the time to someone on our waitlist."\n7. Close: "Thanks for calling '+c.name+'."';
-  const vm='VOICEMAIL GREETING\n\n"Thank you for calling '+c.name+', '+c.address.replace(/\s*\(sample\)/,'')+'. If this is an emergency, please hang up and call triple zero, 000. Our reception team is unavailable right now. You can book, change or cancel an appointment online at any time, or leave your name, date of birth and mobile number after the tone and we\'ll call you back during opening hours. For urgent health advice after hours, call healthdirect on 1800 022 222. Thank you."';
+  const vm='VOICEMAIL GREETING\n\n"Thank you for calling '+c.name+', '+(c.address||'')+'. If this is an emergency, please hang up and call triple zero, 000. Our reception team is unavailable right now. You can book, change or cancel an appointment online at any time, or leave your name, date of birth and mobile number after the tone and we\'ll call you back during opening hours. For urgent health advice after hours, call healthdirect on 1800 022 222. Thank you."';
   $('#scripts').innerHTML='<div class="msgbox">'+esc(call)+'</div><button class="sm ghost" id="cpCall" type="button">Copy call script</button><div class="msgbox">'+esc(vm)+'</div><button class="sm ghost" id="cpVm" type="button">Copy voicemail greeting</button>';
   $('#cpCall').onclick=()=>copyText(call);$('#cpVm').onclick=()=>copyText(vm);
   const p=S.provider||{};if(p.name)$('#provName').value=p.name;$('#provFrom').value=p.from||''}
@@ -344,7 +387,7 @@ function defaultFaxLetter(){return{heading:'FAX',letterhead:'',signoff:'',footer
 function clinicFaxLetter(c){return Object.assign(defaultFaxLetter(),(c&&c.faxLetter)||{})}
 function defaultLetterhead(c){if(!c||isSampleClinic(c))return '';const lines=[c.name,c.address,[c.phone&&('Ph '+c.phone),c.fax&&('Fax '+c.fax)].filter(Boolean).join(' · ')].filter(Boolean);return lines.join('\n')}
 function fxReadLetter(){const c=clinic($('#fxclinic').value);return{heading:$('#fxheading').value.trim()||'FAX',letterhead:$('#fxhead').value,signoff:$('#fxsign').value,footer:$('#fxfoot').value,logo:(c&&c.faxLetter&&c.faxLetter.logo)||'',showTable:$('#fxtable').checked}}
-function fxFillLetter(c){const L=clinicFaxLetter(c);$('#fxheading').value=L.heading||'FAX';$('#fxsign').value=L.signoff||'';$('#fxfoot').value=L.footer||FX_FOOT_DEFAULT;$('#fxtable').checked=L.showTable!==false;$('#fxhead').value=L.letterhead||defaultLetterhead(c);const hint=$('#fxsamplehint');if(hint)hint.textContent=isSampleClinic(c)&&!L.letterhead?'This clinic is still the sample one. Type your real clinic name and address in the letterhead so the word Sample does not appear on the letter.':'These details are saved on this device for this clinic and used on the printed letter.';fxShowLogo(L.logo)}
+function fxFillLetter(c){const L=clinicFaxLetter(c);$('#fxheading').value=L.heading||'FAX';$('#fxsign').value=L.signoff||'';$('#fxfoot').value=L.footer||FX_FOOT_DEFAULT;$('#fxtable').checked=L.showTable!==false;$('#fxhead').value=L.letterhead||defaultLetterhead(c);const hint=$('#fxsamplehint');if(hint)hint.textContent='These details are saved on this device for this clinic and used on the printed letter.';fxShowLogo(L.logo)}
 function fxShowLogo(src){const ok=safeFaxLogo(src),box=$('#fxlogoprev');if(!box)return;box.innerHTML=ok?'<img alt="Clinic logo" style="max-height:72px;max-width:220px">':'';if(ok)box.querySelector('img').src=ok}
 function fxData(){const c=clinic($('#fxclinic').value)||{};return{c,to:$('#fxto').value,num:$('#fxnum').value,from:$('#fxfrom').value||(!isSampleClinic(c)&&c.fax)||'',pages:$('#fxpages').value,sub:$('#fxsub').value,pt:$('#fxpt').value,urg:$('#fxurg').value,msg:$('#fxmsg').value}}
 function fxHTML(){const d=fxData(),L=fxReadLetter(),logo=safeFaxLogo(L.logo);const head=L.letterhead.trim();const fromName=head?head.split('\n')[0]:'';
@@ -372,4 +415,4 @@ $('#fxlogo').onchange=()=>{const c=clinic($('#fxclinic').value);const f=$('#fxlo
 $('#fxlogoclear').onclick=()=>{const c=clinic($('#fxclinic').value);if(c&&c.faxLetter)c.faxLetter.logo='';save();fxShowLogo('');$('#fxsheet').innerHTML=fxHTML();toast('Logo removed')};
 
 /* init */
-save();renderClinics();
+save();applySite();renderClinics();

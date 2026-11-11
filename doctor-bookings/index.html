@@ -36,22 +36,22 @@ footer img{width:40px;height:40px;border-radius:50%}footer a{color:var(--pd);fon
 @media print{header,nav,footer,button{display:none!important}}
 </style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
 </head><body>
-<header><img src="cb-logo.jpg" alt="Coffeebreak logo"><h1>Coffeebreak Doctor Bookings<small>Instant appointments, live availability, smart waitlist and a Personal Reception assistant</small></h1></header>
-<div class="card" id="cbPromo" style="margin:10px 12px 0;background:#fff8e1;border:2px solid #ffd23f;max-width:1180px"><p style="margin:0;font-size:16px;font-weight:600;color:#3a2320">Coffeebreak Doctor Bookings is a brand-new, free booking system for clinics, made by Coffeebreak and hosted on our own site. Patients can book and order a coffee while they wait.</p></div>
+<header><img src="cb-logo.jpg" alt="Coffeebreak logo"><h1><span id="siteTitle">Coffeebreak Doctor Bookings</span><small id="siteTagline">Instant appointments, live availability, smart waitlist and a Personal Reception assistant</small></h1></header>
+<div class="card" id="cbPromo" style="margin:10px 12px 0;background:#fff8e1;border:2px solid #ffd23f;max-width:1180px"><p style="margin:0;font-size:16px;font-weight:600;color:#3a2320" id="sitePromo">Coffeebreak Doctor Bookings is a brand-new, free booking system for clinics, made by Coffeebreak and hosted on our own site. Patients can book and order a coffee while they wait.</p></div>
 <nav id="nav">
 <button data-p="find" class="on">Find &amp; book</button><button type="button" id="navCoffee" style="background:#ffd23f;color:#3a2320">Order coffee</button><button data-p="reception">Personal Reception</button><button data-p="mine">My bookings</button><button data-p="health">My Health</button><button data-p="chatp">Chat</button><button data-p="fax">Fax</button><button data-p="wait">Waitlist</button><button data-p="dash">Doctor dashboard</button><button data-p="setup">Clinic setup</button><button data-p="about">About &amp; disclaimer</button>
 </nav>
 <main>
-<div class="sample" id="sampleBanner">Starter sample data: the clinics, doctors and patients preloaded here are made up so you can try the app. Change them in Clinic setup, or use Clear sample data to add your own clinic.</div>
-<div class="card" id="coffeeNudge" style="background:#fff8e1;border-color:#ffd23f"><h2 style="color:#3a2320">Order a coffee while you wait</h2><p class="muted">This booking app is free. The drink payment goes to the store. Coffeebreak profit is paid by PayID (Teachers Mutual Bank): <b>darkokaz@gmx.com</b>.</p><p><button type="button" id="coffeeNudgeBtn" style="background:#ffd23f;color:#3a2320">Open coffee order cart</button></p></div>
+<div class="sample hide" id="sampleBanner">Try-out data is loaded so you can test bookings. Clear it in Clinic setup before patients use this page.</div>
+<div class="card" id="coffeeNudge" style="background:#fff8e1;border-color:#ffd23f"><h2 style="color:#3a2320" id="coffeeTitle">Order a coffee while you wait</h2><p class="muted" id="coffeeIntro">This booking app is free. The drink payment goes to the store. Coffeebreak profit is paid by PayID (Teachers Mutual Bank): darkokaz@gmx.com.</p><p><button type="button" id="coffeeNudgeBtn" style="background:#ffd23f;color:#3a2320">Open coffee order cart</button></p></div>
 
 <section class="pane on" id="find">
 <div class="card" style="text-align:center"><button id="bbBig" style="font-size:22px;padding:16px 28px;border-radius:16px;background:linear-gradient(135deg,#2e8b57,#3fb07a)">&#10003; Medicare Bulk Billed: show bulk billing appointments</button>
 <p class="muted">Bulk billed means the clinic claims the Medicare rebate directly, so you pay $0 (Medicare card needed). Private visits show the fee, an example rebate and your gap.</p>
 <div class="quick" style="justify-content:center"><a href="https://my.gov.au" target="_blank" rel="noopener"><button class="ghost" type="button">myGov &#8599;</button></a><a href="https://www.servicesaustralia.gov.au/medicare" target="_blank" rel="noopener"><button class="ghost" type="button">Medicare &#8599;</button></a><a href="https://www.myhealthrecord.gov.au" target="_blank" rel="noopener"><button class="ghost" type="button">My Health Record &#8599;</button></a></div>
 <p class="muted">These buttons only open the official government websites. This app is not connected to myGov, Medicare or My Health Record.</p></div>
-<div class="card"><h2>Search clinics</h2>
-<div class="row"><div><label>Search clinic, doctor or suburb</label><input id="fq" placeholder="e.g. Newcastle, Dr Rose"></div>
+<div class="card"><h2 id="findTitle">Search clinics</h2><p class="muted" id="findIntro">Find a clinic and book a time. Add your own clinic in Clinic setup.</p>
+<div class="row"><div><label>Search clinic, doctor or suburb</label><input id="fq" placeholder="Clinic, doctor or suburb"></div>
 <div><label>Specialty</label><select id="fspec"></select></div>
 <div><label>Appointment type</label><select id="ftype"></select></div>
 <div><label>Visit</label><select id="fmode"><option value="any">In person or telehealth</option><option value="in">In person only</option><option value="tele">Telehealth only</option></select></div>
@@ -75,36 +75,36 @@ footer img{width:40px;height:40px;border-radius:50%}footer a{color:var(--pd);fon
 </section>
 
 <section class="pane" id="reception">
-<div class="card"><h2>Personal Reception (virtual receptionist)</h2>
-<p class="muted">A built-in chat assistant for your clinic's website or front desk. It books, reschedules and cancels, answers common questions and points emergencies to 000. It runs on simple rules inside this app. It uses no paid AI service and <b>does not answer real phone calls or send real SMS</b>.</p>
+<div class="card"><h2 id="recTitle">Personal Reception (virtual receptionist)</h2>
+<p class="muted" id="recIntro">A built-in chat assistant for your clinic's website or front desk. It books, reschedules and cancels, answers common questions and points emergencies to 000. It runs on simple rules inside this app. It uses no paid AI service and does not answer real phone calls or send real SMS.</p>
 <div class="row"><div><label>Clinic</label><select id="rclinic"></select></div></div>
 <div class="chat" id="chat"></div><div class="quick" id="rquick"></div>
-<div style="display:flex;gap:6px;margin-top:6px"><input id="rin" placeholder="Type a message, e.g. 'book with Dr Rose tomorrow morning'"><button id="rsend">Send</button></div>
+<div style="display:flex;gap:6px;margin-top:6px"><input id="rin" placeholder="Type a message, e.g. book an appointment tomorrow morning"><button id="rsend">Send</button></div>
 <p class="muted">In an emergency call <b>000</b>. This assistant is not medical advice.</p></div>
-<div class="card"><h2>SMS &amp; email messages</h2><p class="muted">Ready-to-send confirmations and reminders for each booking. Tap to open your phone's SMS or email app with the message filled in, or copy it. Nothing is sent automatically.</p>
+<div class="card"><h2 id="msgTitle">SMS &amp; email messages</h2><p class="muted" id="msgIntro">Ready-to-send confirmations and reminders for each booking. Tap to open your phone's SMS or email app with the message filled in, or copy it. Nothing is sent automatically.</p>
 <div class="row"><div><label>Booking</label><select id="msgAppt"></select></div><div><label>Message</label><select id="msgKind"><option value="confirm">Booking confirmation</option><option value="remind">Reminder</option><option value="resched">Rescheduled</option><option value="cancel">Cancellation</option><option value="waitlist">Waitlist slot filled</option></select></div></div>
 <div id="msgOut"></div></div>
-<div class="card"><h2>Call script &amp; voicemail greeting</h2><p class="muted">Text for your reception staff and your phone system's voicemail, generated from your clinic details.</p><div id="scripts"></div></div>
+<div class="card"><h2 id="scriptTitle">Call script &amp; voicemail greeting</h2><p class="muted" id="scriptIntro">Text for your reception staff and your phone system's voicemail, generated from your clinic details.</p><div id="scripts"></div></div>
 <div class="card"><h2>Connect phone / SMS provider</h2>
 <div class="notactive"><b>NOT ACTIVE: placeholder only.</b> This app has no server, so it cannot send SMS, place calls or answer calls. If your clinic later connects a provider (for example an SMS gateway or a phone system), these are the settings it would need. Saving them here does nothing, and they are stored only on this device.
 <div class="row" style="margin-top:8px"><div><label>Provider</label><select id="provName"><option>None (not connected)</option><option>SMS gateway (example)</option><option>Phone system / IVR (example)</option></select></div><div><label>Sender name / number</label><input id="provFrom" placeholder="e.g. CLINIC"></div><div><label>API key</label><input id="provKey" type="password" placeholder="Not used, placeholder only" disabled></div></div>
 <p><button class="ghost" id="provSave">Save placeholder settings</button> <span class="pill">Status: not connected</span></p></div></div>
 </section>
 
-<section class="pane" id="mine"><div class="card"><h2>My bookings</h2>
+<section class="pane" id="mine"><div class="card"><h2 id="mineTitle">My bookings</h2><p class="muted" id="mineIntro">Enter the mobile or email used when booking to see upcoming and past appointments.</p>
 <div class="row"><div><label>Mobile or email used when booking</label><input id="mq"></div><div style="display:flex;align-items:flex-end"><button id="mfind">Find my bookings</button></div></div>
 <div id="mres"></div></div></section>
 
-<section class="pane" id="health"><div class="card"><h2>My Health (private, on this device)</h2>
-<p class="muted">Keep your own health summary to show your doctor. It is saved only in this browser and never sent anywhere. This is not My Health Record. Use the official site for that: <a href="https://www.myhealthrecord.gov.au" target="_blank" rel="noopener">myhealthrecord.gov.au</a>.</p>
+<section class="pane" id="health"><div class="card"><h2 id="healthTitle">My Health (private, on this device)</h2>
+<p class="muted" id="healthIntro">Keep your own health summary to show your doctor. It is saved only in this browser and never sent anywhere. This is not My Health Record.</p><p class="muted">Official site: <a href="https://www.myhealthrecord.gov.au" target="_blank" rel="noopener">myhealthrecord.gov.au</a>.</p>
 <div class="row"><div><label>Name</label><input id="hname"></div><div><label>Date of birth</label><input id="hdob" type="date"></div><div><label>Blood type</label><input id="hblood"></div><div><label>Emergency contact</label><input id="hemerg"></div></div>
 <div class="row" id="hlists"></div><p><button id="hprint">Print / save as PDF</button> <button class="ghost" id="hexp">Download summary (.txt)</button></p></div>
 <div class="card" id="hsummary"></div></section>
-<section class="pane" id="chatp"><div class="card"><h2>Patient &amp; clinic chat</h2><p class="muted">Non-urgent message threads between patients and the clinic, for things like test results questions, repeat scripts or forms. <b>Not for emergencies: call 000.</b> In this offline version, threads are stored on this device, so the clinic and patient sides are a demo of the workflow.</p>
+<section class="pane" id="chatp"><div class="card"><h2 id="chatTitle">Patient &amp; clinic chat</h2><p class="muted" id="chatIntro">Non-urgent message threads between patients and the clinic, for things like test results questions, repeat scripts or forms. Not for emergencies: call 000. Threads are stored on this device.</p>
 <div class="row"><div><label>Clinic</label><select id="cclinic"></select></div><div><label>View as</label><select id="cas"><option value="patient">Patient</option><option value="clinic">Clinic reception</option></select></div><div><label>Thread</label><select id="cthread"></select></div><div style="display:flex;align-items:flex-end"><button class="ghost" id="cnew">+ New thread</button></div></div>
 <div class="chat" id="cmsgs" style="height:300px;margin-top:8px"></div>
 <div style="display:flex;gap:6px;margin-top:6px"><input id="cin" placeholder="Write a message"><button id="csend">Send</button></div></div></section>
-<section class="pane" id="fax"><div class="card"><h2>Fax letter</h2><p class="muted">Many referrals and results still go by fax. Fill this in, then print it or save it as a PDF to send with your fax machine or eFax service. Each clinic can customise the letterhead and wording so the letter uses their own details, not the sample clinic.</p>
+<section class="pane" id="fax"><div class="card"><h2 id="faxTitle">Fax letter</h2><p class="muted" id="faxIntro">Many referrals and results still go by fax. Fill this in, then print it or save it as a PDF to send with your fax machine or eFax service. Each clinic can customise the letterhead, logo, wording and footer.</p>
 <div class="row"><div><label>From clinic</label><select id="fxclinic"></select></div><div><label>To (name / practice)</label><input id="fxto"></div><div><label>To fax number</label><input id="fxnum"></div><div><label>Our fax number</label><input id="fxfrom"></div><div><label>Pages (incl. cover)</label><input id="fxpages" type="number" value="2"></div></div>
 <div class="row"><div><label>Subject</label><input id="fxsub" placeholder="Referral / Results / Request"></div><div><label>Patient (initials / ref only)</label><input id="fxpt"></div><div><label>Urgency</label><select id="fxurg"><option>Routine</option><option>Urgent</option><option>For review</option><option>Please reply</option></select></div></div>
 <label>Message</label><textarea id="fxmsg"></textarea>
@@ -122,13 +122,13 @@ footer img{width:40px;height:40px;border-radius:50%}footer a{color:var(--pd);fon
 <div class="card"><h2>Fax log</h2><div id="fxlist"></div></div>
 <div class="card"><h2>eFax service</h2><div class="notactive"><b>NOT ACTIVE: placeholder only.</b> This app cannot send faxes. Use your own fax machine or eFax provider. These settings are stored only on this device and do nothing.
 <div class="row" style="margin-top:8px"><div><label>eFax provider</label><select><option>None (not connected)</option><option>eFax service (example)</option></select></div><div><label>Account email</label><input id="efaxEmail" placeholder="Not used"></div><div><label>API key</label><input disabled placeholder="Placeholder only"></div></div><span class="pill">Status: not connected</span></div></div></section>
-<section class="pane" id="wait"><div class="card"><h2>Join the waitlist</h2><p class="muted">No suitable time? Join the waitlist. When someone cancels, the first matching person is <b>booked into the freed slot automatically</b>, and a confirmation message is prepared for them.</p>
+<section class="pane" id="wait"><div class="card"><h2 id="waitTitle">Join the waitlist</h2><p class="muted" id="waitIntro">No suitable time? Join the waitlist. When someone cancels, the first matching person is booked into the freed slot automatically, and a confirmation message is prepared for them.</p>
 <div class="row"><div><label>Clinic</label><select id="wclinic"></select></div><div><label>Doctor</label><select id="wdoc"></select></div><div><label>Appointment type</label><select id="wtype"></select></div><div><label>Visit</label><select id="wmode"><option value="in">In person</option><option value="tele">Telehealth</option><option value="any">Either</option></select></div></div>
 <div class="row"><div><label>Earliest date</label><input type="date" id="wfrom"></div><div><label>Latest date</label><input type="date" id="wto"></div><div><label>Name *</label><input id="wname"></div><div><label>Mobile *</label><input id="wphone"></div><div><label>Email</label><input id="wemail"></div></div>
 <p><button id="wadd">Join waitlist</button></p></div>
 <div class="card"><h2>Current waitlist</h2><div id="wlist"></div></div></section>
 
-<section class="pane" id="dash"><div class="card"><h2>Doctor dashboard</h2>
+<section class="pane" id="dash"><div class="card"><h2 id="dashTitle">Doctor dashboard</h2><p class="muted" id="dashIntro">See the day's appointments, check patients in, and track no-shows for your clinic.</p>
 <div class="row"><div><label>Clinic</label><select id="dclinic"></select></div><div><label>Doctor</label><select id="ddoc"></select></div><div><label>Day</label><input type="date" id="dday"></div>
 <div style="display:flex;align-items:flex-end;gap:4px"><button class="ghost" id="dprev">&lsaquo; Prev</button><button class="ghost" id="dtoday">Today</button><button class="ghost" id="dnext">Next &rsaquo;</button></div></div>
 <div id="dstats"></div><div id="dlist"></div></div>
@@ -145,23 +145,54 @@ footer img{width:40px;height:40px;border-radius:50%}footer a{color:var(--pd);fon
 <div class="row"><div><label>Name</label><input id="ntname" placeholder="Standard consult"></div><div><label>Length (minutes)</label><input id="ntmins" type="number" value="15"></div><div><label>Telehealth allowed</label><select id="nttele"><option value="1">Yes</option><option value="0">No</option></select></div><div style="display:flex;align-items:flex-end"><button id="ntadd">Add type</button></div></div></div>
 <div class="card"><h2>Reminder schedule</h2><p class="muted">Reminders are shown on each booking, included as alarms in the calendar (.ics) file, and prepared as SMS and email text.</p>
 <div class="row"><div><label>Reminder 1 (hours before)</label><input id="rem1" type="number"></div><div><label>Reminder 2 (hours before)</label><input id="rem2" type="number"></div><div><label>Reminder 3 (hours before)</label><input id="rem3" type="number"></div><div style="display:flex;align-items:flex-end"><button id="remsave">Save reminders</button></div></div></div>
+
+<div class="card"><h2>Customise every section</h2>
+<p class="muted">Change the headings and wording on this page. Saved on this device. The emergency, rights and Tesla / Starlink footer stay in place.</p>
+<div class="row"><div><label>Site title</label><input id="csTitle"></div><div><label>Site tagline</label><input id="csTag"></div></div>
+<label>Top promo</label><textarea id="csPromo"></textarea>
+<div class="row"><div><label>Find &amp; book heading</label><input id="csFindT"></div></div>
+<label>Find &amp; book intro</label><textarea id="csFindI"></textarea>
+<div class="row"><div><label>Coffee heading</label><input id="csCofT"></div></div>
+<label>Coffee intro</label><textarea id="csCofI"></textarea>
+<div class="row"><div><label>Reception heading</label><input id="csRecT"></div></div>
+<label>Reception intro</label><textarea id="csRecI"></textarea>
+<div class="row"><div><label>Messages heading</label><input id="csMsgT"></div></div>
+<label>Messages intro</label><textarea id="csMsgI"></textarea>
+<div class="row"><div><label>Call script heading</label><input id="csScrT"></div></div>
+<label>Call script intro</label><textarea id="csScrI"></textarea>
+<div class="row"><div><label>My bookings heading</label><input id="csMineT"></div></div>
+<label>My bookings intro</label><textarea id="csMineI"></textarea>
+<div class="row"><div><label>My Health heading</label><input id="csHeaT"></div></div>
+<label>My Health intro</label><textarea id="csHeaI"></textarea>
+<div class="row"><div><label>Chat heading</label><input id="csChatT"></div></div>
+<label>Chat intro</label><textarea id="csChatI"></textarea>
+<div class="row"><div><label>Fax heading</label><input id="csFaxT"></div></div>
+<label>Fax intro</label><textarea id="csFaxI"></textarea>
+<div class="row"><div><label>Waitlist heading</label><input id="csWaitT"></div></div>
+<label>Waitlist intro</label><textarea id="csWaitI"></textarea>
+<div class="row"><div><label>Dashboard heading</label><input id="csDashT"></div></div>
+<label>Dashboard intro</label><textarea id="csDashI"></textarea>
+<div class="row"><div><label>About heading</label><input id="csAbtT"></div></div>
+<label>About intro</label><textarea id="csAbtI"></textarea>
+<p><button type="button" id="csSave">Save page wording</button> <button type="button" class="ghost" id="csReset">Reset wording</button></p>
+</div>
 <div class="card"><h2>Data</h2><p class="muted">Everything is stored only in this browser on this device.</p>
-<button id="exp" class="ghost">Download backup (.json)</button> <label class="ghost" style="display:inline-block"><input type="file" id="imp" accept=".json" style="width:auto"> Restore backup</label> <button id="clearSample" class="warn">Clear sample data (start fresh)</button> <button id="resetSample" class="ghost">Reload sample data</button></div>
+<button id="exp" class="ghost">Download backup (.json)</button> <label class="ghost" style="display:inline-block"><input type="file" id="imp" accept=".json" style="width:auto"> Restore backup</label> <button id="clearSample" class="warn">Clear try-out data (start fresh)</button> <button id="resetSample" class="ghost">Load try-out data</button></div>
 </section>
 
-<section class="pane" id="about"><div class="card"><h2>About Coffeebreak Doctor Bookings</h2>
-<p>An appointment booker for medical clinics that runs entirely in your browser: live availability, instant booking, automatic next-available slots, a waitlist that fills cancellations, reminders with calendar files, telehealth, new and returning patient forms, a doctor dashboard with check-in and no-show tracking, multi-clinic search and a Personal Reception chat assistant.</p>
+<section class="pane" id="about"><div class="card"><h2 id="aboutTitle">About Coffeebreak Doctor Bookings</h2>
+<p id="aboutIntro">An appointment booker for medical clinics that runs entirely in your browser: live availability, instant booking, automatic next-available slots, a waitlist that fills cancellations, reminders with calendar files, telehealth, new and returning patient forms, a doctor dashboard with check-in and no-show tracking, multi-clinic search and a Personal Reception chat assistant.</p>
 <h3>Disclaimer</h3>
 <p><b>Not medical advice.</b> This app is a booking and scheduling tool only. It does not diagnose, triage or treat any condition. <b>In an emergency call 000.</b> For crisis support call Lifeline 13 11 14. For health advice call healthdirect on 1800 022 222.</p>
 <p>The Personal Reception assistant follows simple rules. It is not a person or a clinician, and it does not answer real phone calls or send real SMS. The "Connect phone/SMS provider" section is a placeholder and is not active.</p>
 <p><b>Fees and rebates:</b> the Medicare rebate and gap figures are examples only (based on a standard GP consult) and change over time. Check the current Medicare Benefits Schedule and the clinic's own fees. Private and Premium visits are paid to the clinic by PayID bank transfer, following the instructions shown. This app takes no card payments.</p>
-<p>The sample clinics, doctors and patients are made up. Clinics using this app are responsible for their own privacy, record-keeping and Australian Privacy Principles obligations. Data stays in this browser unless you export it.</p>
+<p>Clinics using this app are responsible for their own privacy, record-keeping and Australian Privacy Principles obligations. Data stays in this browser unless you export it.</p>
 <p><b>Not affiliated with, endorsed by or connected to HotDoc, HealthEngine, Medicare, Services Australia, myGov, My Health Record, Jitsi or any clinic.</b> Telehealth links use the free public Jitsi Meet service. All trademarks and brand names belong to their respective owners and are mentioned only for comparison.</p>
 <p>© Karen (Coffeebreak). Karen keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they buy, but may not copy the app or make their own versions of it. No ownership is claimed of third-party brands. Provided "as is" without warranty.</p></div></section>
 </main>
 <footer><div class="in"><img src="cb-logo.jpg" alt="Coffeebreak logo"><div>Coffeebreak Doctor Bookings. Not medical advice; in an emergency call 000. Not affiliated with HotDoc, Medicare, myGov or any clinic; trademarks belong to their owners. © Karen (Coffeebreak), all rights reserved.<br>Check out <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>.</div></div></footer>
 <div id="toast"></div>
-<script src="app.js"></script>
+<script src="app.js?v=nosample"></script>
 <!-- CB COFFEE ORDER START -->
 <style>
 #cbco-open{position:fixed;left:14px;bottom:14px;z-index:9998;background:#ff4fa3;color:#fff;border:2px solid #d81b7a;border-radius:999px;padding:12px 18px;font:700 16px system-ui,sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(216,27,122,.35)}
