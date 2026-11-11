@@ -445,7 +445,7 @@
         <p class="hint">Leave this closed and Create song still sings your words. These choices only apply when this section is open.</p>
       </details>
       <div id="createResult" hidden></div>
-      <div class="paybox"><b>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</b><br>$10 AUD for Coffeebreak Studio Espresso. Reference: <b data-pay-ref></b>.<br><span class="hint">The cart stores this reference only. It does not mark the payment as received. You can use the studio either way.</span></div>
+      <div class="paybox"><b>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</b><br>$10 USD for Coffeebreak Studio Espresso. Reference: <b data-pay-ref></b>.<br><span class="hint">The cart stores this reference only. It does not mark the payment as received. You can use the studio either way.</span></div>
     </div>`);
     sec('songs', `<div class="panel"><h3>My songs</h3><p class="hint">Songs you create stay in this browser. Play one here, or open it on the Arrange page with the studio tools.</p><div id="songList"></div></div>`);
     $('#createMood').innerHTML = C.MOODS.map(m => `<option${m === 'Happy' ? ' selected' : ''}>${m}</option>`).join('');
