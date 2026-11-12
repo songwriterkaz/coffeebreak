@@ -14,9 +14,9 @@ input,textarea,select{width:95%;padding:6px;margin:4px 0;border:1px solid #f8a;b
 <header><img src="cb-logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Coffee Mail</h1></header><div class="banner">Full version $5. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com | <a href="https://coffeebreaks.itch.io">https://coffeebreaks.itch.io</a></div>
 <div class="card"><b>On this device.</b> Messages saved here stay in this browser. This page does not send by itself. Outside mail needs a Coffeebreak Mail sign-in, then Send.</div>
 <nav class="card"><button id="tInbox" onclick="show('inbox')">Inbox</button><button onclick="show('compose')">Compose</button><button onclick="show('sent')">Sent</button><button id="tShop" onclick="show('shop')">Coffee Shop</button></nav>
-<section class="card" id="liveCard"><h2>Outside mail</h2><p id="liveStatus">On this device until you sign in.</p><input id="liveN" placeholder="Name" autocomplete="name"><input id="liveH" placeholder="Handle" autocomplete="username"><input id="liveP" placeholder="Password" type="password" autocomplete="current-password"><button id="liveNew" type="button">Create address</button><button id="liveGo" type="button">Sign in</button><button id="liveOff" type="button">Sign out</button><p id="liveMsg"></p></section>
+<section class="card" id="liveCard"><h2>Outside mail</h2><p id="liveStatus">On this device until you sign in.</p><input id="liveN" placeholder="Name" autocomplete="name"><input id="liveH" placeholder="Handle" autocomplete="username"><input id="liveP" placeholder="Password" type="password" autocomplete="current-password"><button id="liveNew" type="button">Create address</button><button id="liveGo" type="button">Sign in</button><button id="liveCheck" type="button">Check for outside mail</button><button id="liveOff" type="button">Sign out</button><p id="liveMsg"></p></section>
 <section id="inbox" class="card"></section><section id="sent" class="card"></section>
-<section id="compose" class="card"><h2>Compose</h2><input id="to" placeholder="To"><input id="subj" placeholder="Subject"><textarea id="body" rows="5" placeholder="Message"></textarea><label><input id="alsoOutside" type="checkbox"> Also hand outside addresses to Coffeebreak Mail</label><button id="sendBtn" onclick="sendMail()">Send</button><p id="mailMsg"></p></section>
+<section id="compose" class="card"><h2>Compose</h2><input id="to" placeholder="To"><input id="subj" placeholder="Subject"><textarea id="body" rows="5" placeholder="Message"></textarea><button id="sendBtn" onclick="sendMail()">Send</button><p id="mailMsg"></p></section>
 <section id="shop" class="card"><h2>Coffee Menu</h2><div id="menu"></div><h3>Cart</h3><div id="cart"></div><input id="cname" placeholder="Your name"><input id="cnote" placeholder="Pickup or delivery notes"><button id="checkout" onclick="checkout()">Save order on this device</button><p id="orderMsg"></p><p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p></section>
 <footer><p><b>Disclaimer:</b> Karen O&#39;Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought but may not copy them. No ownership is claimed of any third-party brands named.</p><p><a href="https://www.tesla.com">Tesla</a> | <a href="https://www.starlink.com">Starlink</a> | <a href="https://coffeebreaks.itch.io">coffeebreaks.itch.io</a></p></footer>
 <script>
@@ -44,15 +44,25 @@ async function liveAuth(mode){const route=window.CBMailRoute,msg=document.getEle
  const handle=document.getElementById('liveH').value.trim(),password=document.getElementById('liveP').value,name=document.getElementById('liveN').value.trim();
  if(mode==='signup'&&!name){msg.textContent='Add your name.';return}
  msg.textContent='One moment';
- try{const j=mode==='signup'?await liveClient().signup({handle,name,password}):await liveClient().login({handle,password});saveLive(j);document.getElementById('liveP').value='';msg.textContent='Signed in.';paintLive()}catch(e){msg.textContent=e.message}}
+ try{const j=mode==='signup'?await liveClient().signup({handle,name,password}):await liveClient().login({handle,password});saveLive(j);document.getElementById('liveP').value='';msg.textContent='Signed in.';paintLive();pullOutside(true)}catch(e){msg.textContent=e.message}}
 document.getElementById('liveNew').onclick=()=>liveAuth('signup');
 document.getElementById('liveGo').onclick=()=>liveAuth('login');
 document.getElementById('liveOff').onclick=()=>{saveLive(null);document.getElementById('liveMsg').textContent='Signed out.';paintLive()};
-window.addEventListener('cbmailroute',paintLive);
+const SEEN_KEY='cbCoffeeMailSeen';
+function seenIds(){try{const a=JSON.parse(localStorage.getItem(SEEN_KEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
+async function pullOutside(show){const route=window.CBMailRoute,session=liveSession();if(!route)return;
+ if(!session){if(show)document.getElementById('liveMsg').textContent=route.describeReceive({signedIn:false});return}
+ try{const j=await liveClient().pull(session.token,0);const picked=route.newServerInbox(j.mail,seenIds());
+  picked.fresh.forEach(m=>S.inbox.push({from:m.from||'',subj:m.subject||'(no subject)',body:m.body||'',t:m.date||new Date().toLocaleString(),outside:true}));
+  localStorage.setItem(SEEN_KEY,JSON.stringify(picked.seen));save();render();
+  document.getElementById('liveMsg').textContent=route.describeReceive({signedIn:true,count:picked.fresh.length})}
+ catch(e){document.getElementById('liveMsg').textContent=route.describeReceive({signedIn:true,error:e.message})}}
+document.getElementById('liveCheck').onclick=()=>pullOutside(true);
+window.addEventListener('cbmailroute',()=>{paintLive();if(liveSession())pullOutside(false)});
 async function sendMail(){const route=window.CBMailRoute;if(!to.value){mailMsg.textContent='Add a recipient.';return}
  if(!route){mailMsg.textContent='The mail helper has not loaded.';return}
  const plan=route.planRecipients(to.value,[]);if(plan.invalid.length){mailMsg.textContent=plan.invalid[0].reason;return}
- const sub=subj.value||'(no subject)',text=body.value,session=liveSession(),hand=document.getElementById('alsoOutside').checked&&plan.outside.length&&session;
+ const sub=subj.value||'(no subject)',text=body.value,session=liveSession(),hand=!!(plan.outside.length&&session);
  S.sent.push({to:to.value,subj:sub,body:text,t:new Date().toLocaleString(),onDevice:true});save();
  let accepted=0,error='',waiting=false;
  if(hand){try{const j=await liveClient().send(session.token,{to:plan.outside.map(x=>x.address).join(', '),subject:sub,text:text});accepted=(j.results||[]).filter(r=>r.ok).length;waiting=j.outsideState==='waiting';error=((j.results||[]).find(r=>!r.ok)||{}).error||''}catch(e){error=e.message}}
