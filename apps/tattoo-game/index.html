@@ -36,7 +36,7 @@ button.alt{background:transparent;border:1px solid var(--accent);color:var(--acc
 <div class="ov" id="start"><div class="box"><h2>Welcome to the Coffeebreak tattoo studio</h2>
 <p>A customer has a stencil on their arm. Hold down and trace over the dotted line with your tattoo machine. Stay on the line, cover all of it and keep it neat before the timer runs out.</p>
 <p>The machine shakes more as you level up. Tips are game coins only.</p><button id="go">Start tattooing</button></div></div>
-<div class="ov hidden" id="res"><div class="box"><h2 id="rT">Done</h2><div class="stars" id="rS"></div><p id="rP"></p><button id="next">Next customer</button><button class="alt" id="retry">Try again</button></div></div>
+<div class="ov hidden" id="res"><div class="box"><h2 id="rT">Done</h2><div class="stars" id="rS"></div><button id="next">Next customer</button><button class="alt" id="retry">Try again</button></div></div>
 </div>
 <div class="bar">Ink colour: <span id="sws"></span><button class="alt" id="finish">Finish tattoo</button></div>
 <footer class="cbfoot">
@@ -94,5 +94,5 @@ $('retry').onclick=()=>{$('res').classList.add('hidden');newRound()};
 size();design=D[0];stencil=design.p();draw();
 </script>
 <div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
-</body>
+<!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/tattoo-game" aria-label="Cart"><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/tattoo-game","currency":null,"items":[{"id":"full","name":"Coffeebreak Tattoo Game","amount":null,"currency":null,"gap":"Price coming soon. No payment is requested."}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> <a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p></footer><!--cb-game-cart-end--></body>
 </html>
