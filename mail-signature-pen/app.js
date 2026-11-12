@@ -135,9 +135,15 @@ async function liveAuth(mode){const m=$('#liveMsg'),b=$(mode==='signup'?'#liveNe
  if(mode==='signup'&&!name){m.textContent='Add your name.';return}
  b.disabled=true;m.textContent='One moment';
  try{const j=mode==='signup'?await live.signup({handle,name,password}):await live.login({handle,password});
-  S.settings.liveTok=j.token;S.settings.liveAddr=j.address;save();renderLive();pullLive(true)}
+  S.settings.liveTok=j.token;S.settings.liveAddr=j.address;ensureDeviceMailbox(j);save();render();renderLive();pullLive(true)}
  catch(e){m.textContent=e.message}finally{if(b)b.disabled=false}}
-async function pullLive(show){if(!liveTok()||!me())return 0;try{const j=await live.pull(liveTok(),0);const seen=new Set(S.settings.liveSeen||[]);let n=0;
+function ensureDeviceMailbox(profile){const handle=String((profile&&profile.handle)||((profile&&profile.address)||'').split('@')[0]||'').toLowerCase();
+ if(!/^[a-z0-9._-]{3,30}$/.test(handle))return null;
+ let a=S.accounts.find(x=>x.user===handle);
+ if(!a){a={id:uid(),name:profile.name||handle,user:handle,contact:profile.address||'',created:Date.now(),pro:'none',ref:null};S.accounts.push(a);S.cur=a.id;seed(a)}
+ else S.cur=a.id;
+ save();return a}
+async function pullLive(show){if(!liveTok())return 0;if(!me()){if(show){const t='Sign in again so outside mail has a mailbox on this device.';const el=$('#recvMsg');if(el)el.textContent=t;toast(t)}return 0}try{const j=await live.pull(liveTok(),0);const seen=new Set(S.settings.liveSeen||[]);let n=0;
  (j.mail||[]).filter(m=>m.folder==='Inbox'&&!seen.has(m.id)).forEach(m=>{seen.add(m.id);box().push({id:uid(),liveId:m.id,from:m.from||'',fromName:m.fromName||'',to:m.to||'',cc:m.cc||'',subject:m.subject||'(no subject)',body:m.body||'',date:Date.parse(m.date)||m.received||Date.now(),folder:'Inbox',read:false,starred:false,labels:[],att:[],outside:true});n++});
  S.settings.liveSeen=[...seen].slice(-2000);save();if(n&&view==='mail')renderMail();
  if(show||n){const t=CBMailRoute.describeReceive({signedIn:true,count:n});$('#recvMsg').textContent=t;toast(t)}return n}catch(e){if(show){const t=CBMailRoute.describeReceive({signedIn:!!liveTok(),error:e.message});$('#recvMsg').textContent=t;toast(t)}return 0}}

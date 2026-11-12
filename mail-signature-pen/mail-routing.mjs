@@ -83,6 +83,17 @@ export function localNotes(name, handle) {
   }];
 }
 
+export function newServerInbox(mail, seenIds) {
+  const seen = new Set(seenIds || []);
+  const fresh = [];
+  for (const m of mail || []) {
+    if (!m || m.folder !== 'Inbox' || !m.id || seen.has(m.id)) continue;
+    seen.add(m.id);
+    fresh.push(m);
+  }
+  return { fresh, seen: [...seen].slice(-2000) };
+}
+
 export function rehomeDeviceNotes(messages) {
   return (messages || []).map(m => {
     if (m && m.folder === 'Inbox' && m.from === 'karen@coffeebreak' && SEEDED.test(m.subject || '')) {
@@ -133,6 +144,7 @@ export const CBMailRoute = {
   describeLiveStatus,
   localNotes,
   rehomeDeviceNotes,
+  newServerInbox,
   createLiveClient
 };
 

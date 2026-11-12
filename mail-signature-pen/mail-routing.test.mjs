@@ -10,7 +10,8 @@ import {
   describeLiveStatus,
   localNotes,
   rehomeDeviceNotes,
-  createLiveClient
+  createLiveClient,
+  newServerInbox
 } from './mail-routing.mjs';
 
 const root = new URL('..', import.meta.url);
@@ -188,6 +189,21 @@ test('a 401 clears the session and does not pretend mail arrived', async () => {
   assert.equal(cleared, 1);
 });
 
+test('only new server inbox messages are taken, and seen ids are remembered', () => {
+  const first = newServerInbox([
+    { id: 'a', folder: 'Inbox', from: 'person@example.com', subject: 'Hello' },
+    { id: 'b', folder: 'Sent', from: 'me', subject: 'Out' },
+    { folder: 'Inbox', subject: 'No id skipped' }
+  ], []);
+  assert.deepEqual(first.fresh.map(m => m.id), ['a']);
+  const second = newServerInbox([
+    { id: 'a', folder: 'Inbox', subject: 'Hello' },
+    { id: 'd', folder: 'Inbox', subject: 'Next' }
+  ], first.seen);
+  assert.deepEqual(second.fresh.map(m => m.id), ['d']);
+  assert.ok(second.seen.includes('a') && second.seen.includes('d'));
+});
+
 test('signup and login are explicit posts', async () => {
   const calls = [];
   const client = createLiveClient({
@@ -213,7 +229,9 @@ test('routing source keeps provider secrets out of the page', () => {
 test('Mail Demo is labelled on-device and does not seed a fake inbox', () => {
   const html = page('mail-demo/index.html');
   assert.match(html, /On this device/);
-  assert.match(html, /Save on this device/);
+  assert.match(html, /Check for outside mail/);
+  assert.match(html, /newServerInbox/);
+  assert.doesNotMatch(html, /alsoOutside/);
   assert.match(html, /cbreport\.js/);
   assert.match(html, /cb-logo\.png/);
   assert.match(html, /https:\/\/www\.tesla\.com/);
@@ -231,6 +249,9 @@ test('Coffee Mail does not invent a sent receipt or a welcome delivery', () => {
   assert.match(html, /inbox:\[\]/);
   assert.match(html, /did not email the order/i);
   assert.match(html, /On this device/);
+  assert.match(html, /Check for outside mail/);
+  assert.match(html, /newServerInbox/);
+  assert.doesNotMatch(html, /alsoOutside/);
   assert.match(html, /cbreport\.js/);
   assert.match(html, /cb-logo\.png/);
   assert.match(html, /https:\/\/www\.tesla\.com/);
@@ -259,6 +280,11 @@ test('Signature Pen drops coming soon and uses the live route', () => {
   assert.match(app, /planRecipients/);
   assert.match(app, /describeSend/);
   assert.match(app, /On this device/);
+  assert.match(app, /ensureDeviceMailbox/);
+  assert.doesNotMatch(app, /if\(!liveTok\(\)\|\|!me\(\)\)return 0/);
+  const liveAt = html.indexOf('id="liveBox"');
+  const appAt = html.indexOf('id="mailApp"');
+  assert.ok(liveAt > 0 && appAt > liveAt);
   assert.doesNotMatch(app, /Delivered to/);
   assert.doesNotMatch(app, /until sending goes live/i);
   assert.match(sw, /mail-routing\.mjs/);

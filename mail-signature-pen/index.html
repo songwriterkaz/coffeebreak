@@ -45,14 +45,16 @@
 </section>
 
 <!-- MAIL -->
-<section class="view on" id="v-mail"><div id="mailLock"></div>
+<section class="view on" id="v-mail">
+ <div class="card noprint"><div class="note" id="liveBox"></div></div>
+ <div id="mailLock"></div>
  <div id="mailApp" class="hide">
  <div class="card noprint"><div class="row" style="align-items:end"><div style="flex:3"><label for="q">Search mail</label><input id="q" placeholder="Search from, subject or words"></div>
   <div><label for="sortSel">Sort</label><select id="sortSel"><option value="new">Newest first</option><option value="old">Oldest first</option><option value="subj">Subject A to Z</option></select></div>
   </div>
   <div class="sendrecv"><button id="composeBtn" class="bigbtn send">✉️ Send<small>Write and send an email</small></button><button id="receiveBtn" class="bigbtn recv">📥 Receive<small>Check for new mail</small></button></div>
   <div id="recvMsg" class="recvmsg" role="status" aria-live="polite"></div>
-  <div class="note">Mail copied to handles on this device stays on this device. It is not sent over the internet.</div><div class="note" id="liveBox"></div></div>
+  <div class="note">Mail copied to handles on this device stays on this device. It is not sent over the internet.</div></div>
  <div class="mailwrap"><div class="card side" id="side"></div><div class="card list" id="list"></div><div class="card reader" id="reader"><p class="muted">Pick an email to read it.</p></div></div>
  </div>
 </section>

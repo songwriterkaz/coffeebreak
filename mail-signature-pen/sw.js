@@ -1,4 +1,4 @@
-const V='cbmail-v8-honest';
+const V='cbmail-v9-inbox';
 const SHELL=['./','index.html','style.css','tools.js','app.js','mail-routing.mjs','cbreport.js','sigpen.js','manifest.webmanifest','assets/logo-sm.jpg','assets/baloo2.woff','icons/icon-192.png','icons/icon-512.png','icons/icon-180.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
