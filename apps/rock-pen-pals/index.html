@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak Rock Pen Pals</title>
+<meta name="description" content="Coffeebreak Rock Pen Pals — paint or name a collected rock, write a short note, and donate it to a stranger, pen-pal style. Free for now.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect fill='%23ff4f9a' width='64' height='64' rx='14'/%3E%3Cellipse cx='32' cy='36' rx='20' ry='14' fill='%23f3d2b3'/%3E%3Ccircle cx='26' cy='34' r='3' fill='%23ff4f9a'/%3E%3Ccircle cx='36' cy='38' r='2' fill='%23d6336c'/%3E%3C/svg%3E">
+<style>
+:root {
+  --pink: #ff4f9a;
+  --pink-deep: #d6336c;
+  --ink: #4a1030;
+  --ink-soft: #7a3a58;
+  --cream: #fff7fb;
+  --card: #ffffff;
+  --blush: #ffe0ef;
+  --line: #ffb6d4;
+  --shadow: 0 8px 24px rgba(214, 51, 108, .22);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 500px at 10% -10%, #fff 0%, transparent 50%),
+    radial-gradient(900px 400px at 110% 0%, #ff9ec8 0%, transparent 45%),
+    linear-gradient(165deg, #ffe0ef 0%, #ffc2dd 45%, #ff9ec8 100%);
+  min-height: 100vh;
+}
+.wrap { max-width: 980px; margin: 0 auto; padding: 18px 14px 48px; }
+header.hero {
+  background: linear-gradient(135deg, #ff2d8a 0%, #ff4f9a 45%, #ff7ab3 100%);
+  color: #fff;
+  border-radius: 24px;
+  padding: 22px 22px 18px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+header.hero:after {
+  content: "";
+  position: absolute;
+  right: -30px; top: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle at 30% 30%, #fff8, transparent 60%);
+  pointer-events: none;
+}
+header.hero h1 { margin: 0 0 6px; font-size: clamp(26px, 5vw, 40px); letter-spacing: .01em; }
+header.hero p { margin: 0; max-width: 52ch; line-height: 1.4; font-size: 16px; }
+.back { color: #fff; font-weight: 700; text-decoration: none; display: inline-block; margin-bottom: 10px; opacity: .95; }
+.back:hover { text-decoration: underline; }
+.free {
+  background: #4a1030;
+  color: #fff;
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin: 14px 0;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.free a { color: #ffd6e7; }
+.safety {
+  background: var(--cream);
+  border: 3px solid var(--pink-deep);
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin: 0 0 16px;
+  line-height: 1.45;
+}
+.safety strong { color: var(--pink-deep); }
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+.tabs button {
+  appearance: none;
+  border: 0;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #ff9ec8;
+}
+.tabs button[aria-selected="true"], .tabs button.on {
+  background: var(--pink);
+  color: #fff;
+  box-shadow: 0 3px 0 var(--pink-deep);
+}
+.panel { display: none; }
+.panel.on { display: block; }
+.card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  margin: 0 0 16px;
+}
+.card h2 { margin: 0 0 10px; color: var(--pink-deep); font-size: 22px; }
+.row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+.painter {
+  flex: 0 0 auto;
+  width: 280px;
+  max-width: 100%;
+}
+canvas#rockCanvas {
+  width: 280px;
+  height: 240px;
+  max-width: 100%;
+  background: linear-gradient(#fff, #ffe9f3);
+  border-radius: 18px;
+  border: 3px solid var(--pink);
+  touch-action: none;
+  cursor: crosshair;
+  display: block;
+}
+.palette, .patterns, .actions { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.swatch, .pat, button.btn, .actions button {
+  appearance: none;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+}
+.swatch { width: 28px; height: 28px; border-radius: 50%; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #ffb6d4; }
+.swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px #fff, 0 0 0 5px var(--pink-deep); }
+.pat, button.btn, .actions button, .mail button, .thread-box button, .rock-card button {
+  background: var(--blush);
+  color: var(--ink);
+  padding: 8px 12px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+.pat[aria-pressed="true"], button.btn.primary, .actions button.primary, .rock-card button.primary, .mail button.primary, .thread-box button.primary {
+  background: var(--pink);
+  color: #fff;
+  border-color: var(--pink-deep);
+}
+button.btn:disabled, .actions button:disabled { opacity: .5; cursor: not-allowed; }
+.form { flex: 1 1 260px; min-width: 220px; }
+label { display: block; font-weight: 800; margin: 8px 0 4px; }
+input[type=text], textarea, select {
+  width: 100%;
+  font: inherit;
+  font-size: 16px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+}
+textarea { min-height: 90px; resize: vertical; }
+.hint { color: var(--ink-soft); font-size: 13px; margin: 4px 0 0; }
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.rock-card {
+  background: var(--cream);
+  border-radius: 18px;
+  padding: 12px;
+  border: 2px solid var(--line);
+}
+.rock-card canvas { width: 100%; height: 130px; display: block; background: transparent; }
+.rock-card h3 { margin: 8px 0 2px; font-size: 18px; }
+.rock-card .code { font-weight: 800; color: var(--pink-deep); letter-spacing: .04em; }
+.rock-card p { margin: 6px 0; font-size: 14px; line-height: 1.4; }
+.badge {
+  display: inline-block;
+  background: #fff;
+  color: var(--pink-deep);
+  border: 2px solid var(--pink);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.thread-list { display: grid; gap: 10px; }
+.msg {
+  background: #fff;
+  border-left: 5px solid var(--pink);
+  border-radius: 0 14px 14px 0;
+  padding: 8px 12px;
+  margin: 8px 0;
+}
+.msg .who { font-weight: 800; color: var(--pink-deep); }
+.msg .when { color: var(--ink-soft); font-size: 12px; margin-left: 6px; }
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  display: none;
+  z-index: 50;
+  max-width: 90vw;
+}
+footer.foot {
+  text-align: center;
+  padding: 18px 8px 8px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+footer.foot a { color: var(--pink-deep); font-weight: 800; }
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+.filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+.empty { text-align: center; padding: 20px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <a class="back" href="../../">&larr; Back to the Coffeebreak hub</a>
+    <h1>Coffeebreak Rock Pen Pals</h1>
+    <p>Paint or name a collected rock, write a short note, and donate it to a stranger — pen-pal style.</p>
+  </header>
+
+  <p class="free">Free for now &mdash; tip Karen a coffee via PayID (Teachers Mutual Bank): <b>darkokaz@gmx.com</b></p>
+
+  <div class="safety" role="note">
+    <strong>Be kind. Keep it private.</strong>
+    Never share your real name, home address, phone number, email, or other personal info on this board, in notes, or in pen-pal replies.
+    Never post your address publicly. This rock exchange lives on your device (plus a few starter pals to browse). It is not a live global mail service.
+  </div>
+
+  <nav class="tabs" role="tablist" aria-label="Rock Pen Pals sections">
+    <button type="button" class="on" role="tab" aria-selected="true" data-tab="make" id="tab-make">Make a rock</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="board" id="tab-board">Rock exchange</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="pals" id="tab-pals">My pen pals</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="mail" id="tab-mail">Mail a real rock</button>
+  </nav>
+
+  <section id="panel-make" class="panel on" role="tabpanel" aria-labelledby="tab-make">
+    <div class="card">
+      <h2>Make a rock</h2>
+      <div class="row">
+        <div class="painter">
+          <canvas id="rockCanvas" width="560" height="480" aria-label="Rock painter"></canvas>
+          <p class="hint">Choose a colour and pattern, then doodle on the rock if you like.</p>
+          <div class="palette" id="palette" aria-label="Rock colours"></div>
+          <div class="patterns" id="patterns" aria-label="Rock patterns"></div>
+          <div class="actions">
+            <button type="button" id="btnPaintColor" class="btn" title="Doodle colour">Doodle colour</button>
+            <button type="button" id="btnClear">Clear doodles</button>
+            <button type="button" id="btnSurprise">Surprise me</button>
+          </div>
+        </div>
+        <div class="form">
+          <label for="rockName">Rock name</label>
+          <input id="rockName" type="text" maxlength="40" placeholder="Pink Pebble" autocomplete="off">
+          <label for="nick">Your pen-pal nickname <span class="hint">(not your real name)</span></label>
+          <input id="nick" type="text" maxlength="24" placeholder="RiverDot" autocomplete="off">
+          <label for="note">Short note to a stranger</label>
+          <textarea id="note" maxlength="180" placeholder="A kind thought — no personal details."></textarea>
+          <p class="hint"><span id="noteCount">0</span>/180 · Be kind. No addresses, phones, or real names.</p>
+          <div class="actions">
+            <button type="button" class="primary" id="btnDonate">Donate this rock to a stranger</button>
+          </div>
+          <p class="hint">Donating adds it to the rock exchange board on this device and gives it a random pen-pal code.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="panel-board" class="panel" role="tabpanel" aria-labelledby="tab-board">
+    <div class="card">
+      <h2>Rock exchange board</h2>
+      <p class="hint">Browse rocks waiting for a pal, including starter rocks left by Coffeebreak sample pals. Adopt one and write back. Your donated rocks stay on this device.</p>
+      <div class="filter">
+        <button type="button" class="btn primary" data-filter="all" id="filter-all">All</button>
+        <button type="button" class="btn" data-filter="waiting">Waiting</button>
+        <button type="button" class="btn" data-filter="adopted">Adopted</button>
+        <button type="button" class="btn" data-filter="mine">Mine</button>
+      </div>
+      <div class="board" id="board"></div>
+    </div>
+  </section>
+
+  <section id="panel-pals" class="panel" role="tabpanel" aria-labelledby="tab-pals">
+    <div class="card">
+      <h2>My pen pals</h2>
+      <p class="hint">Message threads for rocks you donated or adopted. Still no personal info, please.</p>
+      <div id="threadList" class="thread-list"></div>
+      <div id="threadView" class="thread-box" hidden>
+        <button type="button" id="btnBackThreads">← All threads</button>
+        <div id="threadHead"></div>
+        <div id="threadMsgs"></div>
+        <label for="reply">Reply note</label>
+        <textarea id="reply" maxlength="180" placeholder="A kind reply — no personal details."></textarea>
+        <p class="hint"><span id="replyCount">0</span>/180</p>
+        <button type="button" class="primary" id="btnReply">Send reply</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="panel-mail" class="panel" role="tabpanel" aria-labelledby="tab-mail">
+    <div class="card mail">
+      <h2>Optional real-world mailing</h2>
+      <p>If you would like Karen to help coordinate sending a real painted or collected rock, you can open an email with your <strong>pen-pal nickname only</strong>.</p>
+      <div class="safety">
+        <strong>Do not enter a home address on this page.</strong>
+        Never post your address publicly, in a rock note, or in a pen-pal thread.
+        If mailing needs to be arranged, Karen can reply to your email privately.
+      </div>
+      <label for="mailNick">Pen-pal nickname</label>
+      <input id="mailNick" type="text" maxlength="24" placeholder="RiverDot" autocomplete="off">
+      <label for="mailCode">Rock code (optional)</label>
+      <input id="mailCode" type="text" maxlength="20" placeholder="RPP-7K4M" autocomplete="off">
+      <label for="mailNote">Short message (optional — no address)</label>
+      <textarea id="mailNote" maxlength="180" placeholder="I would like to mail a real rock. Please do not include an address."></textarea>
+      <div class="actions">
+        <button type="button" class="primary" id="btnMailto">Open email to Karen</button>
+      </div>
+      <p class="hint">This opens your mail app to songwriterkaz@gmail.com. Nothing is sent until you press send there. No address field is collected here.</p>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p>Free for now. Coffee tip via PayID (Teachers Mutual Bank): <b>darkokaz@gmx.com</b></p>
+    <p><small>Karen (Coffeebreak) keeps all rights in this app, its name, art and design. Third-party names and trademarks belong to their owners; Coffeebreak makes no claim on them and is not affiliated with or endorsed by them. Provided as is for personal and entertainment use.</small></p>
+    <p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p>
+    <p><a href="../../">Back to the Coffeebreak hub</a></p>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(function () {
+  var STORE = "cb-rock-pen-pals-v1";
+  var MAILTO = "songwriterkaz@gmail.com";
+  var COLORS = ["#e8d5c4", "#c9b299", "#8d6e54", "#f3d2b3", "#ff8fab", "#ff4f9a", "#ffd166", "#7bdff2", "#8bd450", "#b388eb", "#ff6b35", "#4a1030"];
+  var PATTERNS = ["smooth", "speckles", "stripes", "dots", "hearts", "stars", "flowers", "swirl", "zigzag", "smiley", "waves", "sparkle"];
+  var canvas = document.getElementById("rockCanvas");
+  var ctx = canvas.getContext("2d");
+  var state = { color: COLORS[4], pattern: "speckles", doodleColor: "#4a1030", strokes: [], current: null, filter: "all", openId: null };
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
+    });
+  }
+  function toast(msg) {
+    var el = $("toast");
+    el.textContent = msg;
+    el.style.display = "block";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { el.style.display = "none"; }, 2800);
+  }
+  function code() {
+    var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    var out = "RPP-";
+    for (var i = 0; i < 4; i++) out += chars.charAt(Math.floor(Math.random() * chars.length));
+    return out;
+  }
+  function uid() {
+    return "rk-" + Date.now().toString(36) + "-" + Math.floor(Math.random() * 1e6).toString(36);
+  }
+  function looksPersonal(s) {
+    var t = String(s || "");
+    if (/\b\d{6,}\b/.test(t)) return "numbers that look like a phone or postcode";
+    if (/\b(street|st\.|road|rd\.|avenue|ave\.|drive|dr\.|lane|ln\.|suburb|postcode|zip code|address|po box)\b/i.test(t)) return "a word that looks like an address";
+    if (/[A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,}/i.test(t)) return "an email address";
+    return null;
+  }
+  function confirmSafe(text) {
+    var why = looksPersonal(text);
+    if (!why) return true;
+    return window.confirm("That note looks like it may include " + why + ". Please do not share personal info. Edit it, or press OK if you are sure it is safe.");
+  }
+
+  var SEEDS = [
+    { id: "seed-1", code: "RPP-PINK", name: "Pink Pebble", nick: "Rosie", note: "Hello from a sunny morning walk. Paint a smile on your next stone.", color: "#ff8fab", pattern: "hearts", seed: true },
+    { id: "seed-2", code: "RPP-RIVR", name: "River Dot", nick: "Beachcomber", note: "Found me by a creek. Pass on a kindness today.", color: "#7bdff2", pattern: "dots", seed: true },
+    { id: "seed-3", code: "RPP-STAR", name: "Star Spark", nick: "Luna", note: "I wish you a gentle week. Keep me on a windowsill.", color: "#b388eb", pattern: "stars", seed: true },
+    { id: "seed-4", code: "RPP-HONY", name: "Honey Stripe", nick: "Goldie", note: "You are braver than you think.", color: "#ffd166", pattern: "stripes", seed: true },
+    { id: "seed-5", code: "RPP-PIP1", name: "Heart Speckle", nick: "Pip", note: "A tiny heart for a stranger. Be kind to yourself too.", color: "#ff4f9a", pattern: "speckles", seed: true },
+    { id: "seed-6", code: "RPP-TIDE", name: "Ocean Swirl", nick: "Tide", note: "Collected at low tide. May your day be calm.", color: "#7bdff2", pattern: "swirl", seed: true },
+    { id: "seed-7", code: "RPP-FERN", name: "Garden Dot", nick: "Fern", note: "From a quiet garden path. I hope you find a favourite tree.", color: "#8bd450", pattern: "dots", seed: true },
+    { id: "seed-8", code: "RPP-DUSK", name: "Sunset Flash", nick: "Amber", note: "Painted at dusk with leftover pink.", color: "#ff6b35", pattern: "waves", seed: true },
+    { id: "seed-9", code: "RPP-CHIP", name: "Lucky Spot", nick: "Scout", note: "Keep me for a day, then gift a rock of your own.", color: "#c9b299", pattern: "sparkle", seed: true },
+    { id: "seed-10", code: "RPP-CLLD", name: "Cloud Stripe", nick: "Mallow", note: "Soft as a cloud, sturdy as a stone.", color: "#e8d5c4", pattern: "stripes", seed: true },
+    { id: "seed-11", code: "RPP-BERRY", name: "Berry Swirl", nick: "Juniper", note: "A berry-coloured pebble for someone who needs a lift.", color: "#d6336c", pattern: "swirl", seed: true },
+    { id: "seed-12", code: "RPP-KIND", name: "Kind Flint", nick: "KindFlint", note: "If you adopt me, write back. No real names — just kindness.", color: "#8d6e54", pattern: "smiley", seed: true }
+  ];
+  var SEED_THREADS = {
+    "seed-1": [{ from: "Rosie", text: "I left Pink Pebble on the exchange for a new pal.", at: "2026-03-14T09:00:00.000Z" }],
+    "seed-12": [{ from: "KindFlint", text: "Hello, stranger. Tell me a favourite colour — not a favourite street.", at: "2026-04-02T11:30:00.000Z" }]
+  };
+
+  function defaultData() {
+    return { nickname: "", rocks: SEEDS.map(function (s) { return Object.assign({ strokes: [], created: "2026-03-01T00:00:00.000Z", status: "waiting", adoptedBy: "", mine: false }, s); }), threads: SEED_THREADS };
+  }
+  function load() {
+    var fallback = defaultData();
+    try {
+      var raw = localStorage.getItem(STORE);
+      if (!raw) return fallback;
+      var data = JSON.parse(raw);
+      if (!data || !data.rocks) return fallback;
+      var have = {};
+      data.rocks.forEach(function (r) { have[r.id] = true; });
+      SEEDS.forEach(function (s) {
+        if (!have[s.id]) {
+          data.rocks.push(Object.assign({ strokes: [], created: "2026-03-01T00:00:00.000Z", status: "waiting", adoptedBy: "", mine: false }, s));
+        }
+      });
+      if (!data.threads) data.threads = {};
+      Object.keys(SEED_THREADS).forEach(function (id) {
+        if (!data.threads[id] || !data.threads[id].length) data.threads[id] = SEED_THREADS[id].slice();
+      });
+      if (!data.nickname) data.nickname = "";
+      return data;
+    } catch (e) {
+      return fallback;
+    }
+  }
+  function save() {
+    try { localStorage.setItem(STORE, JSON.stringify(DB)); } catch (e) {}
+  }
+  var DB = load();
+
+  function pebblePath(c, w, h) {
+    var cx = w / 2, cy = h / 2 + h * 0.04, rx = w * 0.38, ry = h * 0.30;
+    c.beginPath();
+    var pts = [
+      [0.00, -0.70], [0.28, -0.92], [0.62, -0.70], [0.92, -0.22],
+      [0.88, 0.38], [0.55, 0.88], [0.05, 0.95], [-0.48, 0.72],
+      [-0.90, 0.22], [-0.86, -0.38], [-0.50, -0.82]
+    ];
+    pts.forEach(function (p, i) {
+      var x = cx + p[0] * rx, y = cy + p[1] * ry;
+      if (i === 0) c.moveTo(x, y); else c.lineTo(x, y);
+    });
+    c.closePath();
+  }
+  function drawPattern(c, w, h, rock) {
+    var pattern = rock.pattern || "smooth";
+    var ink = shade(rock.color, -40);
+    c.save();
+    c.fillStyle = ink;
+    c.strokeStyle = ink;
+    var i, x, y;
+    if (pattern === "speckles") {
+      for (i = 0; i < 70; i++) {
+        c.globalAlpha = 0.35;
+        c.beginPath();
+        c.arc(rand(w, i, 1) * w, rand(h, i, 2) * h, 1 + rand(w, i, 3) * 3, 0, Math.PI * 2);
+        c.fill();
+      }
+    } else if (pattern === "stripes") {
+      c.lineWidth = 6;
+      c.globalAlpha = 0.35;
+      for (i = -h; i < w + h; i += 16) {
+        c.beginPath();
+        c.moveTo(i, 0);
+        c.lineTo(i + h, h);
+        c.stroke();
+      }
+    } else if (pattern === "dots") {
+      c.globalAlpha = 0.45;
+      for (y = 20; y < h; y += 28) {
+        for (x = 20; x < w; x += 28) {
+          c.beginPath();
+          c.arc(x + ((y / 28) % 2) * 10, y, 5, 0, Math.PI * 2);
+          c.fill();
+        }
+      }
+    } else if (pattern === "hearts") {
+      c.globalAlpha = 0.5;
+      for (i = 0; i < 8; i++) heart(c, 60 + (i % 4) * 70, 70 + Math.floor(i / 4) * 90, 10);
+    } else if (pattern === "stars") {
+      c.globalAlpha = 0.5;
+      for (i = 0; i < 8; i++) star(c, 70 + (i % 4) * 70, 80 + Math.floor(i / 4) * 90, 9, 5);
+    } else if (pattern === "flowers") {
+      c.globalAlpha = 0.5;
+      for (i = 0; i < 6; i++) flower(c, 80 + (i % 3) * 90, 90 + Math.floor(i / 3) * 110, 12);
+    } else if (pattern === "swirl") {
+      c.globalAlpha = 0.4;
+      c.lineWidth = 4;
+      c.beginPath();
+      for (i = 0; i < 80; i++) {
+        var a = i / 5, r = i * 1.3;
+        var sx = w / 2 + Math.cos(a) * r, sy = h / 2 + Math.sin(a) * r;
+        if (i === 0) c.moveTo(sx, sy); else c.lineTo(sx, sy);
+      }
+      c.stroke();
+    } else if (pattern === "zigzag") {
+      c.globalAlpha = 0.45;
+      c.lineWidth = 4;
+      for (y = 50; y < h - 20; y += 22) {
+        c.beginPath();
+        c.moveTo(40, y);
+        for (x = 40; x < w - 40; x += 18) c.lineTo(x + 9, y + ((x / 18) % 2 ? -8 : 8));
+        c.stroke();
+      }
+    } else if (pattern === "smiley") {
+      c.globalAlpha = 0.65;
+      c.lineWidth = 6;
+      c.beginPath(); c.arc(w * 0.42, h * 0.45, 6, 0, Math.PI * 2); c.fill();
+      c.beginPath(); c.arc(w * 0.58, h * 0.45, 6, 0, Math.PI * 2); c.fill();
+      c.beginPath(); c.arc(w / 2, h * 0.52, 28, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke();
+    } else if (pattern === "waves") {
+      c.globalAlpha = 0.4;
+      c.lineWidth = 4;
+      for (y = 50; y < h - 30; y += 18) {
+        c.beginPath();
+        for (x = 0; x <= w; x += 8) c[x === 0 ? "moveTo" : "lineTo"](x, y + Math.sin(x / 16) * 6);
+        c.stroke();
+      }
+    } else if (pattern === "sparkle") {
+      c.globalAlpha = 0.6;
+      for (i = 0; i < 14; i++) spark(c, 50 + rand(w, i, 4) * (w - 100), 50 + rand(h, i, 5) * (h - 100), 7);
+    }
+    c.restore();
+  }
+  function rand(seedA, i, k) {
+    var x = Math.sin(seedA * 0.017 + i * 12.9898 + k * 78.233) * 43758.5453;
+    return x - Math.floor(x);
+  }
+  function shade(hex, amt) {
+    var h = hex.replace("#", "");
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var n = parseInt(h, 16);
+    var r = Math.max(0, Math.min(255, (n >> 16) + amt));
+    var g = Math.max(0, Math.min(255, ((n >> 8) & 255) + amt));
+    var b = Math.max(0, Math.min(255, (n & 255) + amt));
+    return "rgb(" + r + "," + g + "," + b + ")";
+  }
+  function heart(c, x, y, s) {
+    c.beginPath();
+    c.moveTo(x, y + s * 0.3);
+    c.bezierCurveTo(x, y - s, x - s * 1.6, y - s * 0.2, x, y + s);
+    c.bezierCurveTo(x + s * 1.6, y - s * 0.2, x, y - s, x, y + s * 0.3);
+    c.fill();
+  }
+  function star(c, x, y, r, n) {
+    c.beginPath();
+    for (var i = 0; i < n * 2; i++) {
+      var a = (i * Math.PI) / n - Math.PI / 2;
+      var rad = i % 2 === 0 ? r : r / 2;
+      var fn = i === 0 ? "moveTo" : "lineTo";
+      c[fn](x + Math.cos(a) * rad, y + Math.sin(a) * rad);
+    }
+    c.closePath();
+    c.fill();
+  }
+  function flower(c, x, y, r) {
+    for (var i = 0; i < 5; i++) {
+      var a = (i / 5) * Math.PI * 2;
+      c.beginPath();
+      c.arc(x + Math.cos(a) * r, y + Math.sin(a) * r, r * 0.55, 0, Math.PI * 2);
+      c.fill();
+    }
+    c.beginPath();
+    c.arc(x, y, r * 0.4, 0, Math.PI * 2);
+    c.fill();
+  }
+  function spark(c, x, y, r) {
+    c.beginPath();
+    c.moveTo(x, y - r);
+    c.lineTo(x + 1, y - 1);
+    c.lineTo(x + r, y);
+    c.lineTo(x + 1, y + 1);
+    c.lineTo(x, y + r);
+    c.lineTo(x - 1, y + 1);
+    c.lineTo(x - r, y);
+    c.lineTo(x - 1, y - 1);
+    c.closePath();
+    c.fill();
+  }
+
+  function drawRock(c, w, h, rock) {
+    c.clearRect(0, 0, w, h);
+    c.save();
+    // soft ground shadow
+    c.fillStyle = "rgba(74,16,48,0.12)";
+    c.beginPath();
+    c.ellipse(w / 2, h * 0.78, w * 0.28, h * 0.07, 0, 0, Math.PI * 2);
+    c.fill();
+    pebblePath(c, w, h);
+    c.fillStyle = rock.color || "#e8d5c4";
+    c.fill();
+    c.save();
+    pebblePath(c, w, h);
+    c.clip();
+    drawPattern(c, w, h, rock);
+    var strokes = rock.strokes || [];
+    strokes.forEach(function (st) {
+      if (!st.points || !st.points.length) return;
+      c.strokeStyle = st.color || "#4a1030";
+      c.lineWidth = (st.width || 4) * (w / 280);
+      c.lineCap = "round";
+      c.lineJoin = "round";
+      c.beginPath();
+      st.points.forEach(function (p, i) {
+        var x = p[0] * w, y = p[1] * h;
+        if (i === 0) c.moveTo(x, y); else c.lineTo(x, y);
+      });
+      c.stroke();
+    });
+    // shine
+    c.fillStyle = "rgba(255,255,255,0.28)";
+    c.beginPath();
+    c.ellipse(w * 0.40, h * 0.38, w * 0.12, h * 0.07, -0.5, 0, Math.PI * 2);
+    c.fill();
+    c.restore();
+    c.lineWidth = 4;
+    c.strokeStyle = shade(rock.color || "#e8d5c4", -50);
+    pebblePath(c, w, h);
+    c.stroke();
+    c.restore();
+  }
+  function currentRock() {
+    return { color: state.color, pattern: state.pattern, strokes: state.strokes };
+  }
+  function redraw() {
+    drawRock(ctx, canvas.width, canvas.height, currentRock());
+  }
+
+  function pos(ev) {
+    var r = canvas.getBoundingClientRect();
+    var src = ev.touches ? ev.touches[0] : ev;
+    return [(src.clientX - r.left) / r.width, (src.clientY - r.top) / r.height];
+  }
+  function insidePebble(nx, ny) {
+    // rough test using an offscreen path
+    var c = canvas.getContext("2d");
+    pebblePath(c, canvas.width, canvas.height);
+    return c.isPointInPath(nx * canvas.width, ny * canvas.height);
+  }
+  canvas.addEventListener("pointerdown", function (ev) {
+    ev.preventDefault();
+    var p = pos(ev);
+    if (!insidePebble(p[0], p[1])) return;
+    state.current = { color: state.doodleColor, width: 5, points: [p] };
+    state.strokes = state.strokes.concat([state.current]);
+    try { canvas.setPointerCapture(ev.pointerId); } catch (e) {}
+    redraw();
+  });
+  canvas.addEventListener("pointermove", function (ev) {
+    if (!state.current) return;
+    ev.preventDefault();
+    var p = pos(ev);
+    state.current.points.push(p);
+    redraw();
+  });
+  function endStroke() { state.current = null; }
+  canvas.addEventListener("pointerup", endStroke);
+  canvas.addEventListener("pointercancel", endStroke);
+
+  function buildSwatches() {
+    var pal = $("palette");
+    pal.innerHTML = "";
+    COLORS.forEach(function (col) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "swatch";
+      b.style.background = col;
+      b.setAttribute("aria-label", "Colour " + col);
+      b.setAttribute("aria-pressed", col === state.color ? "true" : "false");
+      b.addEventListener("click", function () {
+        state.color = col;
+        buildSwatches();
+        redraw();
+      });
+      pal.appendChild(b);
+    });
+    var pats = $("patterns");
+    pats.innerHTML = "";
+    PATTERNS.forEach(function (p) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "pat";
+      b.textContent = p;
+      b.setAttribute("aria-pressed", p === state.pattern ? "true" : "false");
+      b.addEventListener("click", function () {
+        state.pattern = p;
+        buildSwatches();
+        redraw();
+      });
+      pats.appendChild(b);
+    });
+  }
+  $("btnClear").addEventListener("click", function () {
+    state.strokes = [];
+    redraw();
+  });
+  $("btnSurprise").addEventListener("click", function () {
+    state.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    state.pattern = PATTERNS[Math.floor(Math.random() * PATTERNS.length)];
+    state.strokes = [];
+    buildSwatches();
+    redraw();
+  });
+  $("btnPaintColor").addEventListener("click", function () {
+    var next = COLORS[Math.floor(Math.random() * COLORS.length)];
+    state.doodleColor = next;
+    $("btnPaintColor").style.background = next;
+    $("btnPaintColor").style.color = "#fff";
+    toast("Doodle colour changed");
+  });
+
+  function showTab(name) {
+    ["make", "board", "pals", "mail"].forEach(function (t) {
+      var panel = $("panel-" + t);
+      var tab = $("tab-" + t);
+      var on = t === name;
+      panel.className = "panel" + (on ? " on" : "");
+      tab.setAttribute("aria-selected", on ? "true" : "false");
+      tab.className = on ? "on" : "";
+    });
+    if (name === "board") renderBoard();
+    if (name === "pals") renderThreads();
+    if (name === "mail") $("mailNick").value = $("mailNick").value || DB.nickname || $("nick").value;
+  }
+  document.querySelectorAll(".tabs button").forEach(function (btn) {
+    btn.addEventListener("click", function () { showTab(btn.getAttribute("data-tab")); });
+  });
+
+  $("note").addEventListener("input", function () { $("noteCount").textContent = $("note").value.length; });
+  $("reply").addEventListener("input", function () { $("replyCount").textContent = $("reply").value.length; });
+  if (DB.nickname) $("nick").value = DB.nickname;
+
+  $("btnDonate").addEventListener("click", function () {
+    var name = $("rockName").value.trim();
+    var nick = $("nick").value.trim();
+    var note = $("note").value.trim();
+    if (!name) { toast("Name your rock first"); return; }
+    if (!nick) { toast("Choose a pen-pal nickname (not your real name)"); return; }
+    if (looksPersonal(nick)) { toast("Use a nickname, not personal info"); return; }
+    if (!confirmSafe(name + " " + note)) return;
+    if (!note) {
+      if (!window.confirm("Donate this rock with no note? A short kind note makes a sweeter swap.")) return;
+    }
+    var rock = {
+      id: uid(),
+      code: code(),
+      name: name,
+      nick: nick,
+      note: note || "A rock for a stranger. Be kind.",
+      color: state.color,
+      pattern: state.pattern,
+      strokes: state.strokes.map(function (s) {
+        return { color: s.color, width: s.width, points: s.points.slice() };
+      }),
+      created: new Date().toISOString(),
+      status: "waiting",
+      adoptedBy: "",
+      mine: true,
+      seed: false
+    };
+    DB.nickname = nick;
+    DB.rocks.unshift(rock);
+    DB.threads[rock.id] = [{ from: nick, text: "I donated " + name + " to a stranger. Code " + rock.code + ".", at: rock.created }];
+    save();
+    $("rockName").value = "";
+    $("note").value = "";
+    $("noteCount").textContent = "0";
+    state.strokes = [];
+    redraw();
+    toast("Donated! Your pen-pal code is " + rock.code);
+    showTab("board");
+  });
+
+  function renderBoard() {
+    var box = $("board");
+    box.innerHTML = "";
+    var list = DB.rocks.filter(function (r) {
+      if (state.filter === "waiting") return r.status !== "adopted";
+      if (state.filter === "adopted") return r.status === "adopted";
+      if (state.filter === "mine") return !!r.mine;
+      return true;
+    });
+    if (!list.length) {
+      box.innerHTML = '<p class="empty">No rocks in this view yet. Make one and donate it.</p>';
+      return;
+    }
+    list.forEach(function (r) {
+      var el = document.createElement("article");
+      el.className = "rock-card";
+      var cnv = document.createElement("canvas");
+      cnv.width = 400; cnv.height = 260;
+      drawRock(cnv.getContext("2d"), 400, 260, r);
+      var h = document.createElement("h3");
+      h.textContent = r.name;
+      var meta = document.createElement("div");
+      meta.innerHTML = '<span class="code">' + esc(r.code) + '</span> · <span class="badge">' + (r.status === "adopted" ? "Adopted" : "Waiting") + "</span>";
+      var p = document.createElement("p");
+      p.textContent = r.note;
+      var who = document.createElement("p");
+      who.className = "hint";
+      who.textContent = "From " + r.nick + (r.adoptedBy ? " · pal " + r.adoptedBy : "");
+      var actions = document.createElement("div");
+      actions.className = "actions";
+      if (r.status !== "adopted" && !r.mine) {
+        var ad = document.createElement("button");
+        ad.type = "button";
+        ad.className = "primary";
+        ad.textContent = "Adopt this rock";
+        ad.addEventListener("click", function () { adoptRock(r.id); });
+        actions.appendChild(ad);
+      }
+      var open = document.createElement("button");
+      open.type = "button";
+      open.textContent = "Open thread";
+      open.addEventListener("click", function () { openThread(r.id); });
+      actions.appendChild(open);
+      el.appendChild(cnv);
+      el.appendChild(h);
+      el.appendChild(meta);
+      el.appendChild(p);
+      el.appendChild(who);
+      el.appendChild(actions);
+      box.appendChild(el);
+    });
+  }
+  document.querySelectorAll(".filter button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      state.filter = b.getAttribute("data-filter");
+      document.querySelectorAll(".filter button").forEach(function (x) { x.className = "btn"; });
+      b.className = "btn primary";
+      renderBoard();
+    });
+  });
+
+  function adoptRock(id) {
+    var r = DB.rocks.filter(function (x) { return x.id === id; })[0];
+    if (!r) return;
+    var nick = (DB.nickname || $("nick").value || "").trim();
+    if (!nick) {
+      nick = (window.prompt("Choose a pen-pal nickname (not your real name) to adopt this rock:") || "").trim();
+    }
+    if (!nick) { toast("A nickname is needed to adopt"); return; }
+    if (looksPersonal(nick)) { toast("Use a nickname, not personal info"); return; }
+    if (r.mine) { toast("That is your donated rock"); return; }
+    if (r.status === "adopted") { toast("Someone already adopted this rock on this device"); openThread(id); return; }
+    r.status = "adopted";
+    r.adoptedBy = nick;
+    DB.nickname = nick;
+    $("nick").value = nick;
+    if (!DB.threads[r.id]) DB.threads[r.id] = [];
+    DB.threads[r.id].push({ from: nick, text: "I adopted " + r.name + ". Thank you, " + r.nick + ".", at: new Date().toISOString() });
+    save();
+    toast("You adopted " + r.name + ". Write a reply anytime.");
+    openThread(id);
+  }
+
+  function rocksForThreads() {
+    return DB.rocks.filter(function (r) {
+      return r.mine || r.status === "adopted" || (DB.threads[r.id] && DB.threads[r.id].length);
+    });
+  }
+  function renderThreads() {
+    $("threadView").hidden = true;
+    $("threadList").hidden = false;
+    var box = $("threadList");
+    box.innerHTML = "";
+    var list = rocksForThreads();
+    if (!list.length) {
+      box.innerHTML = '<p class="empty">Donate or adopt a rock to start a pen-pal thread.</p>';
+      return;
+    }
+    list.forEach(function (r) {
+      var msgs = DB.threads[r.id] || [];
+      var el = document.createElement("article");
+      el.className = "rock-card";
+      el.innerHTML = "<h3>" + esc(r.name) + ' <span class="code">' + esc(r.code) + "</span></h3>" +
+        "<p>" + esc(r.note) + "</p>" +
+        '<p class="hint">' + msgs.length + " message" + (msgs.length === 1 ? "" : "s") + " · From " + esc(r.nick) + "</p>";
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "primary";
+      b.textContent = "Open thread";
+      b.addEventListener("click", function () { openThread(r.id); });
+      el.appendChild(b);
+      box.appendChild(el);
+    });
+  }
+  function openThread(id) {
+    var r = DB.rocks.filter(function (x) { return x.id === id; })[0];
+    if (!r) return;
+    state.openId = id;
+    showTab("pals");
+    $("threadList").hidden = true;
+    $("threadView").hidden = false;
+    var head = $("threadHead");
+    head.innerHTML = "";
+    var cnv = document.createElement("canvas");
+    cnv.width = 400; cnv.height = 260;
+    cnv.style.maxWidth = "220px";
+    cnv.style.height = "auto";
+    drawRock(cnv.getContext("2d"), 400, 260, r);
+    var info = document.createElement("div");
+    info.innerHTML = "<h3>" + esc(r.name) + "</h3><div class='code'>" + esc(r.code) + "</div><p>" + esc(r.note) + "</p><p class='hint'>Left by " + esc(r.nick) + (r.adoptedBy ? " · adopted by " + esc(r.adoptedBy) : "") + "</p>";
+    head.appendChild(cnv);
+    head.appendChild(info);
+    renderMsgs(id);
+  }
+  function renderMsgs(id) {
+    var box = $("threadMsgs");
+    var msgs = DB.threads[id] || [];
+    if (!msgs.length) {
+      box.innerHTML = '<p class="empty">No messages yet. Say hello — no personal info.</p>';
+      return;
+    }
+    box.innerHTML = msgs.map(function (m) {
+      var when = "";
+      try { when = new Date(m.at).toLocaleString(); } catch (e) { when = ""; }
+      return '<div class="msg"><span class="who">' + esc(m.from) + '</span><span class="when">' + esc(when) + "</span><div>" + esc(m.text) + "</div></div>";
+    }).join("");
+  }
+  $("btnBackThreads").addEventListener("click", function () {
+    state.openId = null;
+    renderThreads();
+  });
+  $("btnReply").addEventListener("click", function () {
+    var id = state.openId;
+    if (!id) return;
+    var text = $("reply").value.trim();
+    var nick = (DB.nickname || $("nick").value || "").trim();
+    if (!nick) {
+      nick = (window.prompt("Choose a pen-pal nickname (not your real name):") || "").trim();
+      if (!nick) { toast("A nickname is needed to reply"); return; }
+      DB.nickname = nick;
+    }
+    if (looksPersonal(nick)) { toast("Use a nickname, not personal info"); return; }
+    if (!text) { toast("Write a short reply first"); return; }
+    if (!confirmSafe(text)) return;
+    if (!DB.threads[id]) DB.threads[id] = [];
+    DB.threads[id].push({ from: nick, text: text, at: new Date().toISOString() });
+    $("reply").value = "";
+    $("replyCount").textContent = "0";
+    save();
+    renderMsgs(id);
+    toast("Reply saved on this device");
+  });
+
+  $("btnMailto").addEventListener("click", function () {
+    var nick = $("mailNick").value.trim();
+    var rockCode = $("mailCode").value.trim();
+    var note = $("mailNote").value.trim();
+    if (!nick) { toast("Enter your pen-pal nickname only"); return; }
+    if (looksPersonal(nick) || looksPersonal(rockCode) || looksPersonal(note)) {
+      toast("Please remove anything that looks like personal info or an address");
+      return;
+    }
+    var subject = "Rock Pen Pals — " + nick + " would like to mail a real rock";
+    var body = [
+      "Pen-pal nickname: " + nick,
+      "Rock code (optional): " + (rockCode || "(none)"),
+      "Note (no address): " + (note || "(none)"),
+      "",
+      "I have not included a home address. Please reply by email if a real-world rock swap can be arranged privately.",
+      "",
+      "Sent from Coffeebreak Rock Pen Pals."
+    ].join("\n");
+    var href = "mailto:" + MAILTO + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    window.location.href = href;
+  });
+
+  buildSwatches();
+  redraw();
+  renderBoard();
+})();
+</script>
+</body>
+</html>
