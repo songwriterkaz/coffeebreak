@@ -1,5 +1,5 @@
 /* Coffeebreak voice - a sung vocal made in the browser.
-   Formant singing with glides, vibrato, breath and reverb.
+   LF glottal source, formants, human pitch, breath and reverb.
    No outside service is used.
 */
 (function (root, factory) {
@@ -83,14 +83,19 @@
   function onsetOf(word) {
     const w = String(word || '').toLowerCase().replace(/[^a-z]/g, '');
     if (!w) return '';
-    if (w.startsWith('shr') || w.startsWith('sh') || w.startsWith('ch')) return 'sh';
+    if (w.startsWith('ch')) return 'ch';
+    if (w.startsWith('shr') || w.startsWith('sh')) return 'sh';
     if (w.startsWith('th')) return 'th';
     if (w.startsWith('ph') || w[0] === 'f') return 'f';
     if (w.startsWith('wh') || w[0] === 'w') return 'w';
     if (w[0] === 's' || (w[0] === 'c' && 'eiy'.indexOf(w[1] || '') >= 0)) return 's';
     if (w[0] === 'h') return 'h';
-    if (w[0] === 'p' || w[0] === 't' || w[0] === 'k' || (w[0] === 'c' && 'eiy'.indexOf(w[1] || '') < 0) || w[0] === 'q') return 'stop';
-    if (w[0] === 'b' || w[0] === 'd' || w[0] === 'g') return 'vstop';
+    if (w[0] === 'p') return 'p';
+    if (w[0] === 't') return 't';
+    if (w[0] === 'k' || w[0] === 'q' || (w[0] === 'c' && 'eiy'.indexOf(w[1] || '') < 0)) return 'k';
+    if (w[0] === 'b') return 'b';
+    if (w[0] === 'd') return 'd';
+    if (w[0] === 'g') return 'g';
     if (w[0] === 'm' || w[0] === 'n') return 'nasal';
     if (w[0] === 'l') return 'l';
     if (w[0] === 'r') return 'r';
@@ -104,8 +109,11 @@
     const w = String(word || '').toLowerCase().replace(/[^a-z]/g, '');
     if (!w) return '';
     if (/ss$|s$|ce$|se$/.test(w) && !/ous$/.test(w)) return 's';
-    if (/sh$|ch$|ge$|dge$/.test(w)) return 'sh';
-    if (/[ptk]$|ck$/.test(w)) return 'stop';
+    if (/ch$/.test(w)) return 'ch';
+    if (/sh$|ge$|dge$/.test(w)) return 'sh';
+    if (/p$/.test(w)) return 'p';
+    if (/t$/.test(w)) return 't';
+    if (/k$|ck$|q$/.test(w)) return 'k';
     if (/[mn]$|ng$/.test(w)) return 'nasal';
     if (/[l]$/.test(w)) return 'l';
     return '';
@@ -133,12 +141,43 @@
     };
   }
 
-  function glottal(phase, oq) {
-    const tp = oq * 0.62;
-    const tn = oq * 0.38;
-    if (phase < tp) return 0.5 * (1 - Math.cos(Math.PI * phase / tp));
-    if (phase < tp + tn) return Math.cos(Math.PI * (phase - tp) / (2 * tn));
-    return 0;
+  function makeLF(te, tp, ta) {
+    te = clamp(te, 0.45, 0.86);
+    tp = clamp(tp, 0.22, te - 0.04);
+    ta = clamp(ta, 0.01, 0.12);
+    const w = Math.PI / tp;
+    const eps = 1 / ta;
+    const tret = 1 - te;
+    const ed = Math.exp(-eps * tret);
+    const retArea = -1 / eps + ed * tret / Math.max(1e-9, 1 - ed);
+    function e0(a) {
+      const s = Math.exp(a * te) * Math.sin(w * te);
+      return Math.abs(s) < 1e-9 ? 0 : -1 / s;
+    }
+    function openArea(a) {
+      const E0 = e0(a);
+      const den = a * a + w * w;
+      const atTe = Math.exp(a * te) * (a * Math.sin(w * te) - w * Math.cos(w * te));
+      const at0 = -w;
+      return E0 * (atTe - at0) / den;
+    }
+    let a = 3.2;
+    for (let i = 0; i < 14; i++) {
+      const f = openArea(a) + retArea;
+      const da = 1e-4;
+      const fp = (openArea(a + da) + retArea - f) / da;
+      if (Math.abs(fp) < 1e-12) break;
+      a -= f / fp;
+      a = clamp(a, 0.15, 18);
+    }
+    const E0 = e0(a);
+    const den = Math.max(1e-9, 1 - ed);
+    return function lf(phase) {
+      if (phase < 0) phase = 0;
+      if (phase >= 1) phase -= Math.floor(phase);
+      if (phase < te) return E0 * Math.exp(a * phase) * Math.sin(w * phase);
+      return -(Math.exp(-eps * (phase - te)) - ed) / den;
+    };
   }
 
   function encodeWav(left, right, sr) {
@@ -332,7 +371,11 @@
     const singer = resonator(2850, 160, sr);
     const chest = resonator(520, 90, sr);
     const nasalRes = resonator(280, 70, sr);
-    const fric = resonator(5500, 1800, sr);
+    const sRes = resonator(6500, 1600, sr);
+    const shRes = resonator(3200, 1400, sr);
+    const tRes = resonator(4800, 1200, sr);
+    const kRes = resonator(2100, 800, sr);
+    const pRes = resonator(900, 500, sr);
     const combsL = makeCombs(sr);
     const combsR = makeCombs(sr * 1.013);
     const apL1 = makeAllpass(sr, 0.0051, 0.7);
@@ -342,62 +385,107 @@
 
     let phase = 0;
     let prevHz = 0;
-    let lip = 0;
     let airLp = 0;
+    let hpS = 0;
 
     function writeNoise(at, dur, amount, kind) {
-      const start = Math.max(0, Math.floor(at * sr));
+      const startAt = Math.max(0, Math.floor(at * sr));
       const len = Math.max(1, Math.floor(dur * sr));
+      const closure = kind === 't' ? 0.016 : kind === 'k' ? 0.02 : kind === 'p' ? 0.012 : kind === 'ch' ? 0.014 : 0;
+      const closeN = Math.floor(closure * sr);
       for (let i = 0; i < len; i++) {
-        const t = i / len;
-        const env = Math.sin(Math.PI * Math.min(1, t * 1.15)) * (1 - t * 0.35);
-        let x = (rand() * 2 - 1);
-        if (kind === 's' || kind === 'sh') {
-          x = fric.tick(x);
-          if (kind === 's') x = x - airLp, airLp += 0.08 * ((x + airLp) - airLp);
-        } else if (kind === 'f' || kind === 'th' || kind === 'h') {
-          x *= 0.55;
-        } else if (kind === 'stop') {
-          if (i < sr * 0.012) x = 0;
-          else x *= Math.exp(-(i - sr * 0.012) / (sr * 0.012));
+        const o = startAt + i;
+        if (o >= n) break;
+        if (i < closeN) continue;
+        const u = (i - closeN) / Math.max(1, len - closeN);
+        let env = Math.sin(Math.PI * Math.min(1, u * 1.2));
+        if (kind === 't' || kind === 'k' || kind === 'p' || kind === 'b' || kind === 'd' || kind === 'g' || kind === 'ch') {
+          env = Math.exp(-u / 0.18) * (u < 0.08 ? u / 0.08 : 1);
         }
-        const o = start + i;
-        if (o < n) mono[o] += x * amount * env;
+        let x = rand() * 2 - 1;
+        if (kind === 's') {
+          x = sRes.tick(x);
+          hpS += 0.22 * (x - hpS);
+          x = x - hpS;
+        } else if (kind === 'sh' || kind === 'ch') {
+          x = shRes.tick(x);
+          if (kind === 'ch') x = 0.65 * x + 0.35 * tRes.tick(rand() * 2 - 1);
+        } else if (kind === 't') {
+          x = tRes.tick(x);
+        } else if (kind === 'k') {
+          x = kRes.tick(x);
+        } else if (kind === 'p' || kind === 'b') {
+          x = pRes.tick(x) * 0.7 + (rand() * 2 - 1) * 0.3;
+        } else if (kind === 'd') {
+          x = tRes.tick(x) * 0.6 + pRes.tick(rand() * 2 - 1) * 0.4;
+        } else if (kind === 'g') {
+          x = kRes.tick(x) * 0.7 + pRes.tick(rand() * 2 - 1) * 0.3;
+        } else if (kind === 'f' || kind === 'th' || kind === 'h') {
+          airLp += 0.08 * (x - airLp);
+          x = (x - airLp) * (kind === 'h' ? 0.7 : 0.85);
+        }
+        mono[o] += x * amount * env;
       }
     }
+
+    const vot = { s: 0.055, sh: 0.06, ch: 0.05, t: 0.03, k: 0.036, p: 0.02, h: 0.04, f: 0.04, th: 0.035, b: 0.012, d: 0.014, g: 0.016 };
 
     for (let ni = 0; ni < notes.length; ni++) {
       const note = notes[ni];
       if (!note || note.rest || !(note.d > 0)) {
-        if (note && note.d > 0.18) writeNoise(note.t + note.d * 0.15, Math.min(0.16, note.d * 0.35), 0.035, 'h');
+        if (note && note.d > 0.18) writeNoise(note.t + note.d * 0.15, Math.min(0.16, note.d * 0.35), 0.04, 'h');
         continue;
       }
       const word = note.w || 'la';
       const vow = vowelOf(word);
       const onset = onsetOf(word);
       const coda = codaOf(word);
-      const start = Math.max(0, Math.floor(note.t * sr));
-      const dur = note.d;
+      const phraseStart = ni === 0 || (notes[ni - 1] && notes[ni - 1].rest);
+      const timing = (rand() - 0.5) * 0.022;
+      const loud = 0.86 + rand() * 0.26;
+      const start = Math.max(0, Math.floor((note.t + timing) * sr));
+      const dur = Math.max(0.12, note.d * (0.97 + rand() * 0.06));
       const len = Math.max(1, Math.floor(dur * sr));
       const targetHz = midiHz(clamp(note.p, 48, 84));
-      const fromHz = prevHz > 0 ? prevHz : targetHz * 0.97;
-      const leap = Math.abs(Math.log2(targetHz / fromHz));
-      const glideT = clamp(0.05 + leap * 0.07, 0.05, 0.16);
-      const scoop = prevHz <= 0 || leap > 0.15;
-      const vibDelay = 0.14 + rand() * 0.1;
-      const vibRate = 5.15 + rand() * 0.55;
-      const vibDepth = 0.016 + rand() * 0.01;
-      const fall = (ni === notes.length - 1 || (notes[ni + 1] && notes[ni + 1].rest)) ? 0.018 : 0.006;
+      const fromHz = prevHz > 0 ? prevHz : targetHz * Math.pow(2, -0.06);
+      const leap = Math.abs(Math.log2(targetHz / Math.max(70, fromHz)));
+      const glideT = clamp(0.05 + leap * 0.08, 0.05, 0.18);
+      const scoopCents = (phraseStart || leap > 0.08 ? 50 : 28) + rand() * 35;
+      const scoopT = 0.05 + rand() * 0.035;
+      const vibDelay = 0.17 + rand() * 0.13;
+      const vibGrow = 0.32 + rand() * 0.28;
+      const vibRate0 = 5.05 + rand() * 0.75;
+      const vibDepth0 = 0.017 + rand() * 0.012;
+      const vibRateJit = 0.12 + rand() * 0.1;
+      const vibDepthJit = 0.18 + rand() * 0.12;
+      const vibPhase = rand() * Math.PI * 2;
+      const rateWanderPh = rand() * Math.PI * 2;
+      const depthWanderPh = rand() * Math.PI * 2;
+      const fall = (ni === notes.length - 1 || (notes[ni + 1] && notes[ni + 1].rest)) ? 0.02 : 0.006;
       const oq = 0.58 + rand() * 0.08;
-      if (onset === 's') writeNoise(note.t, Math.min(0.07, dur * 0.18), 0.16, 's');
-      else if (onset === 'sh') writeNoise(note.t, Math.min(0.08, dur * 0.2), 0.14, 'sh');
-      else if (onset === 'f' || onset === 'th') writeNoise(note.t, 0.05, 0.09, onset);
-      else if (onset === 'h') writeNoise(note.t, 0.07, 0.07, 'h');
-      else if (onset === 'stop') writeNoise(note.t, 0.04, 0.11, 'stop');
-      else if (onset === 'vstop') writeNoise(note.t, 0.03, 0.08, 'stop');
-      if (ni === 0 || (notes[ni - 1] && notes[ni - 1].rest)) writeNoise(Math.max(0, note.t - 0.09), 0.1, 0.03, 'h');
+      const rd = 1.05 + rand() * 0.35;
+      const lf = makeLF(oq, oq * (0.62 + rand() * 0.06), clamp(0.018 * rd, 0.014, 0.06));
+      let drift = (rand() - 0.5) * 4;
+      const driftTau = 0.32 + rand() * 0.22;
+      const driftSig = 9;
+      let jit = 1;
+      let shim = 1;
 
-      const voiceDelay = (onset === 's' || onset === 'sh' || onset === 'stop') ? Math.min(0.05, dur * 0.15) : (onset === 'h' ? 0.04 : 0.01);
+      const burstAt = note.t + timing;
+      if (onset === 's') writeNoise(burstAt, Math.min(0.08, dur * 0.22), 0.28, 's');
+      else if (onset === 'sh') writeNoise(burstAt, Math.min(0.09, dur * 0.24), 0.24, 'sh');
+      else if (onset === 'ch') writeNoise(burstAt, Math.min(0.09, dur * 0.22), 0.26, 'ch');
+      else if (onset === 't') writeNoise(burstAt, 0.045, 0.32, 't');
+      else if (onset === 'k') writeNoise(burstAt, 0.055, 0.3, 'k');
+      else if (onset === 'p') writeNoise(burstAt, 0.04, 0.26, 'p');
+      else if (onset === 'b') writeNoise(burstAt, 0.032, 0.18, 'b');
+      else if (onset === 'd') writeNoise(burstAt, 0.034, 0.2, 'd');
+      else if (onset === 'g') writeNoise(burstAt, 0.038, 0.2, 'g');
+      else if (onset === 'f' || onset === 'th') writeNoise(burstAt, 0.06, 0.14, onset);
+      else if (onset === 'h') writeNoise(burstAt, 0.08, 0.1, 'h');
+      if (phraseStart) writeNoise(Math.max(0, burstAt - 0.1), 0.11, 0.04, 'h');
+
+      const voiceDelay = Math.min((vot[onset] || 0.012), dur * 0.22);
       const nasalWord = onset === 'nasal' || coda === 'nasal';
 
       for (let i = 0; i < len; i++) {
@@ -405,24 +493,31 @@
         if (o >= n) break;
         const t = i / sr;
         const u = i / len;
-        const local = t;
-        let hz = lerp(fromHz, targetHz, smooth(local / glideT));
-        if (scoop && local < 0.08) hz *= 0.97 + 0.03 * smooth(local / 0.08);
-        if (u > 0.82) hz *= 1 - fall * smooth((u - 0.82) / 0.18);
-        const vibAmt = smooth((local - vibDelay) / 0.18);
-        hz *= 1 + vibAmt * vibDepth * Math.sin(2 * Math.PI * vibRate * (note.t + t));
-        hz *= 1 + 0.0016 * Math.sin(2 * Math.PI * 0.85 * (note.t + t) + 0.3);
+        const dt = 1 / sr;
+        drift += (-drift / driftTau) * dt + driftSig * Math.sqrt(dt) * (rand() * 2 - 1) * 1.2;
+        drift = clamp(drift, -22, 22);
+        let hz = lerp(fromHz, targetHz, smooth(t / glideT));
+        const scoopAmt = smooth(t / scoopT);
+        hz *= Math.pow(2, (scoopCents * (1 - scoopAmt)) / -1200);
+        if (u > 0.84) hz *= Math.pow(2, -fall * 1.4 * smooth((u - 0.84) / 0.16));
+        const vibEnv = smooth((t - vibDelay) / vibGrow);
+        const rate = vibRate0 * (1 + vibRateJit * 0.35 * Math.sin(2 * Math.PI * 0.33 * (note.t + t) + rateWanderPh));
+        const depth = vibDepth0 * vibEnv * (1 + vibDepthJit * 0.4 * Math.sin(2 * Math.PI * 0.27 * (note.t + t) + depthWanderPh));
+        hz *= 1 + depth * Math.sin(2 * Math.PI * rate * (note.t + t) + vibPhase);
+        hz *= Math.pow(2, drift / 1200);
         hz = clamp(hz, 70, 1200);
-        phase += hz / sr;
-        if (phase >= 1) phase -= Math.floor(phase);
-        const pulse = glottal(phase, oq);
-        const rad = pulse - lip;
-        lip = pulse;
-        let breath = (rand() * 2 - 1);
+        phase += (hz * jit) / sr;
+        if (phase >= 1) {
+          phase -= Math.floor(phase);
+          jit = 1 + (rand() * 2 - 1) * 0.009;
+          shim = 1 + (rand() * 2 - 1) * 0.05;
+        }
+        const sourcePulse = lf(phase) * shim;
+        let breath = rand() * 2 - 1;
         airLp += 0.12 * (breath - airLp);
         breath = breath - airLp;
-        const breathAmt = 0.028 + 0.02 * (1 - u) + (onset === 'h' ? 0.04 * (1 - smooth(u / 0.2)) : 0);
-        const source = rad * 0.9 + breath * breathAmt;
+        const breathAmt = 0.03 + 0.018 * (1 - u) + (onset === 'h' ? 0.045 * (1 - smooth(t / 0.2)) : 0);
+        const source = sourcePulse * 0.95 + breath * breathAmt;
 
         const fv = formantsAt(vow, u);
         for (let k = 0; k < 4; k++) res[k].set(fv[k] * (1 + 0.004 * Math.sin(2 * Math.PI * 0.7 * (note.t + t) + k)), BW[k]);
@@ -434,21 +529,24 @@
           + chest.tick(source) * 0.18;
         if (nasalWord && (u < 0.22 || u > 0.78)) y = y * 0.7 + nasalRes.tick(source) * 0.7;
         if (onset === 'l' && u < 0.14) y *= 0.75;
-        if (onset === 'w' && u < 0.12) y = y * 0.6 + res[0].tick(source) * 0.2;
-        if (onset === 'y' && u < 0.12) y = y * 0.7;
+        if (onset === 'w' && u < 0.12) y *= 0.72;
+        if (onset === 'y' && u < 0.12) y *= 0.78;
 
-        const attack = smooth((t - voiceDelay) / 0.035);
+        const attack = smooth((t - voiceDelay) / 0.04);
         const rel = 1 - smooth((u - 0.88) / 0.12);
         const swell = 0.86 + 0.14 * Math.sin(Math.PI * Math.min(1, u * 1.05));
-        const vibAmp = 1 + vibAmt * 0.04 * Math.sin(2 * Math.PI * vibRate * (note.t + t) + 0.7);
-        let env = Math.max(0, attack) * rel * swell * vibAmp;
-        if (t < voiceDelay) env *= 0.12;
-        mono[o] += y * env * 0.22;
+        const vibAmp = 1 + vibEnv * 0.045 * Math.sin(2 * Math.PI * rate * (note.t + t) + vibPhase + 0.7);
+        let env = Math.max(0, attack) * rel * swell * vibAmp * loud;
+        if (t < voiceDelay) env *= 0.1;
+        mono[o] += y * env * 0.2;
       }
-      if (coda === 's') writeNoise(note.t + dur * 0.86, Math.min(0.08, dur * 0.14), 0.12, 's');
-      else if (coda === 'sh') writeNoise(note.t + dur * 0.86, 0.07, 0.1, 'sh');
-      else if (coda === 'stop') writeNoise(note.t + dur * 0.92, 0.03, 0.08, 'stop');
-      prevHz = targetHz * (1 - fall);
+      if (coda === 's') writeNoise(note.t + timing + dur * 0.86, Math.min(0.09, dur * 0.16), 0.22, 's');
+      else if (coda === 'sh') writeNoise(note.t + timing + dur * 0.86, 0.08, 0.18, 'sh');
+      else if (coda === 'ch') writeNoise(note.t + timing + dur * 0.86, 0.08, 0.2, 'ch');
+      else if (coda === 't') writeNoise(note.t + timing + dur * 0.9, 0.04, 0.24, 't');
+      else if (coda === 'k') writeNoise(note.t + timing + dur * 0.9, 0.045, 0.22, 'k');
+      else if (coda === 'p') writeNoise(note.t + timing + dur * 0.9, 0.035, 0.2, 'p');
+      prevHz = targetHz * Math.pow(2, -fall);
     }
 
     let peak = peakOf(mono);
