@@ -1,6 +1,5 @@
-/* Coffeebreak Studio Espresso - create, library, and ACE-Step vocal client.
-   ACE-Step (ACE-Step/ACE-Step) is Apache-2.0. This file calls the public
-   Space. It does not synthesise a singer locally. */
+/* Coffeebreak Studio Espresso - create, library, and the Coffeebreak voice.
+   The sung vocal is made in the browser. No outside singing service is used. */
 (function (root, factory) {
   const api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
@@ -8,7 +7,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   const PAY_LABEL = 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
   const CART_KEY = 'cbx-espresso-cart';
-  const MODEL = 'ACE-Step/ACE-Step';
+  const MODEL = 'Coffeebreak voice';
   const ENDPOINT = 'https://ace-step-ace-step.hf.space';
   const VOICES = [
     { id: 'en1', label: 'English demo voice 1 (GTSinger reference)', api: 'EN singer 1 — GTSinger' },
@@ -183,35 +182,64 @@
     return Math.max(12, Math.min(28, Math.round(words * 0.45 + lines * 1.5)));
   }
 
-  function songModule(opts) {
-    if (opts && opts.songgen) return opts.songgen;
-    const globalSong = typeof CBSong !== 'undefined' ? CBSong : null;
-    if (globalSong && globalSong.generateSong) return globalSong;
-    if (typeof require === 'function') return require('../../cb-songgen/songgen.js');
-    throw new Error('The shared song module is not loaded. Nothing was saved.');
+  function defaultNotes(count, seed, key) {
+    const scale = [0, 2, 4, 5, 7, 9, 11];
+    const notes = [];
+    let deg = 7;
+    const s = (seed == null ? 3 : seed) | 0;
+    const k = key || 0;
+    for (let i = 0; i < Math.max(count, 2); i++) {
+      deg = Math.max(0, Math.min(14, deg + ((s * 17 + i * 31) % 5) - 2));
+      const p = 60 + k + scale[deg % 7] + 12 * Math.floor(deg / 7) - 12;
+      notes.push({ p: p, s: i, l: 1, v: 0.8 });
+    }
+    return notes;
   }
 
-  async function singAceStep(lyrics, opts) {
+  function voiceModule(opts) {
+    if (opts && opts.voice && typeof opts.voice.sing === 'function') return opts.voice;
+    const g = (typeof globalThis !== 'undefined') ? globalThis : (typeof window !== 'undefined' ? window : {});
+    if (g.CBVoice && typeof g.CBVoice.sing === 'function') return g.CBVoice;
+    if (typeof require === 'function') return require('./voice.js');
+    throw new Error('The Coffeebreak voice could not be loaded.');
+  }
+
+  async function singVoice(lyrics, opts) {
     opts = opts || {};
     const line = opts.line ? String(opts.line).trim() : '';
     const text = line || String(lyrics || '').trim();
     if (wordsOf(text).length < 1 || (!line && wordsOf(text).length < 2)) throw new Error('Write at least two words to sing.');
-    const seconds = opts.seconds || (line ? Math.max(10, Math.min(30, Math.round(wordsOf(line).length * 0.8 + 8))) : vocalSeconds(text));
-    const prompt = opts.prompt || 'sung vocal, clear lyrics, drums, bass and backing music';
-    const sung = await songModule(opts).generateSong({
-      lyrics: text,
-      prompt: prompt,
-      seconds: seconds,
-      seed: opts.seed,
-      bpm: opts.bpm,
-    }, {
-      timeoutMs: opts.timeoutMs,
-      fetchImpl: opts.fetchImpl,
-      onStatus: opts.onStatus,
-      backends: opts.backends,
-    });
-    sung.seconds = seconds;
-    return sung;
+    if (typeof opts.onStatus === 'function') opts.onStatus('Singing with the Coffeebreak voice.');
+    const voice = voiceModule(opts);
+    const bpm = Math.max(72, Math.min(140, opts.bpm || 110));
+    const notes = (opts.notes && opts.notes.length) ? opts.notes : defaultNotes(wordsOf(text).length, opts.seed, opts.key);
+    const score = buildScore(text, notes, bpm);
+    if (opts.seconds && score.seconds > 0.2) {
+      const target = Math.max(4, Math.min(120, +opts.seconds));
+      const k = target / score.seconds;
+      score.notes.forEach(function (n) {
+        if (n.duration != null) n.duration *= k;
+        if (n.d != null) n.d *= k;
+        if (n.t != null) n.t *= k;
+      });
+      score.seconds = target;
+    }
+    const wav = voice.sing(score, { seed: opts.seed, key: opts.key, bpm: bpm });
+    if (!wav || wav.byteLength < 100) throw new Error('The Coffeebreak voice returned silence. Nothing was saved.');
+    return {
+      bytes: wav,
+      mime: 'audio/wav',
+      model: MODEL,
+      license: '',
+      credit: 'Coffeebreak voice',
+      info: 'Sung in the browser with the Coffeebreak voice.',
+      backend: 'coffeebreak-voice',
+      seconds: score.seconds,
+    };
+  }
+
+  function singAceStep(lyrics, opts) {
+    return singVoice(lyrics, opts);
   }
 
   function wavStats(arrayBuffer) {
@@ -272,6 +300,7 @@
     defaultVoiceId: defaultVoiceId,
     lyricLines: lyricLines,
     vocalSeconds: vocalSeconds,
+    singVoice: singVoice,
     singAceStep: singAceStep,
     parseSse: parseSse,
     wavStats: wavStats,

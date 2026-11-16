@@ -154,7 +154,7 @@ try {
   assert.equal(out.simple.voiceInsideMore, false);
   assert.equal(out.song.title, 'Sun is up on the hill');
   assert.equal(out.song.lyrics, 'sun is up on the hill');
-  assert.match(out.song.vocal.model, /ACE-Step|DiffRhythm/);
+  assert.match(out.song.vocal.model, /Coffeebreak voice/);
   assert.notEqual(out.edits.pitched.mark, out.edits.before.mark);
   assert.ok(out.edits.pitched.peak > 0.02);
   assert.equal(out.edits.pitched.pitch, 2);
@@ -165,7 +165,7 @@ try {
   assert.ok(Math.abs(out.opened.vocalLevel - 0.3) < 0.001);
   assert.equal(out.opened.vocalPitch, 2);
   assert.ok(out.song.tracks.includes('Vocals'));
-  assert.equal(out.song.tracks.includes('Drums'), false);
+  assert.equal(out.song.tracks.includes('Drums'), true);
   assert.ok(out.listed.some(s => s.title === 'Sun is up on the hill' && s.lyrics === 'sun is up on the hill'));
   assert.ok(out.played.peak > 0.02, 'mix peak ' + out.played.peak);
   assert.ok(out.played.duration > 1, 'mix duration ' + out.played.duration);
@@ -173,7 +173,7 @@ try {
   assert.ok(out.played.seconds > 0, 'playhead ' + out.played.seconds);
   assert.ok(out.opened.vocalSeconds > 1);
   assert.ok(out.opened.vocalPeak > 0.05);
-  assert.equal(out.opened.drumNotes, 0);
+  assert.ok(out.opened.drumNotes > 0, 'drum notes ' + out.opened.drumNotes);
   assert.ok(out.demoPeak > 0.02, 'demo song still renders');
   assert.equal(out.cart.paid, false);
   assert.equal(out.cart.amount, 10);
