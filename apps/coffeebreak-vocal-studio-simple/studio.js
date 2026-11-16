@@ -299,6 +299,25 @@
     $('createGo').onclick = onCreate;
     $('speakGo').onclick = onSpeak;
     $('downloadGo').onclick = onDownload;
+    function keepLyricsInView() {
+      var el = document.activeElement;
+      if (!el || el.id !== 'lyrics') return;
+      var vv = window.visualViewport;
+      var r = el.getBoundingClientRect();
+      var viewH = vv ? vv.height : window.innerHeight;
+      var viewTop = vv ? vv.offsetTop : 0;
+      if (r.top < viewTop + 8 || r.bottom > viewTop + viewH - 8) {
+        el.scrollIntoView({ block: 'center', inline: 'nearest' });
+      }
+    }
+    if ($('lyrics')) {
+      $('lyrics').removeAttribute('readonly');
+      $('lyrics').addEventListener('focus', function () { setTimeout(keepLyricsInView, 50); });
+    }
+    if (window.visualViewport) {
+      visualViewport.addEventListener('resize', keepLyricsInView);
+      visualViewport.addEventListener('scroll', keepLyricsInView);
+    }
     window.addEventListener('pagehide', stopSpeech);
     var report = $('reportBtn');
     if (report) report.onclick = function () {

@@ -252,6 +252,8 @@ function initKeys(){ const held={}; window.addEventListener('keydown',e=>{ const
   else if(mod&&k==='d'){e.preventDefault();const t=selTrack(),c=selClip();if(c)dupClip(t,c)} else if(mod)return; else if(k==='r')record(); else if(k==='l')$('#bLoop').click(); else if(k==='m')$('#bMetro').click(); else if(k==='s'){const t=selTrack(),c=selClip();if(c)splitClip(t,c,T.pos)}
   else if(k==='delete'||k==='backspace'){if(CUR==='arrange'){e.preventDefault();delClip()}} else if(k==='+'||k==='='){Z=Math.min(160,Z*1.25);drawTL()} else if(k==='-'){Z=Math.max(6,Z/1.25);drawTL()} else if(/^[1-9]$/.test(k)){showTab(TABS[+k-1][0])} });
  window.addEventListener('keyup',e=>{ const k=e.key.toLowerCase(); if(held[k]){delete held[k];midiOff(KOCT*12+12+CKEYS.indexOf(k))} }); }
+function keepTypedFieldInView(){ const el=document.activeElement; if(!el||!/^(TEXTAREA|INPUT)$/.test(el.tagName))return; if(el.type==='range'||el.type==='checkbox'||el.type==='button'||el.type==='file')return; const vv=window.visualViewport; const r=el.getBoundingClientRect(); const viewH=vv?vv.height:window.innerHeight; const viewTop=vv?vv.offsetTop:0; if(r.top<viewTop+96||r.bottom>viewTop+viewH-12){ el.scrollIntoView({block:'center',inline:'nearest'}); } }
+function initTypedFieldFocus(){ document.addEventListener('focusin',e=>{ const el=e.target; if(!el||!/^(TEXTAREA|INPUT)$/.test(el.tagName))return; setTimeout(keepTypedFieldInView,50); }); if(window.visualViewport){ visualViewport.addEventListener('resize',keepTypedFieldInView); visualViewport.addEventListener('scroll',keepTypedFieldInView); } }
 function init(){ applyTheme(); buildSections(); if(DEMO){$('#demoBanner').classList.remove('hidden');$('#sub').textContent='Free demo';}
  $('#bPlay').onclick=()=>play(); $('#bStop').onclick=goStart; $('#bRec').onclick=record; $('#bUndo').onclick=undo; $('#bRedo').onclick=redo; $('#bSave').onclick=saveLocal;
  $('#bLoop').onclick=()=>{ snap(); P.loop.on=!P.loop.on; if(P.loop.on&&P.loop.e<=P.loop.s){P.loop.s=Math.floor(T.pos/P.sig)*P.sig;P.loop.e=P.loop.s+P.sig*4} $('#bLoop').classList.toggle('on',P.loop.on); drawTL(); };
@@ -266,7 +268,7 @@ function init(){ applyTheme(); buildSections(); if(DEMO){$('#demoBanner').classL
  initArrange(); initPiano(); initDrums(); initInst(); initEditor(); initMaster(); initTools(); initKaraoke(); initExport(); initSettings(); initKeys();
  $('#libQ').oninput=libView; $('#libCat').onchange=libView; $('#prCk').classList.toggle('on',!!prefs.keys); $('#prCk').textContent='Computer keys: '+(prefs.keys?'on':'off');
  demoSong(); showTab('arrange'); refreshAll(); requestAnimationFrame(frame); window.addEventListener('resize',()=>drawTL());
- document.addEventListener('pointerdown',()=>{ if(ctx&&ctx.state==='suspended')ctx.resume(); },{passive:true}); }
+ document.addEventListener('pointerdown',()=>{ if(ctx&&ctx.state==='suspended')ctx.resume(); },{passive:true}); initTypedFieldFocus(); }
 init();
 // test hooks
 window.CBX={P:()=>P,renderSong,encodeWAV,buildLib,demoSong,refreshAll,FXDEF,INSTDEF,INST_PRESETS,BUFS,showTab,addTrack,fxNew,newClip,audioClip,setP:x=>{P=x}};
