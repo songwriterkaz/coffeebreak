@@ -47,7 +47,7 @@ test('AUD game cart adds, changes quantity, removes, totals, and shows PayID ins
   assert.equal(empty.reference, null);
 });
 
-test('USD game prices stay in USD and are not relabelled as an Australian amount', () => {
+test('USD game prices stay labelled in USD and show a guide Australian dollar transfer amount', () => {
   const game = api();
   const session = game.createSession({
     storeId: 'apps/rooftop-kick-goals-buy',
@@ -57,15 +57,31 @@ test('USD game prices stay in USD and are not relabelled as an Australian amount
   });
   game.add(session, 'full');
   game.setQty(session, 'full', 2);
+  const listed = game.view(session);
+  assert.equal(listed.currency, 'USD');
+  assert.equal(listed.totalLabel, '20.00');
+  assert.equal(listed.audAmountMinor, null);
+  assert.equal(listed.requestsPayment, true);
+  assert.equal(listed.showTransferInstructions, true);
+  assert.equal(listed.mode, 'quote-before-transfer');
+  assert.equal(listed.paymentLabel, 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com');
+  assert.equal(listed.paid, false);
+  assert.equal(Object.hasOwn(listed, 'exchangeRate'), false);
+  session.usdAudRate = 1.48;
+  session.exchangeRateDate = '2026-11-16';
   const view = game.view(session);
   assert.equal(view.currency, 'USD');
   assert.equal(view.totalLabel, '20.00');
-  assert.equal(view.audAmountMinor, null);
-  assert.equal(view.requestsPayment, false);
-  assert.equal(view.mode, 'quote-before-transfer');
-  assert.equal(view.paymentLabel, 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com');
+  assert.equal(view.audAmountMinor, 2960);
+  assert.equal(view.audTotalLabel, '29.60');
+  assert.equal(view.exchangeRate, 1.48);
+  assert.equal(view.exchangeRateDate, '2026-11-16');
+  assert.equal(view.requestsPayment, true);
+  assert.equal(view.showTransferInstructions, true);
   assert.equal(view.paid, false);
-  assert.equal(Object.hasOwn(view, 'exchangeRate'), false);
+  const quote = game.audQuote(2000, 'USD', 1.48, '2026-11-16');
+  assert.equal(quote.audAmountMinor, 2960);
+  assert.equal(quote.audTotalLabel, '29.60');
 });
 
 test('an unpriced game offer is sold at 10.00 USD and can be checked out', () => {
@@ -177,8 +193,8 @@ test('published game copy keeps its price and currency', () => {
 
 test('order details use the Formsubmit mailbox and never mark a payment verified', () => {
   const game = api();
-  assert.equal(game.GAME_ORDERS_EMAIL, 'coffeebreakhq+orders@mail.grokbot.com');
-  assert.equal(game.ordersEndpoint(), 'https://formsubmit.co/ajax/coffeebreakhq%2Borders@mail.grokbot.com');
+  assert.equal(game.GAME_ORDERS_EMAIL, 'darkokaz@gmx.com');
+  assert.equal(game.ordersEndpoint(), 'https://formsubmit.co/ajax/darkokaz@gmx.com');
   const fields = game.orderFields({
     name: 'Ada Lovelace',
     email: 'ada@example.com',
@@ -192,9 +208,24 @@ test('order details use the Formsubmit mailbox and never mark a payment verified
   assert.equal(fields.items, '2 x Coffeebreak Darts');
   assert.equal(fields.total, '20.00 USD');
   assert.equal(fields.reference, 'CBTESTREFERENCE1');
+  assert.equal(fields.payId, 'darkokaz@gmx.com');
   assert.equal(fields._captcha, 'false');
   assert.equal(fields._honey, '');
   assert.match(fields._subject, /CBTESTREFERENCE1/);
+  const draft = game.orderMailto({
+    name: 'Ada Lovelace',
+    email: 'ada@example.com',
+    address: '1 Test Street, Newcastle NSW 2300',
+    phone: '0400000000',
+    lines: [{ id: 'full', name: 'Coffeebreak Darts', qty: 2 }],
+    total: '20.00',
+    currency: 'USD',
+    audTotal: '29.60',
+    reference: 'CBTESTREFERENCE1'
+  });
+  assert.match(draft.href, /^mailto:darkokaz@gmx\.com\?/);
+  assert.match(decodeURIComponent(draft.href), /Transfer: 29\.60 AUD/);
+  assert.match(decodeURIComponent(draft.href), /PayID: darkokaz@gmx\.com/);
   assert.equal(JSON.stringify(fields).includes('verified'), false);
   const mount = readFileSync(new URL('./game-mount.js', import.meta.url), 'utf8');
   assert.match(mount, /cb-game-checkout/);
@@ -203,6 +234,11 @@ test('order details use the Formsubmit mailbox and never mark a payment verified
   assert.match(mount, /honourClaim\(/);
   assert.match(mount, /unlockKey\(/);
   assert.match(mount, /ordersEndpoint\(\)/);
+  assert.match(mount, /orderMailto\(/);
+  assert.match(mount, /Email this order/);
+  assert.match(mount, /Open cart/);
+  assert.match(mount, /left:12px/);
+  assert.match(mount, /2147483646/);
   assert.match(mount, /orderFields\(/);
   assert.match(mount, /labelledInput\('Name', 'name'/);
   assert.match(mount, /labelledInput\('Email', 'email'/);
