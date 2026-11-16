@@ -133,12 +133,13 @@ class DeEss extends AudioWorkletProcessor{static get parameterDescriptors(){retu
    this.env=hm>this.env?hm:this.env*0.999;const g=this.env>th?th/this.env:1;for(let c=0;c<y.length;c++)y[c][n]=this.lp[c]+hs[c]*g}return true}}
 registerProcessor('cbx-deess',DeEss);
 class Tune extends AudioWorkletProcessor{static get parameterDescriptors(){return[{name:'key',defaultValue:0,minValue:0,maxValue:11},{name:'scale',defaultValue:0,minValue:0,maxValue:5},{name:'speed',defaultValue:0.5,minValue:0,maxValue:1},{name:'mix',defaultValue:1,minValue:0,maxValue:1}]}
- constructor(){super();this.W=2048;this.buf=new Float32Array(4096);this.w=0;this.an=new Float32Array(1024);this.ai=0;this.cnt=0;this.ratio=1;this.target=1;this.ph=0}
- detect(){const d=this.an,n=d.length,sr=sampleRate/2;let rms=0;for(let i=0;i<n;i+=2)rms+=d[i]*d[i];rms/=n/2;if(Math.sqrt(rms)<0.01)return 0;let best=0,bl=0;
-  for(let l=Math.floor(sr/900);l<Math.floor(sr/70);l++){let s=0,e=0;for(let i=0;i+2*l<n;i+=4){s+=d[i]*d[i+2*l];e+=d[i+2*l]*d[i+2*l]}const v=s/Math.sqrt(e*rms*(n/4)+1e-12);if(v>best){best=v;bl=l}}return best>0.5&&bl?sr/bl:0}
- process(i,o,p){const x=i[0],y=o[0];if(!x||!x[0])return true;const S=[[0,2,4,5,7,9,11],[0,2,3,5,7,8,10],[0,1,2,3,4,5,6,7,8,9,10,11],[0,2,4,7,9],[0,3,5,6,7,10],[0,2,3,5,7,8,11]][Math.round(p.scale[0])],key=Math.round(p.key[0]),mix=p.mix[0],sp=0.0005+0.02*p.speed[0];
-  for(let n=0;n<x[0].length;n++){const s=x[0][n];this.buf[this.w]=s;this.an[this.ai]=s;this.ai=(this.ai+1)%1024;
-   if(++this.cnt>=512){this.cnt=0;const f=this.detect();if(f){const m=69+12*Math.log2(f/440);let bm=m,bd=99;for(let o=-1;o<=1;o++)for(const sc of S){const c=Math.round(m/12+o)*12+((sc+key)%12);if(Math.abs(c-m)<bd){bd=Math.abs(c-m);bm=c}}this.target=Math.pow(2,(bm-m)/12)}else this.target=1}
+ constructor(){super();this.W=2048;this.buf=new Float32Array(4096);this.w=0;this.N=2048;this.an=new Float32Array(this.N);this.lin=new Float32Array(this.N);this.ai=0;this.cnt=0;this.ratio=1;this.target=1;this.ph=0}
+ detect(){const n=this.N,start=this.ai,d=this.lin;for(let i=0;i<n;i++)d[i]=this.an[(start+i)%n];const sr=sampleRate;let rms=0;for(let i=0;i<n;i+=2)rms+=d[i]*d[i];rms/=n/2;if(Math.sqrt(rms)<0.01)return 0;let best=0,bl=0;
+  const minL=Math.floor(sr/900),maxL=Math.min(Math.floor(n/2)-1,Math.floor(sr/70));
+  for(let l=minL;l<maxL;l++){let s=0,e=0,c=0;for(let i=0;i+l<n;i+=4){s+=d[i]*d[i+l];e+=d[i+l]*d[i+l];c++}const v=s/Math.sqrt(e*rms*c+1e-12);if(v>best){best=v;bl=l}}return best>0.45&&bl?sr/bl:0}
+ process(i,o,p){const x=i[0],y=o[0];if(!x||!x[0])return true;const scales=[[0,2,4,5,7,9,11],[0,2,3,5,7,8,10],[0,1,2,3,4,5,6,7,8,9,10,11],[0,2,4,7,9],[0,3,5,6,7,10],[0,2,3,5,7,8,11]];const si=Math.max(0,Math.min(5,Math.round(p.scale[0])));const S=scales[si],key=Math.round(p.key[0]),mix=p.mix[0],sp=0.0005+0.02*p.speed[0];
+  for(let n=0;n<x[0].length;n++){const s=x[0][n];this.buf[this.w]=s;this.an[this.ai]=s;this.ai=(this.ai+1)%this.N;
+   if(++this.cnt>=1024){this.cnt=0;const f=this.detect();if(f){const m=69+12*Math.log2(f/440);let bm=m,bd=99;for(let oct=-1;oct<=1;oct++)for(const sc of S){const c=Math.round(m/12+oct)*12+((sc+key)%12);const dist=Math.abs(c-m);if(dist<bd){bd=dist;bm=c}}this.target=Math.pow(2,(bm-m)/12)}else this.target=1}
    this.ratio+=(this.target-this.ratio)*sp;this.ph=(this.ph+(1-this.ratio)/this.W+1)%1;
    const rd=(d)=>{let q=this.w-d;while(q<0)q+=4096;const q0=Math.floor(q),fr=q-q0;return this.buf[q0%4096]*(1-fr)+this.buf[(q0+1)%4096]*fr};
    const p2=(this.ph+0.5)%1,v=rd(this.ph*this.W+2)*Math.sin(Math.PI*this.ph)+rd(p2*this.W+2)*Math.sin(Math.PI*p2);
