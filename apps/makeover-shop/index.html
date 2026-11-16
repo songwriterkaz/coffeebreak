@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Makeover Shop</title>
+<meta name="description" content="Browse and book Coffeebreak makeover services and products. Light accessories and press-on nails US$15, wigs US$45, makeup kits US$35, in-person hair and makeup US$280. Pay by PayID.">
+<link rel="icon" href="../cb-logo.png">
+<link rel="stylesheet" href="style.css">
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<header class="site">
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="120" height="82">
+  <div>
+    <p class="eyebrow">Coffeebreak</p>
+    <h1>Coffeebreak Makeover Shop</h1>
+    <p>Hair styling, makeup looks, nails, wardrobe makeovers, wigs, accessories and gift vouchers.</p>
+  </div>
+  <a class="cart-link" href="#cart">Cart <span id="dock-count">0</span> · <span id="dock-total">US$0.00</span></a>
+</header>
+<main>
+  <p class="disc"><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to this app, its design, name and logo. Buyers may resell physical items they bought, but may not copy the app or make their own versions. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</p>
+  <p class="note">Hair clips, scrunchies, hair ties, press-on nails and other light accessories are <b>US$15</b>. Wigs are <b>US$45</b>. Makeup kits are <b>US$35</b>. An in-person makeup makeover is <b>US$150</b>, and an in-person hair and makeup makeover is <b>US$280</b>. Gift vouchers are <b>US$10</b>, <b>US$50</b> or <b>US$150</b>. Other services and products on this page are US$10. Styling is cosmetic only. This shop does not offer piercing, cosmetic tattoo or injectables.</p>
+
+  <section class="card" id="look" aria-labelledby="look-title">
+    <h2 id="look-title">Try a look</h2>
+    <p class="lede">Pick a hair style, a makeup look and an outfit. Your summary card updates straight away. Add the look to your cart when you want it booked. For a booked service, the appointment time is confirmed by email after the PayID payment is received. Visits are in the Newcastle/Hunter area.</p>
+    <div class="look-layout">
+      <article class="mirror-card" id="look-card" aria-live="polite">
+        <div class="mirror" aria-hidden="true">
+          <span id="stage-hair">🌊</span>
+          <span id="stage-face">😊</span>
+          <span id="stage-outfit">👗</span>
+        </div>
+        <h3>Your look</h3>
+        <p id="look-summary">Soft waves, a bare glow, and a cafe dress.</p>
+        <p class="price">US$10</p>
+        <button type="button" class="btn" id="add-look">Add this look to cart</button>
+      </article>
+      <div class="pickers">
+        <fieldset>
+          <legend>Hair</legend>
+          <div class="choices" id="hair-choices" role="group"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Makeup</legend>
+          <div class="choices" id="makeup-choices" role="group"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Outfit</legend>
+          <div class="choices" id="outfit-choices" role="group"></div>
+        </fieldset>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="services-title">
+    <h2 id="services-title">Book a service</h2>
+    <p class="lede">Booked services are in the Newcastle/Hunter area. The appointment time is confirmed by email after the PayID payment is received.</p>
+    <div class="grid" id="services"></div>
+  </section>
+
+  <section class="card" aria-labelledby="products-title">
+    <h2 id="products-title">Shop products</h2>
+    <div class="grid" id="products"></div>
+  </section>
+
+  <section class="card" id="cart" aria-labelledby="cart-title">
+    <h2 id="cart-title">Cart</h2>
+    <p id="cart-empty">Your cart is empty. Add a look, a service or a product.</p>
+    <ul id="cart-lines"></ul>
+    <p class="total" id="cart-total" hidden>Total <b id="cart-total-value">US$0.00</b></p>
+
+    <form id="checkout-form">
+      <h3>Checkout</h3>
+      <p class="pay-label">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+      <label>Name
+        <input id="buyer-name" name="name" autocomplete="name" maxlength="80" required>
+      </label>
+      <label>Email
+        <input id="buyer-email" name="email" type="email" autocomplete="email" maxlength="120" required>
+      </label>
+      <label>Order notes
+        <textarea id="buyer-notes" name="notes" maxlength="500" rows="3" placeholder="Day, colours, or anything we should know"></textarea>
+      </label>
+      <p id="form-error" class="error" role="alert" hidden></p>
+      <button type="submit" class="btn" id="checkout-btn">Show PayID instructions</button>
+    </form>
+
+    <div id="pay-panel" class="pay-panel" hidden>
+      <h3>PayID instructions</h3>
+      <p class="pay-label">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+      <p>Amount: <b id="pay-amount"></b></p>
+      <p>Order reference: <b id="pay-ref"></b></p>
+      <p>Put the order reference in the payment description when you pay from your own bank.</p>
+      <p>Your order is confirmed once the PayID payment is received. This page does not check your bank and does not mark the payment as received.</p>
+      <p id="pay-booking" hidden>For booked services, the appointment time is confirmed by email after the PayID payment is received. Visits are in the Newcastle/Hunter area.</p>
+      <dl id="pay-details"></dl>
+      <div class="copy-row">
+        <button type="button" class="btn alt" id="copy-payid">Copy PayID</button>
+        <button type="button" class="btn alt" id="copy-ref">Copy reference</button>
+        <button type="button" class="btn alt" id="copy-amount">Copy amount</button>
+      </div>
+      <p id="copy-status" class="lede" role="status"></p>
+    </div>
+  </section>
+</main>
+<footer>
+  <p>Karen O'Brien (Coffeebreak) keeps all rights to this app, its design, name and logo. Buyers may resell physical items they bought, but may not copy the app or make their own versions.</p>
+  <p>Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</p>
+  <div class="links">
+    <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a>
+    <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>
+    <a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">YouTube</a>
+    <a href="../../">Coffeebreak hub</a>
+    <a href="../../pages/">Coffeebreak Pages</a>
+    <a href="../../yellow-pages/">Yellow Pages</a>
+  </div>
+</footer>
+<script src="shop.js"></script>
+</body>
+</html>
