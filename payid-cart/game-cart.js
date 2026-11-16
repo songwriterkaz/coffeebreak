@@ -32,6 +32,11 @@
     'Increase quantity',
     'Remove',
     'Your cart is empty.',
+    'Checkout',
+    'How to pay',
+    'Open your banking app.',
+    'Send the total to that PayID.',
+    'Put the reference in the payment description.',
     'Price coming soon',
     GAP,
     PAY_HINT,
@@ -183,22 +188,17 @@
     var priceMatch;
     while ((priceMatch = priceRe.exec(source))) addFound(title, priceMatch[1], priceMatch[2], priceMatch.index);
 
-    if (!found.length) {
+    function pricedDefault() {
       return {
         storeId: storeId,
-        currency: null,
-        items: [{ id: 'full', name: title, amount: null, currency: null, gap: GAP }]
+        currency: 'USD',
+        items: [{ id: 'full', name: title, amount: '10.00', currency: 'USD' }]
       };
     }
+    if (!found.length) return pricedDefault();
     var currency = found[0].currency;
     var mixed = found.some(function (item) { return item.currency !== currency; });
-    if (mixed) {
-      return {
-        storeId: storeId,
-        currency: null,
-        items: [{ id: 'full', name: title, amount: null, currency: null, gap: GAP }]
-      };
-    }
+    if (mixed) return pricedDefault();
     if (found.length === 1) found[0].id = 'full';
     else found.forEach(function (item, index) { item.id = slug(item.name, index + 1); });
     return { storeId: storeId, currency: currency, items: found };

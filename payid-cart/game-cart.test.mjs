@@ -68,7 +68,30 @@ test('USD game prices stay in USD and are not relabelled as an Australian amount
   assert.equal(Object.hasOwn(view, 'exchangeRate'), false);
 });
 
-test('a missing price stays a labelled gap and cannot be checked out', () => {
+test('an unpriced game offer is sold at 10.00 USD and can be checked out', () => {
+  const game = api();
+  const offer = game.readOffer('<title>Pin the Condom on the Banana</title>', 'pin-the-condom-on-the-banana/index.html');
+  assert.equal(offer.currency, 'USD');
+  assert.equal(offer.items[0].amount, '10.00');
+  assert.equal(offer.items[0].currency, 'USD');
+  const session = game.createSession({
+    storeId: offer.storeId,
+    currency: offer.currency,
+    items: offer.items,
+    rng: seqRng(1)
+  });
+  assert.equal(game.priceLabel(session.items[0]), '10.00 USD');
+  assert.equal(game.add(session, 'full').ok, true);
+  const view = game.view(session);
+  assert.equal(view.ok, true);
+  assert.equal(view.currency, 'USD');
+  assert.equal(view.totalLabel, '10.00');
+  assert.equal(view.paymentLabel, 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com');
+  assert.match(view.reference, /^CB[A-Z2-9]{14}$/);
+  assert.equal(view.paid, false);
+});
+
+test('a session with no price still cannot be checked out', () => {
   const game = api();
   const session = game.createSession({
     storeId: 'pin-the-condom-on-the-banana',
@@ -138,9 +161,9 @@ test('published game copy keeps its price and currency', () => {
   assert.equal(buy.currency, 'USD');
   assert.equal(buy.items[0].amount, '10.00');
   const bare = game.readOffer('<title>Coffeebreak Karaoke</title><p>Buy for $5 on this page.</p>', 'apps/karaoke/index.html');
-  assert.equal(bare.currency, null);
-  assert.equal(bare.items[0].amount, null);
-  assert.match(bare.items[0].gap, /Price coming soon/);
+  assert.equal(bare.currency, 'USD');
+  assert.equal(bare.items[0].amount, '10.00');
+  assert.equal(bare.items[0].currency, 'USD');
   const packs = game.readOffer(
     '<title>Coffeebreak Street Brawl</title><h3>Premium skins</h3><p><b>$2 USD</b></p><h3>Iron chin pack</h3><p><b>$3 USD</b></p>',
     'apps/street-brawl/index.html'
@@ -148,7 +171,8 @@ test('published game copy keeps its price and currency', () => {
   assert.equal(packs.currency, 'USD');
   assert.deepEqual(packs.items.map((item) => item.amount), ['2.00', '3.00']);
   const rebate = game.readOffer('<title>Coffee Card</title><p>pay $10 then claim $2 back</p>', 'coffee-card-game/index.html');
-  assert.equal(rebate.items[0].amount, null);
+  assert.equal(rebate.currency, 'USD');
+  assert.equal(rebate.items[0].amount, '10.00');
 });
 
 test('added cart text has no exclamation mark, Headspace, PayPal, or Gumroad', () => {
@@ -165,6 +189,9 @@ test('added cart text has no exclamation mark, Headspace, PayPal, or Gumroad', (
   assert.match(mount, /Reduce quantity/);
   assert.match(mount, /Increase quantity/);
   assert.match(mount, /Remove/);
+  assert.match(mount, /How to pay/);
+  assert.match(mount, /Open your banking app/);
+  assert.match(mount, /Put the reference in the payment description/);
   assert.doesNotMatch(mount, /I have paid|payment confirmed|order sent|headspace|paypal|gumroad/i);
   assert.doesNotMatch(src, /headspace|paypal|gumroad/i);
   assert.match(src, /fulfilmentVerified:\s*true/);

@@ -148,19 +148,26 @@
         total.textContent = 'Total: ' + current.totalLabel + ' ' + current.currency;
         var label = document.createElement('p');
         label.textContent = 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
+        var checkout = document.createElement('h3');
+        checkout.textContent = 'Checkout';
         var ref = document.createElement('p');
         ref.textContent = current.reference ? 'Reference: ' + current.reference : 'Add a priced item to mint a reference.';
-        panel.append(total, label, ref);
+        var stepsHead = document.createElement('p');
+        stepsHead.textContent = 'How to pay';
+        var steps = document.createElement('ol');
+        ;['Open your banking app.', 'Send the total to that PayID.', 'Put the reference in the payment description.'].forEach(function (text) {
+          var item = document.createElement('li');
+          item.textContent = text;
+          steps.appendChild(item);
+        });
+        var hint = document.createElement('p');
+        hint.textContent = G.PAY_HINT;
+        panel.append(checkout, total, label, ref, stepsHead, steps, hint);
         (current.notices || []).forEach(function (text) {
           var note = document.createElement('p');
           note.textContent = text;
           panel.appendChild(note);
         });
-        if (current.mode === 'quote-before-transfer') {
-          var hint = document.createElement('p');
-          hint.textContent = G.PAY_HINT;
-          panel.appendChild(hint);
-        }
         var copies = C.copyFields(current);
         panel.append(
           copyButton('Copy amount', copies.amount),

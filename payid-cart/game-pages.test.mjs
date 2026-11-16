@@ -51,8 +51,8 @@ test('representative games keep published prices and owner access', () => {
   assert.equal(drag.currency, 'USD');
   assert.equal(drag.items[0].amount, '10.00');
   const banana = game.readOffer(page('pin-the-condom-on-the-banana/index.html'), 'pin-the-condom-on-the-banana/index.html');
-  assert.equal(banana.items[0].amount, null);
-  assert.match(banana.items[0].gap, /Price coming soon/);
+  assert.equal(banana.currency, 'USD');
+  assert.equal(banana.items[0].amount, '10.00');
   const latte = page('apps/latte-lantern-haunt/index.html');
   assert.match(latte, /Owner copy free for Karen/);
   assert.match(page('apps/rooftop-kick-goals-buy/index.html'), /\$10 USD/);
