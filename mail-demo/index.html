@@ -14,8 +14,17 @@ input,select,textarea{font-size:1rem;padding:9px;border:2px solid #ffb3d6;border
 <div class="card" id="cbox" hidden><h3>New message <span class="demo">ON THIS DEVICE</span></h3><input id="to" placeholder="To"><input id="sub" placeholder="Subject"><textarea id="bd" rows="6" placeholder="Message"></textarea><button id="snd">Send</button><button class="alt" id="cx">Cancel</button><p id="demoMsg" class="muted" role="status"></p></div>
 <div class="card" id="liveCard"><h3>Outside mail</h3><p id="liveStatus" class="muted">On this device until you sign in.</p><div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><div><label for="liveN">Name</label><input id="liveN" autocomplete="name"></div><div><label for="liveH">Handle</label><input id="liveH" autocomplete="username"></div><div><label for="liveP">Password</label><input id="liveP" type="password" autocomplete="current-password"></div></div><button id="liveNew" type="button">Create address</button><button id="liveGo" type="button">Sign in</button><button id="liveCheck" type="button">Check for outside mail</button><button class="alt" id="liveOff" type="button">Sign out</button><p id="liveMsg" class="muted"></p></div>
 <div class="card"><h3>Sample mail, not real messages</h3><p class="muted">These lines were not sent or received.</p><p>Pink Bean Cafe: Your order is ready</p><p>Demo Music Store: New sheet music in stock</p><p>Sample Friend: Coffee on Friday?</p></div>
-<div class="price card">Outside mail uses Coffeebreak Mail after you sign in. The sample lines are not an inbox.</div></main>
-<footer><p>&copy; Coffeebreak. All rights reserved. Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell what they bought but may not copy it or make their own versions. Third-party trademarks belong to their owners and are used only to describe items.</p>
+<div class="price card">Outside mail uses Coffeebreak Mail after you sign in. The sample lines are not an inbox.</div>
+<div class="card" id="why-switch"><h2>Why switch</h2>
+<ul>
+<li>One US$10 purchase. No monthly fee for the software.</li>
+<li>Share one existing data plan through a phone or laptop hotspot.</li>
+<li>Free local mail between people on the hotspot, when the host runs the local Coffeebreak Mail server on that same computer.</li>
+</ul>
+<p>Coffeebreak does not give free internet. Data used on the hotspot counts on the host's plan. Local mail only works while that phone or laptop is sharing the connection.</p>
+<p><a href="../coffeebreak-wifi/coffeebreak-mail-local-hotspot.zip" download>Download the local mail server</a> for hotspot mode. Setup for the hotspot is on the <a href="../coffeebreak-wifi/">Coffeebreak WiFi hotspot</a> page.</p>
+</div></main>
+<footer><p>&copy; Coffeebreak. All rights reserved. Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell what they bought but not copy it. Subject to Australian Consumer Law. Karen claims no ownership of third-party brands named. Third-party trademarks belong to their owners and are used only to describe items.</p>
 <p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a><a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">Coffeebreak on itch</a></p></footer>
 <script>const $=i=>document.getElementById(i),F=['Inbox','Sent','Drafts','Starred','Trash','On this device'];
 let M=JSON.parse(localStorage.cbMailDemo||'null');if(!Array.isArray(M))M=[];

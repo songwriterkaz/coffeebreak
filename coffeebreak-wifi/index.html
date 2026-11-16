@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak WiFi Hotspot</title>
+<link rel="icon" href="cb-logo.png">
+<meta name="description" content="Download the Coffeebreak WiFi hotspot kit and the local mail server, with setup steps for Windows, macOS and Linux.">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:linear-gradient(160deg,#ffe3f1,#ffc2df);color:#3a1030;min-height:100vh}
+header{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#ff4fa3;color:#fff}
+header img{width:48px;height:48px;border-radius:50%;background:#fff}
+header h1{font-size:1.3rem;margin:0}
+main{max-width:900px;margin:auto;padding:16px}
+.card{background:#fff;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 4px 16px #ff4fa333}
+a.btn{display:inline-block;background:#ff4fa3;color:#fff;border-radius:999px;padding:10px 18px;text-decoration:none;margin:4px 8px 4px 0}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#fff0f7;border-radius:12px;padding:12px;overflow:auto}
+h2{margin:0 0 8px}
+ul,ol{margin:8px 0;padding-left:22px}
+li{margin:.35em 0}
+footer{background:#3a1030;color:#ffd6ea;padding:20px;font-size:.85rem;text-align:center;margin-top:30px}
+footer a{color:#ff9ccc;margin:0 8px}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<header><img src="cb-logo.png" alt="Coffeebreak logo"><h1>Coffeebreak WiFi Hotspot</h1></header>
+<main>
+<div class="card">
+<h2>The kit</h2>
+<p>This page is the downloadable Coffeebreak WiFi hotspot and local mail kit. It is the captive-portal welcome page plus setup scripts for Windows, macOS and Linux, and a separate local mail server for people on that hotspot.</p>
+<p>Both programs need Node.js 18 or newer on the computer that shares the connection. They do not include an account password, a relay password, or a deploy key.</p>
+<p><a class="btn" href="coffeebreak-wifi-hotspot.zip" download>Download the WiFi hotspot kit</a><a class="btn" href="coffeebreak-mail-local-hotspot.zip" download>Download the local mail server</a></p>
+</div>
+<div class="card" id="why-switch">
+<h2>Why switch</h2>
+<ul>
+<li>One US$10 purchase. No monthly fee for the software.</li>
+<li>Share one existing data plan through a phone or laptop hotspot.</li>
+<li>Free local mail between people on the hotspot, when the host runs the local Coffeebreak Mail server on that same computer.</li>
+</ul>
+<p>Coffeebreak does not give free internet. Data used on the hotspot counts on the host's plan. Local mail only works while that phone or laptop is sharing the connection.</p>
+<p>The welcome page in the kit says one US$10 purchase, with no monthly fee for the software. Internet access comes from the host's own provider.</p>
+</div>
+<div class="card">
+<h2>Windows</h2>
+<ol>
+<li>Install Node.js 18 or newer.</li>
+<li>Unzip the WiFi kit. In the <code>coffeebreak-wifi/server</code> folder, open PowerShell as Administrator.</li>
+<li>Run <code>powershell -ExecutionPolicy Bypass -File setup\windows-mobile-hotspot.ps1</code></li>
+<li>When asked, choose a hotspot password of 8 or more characters. The network name is Coffeebreak WiFi. The password stays on that PC. It is not in this download.</li>
+<li>The script shares this PC's existing internet connection and allows the welcome page through the firewall on port 80.</li>
+<li>Start the portal with <code>node server.js</code>, or run <code>setup\start-windows.bat</code> as Administrator.</li>
+<li>Windows hotspots usually use the address 192.168.137.1. Guests open <code>http://192.168.137.1</code></li>
+<li>Windows does not send guests to that page by itself. Put the address on a sign or a QR code.</li>
+</ol>
+</div>
+<div class="card">
+<h2>macOS</h2>
+<ol>
+<li>Install Node.js 18 or newer.</li>
+<li>Open System Settings, then General, then Sharing, then Internet Sharing.</li>
+<li>Share your connection from Ethernet, iPhone USB, or Thunderbolt. That is the Mac's internet.</li>
+<li>Share to devices using Wi-Fi.</li>
+<li>In Wi-Fi Options, set the network name to Coffeebreak WiFi, choose WPA2 or WPA3 Personal, and set a password.</li>
+<li>Turn Internet Sharing on. The Mac's Wi-Fi cannot share the same Wi-Fi network it is already joined to. Use Ethernet or a phone over USB.</li>
+<li>From the <code>coffeebreak-wifi/server</code> folder, run <code>sudo bash setup/macos-internet-sharing.sh</code></li>
+<li>Guests open the address the script prints. macOS does not send guests to that page by itself. Put the address on a sign or a QR code.</li>
+</ol>
+</div>
+<div class="card">
+<h2>Linux, with the welcome page redirect</h2>
+<p>This path is written for Debian, Ubuntu, and Raspberry Pi OS. It needs hostapd, dnsmasq, iptables, ipset, and Node.js 18 or newer. From the <code>coffeebreak-wifi/server</code> folder:</p>
+<pre>sudo apt install hostapd dnsmasq iptables ipset nodejs
+sudo bash setup/linux-hotspot-captive.sh start</pre>
+<ol>
+<li>The Wi-Fi card defaults to <code>wlan0</code> and the internet connection defaults to <code>eth0</code>. Override them with <code>WIFI_IF</code> and <code>WAN_IF</code> if your machine uses other names. A phone tether is often <code>usb0</code>.</li>
+<li>The network name defaults to Coffeebreak WiFi. Set <code>PASS</code> to 8 or more characters, or leave it empty for an open network. Set it in the environment for that command. Do not put it in a file you publish.</li>
+<li>Guests can open <code>http://192.168.50.1/</code> or <code>http://coffeebreak.wifi/</code>. Until a device accepts the terms, its web requests go to the welcome page.</li>
+<li>To stop, press Ctrl+C in the portal window, then run <code>sudo bash setup/linux-hotspot-captive.sh stop</code></li>
+</ol>
+</div>
+<div class="card">
+<h2>Linux, NetworkManager only</h2>
+<p>Use this when you want the hotspot and the welcome page without hostapd. It does not redirect guests on its own.</p>
+<pre>sudo bash setup/linux-networkmanager-hotspot.sh</pre>
+<ol>
+<li>The script asks for a hotspot password of 8 or more characters. The default Wi-Fi card is <code>wlan0</code>. Override it with <code>WIFI_IF</code> if needed.</li>
+<li>Guests open the address the script prints. Put that address on a sign or a QR code.</li>
+</ol>
+</div>
+<div class="card">
+<h2>Local mail on the hotspot</h2>
+<p>The mail download is a local SMTP and API server for addresses at coffeebreak.local. It is for people on the hotspot. It is not the public mail website, and it does not contain a deploy credential.</p>
+<ol>
+<li>Unzip <code>coffeebreak-mail-local-hotspot.zip</code>.</li>
+<li>In <code>coffeebreak-mail/server</code>, copy <code>config.example.json</code> to <code>config.json</code>.</li>
+<li>Leave outside mail turned off for mail between people on the hotspot. The example file uses placeholders only. If you later add your own relay, keep that only in <code>config.json</code> on the host computer. That file is ignored by the kit and must not be published.</li>
+<li>Run <code>npm install</code> and then <code>npm start</code>.</li>
+<li>SMTP receives mail on port 25. The API listens on port 8080.</li>
+<li>Create a mailbox with <code>node src/cli.js add-user username</code>. Type the password when asked, or pass it only in the <code>PASSWORD</code> environment variable for that one command.</li>
+<li>When this server is running, the WiFi welcome page can show a link to Coffeebreak Mail on port 8080.</li>
+</ol>
+<p>The <code>web</code> folder in the mail zip has the Coffeebreak logo. <code>reference-ui-from-live</code> is a copy of the public mail screen, kept so a local front end can be adapted from it. It is not a Cloudflare deploy. That screen calls the public mail service unless it is opened on localhost, because that is how the copy was written. Mail between people on the hotspot is the SMTP and API server in the zip.</p>
+<p>The same mail download is also linked from <a href="../mail-demo/">Coffeebreak Mail (Demo)</a> and <a href="../coffee-mail/">Coffeebreak Coffee Mail</a>.</p>
+</div>
+</main>
+<footer>
+<p>Karen keeps all rights to her products, designs, apps, name and logo. Buyers may resell what they bought but not copy it. Subject to Australian Consumer Law. Karen claims no ownership of third-party brands named.</p>
+<p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a><a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a><a href="../">Coffeebreak hub</a><a href="../pages/">A to Z pages</a></p>
+</footer>
+</body>
+</html>
