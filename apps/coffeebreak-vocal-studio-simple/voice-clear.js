@@ -1,4 +1,4 @@
-/* Vendored Clear studio voice from cb-voice/voice.js at 3c269838ee8d84d2fe9b2842ec23ea2f0d4f2637. This copy is frozen so later shared-voice changes do not affect this app. */
+/* Vendored Clear studio voice from cb-voice/voice.js at 3c269838ee8d84d2fe9b2842ec23ea2f0d4f2637, with a later clarity pass in this app only. */
 /* Coffeebreak voice - a sung vocal made in the browser.
    LF glottal source, formants, human pitch, breath and reverb.
    No outside service is used.
@@ -14,17 +14,17 @@
 
   const VOWELS = {
     i: [310, 2250, 2960, 3450, 4200],
-    I: [400, 1980, 2560, 3300, 4100],
+    I: [400, 2060, 2580, 3350, 4150],
     e: [460, 1880, 2650, 3400, 4150],
     E: [560, 1700, 2500, 3400, 4100],
     a: [760, 1220, 2520, 3400, 4000],
     o: [500, 840, 2620, 3350, 3950],
     u: [350, 760, 2380, 3300, 3850],
-    '@': [520, 1480, 2480, 3300, 4050],
+    '@': [590, 1380, 2520, 3350, 4080],
     r: [480, 1180, 1580, 2800, 3600]
   };
 
-  const BW = [80, 110, 150, 200, 280];
+  const BW = [70, 95, 135, 185, 250];
 
   function midiHz(p) {
     return 440 * Math.pow(2, (p - 69) / 12);
@@ -320,8 +320,8 @@
 
   const NAT = {
     IY:0.16,IH:0.12,EY:0.16,EH:0.13,AE:0.14,AA:0.15,AO:0.15,OW:0.16,UH:0.12,UW:0.16,AH:0.12,ER:0.14,AY:0.18,AW:0.18,OY:0.18,
-    S:0.085,SH:0.09,F:0.07,TH:0.07,HH:0.065,Z:0.08,ZH:0.08,V:0.07,DH:0.065,
-    P:0.075,T:0.07,K:0.08,B:0.06,D:0.06,G:0.07,CH:0.09,JH:0.08,
+    S:0.105,SH:0.105,F:0.08,TH:0.08,HH:0.08,Z:0.10,ZH:0.09,V:0.08,DH:0.08,
+    P:0.085,T:0.085,K:0.09,B:0.065,D:0.065,G:0.075,CH:0.10,JH:0.09,
     M:0.08,N:0.085,NG:0.09,L:0.085,R:0.07,W:0.055,Y:0.05
   };
 
@@ -565,9 +565,9 @@
 
   function vocalChain(buf, sr) {
     const hp = biquad('highpass', 90, 0.7, 0, sr);
-    const scoop = biquad('peaking', 380, 0.9, -2.0, sr);
-    const presence = biquad('peaking', 3200, 1.0, 3.2, sr);
-    const air = biquad('highshelf', 8500, 0.7, 2.0, sr);
+    const scoop = biquad('peaking', 380, 0.9, -2.4, sr);
+    const presence = biquad('peaking', 3000, 1.15, 4.8, sr);
+    const air = biquad('highshelf', 8500, 0.7, 0.6, sr);
     const essF = 2 * Math.PI * 6500 / sr;
     const essA = Math.exp(-essF);
     let lp = 0, env = 0, cenv = 0;
@@ -582,7 +582,7 @@
       const high = x - lp;
       const ha = Math.abs(high);
       env = ha > env ? ha : env * deessRel + ha * (1 - deessRel);
-      const dg = env > 0.09 ? 0.09 / env : 1;
+      const dg = env > 0.075 ? 0.075 / env : 1;
       x = lp + high * (0.45 + 0.55 * dg);
       const a = Math.abs(x);
       cenv = a > cenv ? a : cenv * rel + a * (1 - rel);
@@ -724,10 +724,10 @@
       const rateWanderPh = rand() * Math.PI * 2;
       const depthWanderPh = rand() * Math.PI * 2;
       const fall = (si === segs.length - 1 || (segs[si + 1] && segs[si + 1].restBreath)) ? 0.02 : (typ === 'vowel' ? 0.006 : 0);
-      const oq = 0.58 + rand() * 0.08 + oqBias;
-      const rd = 1.05 + rand() * 0.35 + rdBias;
+      const oq = 0.61 + rand() * 0.04 + oqBias;
+      const rd = 0.95 + rand() * 0.16 + rdBias;
       const lf = typ === 'vowel' || typ === 'nasal' || typ === 'liquid' || typ === 'vfric' || typ === 'vstop'
-        ? makeLF(oq, oq * (0.62 + rand() * 0.06), clamp(0.018 * rd, 0.014, 0.06))
+        ? makeLF(oq, oq * (0.64 + rand() * 0.04), clamp(0.013 * rd, 0.011, 0.032))
         : null;
       let drift = (rand() - 0.5) * 4;
       const driftTau = 0.32 + rand() * 0.22;
@@ -760,14 +760,14 @@
           } else if (i < closeN + burstN) {
             const bu = (i - closeN) / Math.max(1, burstN);
             const amp = Math.exp(-bu / 0.18) * (bu < 0.08 ? bu / 0.08 : 1);
-            y = noiseAt(seg.ph) * amp * (typ === 'stop' ? 0.3 : 0.2);
+            y = noiseAt(seg.ph) * amp * (typ === 'stop' ? 0.38 : 0.24);
           } else {
             const vu = (i - closeN - burstN) / Math.max(1, len - closeN - burstN);
             const asp = typ === 'stop' ? 0.16 * (1 - vu) : 0.06 * (1 - vu);
             y = noiseAt(seg.ph) * asp;
           }
         } else if (typ === 'fric' || typ === 'vfric') {
-          const amt = seg.restBreath ? (seg.amount || 0.04) : (typ === 'fric' ? 0.30 : 0.28);
+          const amt = seg.restBreath ? (seg.amount || 0.04) : (typ === 'fric' ? 0.36 : 0.32);
           env = Math.sin(Math.PI * Math.min(1, u * 1.2));
           y = noiseAt(seg.ph) * amt;
         }
@@ -791,22 +791,22 @@
           phase += (hz * jit) / sr;
           if (phase >= 1) {
             phase -= Math.floor(phase);
-            jit = 1 + (rand() * 2 - 1) * 0.009;
-            shim = 1 + (rand() * 2 - 1) * 0.05;
+            jit = 1 + (rand() * 2 - 1) * 0.006;
+            shim = 1 + (rand() * 2 - 1) * 0.018;
           }
           const sourcePulse = lf(phase) * shim;
           let breath = rand() * 2 - 1;
           airLp += 0.12 * (breath - airLp);
           breath = breath - airLp;
-          const breathAmt = (0.03 + 0.018 * (1 - u) + (seg.ph === 'HH' ? 0.045 * (1 - smooth(t / 0.2)) : 0)) * Math.max(0, breathScale);
+          const breathAmt = (0.014 + 0.008 * (1 - u) + (seg.ph === 'HH' ? 0.03 * (1 - smooth(t / 0.2)) : 0)) * Math.max(0, breathScale);
           const source = sourcePulse * 0.95 + breath * breathAmt;
           const fv = targets(seg, u, prevF, nextF);
           const bwMul = typ === 'nasal' ? 0.85 : 1;
           for (let k = 0; k < 5; k++) res[k].set((fv[k] || 4000) * formant * (1 + 0.004 * Math.sin(2 * Math.PI * 0.7 * (seg.t + t) + k)), BW[k] * bwMul);
           let vf = res[0].tick(source) * 1.05
-            + res[1].tick(source) * 0.95
-            + res[2].tick(source) * 0.55
-            + res[3].tick(source) * 0.28
+            + res[1].tick(source) * 1.05
+            + res[2].tick(source) * 0.68
+            + res[3].tick(source) * 0.34
             + res[4].tick(source) * 0.14
             + singer.tick(source) * (typ === 'nasal' ? 0.1 : 0.22)
             + chest.tick(source) * (typ === 'nasal' ? 0.28 : 0.16);
@@ -849,8 +849,8 @@
 
     const left = new Float32Array(n);
     const right = new Float32Array(n);
-    const wet = 0.28;
-    const dry = 0.78;
+    const wet = 0.18;
+    const dry = 0.86;
     const preDelay = Math.round(0.018 * sr);
     for (let i = 0; i < n; i++) {
       const dryS = mono[i];
