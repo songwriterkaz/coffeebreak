@@ -47,7 +47,7 @@ function defaultSite(){return{
   tagline:'Instant appointments, live availability, smart waitlist and a Personal Reception assistant',
   promo:'Coffeebreak Doctor Bookings is a brand-new, free booking system for clinics, made by Coffeebreak and hosted on our own site. Patients can book and order a coffee while they wait.',
   findTitle:'Search clinics',findIntro:'Find a clinic and book a time. Add your own clinic in Clinic setup.',
-  coffeeTitle:'Order a coffee while you wait',coffeeIntro:'This booking app is free. The drink payment goes to the store. Coffeebreak profit is paid by PayID (Teachers Mutual Bank): darkokaz@gmx.com.',
+  coffeeTitle:'Order a coffee while you wait',coffeeIntro:'This booking app is free. Pay the drinks, extras and delivery fee by PayID (Teachers Mutual Bank): darkokaz@gmx.com.',
   recTitle:'Personal Reception (virtual receptionist)',recIntro:'A built-in chat assistant for your clinic\'s website or front desk. It books, reschedules and cancels, answers common questions and points emergencies to 000. It runs on simple rules inside this app. It uses no paid AI service and does not answer real phone calls or send real SMS.',
   msgTitle:'SMS & email messages',msgIntro:'Ready-to-send confirmations and reminders for each booking. Tap to open your phone\'s SMS or email app with the message filled in, or copy it. Nothing is sent automatically.',
   scriptTitle:'Call script & voicemail greeting',scriptIntro:'Text for your reception staff and your phone system\'s voicemail, generated from your clinic details.',
