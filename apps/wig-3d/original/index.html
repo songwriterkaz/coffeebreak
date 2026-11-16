@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Realistic Blonde Moving Wig</title>
+<style>
+html,body{margin:0;height:100%;background:#2b1d2e;font-family:Georgia,serif;color:#f7c6d9;overflow:hidden}
+#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.top{position:fixed;top:0;left:0;right:0;text-align:center;padding:10px;pointer-events:none}
+.top b{letter-spacing:1px;font-size:20px}
+.hint{font-size:14px;opacity:.85}
+.ui{position:fixed;left:0;right:0;bottom:62px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:0 8px}
+button{font-family:inherit;font-size:15px;padding:10px 16px;border-radius:20px;border:2px solid #f7c6d9;background:#3b2a3f;color:#f7c6d9;cursor:pointer}
+button.on{background:#f7c6d9;color:#2b1d2e}
+.sw{display:inline-block;width:18px;height:18px;border-radius:50%;vertical-align:middle;border:2px solid #fff}
+footer{position:fixed;bottom:0;left:0;right:0;font-size:11px;text-align:center;padding:6px 10px;background:#1d1220;color:#c9a6b6}
+footer a{color:#f7c6d9}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="top">
+  <b>Realistic Blonde Moving Wig</b>
+  <div>Realistic, lifelike hair that moves when touched.</div>
+  <div class="hint" id="hint">Stroke the hair with your finger or mouse. On a phone you will feel a soft buzz.</div>
+</div>
+<div class="ui">
+  <button id="mTouch" class="on" type="button">Touch hair</button>
+  <button id="mRot" type="button">Rotate</button>
+  <button id="mPeek" type="button">Peek under the hair</button>
+  <button type="button" data-c="0">Honey <span class="sw" style="background:#b98a5a"></span></button>
+  <button type="button" data-c="1">Dark <span class="sw" style="background:#2b1c16"></span></button>
+  <button type="button" data-c="2">Rose <span class="sw" style="background:#d98aa8"></span></button>
+</div>
+<footer>Design preview by Karen O'Brien / Coffeebreak. Karen O'Brien keeps all rights to this design, name and logo.
+  <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> ·
+  <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> ·
+  <a href="https://www.youtube.com/@coffeebreakTVSERIES/streams" target="_blank" rel="noopener">YouTube</a>
+</footer>
+<script src="three.min.js"></script>
+<script>
+const cv=document.getElementById('c');
+let R;try{R=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true})}catch(e){document.body.innerHTML='<p style="padding:30px;color:#f7c6d9;font-family:Georgia">Your browser could not start the 3D view.</p>';throw e}
+R.setPixelRatio(Math.min(devicePixelRatio,matchMedia('(pointer:coarse)').matches?1.5:2));
+const S=new THREE.Scene();S.background=new THREE.Color(0x2b1d2e);
+const cam=new THREE.PerspectiveCamera(40,1,.1,50);cam.position.set(0,-.2,8.2);cam.lookAt(0,-.55,0);
+S.add(new THREE.HemisphereLight(0xfff0f5,0x3a2440,1.1));
+const dl=new THREE.DirectionalLight(0xffffff,1.1);dl.position.set(2,3,4);S.add(dl);
+const G=new THREE.Group();S.add(G);
+const skin=new THREE.MeshStandardMaterial({color:0xe3b898,roughness:.45,metalness:0,transparent:true,opacity:1});
+const head=new THREE.Mesh(new THREE.SphereGeometry(1,64,48),skin);head.scale.set(.88,1.08,.98);G.add(head);
+const neck=new THREE.Mesh(new THREE.CylinderGeometry(.34,.4,1.3,32),skin);neck.position.y=-1.35;G.add(neck);
+const stand=new THREE.Mesh(new THREE.CylinderGeometry(.6,.7,.12,32),new THREE.MeshStandardMaterial({color:0x111111,roughness:.5}));stand.position.y=-2.05;G.add(stand);
+const N=matchMedia('(pointer:coarse)').matches?6000:14000,SEG=7;let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
+const pal=[[0xb98a5a,0x8a5f3a,0xd9b484],[0x2b1c16,0x120b08,0x4a342a],[0xd98aa8,0xa85f7d,0xf2b8cc]];
+let cur=0;
+const roots=[],dirs=[],len=[],curl=[],shade=[];
+for(let i=0;i<N;i++){
+  let th,ph,x,y,z;
+  do{th=rnd()*Math.PI*2;ph=Math.acos(1-rnd()*1.15);
+    x=Math.sin(ph)*Math.cos(th);y=Math.cos(ph);z=Math.sin(ph)*Math.sin(th);
+    if(rnd()<.45){y=y*.9-.25*rnd();const l=Math.hypot(x,y,z);x/=l;y/=l;z/=l}
+  }while(z>.4&&y<.4&&Math.abs(x)<.34);
+  const rx=x*.88,ry=y*1.08,rz=z*.98;
+  roots.push([rx,ry,rz]);dirs.push([x,y,z]);
+  len.push(1.5+rnd()*1.2+(1-y)*.5);curl.push(rnd()*Math.PI*2);shade.push(.75+rnd()*.5);
+}
+const pos=new Float32Array(N*SEG*2*3),col=new Float32Array(N*SEG*2*3);
+const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+const hm=new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:.9});
+const hair=new THREE.LineSegments(geo,hm);hair.frustumCulled=false;G.add(hair);
+const disp=new Float32Array(N*3),vel=new Float32Array(N*3);
+const tmp=new THREE.Vector3();
+function setColors(){const [a,b,c]=pal[cur].map(h=>new THREE.Color(h));
+  let k=0;for(let i=0;i<N;i++){for(let s=0;s<SEG;s++){for(let e=0;e<2;e++){const t=(s+e)/SEG;
+    const m=t<.5?b.clone().lerp(a,t*2):a.clone().lerp(c,(t-.5)*2);m.multiplyScalar(shade[i]);
+    col[k++]=m.r;col[k++]=m.g;col[k++]=m.b;}}}geo.attributes.color.needsUpdate=true}
+setColors();
+function strandPoint(i,t,out){
+  const r=roots[i],d=dirs[i],L=len[i];
+  const out_=Math.min(t*3,1)*.28*(1-t*.4);
+  let x=r[0]+d[0]*out_,y=r[1]+d[1]*out_,z=r[2]+d[2]*out_;
+  const fall=t*t*L*.62;
+  y-=fall;
+  const wave=Math.sin(t*5+curl[i])*.05*t;
+  x+=d[0]*t*.2+wave+Math.sign(r[0]||1)*Math.pow(t,1.2)*.62*Math.max(r[2],0);z+=d[2]*t*.2+Math.cos(t*4+curl[i])*.04*t;
+  const hx=x/.9,hy=y/1.1,hz=z/1.0;const hl=Math.hypot(hx,hy,hz);
+  if(hl<1.04&&y>-.2){const f=1.04/hl;x*=f;y*=f;z*=f}
+  if(y<-.3){const rr=Math.hypot(x,z);const mr=.56+Math.min(-y-.3,1.5)*.12;if(rr<mr&&rr>0){x*=mr/rr;z*=mr/rr}}
+  const w=t*t;out.set(x+disp[i*3]*w,y+disp[i*3+1]*w,z+disp[i*3+2]*w);
+}
+function rebuild(){let k=0;const a=new THREE.Vector3(),b=new THREE.Vector3();
+  for(let i=0;i<N;i++){strandPoint(i,0,a);for(let s=0;s<SEG;s++){strandPoint(i,(s+1)/SEG,b);
+    pos[k++]=a.x;pos[k++]=a.y;pos[k++]=a.z;pos[k++]=b.x;pos[k++]=b.y;pos[k++]=b.z;a.copy(b)}}
+  geo.attributes.position.needsUpdate=true}
+let mode='touch',px=-1,py=-1,lx=-1,ly=-1,down=false,rot=0,lastBuzz=0,peek=false;
+function resize(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();cam.position.z=w/h<.8?11:8.2;cam.lookAt(0,-.55,0)}
+addEventListener('resize',resize);resize();
+function pp(e){const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]}
+cv.addEventListener('pointerdown',e=>{down=true;[px,py]=pp(e);lx=px;ly=py;try{cv.setPointerCapture(e.pointerId)}catch(err){}});
+cv.addEventListener('pointermove',e=>{[px,py]=pp(e);});
+cv.addEventListener('pointerup',()=>{down=false});
+cv.addEventListener('pointerleave',()=>{if(!down){px=-1;py=-1}});
+const hint=document.getElementById('hint');
+function setMode(m){mode=m;document.getElementById('mTouch').classList.toggle('on',m=='touch');document.getElementById('mRot').classList.toggle('on',m=='rot');
+  hint.textContent=m=='touch'?'Stroke the hair with your finger or mouse. On a phone you will feel a soft buzz.':'Drag to spin the wig and look at it from every side.'}
+mTouch.onclick=()=>setMode('touch');mRot.onclick=()=>setMode('rot');
+mPeek.onclick=()=>{peek=!peek;mPeek.classList.toggle('on',peek)};
+document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{cur=+b.dataset.c;setColors()});
+let first=true,strokeHits=0;
+function step(){
+  if(mode=='rot'&&down&&px>=0){rot+=(px-lx)*.012;}
+  G.rotation.y=rot;lx=px;ly=py;
+  const w=cv.clientWidth,h=cv.clientHeight;
+  const active=mode=='touch'&&px>=0&&(down||matchMedia('(hover:hover)').matches);
+  let hit=0;
+  if(active){const dx=px-(window._ppx??px),dy=py-(window._ppy??py);
+    G.updateMatrixWorld();
+    for(let i=0;i<N;i++){
+      strandPoint(i,1,tmp);tmp.applyMatrix4(G.matrixWorld).project(cam);
+      const sx=(tmp.x+1)/2*w,sy=(1-tmp.y)/2*h;
+      const dd=Math.hypot(sx-px,sy-py),rad=Math.min(w,h)*.09;
+      if(dd<rad){const f=(1-dd/rad);hit++;
+        vel[i*3]+=dx*f*.009;vel[i*3+1]+=-dy*f*.009;vel[i*3+2]+=Math.abs(dx+dy)*f*.001}
+    }}
+  window._ppx=px;window._ppy=py;
+  let mv=0;for(let i=0;i<N*3;i++){vel[i]+=-disp[i]*.06;vel[i]*=.9;disp[i]+=vel[i];mv+=Math.abs(vel[i])+Math.abs(disp[i])}
+  if(hit>20)strokeHits++;
+  if(hit>20&&navigator.vibrate&&navigator.userActivation&&navigator.userActivation.hasBeenActive&&performance.now()-lastBuzz>70){navigator.vibrate(6);lastBuzz=performance.now()}
+  const target=peek?.12:.9;hm.opacity+=(target-hm.opacity)*.12;
+  if(mv>.02||first){rebuild();first=false}
+  R.render(S,cam);requestAnimationFrame(step)
+}
+step();
+window.wigStrokeHits=function(){return strokeHits};
+window.wigHairShift=function(){let s=0;for(let i=0;i<disp.length;i+=17)s+=Math.abs(disp[i]);return s};
+</script>
+</body>
+</html>
