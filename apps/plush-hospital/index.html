@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coffeebreak Plush Hospital</title>
+<link rel="icon" href="cb-logo.jpg">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #f6d5e2; color: #4a2436; font: 17px/1.45 Georgia, "Iowan Old Style", serif; }
+button, a { font: 700 16px/1.2 Georgia, serif; }
+button {
+  background: #e978a8;
+  color: #fffafb;
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 16px;
+  min-height: 44px;
+  min-width: 44px;
+  cursor: pointer;
+}
+button.quiet { background: #fff; color: #8a3458; box-shadow: inset 0 0 0 2px #e978a8; }
+button:focus-visible, a:focus-visible { outline: 3px solid #6a3044; outline-offset: 2px; }
+a { color: #a33b68; }
+#stage { position: fixed; inset: 0; z-index: 0; }
+#stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+#cb-game-legal {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 6;
+  background: rgba(255, 246, 250, 0.94);
+  color: #5c3144;
+  font: 12px/1.35 Georgia, serif;
+  padding: 8px 12px;
+  text-align: center;
+}
+#cb-game-legal p { margin: 0; }
+#cb-game-legal .rights {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.overlay, .sheet, #hud, #stick { display: none; }
+.overlay.open, .sheet.open { display: flex; }
+#hud.open { display: block; }
+#stick.open { display: block; }
+.overlay, .sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  padding: 64px 14px 18px;
+  pointer-events: none;
+  align-items: flex-start;
+  justify-content: center;
+}
+.overlay.block { pointer-events: auto; background: rgba(90, 40, 60, 0.28); align-items: center; }
+.card {
+  pointer-events: auto;
+  width: min(560px, 100%);
+  max-height: calc(100vh - 86px);
+  overflow: auto;
+  background: #fff7f4;
+  border-radius: 22px;
+  padding: 16px 16px 18px;
+  box-shadow: 0 16px 40px rgba(90, 40, 60, 0.18);
+}
+.card h1, .card h2 { font-weight: 700; color: #a33b68; margin: 6px 0; }
+.card h1 { font-size: 32px; line-height: 1.15; }
+.card p { margin: 8px 0; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.logo-frame { display: inline-block; width: 120px; height: 68px; overflow: hidden; border-radius: 12px; background: #fff; }
+.logo { width: 240px; height: 135px; display: block; }
+.fine { font-size: 13px; color: #6d4456; }
+#boot-note { min-height: 1.2em; color: #8a3458; }
+#hud {
+  position: fixed;
+  z-index: 5;
+  left: 0; right: 0; top: 56px;
+  padding: 8px 10px 0;
+  pointer-events: none;
+}
+#hud .bar, #tools { pointer-events: auto; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+#hud .bar {
+  background: rgba(255, 247, 244, 0.92);
+  border-radius: 16px;
+  padding: 8px;
+}
+#tools { justify-content: flex-end; margin-top: 8px; }
+#tools button.fit { box-shadow: 0 0 0 3px #fff, 0 0 0 6px #6a3044; }
+#stick {
+  position: fixed;
+  z-index: 7;
+  left: 14px;
+  bottom: 14px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.42);
+  box-shadow: inset 0 0 0 2px rgba(233, 120, 168, 0.9);
+  touch-action: none;
+}
+#knob {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 54px; height: 54px;
+  border-radius: 50%;
+  background: #e978a8;
+  transform: translate(-50%, -50%);
+}
+.sheet { align-items: center; }
+.sheet .card { width: min(420px, 100%); }
+#toast {
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: 88px;
+  transform: translateX(-50%);
+  max-width: min(460px, calc(100% - 24px));
+  background: #4a2436;
+  color: #fff7f4;
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: none;
+}
+#toast.open { display: block; }
+.meter { position: relative; height: 22px; background: #f3d5e0; border-radius: 999px; overflow: hidden; margin: 8px 0; }
+.meter .level { height: 100%; width: 0; background: #e978a8; }
+.meter .zone { position: absolute; top: 0; bottom: 0; left: 48%; width: 32%; background: rgba(90, 150, 110, 0.35); }
+.meter.tall { height: 168px; width: 48px; margin: 8px auto; overflow: hidden; }
+.meter.tall .mark { position: absolute; left: 0; right: 0; height: 8px; background: #4a2436; bottom: 50%; }
+.meter.tall .zone { left: 0; width: 100%; top: auto; bottom: 42.5%; height: 35%; }
+.tap { min-width: 92px; }
+button.hot { background: #ffd36e; color: #4a2436; }
+#vr-button, #VRButton { z-index: 80; }
+</style>
+</head>
+<body data-mode="game">
+<div id="stage"></div>
+<section id="screen-title" class="overlay block open" aria-label="Title">
+  <div class="card">
+    <span class="logo-frame"><img class="logo" src="cb-logo.jpg" alt="Coffeebreak"></span>
+    <h1>Coffeebreak Plush Hospital</h1>
+    <p>You are a plush doctor. Soft patients arrive in a warm pink ward.</p>
+    <p>The free demo covers the first ward and 3 patients.</p>
+    <p>Full game $10 USD.</p>
+    <p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+    <p id="saved-line" class="fine">Hearts saved: 0</p>
+    <div class="row">
+      <button type="button" id="btn-play">Play</button>
+      <button type="button" id="btn-tutorial">Tutorial</button>
+      <button type="button" id="btn-continue" class="quiet">Continue</button>
+      <button type="button" id="btn-title-sound" class="quiet">Sound on</button>
+      <button type="button" id="btn-title-cart" class="quiet">Cart</button>
+    </div>
+    <p id="boot-note" class="fine" role="status"></p>
+    <p class="fine"><strong>Disclaimer:</strong> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</p>
+    <p class="fine"><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> · <a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p>
+  </div>
+</section>
+<section id="screen-tutorial" class="overlay block" aria-label="Tutorial">
+  <div class="card">
+    <h2>Tour of the ward</h2>
+    <p id="tut-text"></p>
+    <div class="row" id="tut-tries">
+      <button type="button" id="btn-try-thermo" class="quiet">Try thermometer</button>
+      <button type="button" id="btn-try-steth" class="quiet">Try stethoscope</button>
+      <button type="button" id="btn-try-bandage" class="quiet">Try bandage</button>
+      <button type="button" id="btn-try-needle" class="quiet">Try needle and thread</button>
+      <button type="button" id="btn-try-stuffing" class="quiet">Try stuffing refill</button>
+      <button type="button" id="btn-try-cuddle" class="quiet">Try cuddle</button>
+    </div>
+    <div class="row">
+      <button type="button" id="btn-tut-back" class="quiet">Back</button>
+      <button type="button" id="btn-tut-next">Next</button>
+      <button type="button" id="btn-tut-close" class="quiet">Close</button>
+    </div>
+  </div>
+</section>
+<section id="hud" aria-label="Ward status">
+  <div class="bar">
+    <strong id="hud-hearts">Hearts 0</strong>
+    <span id="hud-ward">Pink Ward</span>
+    <span id="hud-patients">Patients 0 of 3</span>
+    <span id="hud-who">Ward is quiet</span>
+    <button type="button" id="btn-patient">See the patient</button>
+    <button type="button" id="btn-door" class="quiet">About this door</button>
+    <button type="button" id="btn-rooms" class="quiet">Rooms</button>
+    <button type="button" id="btn-help" class="quiet">Help</button>
+    <button type="button" id="btn-sound" class="quiet">Sound on</button>
+    <button type="button" id="btn-menu" class="quiet">Menu</button>
+  </div>
+  <div id="tools">
+    <button type="button" id="btn-tool-thermo">Thermometer</button>
+    <button type="button" id="btn-tool-steth">Stethoscope</button>
+    <button type="button" id="btn-tool-bandage">Bandage</button>
+    <button type="button" id="btn-tool-needle">Needle and thread</button>
+    <button type="button" id="btn-tool-stuffing">Stuffing refill</button>
+    <button type="button" id="btn-tool-cuddle">Cuddle</button>
+  </div>
+</section>
+<section id="screen-chart" class="sheet" aria-label="Patient chart">
+  <div class="card">
+    <h2 id="chart-name">Patient</h2>
+    <p id="chart-ail"></p>
+    <p id="chart-blurb"></p>
+    <p id="chart-hint">Choose a tool, or listen with the stethoscope.</p>
+    <div class="row">
+      <button type="button" id="btn-chart-close" class="quiet">Step back</button>
+    </div>
+  </div>
+</section>
+<section id="screen-rooms" class="sheet" aria-label="Rooms">
+  <div class="card">
+    <h2>Rooms</h2>
+    <p class="fine">Hearts open rooms. The free demo covers the first ward and 3 patients.</p>
+    <div class="row" id="room-list"></div>
+    <button type="button" id="btn-rooms-close" class="quiet">Close</button>
+  </div>
+</section>
+<section id="screen-mini" class="overlay block" aria-label="Care">
+  <div class="card">
+    <h2 id="mini-title">Care</h2>
+    <p id="mini-help"></p>
+    <div id="mini-body"></div>
+    <div class="row">
+      <button type="button" id="btn-mini-close" class="quiet">Close</button>
+    </div>
+  </div>
+</section>
+<section id="screen-pay" class="overlay block" aria-label="Full game">
+  <div class="card">
+    <h2>Full game</h2>
+    <p>The free demo covers the first ward and 3 patients.</p>
+    <p>Full game $10 USD.</p>
+    <p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+    <p id="pay-extra"></p>
+    <p class="fine">Use the cart total, PayID, and reference in your own banking app. This page does not mark a payment as received.</p>
+    <div class="row">
+      <button type="button" id="btn-pay-cart">Add full game to cart</button>
+      <button type="button" id="btn-pay-walk" class="quiet">Keep walking</button>
+      <button type="button" id="btn-pay-title" class="quiet">Title screen</button>
+    </div>
+  </div>
+</section>
+<div id="stick" aria-hidden="true"><div id="knob"></div></div>
+<div id="toast" role="status"></div>
+<script type="module" src="game.js"></script>
+<!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/plush-hospital" aria-label="Cart"><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/plush-hospital","currency":"USD","items":[{"id":"full","name":"Coffeebreak Plush Hospital","amount":"10.00","currency":"USD"}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> <a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p><p class="rights">Karen (Coffeebreak) keeps all rights to her products, designs, apps, games, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p></footer><!--cb-game-cart-end-->
+</body>
+</html>
