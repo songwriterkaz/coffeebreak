@@ -197,7 +197,7 @@ header img{height:44px;width:44px;border-radius:8px}
 <div id="main">
  <div id="tlwrap"><div id="tlin"><div id="heads"></div><div style="position:relative"><canvas id="tl"></canvas><div id="ph"></div></div></div></div>
  <div id="bottom">
-  <div id="tabs"><button data-p="mix" class="on">Mixer</button><button data-p="fx">Track Effects</button><button data-p="roll">Piano Roll</button><button data-p="drum">Drum Machine</button><button data-p="mst">Mastering</button><button data-p="exp">Export and Project</button><button data-p="help">Help</button></div>
+  <div id="tabs"><button data-p="mix" class="on">Mixer</button><button data-p="fx">Track Effects</button><button data-p="roll">Piano Roll</button><button data-p="drum">Drum Machine</button><button data-p="mst">Mastering</button><button data-p="exp">Export and Project</button><button data-p="sung">Sung song</button><button data-p="help">Help</button></div>
   <div id="panes">
    <div class="pane show" id="p-mix"><div class="strips" id="strips"></div></div>
    <div class="pane" id="p-fx"><div class="note" id="fxname"></div><div class="fx" id="fxbox"></div></div>
@@ -210,7 +210,7 @@ header img{height:44px;width:44px;border-radius:8px}
      <button id="xmp4">Export MP4 video</button><button id="xstem">Export stems (WAV)</button>
      <span class="note">|</span><button id="psave">Save project</button><button id="pload">Open project</button><input id="ploadf" type="file" accept=".json,.cbstudio" hidden><button id="pnew">New project</button>
     </div><p class="note" id="xinfo">Exports render the whole song, from the start to the end of the last clip, through every effect and the mastering chain.</p><canvas id="viz" width="1280" height="720" style="width:320px;height:180px;background:#000;border-radius:6px"></canvas></div>
-   <div class="pane" id="p-help"><div class="note" style="font-size:12px;max-width:900px">
+   <div class="pane" id="p-sung"><div data-cb-sung data-app="Coffeebreak Recording Studio Pro" data-store="recording-studio-pro" data-amount-text="$10"></div></div><div class="pane" id="p-help"><div class="note" style="font-size:12px;max-width:900px">
     <p><b>Recording.</b> Press Mic inputs to allow your microphone, pick an input on the track, press R on the track to arm it, then press Rec. Turn on I to hear yourself (use headphones). Set Count-in for a bar of clicks first. Turn on Punch and alt-drag the ruler to only keep a section.</p>
     <p><b>Timeline.</b> Click the ruler to move the playhead, shift-drag it to set the loop region, alt-drag it to set the punch region. Drag clips to move them, drag clip edges to trim. Use Split, Duplicate, fades and clip gain in the toolbar. Drop audio files anywhere to import them.</p>
     <p><b>Instruments.</b> Synth tracks play piano, electric piano, organ, pad, bass, lead and pluck sounds. Use Draw to make a clip, then the Piano Roll. Play with the on-screen keys, your computer keyboard or a MIDI keyboard. Arm a synth track and press Rec to record what you play. Drum tracks use the step sequencer.</p>
@@ -843,4 +843,4 @@ var CB=window.CB={get P(){return P},BUFS:BUFS,get G(){return G},play:play,stop:s
 
 </script>
 <script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Recording Studio Pro Sample" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
-</body></html>
+<script src="../../payid-cart/cart.js"></script><script src="../../cb-songgen/songgen.js"></script><script src="../../cb-songgen/panel.js"></script></body></html>

@@ -138,7 +138,7 @@ footer p{margin:2px 0}
  <button data-tab="amp">Amps and Effects</button>
  <button data-tab="mixer">Mixer</button>
  <button data-tab="recorder">Recorder</button>
- <button data-tab="shop">Shop the real kit</button>
+ <button data-tab="sung">Sung song</button><button data-tab="shop">Shop the real kit</button>
 </nav>
 <main>
 <section class="panel on" id="p-keys"><div class="card">
@@ -242,6 +242,7 @@ footer p{margin:2px 0}
  <p class="status" id="recStatus"></p>
 </div></section>
 
+<section class="panel" id="p-sung"><div class="card"><h2>Sung song</h2><p class="hint">The music software on this page stays free. Kit prices stay on the shop tab.</p><div data-cb-sung data-app="Coffeebreak Virtual Music Studio" data-store="virtual-studio"></div></div></section>
 <section class="panel" id="p-shop"><div class="card">
  <h2>Shop the real pink Coffeebreak studio kit</h2>
  <p class="hint">Take the studio off the screen. A physical all-pink kit that works with this free app.</p>
@@ -540,5 +541,10 @@ idbLoad().then(function(bl){var any=bl.some(Boolean);if(!any)return;var a=initAu
 <p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
 <p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
 <p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
-<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div>
+<script src="../../payid-cart/cart.js"></script>
+<script src="../../cb-songgen/songgen.js"></script>
+<script src="../../cb-songgen/panel.js"></script>
+<script src="../../cb-songgen/cbreport.js" data-app="Coffeebreak Virtual Music Studio" data-version="sung1"></script>
+</body>
 </html>

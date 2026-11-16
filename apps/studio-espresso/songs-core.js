@@ -183,51 +183,12 @@
     return Math.max(12, Math.min(28, Math.round(words * 0.45 + lines * 1.5)));
   }
 
-  const SERVICE_DOWN = 'The ACE-Step singing service is not available right now. Nothing was saved. You can try again later, or record your own vocal on an audio track.';
-  const SERVICE_UNREACHED = 'The ACE-Step singing service could not be reached. Nothing was saved. You can try again later, or record your own vocal on an audio track.';
-
-  function downStatus(status) {
-    return status === 502 || status === 503 || status === 504 || status === 429;
-  }
-
-  async function callSpace(endpoint, apiName, data, timeoutMs) {
-    let posted;
-    try {
-      posted = await fetch(endpoint + '/gradio_api/call/' + apiName, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: data }),
-      });
-    } catch (e) {
-      throw new Error(SERVICE_UNREACHED);
-    }
-    if (!posted.ok) throw new Error(downStatus(posted.status) ? SERVICE_DOWN : 'The vocal service refused the request (' + posted.status + '). Nothing was saved.');
-    const accepted = await posted.json();
-    if (!accepted.event_id) throw new Error('The vocal service did not accept the lyrics. Nothing was saved.');
-    const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
-    const timer = setTimeout(() => { if (ctrl) ctrl.abort(); }, timeoutMs || 120000);
-    let streamed;
-    try {
-      streamed = await fetch(endpoint + '/gradio_api/call/' + apiName + '/' + accepted.event_id, ctrl ? { signal: ctrl.signal } : {});
-    } catch (e) {
-      if (e && e.name === 'AbortError') throw new Error('The vocal model did not answer in time. Nothing was saved.');
-      throw new Error(SERVICE_UNREACHED);
-    } finally { clearTimeout(timer); }
-    if (!streamed.ok) throw new Error(downStatus(streamed.status) ? SERVICE_DOWN : 'The vocal service failed while generating (' + streamed.status + '). Nothing was saved.');
-    const sse = parseSse(await streamed.text());
-    if (sse.event === 'error') throw new Error(SERVICE_DOWN);
-    if (sse.event !== 'complete') throw new Error(SERVICE_DOWN);
-    let parsed;
-    try { parsed = JSON.parse(sse.data); } catch (e) { throw new Error('The vocal model sent an unreadable result. Nothing was saved.'); }
-    const file = parsed && parsed[0];
-    if (!file || !file.url) throw new Error('The vocal model returned no audio. Nothing was saved.');
-    let audio;
-    try { audio = await fetch(file.url); }
-    catch (e) { throw new Error('The sung audio could not be downloaded. Nothing was saved.'); }
-    if (!audio.ok) throw new Error('The sung audio could not be downloaded. Nothing was saved.');
-    const bytes = await audio.arrayBuffer();
-    if (!bytes || bytes.byteLength < 8000) throw new Error('The vocal model returned an empty file. Nothing was saved.');
-    return { bytes: bytes, info: parsed[1] && parsed[1].audio_duration ? Math.round(parsed[1].audio_duration) + 's sung audio' : 'sung audio', model: MODEL, license: 'Apache-2.0' };
+  function songModule(opts) {
+    if (opts && opts.songgen) return opts.songgen;
+    const globalSong = typeof CBSong !== 'undefined' ? CBSong : null;
+    if (globalSong && globalSong.generateSong) return globalSong;
+    if (typeof require === 'function') return require('../../cb-songgen/songgen.js');
+    throw new Error('The shared song module is not loaded. Nothing was saved.');
   }
 
   async function singAceStep(lyrics, opts) {
@@ -235,12 +196,16 @@
     const line = opts.line ? String(opts.line).trim() : '';
     const text = line || String(lyrics || '').trim();
     if (wordsOf(text).length < 1 || (!line && wordsOf(text).length < 2)) throw new Error('Write at least two words to sing.');
-    const seconds = opts.seconds || (line ? Math.max(8, Math.min(14, Math.round(wordsOf(line).length * 0.8 + 4))) : vocalSeconds(text));
-    const steps = opts.steps == null ? 32 : opts.steps;
-    const prompt = opts.prompt || 'a cappella, solo singing voice only, no instruments, no drums, clear lyrics, natural sung vocal';
-    const endpoint = String(opts.endpoint || ENDPOINT).replace(/\/$/, '');
-    const data = [seconds, prompt, '[Verse]\n' + text + '\n', steps, 15, 'euler', 'apg', 10, String(opts.seed == null ? 7 : opts.seed), 0.5, 0, 3, true, true, true, null, 0, 0, false, 0.5, null, 'none'];
-    const sung = await callSpace(endpoint, '__call__', data, opts.timeoutMs || 120000);
+    const seconds = opts.seconds || (line ? Math.max(10, Math.min(30, Math.round(wordsOf(line).length * 0.8 + 8))) : vocalSeconds(text));
+    const prompt = opts.prompt || 'sung vocal, clear lyrics, drums, bass and backing music';
+    const sung = await songModule(opts).generateSong({
+      lyrics: text,
+      prompt: prompt,
+      seconds: seconds,
+      seed: opts.seed,
+      timeoutMs: opts.timeoutMs,
+      fetchImpl: opts.fetchImpl,
+    });
     sung.seconds = seconds;
     return sung;
   }

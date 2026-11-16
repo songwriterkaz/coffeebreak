@@ -75,7 +75,7 @@ try {
   const run = await send('Runtime.evaluate', {
     awaitPromise: true,
     returnByValue: true,
-    timeout: 120000,
+    timeout: 360000,
     expression: `(() => (async () => {
       const lyricsLabel = document.querySelector('label[for="createLyrics"]');
       const simple = {
@@ -143,7 +143,7 @@ try {
   if (out.error) throw new Error(out.error);
   assert.equal(out.simple.hasLyrics, true);
   assert.equal(out.simple.lyricsLabel, 'Lyrics');
-  assert.equal(out.simple.vocalLabel, 'Sung vocal');
+  assert.equal(out.simple.vocalLabel, 'Full song');
   assert.equal(out.simple.button, 'Create song');
   assert.match(out.found.lyrics, /sun is up on the hill/);
   assert.match(out.found.vocal, /Vocals/);
@@ -154,7 +154,7 @@ try {
   assert.equal(out.simple.voiceInsideMore, false);
   assert.equal(out.song.title, 'Sun is up on the hill');
   assert.equal(out.song.lyrics, 'sun is up on the hill');
-  assert.equal(out.song.vocal.model, 'ACE-Step/ACE-Step');
+  assert.match(out.song.vocal.model, /ACE-Step|DiffRhythm/);
   assert.notEqual(out.edits.pitched.mark, out.edits.before.mark);
   assert.ok(out.edits.pitched.peak > 0.02);
   assert.equal(out.edits.pitched.pitch, 2);
@@ -165,7 +165,7 @@ try {
   assert.ok(Math.abs(out.opened.vocalLevel - 0.3) < 0.001);
   assert.equal(out.opened.vocalPitch, 2);
   assert.ok(out.song.tracks.includes('Vocals'));
-  assert.ok(out.song.tracks.includes('Drums'));
+  assert.equal(out.song.tracks.includes('Drums'), false);
   assert.ok(out.listed.some(s => s.title === 'Sun is up on the hill' && s.lyrics === 'sun is up on the hill'));
   assert.ok(out.played.peak > 0.02, 'mix peak ' + out.played.peak);
   assert.ok(out.played.duration > 1, 'mix duration ' + out.played.duration);
@@ -173,7 +173,7 @@ try {
   assert.ok(out.played.seconds > 0, 'playhead ' + out.played.seconds);
   assert.ok(out.opened.vocalSeconds > 1);
   assert.ok(out.opened.vocalPeak > 0.05);
-  assert.ok(out.opened.drumNotes > 0);
+  assert.equal(out.opened.drumNotes, 0);
   assert.ok(out.demoPeak > 0.02, 'demo song still renders');
   assert.equal(out.cart.paid, false);
   assert.equal(out.cart.amount, 10);

@@ -137,15 +137,11 @@
     const lyrics = String(input.lyrics || '').trim();
     const style = C.readStyle(input);
     const prog = C.progressionFor(style);
-    const moodIndex = Math.max(0, C.MOODS.indexOf(style.mood));
     const seed = input.seed == null ? 1 + Math.floor(Math.random() * 50) : input.seed | 0;
-    const previousSig = P.sig;
-    P.sig = 4;
-    let melody;
-    try { melody = genMelody(style.key, moodIndex, seed, 8); }
-    finally { P.sig = previousSig; }
-    C.buildScore(lyrics, melody, style.bpm);
-    const sung = await C.singAceStep(lyrics, { steps: input.steps, seed: seed, seconds: input.seconds });
+    C.buildScore(lyrics, [], style.bpm);
+    const prompt = [input.prompt, style.genre, style.mood, style.bpm + ' BPM'].filter(Boolean).join(', ');
+    const seconds = input.seconds || C.vocalSeconds(lyrics);
+    const sung = await C.singAceStep(lyrics, { prompt: prompt, seed: seed, seconds: seconds });
     const ctx = AC();
     const decoded = await ctx.decodeAudioData(sung.bytes.slice(0));
     if (peakBuf(decoded) < 0.02) throw new Error('The vocal model returned silence. Nothing was saved.');
@@ -159,8 +155,7 @@
       P.bpm = style.bpm;
       P.sig = 4;
       P.lyrics = lyrics;
-      const bars = Math.max(4, Math.min(16, Math.ceil(s2b(vocal.duration) / P.sig)));
-      const parts = arrange(style, prog, melody, bars);
+      const parts = ['sung vocal', 'backing music'];
       const vocalTrack = addTrack('audio', null, 'Vocals');
       if (!vocalTrack) throw new Error('The vocal track could not be added. Nothing was saved.');
       audioClip(vocalTrack, vocal, 0, 'Vocals');
@@ -170,7 +165,7 @@
       P.markers = [{ b: 0, name: 'Song' }];
       SEL.t = vocalTrack.id;
       const keyName = C.NOTE_NAMES[style.key] + (prog.minor ? ' minor' : ' major');
-      const summary = style.genre + ', ' + style.mood + ', ' + keyName + ', ' + style.bpm + ' BPM. ACE-Step sang the lyrics. Parts: ' + parts.join(', ') + '.';
+      const summary = style.genre + ', ' + style.mood + ', ' + keyName + ', ' + style.bpm + ' BPM. Full song with a sung vocal and backing music. ' + (sung.credit || sung.model) + '.';
       const record = {
         id: P.songId,
         title: P.name,
@@ -180,7 +175,10 @@
         style: style,
         level: vocalTrack.vol,
         pitch: 0,
-        vocal: { model: sung.model, info: sung.info, license: sung.license },
+        file: sung.bytes,
+        mime: sung.mime || 'audio/mpeg',
+        backend: sung.backend || '',
+        vocal: { model: sung.model, info: sung.info, license: sung.license, credit: sung.credit || '' },
         packed: await packProject().arrayBuffer(),
       };
       await LIB.put(record);
@@ -198,6 +196,20 @@
       refreshAll();
       throw err;
     }
+  }
+
+  async function downloadSong(id) {
+    const record = await LIB.get(id);
+    if (!record || !record.file) throw new Error('That song file is not in this browser.');
+    const blob = new Blob([record.file], { type: record.mime || 'audio/mpeg' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (record.title || 'song').replace(/[^\w]+/g, '-').slice(0, 40) + '.mp3';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
   }
 
   async function playSong(id) {
@@ -327,14 +339,16 @@
       <div class="songmeta"><b>${esc(s.title)}</b><p><b>Lyrics</b> and <b>Vocal</b></p>${vocalEditor(s.id, s.lyrics || '', s.level == null ? 1 : s.level, s.pitch || 0)}</div>
       <button type="button" data-act="play" data-id="${esc(s.id)}">Play</button>
       <button type="button" data-act="open" data-id="${esc(s.id)}">Open in studio</button>
+      <button type="button" data-act="download" data-id="${esc(s.id)}">Download song</button>
       <button type="button" class="sm" data-act="delete" data-id="${esc(s.id)}">Delete</button>
     </div>`).join('');
-    box.querySelectorAll('button[data-act="play"], button[data-act="open"], button[data-act="delete"]').forEach(button => {
+    box.querySelectorAll('button[data-act="play"], button[data-act="open"], button[data-act="download"], button[data-act="delete"]').forEach(button => {
       button.onclick = async () => {
         const id = button.dataset.id;
         try {
           if (button.dataset.act === 'play') await playSong(id);
           else if (button.dataset.act === 'open') await openSong(id);
+          else if (button.dataset.act === 'download') await downloadSong(id);
           else if (button.dataset.act === 'delete') {
             if (!confirm('Delete this song from My songs?')) return;
             if (AUD.id === id) stopAudition();
@@ -351,7 +365,7 @@
     const el = $('#createResult');
     if (!el) return;
     el.hidden = false;
-    el.innerHTML = `<p><b>Lyrics</b></p><p class="lyric-block">${esc(record.lyrics || '')}</p><p><b>Vocal</b></p><p>The sung vocal is saved in My songs and on the track named Vocals.</p><p class="hint">${esc(record.summary)} ${esc(record.vocal.model)}, ${esc(record.vocal.license)}. ${esc(record.vocal.info)}</p>`;
+    el.innerHTML = `<p><b>Lyrics</b></p><p class="lyric-block">${esc(record.lyrics || '')}</p><p><b>Vocal</b></p><p>The full song is saved in My songs and on the track named Vocals.</p><p class="hint">${esc(record.summary)} ${esc(record.vocal.model)}, ${esc(record.vocal.license)}. ${esc(record.vocal.info)}</p>`;
   }
 
   function setStatus(text) {
@@ -377,6 +391,8 @@
       title: '',
       lyrics: lyrics,
       description: '',
+      prompt: $('#createStyle') ? $('#createStyle').value : '',
+      seconds: $('#createSeconds') && $('#createSeconds').value ? +$('#createSeconds').value : undefined,
       mood: 'Happy',
       genre: 'Pop',
       key: 0,
@@ -389,6 +405,8 @@
       title: $('#createTitle') ? $('#createTitle').value : '',
       lyrics: lyrics,
       description: $('#createDesc') ? $('#createDesc').value : '',
+      prompt: $('#createStyle') ? $('#createStyle').value : '',
+      seconds: $('#createSeconds') && $('#createSeconds').value ? +$('#createSeconds').value : undefined,
       mood: $('#createMood') ? $('#createMood').value : base.mood,
       genre: $('#createGenre') ? $('#createGenre').value : base.genre,
       key: $('#createKey') ? +$('#createKey').value : base.key,
@@ -405,7 +423,7 @@
     busy = true;
     const button = $('#createGo');
     if (button) button.disabled = true;
-    setStatus('Generating the sung vocal with ACE-Step. This can take up to a minute.');
+    setStatus('Generating the full song. This can take a few minutes.');
     try {
       AC();
       await createSong(input);
@@ -439,10 +457,14 @@
     sec('create', `<div class="panel"><h3>Write a song</h3>
       <label class="field-label" for="createLyrics">Lyrics</label>
       <textarea id="createLyrics" aria-label="Lyrics" placeholder="Paste or type the words to sing"></textarea>
+      <label class="field-label" for="createStyle">Style</label>
+      <input id="createStyle" type="text" aria-label="Style" placeholder="bright pop, clear vocal, live drums" style="width:min(520px,90vw)">
+      <label class="field-label" for="createSeconds">Length in seconds, optional</label>
+      <input id="createSeconds" type="number" min="10" max="120" placeholder="30" aria-label="Length in seconds" style="width:120px">
       <div class="vocal-action">
-        <span class="field-label" id="vocalLabel">Sung vocal</span>
+        <span class="field-label" id="vocalLabel">Full song</span>
         <div class="row"><button type="button" id="createGo" class="big">Create song</button><span id="createStatus" class="hint"></span></div>
-        <p class="hint" id="createHonest">Press Create song to sing the lyrics above. The sung vocal is saved in My songs. It is generated singing from ACE-Step, an open Apache-2.0 model, not a recording of a person. Drums, bass and keys are this studio's synthesizers. If the vocal service fails, nothing is saved and no stand-in voice is played.</p>
+        <p class="hint" id="createHonest">Press Create song to make a full song from the lyrics and style. The result has a sung vocal and backing music from an open model, and it is saved in My songs. You get 100 percent commercial rights to songs you make here. If the service fails, nothing is saved and no stand-in song is played.</p>
       </div>
       <details id="createMore"><summary>More choices</summary>
         <div class="row"><label class="mini">Title <input id="createTitle" type="text" maxlength="80"></label>
