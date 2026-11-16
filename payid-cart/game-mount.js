@@ -54,7 +54,7 @@
         currency: session.currency,
         lines: session.lines,
         previous: session.previous,
-        customerClaimsPaid: false
+        customerClaimsPaid: session.customerClaimsPaid === true
       });
       if (state.ok) {
         session.previous = state;
@@ -137,9 +137,12 @@
         labelledInput('Total', 'total', current.totalLabel + ' ' + current.currency, { readOnly: true }),
         labelledInput('Reference', 'reference', current.reference || '', { readOnly: true })
       );
+      var digital = session.lines.some(function (line) {
+        return !G.isPhysicalItem(line, session.storeId);
+      });
       var submit = document.createElement('button');
       submit.type = 'submit';
-      submit.textContent = 'Send order details';
+      submit.textContent = digital ? "I've paid by PayID, unlock now" : "I've paid by PayID, confirm this order";
       var status = document.createElement('p');
       status.id = 'cb-game-order-status';
       status.textContent = session.orderNotice || '';
@@ -168,21 +171,42 @@
           currency: current.currency,
           reference: current.reference
         });
-        session.orderNotice = 'Payment is not verified. Reference: ' + (current.reference || '');
+        var claim = G.honourClaim({
+          storeId: session.storeId,
+          name: name,
+          email: email,
+          lines: session.lines,
+          total: current.totalLabel,
+          currency: current.currency,
+          reference: current.reference
+        });
+        session.customerClaimsPaid = true;
+        if (claim.unlocked) {
+          try {
+            if (storage) storage.setItem(G.unlockKey(session.storeId), JSON.stringify(claim));
+          } catch (err) {}
+          document.documentElement.setAttribute('data-cb-payid-unlock', session.storeId);
+          try { window.dispatchEvent(new CustomEvent('cb-payid-unlock', { detail: claim })); } catch (err) {}
+          session.orderNotice = 'Unlocked on this device. Payment is not verified. Reference: ' + claim.reference;
+        } else {
+          session.orderNotice = 'Order reference: ' + claim.reference + '. Payment is not verified.';
+        }
         status.textContent = session.orderNotice;
+        persist();
+        var baseNotice = session.orderNotice;
         fetch(G.ordersEndpoint(), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(fields)
         }).then(function (res) { return res.json(); }).then(function (body) {
           if (body && (body.success === true || body.success === 'true')) {
-            session.orderNotice = 'Order details were handed to the mailbox. Payment is not verified. Reference: ' + (current.reference || '');
+            session.orderNotice = baseNotice + ' Order details were handed to the mailbox.';
           } else {
-            session.orderNotice = 'The mailbox did not accept the order details yet. Payment is not verified. Reference: ' + (current.reference || '');
+            session.orderNotice = baseNotice + ' The mailbox did not accept the order details yet.';
           }
           status.textContent = session.orderNotice;
         }).catch(function () {
-          session.orderNotice = 'The mailbox did not accept the order details yet. Payment is not verified. Reference: ' + (current.reference || '');
+          session.orderNotice = baseNotice + ' The mailbox did not accept the order details yet.';
           status.textContent = session.orderNotice;
         });
       });

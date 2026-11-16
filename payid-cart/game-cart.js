@@ -52,7 +52,10 @@
     'Email',
     'Items',
     'Reference',
-    'Send order details',
+    "I've paid by PayID, unlock now",
+    "I've paid by PayID, confirm this order",
+    'Unlocked on this device. Payment is not verified.',
+    'Order reference',
     'Add your name and a valid email.',
     'Order details were handed to the mailbox. Payment is not verified.',
     'The mailbox did not accept the order details yet. Payment is not verified.',
@@ -211,6 +214,50 @@
     if (found.length === 1) found[0].id = 'full';
     else found.forEach(function (item, index) { item.id = slug(item.name, index + 1); });
     return { storeId: storeId, currency: currency, items: found };
+  }
+
+  function isPhysicalItem(item, storeId) {
+    var name = String(item && item.name || '');
+    var id = String(item && item.id || '');
+    var store = String(storeId || '');
+    if (id === 'full') return false;
+    if (name === 'Coffeebreak Plush Hospital') return false;
+    if (/plush-hospital/.test(store)) return true;
+    if (/\bplush\b/i.test(name) && !/hospital/i.test(name)) return true;
+    return false;
+  }
+
+  function unlockKey(storeId) {
+    return 'cb-payid-unlock:' + String(storeId || 'game');
+  }
+
+  function honourClaim(input) {
+    input = input || {};
+    var lines = Array.isArray(input.lines) ? input.lines : [];
+    var items = lines.map(function (line) {
+      return {
+        id: line.id,
+        name: line.name,
+        qty: line.qty,
+        physical: isPhysicalItem(line, input.storeId)
+      };
+    });
+    var digital = items.some(function (item) { return !item.physical; });
+    return {
+      unlocked: digital && items.length > 0,
+      physical: items.some(function (item) { return item.physical; }),
+      paid: false,
+      verified: false,
+      confirmed: false,
+      customerClaimsPaid: items.length > 0,
+      reference: input.reference || '',
+      storeId: String(input.storeId || ''),
+      name: String(input.name || '').slice(0, 100),
+      email: String(input.email || '').slice(0, 150),
+      total: String(input.total || ''),
+      currency: String(input.currency || ''),
+      items: items
+    };
   }
 
   function ordersEndpoint() {
@@ -484,6 +531,9 @@
     mountPage: mountPage,
     assetPrefix: assetPrefix,
     ordersEndpoint: ordersEndpoint,
-    orderFields: orderFields
+    orderFields: orderFields,
+    isPhysicalItem: isPhysicalItem,
+    unlockKey: unlockKey,
+    honourClaim: honourClaim
   };
 });

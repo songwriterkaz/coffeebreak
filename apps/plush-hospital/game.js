@@ -136,7 +136,7 @@ function loadSave() {
     blank.mute = data.mute === true;
     blank.started = data.started === true || blank.healed > 0 || blank.hearts > 0;
     if (data.announced && typeof data.announced === 'object') blank.announced = data.announced;
-    if (blank.healed > DEMO_LIMIT) blank.healed = DEMO_LIMIT;
+    if (blank.healed > patientCap()) blank.healed = patientCap();
     if (blank.hearts < 0) blank.hearts = 0;
     return blank;
   } catch (err) {
@@ -163,11 +163,26 @@ function roomById(id) {
   return null;
 }
 
+function honourUnlocked() {
+  try {
+    const raw = localStorage.getItem('cb-payid-unlock:apps/plush-hospital');
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    return data.unlocked === true && data.paid !== true && data.verified !== true && data.confirmed !== true;
+  } catch (err) {
+    return false;
+  }
+}
+
+function patientCap() {
+  return honourUnlocked() ? QUEUE.length : DEMO_LIMIT;
+}
+
 function canEnter(room) {
   if (!room) return false;
   if (save.hearts < room.hearts) return false;
   if (room.demo) return true;
-  return false;
+  return honourUnlocked();
 }
 
 function forwardVector(angle) {
@@ -221,9 +236,10 @@ function paintSound() {
 
 function updateHud() {
   $('hud-hearts').textContent = 'Hearts ' + save.hearts;
-  $('hud-patients').textContent = 'Patients ' + Math.min(save.healed, DEMO_LIMIT) + ' of ' + DEMO_LIMIT;
+  const cap = patientCap();
+  $('hud-patients').textContent = 'Patients ' + Math.min(save.healed, cap) + ' of ' + cap;
   if (player) $('hud-ward').textContent = wardNameAt(player.position.x, player.position.z);
-  if (patient && save.healed < DEMO_LIMIT) $('hud-who').textContent = patient.name + ' needs care';
+  if (patient && save.healed < patientCap()) $('hud-who').textContent = patient.name + ' needs care';
   else $('hud-who').textContent = 'Ward is quiet';
   const fit = mode === 'chart' && patient ? KINDS[patient.kind].tool : '';
   Object.keys(TOOLS).forEach(function (id) {
@@ -692,7 +708,7 @@ function ensurePatient() {
     scene.remove(patientMesh);
     patientMesh = null;
   }
-  if (save.healed >= DEMO_LIMIT) {
+  if (save.healed >= patientCap()) {
     patient = null;
     updateHud();
     return;
@@ -972,8 +988,9 @@ function seePatient() {
     return;
   }
   if (mode === 'title' || mode === 'tutorial') startPlay();
-  if (save.healed >= DEMO_LIMIT || !patient) {
-    openPay('play');
+  if (save.healed >= patientCap() || !patient) {
+    if (!honourUnlocked() && save.healed >= DEMO_LIMIT) openPay('play');
+    else toast('Every patient in this visit is comfortable.');
     return;
   }
   mode = 'chart';
@@ -1266,13 +1283,13 @@ function healPatient() {
   showPanels();
   window.setTimeout(function () {
     healing = false;
-    if (save.healed >= DEMO_LIMIT) {
+    if (save.healed >= patientCap()) {
       patient = null;
       if (patientMesh) {
         scene.remove(patientMesh);
         patientMesh = null;
       }
-      if (mode === 'play' || mode === 'chart') openPay('play');
+      if ((mode === 'play' || mode === 'chart') && !honourUnlocked()) openPay('play');
       else updateHud();
     } else {
       ensurePatient();
@@ -1402,7 +1419,7 @@ function openRooms() {
         toast(room.name);
         blip();
       });
-    } else if (!room.demo) {
+    } else if (!room.demo && !honourUnlocked()) {
       button.textContent = room.name + ' is in the full game';
       button.addEventListener('click', function () {
         toast(room.name + ' asks for ' + room.hearts + ' hearts. You have ' + save.hearts + '. Full game $10 USD.');
@@ -1692,6 +1709,19 @@ function bindUi() {
     });
   });
   $('btn-pay-cart').addEventListener('click', function () { openCart(0); });
+  window.addEventListener('cb-payid-unlock', function (event) {
+    const detail = event.detail || {};
+    if (detail.storeId !== 'apps/plush-hospital' || detail.unlocked !== true) return;
+    if (detail.paid === true || detail.verified === true || detail.confirmed === true) return;
+    refreshCurtains();
+    updateHud();
+    if (mode === 'pay') {
+      mode = payFrom === 'title' ? 'title' : 'play';
+      showPanels();
+    }
+    if (mode === 'play') ensurePatient();
+    toast('Full game unlocked on this device. Payment is not verified.');
+  });
   $('btn-tut-back').addEventListener('click', function () {
     if (step === 0) {
       toast('This is the start of the tour.');
@@ -1724,7 +1754,7 @@ function bindUi() {
     }
     const otherId = near.door.a === 'pink' ? near.door.b : near.door.a;
     const room = roomById(otherId) || roomById(near.door.b);
-    if (room && !room.demo) openPay('play');
+    if (room && !room.demo && !honourUnlocked()) openPay('play');
     else if (room) toast(room.name + ' opens at ' + room.hearts + ' hearts. You have ' + save.hearts + '.');
     else openRooms();
   });
