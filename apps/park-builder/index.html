@@ -37,19 +37,24 @@ body.touch #help{display:none}
 #start img{width:min(260px,60vw)}
 #start h1{margin:0;font-size:34px;text-shadow:0 3px 0 #9646dc}
 #start button{font-size:22px;padding:14px 28px}
+#online{background:#2a1640cc}
+#nick{font:bold 20px "Trebuchet MS",Arial;padding:10px 14px;border-radius:14px;border:3px solid #fff;width:min(280px,80vw);text-align:center;color:#9646dc;user-select:text;-webkit-user-select:text}
+#nickErr{min-height:18px;font-weight:bold;color:#fff3a0}
+.live-note{font-size:14px;max-width:340px}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 <script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
 </head><body>
-<div id="start"><img src="assets/logo.png" alt="Coffeebreak"><h1>Coffeebreak Park Builder</h1><div>Build your own pink music park with speakers and rides</div><button id="play">Play</button></div>
-<div id="top"><img src="assets/logo.png" alt="Coffeebreak"><span class="pill" id="coins">100 coins</span><span class="pill" id="mode">Exploring</span><span class="pill" id="now" style="display:none"></span></div>
-<div id="help">WASD or arrows to walk, Space to jump<br>Drag to look around, wheel to zoom<br>In build mode click the ground to move the piece, R rotates, Enter places</div>
+<div id="start"><img src="assets/logo.png" alt="Coffeebreak"><h1>Coffeebreak Park Builder</h1><div>Build your own pink music park with speakers and rides</div><div class="live-note">Play live with real players. Pick a nickname so friends can see you. There is no chat.</div><input id="nick" maxlength="16" placeholder="Your nickname" autocomplete="off" aria-label="Your nickname"><div id="nickErr"></div><button id="play">Play</button></div>
+<div id="top"><img src="assets/logo.png" alt="Coffeebreak"><span class="pill" id="coins">100 coins</span><span class="pill" id="mode">Exploring</span><span class="pill" id="online">Offline</span><span class="pill" id="now" style="display:none"></span></div>
+<div id="help">WASD or arrows to walk, Space to jump<br>Drag to look around, wheel to zoom<br>In build mode click the ground to move the piece, R rotates, Enter places<br>Players shows real people online and lets you visit their parks</div>
 <div id="msg"></div>
 <div id="pieces" class="panel"></div>
 <div id="music" class="panel"></div>
 <div id="outfits" class="panel"></div>
+<div id="parks" class="panel"></div>
 <div id="bar">
-<button id="bBuild">Build</button><button id="bRotate" class="alt">Rotate</button><button id="bPlace">Place</button><button id="bDelete" class="alt">Delete</button><button id="bMusic">Music</button><button id="bOutfit" class="alt">Outfit</button><button id="bPark">My Park</button><button id="bOrders">Food & prizes</button><button id="bDone" class="alt">Done</button>
+<button id="bBuild">Build</button><button id="bRotate" class="alt">Rotate</button><button id="bPlace">Place</button><button id="bDelete" class="alt">Delete</button><button id="bMusic">Music</button><button id="bOutfit" class="alt">Outfit</button><button id="bPark">My Park</button><button id="bParks" class="alt">Players</button><button id="bOrders">Food & prizes</button><button id="bDone" class="alt">Done</button>
 </div>
 <div id="joy"><div id="knob"></div></div><button id="jump">Jump</button>
 <div id="parkOrders" class="panel"></div>
