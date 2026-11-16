@@ -53,72 +53,6 @@
     };
   }
 
-  function vowelOf(word) {
-    const w = String(word || '').toLowerCase().replace(/[^a-z]/g, '');
-    if (!w) return ['@', '@'];
-    if (/igh|ie$|ye$|y$/.test(w) && !/ey$/.test(w)) return ['a', 'i'];
-    if (/ay|ai|ei|ey/.test(w)) return ['e', 'I'];
-    if (/oy|oi/.test(w)) return ['o', 'I'];
-    if (/(ow|ou|au)(?!gh)/.test(w) && !/ough/.test(w)) return ['a', 'u'];
-    if (/oo|ew|ue|ui/.test(w)) return ['u', 'u'];
-    if (/ee|ea/.test(w)) return ['i', 'i'];
-    if (/oa|oe/.test(w)) return ['o', 'o'];
-    if (/ar/.test(w)) return ['a', 'a'];
-    if (/or|aw/.test(w)) return ['o', 'o'];
-    if (/er|ir|ur|re$/.test(w)) return ['@', 'r'];
-    if (/[aeiou][bcdfghjklmnpqrstvwxyz]e$/.test(w) && w.length > 2) {
-      const q = w[w.length - 3];
-      if (q === 'a') return ['e', 'I'];
-      if (q === 'i') return ['i', 'i'];
-      if (q === 'o') return ['o', 'u'];
-      if (q === 'u') return ['u', 'u'];
-    }
-    const letters = w.match(/[aeiouy]/g);
-    const last = letters ? letters[letters.length - 1] : '@';
-    const map = { a: 'a', e: 'e', i: 'i', o: 'o', u: 'u', y: 'i' };
-    const v = map[last] || '@';
-    return [v, v];
-  }
-
-  function onsetOf(word) {
-    const w = String(word || '').toLowerCase().replace(/[^a-z]/g, '');
-    if (!w) return '';
-    if (w.startsWith('ch')) return 'ch';
-    if (w.startsWith('shr') || w.startsWith('sh')) return 'sh';
-    if (w.startsWith('th')) return 'th';
-    if (w.startsWith('ph') || w[0] === 'f') return 'f';
-    if (w.startsWith('wh') || w[0] === 'w') return 'w';
-    if (w[0] === 's' || (w[0] === 'c' && 'eiy'.indexOf(w[1] || '') >= 0)) return 's';
-    if (w[0] === 'h') return 'h';
-    if (w[0] === 'p') return 'p';
-    if (w[0] === 't') return 't';
-    if (w[0] === 'k' || w[0] === 'q' || (w[0] === 'c' && 'eiy'.indexOf(w[1] || '') < 0)) return 'k';
-    if (w[0] === 'b') return 'b';
-    if (w[0] === 'd') return 'd';
-    if (w[0] === 'g') return 'g';
-    if (w[0] === 'm' || w[0] === 'n') return 'nasal';
-    if (w[0] === 'l') return 'l';
-    if (w[0] === 'r') return 'r';
-    if (w[0] === 'y') return 'y';
-    if (w[0] === 'v' || w[0] === 'z') return 'vz';
-    if (w[0] === 'j') return 'j';
-    return '';
-  }
-
-  function codaOf(word) {
-    const w = String(word || '').toLowerCase().replace(/[^a-z]/g, '');
-    if (!w) return '';
-    if (/ss$|s$|ce$|se$/.test(w) && !/ous$/.test(w)) return 's';
-    if (/ch$/.test(w)) return 'ch';
-    if (/sh$|ge$|dge$/.test(w)) return 'sh';
-    if (/p$/.test(w)) return 'p';
-    if (/t$/.test(w)) return 't';
-    if (/k$|ck$|q$/.test(w)) return 'k';
-    if (/[mn]$|ng$/.test(w)) return 'nasal';
-    if (/[l]$/.test(w)) return 'l';
-    return '';
-  }
-
   function resonator(freq, bw, sr) {
     const st = { a1: 0, a2: 0, g: 1, y1: 0, y2: 0 };
     function set(f, b) {
@@ -348,12 +282,253 @@
     return out;
   }
 
-  function formantsAt(vowel, t) {
-    const pair = Array.isArray(vowel) ? vowel : [vowel, vowel];
-    const a = VOWELS[pair[0]] || VOWELS['@'];
-    const b = VOWELS[pair[1]] || a;
-    const k = smooth(t);
-    return [lerp(a[0], b[0], k), lerp(a[1], b[1], k), lerp(a[2], b[2], k), lerp(a[3], b[3], k)];
+  const VFORM = {
+    IY: VOWELS.i,
+    IH: VOWELS.I,
+    EY: VOWELS.e,
+    EH: VOWELS.E,
+    AE: VOWELS.a,
+    AA: VOWELS.a,
+    AO: VOWELS.o,
+    OW: VOWELS.o,
+    UH: VOWELS.u,
+    UW: VOWELS.u,
+    AH: VOWELS['@'],
+    ER: VOWELS.r,
+    AY: VOWELS.a,
+    AW: VOWELS.a,
+    OY: VOWELS.o
+  };
+  const DIPH = { EY: ['EH', 'IY'], AY: ['AA', 'IY'], AW: ['AA', 'UW'], OW: ['AO', 'UW'], OY: ['AO', 'IY'] };
+  const NASAL_F = { M: [250, 1100, 2150, 2800], N: [270, 1400, 2500, 3200], NG: [260, 2000, 2500, 3000] };
+  const LIQ_F = { L: [400, 950, 2650, 3300], R: VOWELS.r, W: [350, 700, 2300, 3200], Y: VOWELS.i };
+
+  const VOICED = {
+    IY:1,IH:1,EY:1,EH:1,AE:1,AA:1,AO:1,OW:1,UH:1,UW:1,AH:1,ER:1,AY:1,AW:1,OY:1,
+    B:1,D:1,G:1,V:1,Z:1,ZH:1,DH:1,M:1,N:1,NG:1,L:1,R:1,W:1,Y:1,JH:1
+  };
+  const TYPE = {};
+  'IY IH EY EH AE AA AO OW UH UW AH ER AY AW OY'.split(' ').forEach(function (p) { TYPE[p] = 'vowel'; });
+  'M N NG'.split(' ').forEach(function (p) { TYPE[p] = 'nasal'; });
+  'L R W Y'.split(' ').forEach(function (p) { TYPE[p] = 'liquid'; });
+  'S SH F TH HH'.split(' ').forEach(function (p) { TYPE[p] = 'fric'; });
+  'Z ZH V DH'.split(' ').forEach(function (p) { TYPE[p] = 'vfric'; });
+  'P T K'.split(' ').forEach(function (p) { TYPE[p] = 'stop'; });
+  'B D G'.split(' ').forEach(function (p) { TYPE[p] = 'vstop'; });
+  TYPE.CH = 'stop'; TYPE.JH = 'vstop';
+
+  const NAT = {
+    IY:0.16,IH:0.12,EY:0.16,EH:0.13,AE:0.14,AA:0.15,AO:0.15,OW:0.16,UH:0.12,UW:0.16,AH:0.12,ER:0.14,AY:0.18,AW:0.18,OY:0.18,
+    S:0.085,SH:0.09,F:0.07,TH:0.07,HH:0.065,Z:0.08,ZH:0.08,V:0.07,DH:0.065,
+    P:0.075,T:0.07,K:0.08,B:0.06,D:0.06,G:0.07,CH:0.09,JH:0.08,
+    M:0.08,N:0.085,NG:0.09,L:0.085,R:0.07,W:0.055,Y:0.05
+  };
+
+  const CMU = {
+    a:['AH'], an:['AE','N'], and:['AE','N','D'], are:['AA','R'], as:['AE','Z'], at:['AE','T'],
+    be:['B','IY'], been:['B','IH','N'], but:['B','AH','T'], by:['B','AY'],
+    can:['K','AE','N'], come:['K','AH','M'], could:['K','UH','D'],
+    day:['D','EY'], did:['D','IH','D'], do:['D','UW'], down:['D','AW','N'],
+    for:['F','AO','R'], from:['F','R','AH','M'],
+    get:['G','EH','T'], go:['G','OW'], going:['G','OW','IH','NG'], good:['G','UH','D'],
+    had:['HH','AE','D'], has:['HH','AE','Z'], have:['HH','AE','V'], he:['HH','IY'], her:['HH','ER'],
+    here:['HH','IY','R'], him:['HH','IH','M'], his:['HH','IH','Z'], hill:['HH','IH','L'],
+    i:['AY'], if:['IH','F'], in:['IH','N'], into:['IH','N','T','UW'], is:['IH','Z'], it:['IH','T'], its:['IH','T','S'],
+    just:['JH','AH','S','T'],
+    know:['N','OW'],
+    la:['L','AA'], let:['L','EH','T'], like:['L','AY','K'], little:['L','IH','T','AH','L'], look:['L','UH','K'], love:['L','AH','V'],
+    me:['M','IY'], more:['M','AO','R'], my:['M','AY'],
+    no:['N','OW'], not:['N','AA','T'], now:['N','AW'],
+    of:['AH','V'], on:['AA','N'], one:['W','AH','N'], or:['AO','R'], our:['AW','ER'], out:['AW','T'],
+    said:['S','EH','D'], see:['S','IY'], she:['SH','IY'], so:['S','OW'], some:['S','AH','M'], sun:['S','AH','N'],
+    that:['DH','AE','T'], the:['DH','AH'], their:['DH','EH','R'], them:['DH','EH','M'], then:['DH','EH','N'],
+    there:['DH','EH','R'], they:['DH','EY'], this:['DH','IH','S'], to:['T','UW'], too:['T','UW'], two:['T','UW'],
+    up:['AH','P'], us:['AH','S'],
+    was:['W','AA','Z'], we:['W','IY'], were:['W','ER'], what:['W','AH','T'], when:['W','EH','N'],
+    where:['W','EH','R'], who:['HH','UW'], will:['W','IH','L'], with:['W','IH','DH'], would:['W','UH','D'],
+    you:['Y','UW'], your:['Y','AO','R'],
+    all:['AO','L'], night:['N','AY','T'], heart:['HH','AA','R','T'], time:['T','AY','M'],
+    life:['L','AY','F'], want:['W','AA','N','T'], never:['N','EH','V','ER'], ever:['EH','V','ER'],
+    away:['AH','W','EY'], again:['AH','G','EH','N'], around:['ER','AW','N','D'],
+    light:['L','AY','T'], right:['R','AY','T'], rain:['R','EY','N'], sky:['S','K','AY'],
+    home:['HH','OW','M'], world:['W','ER','L','D'], girl:['G','ER','L'], boy:['B','OY'],
+    baby:['B','EY','B','IY'], yeah:['Y','AE'], oh:['OW'], ah:['AA'], ooh:['UW'],
+    through:['TH','R','UW'], thought:['TH','AO','T'], though:['DH','OW'],
+    because:['B','IH','K','AO','Z'], before:['B','IH','F','AO','R'], about:['AH','B','AW','T'],
+    only:['OW','N','L','IY'], over:['OW','V','ER'], under:['AH','N','D','ER'],
+    every:['EH','V','R','IY'], always:['AO','L','W','EY','Z'], still:['S','T','IH','L'],
+    feel:['F','IY','L'], feeling:['F','IY','L','IH','NG'], tell:['T','EH','L'], call:['K','AO','L'],
+    come:['K','AH','M'], coming:['K','AH','M','IH','NG'], going:['G','OW','IH','NG'],
+    take:['T','EY','K'], make:['M','EY','K'], made:['M','EY','D'], give:['G','IH','V'],
+    keep:['K','IY','P'], find:['F','AY','N','D'], found:['F','AW','N','D'],
+    walk:['W','AO','K'], talking:['T','AO','K','IH','NG'], singing:['S','IH','NG','IH','NG'],
+    dream:['D','R','IY','M'], fire:['F','AY','ER'], water:['W','AO','T','ER'],
+    morning:['M','AO','R','N','IH','NG'], tonight:['T','AH','N','AY','T']
+  };
+
+  const OLD_KEY = {
+    IY:'i', IH:'I', EY:'e', EH:'E', AE:'a', AA:'a', AO:'o', OW:'o',
+    UH:'u', UW:'u', AH:'@', ER:'r', AY:'a', AW:'a', OY:'o'
+  };
+
+  function isVowel(ph) { return TYPE[ph] === 'vowel'; }
+
+  function g2p(word, next) {
+    const raw = String(word || '').toLowerCase().replace(/[^a-z']/g, '');
+    if (!raw) return ['AH'];
+    let phones = CMU[raw] ? CMU[raw].slice() : g2pRules(raw);
+    if (raw === 'the' && next) {
+      const n0 = g2p(next)[0];
+      if (isVowel(n0)) phones = ['DH', 'IY'];
+    }
+    return phones;
+  }
+
+  function g2pRules(s) {
+    const out = [];
+    let i = 0;
+    function take(n, phones) {
+      for (let k = 0; k < phones.length; k++) out.push(phones[k]);
+      i += n;
+    }
+    function consC() {
+      const nx = s[i + 1] || '';
+      return 'eiy'.indexOf(nx) >= 0 ? 'S' : 'K';
+    }
+    function magicE(vowel) {
+      if (s[i + 2] === 'e' && s[i + 3] === undefined && s[i + 1] && 'aeiou'.indexOf(s[i + 1]) < 0) return vowel;
+      return null;
+    }
+    while (i < s.length) {
+      const r = s.slice(i);
+      if (r.startsWith("n't")) { take(3, ['AH','N','T']); continue; }
+      if (r.startsWith('tion')) { take(4, ['SH','AH','N']); continue; }
+      if (r.startsWith('sion')) { take(4, ['ZH','AH','N']); continue; }
+      if (r.startsWith('ough')) { take(4, ['AO']); continue; }
+      if (r.startsWith('ight') || r.startsWith('igh')) { take(r.startsWith('ight') ? 4 : 3, r.startsWith('ight') ? ['AY','T'] : ['AY']); continue; }
+      if (r.startsWith('qu')) { take(2, ['K','W']); continue; }
+      if (r.startsWith('wh')) { take(2, ['W']); continue; }
+      if (r.startsWith('ch')) { take(2, ['CH']); continue; }
+      if (r.startsWith('sh')) { take(2, ['SH']); continue; }
+      if (r.startsWith('th')) { take(2, [i === 0 || s[i - 1] === ' ' ? 'DH' : 'TH']); continue; }
+      if (r.startsWith('ph')) { take(2, ['F']); continue; }
+      if (r.startsWith('ng')) { take(2, ['NG']); continue; }
+      if (r.startsWith('ck')) { take(2, ['K']); continue; }
+      if (r.startsWith('dg') || r.startsWith('dge')) { take(r.startsWith('dge') ? 3 : 2, ['JH']); continue; }
+      if (r.startsWith('oo')) { take(2, ['UW']); continue; }
+      if (r.startsWith('ee') || r.startsWith('ea')) { take(2, ['IY']); continue; }
+      if (r.startsWith('ai') || r.startsWith('ay') || r.startsWith('ey')) { take(2, ['EY']); continue; }
+      if (r.startsWith('oa') || r.startsWith('oe')) { take(2, ['OW']); continue; }
+      if (r.startsWith('oi') || r.startsWith('oy')) { take(2, ['OY']); continue; }
+      if (r.startsWith('aw') || r.startsWith('au')) { take(2, ['AO']); continue; }
+      if (r.startsWith('ow') || r.startsWith('ou')) { take(2, ['AW']); continue; }
+      if (r.startsWith('ew') || r.startsWith('ue') || r.startsWith('ui')) { take(2, ['UW']); continue; }
+      if (r.startsWith('ar')) { take(2, ['AA','R']); continue; }
+      if (r.startsWith('or') || r.startsWith('ore')) { take(r.startsWith('ore') ? 3 : 2, ['AO','R']); continue; }
+      if (r.startsWith('er') || r.startsWith('ir') || r.startsWith('ur')) { take(2, ['ER']); continue; }
+      if (r.startsWith('ing')) { take(3, ['IH','NG']); continue; }
+      if (r.startsWith('ed') && i > 0) {
+        const prev = s[i - 1];
+        if (prev === 't' || prev === 'd') take(2, ['AH','D']);
+        else if ('pkfsch'.indexOf(prev) >= 0) take(2, ['T']);
+        else take(2, ['D']);
+        continue;
+      }
+      const c = s[i];
+      const nx = s[i + 1] || '';
+      if (c === 'c') { take(1, [consC() === 'S' ? 'S' : 'K']); continue; }
+      if (c === 'g') { take(1, ['eiy'.indexOf(nx) >= 0 ? 'JH' : 'G']); continue; }
+      if (c === 'x') { take(1, ['K','S']); continue; }
+      if (c === 'j') { take(1, ['JH']); continue; }
+      if (c === 'y') {
+        if (i === 0 || 'aeiou'.indexOf(s[i - 1] || '') < 0) take(1, ['Y']);
+        else take(1, ['IY']);
+        continue;
+      }
+      if (c === 'a') {
+        const m = magicE('EY');
+        take(1, [m || (nx && 'eiou'.indexOf(nx) >= 0 ? 'EY' : 'AE')]);
+        continue;
+      }
+      if (c === 'e') {
+        if (i === s.length - 1 && out.length) { i += 1; continue; }
+        const m = magicE('IY');
+        take(1, [m || 'EH']);
+        continue;
+      }
+      if (c === 'i') { take(1, [magicE('AY') || 'IH']); continue; }
+      if (c === 'o') { take(1, [magicE('OW') || 'AA']); continue; }
+      if (c === 'u') { take(1, [magicE('UW') || 'AH']); continue; }
+      const cmap = { b:'B', d:'D', f:'F', h:'HH', k:'K', l:'L', m:'M', n:'N', p:'P', q:'K', r:'R', s:'S', t:'T', v:'V', w:'W', z:'Z' };
+      if (cmap[c]) take(1, [cmap[c]]);
+      else i += 1;
+    }
+    if (!out.length) out.push('AH');
+    return out;
+  }
+
+  function vowelOf(word) {
+    const phones = g2p(word);
+    const vs = phones.filter(isVowel);
+    if (!vs.length) return ['@', '@'];
+    const a = vs[0];
+    const b = vs[vs.length - 1];
+    if (vs.length === 1 && DIPH[a]) return [OLD_KEY[DIPH[a][0]] || '@', OLD_KEY[DIPH[a][1]] || '@'];
+    return [OLD_KEY[a] || '@', OLD_KEY[b] || '@'];
+  }
+
+  function formantsOf(ph, u) {
+    u = clamp(u, 0, 1);
+    if (NASAL_F[ph]) return NASAL_F[ph];
+    if (LIQ_F[ph]) return LIQ_F[ph];
+    if (DIPH[ph]) {
+      const a = VFORM[DIPH[ph][0]] || VFORM.AH;
+      const b = VFORM[DIPH[ph][1]] || a;
+      const k = smooth(u);
+      return [lerp(a[0], b[0], k), lerp(a[1], b[1], k), lerp(a[2], b[2], k), lerp(a[3], b[3], k)];
+    }
+    return VFORM[ph] || VFORM.AH;
+  }
+
+  function scheduleWord(phones, t0, slot, midi) {
+    const segs = [];
+    if (!phones.length) return segs;
+    const onset = [];
+    const nuc = [];
+    const coda = [];
+    let seenV = false;
+    for (let i = 0; i < phones.length; i++) {
+      if (isVowel(phones[i])) { seenV = true; nuc.push(phones[i]); }
+      else if (!seenV) onset.push(phones[i]);
+      else coda.push(phones[i]);
+    }
+    if (!nuc.length) nuc.push('AH');
+    function durOf(ph) { return NAT[ph] || 0.08; }
+    let cDur = 0;
+    onset.concat(coda).forEach(function (ph) { cDur += durOf(ph); });
+    const avail = Math.max(0.18, slot);
+    let vDur = avail - cDur;
+    const vMin = 0.1 * nuc.length;
+    if (vDur < vMin) {
+      const scale = Math.max(0.6, (avail - vMin) / Math.max(0.04, cDur));
+      cDur = 0;
+      onset.forEach(function (ph, i) { onset[i] = [ph, Math.max(0.035, durOf(ph) * scale)]; cDur += onset[i][1]; });
+      coda.forEach(function (ph, i) { coda[i] = [ph, Math.max(0.035, durOf(ph) * scale)]; cDur += coda[i][1]; });
+      vDur = Math.max(vMin, avail - cDur);
+    } else {
+      onset.forEach(function (ph, i) { onset[i] = [ph, durOf(ph)]; });
+      coda.forEach(function (ph, i) { coda[i] = [ph, durOf(ph)]; });
+    }
+    let t = t0;
+    function push(ph, d) {
+      segs.push({ ph: ph, type: TYPE[ph] || 'vowel', t: t, d: d, p: midi });
+      t += d;
+    }
+    onset.forEach(function (pair) { push(pair[0], pair[1]); });
+    const each = vDur / nuc.length;
+    nuc.forEach(function (ph) { push(ph, each); });
+    coda.forEach(function (pair) { push(pair[0], pair[1]); });
+    return segs;
   }
 
   function sing(score, opts) {
@@ -367,9 +542,26 @@
     const oqBias = st.oq != null ? +st.oq : 0;
     const sr = opts.sampleRate || SR;
     const notes = normalizeNotes(score);
+    const segs = [];
+    for (let ni = 0; ni < notes.length; ni++) {
+      const note = notes[ni];
+      if (!note || note.rest || !(note.d > 0) || !note.w) {
+        if (note && note.d > 0.18) segs.push({ ph: 'HH', type: 'fric', t: note.t + note.d * 0.15, d: Math.min(0.16, note.d * 0.35), p: note.p || 60, restBreath: true });
+        continue;
+      }
+      const nextWord = (notes[ni + 1] && !notes[ni + 1].rest) ? notes[ni + 1].w : '';
+      const phones = g2p(note.w, nextWord);
+      const phraseStart = ni === 0 || (notes[ni - 1] && notes[ni - 1].rest);
+      const timing = 0; /* keep consonants aligned; small loudness variation stays in the renderer */
+      const wordSegs = scheduleWord(phones, note.t + timing, Math.max(0.16, note.d), clamp(note.p, 48, 84));
+      if (phraseStart) segs.push({ ph: 'HH', type: 'fric', t: Math.max(0, (wordSegs[0] ? wordSegs[0].t : note.t) - 0.1), d: 0.11, p: note.p, restBreath: true, amount: 0.04 });
+      wordSegs.forEach(function (s) { segs.push(s); });
+    }
+
+    const last = segs.length ? segs[segs.length - 1] : null;
+    const scoredNotes = notes.length ? notes[notes.length - 1] : null;
+    const scored = (score && score.seconds) || (last ? last.t + last.d : (scoredNotes ? scoredNotes.t + scoredNotes.d : 2));
     const tail = 1.55;
-    const last = notes.length ? notes[notes.length - 1] : null;
-    const scored = (score && score.seconds) || (last ? last.t + last.d : 2);
     const seconds = Math.max(0.4, scored) + tail;
     const n = Math.ceil(seconds * sr);
     const mono = new Float32Array(n);
@@ -395,69 +587,49 @@
     let airLp = 0;
     let hpS = 0;
 
-    function writeNoise(at, dur, amount, kind) {
-      const startAt = Math.max(0, Math.floor(at * sr));
-      const len = Math.max(1, Math.floor(dur * sr));
-      const closure = kind === 't' ? 0.016 : kind === 'k' ? 0.02 : kind === 'p' ? 0.012 : kind === 'ch' ? 0.014 : 0;
-      const closeN = Math.floor(closure * sr);
-      for (let i = 0; i < len; i++) {
-        const o = startAt + i;
-        if (o >= n) break;
-        if (i < closeN) continue;
-        const u = (i - closeN) / Math.max(1, len - closeN);
-        let env = Math.sin(Math.PI * Math.min(1, u * 1.2));
-        if (kind === 't' || kind === 'k' || kind === 'p' || kind === 'b' || kind === 'd' || kind === 'g' || kind === 'ch') {
-          env = Math.exp(-u / 0.18) * (u < 0.08 ? u / 0.08 : 1);
-        }
-        let x = rand() * 2 - 1;
-        if (kind === 's') {
-          x = sRes.tick(x);
-          hpS += 0.22 * (x - hpS);
-          x = x - hpS;
-        } else if (kind === 'sh' || kind === 'ch') {
-          x = shRes.tick(x);
-          if (kind === 'ch') x = 0.65 * x + 0.35 * tRes.tick(rand() * 2 - 1);
-        } else if (kind === 't') {
-          x = tRes.tick(x);
-        } else if (kind === 'k') {
-          x = kRes.tick(x);
-        } else if (kind === 'p' || kind === 'b') {
-          x = pRes.tick(x) * 0.7 + (rand() * 2 - 1) * 0.3;
-        } else if (kind === 'd') {
-          x = tRes.tick(x) * 0.6 + pRes.tick(rand() * 2 - 1) * 0.4;
-        } else if (kind === 'g') {
-          x = kRes.tick(x) * 0.7 + pRes.tick(rand() * 2 - 1) * 0.3;
-        } else if (kind === 'f' || kind === 'th' || kind === 'h') {
-          airLp += 0.08 * (x - airLp);
-          x = (x - airLp) * (kind === 'h' ? 0.7 : 0.85);
-        }
-        mono[o] += x * amount * env;
+    function noiseAt(kind) {
+      let x = rand() * 2 - 1;
+      if (kind === 'S' || kind === 'Z') {
+        x = sRes.tick(x);
+        hpS += 0.22 * (x - hpS);
+        x = x - hpS;
+      } else if (kind === 'SH' || kind === 'ZH' || kind === 'CH' || kind === 'JH') {
+        x = shRes.tick(x);
+        if (kind === 'CH' || kind === 'JH') x = 0.65 * x + 0.35 * tRes.tick(rand() * 2 - 1);
+      } else if (kind === 'T' || kind === 'D') x = tRes.tick(x);
+      else if (kind === 'K' || kind === 'G') x = kRes.tick(x);
+      else if (kind === 'P' || kind === 'B') x = pRes.tick(x) * 0.7 + (rand() * 2 - 1) * 0.3;
+      else if (kind === 'F' || kind === 'V' || kind === 'TH' || kind === 'DH' || kind === 'HH') {
+        airLp += 0.08 * (x - airLp);
+        x = (x - airLp) * (kind === 'HH' ? 0.7 : 0.85);
       }
+      return x;
     }
 
-    const vot = { s: 0.055, sh: 0.06, ch: 0.05, t: 0.03, k: 0.036, p: 0.02, h: 0.04, f: 0.04, th: 0.035, b: 0.012, d: 0.014, g: 0.016 };
-
-    for (let ni = 0; ni < notes.length; ni++) {
-      const note = notes[ni];
-      if (!note || note.rest || !(note.d > 0)) {
-        if (note && note.d > 0.18) writeNoise(note.t + note.d * 0.15, Math.min(0.16, note.d * 0.35), 0.04, 'h');
-        continue;
+    function targets(seg, u, prevF, nextF) {
+      let f = formantsOf(seg.ph, u);
+      const trans = 0.02 / Math.max(0.04, seg.d);
+      if (prevF && u < trans) {
+        const k = smooth(u / trans);
+        f = [lerp(prevF[0], f[0], k), lerp(prevF[1], f[1], k), lerp(prevF[2], f[2], k), lerp(prevF[3], f[3], k)];
+      } else if (nextF && u > 1 - trans) {
+        const k = smooth((u - (1 - trans)) / trans);
+        f = [lerp(f[0], nextF[0], k), lerp(f[1], nextF[1], k), lerp(f[2], nextF[2], k), lerp(f[3], nextF[3], k)];
       }
-      const word = note.w || 'la';
-      const vow = vowelOf(word);
-      const onset = onsetOf(word);
-      const coda = codaOf(word);
-      const phraseStart = ni === 0 || (notes[ni - 1] && notes[ni - 1].rest);
-      const timing = (rand() - 0.5) * 0.022;
-      const loud = 0.86 + rand() * 0.26;
-      const start = Math.max(0, Math.floor((note.t + timing) * sr));
-      const dur = Math.max(0.12, note.d * (0.97 + rand() * 0.06));
-      const len = Math.max(1, Math.floor(dur * sr));
-      const targetHz = midiHz(clamp(note.p, 48, 84));
-      const fromHz = prevHz > 0 ? prevHz : targetHz * Math.pow(2, -0.06);
+      return f;
+    }
+
+    for (let si = 0; si < segs.length; si++) {
+      const seg = segs[si];
+      const start = Math.max(0, Math.floor(seg.t * sr));
+      const len = Math.max(1, Math.floor(seg.d * sr));
+      const typ = seg.type;
+      const targetHz = midiHz(clamp(seg.p, 48, 84));
+      const fromHz = prevHz > 0 ? prevHz : targetHz * Math.pow(2, typ === 'vowel' ? -0.06 : -0.02);
       const leap = Math.abs(Math.log2(targetHz / Math.max(70, fromHz)));
       const glideT = clamp(0.05 + leap * 0.08, 0.05, 0.18);
-      const scoopCents = ((phraseStart || leap > 0.08 ? 50 : 28) + rand() * 35) * scoopScale;
+      const phraseLike = typ === 'vowel';
+      const scoopCents = ((phraseLike && leap > 0.08 ? 50 : 28) + rand() * 35) * scoopScale * (typ === 'vowel' ? 1 : 0.25);
       const scoopT = 0.05 + rand() * 0.035;
       const vibDelay = 0.17 + rand() * 0.13;
       const vibGrow = 0.32 + rand() * 0.28;
@@ -468,32 +640,22 @@
       const vibPhase = rand() * Math.PI * 2;
       const rateWanderPh = rand() * Math.PI * 2;
       const depthWanderPh = rand() * Math.PI * 2;
-      const fall = (ni === notes.length - 1 || (notes[ni + 1] && notes[ni + 1].rest)) ? 0.02 : 0.006;
+      const fall = (si === segs.length - 1 || (segs[si + 1] && segs[si + 1].restBreath)) ? 0.02 : (typ === 'vowel' ? 0.006 : 0);
       const oq = 0.58 + rand() * 0.08 + oqBias;
       const rd = 1.05 + rand() * 0.35 + rdBias;
-      const lf = makeLF(oq, oq * (0.62 + rand() * 0.06), clamp(0.018 * rd, 0.014, 0.06));
+      const lf = typ === 'vowel' || typ === 'nasal' || typ === 'liquid' || typ === 'vfric' || typ === 'vstop'
+        ? makeLF(oq, oq * (0.62 + rand() * 0.06), clamp(0.018 * rd, 0.014, 0.06))
+        : null;
       let drift = (rand() - 0.5) * 4;
       const driftTau = 0.32 + rand() * 0.22;
       const driftSig = 9;
       let jit = 1;
       let shim = 1;
-
-      const burstAt = note.t + timing;
-      if (onset === 's') writeNoise(burstAt, Math.min(0.08, dur * 0.22), 0.28, 's');
-      else if (onset === 'sh') writeNoise(burstAt, Math.min(0.09, dur * 0.24), 0.24, 'sh');
-      else if (onset === 'ch') writeNoise(burstAt, Math.min(0.09, dur * 0.22), 0.26, 'ch');
-      else if (onset === 't') writeNoise(burstAt, 0.045, 0.32, 't');
-      else if (onset === 'k') writeNoise(burstAt, 0.055, 0.3, 'k');
-      else if (onset === 'p') writeNoise(burstAt, 0.04, 0.26, 'p');
-      else if (onset === 'b') writeNoise(burstAt, 0.032, 0.18, 'b');
-      else if (onset === 'd') writeNoise(burstAt, 0.034, 0.2, 'd');
-      else if (onset === 'g') writeNoise(burstAt, 0.038, 0.2, 'g');
-      else if (onset === 'f' || onset === 'th') writeNoise(burstAt, 0.06, 0.14, onset);
-      else if (onset === 'h') writeNoise(burstAt, 0.08, 0.1, 'h');
-      if (phraseStart) writeNoise(Math.max(0, burstAt - 0.1), 0.11, 0.04, 'h');
-
-      const voiceDelay = Math.min((vot[onset] || 0.012), dur * 0.22);
-      const nasalWord = onset === 'nasal' || coda === 'nasal';
+      const loud = 0.86 + rand() * 0.26;
+      const prevF = si > 0 && !segs[si - 1].restBreath ? formantsOf(segs[si - 1].ph, 1) : null;
+      const nextF = si + 1 < segs.length && !segs[si + 1].restBreath ? formantsOf(segs[si + 1].ph, 0) : null;
+      const closeN = (typ === 'stop' || typ === 'vstop') ? Math.floor(sr * (typ === 'stop' ? (seg.ph === 'K' ? 0.02 : seg.ph === 'T' ? 0.016 : 0.012) : 0.01)) : 0;
+      const burstN = (typ === 'stop' || typ === 'vstop') ? Math.floor(sr * ((seg.ph === 'CH' || seg.ph === 'JH') ? 0.04 : typ === 'stop' ? 0.016 : 0.012)) : 0;
 
       for (let i = 0; i < len; i++) {
         const o = start + i;
@@ -501,59 +663,97 @@
         const t = i / sr;
         const u = i / len;
         const dt = 1 / sr;
-        drift += (-drift / driftTau) * dt + driftSig * Math.sqrt(dt) * (rand() * 2 - 1) * 1.2;
-        drift = clamp(drift, -22, 22);
-        let hz = lerp(fromHz, targetHz, smooth(t / glideT));
-        const scoopAmt = smooth(t / scoopT);
-        hz *= Math.pow(2, (scoopCents * (1 - scoopAmt)) / -1200);
-        if (u > 0.84) hz *= Math.pow(2, -fall * 1.4 * smooth((u - 0.84) / 0.16));
-        const vibEnv = smooth((t - vibDelay) / vibGrow);
-        const rate = vibRate0 * (1 + vibRateJit * 0.35 * Math.sin(2 * Math.PI * 0.33 * (note.t + t) + rateWanderPh));
-        const depth = vibDepth0 * vibEnv * (1 + vibDepthJit * 0.4 * Math.sin(2 * Math.PI * 0.27 * (note.t + t) + depthWanderPh));
-        hz *= 1 + depth * Math.sin(2 * Math.PI * rate * (note.t + t) + vibPhase);
-        hz *= Math.pow(2, drift / 1200);
-        hz = clamp(hz, 70, 1200);
-        phase += (hz * jit) / sr;
-        if (phase >= 1) {
-          phase -= Math.floor(phase);
-          jit = 1 + (rand() * 2 - 1) * 0.009;
-          shim = 1 + (rand() * 2 - 1) * 0.05;
+        let y = 0;
+        let env = 1;
+
+        if (typ === 'stop' || typ === 'vstop') {
+          if (i < closeN) {
+            if (typ === 'vstop' && lf) {
+              const pulse = lf(phase);
+              phase += (targetHz * 0.45 * jit) / sr;
+              if (phase >= 1) { phase -= Math.floor(phase); jit = 1 + (rand() * 2 - 1) * 0.009; }
+              y = pulse * 0.1;
+            } else y = 0;
+          } else if (i < closeN + burstN) {
+            const bu = (i - closeN) / Math.max(1, burstN);
+            const amp = Math.exp(-bu / 0.18) * (bu < 0.08 ? bu / 0.08 : 1);
+            y = noiseAt(seg.ph) * amp * (typ === 'stop' ? 0.3 : 0.2);
+          } else {
+            const vu = (i - closeN - burstN) / Math.max(1, len - closeN - burstN);
+            const asp = typ === 'stop' ? 0.16 * (1 - vu) : 0.06 * (1 - vu);
+            y = noiseAt(seg.ph) * asp;
+          }
+        } else if (typ === 'fric' || typ === 'vfric') {
+          const amt = seg.restBreath ? (seg.amount || 0.04) : (typ === 'fric' ? 0.30 : 0.28);
+          env = Math.sin(Math.PI * Math.min(1, u * 1.2));
+          y = noiseAt(seg.ph) * amt;
         }
-        const sourcePulse = lf(phase) * shim;
-        let breath = rand() * 2 - 1;
-        airLp += 0.12 * (breath - airLp);
-        breath = breath - airLp;
-        const breathAmt = (0.03 + 0.018 * (1 - u) + (onset === 'h' ? 0.045 * (1 - smooth(t / 0.2)) : 0)) * Math.max(0, breathScale);
-        const source = sourcePulse * 0.95 + breath * breathAmt;
 
-        const fv = formantsAt(vow, u);
-        for (let k = 0; k < 4; k++) res[k].set(fv[k] * formant * (1 + 0.004 * Math.sin(2 * Math.PI * 0.7 * (note.t + t) + k)), BW[k]);
-        let y = res[0].tick(source) * 1.05
-          + res[1].tick(source) * 0.85
-          + res[2].tick(source) * 0.45
-          + res[3].tick(source) * 0.22
-          + singer.tick(source) * 0.2
-          + chest.tick(source) * 0.18;
-        if (nasalWord && (u < 0.22 || u > 0.78)) y = y * 0.7 + nasalRes.tick(source) * 0.7;
-        if (onset === 'l' && u < 0.14) y *= 0.75;
-        if (onset === 'w' && u < 0.12) y *= 0.72;
-        if (onset === 'y' && u < 0.12) y *= 0.78;
+        const voicedNow = !!VOICED[seg.ph] && !(typ === 'stop' || (typ === 'vstop' && i < closeN));
+        if (voicedNow && lf) {
+          drift += (-drift / driftTau) * dt + driftSig * Math.sqrt(dt) * (rand() * 2 - 1) * 1.2;
+          drift = clamp(drift, -22, 22);
+          let hz = lerp(fromHz, targetHz, smooth(t / glideT));
+          if (typ === 'vowel') {
+            const scoopAmt = smooth(t / scoopT);
+            hz *= Math.pow(2, (scoopCents * (1 - scoopAmt)) / -1200);
+            if (u > 0.84) hz *= Math.pow(2, -fall * 1.4 * smooth((u - 0.84) / 0.16));
+          }
+          const vibEnv = typ === 'vowel' ? smooth((t - vibDelay) / vibGrow) : 0;
+          const rate = vibRate0 * (1 + vibRateJit * 0.35 * Math.sin(2 * Math.PI * 0.33 * (seg.t + t) + rateWanderPh));
+          const depth = vibDepth0 * vibEnv * (1 + vibDepthJit * 0.4 * Math.sin(2 * Math.PI * 0.27 * (seg.t + t) + depthWanderPh));
+          hz *= 1 + depth * Math.sin(2 * Math.PI * rate * (seg.t + t) + vibPhase);
+          hz *= Math.pow(2, drift / 1200);
+          hz = clamp(hz, 70, 1200);
+          phase += (hz * jit) / sr;
+          if (phase >= 1) {
+            phase -= Math.floor(phase);
+            jit = 1 + (rand() * 2 - 1) * 0.009;
+            shim = 1 + (rand() * 2 - 1) * 0.05;
+          }
+          const sourcePulse = lf(phase) * shim;
+          let breath = rand() * 2 - 1;
+          airLp += 0.12 * (breath - airLp);
+          breath = breath - airLp;
+          const breathAmt = (0.03 + 0.018 * (1 - u) + (seg.ph === 'HH' ? 0.045 * (1 - smooth(t / 0.2)) : 0)) * Math.max(0, breathScale);
+          const source = sourcePulse * 0.95 + breath * breathAmt;
+          const fv = targets(seg, u, prevF, nextF);
+          const bwMul = typ === 'nasal' ? 0.85 : 1;
+          for (let k = 0; k < 4; k++) res[k].set(fv[k] * formant * (1 + 0.004 * Math.sin(2 * Math.PI * 0.7 * (seg.t + t) + k)), BW[k] * bwMul);
+          let vf = res[0].tick(source) * 1.05
+            + res[1].tick(source) * 0.85
+            + res[2].tick(source) * 0.45
+            + res[3].tick(source) * 0.22
+            + singer.tick(source) * (typ === 'nasal' ? 0.1 : 0.2)
+            + chest.tick(source) * (typ === 'nasal' ? 0.28 : 0.18);
+          if (typ === 'nasal') vf = vf * 0.75 + nasalRes.tick(source) * 0.55;
+          if (typ === 'vstop' && i >= closeN + burstN) y += vf * 0.8;
+          else if (typ !== 'stop' && typ !== 'vstop' && typ !== 'vfric' && typ !== 'fric') y = vf;
 
-        const attack = smooth((t - voiceDelay) / 0.04);
-        const rel = 1 - smooth((u - 0.88) / 0.12);
-        const swell = 0.86 + 0.14 * Math.sin(Math.PI * Math.min(1, u * 1.05));
-        const vibAmp = 1 + vibEnv * 0.045 * Math.sin(2 * Math.PI * rate * (note.t + t) + vibPhase + 0.7);
-        let env = Math.max(0, attack) * rel * swell * vibAmp * loud;
-        if (t < voiceDelay) env *= 0.1;
-        mono[o] += y * env * 0.2;
+          if (typ === 'vowel') {
+            const attack = smooth(t / 0.04);
+            const rel = 1 - smooth((u - 0.88) / 0.12);
+            const swell = 0.86 + 0.14 * Math.sin(Math.PI * Math.min(1, u * 1.05));
+            const vibAmp = 1 + vibEnv * 0.045 * Math.sin(2 * Math.PI * rate * (seg.t + t) + vibPhase + 0.7);
+            env = Math.max(0, attack) * rel * swell * vibAmp * loud;
+          } else if (typ === 'nasal' || typ === 'liquid') {
+            env = smooth(t / 0.012) * (1 - 0.08 * smooth((u - 0.9) / 0.1)) * loud;
+          }
+          if (typ === 'vfric' || typ === 'fric') {
+            const noise = typ === 'vfric' ? y : (y + vf * 0.12);
+            const voice = typ === 'vfric' ? vf * env * 0.16 : 0;
+            mono[o] += voice + noise * env;
+          } else {
+            mono[o] += y * env * 0.2;
+          }
+        } else {
+          if (typ === 'fric' && seg.ph === 'HH' && seg.restBreath) {
+            env = Math.sin(Math.PI * Math.min(1, u * 1.2));
+          }
+          mono[o] += y * env;
+        }
       }
-      if (coda === 's') writeNoise(note.t + timing + dur * 0.86, Math.min(0.09, dur * 0.16), 0.22, 's');
-      else if (coda === 'sh') writeNoise(note.t + timing + dur * 0.86, 0.08, 0.18, 'sh');
-      else if (coda === 'ch') writeNoise(note.t + timing + dur * 0.86, 0.08, 0.2, 'ch');
-      else if (coda === 't') writeNoise(note.t + timing + dur * 0.9, 0.04, 0.24, 't');
-      else if (coda === 'k') writeNoise(note.t + timing + dur * 0.9, 0.045, 0.22, 'k');
-      else if (coda === 'p') writeNoise(note.t + timing + dur * 0.9, 0.035, 0.2, 'p');
-      prevHz = targetHz * Math.pow(2, -fall);
+      if (typ === 'vowel' || typ === 'nasal' || typ === 'liquid') prevHz = targetHz * Math.pow(2, -fall);
     }
 
     let peak = peakOf(mono);
@@ -566,7 +766,6 @@
     const right = new Float32Array(n);
     const wet = 0.28;
     const dry = 0.78;
-    let preL = 0;
     const preDelay = Math.round(0.018 * sr);
     for (let i = 0; i < n; i++) {
       const dryS = mono[i];
@@ -579,7 +778,6 @@
       accR = tickAllpass(apR2, tickAllpass(apR1, accR / combsR.length));
       left[i] = dryS * dry + accL * wet;
       right[i] = dryS * dry * 0.98 + accR * wet;
-      preL = dryS;
     }
 
     peak = Math.max(peakOf(left), peakOf(right));
@@ -600,6 +798,7 @@
     detectPitch: detectPitch,
     peakOf: peakOf,
     midiHz: midiHz,
-    vowelOf: vowelOf
+    vowelOf: vowelOf,
+    g2p: g2p
   };
 });

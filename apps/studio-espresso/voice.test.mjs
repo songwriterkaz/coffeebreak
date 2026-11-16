@@ -40,3 +40,12 @@ test('a short lyric phrase keeps audible level', () => {
   assert.ok(voice.peakOf(dec.samples) > 0.05);
   assert.ok(wav.byteLength > 10000);
 });
+
+test('g2p maps the sample phrase into consonants and vowels', () => {
+  assert.deepEqual(voice.g2p('sun'), ['S', 'AH', 'N']);
+  assert.deepEqual(voice.g2p('is'), ['IH', 'Z']);
+  assert.deepEqual(voice.g2p('up'), ['AH', 'P']);
+  assert.deepEqual(voice.g2p('on'), ['AA', 'N']);
+  assert.deepEqual(voice.g2p('the', 'hill'), ['DH', 'AH']);
+  assert.deepEqual(voice.g2p('hill'), ['HH', 'IH', 'L']);
+});
