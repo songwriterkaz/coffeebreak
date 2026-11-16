@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Coffeebreak Vocal Studio Simple</title>
-<meta name="description" content="Coffeebreak Vocal Studio Simple sings lyrics with the original Coffeebreak voice in your browser.">
+<meta name="description" content="Coffeebreak Vocal Studio Simple sings lyrics in your browser, with the Twirling Bean voice as the default.">
 <link rel="icon" href="../cb-logo.png">
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Georgia,serif;background:#fff5fa;color:#3a1028}
@@ -35,7 +35,7 @@ label.voice-pick{display:flex;gap:6px;align-items:center;font-size:14px}
 <img src="../cb-logo.png" alt="Coffeebreak logo">
 <div>
 <h1>Coffeebreak Vocal Studio Simple</h1>
-<p>Write lyrics, then sing them with Voice 2 or the clear studio voice, or hear them spoken in your browser.</p>
+<p>Write lyrics, then sing them with the Twirling Bean voice, Voice 2 or the clear studio voice, or hear them spoken in your browser.</p>
 </div>
 </header>
 <main>
@@ -44,16 +44,18 @@ label.voice-pick{display:flex;gap:6px;align-items:center;font-size:14px}
 <div class="row">
 <label class="voice-pick">Singing voice
 <select id="voicePick" aria-label="Singing voice">
-<option value="voice2" selected>Voice 2</option>
+<option value="twirl" selected>Twirling Bean voice</option>
+<option value="voice2">Voice 2</option>
 <option value="clear">Clear studio voice</option>
 </select>
 </label>
+<label class="voice-pick"><input type="checkbox" id="backingPick" checked> Backing music</label>
 <button type="button" class="go" id="createGo">Create vocal</button>
 <button type="button" id="speakGo">Speak</button>
 <button type="button" id="downloadGo">Download wav</button>
 <span class="hint" id="status"></span>
 </div>
-<p class="hint" id="honest">Create vocal sings the lyrics in your browser. Voice 2 is the default singing voice. Clear studio voice is the later clearer pass. Speak reads the lyrics in your device's built-in speaking voice. No outside singing service is used. The spoken voice can be played here, but it cannot be saved as a wav. Download wav is for the sung vocal. The singing voices are made by the page, not a recording of a person, and will not sound as finished as a paid singing service.</p>
+<p class="hint" id="honest">Create vocal sings the lyrics in your browser. Twirling Bean voice is the default singing voice. It is a synthesizer tuned toward a warmer, lower country singer, with optional guitar, bass and drums made in the page. Voice 2 and Clear studio voice are still available. Speak reads the lyrics in your device's built-in speaking voice. No outside singing service is used. The spoken voice can be played here, but it cannot be saved as a wav. Download wav is for the sung vocal. The singing voices are made by the page, not a recording of a person, and will not sound as finished as a paid singing service or the reference clip they were tuned toward.</p>
 <audio id="player" controls hidden></audio>
 <div class="paybox">
 <b>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</b><br>
@@ -74,8 +76,10 @@ $10 USD for Coffeebreak Vocal Studio Simple. Reference: <b data-pay-ref></b>.
 <script src="voice-2.js"></script>
 <script>window.CBVoice2 = window.CBVoice;</script>
 <script src="voice-clear.js"></script>
-<script>window.CBVoiceClear = window.CBVoice; window.CBVoice = window.CBVoice2;</script>
+<script>window.CBVoiceClear = window.CBVoice;</script>
+<script src="voice-twirling.js"></script>
+<script>window.CBVoiceTwirl = window.CBVoice;</script>
 <script src="studio.js"></script>
-<script src="../../cb-songgen/cbreport.js" data-app="Coffeebreak Vocal Studio Simple" data-version="vocal-simple2"></script>
+<script src="../../cb-songgen/cbreport.js" data-app="Coffeebreak Vocal Studio Simple" data-version="vocal-simple-twirl"></script>
 </body>
 </html>

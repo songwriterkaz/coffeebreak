@@ -1,5 +1,5 @@
 /* Coffeebreak Vocal Studio Simple - lyrics, create, playback, and download.
-   Uses a vendored copy of the original Vocal Studio voice (commit fd959847). */
+   Default singing voice is Twirling Bean, with Voice 2, the clear studio voice, and Speak still available. */
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var PAY_LABEL = 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
@@ -29,16 +29,28 @@
 
   function selectedVoiceId() {
     var el = $('voicePick');
-    return el && el.value === 'clear' ? 'clear' : 'voice2';
+    var v = el ? el.value : 'twirl';
+    if (v === 'clear') return 'clear';
+    if (v === 'voice2') return 'voice2';
+    return 'twirl';
   }
 
   function currentVoice() {
-    if (selectedVoiceId() === 'clear' && window.CBVoiceClear) return window.CBVoiceClear;
-    return window.CBVoice2 || window.CBVoice;
+    var id = selectedVoiceId();
+    if (id === 'clear' && window.CBVoiceClear) return window.CBVoiceClear;
+    if (id === 'voice2') return window.CBVoice2 || window.CBVoice;
+    return window.CBVoiceTwirl || window.CBVoice;
   }
 
   function voiceLabel(id) {
-    return id === 'clear' ? 'the clear studio voice' : 'Voice 2';
+    if (id === 'clear') return 'the clear studio voice';
+    if (id === 'voice2') return 'Voice 2';
+    return 'the Twirling Bean voice';
+  }
+
+  function backingOn() {
+    var el = $('backingPick');
+    return !el || !!el.checked;
   }
 
 
@@ -82,10 +94,13 @@
     if (words.length < 2) throw new Error('Write at least two words to sing.');
     var beat = 60 / Math.max(72, Math.min(140, bpm || 110));
     var seq = notes && notes.length ? notes : [];
+    if (!seq.length && selectedVoiceId() === 'twirl' && window.CBVoiceTwirl && window.CBVoiceTwirl.defaultMelody) {
+      seq = window.CBVoiceTwirl.defaultMelody(words.length);
+    }
     var out = [];
     var t = 0;
     for (var i = 0; i < words.length; i++) {
-      var src = seq.length ? seq[i % seq.length] : { p: 64, l: 1 };
+      var src = seq.length ? seq[i % seq.length] : { p: selectedVoiceId() === 'twirl' ? 57 : 64, l: 1 };
       var dur = Math.max(0.24, (src.l || 1) * beat);
       out.push({ text: words[i], w: words[i], pitch: src.p, p: src.p, t: t, d: dur, duration: dur, rest: false });
       t += dur;
@@ -127,10 +142,12 @@
 
   async function singLyrics(lyrics, opts) {
     opts = opts || {};
-    if (opts.voiceId && $('voicePick')) $('voicePick').value = opts.voiceId === 'clear' ? 'clear' : 'voice2';
+    if (opts.voiceId && $('voicePick')) {
+      $('voicePick').value = opts.voiceId === 'clear' ? 'clear' : (opts.voiceId === 'voice2' ? 'voice2' : 'twirl');
+    }
     var voice = currentVoice();
     if (!voice) throw new Error('The Coffeebreak voice could not be loaded.');
-    var bpm = opts.bpm || state.bpm;
+    var bpm = opts.bpm || (selectedVoiceId() === 'twirl' ? 100 : state.bpm);
     var notes = opts.notes || null;
     var seconds = opts.seconds || vocalSeconds(lyrics);
     var score = buildScore(lyrics, notes, bpm, seconds);
@@ -142,7 +159,9 @@
     stopSpeech();
     state.mode = 'sing';
     setStatus('Singing with the Coffeebreak voice.');
-    var wav = voice.sing(score, { seed: opts.seed == null ? state.seed : opts.seed, bpm: bpm, style: opts.style || {} });
+    var style = opts.style ? Object.assign({}, opts.style) : {};
+    if (selectedVoiceId() === 'twirl' && style.backing == null) style.backing = backingOn();
+    var wav = voice.sing(score, { seed: opts.seed == null ? state.seed : opts.seed, bpm: bpm, style: style });
     var dec = voice.decodeMono(wav);
     if (voice.peakOf(dec.samples) < 0.02) throw new Error('The Coffeebreak voice returned silence.');
     encodeAndHold(dec.samples, dec.sampleRate, wav);
@@ -298,6 +317,7 @@
         peak: state.samples && currentVoice() ? currentVoice().peakOf(state.samples) : 0,
         seconds: state.samples ? state.samples.length / state.sampleRate : 0,
         voiceId: selectedVoiceId(),
+        backing: selectedVoiceId() === 'twirl' && backingOn(),
         mode: state.mode,
         speaking: !!state.speaking,
         canSpeak: !!(window.speechSynthesis && speechSynthesis.speak),
