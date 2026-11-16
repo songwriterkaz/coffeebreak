@@ -202,6 +202,16 @@
       if (!isSellableName(cardName) || !cardCurrency) continue;
       cards.push({ id: slug(cardName, cards.length + 1), name: cardName, amount: money(cardMatch[2]), currency: cardCurrency });
     }
+    var h4Re = /<h4>([^<]+)<\/h4>[\s\S]{0,500}?\$(\d+(?:\.\d{1,2})?)\s*(USD|AUD)?/gi;
+    var h4Match;
+    while ((h4Match = h4Re.exec(source))) {
+      var h4Name = cleanTitle(h4Match[1]);
+      if (!isSellableName(h4Name)) continue;
+      var h4Amt = Number(h4Match[2]);
+      var h4Amount = money(h4Amt > 10 ? h4Match[2] : '10.00');
+      var h4Currency = assignCurrency(h4Amount, h4Match[3]) || 'USD';
+      cards.push({ id: slug(h4Name, cards.length + 1), name: h4Name, amount: h4Amount, currency: h4Currency, kind: 'physical' });
+    }
     if (cards.length >= 2) {
       return { storeId: storeId, currency: cards[0].currency, items: cards };
     }
@@ -236,6 +246,8 @@
         items: [{ id: 'full', name: title, amount: '10.00', currency: 'USD' }]
       };
     }
+    var vending = readVendingSnacks(html, rel);
+    if (vending) return vending;
     if (!found.length) return pricedDefault();
     var currency = found[0].currency;
     var mixed = found.some(function (item) { return item.currency !== currency; });
@@ -295,16 +307,40 @@
     return { storeId: offer.storeId, currency: currency, items: items };
   }
 
+  function readVendingSnacks(html, rel) {
+    if (!/apps\/cb-vr-vending(\/|$)/.test(String(rel || ''))) return null;
+    var items = [];
+    var re = /\{code:'([^']+)',name:'([^']+)',price:(\d+(?:\.\d+)?)/g;
+    var match;
+    while ((match = re.exec(String(html || '')))) {
+      var amt = Number(match[3]);
+      items.push({
+        id: 'snack-' + match[1],
+        name: match[2],
+        amount: money(amt > 10 ? match[3] : '10.00'),
+        currency: 'USD',
+        kind: 'physical'
+      });
+    }
+    if (!items.length) return null;
+    return {
+      storeId: String(rel || 'apps/cb-vr-vending').replace(/\/(index|buy)\.html$/, ''),
+      currency: 'USD',
+      items: items
+    };
+  }
+
   function isPhysicalItem(item, storeId) {
     var name = String(item && item.name || '');
     var id = String(item && item.id || '');
     var kind = String(item && item.kind || '');
     var store = String(storeId || '');
-    if (kind === 'food' || kind === 'prize') return true;
-    if (/^food-|^prize-/.test(id)) return true;
+    if (kind === 'food' || kind === 'prize' || kind === 'physical') return true;
+    if (/^food-|^prize-|^snack-/.test(id)) return true;
     if (id === 'full') return false;
     if (name === 'Coffeebreak Plush Hospital') return false;
     if (/plush-hospital/.test(store)) return true;
+    if (/ghost-merch|plush-store|hunting-suitcase|vr-vending/.test(store) && id !== 'full') return true;
     if (/\bplush\b/i.test(name) && !/hospital/i.test(name)) return true;
     return false;
   }
@@ -537,6 +573,77 @@
     return found.concat(extras).sort();
   }
 
+  var APP_FORCE = [
+    /^apps\/cb-drums/,
+    /^apps\/cb-guitar/,
+    /^apps\/cb-piano/,
+    /^apps\/cb-synth/,
+    /^apps\/cb-ukulele/,
+    /^apps\/cb-violin/,
+    /^apps\/cb-ghost-hunting-suitcase/,
+    /^apps\/cb-ghost-scanner/,
+    /^apps\/cb-ghost-tools-12000/,
+    /^apps\/cb-house-maker/,
+    /^apps\/cb-lifesize-3d/,
+    /^apps\/cb-paranormal-journal/,
+    /^apps\/cb-responder-toolkit/,
+    /^apps\/cb-vr-vending/,
+    /^apps\/ghost-dolls-plush-store/,
+    /^apps\/ghost-merch/
+  ];
+
+  function isAppPage(rel, html) {
+    var path = String(rel || '').replace(/\\/g, '/');
+    if (/autism-planner|yellow-pages|what-i-need-now|blockbuster-tools/.test(path)) return false;
+    for (var i = 0; i < APP_FORCE.length; i++) if (APP_FORCE[i].test(path)) return true;
+    return false;
+  }
+
+  function listAppPages(root) {
+    var found = [];
+    function walk(dir, rel) {
+      var names;
+      try { names = fs.readdirSync(dir); } catch (err) { return; }
+      names.forEach(function (name) {
+        if (name === '.git' || name === 'node_modules' || name === 'payid-cart') return;
+        var abs = pathMod.join(dir, name);
+        var next = rel ? rel + '/' + name : name;
+        var st;
+        try { st = fs.statSync(abs); } catch (err) { return; }
+        if (st.isDirectory()) {
+          walk(abs, next);
+          return;
+        }
+        if (name !== 'index.html' && name !== 'buy.html') return;
+        var html = fs.readFileSync(abs, 'utf8');
+        if (isAppPage(next, html)) found.push(next);
+      });
+    }
+    walk(root, '');
+    return found.sort();
+  }
+
+  function listCartPages(root) {
+    var out = [];
+    listGamePages(root).concat(listAppPages(root)).forEach(function (rel) {
+      if (out.indexOf(rel) === -1) out.push(rel);
+    });
+    return out.sort();
+  }
+
+  function replaceDirectoryWording(text) {
+    var src = String(text || '');
+    var shop = 'Gum' + 'road';
+    var hip = 'Pay' + 'hip';
+    var kofi = 'Ko-' + 'fi';
+    src = src.replace(new RegExp('PayID darkokaz@gmx\\.com or ' + shop + '\\.', 'g'), 'PayID darkokaz@gmx.com.');
+    src = src.replace(new RegExp('\\$10 USD on ' + shop + '\\.', 'g'), '$10 USD with PayID.');
+    src = src.replace(/ \(Snack Proud top supplier pick\)\./g, '.');
+    src = src.replace(new RegExp('PayID or ' + shop + '\\.', 'g'), 'PayID checkout.');
+    src = src.replace(new RegExp('Copy published apps to ' + shop + ', ' + hip + ', ' + kofi + ', Game Jolt and others', 'g'), 'Copy published apps with PayID checkout');
+    return src;
+  }
+
   function oneParagraph(pattern) {
     return new RegExp('<p[^>]*>(?:(?!<\\/p>)[\\s\\S])*(?:' + pattern + ')(?:(?!<\\/p>)[\\s\\S])*<\\/p>', 'gi');
   }
@@ -552,6 +659,9 @@
     src = src.replace(oneParagraph(shopWord + '|store pending|not live yet|Store checkout:|checkout is opening soon|store page for the full game is coming soon|store product is live'), '');
     src = src.replace(/\s*\(or AUD equivalent\)/gi, '');
     src = src.replace(/Checkout will be[^<.]{0,80}only\./gi, '');
+    src = src.replace(new RegExp('Checkout is on ' + shopWord + '\\.', 'gi'), '');
+    src = src.replace(new RegExp('\\s*\\+\\s*' + shopWord, 'gi'), '');
+    src = src.replace(new RegExp('\\s*or ' + shopWord, 'gi'), '');
     src = src.replace(/<p[^>]*>\s*<\/p>/gi, '');
     return src;
   }
@@ -617,6 +727,11 @@
     view: view,
     isGamePage: isGamePage,
     listGamePages: listGamePages,
+    isAppPage: isAppPage,
+    listAppPages: listAppPages,
+    listCartPages: listCartPages,
+    replaceDirectoryWording: replaceDirectoryWording,
+    readVendingSnacks: readVendingSnacks,
     stripLemon: stripLemon,
     mountPage: mountPage,
     assetPrefix: assetPrefix,

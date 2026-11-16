@@ -363,3 +363,36 @@ test('real food and prizes share the game currency and are physical', () => {
   assert.match(html, /prize-hamper/);
 });
 
+
+test('paid apps and stores use the shared PayID cart and stay out of the game list', () => {
+  const game = api();
+  assert.equal(game.isGamePage('apps/cb-piano-buy/index.html', '<title>Buy Coffeebreak Grand Piano</title>'), false);
+  assert.equal(game.isAppPage('apps/cb-piano-buy/index.html', '<title>Buy Coffeebreak Grand Piano</title>'), true);
+  assert.equal(game.isAppPage('apps/ghost-merch/index.html', '<title>Ghost Merch Store</title>'), true);
+  assert.equal(game.isAppPage('apps/cb-vr-vending/index.html', '<title>Coffeebreak VR Snack Vending</title>'), true);
+  assert.equal(game.isAppPage('apps/autism-planner/index.html', '<title>Coffeebreak Autism Planner</title>'), false);
+  assert.equal(game.isAppPage('yellow-pages/index.html', '<title>Yellow Pages</title>'), false);
+  const merch = game.readOffer(
+    '<title>Ghost merch</title><h4>Ghost hunting tote</h4><p><span class="badge">$10 USD</span></p><h4>EMF enamel pin</h4><p><span class="badge">$10 USD</span></p>',
+    'apps/ghost-merch/index.html'
+  );
+  assert.equal(merch.currency, 'USD');
+  assert.equal(merch.items.length, 2);
+  assert.equal(merch.items[0].amount, '10.00');
+  assert.equal(merch.items[0].kind, 'physical');
+  const heavy = game.readOffer(
+    '<title>Store</title><h4>Light pin</h4><p><span class="badge">$8 USD</span></p><h4>Heavy hamper</h4><p><span class="badge">$129 USD</span></p>',
+    'apps/ghost-merch/index.html'
+  );
+  assert.equal(heavy.items.find((item) => item.name === 'Light pin').amount, '10.00');
+  assert.equal(heavy.items.find((item) => item.name === 'Heavy hamper').amount, '129.00');
+  const snacks = game.readVendingSnacks("const SNACKS=[{code:'A1',name:'CB Salt Chips',price:4.5,kind:'chips'}];", 'apps/cb-vr-vending/index.html');
+  assert.equal(snacks.items[0].id, 'snack-A1');
+  assert.equal(snacks.items[0].amount, '10.00');
+  assert.equal(game.isPhysicalItem(snacks.items[0], 'apps/cb-vr-vending'), true);
+  const wording = game.replaceDirectoryWording('PayID darkokaz@gmx.com or Gumroad. Buy page for Responder Toolkit $10 USD on Gumroad. snacks posted in Australia (Snack Proud top supplier pick). PayID or Gumroad. Copy published apps to Gumroad, Payhip, Ko-fi, Game Jolt and others');
+  assert.equal(wording.includes('Gumroad'), false);
+  assert.equal(wording.includes('Snack Proud'), false);
+  assert.match(wording, /PayID/);
+});
+
