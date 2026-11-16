@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stable Store</title>
+<meta name="description" content="Coffeebreak stable store: hay, feed, grooming kits, tack and small stable tools. Horseshoe fitting is price on enquiry.">
+<link rel="icon" href="../cb-logo.png">
+<style>
+:root{--bg:#f4f1e4;--card:#fffdf6;--ink:#2a2618;--soft:#5d5644;--line:#ddd3b2;--acc:#3f6b32}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+header,main,footer{max-width:980px;margin:0 auto}
+header{display:flex;gap:14px;align-items:center;padding:16px}
+header img{width:64px;height:auto;border-radius:12px;background:#fff}
+h1{margin:0;font-size:clamp(1.4rem,3vw,2rem)}
+header p{margin:2px 0 0;color:var(--soft)}
+main{padding:0 16px 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.art{height:92px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;background:linear-gradient(#f3e7c4,#e7f0d8);margin-bottom:8px}
+h2{margin:0 0 8px;font-size:1.15rem}
+.price{font-weight:800;color:var(--acc)}
+.btn{min-height:44px;border:0;border-radius:10px;background:var(--acc);color:#fff;font:inherit;font-weight:700;padding:10px 14px;cursor:pointer}
+.btn.alt{background:#fff;color:var(--acc);border:1px solid var(--line)}
+.note{background:#eef6e6;border-left:4px solid var(--acc);padding:10px 12px;border-radius:8px}
+label{display:block;font-weight:700;margin:10px 0 4px}
+input,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit}
+textarea{min-height:80px}
+#catalog,#enquiry,#checkout{margin-bottom:14px}
+footer{padding:8px 16px 32px;color:var(--soft);font-size:.9rem}
+footer img{width:48px;height:auto;border-radius:10px}
+.links{display:flex;flex-wrap:wrap;gap:12px}
+.links a{color:var(--acc)}
+</style>
+<script id="cb-pages-bar-script" src="../../pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<header>
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="64" height="48">
+  <div>
+    <h1>Stable Store</h1>
+    <p>Hay, feed, grooming, tack and small stable tools</p>
+  </div>
+</header>
+<main>
+  <section id="catalog" class="grid" aria-label="Products"></section>
+  <section class="card" id="enquiry">
+    <h2>Horseshoe fitting by a farrier</h2>
+    <p class="price">Price on enquiry</p>
+    <p>This visit is not in the cart. Tell us about the horse and the suburb, and we will reply with a price.</p>
+    <form id="farrier-form">
+      <label for="f-name">Name</label><input id="f-name" required autocomplete="name">
+      <label for="f-email">Email</label><input id="f-email" type="email" required autocomplete="email">
+      <label for="f-notes">Notes</label><textarea id="f-notes" required placeholder="Horse, shoe size if you know it, and suburb"></textarea>
+      <button class="btn" type="submit">Email farrier enquiry</button>
+      <p id="f-out"></p>
+    </form>
+  </section>
+  <section class="card" id="checkout" aria-label="Cart"></section>
+</main>
+<footer>
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="48" height="36">
+  <p>Karen (Coffeebreak) keeps all rights to her products, designs, apps, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p>
+  <p class="links">
+    <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a>
+    <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>
+    <a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Coffeebreak on YouTube</a>
+    <a href="../../">Coffeebreak hub</a>
+  </p>
+</footer>
+<script src="../../payid-cart/cart.js"></script>
+<script src="../cb-static-checkout.js"></script>
+<script>
+(function () {
+  var PRODUCTS = [
+    { id: 'hay-mini', name: 'Hay mini bale', amount: '35.00', price: 'US$35', art: '🌾', note: '' },
+    { id: 'hay-bundle', name: 'Hay delivery bundle of 15 bales (Newcastle/Hunter delivery only)', amount: '450.00', price: 'US$450', art: '🚚', note: 'Delivery of this bundle is only in Newcastle and the Hunter. Put your suburb in the order notes.' },
+    { id: 'feed', name: 'Feed bag', amount: '50.00', price: 'US$50', art: '🥣', note: '' },
+    { id: 'groom', name: 'Grooming kit', amount: '35.00', price: 'US$35', art: '🪥', note: '' },
+    { id: 'halter', name: 'Tack: halter', amount: '60.00', price: 'US$60', art: '🪢', note: '' },
+    { id: 'lead', name: 'Tack: lead rope', amount: '60.00', price: 'US$60', art: '🧵', note: '' },
+    { id: 'pad', name: 'Tack: saddle pad', amount: '60.00', price: 'US$60', art: '🟫', note: '' },
+    { id: 'pick', name: 'Small stable tool: hoof pick', amount: '15.00', price: 'US$15', art: '🔧', note: '' },
+    { id: 'bucket', name: 'Small stable tool: bucket', amount: '15.00', price: 'US$15', art: '🪣', note: '' },
+    { id: 'fork', name: 'Small stable tool: stable fork', amount: '15.00', price: 'US$15', art: '🍴', note: '' }
+  ];
+  var cart = [];
+  var ui = CBStaticCheckout.mount('checkout', {
+    storeId: 'stable-store',
+    storeName: 'Stable Store',
+    currency: 'USD',
+    getItems: function () { return cart; },
+    onQty: function (id, qty) {
+      cart.forEach(function (line) { if (line.id === id) line.qty = Math.max(1, Math.min(20, qty)); });
+      ui.refresh();
+    },
+    onRemove: function (id) {
+      cart = cart.filter(function (line) { return line.id !== id; });
+      ui.refresh();
+    }
+  });
+  var catalog = document.getElementById('catalog');
+  PRODUCTS.forEach(function (product) {
+    var card = document.createElement('article');
+    card.className = 'card';
+    card.innerHTML = '<div class="art" aria-hidden="true"></div><h2></h2><p class="price"></p><p class="note" hidden></p><button type="button" class="btn">Add to cart</button>';
+    card.querySelector('.art').textContent = product.art;
+    card.querySelector('h2').textContent = product.name;
+    card.querySelector('.price').textContent = product.price;
+    if (product.note) {
+      var note = card.querySelector('.note');
+      note.hidden = false;
+      note.textContent = product.note;
+    }
+    card.querySelector('button').addEventListener('click', function () {
+      var line = null;
+      cart.forEach(function (item) { if (item.id === product.id) line = item; });
+      if (line) { if (line.qty < 20) line.qty += 1; }
+      else cart.push({ id: product.id, name: product.name, amount: product.amount, qty: 1 });
+      ui.refresh();
+    });
+    catalog.appendChild(card);
+  });
+  var form = document.getElementById('farrier-form');
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    var body = [
+      'Horseshoe fitting by a farrier',
+      'Price on enquiry. This service is not in the cart.',
+      'Name: ' + document.getElementById('f-name').value.trim(),
+      'Email: ' + document.getElementById('f-email').value.trim(),
+      'Notes: ' + document.getElementById('f-notes').value.trim()
+    ].join('\n');
+    var href = 'mailto:darkokaz@gmx.com?subject=' + encodeURIComponent('Stable Store farrier enquiry') + '&body=' + encodeURIComponent(body);
+    var out = document.getElementById('f-out');
+    out.replaceChildren();
+    out.appendChild(document.createTextNode('Your email draft is ready. Opening it does not send the message and does not set a price.'));
+    out.appendChild(document.createElement('br'));
+    var link = document.createElement('a');
+    link.id = 'farrier-mailto';
+    link.href = href;
+    link.textContent = 'Open the email draft';
+    out.appendChild(link);
+  });
+})();
+</script>
+</body>
+</html>

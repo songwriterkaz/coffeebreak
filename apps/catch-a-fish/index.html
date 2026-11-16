@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catch a Fish</title>
+<meta name="description" content="Catch a Fish is a free canvas fishing game. No purchase and no paid entry. Real prizes are coming soon, subject to promotion rules.">
+<link rel="icon" href="../cb-logo.png">
+<style>
+:root{--bg:#e7f4fb;--card:#fff;--ink:#123044;--soft:#3e6278;--line:#c5dfec;--acc:#0b6e8a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+header,main,footer{max-width:860px;margin:0 auto}
+header{display:flex;gap:14px;align-items:center;padding:16px}
+header img{width:64px;height:auto;border-radius:12px;background:#fff}
+h1{margin:0;font-size:clamp(1.4rem,3vw,2rem)}
+header p{margin:2px 0 0;color:var(--soft)}
+main{padding:0 16px 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:0 0 14px}
+.note{background:#e5f7ea;border-left:4px solid #1d8a4e;padding:10px 12px;border-radius:8px}
+canvas{width:100%;height:auto;background:#8fd0ea;border-radius:12px;touch-action:manipulation;display:block}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.btn{min-height:44px;border:0;border-radius:10px;background:var(--acc);color:#fff;font:inherit;font-weight:700;padding:10px 14px;cursor:pointer}
+.btn.alt{background:#fff;color:var(--acc);border:1px solid var(--line)}
+input{font:inherit;padding:10px;border:1px solid var(--line);border-radius:10px;min-height:44px}
+footer{padding:8px 16px 32px;color:var(--soft);font-size:.9rem}
+footer img{width:48px;height:auto;border-radius:10px}
+.links{display:flex;flex-wrap:wrap;gap:12px}
+.links a{color:var(--acc)}
+</style>
+<script id="cb-pages-bar-script" src="../../pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<header>
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="64" height="48">
+  <div>
+    <h1>Catch a Fish</h1>
+    <p>A free fishing game. Real prizes are coming soon.</p>
+  </div>
+</header>
+<main>
+  <section class="card">
+    <p class="note" id="free-note">Catch a Fish is free to play. There is no purchase and no paid entry. This page takes no payment.</p>
+    <div class="row">
+      <button type="button" class="btn" id="start-round">Start round</button>
+      <button type="button" class="btn alt" id="end-round">End round</button>
+      <span id="hud">Score <b id="score">0</b> · Time <b id="time">45</b>s</span>
+    </div>
+    <canvas id="pond" width="720" height="420" aria-label="Fishing pond. Click a fish to catch it."></canvas>
+    <p>Click or tap a fish to cast. Arrow keys move a marker. Space casts at the marker.</p>
+    <label for="angler">Name on the practice board</label>
+    <input id="angler" value="Angler" maxlength="40">
+  </section>
+  <section class="card" aria-labelledby="prize-title">
+    <h2 id="prize-title">Prize leaderboard</h2>
+    <p>Real prizes are coming soon, subject to promotion rules. Playing this round does not enter a paid competition.</p>
+    <ol id="prize-board">
+      <li>1st place — real prize coming soon</li>
+      <li>2nd place — real prize coming soon</li>
+      <li>3rd place — real prize coming soon</li>
+    </ol>
+    <h3>Practice scores on this browser</h3>
+    <ol id="practice-scores"></ol>
+  </section>
+</main>
+<footer>
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="48" height="36">
+  <p>Karen (Coffeebreak) keeps all rights to her products, designs, apps, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p>
+  <p class="links">
+    <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a>
+    <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>
+    <a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Coffeebreak on YouTube</a>
+    <a href="../../">Coffeebreak hub</a>
+  </p>
+</footer>
+<script>
+(function () {
+  var canvas = document.getElementById('pond');
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  var fish = [];
+  var score = 0;
+  var left = 45;
+  var running = false;
+  var marker = { x: W / 2, y: H / 2 };
+  var splashes = [];
+  var last = 0;
+  var tick = 0;
+  var KEY = 'cb-catch-a-fish-scores';
+
+  function spawn(kind, x) {
+    var specs = {
+      small: { r: 18, pts: 10, speed: 50, color: '#f4a261' },
+      medium: { r: 26, pts: 25, speed: 70, color: '#e76f51' },
+      big: { r: 34, pts: 50, speed: 40, color: '#2a9d8f' }
+    };
+    var spec = specs[kind];
+    var dir = Math.random() < 0.5 ? 1 : -1;
+    fish.push({
+      x: typeof x === 'number' ? x : (dir > 0 ? -40 : W + 40),
+      y: 70 + Math.random() * (H - 140),
+      r: spec.r,
+      pts: spec.pts,
+      speed: spec.speed * dir,
+      color: spec.color
+    });
+  }
+  function stock() {
+    fish = [];
+    ['small', 'medium', 'big', 'small', 'medium', 'small'].forEach(function (kind, index) {
+      spawn(kind, 80 + index * 105);
+    });
+  }
+  function drawFish(item) {
+    ctx.save();
+    ctx.translate(item.x, item.y);
+    ctx.scale(item.speed > 0 ? 1 : -1, 1);
+    ctx.fillStyle = item.color;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, item.r, item.r * 0.62, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(-item.r, 0);
+    ctx.lineTo(-item.r - 16, -10);
+    ctx.lineTo(-item.r - 16, 10);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#123044';
+    ctx.beginPath();
+    ctx.arc(item.r * 0.4, -2, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+  function frame(now) {
+    var dt = Math.min(0.05, (now - last) / 1000 || 0);
+    last = now;
+    if (running) {
+      tick += dt;
+      if (tick >= 1) { tick -= 1; left -= 1; if (left <= 0) endRound(); }
+      fish.forEach(function (item) {
+        item.x += item.speed * dt;
+        if (item.x < -60) item.x = W + 40;
+        if (item.x > W + 60) item.x = -40;
+      });
+    }
+    ctx.clearRect(0, 0, W, H);
+    var sky = ctx.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, '#b9e6f5');
+    sky.addColorStop(1, '#1d6f93');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(255,255,255,.25)';
+    ctx.fillRect(0, H - 36, W, 12);
+    fish.forEach(drawFish);
+    ctx.strokeStyle = '#123044';
+    ctx.beginPath();
+    ctx.arc(marker.x, marker.y, 12, 0, Math.PI * 2);
+    ctx.stroke();
+    splashes = splashes.filter(function (splash) { splash.life -= dt; return splash.life > 0; });
+    splashes.forEach(function (splash) {
+      ctx.strokeStyle = 'rgba(255,255,255,' + splash.life + ')';
+      ctx.beginPath();
+      ctx.arc(splash.x, splash.y, 20 + (1 - splash.life) * 30, 0, Math.PI * 2);
+      ctx.stroke();
+    });
+    document.getElementById('score').textContent = String(score);
+    document.getElementById('time').textContent = String(Math.max(0, left));
+    requestAnimationFrame(frame);
+  }
+  function castAt(x, y) {
+    if (!running) return false;
+    marker.x = x;
+    marker.y = y;
+    var hit = null;
+    fish.forEach(function (item) {
+      var dx = item.x - x, dy = item.y - y;
+      if (dx * dx + dy * dy <= (item.r + 8) * (item.r + 8)) hit = item;
+    });
+    splashes.push({ x: x, y: y, life: 1 });
+    if (!hit) return false;
+    score += hit.pts;
+    fish = fish.filter(function (item) { return item !== hit; });
+    spawn(hit.pts >= 50 ? 'big' : hit.pts >= 25 ? 'medium' : 'small');
+    return true;
+  }
+  function pointer(event) {
+    var rect = canvas.getBoundingClientRect();
+    var x = (event.clientX - rect.left) * (W / rect.width);
+    var y = (event.clientY - rect.top) * (H / rect.height);
+    castAt(x, y);
+  }
+  function start() {
+    score = 0;
+    left = 45;
+    tick = 0;
+    running = true;
+    stock();
+  }
+  function readBoard() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
+    catch (err) { return []; }
+  }
+  function paintBoard() {
+    var list = document.getElementById('practice-scores');
+    var rows = readBoard();
+    list.replaceChildren();
+    if (!rows.length) {
+      var empty = document.createElement('li');
+      empty.textContent = 'No practice scores yet. Play a round to add one.';
+      list.appendChild(empty);
+      return;
+    }
+    rows.forEach(function (row) {
+      var item = document.createElement('li');
+      item.textContent = row.name + ' — ' + row.score + ' points';
+      list.appendChild(item);
+    });
+  }
+  function endRound() {
+    if (!running) return;
+    running = false;
+    var name = (document.getElementById('angler').value || 'Angler').trim().slice(0, 40) || 'Angler';
+    var rows = readBoard();
+    rows.push({ name: name, score: score });
+    rows.sort(function (a, b) { return b.score - a.score; });
+    rows = rows.slice(0, 8);
+    try { localStorage.setItem(KEY, JSON.stringify(rows)); } catch (err) {}
+    paintBoard();
+  }
+  canvas.addEventListener('pointerdown', pointer);
+  document.getElementById('start-round').addEventListener('click', start);
+  document.getElementById('end-round').addEventListener('click', function () { if (running) endRound(); });
+  document.addEventListener('keydown', function (event) {
+    var step = 24;
+    if (event.key === 'ArrowLeft') marker.x = Math.max(10, marker.x - step);
+    else if (event.key === 'ArrowRight') marker.x = Math.min(W - 10, marker.x + step);
+    else if (event.key === 'ArrowUp') marker.y = Math.max(10, marker.y - step);
+    else if (event.key === 'ArrowDown') marker.y = Math.min(H - 10, marker.y + step);
+    else if (event.key === ' ') { event.preventDefault(); castAt(marker.x, marker.y); }
+  });
+  stock();
+  paintBoard();
+  requestAnimationFrame(frame);
+  window.CBFish = {
+    start: start,
+    castAt: castAt,
+    endRound: endRound,
+    fish: function () { return fish.map(function (item) { return { x: item.x, y: item.y, r: item.r, pts: item.pts }; }); },
+    score: function () { return score; },
+    running: function () { return running; }
+  };
+})();
+</script>
+</body>
+</html>

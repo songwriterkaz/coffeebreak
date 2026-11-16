@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Life Skills Lessons</title>
+<meta name="description" content="Home schooling life skills lesson plans with fan themes. Full pack US$10. Not affiliated with any book or show.">
+<link rel="icon" href="../cb-logo.png">
+<style>
+:root{--bg:#fbf6ea;--card:#fffdf8;--ink:#2c2416;--soft:#665944;--line:#e2d3b4;--acc:#8a5a12}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Georgia,serif}
+header,main,footer{max-width:920px;margin:0 auto}
+header{display:flex;gap:14px;align-items:center;padding:16px}
+header img{width:64px;height:auto;border-radius:12px;background:#fff}
+h1{margin:0;font-size:clamp(1.4rem,3vw,2rem)}
+header p, .lede{color:var(--soft)}
+main{padding:0 16px 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:0 0 14px}
+h2{margin:0 0 8px;font-size:1.25rem}
+.note{background:#fff4d8;border-left:4px solid var(--acc);padding:10px 12px;border-radius:8px}
+.picks{display:flex;flex-wrap:wrap;gap:8px}
+.picks label{display:flex;gap:6px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;min-height:44px}
+select,input,textarea{font:inherit;padding:10px;border:1px solid var(--line);border-radius:10px}
+.btn{min-height:44px;border:0;border-radius:10px;background:var(--acc);color:#fff;font:inherit;font-weight:700;padding:10px 14px;cursor:pointer;margin:4px 4px 4px 0}
+.btn.alt{background:#fff;color:var(--acc);border:1px solid var(--line)}
+.sheet{border-top:1px dashed var(--line);margin-top:12px;padding-top:8px}
+.sheet h3{margin-bottom:4px}
+footer{padding:8px 16px 32px;color:var(--soft);font-size:.92rem}
+footer img{width:48px;height:auto;border-radius:10px}
+.links{display:flex;flex-wrap:wrap;gap:12px}
+.links a{color:var(--acc)}
+label.block{display:block;font-weight:700;margin:10px 0 4px}
+@media print{
+  header,footer,#builder,#checkout{display:none!important}
+  body{background:#fff}
+  .card{border:0;padding:0}
+  .sheet{break-inside:avoid}
+}
+</style>
+<script id="cb-pages-bar-script" src="../../pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<header>
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="64" height="48">
+  <div>
+    <h1>Life Skills Lessons</h1>
+    <p>Home schooling plans that follow the learner's interests</p>
+  </div>
+</header>
+<main>
+  <section class="card" id="builder">
+    <p class="note">Fan themes are original Coffeebreak lesson ideas. Warrior Cats and Heartstopper are named only as fan themes. This page is not affiliated with, endorsed by, or a copy of those books or shows, or of their creators, publishers or studios. No logos, copied text, character names or character art are used.</p>
+    <h2>Build a plan</h2>
+    <p class="lede">Pick interests and an age. The page writes original life skills lessons for money, cooking, cleaning, shopping, safety, communication and travel. Print them from your browser. The full pack is US$10.</p>
+    <p id="interests" class="picks"></p>
+    <label class="block" for="age">Age</label>
+    <select id="age">
+      <option value="6-8">6–8</option>
+      <option value="9-12" selected>9–12</option>
+      <option value="13-15">13–15</option>
+      <option value="16-18">16–18</option>
+    </select>
+    <p>
+      <button type="button" class="btn" id="generate">Generate lesson plans</button>
+      <button type="button" class="btn alt" id="print-plan">Print plans</button>
+      <button type="button" class="btn" id="add-pack">Add full pack to cart — US$10</button>
+    </p>
+  </section>
+  <section class="card" id="plans" aria-live="polite"><p>Your plans will appear here.</p></section>
+  <section class="card" id="checkout" aria-label="Cart"></section>
+</main>
+<footer>
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="48" height="36">
+  <p>Karen (Coffeebreak) keeps all rights to her products, designs, apps, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p>
+  <p class="links">
+    <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a>
+    <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>
+    <a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Coffeebreak on YouTube</a>
+    <a href="../../">Coffeebreak hub</a>
+  </p>
+</footer>
+<script src="../../payid-cart/cart.js"></script>
+<script src="../cb-static-checkout.js"></script>
+<script>
+(function () {
+  var INTERESTS = [
+    { id: 'warrior', label: 'Warrior Cats fan theme', noun: 'forest scout', place: 'camp', prop: 'trail map' },
+    { id: 'heart', label: 'Heartstopper fan theme', noun: 'comic artist', place: 'art table', prop: 'four-panel page' },
+    { id: 'horses', label: 'Horses', noun: 'stable helper', place: 'yard', prop: 'hoof pick' },
+    { id: 'music', label: 'Music', noun: 'musician', place: 'practice corner', prop: 'practice timer' },
+    { id: 'cooking', label: 'Cooking', noun: 'home cook', place: 'kitchen', prop: 'recipe card' }
+  ];
+  var SKILLS = [
+    ['money', 'Money'],
+    ['cooking', 'Cooking'],
+    ['cleaning', 'Cleaning'],
+    ['shopping', 'Shopping'],
+    ['safety', 'Safety'],
+    ['communication', 'Communication'],
+    ['travel', 'Travel']
+  ];
+  var box = document.getElementById('interests');
+  INTERESTS.forEach(function (item) {
+    var label = document.createElement('label');
+    var input = document.createElement('input');
+    input.type = 'checkbox';
+    input.value = item.id;
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(item.label));
+    box.appendChild(label);
+  });
+
+  function ageBand() { return document.getElementById('age').value; }
+  function chosen() {
+    var ids = [].map.call(box.querySelectorAll('input:checked'), function (input) { return input.value; });
+    return INTERESTS.filter(function (item) { return ids.indexOf(item.id) >= 0; });
+  }
+  function task(skill, theme, age) {
+    var young = age === '6-8' || age === '9-12';
+    var lines = {
+      money: young
+        ? 'Draw three things a ' + theme.noun + ' uses at the ' + theme.place + '. Put a small coin price on each. Add them with the learner. If the total is over 10 coins, cross one out and pick a cheaper idea.'
+        : 'Give the ' + theme.noun + ' a 40 dollar week at the ' + theme.place + '. Split the money into needs, wants and a small save. Write what changes if one cost goes up.',
+      cooking: young
+        ? 'Plan a no-cook snack a ' + theme.noun + ' could pack. List two foods, one drink and who helps with anything sharp or hot. Draw it on the ' + theme.prop + '.'
+        : 'Write a three-step meal for the ' + theme.place + '. Include a measure, a safety step and a cleanup step. Use your own recipe words.',
+      cleaning: young
+        ? 'Name four small jobs that leave the ' + theme.place + ' ready for the next person. Time one job for three minutes.'
+        : 'Make a weekly roster for the ' + theme.place + '. Give each job a day, a tool and a "done when" check.',
+      shopping: young
+        ? 'Build a five-item list for the ' + theme.place + '. Sort it into "must bring" and "only if it fits the coins".'
+        : 'Compare two ways to buy the same ' + theme.prop + ' supplies. Write the price, the amount and which choice you would repeat.',
+      safety: young
+        ? 'Point to two safe choices and one "ask a trusted adult" choice for a ' + theme.noun + ' at the ' + theme.place + '. Practise saying the adult\'s name.'
+        : 'Write a five-step plan: who you tell, what you pack, where you stop, and the local emergency number (000 in Australia, 911 in the United States).',
+      communication: young
+        ? 'Finish two sentences a ' + theme.noun + ' can say: "I need…" and "Can you help me with…". Practise them out loud.'
+        : 'Draft a short message about the ' + theme.place + '. Check that it says what you need, when, and how the other person can answer.',
+      travel: young
+        ? 'Draw the trip from home to the ' + theme.place + '. Mark the start, one stop and the finish. Say who walks with the learner.'
+        : 'Plan the trip: leave time, how you get there, what the ' + theme.prop + ' ride needs, and a backup if the plan changes.'
+    };
+    return lines[skill];
+  }
+  function render() {
+    var themes = chosen();
+    var host = document.getElementById('plans');
+    host.replaceChildren();
+    if (!themes.length) {
+      host.textContent = 'Pick at least one interest.';
+      return;
+    }
+    var age = ageBand();
+    var intro = document.createElement('p');
+    intro.className = 'note';
+    intro.textContent = 'Original Coffeebreak lessons for age ' + age + '. Fan themes are not affiliated with any book, show, creator, publisher or studio.';
+    host.appendChild(intro);
+    themes.forEach(function (theme) {
+      SKILLS.forEach(function (skill) {
+        var sheet = document.createElement('article');
+        sheet.className = 'sheet';
+        var title = document.createElement('h3');
+        title.textContent = skill[1] + ' — ' + theme.label;
+        var aim = document.createElement('p');
+        aim.textContent = 'Age ' + age + '. The learner practises ' + skill[1].toLowerCase() + ' as a ' + theme.noun + '.';
+        var body = document.createElement('p');
+        body.textContent = task(skill[0], theme, age);
+        var write = document.createElement('p');
+        write.textContent = 'Learner writes: _______________________________';
+        sheet.append(title, aim, body, write);
+        host.appendChild(sheet);
+      });
+    });
+  }
+  document.getElementById('generate').addEventListener('click', render);
+  document.getElementById('print-plan').addEventListener('click', function () {
+    render();
+    window.print();
+  });
+
+  var cart = [];
+  var ui = CBStaticCheckout.mount('checkout', {
+    storeId: 'life-skills-lessons',
+    storeName: 'Life Skills Lessons',
+    currency: 'USD',
+    getItems: function () { return cart; },
+    onQty: function (id, qty) {
+      cart.forEach(function (line) { if (line.id === id) line.qty = Math.max(1, Math.min(20, qty)); });
+      ui.refresh();
+    },
+    onRemove: function (id) {
+      cart = cart.filter(function (line) { return line.id !== id; });
+      ui.refresh();
+    }
+  });
+  document.getElementById('add-pack').addEventListener('click', function () {
+    var themes = chosen();
+    if (!themes.length) { render(); return; }
+    var name = 'Life Skills Lessons full pack — age ' + ageBand() + ' — ' + themes.map(function (theme) { return theme.label; }).join(', ');
+    var line = null;
+    cart.forEach(function (item) { if (item.id === 'full-pack') line = item; });
+    if (line) { line.name = name; if (line.qty < 20) line.qty += 1; }
+    else cart.push({ id: 'full-pack', name: name, amount: '10.00', qty: 1 });
+    ui.refresh();
+    var checkout = document.getElementById('checkout');
+    checkout.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
+</body>
+</html>

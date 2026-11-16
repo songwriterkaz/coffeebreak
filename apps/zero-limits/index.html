@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zero Limits</title>
+<meta name="description" content="Zero Limits: no limit to how far you travel or who you travel with. A life your way. An independent, self-funded disability support platform.">
+<link rel="icon" href="../cb-logo.png">
+<style>
+:root{--bg:#f3f7f4;--card:#fff;--ink:#1c2b28;--soft:#4d655f;--line:#c9ddd4;--acc:#0f6e62;--acc2:#084e46}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+header,main,footer{max-width:920px;margin:0 auto}
+header{display:flex;gap:14px;align-items:center;padding:16px}
+header img{width:64px;height:auto;border-radius:12px;background:#fff}
+h1{margin:0;font-size:clamp(1.4rem,3vw,2rem)}
+header p{margin:2px 0 0;color:var(--soft)}
+main{padding:0 16px 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:0 0 14px}
+h2{margin:0 0 8px;font-size:1.25rem}
+.note{background:#e7f4f0;border-left:4px solid var(--acc);padding:10px 12px;border-radius:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+label{display:block;font-weight:700;margin:10px 0 4px}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff}
+textarea{min-height:80px}
+.chk{display:flex;gap:8px;align-items:flex-start;font-weight:600;margin:8px 0}
+.chk input{width:auto;margin-top:4px}
+.btn{display:inline-block;min-height:44px;border:0;border-radius:10px;background:var(--acc);color:#fff;font:inherit;font-weight:700;padding:10px 14px;cursor:pointer;margin:4px 4px 4px 0}
+.btn.alt{background:#fff;color:var(--acc2);border:1px solid var(--line)}
+.price{font-weight:800;color:var(--acc2)}
+footer{padding:8px 16px 32px;color:var(--soft);font-size:.9rem}
+footer img{width:48px;height:auto;border-radius:10px}
+.links{display:flex;flex-wrap:wrap;gap:12px}
+.links a{color:var(--acc2)}
+#plan-summary{white-space:pre-wrap}
+@media(max-width:640px){header{padding:12px}header img{width:48px}}
+</style>
+<script id="cb-pages-bar-script" src="../../pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<header>
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="64" height="48">
+  <div>
+    <h1>Zero Limits</h1>
+    <p>No limit to how far you travel or who you travel with. A life your way.</p>
+  </div>
+</header>
+<main>
+  <section class="card">
+    <p class="note" id="disclaimer">Zero Limits is an independent private service and is not a government scheme.</p>
+    <p>Zero Limits is an independent, self-funded disability support platform. Members pay for themselves. Support can come from paid support workers or from volunteers.</p>
+    <p>Support workers can travel with you on local outings, interstate trips and overseas trips. There is no distance cap on the kind of trip you can plan, and no rule here about who you travel with. Driver and chauffeur support workers can take you to appointments. Support can include the whole family. Dream goals, such as owning your own home or travelling overseas, can be the point of a job.</p>
+  </section>
+
+  <section class="card" aria-labelledby="goals-title">
+    <h2 id="goals-title">Goal planner</h2>
+    <p>Pick the goals you want a plan for. The summary stays on this page until you email it yourself.</p>
+    <div id="goals"></div>
+    <button type="button" class="btn" id="build-plan">See plan summary</button>
+    <h3>Plan summary</h3>
+    <div id="plan-summary">Choose at least one goal.</div>
+  </section>
+
+  <section class="card" aria-labelledby="jobs-title">
+    <h2 id="jobs-title">Paid support jobs</h2>
+    <p>Choose a job type and a tier. You pick the tier yourself. Paid jobs go in the cart. Volunteer support stays free and is not added to the cart.</p>
+    <label for="job-type">Job type</label>
+    <select id="job-type">
+      <option value="everyday">Everyday — local outings, daily support, or a driver or chauffeur</option>
+      <option value="travel">Travel — interstate or overseas, with a support worker</option>
+      <option value="family">Family — support that includes the whole family</option>
+      <option value="dream">Dream Goals — steps toward a home of your own, or overseas travel</option>
+    </select>
+    <div class="grid">
+      <article class="card">
+        <h3>Standard</h3>
+        <p class="price">A$1,000 per job</p>
+        <p>Includes up to 11 hours of weekday daytime support.</p>
+        <button type="button" class="btn" id="add-standard">Add Standard to cart</button>
+      </article>
+      <article class="card">
+        <h3>Zero Limits Premium</h3>
+        <p class="price">A$10,000 per job</p>
+        <p>A VIP, white-glove option: a dedicated support team, luxury travel arrangements, priority booking and a family concierge.</p>
+        <p>Includes up to 115 hours of weekday daytime support.</p>
+        <button type="button" class="btn" id="add-premium">Add Premium to cart</button>
+      </article>
+    </div>
+    <p class="note">Evening, weekend and public holiday hours count at a higher rate (quoted on enquiry).</p>
+  </section>
+
+  <section class="card" id="checkout" aria-label="Cart"></section>
+
+  <section class="card" aria-labelledby="quote-title">
+    <h2 id="quote-title">Evening, weekend and public holiday quote</h2>
+    <p>Those hours are quoted on enquiry. This form does not add a charge and does not go through the cart.</p>
+    <form id="hours-quote">
+      <label for="q-name">Name</label><input id="q-name" name="name" required autocomplete="name">
+      <label for="q-email">Email</label><input id="q-email" name="email" type="email" required autocomplete="email">
+      <label for="q-notes">When you need support</label><textarea id="q-notes" name="notes" required></textarea>
+      <button class="btn" type="submit">Email a quote request</button>
+      <p id="q-out"></p>
+    </form>
+  </section>
+
+  <section class="card" aria-labelledby="vol-title">
+    <h2 id="vol-title">Volunteer support (free)</h2>
+    <p>Members can ask for volunteer support instead of a paid job. There is no charge and nothing is added to the cart.</p>
+    <form id="volunteer-support">
+      <label for="v-name">Name</label><input id="v-name" name="name" required autocomplete="name">
+      <label for="v-email">Email</label><input id="v-email" name="email" type="email" required autocomplete="email">
+      <label for="v-job">Job type</label>
+      <select id="v-job" name="job">
+        <option>Everyday</option>
+        <option>Travel</option>
+        <option>Family</option>
+        <option>Dream Goals</option>
+      </select>
+      <label for="v-goals">Goals</label><textarea id="v-goals" name="goals" required></textarea>
+      <button class="btn" type="submit">Email volunteer support enquiry</button>
+      <p id="v-out"></p>
+    </form>
+  </section>
+
+  <section class="card" aria-labelledby="join-title">
+    <h2 id="join-title">Become a volunteer</h2>
+    <p>Tell us where you are, when you can help, and which skills you can offer. Emailing this form does not by itself approve you for a shift.</p>
+    <form id="volunteer-join">
+      <label for="j-name">Name</label><input id="j-name" name="name" required autocomplete="name">
+      <label for="j-email">Email</label><input id="j-email" name="email" type="email" required autocomplete="email">
+      <label for="j-suburb">Suburb/region</label><input id="j-suburb" name="suburb" required>
+      <label for="j-when">Availability</label><textarea id="j-when" name="availability" required></textarea>
+      <fieldset>
+        <legend>Skills</legend>
+        <label class="chk"><input type="checkbox" name="skill" value="driving"> Driving</label>
+        <label class="chk"><input type="checkbox" name="skill" value="travel companion"> Travel companion</label>
+        <label class="chk"><input type="checkbox" name="skill" value="personal care"> Personal care</label>
+        <label class="chk"><input type="checkbox" name="skill" value="family support"> Family support</label>
+      </fieldset>
+      <label class="chk"><input type="checkbox" id="police" name="police" required> I have or will get a national police check</label>
+      <button class="btn" type="submit">Email volunteer sign-up</button>
+      <p id="j-out"></p>
+    </form>
+  </section>
+</main>
+<footer>
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="48" height="36">
+  <p>Karen (Coffeebreak) keeps all rights to her products, designs, apps, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p>
+  <p>Zero Limits is an independent private service and is not a government scheme.</p>
+  <p class="links">
+    <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a>
+    <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>
+    <a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Coffeebreak on YouTube</a>
+    <a href="../../">Coffeebreak hub</a>
+  </p>
+</footer>
+<script src="../../payid-cart/cart.js"></script>
+<script src="../cb-static-checkout.js"></script>
+<script>
+(function () {
+  var GOALS = [
+    ['local', 'Local outings', 'Start with one nearby place and the support you want with you.'],
+    ['interstate', 'Interstate travel', 'Name the city, the dates you hope for, and who travels with you.'],
+    ['overseas', 'Overseas travel', 'List the country, the purpose of the trip, and the support you want on the journey.'],
+    ['driver', 'A driver or chauffeur', 'List the regular appointments a driver would cover.'],
+    ['family', 'Whole-family support', 'Note who is in the family group and what a good day looks like for everyone.'],
+    ['home', 'Owning your own home', 'Write the first practical step, such as a savings chat or a visit you want company for.'],
+    ['choose', 'Travelling with someone you choose', 'Name who you want with you. Zero Limits does not pick your companion for you.'],
+    ['routine', 'A weekly routine that is yours', 'Sketch the weekday daytime hours you want covered.']
+  ];
+  var goals = document.getElementById('goals');
+  GOALS.forEach(function (g) {
+    var label = document.createElement('label');
+    label.className = 'chk';
+    var box = document.createElement('input');
+    box.type = 'checkbox';
+    box.value = g[0];
+    box.dataset.title = g[1];
+    box.dataset.step = g[2];
+    label.appendChild(box);
+    label.appendChild(document.createTextNode(' ' + g[1]));
+    goals.appendChild(label);
+  });
+  document.getElementById('build-plan').addEventListener('click', function () {
+    var picked = [].filter.call(goals.querySelectorAll('input'), function (box) { return box.checked; });
+    var out = document.getElementById('plan-summary');
+    if (!picked.length) { out.textContent = 'Choose at least one goal.'; return; }
+    out.textContent = picked.map(function (box, i) {
+      return (i + 1) + '. ' + box.dataset.title + ' — ' + box.dataset.step;
+    }).join('\n');
+  });
+
+  var JOBS = {
+    everyday: 'Everyday',
+    travel: 'Travel',
+    family: 'Family',
+    dream: 'Dream Goals'
+  };
+  var TIERS = {
+    standard: { amount: '1000.00', name: 'Standard', hours: 'up to 11 hours of weekday daytime support' },
+    premium: { amount: '10000.00', name: 'Zero Limits Premium', hours: 'up to 115 hours of weekday daytime support' }
+  };
+  var cart = [];
+  var ui = CBStaticCheckout.mount('checkout', {
+    storeId: 'zero-limits',
+    storeName: 'Zero Limits',
+    currency: 'AUD',
+    getItems: function () { return cart; },
+    onQty: function (id, qty) {
+      cart.forEach(function (line) { if (line.id === id) line.qty = Math.max(1, Math.min(20, qty)); });
+      ui.refresh();
+    },
+    onRemove: function (id) {
+      cart = cart.filter(function (line) { return line.id !== id; });
+      ui.refresh();
+    }
+  });
+  function add(tierId) {
+    var jobId = document.getElementById('job-type').value;
+    var tier = TIERS[tierId];
+    var id = jobId + '-' + tierId;
+    var name = JOBS[jobId] + ' — ' + tier.name + ' (' + tier.hours + ')';
+    var line = null;
+    cart.forEach(function (item) { if (item.id === id) line = item; });
+    if (line) { if (line.qty < 20) line.qty += 1; }
+    else cart.push({ id: id, name: name, amount: tier.amount, qty: 1 });
+    ui.refresh();
+  }
+  document.getElementById('add-standard').addEventListener('click', function () { add('standard'); });
+  document.getElementById('add-premium').addEventListener('click', function () { add('premium'); });
+
+  function mailtoForm(form, outId, subject, lines) {
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      var href = 'mailto:darkokaz@gmx.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines().join('\n'));
+      var out = document.getElementById(outId);
+      out.replaceChildren();
+      out.appendChild(document.createTextNode('Your email draft is ready. Opening it does not send the message. This form does not take payment.'));
+      out.appendChild(document.createElement('br'));
+      var link = document.createElement('a');
+      link.href = href;
+      link.textContent = 'Open the email draft';
+      out.appendChild(link);
+    });
+  }
+  mailtoForm(document.getElementById('hours-quote'), 'q-out', 'Zero Limits out-of-hours quote', function () {
+    return [
+      'Please quote evening, weekend or public holiday hours.',
+      'Name: ' + document.getElementById('q-name').value.trim(),
+      'Email: ' + document.getElementById('q-email').value.trim(),
+      'When: ' + document.getElementById('q-notes').value.trim(),
+      'This note does not confirm a price or a booking.'
+    ];
+  });
+  mailtoForm(document.getElementById('volunteer-support'), 'v-out', 'Zero Limits volunteer support enquiry', function () {
+    return [
+      'Volunteer support (free)',
+      'Name: ' + document.getElementById('v-name').value.trim(),
+      'Email: ' + document.getElementById('v-email').value.trim(),
+      'Job type: ' + document.getElementById('v-job').value,
+      'Goals: ' + document.getElementById('v-goals').value.trim(),
+      'No payment is requested for volunteer support.'
+    ];
+  });
+  mailtoForm(document.getElementById('volunteer-join'), 'j-out', 'Zero Limits volunteer sign-up', function () {
+    var skills = [].map.call(document.querySelectorAll('#volunteer-join input[name=skill]:checked'), function (box) { return box.value; });
+    return [
+      'Become a volunteer',
+      'Name: ' + document.getElementById('j-name').value.trim(),
+      'Email: ' + document.getElementById('j-email').value.trim(),
+      'Suburb/region: ' + document.getElementById('j-suburb').value.trim(),
+      'Availability: ' + document.getElementById('j-when').value.trim(),
+      'Skills: ' + (skills.join(', ') || 'none ticked'),
+      'I have or will get a national police check: yes'
+    ];
+  });
+})();
+</script>
+</body>
+</html>
