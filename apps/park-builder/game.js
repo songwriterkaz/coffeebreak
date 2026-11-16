@@ -376,10 +376,10 @@ function animateWalk(av, speed, t) {
   p.la.rotation.x = s; p.ra.rotation.x = -s; p.ll.rotation.x = -s; p.rl.rotation.x = s;
 }
 
-// ---------- NPC visitors ----------
+// ---------- No computer-made visitors: only what players build (Karen, 17 Nov 2026) ----------
 const npcNames = ['Mia', 'Zoe', 'Leo', 'Ava', 'Kai', 'Ruby', 'Max', 'Lily'];
 const npcs = [];
-for (let i = 0; i < 8; i++) {
+for (let i = 0; i < 0; i++) {
   const o = OUTFITS[i % 4];
   const av = makeAvatar(i % 2 ? o.bottom : o.top, i % 2 ? o.top : o.bottom, o.extra, [0xffd9b8, 0xc68e64, 0x8d5a3b, 0xf1c8a5][i % 4]);
   av.position.set(Math.cos(i) * 25, 0, Math.sin(i) * 25);
