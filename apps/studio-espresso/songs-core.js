@@ -215,17 +215,29 @@
     return { bytes: bytes, info: parsed[1] && parsed[1].audio_duration ? Math.round(parsed[1].audio_duration) + 's sung audio' : 'sung audio', model: MODEL, license: 'Apache-2.0' };
   }
 
+  function songModule(opts) {
+    if (opts && opts.songgen) return opts.songgen;
+    const globalSong = typeof CBSong !== 'undefined' ? CBSong : null;
+    if (globalSong && globalSong.generateSong) return globalSong;
+    if (typeof require === 'function') return require('../../cb-songgen/songgen.js');
+    throw new Error('The shared song module is not loaded. Nothing was saved.');
+  }
+
   async function singAceStep(lyrics, opts) {
     opts = opts || {};
     const line = opts.line ? String(opts.line).trim() : '';
     const text = line || String(lyrics || '').trim();
     if (wordsOf(text).length < 1 || (!line && wordsOf(text).length < 2)) throw new Error('Write at least two words to sing.');
-    const seconds = opts.seconds || (line ? Math.max(8, Math.min(14, Math.round(wordsOf(line).length * 0.8 + 4))) : vocalSeconds(text));
-    const steps = opts.steps == null ? 32 : opts.steps;
-    const prompt = opts.prompt || 'a cappella, solo singing voice only, no instruments, no drums, clear lyrics, natural sung vocal';
-    const endpoint = String(opts.endpoint || ENDPOINT).replace(/\/$/, '');
-    const data = [seconds, prompt, '[Verse]\n' + text + '\n', steps, 15, 'euler', 'apg', 10, opts.seed == null ? 7 : opts.seed, 0.5, 0, 3, true, true, true, null, 0, 0, false, 0.5, null, 'none'];
-    const sung = await callSpace(endpoint, '__call__', data, opts.timeoutMs || 120000);
+    const seconds = opts.seconds || (line ? Math.max(10, Math.min(30, Math.round(wordsOf(line).length * 0.8 + 8))) : vocalSeconds(text));
+    const prompt = opts.prompt || 'sung vocal, clear lyrics, drums, bass and backing music';
+    const sung = await songModule(opts).generateSong({
+      lyrics: text,
+      prompt: prompt,
+      seconds: seconds,
+      seed: opts.seed,
+      timeoutMs: opts.timeoutMs,
+      fetchImpl: opts.fetchImpl,
+    });
     sung.seconds = seconds;
     return sung;
   }

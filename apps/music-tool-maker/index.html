@@ -43,7 +43,7 @@ a{color:var(--a)}
 <div id="tool"><p>Press Make a new tool to begin.</p></div>
 <h2>My Tools</h2><ul id="lib"></ul>
 </main>
-<footer><p>Coffeebreak, songwriter and creator from Newcastle NSW. More at <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
+<section><h2>Make a sung song</h2><div data-cb-sung data-app="Coffeebreak Music Tool Maker" data-store="music-tool-maker"></div></section><footer><p>Coffeebreak, songwriter and creator from Newcastle NSW. More at <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></p>
 <p>Coffeebreak keeps all rights to this software, its design, name and logo. You may use the music you make for your own projects but not copy, resell or make your own version of this software.</p></footer>
 <script id="blocklib">
 var AC=null;function ac(){if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC}
@@ -89,4 +89,4 @@ var autoId=null;document.getElementById("auto").onchange=function(){if(this.chec
 document.getElementById("anim").onclick=function(){document.body.classList.toggle("anime");this.textContent=document.body.classList.contains("anime")?"Coffee mode":"Anime mode"};
 document.getElementById("prompt").onclick=function(){if(!cur)show(newTool());var p="Help me design a music tool called \""+cur.name+"\". It combines these parts: "+cur.blocks.map(function(k){return BLOCKS[k].name}).join(", ")+". Settings: key "+cur.settings.key+" "+cur.settings.scale+", "+cur.settings.bpm+" BPM, "+cur.settings.wave+" sound. Suggest how a songwriter could use it, and ideas to improve it.";try{navigator.clipboard.writeText(p)}catch(e){}window.open("https://grok.com","_blank","noopener");this.textContent="Prompt copied"};
 drawLib();show(newTool());
-</script></body></html>
+</script><script src="../../payid-cart/cart.js"></script><script src="../../cb-songgen/songgen.js"></script><script src="../../cb-songgen/panel.js"></script><script src="../../cb-songgen/cbreport.js" data-app="Coffeebreak Music Tool Maker" data-version="sung1"></script></body></html>

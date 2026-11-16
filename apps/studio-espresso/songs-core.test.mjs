@@ -68,20 +68,26 @@ test('a personal library stores and removes songs', async () => {
   assert.equal((await lib.list()).length, 1);
 });
 
-test('ACE-Step sings the lyrics as audio', async () => {
+test('Create song asks the shared module for a full sung song', async () => {
   assert.equal(core.vocalSeconds('sun is up on the hill'), 12);
-  const sung = await core.singAceStep('sun is up on the hill', { steps: 16, seconds: 12, seed: 3, timeoutMs: 90000 });
-  assert.equal(sung.model, 'ACE-Step/ACE-Step');
-  assert.equal(sung.license, 'Apache-2.0');
-  assert.ok(sung.bytes.byteLength > 20000);
-  const fs = await import('node:fs');
-  const { execFileSync } = await import('node:child_process');
-  fs.writeFileSync('/tmp/ace-step-vocal-test.mp3', Buffer.from(sung.bytes));
-  const dur = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'default=nw=1:nk=1', '/tmp/ace-step-vocal-test.mp3'], { encoding: 'utf8' });
-  assert.ok(parseFloat(dur) > 8, dur);
-  execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', '/tmp/ace-step-vocal-test.mp3', '-ac', '1', '-ar', '16000', '/tmp/ace-step-vocal-test.wav']);
-  const raw = fs.readFileSync('/tmp/ace-step-vocal-test.wav');
-  const stats = core.wavStats(raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength));
-  assert.ok(stats.peak > 0.05, 'peak ' + stats.peak);
-  assert.ok(stats.rms > 0.01, 'rms ' + stats.rms);
+  const bytes = new Uint8Array(9000);
+  bytes[0] = 0x49; bytes[1] = 0x44; bytes[2] = 0x33;
+  let seen = null;
+  const sung = await core.singAceStep('sun is up on the hill', {
+    seconds: 12,
+    seed: 3,
+    prompt: 'country',
+    songgen: {
+      async generateSong(job) {
+        seen = job;
+        return { bytes: bytes.buffer, model: 'ACE-Step/Ace-Step1.5', license: 'MIT', credit: 'ACE-Step 1.5, an open model under the MIT license', info: 'test audio', backend: 'ace-step-v15', mime: 'audio/mpeg' };
+      },
+    },
+  });
+  assert.equal(seen.seconds, 12);
+  assert.match(seen.prompt, /country/);
+  assert.match(seen.lyrics, /sun is up on the hill/);
+  assert.equal(sung.model, 'ACE-Step/Ace-Step1.5');
+  assert.equal(sung.license, 'MIT');
+  assert.equal(sung.bytes, bytes.buffer);
 });
