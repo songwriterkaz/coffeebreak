@@ -141,7 +141,7 @@
     C.buildScore(lyrics, [], style.bpm);
     const prompt = [input.prompt, style.genre, style.mood, style.bpm + ' BPM'].filter(Boolean).join(', ');
     const seconds = input.seconds || C.vocalSeconds(lyrics);
-    const sung = await C.singAceStep(lyrics, { prompt: prompt, seed: seed, seconds: seconds });
+    const sung = await C.singAceStep(lyrics, { prompt: prompt, seed: seed, seconds: seconds, bpm: style.bpm, onStatus: input.onStatus });
     const ctx = AC();
     const decoded = await ctx.decodeAudioData(sung.bytes.slice(0));
     if (peakBuf(decoded) < 0.02) throw new Error('The vocal model returned silence. Nothing was saved.');
@@ -426,7 +426,7 @@
     setStatus('Generating the full song. This can take a few minutes.');
     try {
       AC();
-      await createSong(input);
+      await createSong(Object.assign(input, { onStatus: setStatus }));
       setStatus('Saved in My songs. Pitch, timing, level, and sing again are under the vocal.');
       toast('Song saved in My songs');
     } catch (err) {
@@ -464,7 +464,7 @@
       <div class="vocal-action">
         <span class="field-label" id="vocalLabel">Full song</span>
         <div class="row"><button type="button" id="createGo" class="big">Create song</button><span id="createStatus" class="hint"></span></div>
-        <p class="hint" id="createHonest">Press Create song to make a full song from the lyrics and style. The result has a sung vocal and backing music from an open model, and it is saved in My songs. You get 100 percent commercial rights to songs you make here. If the service fails, nothing is saved and no stand-in song is played.</p>
+        <p class="hint" id="createHonest">Press Create song to make a full song from the lyrics and style. The result has a sung vocal and backing music from an open model, and it is saved in My songs. You get 100 percent commercial rights to songs you make here. If the main public Space is down, the studio tries backup singing Spaces, including a slower CPU one. If every service fails, nothing is saved and no stand-in song is played.</p>
       </div>
       <details id="createMore"><summary>More choices</summary>
         <div class="row"><label class="mini">Title <input id="createTitle" type="text" maxlength="80"></label>
@@ -664,7 +664,7 @@
   async function singAgain(lyrics) {
     const text = String(lyrics || '').trim();
     if (C.wordsOf(text).length < 2) throw new Error('Write at least two words to sing.');
-    const sung = await C.singAceStep(text, {});
+    const sung = await C.singAceStep(text, { onStatus: setStatus, bpm: P && P.bpm });
     const buf = await decodeSung(sung);
     const vocal = findVocal();
     if (!vocal) throw new Error('No vocal to edit.');
@@ -685,7 +685,7 @@
     if (!vocal) throw new Error('No vocal to edit.');
     const clip = vocal.clips[0];
     const base = BUFS[clip.takes[clip.take || 0]];
-    const sung = await C.singAceStep(lyrics, { line: line });
+    const sung = await C.singAceStep(lyrics, { line: line, onStatus: setStatus, bpm: P && P.bpm });
     let piece = await decodeSung(sung);
     piece = await matchRate(piece, base.sampleRate, base.numberOfChannels);
     const start = Math.floor(base.length * index / lines.length);

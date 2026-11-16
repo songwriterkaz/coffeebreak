@@ -203,8 +203,12 @@
       prompt: prompt,
       seconds: seconds,
       seed: opts.seed,
+      bpm: opts.bpm,
+    }, {
       timeoutMs: opts.timeoutMs,
       fetchImpl: opts.fetchImpl,
+      onStatus: opts.onStatus,
+      backends: opts.backends,
     });
     sung.seconds = seconds;
     return sung;
