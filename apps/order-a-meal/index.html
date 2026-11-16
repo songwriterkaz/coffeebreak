@@ -22,10 +22,17 @@ h2{margin:0 0 10px;font-size:1.2rem}
 label{display:block;font-weight:700;margin:12px 0 4px}
 input,select,textarea{width:100%;font:16px/1.4 inherit;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
 textarea{min-height:88px;resize:vertical}
-.restos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0 0 12px}
-.resto{min-height:48px;padding:10px;border:1px solid var(--line);border-radius:12px;background:#ead8c3;color:var(--ink);font:inherit;font-weight:700;text-align:left;cursor:pointer}
+.hero-wrap{max-width:720px;margin:16px auto 0;padding:0 16px}
+.hero{position:relative;margin:0;border-radius:20px;overflow:hidden;aspect-ratio:16/9;background:#2a1610}
+.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,22,16,.08),rgba(42,22,16,.2) 45%,rgba(42,22,16,.5));pointer-events:none}
+.caption{margin:8px 0 0;font-size:.85rem;color:var(--soft)}
+.restos{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:0 0 12px}
+.resto{min-height:48px;padding:0;overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);font:inherit;font-weight:700;text-align:left;cursor:pointer;box-shadow:0 6px 16px rgba(58,35,22,.1)}
+.resto img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#ead8c3}
+.resto .meta{padding:10px 12px 12px}
 .resto small{display:block;font-weight:500;color:var(--soft)}
-.resto.on{background:var(--btn);color:var(--btnink)}
+.resto.on{background:var(--btn);color:var(--btnink);border-color:var(--btn)}
 .resto.on small{color:#f4e9dc}
 .price-note{font-size:.9rem;color:var(--soft);margin:0 0 10px}
 .menu{max-height:min(60vh,520px);overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
@@ -56,6 +63,7 @@ footer a{color:var(--acc)}
   header img{width:48px}
   header h1{font-size:1.1rem}
   main{padding:12px}
+  .hero-wrap{margin-top:12px;padding:0 12px}
 }
 </style>
 <script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
@@ -68,6 +76,13 @@ footer a{color:var(--acc)}
     <p>Order and pay on this page for delivery in the Newcastle NSW area</p>
   </div>
 </header>
+<div class="hero-wrap">
+  <figure class="hero">
+    <img src="img/hero.webp" alt="An illustrated premium food spread" width="1280" height="720">
+    <div class="hero-overlay" aria-hidden="true"></div>
+  </figure>
+  <p class="caption">Images are illustrative.</p>
+</div>
 <main>
   <section class="card">
     <h2>Order your meal</h2>
@@ -148,22 +163,36 @@ function mealPrice(){
 }
 function total(){return Math.round((mealPrice()+FEE_DELIVERY+FEE_ORDER)*100)/100}
 function priceText(it){return it.from?'from '+money(it.price):money(it.price)}
+var PHOTOS={
+  'autumn-rooms':['img/cafe-brunch.webp','Illustrated cafe brunch'],
+  'estabar':['img/cafe-coastal.webp','Illustrated coastal cafe breakfast'],
+  'junction-hotel':['img/pub.webp','Illustrated pub meal'],
+  'nagisa':['img/japanese.webp','Illustrated Japanese dishes'],
+  'sapphire':['img/indian.webp','Illustrated Indian dishes'],
+  'sticky-rice':['img/thai.webp','Illustrated Thai dishes'],
+  'humbug':['img/contemporary.webp','Illustrated contemporary dish'],
+  'jana':['img/italian.webp','Illustrated Italian dishes'],
+  'other':['img/other.webp','Illustrated mixed restaurant dishes']
+};
+function restoButton(id,title,sub){
+  var b=document.createElement('button');
+  b.type='button';b.className='resto'+(resto===id?' on':'');
+  var photo=PHOTOS[id]||PHOTOS.other;
+  var img=document.createElement('img');
+  img.src=photo[0];img.alt=photo[1];img.width=800;img.height=600;
+  var meta=document.createElement('div');meta.className='meta';
+  var span=document.createElement('span');span.textContent=title;
+  var sm=document.createElement('small');sm.textContent=sub;
+  meta.append(span,sm);b.append(img,meta);
+  b.addEventListener('click',function(){selectResto(id)});
+  return b;
+}
 function drawRestos(){
   var box=$('restos');box.innerHTML='';
   MENUS.forEach(function(m){
-    var b=document.createElement('button');
-    b.type='button';b.className='resto'+(resto===m.id?' on':'');
-    b.innerHTML='<span></span><small></small>';
-    b.querySelector('span').textContent=m.name;
-    b.querySelector('small').textContent=m.cuisine+' \u00b7 '+m.area;
-    b.addEventListener('click',function(){selectResto(m.id)});
-    box.appendChild(b);
+    box.appendChild(restoButton(m.id,m.name,m.cuisine+' \u00b7 '+m.area));
   });
-  var o=document.createElement('button');
-  o.type='button';o.className='resto'+(resto==='other'?' on':'');
-  o.innerHTML='<span>Another restaurant</span><small>Type the restaurant, items and expected meal price</small>';
-  o.addEventListener('click',function(){selectResto('other')});
-  box.appendChild(o);
+  box.appendChild(restoButton('other','Another restaurant','Type the restaurant, items and expected meal price'));
 }
 function selectResto(id){
   if(resto!==id){cart=[];}
