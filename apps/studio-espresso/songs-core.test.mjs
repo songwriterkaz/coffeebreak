@@ -90,3 +90,21 @@ test('Create song sings with the Coffeebreak voice at the written pitch', async 
   const cents = 1200 * Math.log2(got.hz / 440);
   assert.ok(Math.abs(cents) < 30, 'pitch ' + got.hz + ' Hz, ' + cents.toFixed(1) + ' cents');
 });
+
+test('Studio Espresso sings locally and does not call ACE-Step', async () => {
+  let called = false;
+  const original = globalThis.fetch;
+  globalThis.fetch = async () => { called = true; throw new Error('ace'); };
+  try {
+    const sung = await core.singAceStep('sun is up on the hill', { seconds: 10, seed: 2, prompt: 'pop' });
+    assert.equal(called, false);
+    assert.equal(sung.backend, 'coffeebreak-voice');
+    assert.match(sung.model, /Coffeebreak voice/);
+    assert.equal(sung.mime, 'audio/wav');
+    const stats = core.wavStats(sung.bytes);
+    assert.ok(stats.peak > 0.05, 'peak ' + stats.peak);
+    assert.ok(stats.rms > 0.01, 'rms ' + stats.rms);
+  } finally {
+    globalThis.fetch = original;
+  }
+});

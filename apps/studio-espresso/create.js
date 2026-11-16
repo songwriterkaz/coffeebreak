@@ -435,7 +435,7 @@
     busy = true;
     const button = $('#createGo');
     if (button) button.disabled = true;
-    setStatus('Generating the full song. This can take a few minutes.');
+    setStatus('Singing with the Coffeebreak voice.');
     try {
       AC();
       await createSong(Object.assign(input, { onStatus: setStatus }));

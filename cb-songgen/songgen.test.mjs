@@ -74,6 +74,7 @@ test('a failed first service falls through to the next and returns only that aud
   const sung = await song.generateSong(
     { lyrics: 'sun is up on the hill', prompt: 'pop', seconds: 20, seed: 3 },
     {
+      engine: 'ace',
       fetchImpl,
       timeoutMs: 5000,
       backends: song.BACKENDS.slice(0, 2),
@@ -91,7 +92,7 @@ test('a failed first service falls through to the next and returns only that aud
   assert.match(second.data[1], /sun is up on the hill/);
 });
 
-test('when every service fails the error is plain and no audio is returned', async () => {
+test('when every ACE service fails the built-in singer still returns a song', async () => {
   const fetchImpl = fetchMock([
     { match: 'ace-step-ace-step-v1-5.hf.space/config', json: config('generation_wrapper', 77) },
     { match: 'ace-step-ace-step-v1-5.hf.space/gradio_api/queue/data', text: done('a', { error: 'busy' }, false) },
@@ -100,10 +101,18 @@ test('when every service fails the error is plain and no audio is returned', asy
     { match: 'reubencf-kiku-ace-step-15.hf.space/gradio_api/queue/data', text: done('b', { error: 'queue full' }, false) },
     { match: 'reubencf-kiku-ace-step-15.hf.space/gradio_api/queue/join', json: { event_id: 'b' } },
   ]);
+  const opts = { engine: 'ace', fetchImpl, backends: song.BACKENDS.slice(0, 2), schemas: { 'ace-step-v15': aceSchema, 'ace-step-v15-song': kikuSchema } };
+  const sung = await song.generateSong({ lyrics: 'sun is up on the hill', seconds: 10, seed: 1 }, opts);
+  assert.equal(sung.fallback, true);
+  assert.equal(sung.backend, 'builtin-singer');
+  assert.equal(sung.mime, 'audio/wav');
+  assert.match(sung.info, /built-in synth voice/);
+  assert.ok(sung.bytes.byteLength > 20000);
+  assert.equal(song.looksLikeAudio(sung.bytes), true);
   await assert.rejects(
     () => song.generateSong(
-      { lyrics: 'sun is up on the hill', seconds: 12, seed: 1 },
-      { fetchImpl, backends: song.BACKENDS.slice(0, 2), schemas: { 'ace-step-v15': aceSchema, 'ace-step-v15-song': kikuSchema } }
+      { lyrics: 'sun is up on the hill', seconds: 10, seed: 1 },
+      Object.assign({}, opts, { allowFallback: false })
     ),
     err => {
       assert.match(err.message, /Nothing was saved and no stand-in audio was played/);
@@ -114,20 +123,35 @@ test('when every service fails the error is plain and no audio is returned', asy
   );
 });
 
-test('a tiny or non-audio file is not treated as a song', async () => {
+test('a tiny or non-audio file is not kept, and the built-in voice sings instead', async () => {
   const fetchImpl = fetchMock([
     { match: 'reubencf-kiku-ace-step-15.hf.space/config', json: config('song', 2) },
     { match: 'reubencf-kiku-ace-step-15.hf.space/gradio_api/queue/data', text: done('c', { data: [{ url: 'https://files.example/bad.mp3', orig_name: 'bad.mp3' }] }, true) },
     { match: 'reubencf-kiku-ace-step-15.hf.space/gradio_api/queue/join', json: { event_id: 'c' } },
     { match: 'bad.mp3', bytes: new Uint8Array([1, 2, 3, 4]).buffer },
   ]);
-  await assert.rejects(
-    () => song.generateSong(
-      { lyrics: 'sun is up on the hill', seconds: 12, seed: 1 },
-      { fetchImpl, backends: [song.BACKENDS[1]], schemas: { 'ace-step-v15-song': kikuSchema } }
-    ),
-    /not audio/
+  const sung = await song.generateSong(
+    { lyrics: 'sun is up on the hill', seconds: 10, seed: 1 },
+    { engine: 'ace', fetchImpl, backends: [song.BACKENDS[1]], schemas: { 'ace-step-v15-song': kikuSchema } }
   );
+  assert.equal(sung.fallback, true);
+  assert.equal(sung.backend, 'builtin-singer');
+  assert.equal(song.looksLikeAudio(new Uint8Array([1, 2, 3, 4]).buffer), false);
+  assert.equal(song.looksLikeAudio(sung.bytes), true);
+});
+
+test('the default singer is built in and does not call a service', async () => {
+  let called = false;
+  const sung = await song.generateSong(
+    { lyrics: 'sun is up on the hill', seconds: 10, seed: 2 },
+    { fetchImpl: async () => { called = true; throw new Error('network'); } }
+  );
+  assert.equal(called, false);
+  assert.equal(sung.backend, 'builtin-singer');
+  assert.equal(sung.fallback, false);
+  assert.equal(sung.mime, 'audio/wav');
+  assert.ok(sung.score.notes.length >= 2);
+  assert.equal(song.lastSong(), sung);
 });
 
 test('fewer than two words is refused before any service is called', async () => {

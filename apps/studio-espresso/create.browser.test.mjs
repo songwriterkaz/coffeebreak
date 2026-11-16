@@ -78,6 +78,12 @@ try {
     timeout: 360000,
     expression: `(() => (async () => {
       const lyricsLabel = document.querySelector('label[for="createLyrics"]');
+      let aceCalls = 0;
+      const origFetch = window.fetch;
+      window.fetch = function (url, opts) {
+        if (String(url).indexOf('hf.space') >= 0 || String(url).indexOf('ace-step') >= 0) aceCalls++;
+        return origFetch.apply(this, arguments);
+      };
       const simple = {
         hasLyrics: !!document.getElementById('createLyrics'),
         lyricsLabel: lyricsLabel ? lyricsLabel.textContent : '',
@@ -87,6 +93,14 @@ try {
         voiceInsideMore: !!document.querySelector('#createMore #createVoice'),
       };
       const song = await CBSongs.create({ lyrics: 'sun is up on the hill', steps: 16, seed: 3, autoplay: false });
+      const pitch = (() => {
+        const vocal = P.tracks.find(t => t.name === 'Vocals');
+        const clip = vocal && vocal.clips[0];
+        const buf = clip && BUFS[clip.takes[clip.take || 0]];
+        if (!buf || !window.CBVoice) return { hz: 0, corr: 0 };
+        const data = buf.getChannelData(0);
+        return CBVoice.detectPitch(data, buf.sampleRate, 80, 800);
+      })();
       const before = CBSongs.vocalState();
       await CBSongs.nudgePitch(song.id, 2);
       const pitched = CBSongs.vocalState();
@@ -128,6 +142,9 @@ try {
         listed: listed.map(s => ({ title: s.title, lyrics: s.lyrics })), played, opened,
         demoPeak, toolCount: tools.length,
         toolsAreFunctions: tools.every(t => typeof t.use === 'function' && t.name && t.cat),
+        honest: (document.getElementById('createHonest') || {}).textContent || '',
+        aceCalls,
+        pitch,
         cart: CBSongs.cart(),
         hasPay: text.includes('Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com'),
         hasRights: text.includes('claims no ownership of third-party brands'),
@@ -155,6 +172,11 @@ try {
   assert.equal(out.song.title, 'Sun is up on the hill');
   assert.equal(out.song.lyrics, 'sun is up on the hill');
   assert.match(out.song.vocal.model, /Coffeebreak voice/);
+  assert.equal(out.aceCalls, 0);
+  assert.ok(out.pitch.corr > 0.2, 'corr ' + out.pitch.corr);
+  assert.ok(out.pitch.hz > 80 && out.pitch.hz < 900, 'hz ' + out.pitch.hz);
+  assert.match(out.honest, /Coffeebreak voice/);
+  assert.match(out.honest, /not a recording of a person/);
   assert.notEqual(out.edits.pitched.mark, out.edits.before.mark);
   assert.ok(out.edits.pitched.peak > 0.02);
   assert.equal(out.edits.pitched.pitch, 2);

@@ -12,7 +12,7 @@
     style.id = 'cb-sung-css';
     style.textContent = '.cb-sung{font:16px/1.45 Georgia,serif;color:#3a1028;background:#fff7fb;border:1px solid #f3c1da;border-radius:16px;padding:16px;margin:16px 0;max-width:760px}' +
       '.cb-sung h2,.cb-sung h3{margin:0 0 8px;font-size:1.25rem}.cb-sung label{display:block;margin:10px 0 4px;font-weight:700}' +
-      '.cb-sung textarea,.cb-sung input[type=text],.cb-sung input[type=number]{width:100%;box-sizing:border-box;font:inherit;padding:8px;border-radius:10px;border:1px solid #e48ab3;background:#fff}' +
+      '.cb-sung textarea,.cb-sung input[type=text],.cb-sung input[type=number],.cb-sung select{width:100%;box-sizing:border-box;font:inherit;padding:8px;border-radius:10px;border:1px solid #e48ab3;background:#fff}' +
       '.cb-sung textarea{min-height:140px}.cb-sung button{font:inherit;background:#c2185b;color:#fff;border:0;border-radius:999px;padding:10px 18px;cursor:pointer;margin:8px 8px 8px 0}' +
       '.cb-sung button[disabled]{opacity:.6}.cb-sung .hint,.cb-sung .fine{font-size:13px;color:#6d3554}.cb-sung audio{width:100%;margin:8px 0}' +
       '.cb-sung li{margin:8px 0;padding:8px;background:#fff;border-radius:10px}.cb-sung a{color:#a01455}';
@@ -80,6 +80,16 @@
     return line.slice(0, 80);
   }
 
+  function extOf(mime, name) {
+    var base = String(name || 'song').replace(/\.(mp3|wav|flac|ogg)$/i, '');
+    var mimeText = String(mime || '');
+    var ext = '.mp3';
+    if (mimeText.indexOf('wav') >= 0) ext = '.wav';
+    else if (mimeText.indexOf('flac') >= 0) ext = '.flac';
+    else if (mimeText.indexOf('ogg') >= 0) ext = '.ogg';
+    return base + ext;
+  }
+
   function saveFile(bytes, mime, name) {
     var blob = new Blob([bytes], { type: mime || 'audio/mpeg' });
     var url = URL.createObjectURL(blob);
@@ -89,7 +99,7 @@
     var doc = frame.contentDocument;
     var a = doc.createElement('a');
     a.href = url;
-    a.download = name;
+    a.download = extOf(mime, name);
     doc.body.appendChild(a);
     a.click();
     setTimeout(function () { frame.remove(); URL.revokeObjectURL(url); }, 60000);
@@ -128,16 +138,18 @@
     var box = document.createElement('div');
     box.className = 'cb-sung';
     box.innerHTML = '<h2>Make a sung song</h2>' +
-      '<p>Type lyrics and a style, then press Create. You get a full song with a sung vocal and backing music. It plays on this page, and you can download it.</p>' +
+      '<p>Type lyrics and a style, then press Create. The built-in synth voice sings them with drums, bass and chords. It plays on this page, and you can download it.</p>' +
       '<label for="cb-sung-lyrics">Lyrics</label><textarea id="cb-sung-lyrics" aria-label="Lyrics" placeholder="Paste or type the words to sing"></textarea>' +
-      '<label for="cb-sung-style">Style</label><input id="cb-sung-style" type="text" aria-label="Style" placeholder="bright pop, female vocal, live drums">' +
+      '<label for="cb-sung-style">Style</label><input id="cb-sung-style" type="text" aria-label="Style" placeholder="bright pop, clear vocal, live drums">' +
       '<label for="cb-sung-seconds">Length in seconds, optional</label><input id="cb-sung-seconds" type="number" min="10" max="120" placeholder="30" aria-label="Length in seconds">' +
+      '<label for="cb-sung-engine">Singer</label><select id="cb-sung-engine" aria-label="Singer"><option value="builtin" selected>Built-in synth voice</option><option value="ace">ACE-Step, when the free service is free</option></select>' +
+      '<p class="hint" id="cb-sung-honest">The built-in synth voice sings your lyrics in this browser, on a melody, with drums, bass and chords. It is a synthesizer, not a recording of a person, and it does not need ACE-Step. Choose ACE-Step only if you want to try that free service. If ACE-Step is busy, this page still sings with the built-in voice.</p>' +
       '<div><button type="button" id="cb-sung-go">Create</button><span class="hint" id="cb-sung-status"></span></div>' +
       '<audio id="cb-sung-audio" controls></audio>' +
       '<div><button type="button" id="cb-sung-dl" hidden>Download song</button></div>' +
       '<h3>My songs</h3><ul id="cb-sung-list"></ul>' +
       '<p>' + RIGHTS + '</p>' +
-      '<p class="fine" id="cb-sung-credit">Songs are generated with an open model. This page is Coffeebreak.</p>' +
+      '<p class="fine" id="cb-sung-credit">The default singer is the built-in synth voice in this browser. It is a synthesizer, not a recording of a person. This page is Coffeebreak.</p>' +
       '<p class="fine">' + DISCLAIMER + '</p>' +
       '<p class="fine"><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a></p>' +
       '<p><button type="button" id="cb-sung-report">Report a problem</button></p>';
@@ -185,7 +197,7 @@
         var saveBtn = document.createElement('button');
         saveBtn.type = 'button';
         saveBtn.textContent = 'Download song';
-        saveBtn.onclick = function () { saveFile(row.bytes, row.mime, (row.title || 'song').replace(/[^\w]+/g, '-').slice(0, 40) + '.mp3'); };
+        saveBtn.onclick = function () { saveFile(row.bytes, row.mime, (row.title || 'song').replace(/[^\w]+/g, '-').slice(0, 40)); };
         var del = document.createElement('button');
         del.type = 'button';
         del.textContent = 'Delete';
@@ -201,7 +213,7 @@
 
     box.querySelector('#cb-sung-dl').onclick = function () {
       if (!current) return;
-      saveFile(current.bytes, current.mime, (current.title || 'song').replace(/[^\w]+/g, '-').slice(0, 40) + '.mp3');
+      saveFile(current.bytes, current.mime, (current.title || 'song').replace(/[^\w]+/g, '-').slice(0, 40));
     };
     box.querySelector('#cb-sung-report').onclick = function () {
       if (window.__cbreport && window.__cbreport.open) window.__cbreport.open();
@@ -213,9 +225,12 @@
       var secondsRaw = box.querySelector('#cb-sung-seconds').value;
       busy = true;
       box.querySelector('#cb-sung-go').disabled = true;
-      setStatus('Generating the full song. This can take a few minutes.');
+      var engine = (box.querySelector('#cb-sung-engine') || {}).value || 'builtin';
+      setStatus(engine === 'ace'
+        ? 'Asking ACE-Step. If it is busy, the built-in synth voice sings this song instead.'
+        : 'Singing with the built-in synth voice.');
       try {
-        var sung = await G.generateSong({ lyrics: lyrics, prompt: prompt, seconds: secondsRaw ? +secondsRaw : undefined });
+        var sung = await G.generateSong({ lyrics: lyrics, prompt: prompt, seconds: secondsRaw ? +secondsRaw : undefined, engine: engine });
         var row = {
           id: 's' + Date.now().toString(36),
           app: app,
