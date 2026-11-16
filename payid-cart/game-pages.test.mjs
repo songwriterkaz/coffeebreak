@@ -23,10 +23,11 @@ test('every in-repo game page mounts the shared PayID cart', () => {
     assert.match(html, new RegExp(game.assetPrefix(rel).replace(/\./g, '\\.') + 'cart\\.js'), rel);
     assert.match(html, /payid-cart\/game-cart\.js/, rel);
     assert.match(html, /payid-cart\/game-mount\.js/, rel);
+    assert.match(html, /apps\/cb-static-checkout\.js/, rel);
     const block = html.match(/<!--cb-game-cart-start-->([\s\S]*?)<!--cb-game-cart-end-->/);
     assert.ok(block, rel);
     assert.equal(block[1].includes('!'), false, rel);
-    assert.doesNotMatch(block[1], /headspace|paypal|gumroad|payhip|ko-fi/i, rel);
+    assert.doesNotMatch(block[1], /headspace|paypal|gumroad|payhip|ko-fi|itch\.io|stripe/i, rel);
     const data = JSON.parse(block[1].match(/<script type="application\/json" id="cb-game-cart-data">([\s\S]*?)<\/script>/)[1]);
     const offer = game.readOffer(html, rel);
     assert.equal(data.currency, offer.currency, rel);
@@ -35,9 +36,16 @@ test('every in-repo game page mounts the shared PayID cart', () => {
     else priced[offer.currency] += 1;
     assert.match(html, /https:\/\/www\.tesla\.com/, rel);
     assert.match(html, /https:\/\/www\.starlink\.com/, rel);
+    assert.match(html, /youtube\.com/, rel);
     assert.match(html, /Report a problem|cbreport\.js/, rel);
     assert.match(html, /third-party/i, rel);
-    assert.doesNotMatch(html, /gumroad\.com|payhip\.com|ko-fi\.com|href="#pending"|store pending/i, rel);
+    assert.match(html, /cb-logo|logo/i, rel);
+    assert.doesNotMatch(html, /gumroad\.com|payhip\.com|ko-fi\.com|href="#pending"|store pending|headspace/i, rel);
+    assert.doesNotMatch(html, /<form\b[^>]*paypal/i, rel);
+    assert.doesNotMatch(html, /<a\b[^>]*href=["'][^"']*itch\.io/i, rel);
+    assert.doesNotMatch(html, /<a\b[^>]*href=["'][^"']*(?:paypal\.com|stripe\.com|buy\.stripe)/i, rel);
+    assert.doesNotMatch(html, /<button\b[^>]*>[^<]*(?:I've paid|I have paid)/i, rel);
+    assert.doesNotMatch(html, /C\.trophy\('member'\)/, rel);
   }
   assert.ok(priced.USD + priced.AUD > 0);
   console.log('GAME CARTS pages=' + pages.length + ' aud=' + priced.AUD + ' usd=' + priced.USD + ' gap=' + priced.gap);

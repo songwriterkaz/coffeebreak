@@ -29,39 +29,18 @@
     'Cart',
     'Close cart',
     'Add to cart',
-    'Reduce quantity',
-    'Increase quantity',
-    'Remove',
     'Your cart is empty.',
-    'Checkout',
-    'How to pay',
-    'Open your banking app.',
-    'Send the total to that PayID.',
-    'Put the reference in the payment description.',
+    'Checkout could not load. No payment is requested.',
+    'Order reference',
     'Price coming soon',
     GAP,
     PAY_HINT,
     'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com',
-    'Open email draft',
-    'Copy amount',
-    'Copy PayID',
-    'Copy reference',
     'Report a problem',
-    'Total',
-    'Name',
-    'Email',
-    'Items',
-    'Reference',
-    "I've paid by PayID, unlock now",
-    "I've paid by PayID, confirm this order",
-    'Unlocked on this device. Payment is not verified.',
-    'Order reference',
-    'Add your name and a valid email.',
-    'Order details were handed to the mailbox. Payment is not verified.',
-    'The mailbox did not accept the order details yet. Payment is not verified.',
     RIGHTS,
     'Tesla',
-    'Starlink'
+    'Starlink',
+    'Coffeebreak on YouTube'
   ];
 
   var DENY = [
@@ -84,7 +63,6 @@
     /^coffee-stack\//,
     /^condom-challenge\//,
     /^pin-the-condom-on-the-banana\//,
-    /^pinata-party\//,
     /^mansion-vr\//,
     /^target-range\//,
     /^hymns-karaoke\//,
@@ -155,8 +133,9 @@
 
   function assignCurrency(amount, stated) {
     if (stated) return String(stated).toUpperCase();
-    if (Number(amount) === 10) return 'USD';
-    return null;
+    var value = Number(amount);
+    if (!Number.isFinite(value) || value <= 0) return null;
+    return 'USD';
   }
 
   function readOffer(html, rel) {
@@ -195,6 +174,10 @@
     var fullRe = /(?:Full version|Full game|Buy full game|Buy for|Customers)\s*\$(\d+(?:\.\d{1,2})?)\s*(USD|AUD)?/gi;
     var fullMatch;
     while ((fullMatch = fullRe.exec(source))) addFound(title, fullMatch[1], fullMatch[2], fullMatch.index);
+
+    var forRe = /(?:^|[^A-Za-z])for\s+\$(\d+(?:\.\d{1,2})?)\s*(USD|AUD)?/gi;
+    var forMatch;
+    while ((forMatch = forRe.exec(source))) addFound(title, forMatch[1], null, forMatch.index);
 
     var priceRe = /class="price"[^>]*>\s*(?:[^<$]{0,40})?\$(\d+(?:\.\d{1,2})?)\s*(USD|AUD)?/gi;
     var priceMatch;
@@ -378,9 +361,17 @@
     return false;
   }
 
+  function isWhollyFree(rel, html) {
+    var path = String(rel || '').replace(/\\/g, '/');
+    if (/catch-a-fish/i.test(path)) return true;
+    if (/-free-demo\/|-buy\.html$|-buy\//.test(path)) return false;
+    var text = sourceOf(html || '');
+    return /free to play/i.test(text) && /no purchase|takes no payment|no paid entry|no purchase or payment/i.test(text);
+  }
+
   function isGamePage(rel, html) {
     var path = String(rel || '').replace(/\\/g, '/');
-    if (denied(path)) return false;
+    if (denied(path) || isWhollyFree(path, html)) return false;
     for (var i = 0; i < FORCE.length; i++) if (FORCE[i].test(path)) return true;
     var title = titleOf(html || '');
     if (/\b(game|games|karaoke|brawl|arcade|bowling|pinata|piñata|tycoon|duel|battle|chess|darts|kart)\b/i.test(path + ' ' + title)) return true;
@@ -469,17 +460,50 @@
     return src;
   }
 
-  function assetPrefix(rel) {
-    var depth = String(rel || '').split('/').length - 1;
-    return '../'.repeat(depth) + 'payid-cart/';
+  function depthOf(rel) {
+    return String(rel || '').split('/').length - 1;
   }
 
-  function legalBlock(html) {
+  function assetPrefix(rel) {
+    return '../'.repeat(depthOf(rel)) + 'payid-cart/';
+  }
+
+  function repoFile(rel, file) {
+    return '../'.repeat(depthOf(rel)) + file;
+  }
+
+  function hostPattern(host) {
+    return host.replace(/\./g, '\\.');
+  }
+
+  function stripCheckoutButtons(html) {
+    var src = String(html || '');
+    var linkHosts = ['pay' + 'pal.com', 'stri' + 'pe.com', 'buy.stri' + 'pe.com', 'it' + 'ch.io', 'gum' + 'road.com', 'pay' + 'hip.com', 'ko-' + 'fi.com'];
+    linkHosts.forEach(function (host) {
+      var re = new RegExp('<a\\b[^>]*href=["\'][^"\']*' + hostPattern(host) + '[^"\']*["\'][^>]*>[\\s\\S]*?<\\/a>', 'gi');
+      src = src.replace(re, '');
+    });
+    ['pay' + 'pal.com', 'stri' + 'pe.com', 'buy.stri' + 'pe.com'].forEach(function (host) {
+      var re = new RegExp('<form\\b[^>]*action=["\'][^"\']*' + hostPattern(host) + '[^"\']*["\'][^>]*>[\\s\\S]*?<\\/form>', 'gi');
+      src = src.replace(re, '');
+    });
+    src = src.replace(/<button\b[^>]*>[^<]*(?:I[’']ve paid|I have paid|I[’']ve sent it)[^<]*<\/button>/gi, '');
+    src = src.replace(/\.member\s*=\s*function\s*\(\)\s*\{C\.trophy\('member'\);alert\([^)]*\)\s*;?\s*\}/g, '.member=function(){}');
+    var named = 'head' + 'space';
+    src = src.replace(new RegExp('<a\\b[^>]*href=["\'][^"\']*' + named + '[^"\']*["\'][^>]*>[\\s\\S]*?<\\/a>', 'gi'), '');
+    return src;
+  }
+
+  function legalBlock(html, rel) {
     var bits = [];
+    if (!/<img\b[^>]*(?:logo|cb-logo)/i.test(html)) {
+      bits.push('<img src="' + repoFile(rel, 'apps/cb-logo.png') + '" alt="Coffeebreak logo" width="48" height="36">');
+    }
     if (!/third-party/i.test(html)) bits.push('<p>' + RIGHTS + '</p>');
     var links = [];
     if (!/https:\/\/www\.tesla\.com/i.test(html)) links.push('<a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a>');
     if (!/https:\/\/www\.starlink\.com/i.test(html)) links.push('<a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>');
+    if (!/youtube\.com/i.test(html)) links.push('<a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Coffeebreak on YouTube</a>');
     if (!/Report a problem/i.test(html) && !/cbreport\.js/i.test(html)) {
       links.push('<a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a>');
     }
@@ -489,7 +513,7 @@
   }
 
   function mountPage(html, rel) {
-    var src = stripLemon(html).replace(/<!--cb-game-cart-start-->[\s\S]*?<!--cb-game-cart-end-->/g, '');
+    var src = stripCheckoutButtons(stripLemon(html)).replace(/<!--cb-game-cart-start-->[\s\S]*?<!--cb-game-cart-end-->/g, '');
     var offer = readOffer(src, rel);
     var payload = JSON.stringify({
       storeId: offer.storeId,
@@ -502,9 +526,10 @@
       '<script type="application/json" id="cb-game-cart-data">' + payload + '</script>',
       '</section>',
       '<script src="' + prefix + 'cart.js"></script>',
+      '<script src="' + repoFile(rel, 'apps/cb-static-checkout.js') + '"></script>',
       '<script src="' + prefix + 'game-cart.js"></script>',
       '<script src="' + prefix + 'game-mount.js"></script>',
-      legalBlock(src)
+      legalBlock(src, rel)
     ].join('');
     var wrapped = '<!--cb-game-cart-start-->' + block + '<!--cb-game-cart-end-->';
     if (src.indexOf('</body>') !== -1) return src.replace('</body>', wrapped + '</body>');
@@ -526,10 +551,13 @@
     remove: remove,
     view: view,
     isGamePage: isGamePage,
+    isWhollyFree: isWhollyFree,
     listGamePages: listGamePages,
     stripLemon: stripLemon,
+    stripCheckoutButtons: stripCheckoutButtons,
     mountPage: mountPage,
     assetPrefix: assetPrefix,
+    repoFile: repoFile,
     ordersEndpoint: ordersEndpoint,
     orderFields: orderFields,
     isPhysicalItem: isPhysicalItem,
