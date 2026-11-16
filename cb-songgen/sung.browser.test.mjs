@@ -8,7 +8,7 @@ const ROOT = new URL('../', import.meta.url).pathname;
 
 const APPS = [
   { name: 'studio-espresso', path: '/apps/studio-espresso/index.html', kind: 'espresso' },
-  { name: 'coffeebreak-ace', path: '/apps/coffeebreak-ace/index.html', kind: 'panel', tools: true, fallback: true },
+  // Coffeebreak Vocal Studio is no longer a Sung Song panel. Covered by apps/coffeebreak-ace/studio.playwright.py.
   { name: 'song-studio', path: '/apps/song-studio/index.html', kind: 'panel' },
   { name: 'music-software', path: '/apps/music-software-app/index.html', kind: 'panel', before: "if (typeof show==='function') show('s7')" },
   { name: 'recording-studio-pro', path: '/apps/recording-studio-pro/index.html', kind: 'panel', before: "var b=document.querySelector('#tabs button[data-p=\"sung\"]'); if (b) b.click();" },

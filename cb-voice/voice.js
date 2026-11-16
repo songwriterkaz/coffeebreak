@@ -358,6 +358,13 @@
 
   function sing(score, opts) {
     opts = opts || {};
+    const st = opts.style || {};
+    const formant = st.formant > 0 ? +st.formant : 1;
+    const vibScale = st.vibrato != null ? +st.vibrato : 1;
+    const breathScale = st.breath != null ? +st.breath : 1;
+    const scoopScale = st.scoop != null ? +st.scoop : 1;
+    const rdBias = st.rd != null ? +st.rd : 0;
+    const oqBias = st.oq != null ? +st.oq : 0;
     const sr = opts.sampleRate || SR;
     const notes = normalizeNotes(score);
     const tail = 1.55;
@@ -450,20 +457,20 @@
       const fromHz = prevHz > 0 ? prevHz : targetHz * Math.pow(2, -0.06);
       const leap = Math.abs(Math.log2(targetHz / Math.max(70, fromHz)));
       const glideT = clamp(0.05 + leap * 0.08, 0.05, 0.18);
-      const scoopCents = (phraseStart || leap > 0.08 ? 50 : 28) + rand() * 35;
+      const scoopCents = ((phraseStart || leap > 0.08 ? 50 : 28) + rand() * 35) * scoopScale;
       const scoopT = 0.05 + rand() * 0.035;
       const vibDelay = 0.17 + rand() * 0.13;
       const vibGrow = 0.32 + rand() * 0.28;
       const vibRate0 = 5.05 + rand() * 0.75;
-      const vibDepth0 = 0.017 + rand() * 0.012;
+      const vibDepth0 = (0.017 + rand() * 0.012) * Math.max(0, vibScale);
       const vibRateJit = 0.12 + rand() * 0.1;
       const vibDepthJit = 0.18 + rand() * 0.12;
       const vibPhase = rand() * Math.PI * 2;
       const rateWanderPh = rand() * Math.PI * 2;
       const depthWanderPh = rand() * Math.PI * 2;
       const fall = (ni === notes.length - 1 || (notes[ni + 1] && notes[ni + 1].rest)) ? 0.02 : 0.006;
-      const oq = 0.58 + rand() * 0.08;
-      const rd = 1.05 + rand() * 0.35;
+      const oq = 0.58 + rand() * 0.08 + oqBias;
+      const rd = 1.05 + rand() * 0.35 + rdBias;
       const lf = makeLF(oq, oq * (0.62 + rand() * 0.06), clamp(0.018 * rd, 0.014, 0.06));
       let drift = (rand() - 0.5) * 4;
       const driftTau = 0.32 + rand() * 0.22;
@@ -516,11 +523,11 @@
         let breath = rand() * 2 - 1;
         airLp += 0.12 * (breath - airLp);
         breath = breath - airLp;
-        const breathAmt = 0.03 + 0.018 * (1 - u) + (onset === 'h' ? 0.045 * (1 - smooth(t / 0.2)) : 0);
+        const breathAmt = (0.03 + 0.018 * (1 - u) + (onset === 'h' ? 0.045 * (1 - smooth(t / 0.2)) : 0)) * Math.max(0, breathScale);
         const source = sourcePulse * 0.95 + breath * breathAmt;
 
         const fv = formantsAt(vow, u);
-        for (let k = 0; k < 4; k++) res[k].set(fv[k] * (1 + 0.004 * Math.sin(2 * Math.PI * 0.7 * (note.t + t) + k)), BW[k]);
+        for (let k = 0; k < 4; k++) res[k].set(fv[k] * formant * (1 + 0.004 * Math.sin(2 * Math.PI * 0.7 * (note.t + t) + k)), BW[k]);
         let y = res[0].tick(source) * 1.05
           + res[1].tick(source) * 0.85
           + res[2].tick(source) * 0.45

@@ -200,7 +200,7 @@
     if (opts && opts.voice && typeof opts.voice.sing === 'function') return opts.voice;
     const g = (typeof globalThis !== 'undefined') ? globalThis : (typeof window !== 'undefined' ? window : {});
     if (g.CBVoice && typeof g.CBVoice.sing === 'function') return g.CBVoice;
-    if (typeof require === 'function') return require('./voice.js');
+    if (typeof require === 'function') return require('../../cb-voice/voice.js');
     throw new Error('The Coffeebreak voice could not be loaded.');
   }
 

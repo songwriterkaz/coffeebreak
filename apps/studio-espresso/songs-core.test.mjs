@@ -82,7 +82,7 @@ test('Create song sings with the Coffeebreak voice at the written pitch', async 
   assert.ok(sung.bytes.byteLength > 1000);
   const alias = await core.singAceStep('la la la', { notes: notes, bpm: 80, seed: 3, seconds: 2.4 });
   assert.equal(alias.model, 'Coffeebreak voice');
-  const voice = require('./voice.js');
+  const voice = require('../../cb-voice/voice.js');
   const dec = voice.decodeMono(sung.bytes);
   const peak = voice.peakOf(dec.samples);
   assert.ok(peak > 0.05, 'peak ' + peak);

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const voice = require('./voice.js');
+const voice = require('../../cb-voice/voice.js');
 
 function held(midi, seconds) {
   return { seconds, notes: [{ w: 'la', p: midi, t: 0.15, d: seconds - 0.15 }] };
