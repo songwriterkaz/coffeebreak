@@ -39,11 +39,10 @@ img { max-width: 100%; }
   text-decoration: none;
 }
 .site img {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
+  width: 120px;
+  height: auto;
+  border-radius: 12px;
   background: #fff;
-  object-fit: cover;
 }
 .eyebrow { margin: 0; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--acc); font-weight: 800; }
 .site h1 { margin: 0; font-size: 1.45rem; line-height: 1.15; }
@@ -200,7 +199,7 @@ footer a { color: var(--acc); }
 .links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; }
 @media (max-width: 520px) {
   .site { padding: 10px 12px; gap: 10px; }
-  .site img { width: 56px; height: 56px; }
+  .site img { width: 96px; }
   .site h1 { font-size: 1.2rem; }
   .cart-link { margin-left: 0; width: 100%; }
   main { padding: 12px; }

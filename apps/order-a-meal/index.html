@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Coffeebreak Order a Meal</title>
-<meta name="description" content="Order your meal on Uber Eats. Coffeebreak is not affiliated with Uber Eats.">
+<meta name="description" content="Order a meal for delivery in the Newcastle NSW area. Pay by PayID on this Coffeebreak page.">
 <link rel="icon" href="logo.png">
 <style>
 :root{--bg:#f4e9dc;--card:#fffaf3;--ink:#3a2316;--soft:#6b4a36;--acc:#7a4a2b;--btn:#6b3f24;--btnink:#fff;--line:#c9a98a;--warn:#8a4b00}
@@ -14,26 +14,56 @@ header{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var
 header img{width:56px;height:auto;border-radius:12px}
 header h1{margin:0;font-size:1.25rem}
 header p{margin:0;color:var(--soft);font-size:.9rem}
-main{max-width:640px;margin:0 auto;padding:16px}
+main{max-width:720px;margin:0 auto;padding:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
 h2{margin:0 0 10px;font-size:1.2rem}
-.lede{margin:0 0 14px;color:var(--soft)}
-.note{background:#fff3e0;border-left:4px solid var(--warn);padding:12px;border-radius:8px;font-size:.95rem;margin:0 0 16px}
-.picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:0 0 16px}
-.pick,.big{display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;font:inherit;font-weight:700;border-radius:12px}
-.pick{min-height:48px;padding:12px 14px;background:#ead8c3;color:var(--ink);border:1px solid var(--line)}
-.big{min-height:56px;padding:18px;background:var(--btn);color:var(--btnink);font-size:1.15rem;width:100%}
-.pick:focus,.big:focus{outline:3px solid var(--acc);outline-offset:2px}
-footer{max-width:640px;margin:0 auto;padding:16px 16px 28px;font-size:.85rem;color:var(--soft)}
+.lede,.hint{margin:0 0 12px;color:var(--soft)}
+.note{background:#fff3e0;border-left:4px solid var(--warn);padding:12px;border-radius:8px;font-size:.95rem;margin:0 0 14px}
+label{display:block;font-weight:700;margin:12px 0 4px}
+input,select,textarea{width:100%;font:16px/1.4 inherit;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+textarea{min-height:88px;resize:vertical}
+.hero-wrap{max-width:720px;margin:16px auto 0;padding:0 16px}
+.hero{position:relative;margin:0;border-radius:20px;overflow:hidden;aspect-ratio:16/9;background:#2a1610}
+.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,22,16,.08),rgba(42,22,16,.2) 45%,rgba(42,22,16,.5));pointer-events:none}
+.caption{margin:8px 0 0;font-size:.85rem;color:var(--soft)}
+.restos{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:0 0 12px}
+.resto{min-height:48px;padding:0;overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);font:inherit;font-weight:700;text-align:left;cursor:pointer;box-shadow:0 6px 16px rgba(58,35,22,.1)}
+.resto img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#ead8c3}
+.resto .meta{padding:10px 12px 12px}
+.resto small{display:block;font-weight:500;color:var(--soft)}
+.resto.on{background:var(--btn);color:var(--btnink);border-color:var(--btn)}
+.resto.on small{color:#f4e9dc}
+.price-note{font-size:.9rem;color:var(--soft);margin:0 0 10px}
+.menu{max-height:min(60vh,520px);overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid #f0e0d0}
+.row:last-child{border-bottom:0}
+.row b{display:block}
+.row .p{color:var(--acc);font-weight:700;white-space:nowrap}
+.add,.qty button,.btn{font:inherit;font-weight:700;border:0;border-radius:10px;background:var(--btn);color:var(--btnink);cursor:pointer;min-height:44px;min-width:44px;padding:8px 12px}
+.qty button.quiet,.btn.quiet{background:#fff;color:var(--acc);border:1px solid var(--line)}
+.qty{display:flex;gap:6px;align-items:center;flex:none}
+#cart-lines{margin:0 0 10px}
+#cart-lines .empty{color:var(--soft)}
+.totals{background:#ead8c3;border-radius:12px;padding:12px;margin:12px 0}
+.totals div{display:flex;justify-content:space-between;gap:12px;margin:4px 0}
+.totals .grand{font-size:1.15rem;font-weight:800;border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+.payid{background:#fff;border:1px dashed var(--acc);border-radius:12px;padding:12px;font-weight:700;margin:12px 0}
+#order-ref{word-break:break-all}
+#place{display:block;width:100%;min-height:56px;font-size:1.1rem;margin-top:12px}
+#msg{margin-top:10px;font-weight:700;color:var(--acc)}
+footer{max-width:720px;margin:0 auto;padding:16px 16px 28px;font-size:.85rem;color:var(--soft)}
 footer a{color:var(--acc)}
 .links{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px}
-#cb-hubbar{max-width:640px;margin:8px auto 24px;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px/1.5 system-ui,sans-serif}
+#cb-hubbar{max-width:720px;margin:8px auto 24px;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px/1.5 system-ui,sans-serif}
 #cb-hubbar a{color:#d6336c}
+.hidden{display:none}
 @media (max-width:400px){
   header{padding:10px 12px;gap:10px}
   header img{width:48px}
   header h1{font-size:1.1rem}
   main{padding:12px}
+  .hero-wrap{margin-top:12px;padding:0 12px}
 }
 </style>
 <script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
@@ -43,22 +73,57 @@ footer a{color:var(--acc)}
   <img src="logo.png" alt="Coffeebreak logo">
   <div>
     <h1>Coffeebreak Order a Meal</h1>
-    <p>A short page for ordering one meal</p>
+    <p>Order and pay on this page for delivery in the Newcastle NSW area</p>
   </div>
 </header>
+<div class="hero-wrap">
+  <figure class="hero">
+    <img src="img/hero.webp" alt="An illustrated premium food spread" width="1280" height="720">
+    <div class="hero-overlay" aria-hidden="true"></div>
+  </figure>
+  <p class="caption">Images are illustrative.</p>
+</div>
 <main>
   <section class="card">
     <h2>Order your meal</h2>
-    <p class="lede">Pick a meal type to search Uber Eats Australia, or open Uber Eats to choose for yourself.</p>
-    <p class="note">The order is placed and paid on Uber Eats. Coffeebreak is not affiliated with Uber Eats.</p>
-    <div class="picks" aria-label="Meal type quick picks">
-      <a class="pick" href="https://www.ubereats.com/au/search?q=breakfast" target="_blank" rel="noopener noreferrer">Breakfast</a>
-      <a class="pick" href="https://www.ubereats.com/au/search?q=lunch" target="_blank" rel="noopener noreferrer">Lunch</a>
-      <a class="pick" href="https://www.ubereats.com/au/search?q=dinner" target="_blank" rel="noopener noreferrer">Dinner</a>
-      <a class="pick" href="https://www.ubereats.com/au/search?q=coffee" target="_blank" rel="noopener noreferrer">Coffee</a>
-      <a class="pick" href="https://www.ubereats.com/au/search?q=dessert" target="_blank" rel="noopener noreferrer">Dessert</a>
+    <p class="lede">Choose a restaurant menu or type another restaurant, then pay the total by PayID. Coffeebreak places the order after your payment arrives.</p>
+    <p class="note">The order is placed after your PayID payment arrives. If the real cost differs from this total, the difference is refunded or requested before the order is placed.</p>
+    <label for="address">Delivery suburb or address, Newcastle NSW area</label>
+    <textarea id="address" autocomplete="street-address" placeholder="Suburb or street address in the Newcastle NSW area"></textarea>
+    <label>Restaurant or cuisine</label>
+    <div class="restos" id="restos"></div>
+    <div id="menu-wrap" class="hidden">
+      <p class="price-note" id="menu-label"></p>
+      <p class="price-note">Menu prices are from the restaurant's published menu, may change.</p>
+      <div class="menu" id="menu"></div>
     </div>
-    <a class="big" href="https://www.ubereats.com/au" target="_blank" rel="noopener noreferrer">Order on Uber Eats</a>
+    <div id="other-wrap" class="hidden">
+      <label for="other-restaurant">Restaurant or cuisine</label>
+      <input id="other-restaurant" placeholder="Restaurant name or cuisine">
+      <label for="other-items">Meal items and notes</label>
+      <textarea id="other-items" placeholder="What you would like, and any notes"></textarea>
+      <label for="other-price">Meal price you expect, from the restaurant's menu</label>
+      <input id="other-price" type="number" inputmode="decimal" min="0" step="0.01" placeholder="20.00">
+    </div>
+    <label>Your cart</label>
+    <div id="cart-lines"></div>
+    <label for="notes">Notes for your order, optional</label>
+    <textarea id="notes" placeholder="Allergies, extra notes, or changes"></textarea>
+    <div class="totals" id="totals">
+      <div><span>Meal price</span><span id="meal-price">$0.00</span></div>
+      <div><span>Estimated delivery and service fee</span><span id="fee-delivery">$6.99</span></div>
+      <div><span>Coffeebreak order fee</span><span id="fee-order">$15.00</span></div>
+      <div class="grand"><span>Total</span><span id="grand-total">$21.99</span></div>
+    </div>
+    <div class="payid" id="payid-label">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</div>
+    <p>Order reference: <strong id="order-ref"></strong></p>
+    <p class="hint">Use this reference when you pay. Keep it until the order is confirmed.</p>
+    <label for="cname">Your name</label>
+    <input id="cname" autocomplete="name">
+    <label for="mobile">Mobile</label>
+    <input id="mobile" type="tel" autocomplete="tel" inputmode="tel">
+    <button class="btn" id="place" type="button">Place order request</button>
+    <p id="msg"></p>
   </section>
 </main>
 <footer>
@@ -74,5 +139,202 @@ footer a{color:var(--acc)}
   <p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
   <p>Free to use. Tip if you like: PayID darkokaz@gmx.com (Teachers Mutual Bank). Put the app name in the reference.</p>
 </div>
+<script>
+(function(){
+var MENUS=[{"id":"autumn-rooms","name":"Autumn Rooms","cuisine":"Cafe","area":"Cooks Hill","where":"127 Darby Street, Cooks Hill","items":[{"id":"ar-bb","name":"Banana bread","price":13.5},{"id":"ar-toast","name":"Toast","price":12},{"id":"ar-eggs","name":"Eggs your way","price":19.5},{"id":"ar-yog","name":"Berry and mascarpone yoghurt","price":24},{"id":"ar-hotcake","name":"AR honeycomb hotcake","price":30},{"id":"ar-sausage","name":"Sausage and egg roll","price":26},{"id":"ar-benny","name":"Eggs Benedict","price":33},{"id":"ar-chilli-eggs","name":"Chilli eggs","price":30},{"id":"ar-chicken-cos","name":"Chicken and cos salad","price":28},{"id":"ar-spring-veg","name":"Roast spring vegetables","price":29},{"id":"ar-farmer","name":"East Coast farmer's plate","price":30},{"id":"ar-burger","name":"Classic cheeseburger, with fries","price":29},{"id":"ar-steak","name":"Steak frites","price":43},{"id":"ar-waffle","name":"Kids waffle","price":13.5},{"id":"ar-toastie","name":"Kids ham and cheese toastie","price":13.5},{"id":"ar-scram","name":"Kids scram egg and bacon","price":15},{"id":"ar-croque","name":"Croque monsieur","price":27},{"id":"ar-ricotta","name":"Whipped ricotta toast","price":26},{"id":"ar-mortadella","name":"Mortadella focaccia","price":25},{"id":"ar-smoked","name":"Smoked chicken focaccia","price":25},{"id":"ar-vege-foc","name":"Vege focaccia","price":23},{"id":"ar-iced-oat","name":"Iced oat latte on tap","price":9},{"id":"ar-hot-choc","name":"Kali hot chocolate, large","price":7.5},{"id":"ar-matcha","name":"Matcha latte","price":9},{"id":"ar-biggie","name":"Biggie Smalls","price":12},{"id":"ar-flight","name":"Full flight","price":16},{"id":"ar-eb","name":"English breakfast tea","price":8.2},{"id":"ar-turmeric","name":"Golden turmeric latte","price":9},{"id":"ar-chai","name":"Gingerbread chai","price":9.5},{"id":"ar-earl","name":"Wild Earl Grey","price":8.2},{"id":"ar-moontime","name":"Moontime tea","price":9},{"id":"ar-sencha","name":"Blueberry sencha","price":9},{"id":"ar-cold-drip","name":"Single O cold drip","price":8},{"id":"ar-iced-matcha","name":"Iced matcha","price":10.5},{"id":"ar-hc-foam","name":"Honeycomb cold foam drink","price":13},{"id":"ar-montblanc","name":"Maple sea salt Mont Blanc","price":15},{"id":"ar-galv","name":"Galvanina soda","price":9.5},{"id":"ar-coke","name":"Coca-Cola or Coca-Cola Zero","price":8.5},{"id":"ar-yvj","name":"Yarra Valley juice","price":7},{"id":"ar-ginger-apple","name":"Gingered apple juice","price":10},{"id":"ar-sublime","name":"Sublime pine juice","price":10},{"id":"ar-beets","name":"Love beets juice","price":10},{"id":"ar-pbc","name":"PB and C smoothie","price":15},{"id":"ar-ag1","name":"AG1 supergreens smoothie","price":15},{"id":"ar-tropic","name":"Native tropic smoothie","price":15},{"id":"ar-banana-sm","name":"Banana smoothie","price":12.5},{"id":"ar-miso-shake","name":"AR miso caramel milkshake","price":14},{"id":"ar-shake","name":"Milkshake","price":12},{"id":"ar-shake-kids","name":"Kids milkshake","price":7.5}]},{"id":"estabar","name":"Estabar","cuisine":"Cafe","area":"Newcastle Beach","where":"61 Shortland Esplanade, Newcastle","items":[{"id":"es-pesto-eggs","name":"Eggs with sourdough and macadamia and miso pesto","price":20},{"id":"es-ham-eggs","name":"Eggs with locally smoked free-range ham and labna","price":26.5},{"id":"es-salmon-eggs","name":"Eggs with NZ smoked manuka king salmon and labna","price":27},{"id":"es-miso-chilli","name":"Miso chilli scrambled eggs","price":26},{"id":"es-porridge","name":"Estabar porridge","price":22.5},{"id":"es-salmon-bru","name":"Salmon bruschetta","price":27},{"id":"es-egg-extra","name":"Add poached egg","price":4},{"id":"es-stew","name":"Winter stew","price":28},{"id":"es-sweet-bru","name":"Sweet bruschetta","price":24},{"id":"es-avo","name":"Bob's avo on toast","price":26},{"id":"es-mush","name":"Chilli mushroom toast","price":25},{"id":"es-classic-toastie","name":"Classic toastie","price":18},{"id":"es-vege-toastie","name":"Vege toastie","price":18.5},{"id":"es-ham-cheese","name":"Ham and cheese toastie","price":15},{"id":"es-bb-butter","name":"GF banana bread with butter","price":11},{"id":"es-bb-labna","name":"GF banana bread with sweet labna","price":15},{"id":"es-sourdough","name":"Toasted sourdough","price":9},{"id":"es-fruit-toast","name":"Baked fruit and nut toast with butter","price":10},{"id":"es-fw-s","name":"Flat white, latte, cappuccino, hot chocolate, mocha, turmeric latte, macchiato or piccolo, small","price":6},{"id":"es-fw-l","name":"Flat white, latte, cappuccino, hot chocolate, mocha, turmeric latte, macchiato or piccolo, large","price":7},{"id":"es-lb","name":"Long black or espresso","price":5.5},{"id":"es-lions","name":"Lions mane chocolate tonic","price":7},{"id":"es-iced-s","name":"Iced latte, small","price":6.5},{"id":"es-iced-l","name":"Iced latte, large","price":7.5},{"id":"es-iced-coffee","name":"Iced coffee with creamy milk gelato","price":9.5},{"id":"es-cold-brew","name":"Cold brew","price":6},{"id":"es-chai-s","name":"Chai latte, small","price":6},{"id":"es-chai-l","name":"Chai latte, large","price":7},{"id":"es-affogato","name":"Affogato","price":8.5},{"id":"es-iced-choc","name":"Iced chocolate with chocolate gelato","price":9.5},{"id":"es-water-g","name":"House sparkling mineral water, glass","price":2.5},{"id":"es-water-b","name":"House sparkling mineral water, bottle","price":4.5},{"id":"es-gelato-1","name":"Gelato, one flavour","price":7},{"id":"es-gelato-2","name":"Gelato, two flavours","price":9},{"id":"es-smoothie","name":"Banana smoothie","price":10}]},{"id":"junction-hotel","name":"Junction Hotel","cuisine":"Contemporary Australian","area":"The Junction","where":"204 Corlette Street, The Junction","items":[{"id":"jh-oys-nat","name":"Oysters natural, each","price":6},{"id":"jh-oys-mor","name":"Oysters mornay, each","price":6.5},{"id":"jh-oys-kil","name":"Oysters kilpatrick, each","price":6.5},{"id":"jh-garlic","name":"Garlic bread","price":14.5},{"id":"jh-garlic-ch","name":"Garlic bread with cheese","price":17},{"id":"jh-prawn-tost","name":"Prawn toast tostada","price":25},{"id":"jh-corn","name":"Corn bread with chilli butter","price":17},{"id":"jh-olives","name":"Marinated olives","price":17},{"id":"jh-halloumi","name":"Baked halloumi","price":25},{"id":"jh-hummus","name":"Whipped hummus","price":21},{"id":"jh-muham","name":"Muhamurra dip","price":22},{"id":"jh-burrata","name":"Burrata","price":31.5},{"id":"jh-gyoza","name":"Pork gyoza","price":22},{"id":"jh-popcorn","name":"Popcorn prawn","price":25},{"id":"jh-marrow","name":"Roasted bone marrow","price":26.5},{"id":"jh-burger","name":"Junction wagyu beef burger, single patty","price":27.5},{"id":"jh-burger-d","name":"Junction wagyu beef burger, double patty","price":33.5},{"id":"jh-tacos2","name":"Chicken tacos, two","price":23},{"id":"jh-tacos3","name":"Chicken tacos, three","price":32.5},{"id":"jh-ptacos2","name":"Grilled prawn tacos, two","price":25},{"id":"jh-ptacos3","name":"Grilled prawn tacos, three","price":37},{"id":"jh-wrap","name":"Chicken wrap","price":25},{"id":"jh-parmi-sando","name":"Vodka parmigiana sandwich","price":29.5},{"id":"jh-burrito","name":"Beef burrito","price":29.5},{"id":"jh-noodle-sal","name":"Crispy noodle salad","price":33.5},{"id":"jh-caesar","name":"Caesar salad","price":27.5},{"id":"jh-caesar-ch","name":"Caesar salad with grilled or crumbed chicken","price":33.5},{"id":"jh-shawarma","name":"Lamb shawarma salad","price":38},{"id":"jh-me-sal","name":"Warm Middle Eastern salad","price":30.5},{"id":"jh-me-ch","name":"Warm Middle Eastern salad with grilled chicken","price":37},{"id":"jh-bowl","name":"Burrito bowl with crispy chicken or halloumi","price":32.5},{"id":"jh-bowl-prawn","name":"Burrito bowl with grilled marinated prawns","price":38},{"id":"jh-pumpkin","name":"Roasted baharat spiced pumpkin wedge","price":34.5},{"id":"jh-gnocchi","name":"Ricotta gnocchi","price":34},{"id":"jh-gnocchi-pr","name":"Ricotta gnocchi with prosciutto","price":37},{"id":"jh-macaroni","name":"Baked macaroni","price":37},{"id":"jh-curry","name":"Javanese coconut seafood curry","price":39},{"id":"jh-squid-l","name":"Salt and pepper squid, large","price":32},{"id":"jh-barra","name":"Cajun barramundi","price":34},{"id":"jh-hoki","name":"Beer battered NZ hoki","price":32},{"id":"jh-lasagne","name":"Vegetable lasagne","price":33},{"id":"jh-linguini","name":"Prawn linguini with king prawns","price":40},{"id":"jh-lamb2","name":"Hand crumbed lamb cutlets, two","price":35},{"id":"jh-lamb3","name":"Hand crumbed lamb cutlets, three","price":41},{"id":"jh-schnitzel","name":"Chicken schnitzel","price":29},{"id":"jh-parmi-add","name":"Add vodka sauce parmigiana","price":3},{"id":"jh-rump","name":"Rump 300g Black Onyx","price":43},{"id":"jh-scotch","name":"Scotch fillet 280g Jacks Creek","price":49},{"id":"jh-sirloin","name":"Sirloin 260g Cape Grim grass fed","price":46},{"id":"jh-beans","name":"Green beans","price":14.5},{"id":"jh-sprouts","name":"Crispy Brussels sprouts Caesar","price":16},{"id":"jh-brocc","name":"Charred broccolini","price":14.5},{"id":"jh-sweet-pot","name":"Twice baked sweet potato","price":14.5},{"id":"jh-caesar-side","name":"Caesar salad side","price":16},{"id":"jh-kale","name":"Kale chips","price":14.5},{"id":"jh-carrots","name":"Roasted heirloom carrots","price":13.5},{"id":"jh-pump-side","name":"Roasted pumpkin","price":14.5},{"id":"jh-garden","name":"House garden salad","price":13.5},{"id":"jh-mash","name":"Creamy mash","price":13.5},{"id":"jh-chips","name":"Beer battered chips","price":13.5},{"id":"jh-chats","name":"Twice cooked chats","price":14.5},{"id":"jh-sauce","name":"Sauce or butter: cognac peppercorn jus, black garlic and thyme butter, salsa verde, jus, gravy, peppercorn, Diane, mushroom and bacon, or peppercorn gravy","price":4},{"id":"jh-kids","name":"Kids meal: beer battered fish, chicken nuggets, chicken schnitzel, cheeseburger, margarita pizza, or macaroni pasta, with chips where listed","price":15.5}]},{"id":"nagisa","name":"Nagisa","cuisine":"Japanese","area":"Honeysuckle","where":"N2 The Boardwalk, 1 Honeysuckle Drive, Newcastle","items":[{"id":"ng-banquet","name":"Lunch banquet, per person, minimum 2 people","price":75},{"id":"ng-banquet-oys","name":"Lunch banquet, add 3 local oysters, per person","price":18},{"id":"ng-bento-sea","name":"Seafood bento","price":44},{"id":"ng-bento-meat","name":"Meat bento","price":36},{"id":"ng-bento-veg","name":"Vegetable bento","price":32},{"id":"ng-oys6","name":"Sydney rock oyster, 6 pieces","price":38},{"id":"ng-prawn","name":"Tempura prawn, each","price":6.5},{"id":"ng-pate","name":"Shiitake pate","price":18},{"id":"ng-chilli-eda","name":"Spicy chilli edamame","price":12},{"id":"ng-eda","name":"Edamame","price":9},{"id":"ng-sash8","name":"Sashimi, 8 pieces","price":32},{"id":"ng-sash16","name":"Sashimi, 16 pieces","price":59},{"id":"ng-sash24","name":"Sashimi, 24 pieces","price":98},{"id":"ng-kingfish","name":"Kingfish crudo","price":34},{"id":"ng-carpaccio","name":"Salmon carpaccio","price":30},{"id":"ng-tuna","name":"Tuna tataki","price":38},{"id":"ng-wagyu-tat","name":"Wagyu tataki","price":38},{"id":"ng-scallop","name":"Hokkaido scallop oshizushi, 4 pieces","price":28},{"id":"ng-wagyu-oshi","name":"Wagyu tartare oshizushi, 4 pieces","price":32},{"id":"ng-tuna-futo","name":"Tuna zuke futomaki, 4 pieces","price":24},{"id":"ng-aburi","name":"Aburi sashimi futomaki, 4 pieces","price":24},{"id":"ng-prawn-gyoza","name":"Nagisa prawn and shallot gyoza, 6 pieces","price":32},{"id":"ng-karaage","name":"Chicken kara-age","price":28},{"id":"ng-pork-gyoza","name":"Nagisa pork gyoza, 6 pieces","price":28},{"id":"ng-nasu","name":"Nasu dengaku","price":22},{"id":"ng-agedashi","name":"Agedashi tofu","price":22},{"id":"ng-pumpkin","name":"Miso roast pumpkin","price":19},{"id":"ng-corn","name":"Charred corn salad","price":16},{"id":"ng-goma","name":"Goma salad","price":16},{"id":"ng-cucumber","name":"White miso pickled cucumber","price":14},{"id":"ng-wagyu","name":"Wagyu striploin 7+, 150g","price":85},{"id":"ng-salmon","name":"Teriyaki salmon","price":42},{"id":"ng-kakuni","name":"Hunter pork belly kakuni","price":38},{"id":"ng-tofu-steak","name":"Tofu steak","price":34},{"id":"ng-rice","name":"Boiled rice","price":8},{"id":"ng-miso","name":"Red miso soup","price":6},{"id":"ng-apple","name":"Apple pie gyoza","price":26},{"id":"ng-banoffee","name":"Banoffee gyoza","price":26},{"id":"ng-yuzu","name":"Yuzu sorbet","price":8}]},{"id":"sapphire","name":"Sapphire Indian Restaurant","cuisine":"Indian","area":"Merewether","where":"367-369 Glebe Road, Merewether","items":[{"id":"sa-mush","name":"Chilli garlic mushrooms","price":18.9},{"id":"sa-manch","name":"Veg Manchurian","price":18.9},{"id":"sa-chilli-pan","name":"Chilli paneer","price":18.9},{"id":"sa-soya65","name":"Soya 65","price":18.9},{"id":"sa-pan-tikka","name":"Tandoori paneer tikka","price":18.9},{"id":"sa-kaju","name":"Kaju kebab, 4 pieces","price":16.9},{"id":"sa-chana","name":"Chana chaat","price":15.9},{"id":"sa-bhajji","name":"Onion bhajji","price":15.9},{"id":"sa-samosa","name":"Vegetable samosa, 2 pieces","price":9.9},{"id":"sa-chilli-pot","name":"Chilli potatoes","price":16.9},{"id":"sa-cutlets","name":"Lamb cutlets, 4 pieces","price":26.9},{"id":"sa-seekh","name":"Tandoori seekh kebab","price":18.9},{"id":"sa-lollipops","name":"Chicken lollipops","price":18.9},{"id":"sa-c65","name":"Chicken 65","price":18.9},{"id":"sa-murg-tikka","name":"Tandoori murg tikka","price":19.9},{"id":"sa-tandoori-full","name":"Tandoori chicken, full","price":22.9},{"id":"sa-tandoori-half","name":"Tandoori chicken, half","price":16.9},{"id":"sa-chilli-ch","name":"Chilli chicken","price":18.9},{"id":"sa-tand-prawn","name":"Tandoori prawns","price":23.9},{"id":"sa-gar-prawn","name":"Garlic prawns","price":23.9},{"id":"sa-veg-plat","name":"Sapphire veg platter for 2","price":23.9},{"id":"sa-mix-plat","name":"Sapphire mix platter for 2","price":26.9},{"id":"sa-veg-bir","name":"Veg biryani","price":19.9},{"id":"sa-ch-bir","name":"Chicken biryani","price":21.9},{"id":"sa-lamb-bir","name":"Lamb biryani","price":23.9},{"id":"sa-beef-bir","name":"Beef biryani","price":23.9},{"id":"sa-goat-bir","name":"Goat biryani","price":22.9},{"id":"sa-tikha","name":"Tikha murg masala","price":21.9},{"id":"sa-pepper-ch","name":"Pepper chicken","price":21.9},{"id":"sa-chettinad","name":"Chicken Chettinad","price":21.9},{"id":"sa-vindaloo","name":"Chicken vindaloo","price":21.9},{"id":"sa-tikka-mas","name":"Chicken tikka masala","price":21.9},{"id":"sa-tawa-ch","name":"Tawa chicken","price":21.9},{"id":"sa-methi-ch","name":"Methi chicken","price":21.9},{"id":"sa-karahi-ch","name":"Karahi chicken","price":21.9},{"id":"sa-madras-ch","name":"Chicken Madras","price":21.9},{"id":"sa-saag-ch","name":"Chicken saag","price":21.9},{"id":"sa-nihari","name":"Goat nihari","price":22.9},{"id":"sa-goat-rogan","name":"Goat rogan josh","price":22.9},{"id":"sa-tawa-goat","name":"Tawa goat","price":22.9},{"id":"sa-goat-mad","name":"Goat Madras","price":22.9},{"id":"sa-kadhai-goat","name":"Kadhai goat","price":22.9},{"id":"sa-keema","name":"Keema matar","price":23.9},{"id":"sa-lamb-mas","name":"Lamb masala","price":23.9},{"id":"sa-lamb-vin","name":"Lamb vindaloo","price":23.9},{"id":"sa-lamb-rogan","name":"Lamb rogan josh","price":23.9},{"id":"sa-rice","name":"Basmati rice","price":5.5},{"id":"sa-saffron","name":"Saffron rice","price":6.5},{"id":"sa-onion-sal","name":"Onion salad","price":5.5},{"id":"sa-cuke-sal","name":"Cucumber salad","price":6},{"id":"sa-naan","name":"Naan","price":5},{"id":"sa-sticky","name":"Sticky date pudding","price":8.9},{"id":"sa-kulfi","name":"Mango kulfi","price":8.9},{"id":"sa-nuggets","name":"Kids chicken nuggets with chips","price":12},{"id":"sa-kids-butter","name":"Kids butter chicken with rice","price":14.9}]},{"id":"sticky-rice","name":"Sticky Rice Thai","cuisine":"Thai","area":"Newcastle East","where":"19 Scott Street, Newcastle East","items":[{"id":"sr-l-cashew","name":"Lunch cashew nut with rice","price":16.9,"from":true},{"id":"sr-l-basil","name":"Lunch chilli and basil with rice","price":16.9,"from":true},{"id":"sr-l-peanut","name":"Lunch peanut sauce with rice","price":16.9,"from":true},{"id":"sr-l-garlic","name":"Lunch garlic and pepper with rice","price":16.9,"from":true},{"id":"sr-l-ginger","name":"Lunch ginger sauce with rice","price":16.9,"from":true},{"id":"sr-l-ss","name":"Lunch sweet and sour with rice","price":16.9,"from":true},{"id":"sr-l-green","name":"Lunch green curry with rice","price":16.9,"from":true},{"id":"sr-l-red","name":"Lunch red curry with rice","price":16.9,"from":true},{"id":"sr-l-panang","name":"Lunch panang curry with rice","price":16.9,"from":true},{"id":"sr-l-massaman","name":"Lunch Massaman curry with rice","price":18.9,"from":true},{"id":"sr-l-fried","name":"Lunch Thai fried rice","price":16.9,"from":true},{"id":"sr-l-cj-fried","name":"Lunch chilli jam fried rice","price":16.9,"from":true},{"id":"sr-l-spicy-fr","name":"Lunch spicy fried rice","price":16.9,"from":true},{"id":"sr-l-ty-fr","name":"Lunch Tom Yum fried rice","price":16.9,"from":true},{"id":"sr-l-padthai","name":"Lunch Pad Thai","price":16.9,"from":true},{"id":"sr-l-padsee","name":"Lunch Pad See Ew","price":16.9,"from":true},{"id":"sr-l-hokkien","name":"Lunch Hokkien noodle","price":16.9,"from":true},{"id":"sr-l-satay-n","name":"Lunch satay noodle","price":16.9,"from":true},{"id":"sr-l-cj-n","name":"Lunch chilli jam noodle","price":16.9,"from":true},{"id":"sr-l-basil-n","name":"Lunch chilli and basil noodle","price":16.9,"from":true},{"id":"sr-l-soup","name":"Lunch noodle soup","price":16.9,"from":true},{"id":"sr-l-satay","name":"Lunch satay chicken sticks with rice","price":20.9,"from":true},{"id":"sr-l-duck","name":"Lunch Siam duck with rice","price":20.9,"from":true},{"id":"sr-l-moo","name":"Lunch Siam moo krob with rice","price":20.9,"from":true},{"id":"sr-duck","name":"Siam duck","price":29.9},{"id":"sr-angel","name":"Angel ribs","price":29.9},{"id":"sr-choo","name":"Choo chee pork ribs","price":29.9},{"id":"sr-gar-ribs","name":"Garlic pork ribs","price":29.9},{"id":"sr-padsee-ribs","name":"Pad See Ew pork ribs","price":29.9},{"id":"sr-moo-toon","name":"Moo toon","price":29.9},{"id":"sr-dry-prawn","name":"Dry curry king prawns","price":29.9},{"id":"sr-mac-prawn","name":"Macadamia king prawns","price":29.9},{"id":"sr-chilli-barra","name":"Chilli lemon barramundi","price":29.9},{"id":"sr-poh-tak","name":"Pad poh tak","price":29.9},{"id":"sr-ho-mok","name":"Ho mok talay","price":30.9},{"id":"sr-pt-prawn","name":"Pad Thai with grilled jumbo prawns","price":30.9},{"id":"sr-pt-crab","name":"Pad Thai with crispy soft-shell crab","price":30.9},{"id":"sr-steam-fish","name":"Steamed whole fish with ginger sauce","price":42.5,"from":true},{"id":"sr-pla","name":"Pla lad prig","price":42.5,"from":true},{"id":"sr-springs","name":"Vegetable spring rolls, 4 pieces","price":13.9},{"id":"sr-tofu","name":"Golden tofu, 8 pieces","price":13.9},{"id":"sr-puffs","name":"Curry puffs, 4 pieces","price":13.9},{"id":"sr-wings","name":"Chicken wings, 5 pieces","price":13.9},{"id":"sr-fishcakes","name":"Thai fish cakes, 5 pieces","price":13.9},{"id":"sr-money","name":"Money bags, 4 pieces","price":13.9},{"id":"sr-calamari","name":"Crumbed calamari rings, 7 pieces","price":15.9},{"id":"sr-crab-balls","name":"Crab balls, 4 pieces","price":15.9},{"id":"sr-dim","name":"Dim sims, 5 pieces","price":15.9},{"id":"sr-satay4","name":"Chicken satay sticks, 4 sticks","price":15.9},{"id":"sr-prawn-sr","name":"Prawn spring rolls, 4 pieces","price":15.9},{"id":"sr-panko","name":"Panko prawns, 4 pieces","price":15.9},{"id":"sr-mixed","name":"Mixed entree, 8 pieces","price":16.9},{"id":"sr-tomyum","name":"Tom Yum soup","price":16.9,"from":true},{"id":"sr-tomkha","name":"Tom Kha soup","price":16.9,"from":true},{"id":"sr-yum-nua","name":"Yum-nua, Thai beef salad","price":24.9},{"id":"sr-larb","name":"Larb","price":24.9},{"id":"sr-tiger","name":"Crying tiger","price":24.9},{"id":"sr-duck-sal","name":"Roast duck salad","price":27.9},{"id":"sr-prawn-sal","name":"King prawn salad","price":27.9},{"id":"sr-bbq-ch","name":"BBQ chicken","price":26.9},{"id":"sr-bbq-pork","name":"BBQ pork","price":26.9},{"id":"sr-bbq-rump","name":"BBQ rump steak","price":26.9},{"id":"sr-chilli-rump","name":"Chilli lemon rump steak","price":29.9},{"id":"sr-bbq-prawn","name":"BBQ large banana prawns","price":30.9},{"id":"sr-honey-ch","name":"Honey and lemon chicken","price":27.9},{"id":"sr-honey-pr","name":"Honey and lemon king prawns","price":27.9},{"id":"sr-salt-squid","name":"Salt and pepper squid","price":27.9},{"id":"sr-gp-crab","name":"Garlic and pepper soft shell crab","price":30.9},{"id":"sr-cj-crab","name":"Chilli jam soft shell crab","price":30.9},{"id":"sr-apple-crab","name":"Green apple soft shell crab","price":30.9},{"id":"sr-spicy-crab","name":"Spicy soft shell crab","price":31.9},{"id":"sr-kana","name":"Kana moo krob","price":27.9,"from":true},{"id":"sr-prig","name":"Prig khing moo krob","price":27.9,"from":true},{"id":"sr-kra","name":"Kra prao moo krob","price":27.9,"from":true},{"id":"sr-spicy-moo","name":"Spicy moo krob","price":29.9,"from":true},{"id":"sr-siam-moo","name":"Siam moo krob","price":29.9,"from":true},{"id":"sr-cashew","name":"Cashew nut chilli jam","price":23.9,"from":true},{"id":"sr-basil","name":"Chilli and basil","price":23.9,"from":true},{"id":"sr-garlic","name":"Garlic and pepper","price":23.9,"from":true},{"id":"sr-ss","name":"Sweet and sour","price":23.9,"from":true},{"id":"sr-ginger","name":"Yummy ginger","price":23.9,"from":true},{"id":"sr-puk","name":"Pad puk, oyster sauce","price":23.9,"from":true},{"id":"sr-pumpkin","name":"Yummy pumpkin","price":23.9,"from":true},{"id":"sr-peanut","name":"Peanut sauce","price":23.9,"from":true},{"id":"sr-eggplant","name":"Eggplant","price":23.9,"from":true},{"id":"sr-snow","name":"Snow peas","price":23.9,"from":true},{"id":"sr-saparot","name":"Pad saparot, pineapple","price":23.9,"from":true},{"id":"sr-prik","name":"Pad prik khing","price":23.9,"from":true},{"id":"sr-black","name":"Black bean sauce","price":23.9,"from":true},{"id":"sr-green","name":"Green curry","price":23.9,"from":true},{"id":"sr-red","name":"Red curry","price":23.9,"from":true},{"id":"sr-panang","name":"Panang curry","price":23.9,"from":true},{"id":"sr-yellow","name":"Yellow curry","price":23.9,"from":true},{"id":"sr-massaman","name":"Massaman beef curry","price":27.9,"from":true},{"id":"sr-jungle","name":"Jungle curry","price":23.9,"from":true},{"id":"sr-red-duck","name":"Red duck curry","price":27.9},{"id":"sr-padthai","name":"Pad Thai","price":23.9,"from":true},{"id":"sr-padsee","name":"Pad See Ew","price":23.9,"from":true},{"id":"sr-hokkien","name":"Hokkien noodle","price":23.9,"from":true},{"id":"sr-basil-n","name":"Chilli and basil noodle","price":23.9,"from":true},{"id":"sr-satay-n","name":"Satay noodle","price":23.9,"from":true},{"id":"sr-cj-n","name":"Chilli jam noodle","price":23.9,"from":true},{"id":"sr-laksa","name":"Laksa noodle","price":25.9,"from":true},{"id":"sr-fried","name":"Thai fried rice","price":23.9,"from":true},{"id":"sr-spicy-fr","name":"Spicy fried rice","price":23.9,"from":true},{"id":"sr-pine-fr","name":"Pineapple fried rice","price":23.9,"from":true},{"id":"sr-cj-fr","name":"Chilli jam fried rice","price":23.9,"from":true},{"id":"sr-ty-fr","name":"Tom Yum fried rice","price":23.9,"from":true},{"id":"sr-rice","name":"Steamed rice","price":5.9},{"id":"sr-sticky","name":"Sticky rice","price":7.9},{"id":"sr-coco","name":"Coconut rice","price":7.9},{"id":"sr-satay-s","name":"Satay sauce","price":7.9},{"id":"sr-veg-side","name":"Steamed vegetables","price":23.9},{"id":"sr-tea","name":"Thai milk tea","price":8.9}]},{"id":"humbug","name":"humbug","cuisine":"Contemporary","area":"Newcastle CBD","where":"87-89 Hunter Street, Newcastle","items":[{"id":"hu-oyster","name":"Sydney rock oyster, each","price":6.5},{"id":"hu-focaccia","name":"48hr sourdough focaccia, each","price":6},{"id":"hu-curds","name":"Fresh cheese curds, broad beans and rosemary","price":22},{"id":"hu-scapece","name":"Scapece of spring vegetables","price":24},{"id":"hu-salumi","name":"Salumi, MR wagyu bresaola, 24 month prosciutto di Parma","price":32},{"id":"hu-terrine","name":"Chicken terrine, lovage, mustard","price":18},{"id":"hu-bucatini","name":"Bucatini, zucchini, chilli, confit lemon","price":33},{"id":"hu-conchiglie","name":"Conchiglie, green and white asparagus, sunflower, guanciale","price":34},{"id":"hu-campanelle","name":"Campanelle, Yamba king prawn, chilli, fennel","price":39},{"id":"hu-rigatoni","name":"Rigatoni, nduja, kalamata olive, ricotta","price":36},{"id":"hu-swordfish","name":"BBQ swordfish, red pepper caponata","price":49},{"id":"hu-duck","name":"Northern Rivers duck, smoked duck fat, blackberry, aged balsamic","price":50},{"id":"hu-radicchio","name":"Charred radicchio, kipfler potato, pink lady, gorgonzola, hazelnut","price":34},{"id":"hu-leaves","name":"Local leaves, horseradish","price":14},{"id":"hu-cornflake","name":"Cornflake cake, pear, walnut, salted dulce de leche","price":18},{"id":"hu-donut","name":"Creme brulee donut","price":16},{"id":"hu-affogato","name":"Affogato, coconut gelato","price":10}]},{"id":"jana","name":"Jana Restaurant and Bar","cuisine":"Italian","area":"Newcastle East","where":"185 Hunter Street, Newcastle East","items":[{"id":"ja-focaccia","name":"House-made focaccia","price":9},{"id":"ja-oysters","name":"Sydney rock oysters","price":8},{"id":"ja-tuna","name":"Tuna cigar","price":12},{"id":"ja-croquette","name":"Croquette","price":7},{"id":"ja-zucchini","name":"Zucchini flower","price":9},{"id":"ja-burrata","name":"Burrata","price":28},{"id":"ja-octopus","name":"Fremantle octopus","price":29},{"id":"ja-kingfish","name":"Spencer Gulf kingfish crudo","price":29},{"id":"ja-vitello","name":"Vitello tonnato","price":28},{"id":"ja-scialatielli","name":"Scialatielli alla Nerano","price":36},{"id":"ja-agnolotti","name":"Agnolotti","price":38},{"id":"ja-tagliolini","name":"Tagliolini, Fraser Island spanner crab","price":59},{"id":"ja-pappardelle","name":"Pappardelle, duck ragu","price":41},{"id":"ja-rigatoni","name":"Rigatoni","price":42},{"id":"ja-barra","name":"Daintree barramundi","price":53},{"id":"ja-scotch","name":"Riverine scotch fillet, 350g","price":79},{"id":"ja-strip","name":"Kidman bone-in NY strip, 400g","price":92},{"id":"ja-pork","name":"NSW rare breed black Berkshire pork tomahawk, 550g","price":81},{"id":"ja-ribeye","name":"Kidman bone-in rib eye, 800g","price":175},{"id":"ja-fries","name":"Fries","price":12},{"id":"ja-brocc","name":"Grilled broccolini","price":14},{"id":"ja-salad","name":"Mixed leaf salad","price":14},{"id":"ja-beet","name":"Roasted beetroot","price":16}]}];
+var FEE_DELIVERY=6.99, FEE_ORDER=15, KEY='cbOrderAMealOrders';
+var INTAKE='https://formsubmit.co/ajax/coffeebreakhq+orders@mail.grokbot.com';
+var MAILTO='songwriterkaz@gmail.com';
+var PAY_LABEL='Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
+var cart=[], resto=null, ref;
+function $(id){return document.getElementById(id)}
+function money(n){return '$'+Number(n).toFixed(2)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function newRef(){ref='CBM'+Date.now().toString().slice(-8);$('order-ref').textContent=ref}
+function findMenu(id){for(var i=0;i<MENUS.length;i++)if(MENUS[i].id===id)return MENUS[i];return null}
+function mealPrice(){
+  if(resto==='other'){
+    var n=parseFloat($('other-price').value);
+    return isFinite(n)&&n>0?Math.round(n*100)/100:0;
+  }
+  var s=0;
+  cart.forEach(function(l){s+=l.price*l.qty});
+  return Math.round(s*100)/100;
+}
+function total(){return Math.round((mealPrice()+FEE_DELIVERY+FEE_ORDER)*100)/100}
+function priceText(it){return it.from?'from '+money(it.price):money(it.price)}
+var PHOTOS={
+  'autumn-rooms':['img/cafe-brunch.webp','Illustrated cafe brunch'],
+  'estabar':['img/cafe-coastal.webp','Illustrated coastal cafe breakfast'],
+  'junction-hotel':['img/pub.webp','Illustrated pub meal'],
+  'nagisa':['img/japanese.webp','Illustrated Japanese dishes'],
+  'sapphire':['img/indian.webp','Illustrated Indian dishes'],
+  'sticky-rice':['img/thai.webp','Illustrated Thai dishes'],
+  'humbug':['img/contemporary.webp','Illustrated contemporary dish'],
+  'jana':['img/italian.webp','Illustrated Italian dishes'],
+  'other':['img/other.webp','Illustrated mixed restaurant dishes']
+};
+function restoButton(id,title,sub){
+  var b=document.createElement('button');
+  b.type='button';b.className='resto'+(resto===id?' on':'');
+  var photo=PHOTOS[id]||PHOTOS.other;
+  var img=document.createElement('img');
+  img.src=photo[0];img.alt=photo[1];img.width=800;img.height=600;
+  var meta=document.createElement('div');meta.className='meta';
+  var span=document.createElement('span');span.textContent=title;
+  var sm=document.createElement('small');sm.textContent=sub;
+  meta.append(span,sm);b.append(img,meta);
+  b.addEventListener('click',function(){selectResto(id)});
+  return b;
+}
+function drawRestos(){
+  var box=$('restos');box.innerHTML='';
+  MENUS.forEach(function(m){
+    box.appendChild(restoButton(m.id,m.name,m.cuisine+' \u00b7 '+m.area));
+  });
+  box.appendChild(restoButton('other','Another restaurant','Type the restaurant, items and expected meal price'));
+}
+function selectResto(id){
+  if(resto!==id){cart=[];}
+  resto=id;
+  drawRestos();
+  if(id==='other'){
+    $('menu-wrap').classList.add('hidden');
+    $('other-wrap').classList.remove('hidden');
+  }else{
+    $('other-wrap').classList.add('hidden');
+    $('menu-wrap').classList.remove('hidden');
+    var m=findMenu(id);
+    $('menu-label').textContent=m.name+' \u00b7 '+m.cuisine+' \u00b7 '+m.where;
+    var box=$('menu');box.innerHTML='';
+    m.items.forEach(function(it){
+      var row=document.createElement('div');row.className='row';
+      var info=document.createElement('div');
+      info.innerHTML='<b></b><span class="p"></span>';
+      info.querySelector('b').textContent=it.name;
+      info.querySelector('.p').textContent=priceText(it);
+      var add=document.createElement('button');add.type='button';add.className='add';add.textContent='Add';
+      add.addEventListener('click',function(){addItem(m,it)});
+      row.append(info,add);box.appendChild(row);
+    });
+  }
+  drawCart();
+}
+function addItem(menu,it){
+  var found=null;
+  cart.forEach(function(l){if(l.id===it.id)found=l});
+  if(found)found.qty+=1;
+  else cart.push({id:it.id,name:it.name,price:it.price,from:!!it.from,qty:1,restaurant:menu.name});
+  drawCart();
+}
+function setQty(id,q){
+  cart=cart.map(function(l){if(l.id===id)l.qty=q;return l}).filter(function(l){return l.qty>0});
+  drawCart();
+}
+function drawCart(){
+  var box=$('cart-lines');
+  if(resto!=='other'&&!cart.length){box.innerHTML='<p class="empty">Your cart is empty. Add items from a menu, or choose another restaurant.</p>';}
+  else if(resto==='other'){
+    var r=$('other-restaurant').value.trim()||'Another restaurant';
+    var items=$('other-items').value.trim()||'Items to be typed above';
+    box.innerHTML='<p>'+esc(r)+'<br>'+esc(items)+'</p>';
+  }else{
+    box.innerHTML='';
+    cart.forEach(function(l){
+      var row=document.createElement('div');row.className='row';
+      var info=document.createElement('div');
+      info.innerHTML='<b></b><span class="p"></span>';
+      info.querySelector('b').textContent=l.name;
+      info.querySelector('.p').textContent=(l.from?'from ':'')+money(l.price)+' \u00d7 '+l.qty+' = '+(l.from?'from ':'')+money(l.price*l.qty);
+      var qty=document.createElement('div');qty.className='qty';
+      var minus=document.createElement('button');minus.type='button';minus.className='quiet';minus.textContent='\u2212';
+      minus.addEventListener('click',function(){setQty(l.id,l.qty-1)});
+      var n=document.createElement('span');n.textContent=String(l.qty);
+      var plus=document.createElement('button');plus.type='button';plus.className='quiet';plus.textContent='+';
+      plus.addEventListener('click',function(){setQty(l.id,l.qty+1)});
+      qty.append(minus,n,plus);row.append(info,qty);box.appendChild(row);
+    });
+  }
+  var meal=mealPrice();
+  $('meal-price').textContent=money(meal);
+  $('fee-delivery').textContent=money(FEE_DELIVERY);
+  $('fee-order').textContent=money(FEE_ORDER);
+  $('grand-total').textContent=money(total());
+}
+function linesText(){
+  if(resto==='other')return $('other-items').value.trim();
+  return cart.map(function(l){return l.qty+' x '+l.name+' ('+(l.from?'from ':'')+money(l.price)+')'}).join('\n');
+}
+function restaurantName(){
+  if(resto==='other')return $('other-restaurant').value.trim();
+  var m=findMenu(resto);return m?m.name+' ('+m.where+')':'';
+}
+function bodyText(name,phone,addr){
+  var meal=mealPrice(), tot=total();
+  return 'Coffeebreak meal order\nOrder number: '+ref+'\n\nName: '+name+'\nMobile: '+phone+'\nDelivery: '+addr+'\n\nRestaurant: '+restaurantName()+'\nItems:\n'+linesText()+'\n\nNotes: '+($('notes').value.trim()||'None')+'\n\nMeal price: '+money(meal)+'\nEstimated delivery and service fee: '+money(FEE_DELIVERY)+'\nCoffeebreak order fee: '+money(FEE_ORDER)+'\nTotal: '+money(tot)+' AUD\n\n'+PAY_LABEL+'\nPayID amount: '+money(tot)+'\nPayID reference: '+ref;
+}
+function recordLocal(o){
+  try{
+    var h=[];try{h=JSON.parse(localStorage.getItem(KEY)||'[]')||[]}catch(x){h=[]}
+    h.push(o);localStorage.setItem(KEY,JSON.stringify(h));
+  }catch(x){}
+}
+$('other-price').addEventListener('input',drawCart);
+$('other-restaurant').addEventListener('input',drawCart);
+$('other-items').addEventListener('input',drawCart);
+$('place').addEventListener('click',function(){
+  var msg=$('msg'), btn=$('place');
+  var name=$('cname').value.trim(), phone=$('mobile').value.trim(), addr=$('address').value.trim();
+  if(!addr){msg.textContent='Please enter a delivery suburb or address in the Newcastle NSW area.';return}
+  if(!resto){msg.textContent='Please choose a restaurant menu, or another restaurant.';return}
+  if(resto==='other'){
+    if(!$('other-restaurant').value.trim()||!$('other-items').value.trim()||!(mealPrice()>0)){
+      msg.textContent='Please enter the restaurant, the meal items, and the meal price you expect.';return;
+    }
+  }else if(!cart.length){msg.textContent='Please add a meal item to your cart.';return}
+  if(!name||!phone){msg.textContent='Please enter your name and mobile.';return}
+  var meal=mealPrice(), tot=total();
+  var body=bodyText(name,phone,addr);
+  var payload={
+    _subject:'Coffeebreak meal order - '+name+' - '+ref,
+    _cc:MAILTO,
+    _captcha:'false',
+    _template:'table',
+    order_number:ref,
+    customer_name:name,
+    phone:phone,
+    deliver_to:addr,
+    restaurant:restaurantName(),
+    items:linesText(),
+    notes:$('notes').value.trim()||'None',
+    meal_price:money(meal)+' AUD',
+    delivery_fee:money(FEE_DELIVERY)+' AUD, estimate',
+    order_fee:money(FEE_ORDER)+' AUD',
+    total:money(tot)+' AUD',
+    payid:'darkokaz@gmx.com',
+    payid_amount:money(tot)+' AUD',
+    payid_reference:ref,
+    fulfilment:'Pay the order total by PayID. The order is placed after payment arrives.',
+    message:body
+  };
+  btn.disabled=true;msg.textContent='Sending order '+ref+'...';
+  function done(viaMail){
+    recordLocal({ref:ref,when:new Date().toLocaleString('en-AU'),name:name,total:tot,restaurant:restaurantName(),items:linesText()});
+    var pay='Order '+ref+' recorded. Pay '+money(tot)+' by PayID (Teachers Mutual Bank): darkokaz@gmx.com. Use '+ref+' as the reference. The order is placed after your PayID payment arrives. If the real cost differs, the difference is refunded or requested before the order is placed.';
+    if(viaMail)pay='Your email app is opening with the order for Karen. Send that email if it appears, then pay. '+pay;
+    msg.textContent=pay;
+    newRef();btn.disabled=false;
+  }
+  fetch(INTAKE,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)}).then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d}})}).then(function(){
+    done(false);
+  }).catch(function(){
+    var href='mailto:'+MAILTO+'?subject='+encodeURIComponent('Coffeebreak meal order - '+name+' - '+ref)+'&body='+encodeURIComponent(body);
+    window.location.href=href;
+    done(true);
+  });
+});
+newRef();drawRestos();drawCart();
+})();
+</script>
 </body>
 </html>
