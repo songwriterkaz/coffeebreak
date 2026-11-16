@@ -1,127 +1,34 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Coffeebreak Vocal Studio</title>
-<meta name="description" content="Coffeebreak Vocal Studio sings lyrics in your browser and offers simple vocal controls.">
-<link rel="icon" href="../cb-logo.png">
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Georgia,serif;background:#fff5fa;color:#3a1028}
-header,footer{display:flex;gap:14px;align-items:center;padding:14px 18px;background:linear-gradient(135deg,#d63384,#ff8fc0);color:#fff}
-header img,footer img{width:64px;height:64px;background:#fff;border-radius:12px;object-fit:contain}
-header h1{margin:0;font-size:1.6rem}header p{margin:4px 0 0}
-main{max-width:820px;margin:0 auto;padding:16px}
-a{color:#fff}main a{color:#a01455}
-footer{flex-wrap:wrap;font-size:14px;color:#fff5fa}footer a{color:#fff}
-footer button{font:inherit;border:0;border-radius:999px;padding:8px 14px;background:#fff;color:#a01455;cursor:pointer}
-.vc-panel{margin-top:22px;padding:14px 16px;background:#fff;border:1px solid #e3a0bf;border-radius:14px;box-shadow:0 2px 8px #e75b9a22}
-.vc-panel h2{margin:0 0 8px;font-size:1.15rem}
-.vc-panel .hint{font-size:13px;color:#6d3554;margin:0 0 12px}
-.vc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 14px}
-.vc-grid label{display:flex;flex-direction:column;font-size:.85rem;gap:4px}
-.vc-grid .val{font-variant-numeric:tabular-nums;color:#6a2a4a}
-input[type=range]{accent-color:#e75b9a;width:100%}
-.vc-grid select, .vc-actions button{font:inherit;border:2px solid #e75b9a;background:#fff;color:#3a1028;border-radius:999px;padding:4px 10px;min-height:32px}
-.vc-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
-.vc-actions button{cursor:pointer;background:#fff;color:#a01455}
-.vc-actions button:disabled{opacity:.6;cursor:default}
-</style>
+<meta name="description" content="Coffeebreak Vocal Studio is a music studio in your browser, with the same tools as Studio Espresso.">
+<link rel="icon" href="logo.jpg"><link rel="stylesheet" href="../studio-espresso/style.css">
 <script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
-</head>
-<body>
-<header>
-<img src="../cb-logo.png" alt="Coffeebreak logo">
-<div>
-<h1>Coffeebreak Vocal Studio</h1>
-<p>Write lyrics and a style. Create a sung vocal with backing, then shape it with simple controls.</p>
-</div>
-</header>
-<main>
-<div data-cb-sung data-app="Coffeebreak Vocal Studio" data-store="coffeebreak-vocal-studio"></div>
-<section class="vc-panel" id="vocalControls" aria-labelledby="vcTitle">
-<h2 id="vcTitle">Vocal controls</h2>
-<p class="hint">These process the current song, including the sung vocal and backing. They use Studio Espresso's tuner and DSP. Press Apply to hear a change after you move a control.</p>
-<div class="vc-grid">
-<label>Pitch (semitones)
-<input id="vcPitch" type="range" min="-12" max="12" step="1" value="0" aria-label="Pitch in semitones">
-<span class="val" id="vcPitchVal">0</span>
-</label>
-<label>Pitch correction
-<input id="vcCorrect" type="range" min="0" max="1" step="0.01" value="0" aria-label="Pitch correction amount">
-<span class="val" id="vcCorrectVal">0</span>
-</label>
-<label>Key
-<select id="vcKey" aria-label="Key">
-<option value="0" selected>C</option>
-<option value="1">C#</option>
-<option value="2">D</option>
-<option value="3">D#</option>
-<option value="4">E</option>
-<option value="5">F</option>
-<option value="6">F#</option>
-<option value="7">G</option>
-<option value="8">G#</option>
-<option value="9">A</option>
-<option value="10">A#</option>
-<option value="11">B</option>
-</select>
-</label>
-<label>Scale
-<select id="vcScale" aria-label="Scale">
-<option value="0" selected>Major</option>
-<option value="1">Minor</option>
-<option value="2">Chromatic</option>
-<option value="3">Pentatonic</option>
-<option value="4">Blues</option>
-<option value="5">Harmonic minor</option>
-</select>
-</label>
-<label>Formant / tone
-<input id="vcFormant" type="range" min="-12" max="12" step="1" value="0" aria-label="Formant and tone">
-<span class="val" id="vcFormantVal">0</span>
-</label>
-<label>Speed
-<input id="vcSpeed" type="range" min="0.5" max="1.5" step="0.01" value="1" aria-label="Speed">
-<span class="val" id="vcSpeedVal">1.00</span>
-</label>
-<label>Vibrato
-<input id="vcVibrato" type="range" min="0" max="1" step="0.01" value="0" aria-label="Vibrato">
-<span class="val" id="vcVibratoVal">0</span>
-</label>
-<label>Reverb
-<input id="vcReverb" type="range" min="0" max="1" step="0.01" value="0" aria-label="Reverb">
-<span class="val" id="vcReverbVal">0</span>
-</label>
-<label>Volume
-<input id="vcVolume" type="range" min="0" max="1.5" step="0.01" value="1" aria-label="Volume">
-<span class="val" id="vcVolumeVal">1.00</span>
-</label>
-</div>
-<div class="vc-actions">
-<button type="button" id="vcApply">Apply</button>
-<button type="button" id="vcReset">Reset</button>
-<span class="hint" id="vcStatus"></span>
-</div>
-</section>
-</main>
-<footer>
-<img src="../cb-logo.png" alt="Coffeebreak logo">
-<div>
+</head><body>
+<header><img src="logo.jpg" alt="Coffeebreak" class="logo"><div class="ttl"><h1>Coffeebreak Vocal Studio</h1><small id="sub">Pro music studio in your browser</small></div>
+<div class="transport">
+<button id="bPlay" class="big" title="Play / stop (Space)">Play</button><button id="bStop" title="Stop and go to start (Home)">Stop</button><button id="bRec" class="rec" title="Record (R)">Rec</button>
+<button id="bLoop" class="tg" title="Loop (L)">Loop</button><button id="bMetro" class="tg" title="Metronome (M)">Click</button><button id="bCount" class="tg" title="Count-in">Count-in</button><button id="bPunch" class="tg" title="Punch in and out at the loop region">Punch</button>
+<span id="pos" class="pos">1.1.00</span>
+<label class="mini">BPM <input type="number" id="iBpm" min="30" max="300" value="120"></label>
+<label class="mini">Sig <select id="iSig"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option></select>/4</label>
+<label class="mini">Snap <select id="iSnap"><option value="0">Off</option><option value="0.25">1/16</option><option value="0.5">1/8</option><option value="1" selected>Beat</option><option value="4">Bar</option><option value="0.3333">Triplet</option></select></label>
+<button id="bUndo" title="Undo (Ctrl+Z)">Undo</button><button id="bRedo" title="Redo (Ctrl+Y)">Redo</button><button id="bSave" title="Save to browser (Ctrl+S)">Save</button>
+<canvas id="mMeter" width="120" height="16"></canvas></div></header>
+<div id="demoBanner" class="banner hidden">Free demo: up to 2 tracks and 30 second exports. The full version removes both limits.</div>
+<nav id="tabs"></nav>
+<main id="main"></main>
+<div id="toast" class="toast hidden"></div>
+<script src="../studio-espresso/lame.min.js"></script><script src="../studio-espresso/dsp.js"></script><script src="../studio-espresso/engine.js"></script><script src="../studio-espresso/fx2.js"></script><script src="../studio-espresso/ui.js"></script><script src="../studio-espresso/ui2.js"></script><script src="../studio-espresso/ui3.js"></script><script src="../../cb-voice/voice.js"></script><script src="../studio-espresso/songs-core.js"></script><script src="../studio-espresso/create.js"></script><script src="../studio-espresso/radio.js"></script>
+<script src="../studio-espresso/grainy.js"></script>
+<script src="brand.js"></script>
+<footer class="studio-foot" id="studioFoot"><img src="logo.jpg" alt="Coffeebreak"><div>
 <p><b>Rights.</b> Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Coffeebreak claims no ownership of third-party brands named here, which belong to their owners, and is not affiliated with or endorsed by them.</p>
 <p>You get 100 percent commercial rights to the songs you make here.</p>
-<p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com. This page does not show a separate price, so no new amount is requested. The cart does not mark a payment as received.</p>
+<p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com. This page does not show a separate price, so no new amount is requested. The cart does not mark the payment as received.</p>
 <p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="../../">Coffeebreak hub</a></p>
 <p><button type="button" id="reportBtn">Report a problem</button></p>
-</div>
-</footer>
-<script src="../../payid-cart/cart.js"></script>
-<script src="../../cb-songgen/builtin-singer.js"></script>
-<script src="../../cb-songgen/songgen.js"></script>
-<script src="../../cb-songgen/panel.js"></script>
-<script src="../studio-espresso/dsp.js"></script>
-<script src="vocal-controls.js"></script>
-<script src="../../cb-songgen/cbreport.js" data-app="Coffeebreak Vocal Studio" data-version="vocal2"></script>
+</div></footer>
+<script src="../studio-espresso/cbreport.js" data-app="Coffeebreak Vocal Studio" data-version="vocal3"></script>
 <script>document.getElementById('reportBtn').onclick=function(){ if(window.__cbreport&&window.__cbreport.open)window.__cbreport.open(); };</script>
-</body>
-</html>
+</body></html>

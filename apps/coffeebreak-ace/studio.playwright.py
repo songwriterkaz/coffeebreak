@@ -12,8 +12,28 @@ from pathlib import Path
 from playwright.sync_api import expect, sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
-PORT = 8768
+PORT = 8769
 PAGE = f"http://127.0.0.1:{PORT}/apps/coffeebreak-ace/index.html"
+
+TABS = [
+    ("create", "Create"),
+    ("songs", "My songs"),
+    ("arrange", "Arrange"),
+    ("piano", "Piano Roll"),
+    ("drums", "Drum Machine"),
+    ("inst", "Instruments"),
+    ("mixer", "Mixer and FX"),
+    ("editor", "Audio Editor"),
+    ("master", "Mastering"),
+    ("tools", "Tools"),
+    ("karaoke", "Karaoke"),
+    ("library", "Tools Browser"),
+    ("export", "Export and Project"),
+    ("settings", "Settings"),
+    ("help", "Help"),
+    ("features", "Features"),
+    ("mytools", "All my tools"),
+]
 
 
 def main() -> int:
@@ -42,77 +62,84 @@ def main() -> int:
             page = browser.new_page()
             page.goto(PAGE, wait_until="load", timeout=60000)
             expect(page).to_have_title("Coffeebreak Vocal Studio")
+            expect(page.locator("h1")).to_have_text("Coffeebreak Vocal Studio")
             body = page.inner_text("body")
             if re.search(r"\bACE\b", body) or "ACE-Step" in body:
                 raise SystemExit("ACE still visible")
-            if "11,996" in body or "11996" in body or "12,000" in body or "12000" in body:
+            if "11,996" in body or "11996" in body or "12,000 presets" in body or "12000" in body:
                 raise SystemExit("generated-preset bulk still visible")
-            if "!" in body.replace("Coffeebreak!", ""):
-                # no user-facing exclamation marks
-                bangs = [line for line in body.splitlines() if "!" in line]
-                if bangs:
-                    raise SystemExit("exclamation marks in copy: " + " | ".join(bangs[:5]))
-            expect(page.locator("h1")).to_have_text("Coffeebreak Vocal Studio")
+            if "Coffeebreak Studio Espresso" in body:
+                raise SystemExit("Studio Espresso name still visible")
+            bangs = [line.strip() for line in body.splitlines() if "!" in line]
+            if bangs:
+                raise SystemExit("exclamation marks in copy: " + " | ".join(bangs[:5]))
             expect(page.locator("body")).to_contain_text("Tesla")
             expect(page.locator("body")).to_contain_text("Starlink")
             expect(page.locator("body")).to_contain_text("Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com")
-            for sel in ("#vcPitch", "#vcCorrect", "#vcKey", "#vcScale", "#vcFormant", "#vcSpeed", "#vcVibrato", "#vcReverb", "#vcVolume", "#vcApply"):
-                expect(page.locator(sel)).to_have_count(1)
-            expect(page.locator("#cb-sung-go")).to_be_visible()
-            expect(page.locator("#cb-sung-engine")).to_be_hidden()
+            expect(page.locator("body")).to_contain_text("This page does not show a separate price")
 
-            page.fill("#cb-sung-lyrics", "sun is up on the hill")
-            page.fill("#cb-sung-style", "clear pop")
-            page.fill("#cb-sung-seconds", "12")
-            page.click("#cb-sung-go")
+            for key, label in TABS:
+                expect(page.locator(f'#tabs button[data-t="{key}"]')).to_have_text(label)
+
+            expect(page.locator("#createGo")).to_be_visible()
+            expect(page.locator("#bRec")).to_be_visible()
+            expect(page.locator("#lyr")).to_have_count(1)
+            expect(page.locator("#lyrRhyme")).to_have_count(1)
+            expect(page.locator("#tunBtn")).to_have_count(1)
+            expect(page.locator("#strips")).to_have_count(1)
+            expect(page.locator("#prNew")).to_have_count(1)
+            expect(page.locator("#drNew")).to_have_count(1)
+            expect(page.locator("#mOn")).to_have_count(1)
+            expect(page.locator("#exFmt")).to_have_count(1)
+            expect(page.locator("#edPit")).to_have_count(1)
+
+            page.click('#tabs button[data-t="tools"]')
+            page.fill("#lyrWord", "light")
+            page.click("#lyrRhyme")
+            rhymes = page.inner_text("#lyrR")
+            if "night" not in rhymes or "bright" not in rhymes:
+                raise SystemExit("rhyme pad did not return expected rhymes: " + rhymes)
+
+            page.click('#tabs button[data-t="mixer"]')
+            fx = page.inner_text("#fxAdd")
+            if "Vocal tuner" not in fx:
+                raise SystemExit("mixer is missing Vocal tuner")
+
+            page.click('#tabs button[data-t="create"]')
+            page.fill("#createLyrics", "sun is up on the hill")
+            page.fill("#createStyle", "clear pop")
+            page.click("#createGo")
             page.wait_for_function(
-                "() => { const a=document.getElementById('cb-sung-audio'); return a && a.duration > 2 && a.readyState >= 2; }",
+                """() => {
+                  const t = document.getElementById('createStatus');
+                  return t && /saved in My songs/i.test(t.textContent || '');
+                }""",
                 timeout=90000,
             )
-            created = page.evaluate(
-                """() => ({
-                  duration: document.getElementById('cb-sung-audio').duration,
-                  peak: window.CBVocal && window.CBVocal.lastPeak(),
-                  hasOrig: window.CBVocal && window.CBVocal.hasOriginal(),
-                  title: document.title,
-                })"""
+            sung = page.evaluate(
+                """async () => {
+                  const rows = await window.CBSongs.list();
+                  if (!rows || !rows.length) return { tracks: [], peak: 0 };
+                  const opened = await window.CBSongs.open(rows[0].id);
+                  return {
+                    tracks: opened.tracks || [],
+                    peak: opened.vocalPeak || 0,
+                    title: opened.title,
+                    hasTuneFx: Array.from(document.querySelectorAll('#fxAdd option')).some(o => o.textContent === 'Vocal tuner'),
+                  };
+                }"""
             )
-            if not created["hasOrig"]:
-                raise SystemExit("create did not stash a song for the controls")
-            if not created["duration"] or created["duration"] < 2:
-                raise SystemExit("created song was too short")
-
-            page.fill("#vcVolume", "0.4")
-            page.click("#vcApply")
-            page.wait_for_function(
-                "() => (document.getElementById('vcStatus')||{}).textContent === 'Applied to the current song.'",
-                timeout=30000,
-            )
-            after = page.evaluate(
-                """() => ({
-                  peak: window.CBVocal && window.CBVocal.lastPeak(),
-                  duration: window.CBVocal && window.CBVocal.lastDuration(),
-                  volume: window.CBVocal.readControls().volume,
-                })"""
-            )
-            if after["volume"] != 0.4:
-                raise SystemExit("volume control did not stick")
-            if after["peak"] is None or after["peak"] < 0.02:
-                raise SystemExit("applied vocal was silent")
-            if created["peak"] and after["peak"] > created["peak"] * 0.85:
-                raise SystemExit(f"volume apply did not lower the peak: {created['peak']} -> {after['peak']}")
-
-            page.click("#vcReset")
-            page.wait_for_function(
-                "() => window.CBVocal && Math.abs(window.CBVocal.readControls().volume - 1) < 0.01",
-                timeout=30000,
-            )
+            if "Drums" not in sung["tracks"] or "Vocals" not in sung["tracks"]:
+                raise SystemExit("create song tracks missing: " + str(sung["tracks"]))
+            if sung["peak"] < 0.02:
+                raise SystemExit("created vocal was silent")
             browser.close()
             print({
                 "title": "Coffeebreak Vocal Studio",
-                "duration": created["duration"],
-                "peak": created["peak"],
-                "peakAfterVolume": after["peak"],
+                "tracks": sung["tracks"],
+                "peak": sung["peak"],
+                "hasTuneFx": True,
+                "rhymes": rhymes,
                 "ok": True,
             })
             return 0
