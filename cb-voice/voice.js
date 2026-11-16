@@ -9,21 +9,21 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  const SR = 44100;
+  const SR = 48000;
 
   const VOWELS = {
-    i: [310, 2250, 2960, 3450],
-    I: [400, 1980, 2560, 3300],
-    e: [460, 1880, 2650, 3400],
-    E: [560, 1700, 2500, 3400],
-    a: [760, 1220, 2520, 3400],
-    o: [500, 840, 2620, 3350],
-    u: [350, 760, 2380, 3300],
-    '@': [520, 1480, 2480, 3300],
-    r: [480, 1180, 1580, 2800]
+    i: [310, 2250, 2960, 3450, 4200],
+    I: [400, 1980, 2560, 3300, 4100],
+    e: [460, 1880, 2650, 3400, 4150],
+    E: [560, 1700, 2500, 3400, 4100],
+    a: [760, 1220, 2520, 3400, 4000],
+    o: [500, 840, 2620, 3350, 3950],
+    u: [350, 760, 2380, 3300, 3850],
+    '@': [520, 1480, 2480, 3300, 4050],
+    r: [480, 1180, 1580, 2800, 3600]
   };
 
-  const BW = [80, 110, 150, 200];
+  const BW = [80, 110, 150, 200, 280];
 
   function midiHz(p) {
     return 440 * Math.pow(2, (p - 69) / 12);
@@ -300,8 +300,8 @@
     OY: VOWELS.o
   };
   const DIPH = { EY: ['EH', 'IY'], AY: ['AA', 'IY'], AW: ['AA', 'UW'], OW: ['AO', 'UW'], OY: ['AO', 'IY'] };
-  const NASAL_F = { M: [250, 1100, 2150, 2800], N: [270, 1400, 2500, 3200], NG: [260, 2000, 2500, 3000] };
-  const LIQ_F = { L: [400, 950, 2650, 3300], R: VOWELS.r, W: [350, 700, 2300, 3200], Y: VOWELS.i };
+  const NASAL_F = { M: [250, 1100, 2150, 2800, 3500], N: [270, 1400, 2500, 3200, 3600], NG: [260, 2000, 2500, 3000, 3400] };
+  const LIQ_F = { L: [400, 950, 2650, 3300, 3800], R: VOWELS.r, W: [350, 700, 2300, 3200, 3700], Y: VOWELS.i };
 
   const VOICED = {
     IY:1,IH:1,EY:1,EH:1,AE:1,AA:1,AO:1,OW:1,UH:1,UW:1,AH:1,ER:1,AY:1,AW:1,OY:1,
@@ -485,7 +485,7 @@
       const a = VFORM[DIPH[ph][0]] || VFORM.AH;
       const b = VFORM[DIPH[ph][1]] || a;
       const k = smooth(u);
-      return [lerp(a[0], b[0], k), lerp(a[1], b[1], k), lerp(a[2], b[2], k), lerp(a[3], b[3], k)];
+      return [lerp(a[0], b[0], k), lerp(a[1], b[1], k), lerp(a[2], b[2], k), lerp(a[3], b[3], k), lerp(a[4] || 4000, b[4] || 4000, k)];
     }
     return VFORM[ph] || VFORM.AH;
   }
@@ -531,6 +531,71 @@
     return segs;
   }
 
+
+  function biquad(type, freq, q, gainDb, sr) {
+    const f0 = clamp(freq, 20, sr * 0.45);
+    const A = Math.pow(10, (gainDb || 0) / 40);
+    const w0 = 2 * Math.PI * f0 / sr;
+    const cw = Math.cos(w0);
+    const sw = Math.sin(w0);
+    const alpha = sw / (2 * Math.max(0.1, q || 0.7));
+    let b0, b1, b2, a0, a1, a2;
+    if (type === 'highpass') {
+      b0 = (1 + cw) / 2; b1 = -(1 + cw); b2 = (1 + cw) / 2; a0 = 1 + alpha; a1 = -2 * cw; a2 = 1 - alpha;
+    } else if (type === 'lowshelf') {
+      const t = 2 * Math.sqrt(A) * alpha;
+      b0 = A * ((A + 1) - (A - 1) * cw + t); b1 = 2 * A * ((A - 1) - (A + 1) * cw); b2 = A * ((A + 1) - (A - 1) * cw - t);
+      a0 = (A + 1) + (A - 1) * cw + t; a1 = -2 * ((A - 1) + (A + 1) * cw); a2 = (A + 1) + (A - 1) * cw - t;
+    } else if (type === 'highshelf') {
+      const t = 2 * Math.sqrt(A) * alpha;
+      b0 = A * ((A + 1) + (A - 1) * cw + t); b1 = -2 * A * ((A - 1) + (A + 1) * cw); b2 = A * ((A + 1) + (A - 1) * cw - t);
+      a0 = (A + 1) - (A - 1) * cw + t; a1 = 2 * ((A - 1) - (A + 1) * cw); a2 = (A + 1) - (A - 1) * cw - t;
+    } else {
+      b0 = 1 + alpha * A; b1 = -2 * cw; b2 = 1 - alpha * A; a0 = 1 + alpha / A; a1 = -2 * cw; a2 = 1 - alpha / A;
+    }
+    b0 /= a0; b1 /= a0; b2 /= a0; a1 /= a0; a2 /= a0;
+    let x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+    return function tick(x) {
+      const y = b0 * x + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2;
+      x2 = x1; x1 = x; y2 = y1; y1 = y;
+      return y;
+    };
+  }
+
+  function vocalChain(buf, sr) {
+    const hp = biquad('highpass', 90, 0.7, 0, sr);
+    const scoop = biquad('peaking', 380, 0.9, -2.0, sr);
+    const presence = biquad('peaking', 3200, 1.0, 3.2, sr);
+    const air = biquad('highshelf', 8500, 0.7, 2.0, sr);
+    const essF = 2 * Math.PI * 6500 / sr;
+    const essA = Math.exp(-essF);
+    let lp = 0, env = 0, cenv = 0;
+    const th = 0.12;
+    const ratio = 2.4;
+    const atk = Math.exp(-1 / (sr * 0.008));
+    const rel = Math.exp(-1 / (sr * 0.12));
+    const deessRel = Math.exp(-1 / (sr * 0.04));
+    for (let i = 0; i < buf.length; i++) {
+      let x = air(presence(scoop(hp(buf[i]))));
+      lp = essA * lp + (1 - essA) * x;
+      const high = x - lp;
+      const ha = Math.abs(high);
+      env = ha > env ? ha : env * deessRel + ha * (1 - deessRel);
+      const dg = env > 0.09 ? 0.09 / env : 1;
+      x = lp + high * (0.45 + 0.55 * dg);
+      const a = Math.abs(x);
+      cenv = a > cenv ? a : cenv * rel + a * (1 - rel);
+      let cg = 1;
+      if (cenv > th) cg = (th + (cenv - th) / ratio) / cenv;
+      buf[i] = x * cg * 1.15;
+    }
+    const p = peakOf(buf);
+    if (p > 0) {
+      const g = 0.72 / p;
+      for (let i = 0; i < buf.length; i++) buf[i] *= g;
+    }
+  }
+
   function sing(score, opts) {
     opts = opts || {};
     const st = opts.style || {};
@@ -566,15 +631,22 @@
     const n = Math.ceil(seconds * sr);
     const mono = new Float32Array(n);
     const rand = mulberry((opts.seed == null ? 17 : opts.seed) * 9973 + 13);
-    const res = [0, 1, 2, 3].map(function (i) { return resonator(VOWELS['@'][i], BW[i], sr); });
+    const res = [0, 1, 2, 3, 4].map(function (i) { return resonator(VOWELS['@'][i], BW[i], sr); });
     const singer = resonator(2850, 160, sr);
     const chest = resonator(520, 90, sr);
     const nasalRes = resonator(280, 70, sr);
-    const sRes = resonator(6500, 1600, sr);
-    const shRes = resonator(3200, 1400, sr);
-    const tRes = resonator(4800, 1200, sr);
-    const kRes = resonator(2100, 800, sr);
+    const sRes = resonator(6500, 1400, sr);
+    const sRes2 = resonator(7800, 1600, sr);
+    const sRes3 = resonator(5400, 1100, sr);
+    const shRes = resonator(3200, 1200, sr);
+    const shRes2 = resonator(2500, 900, sr);
+    const tRes = resonator(4800, 1100, sr);
+    const tRes2 = resonator(6200, 1400, sr);
+    const kRes = resonator(2100, 700, sr);
+    const kRes2 = resonator(1400, 500, sr);
     const pRes = resonator(900, 500, sr);
+    const fRes = resonator(7000, 2800, sr);
+    const thRes = resonator(8000, 2500, sr);
     const combsL = makeCombs(sr);
     const combsR = makeCombs(sr * 1.013);
     const apL1 = makeAllpass(sr, 0.0051, 0.7);
@@ -588,20 +660,30 @@
     let hpS = 0;
 
     function noiseAt(kind) {
-      let x = rand() * 2 - 1;
+      const w = rand() * 2 - 1;
+      let x = w;
       if (kind === 'S' || kind === 'Z') {
-        x = sRes.tick(x);
-        hpS += 0.22 * (x - hpS);
+        x = sRes.tick(w) * 0.55 + sRes2.tick(w) * 0.7 + sRes3.tick(w) * 0.35;
+        hpS += 0.18 * (x - hpS);
         x = x - hpS;
       } else if (kind === 'SH' || kind === 'ZH' || kind === 'CH' || kind === 'JH') {
-        x = shRes.tick(x);
-        if (kind === 'CH' || kind === 'JH') x = 0.65 * x + 0.35 * tRes.tick(rand() * 2 - 1);
-      } else if (kind === 'T' || kind === 'D') x = tRes.tick(x);
-      else if (kind === 'K' || kind === 'G') x = kRes.tick(x);
-      else if (kind === 'P' || kind === 'B') x = pRes.tick(x) * 0.7 + (rand() * 2 - 1) * 0.3;
-      else if (kind === 'F' || kind === 'V' || kind === 'TH' || kind === 'DH' || kind === 'HH') {
-        airLp += 0.08 * (x - airLp);
-        x = (x - airLp) * (kind === 'HH' ? 0.7 : 0.85);
+        x = shRes.tick(w) * 0.7 + shRes2.tick(w) * 0.45;
+        if (kind === 'CH' || kind === 'JH') x = 0.6 * x + 0.4 * (tRes.tick(rand() * 2 - 1) + tRes2.tick(rand() * 2 - 1) * 0.5);
+      } else if (kind === 'T' || kind === 'D') {
+        x = tRes.tick(w) * 0.7 + tRes2.tick(w) * 0.5;
+      } else if (kind === 'K' || kind === 'G') {
+        x = kRes.tick(w) * 0.7 + kRes2.tick(w) * 0.45;
+      } else if (kind === 'P' || kind === 'B') {
+        x = pRes.tick(w) * 0.65 + (rand() * 2 - 1) * 0.35;
+      } else if (kind === 'F' || kind === 'V') {
+        airLp += 0.06 * (w - airLp);
+        x = (w - airLp) * 0.7 + fRes.tick(w) * 0.5;
+      } else if (kind === 'TH' || kind === 'DH') {
+        airLp += 0.07 * (w - airLp);
+        x = (w - airLp) * 0.55 + thRes.tick(w) * 0.45;
+      } else if (kind === 'HH') {
+        airLp += 0.08 * (w - airLp);
+        x = (w - airLp) * 0.75;
       }
       return x;
     }
@@ -611,10 +693,10 @@
       const trans = 0.02 / Math.max(0.04, seg.d);
       if (prevF && u < trans) {
         const k = smooth(u / trans);
-        f = [lerp(prevF[0], f[0], k), lerp(prevF[1], f[1], k), lerp(prevF[2], f[2], k), lerp(prevF[3], f[3], k)];
+        f = [lerp(prevF[0], f[0], k), lerp(prevF[1], f[1], k), lerp(prevF[2], f[2], k), lerp(prevF[3], f[3], k), lerp(prevF[4] || 4000, f[4] || 4000, k)];
       } else if (nextF && u > 1 - trans) {
         const k = smooth((u - (1 - trans)) / trans);
-        f = [lerp(f[0], nextF[0], k), lerp(f[1], nextF[1], k), lerp(f[2], nextF[2], k), lerp(f[3], nextF[3], k)];
+        f = [lerp(f[0], nextF[0], k), lerp(f[1], nextF[1], k), lerp(f[2], nextF[2], k), lerp(f[3], nextF[3], k), lerp(f[4] || 4000, nextF[4] || 4000, k)];
       }
       return f;
     }
@@ -719,13 +801,14 @@
           const source = sourcePulse * 0.95 + breath * breathAmt;
           const fv = targets(seg, u, prevF, nextF);
           const bwMul = typ === 'nasal' ? 0.85 : 1;
-          for (let k = 0; k < 4; k++) res[k].set(fv[k] * formant * (1 + 0.004 * Math.sin(2 * Math.PI * 0.7 * (seg.t + t) + k)), BW[k] * bwMul);
+          for (let k = 0; k < 5; k++) res[k].set((fv[k] || 4000) * formant * (1 + 0.004 * Math.sin(2 * Math.PI * 0.7 * (seg.t + t) + k)), BW[k] * bwMul);
           let vf = res[0].tick(source) * 1.05
-            + res[1].tick(source) * 0.85
-            + res[2].tick(source) * 0.45
-            + res[3].tick(source) * 0.22
-            + singer.tick(source) * (typ === 'nasal' ? 0.1 : 0.2)
-            + chest.tick(source) * (typ === 'nasal' ? 0.28 : 0.18);
+            + res[1].tick(source) * 0.95
+            + res[2].tick(source) * 0.55
+            + res[3].tick(source) * 0.28
+            + res[4].tick(source) * 0.14
+            + singer.tick(source) * (typ === 'nasal' ? 0.1 : 0.22)
+            + chest.tick(source) * (typ === 'nasal' ? 0.28 : 0.16);
           if (typ === 'nasal') vf = vf * 0.75 + nasalRes.tick(source) * 0.55;
           if (typ === 'vstop' && i >= closeN + burstN) y += vf * 0.8;
           else if (typ !== 'stop' && typ !== 'vstop' && typ !== 'vfric' && typ !== 'fric') y = vf;
@@ -761,6 +844,7 @@
       const g = 0.72 / peak;
       for (let i = 0; i < n; i++) mono[i] *= g;
     }
+    vocalChain(mono, sr);
 
     const left = new Float32Array(n);
     const right = new Float32Array(n);
