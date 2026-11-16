@@ -2,20 +2,21 @@
 """Playwright checks for Coffeebreak Vocal Studio."""
 from __future__ import annotations
 
+import re
+import subprocess
 import sys
 import time
-import urllib.error
 import urllib.request
 from pathlib import Path
 
 from playwright.sync_api import expect, sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
-PORT = 8766
+PORT = 8768
 PAGE = f"http://127.0.0.1:{PORT}/apps/coffeebreak-ace/index.html"
 
+
 def main() -> int:
-    import subprocess, os, signal
     server = subprocess.Popen(
         [sys.executable, "-m", "http.server", str(PORT), "--bind", "127.0.0.1"],
         cwd=str(ROOT),
@@ -39,72 +40,89 @@ def main() -> int:
                 headless=True,
             )
             page = browser.new_page()
-            page.goto(PAGE, wait_until="load")
+            page.goto(PAGE, wait_until="load", timeout=60000)
             expect(page).to_have_title("Coffeebreak Vocal Studio")
-            body = page.locator("body")
-            expect(body).to_contain_text("Coffeebreak Vocal Studio")
-            expect(body).to_contain_text("Coffeebreak voice")
-            expect(body).to_contain_text("Tesla")
-            expect(body).to_contain_text("Starlink")
-            expect(body).to_contain_text("Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com")
-            expect(body).to_contain_text("34 tools, 11,996 presets")
-            visible = page.inner_text("body")
-            if "ACE-Step" in visible or " ACE " in visible or visible.strip().startswith("ACE"):
-                raise SystemExit("ACE still visible: " + visible[:200])
-            # word ACE should not appear as a name
-            import re
-            if re.search(r"\bACE\b", visible):
-                raise SystemExit("ACE word still visible")
+            body = page.inner_text("body")
+            if re.search(r"\bACE\b", body) or "ACE-Step" in body:
+                raise SystemExit("ACE still visible")
+            if "11,996" in body or "11996" in body or "12,000" in body or "12000" in body:
+                raise SystemExit("generated-preset bulk still visible")
+            if "!" in body.replace("Coffeebreak!", ""):
+                # no user-facing exclamation marks
+                bangs = [line for line in body.splitlines() if "!" in line]
+                if bangs:
+                    raise SystemExit("exclamation marks in copy: " + " | ".join(bangs[:5]))
+            expect(page.locator("h1")).to_have_text("Coffeebreak Vocal Studio")
+            expect(page.locator("body")).to_contain_text("Tesla")
+            expect(page.locator("body")).to_contain_text("Starlink")
+            expect(page.locator("body")).to_contain_text("Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com")
+            for sel in ("#vcPitch", "#vcCorrect", "#vcKey", "#vcScale", "#vcFormant", "#vcSpeed", "#vcVibrato", "#vcReverb", "#vcVolume", "#vcApply"):
+                expect(page.locator(sel)).to_have_count(1)
+            expect(page.locator("#cb-sung-go")).to_be_visible()
+            expect(page.locator("#cb-sung-engine")).to_be_hidden()
 
-            page.fill("#search", "Hall 1.6s 28% mix Warm")
-            page.select_option("#filter", "Effect")
-            page.wait_for_timeout(50)
-            first = page.locator(".preset").first
-            expect(first).to_contain_text("Reverb: Hall")
-
-            page.fill("#lyrics", "sun is up on the hill")
-            sung = page.evaluate(
-                """async () => {
-                  const out = await CBVocalStudio.sing('sun is up on the hill', { seed: 3, bpm: 110 });
-                  const st = CBVocalStudio.state();
-                  const pitch = CBVocalStudio.detectPitch();
-                  return { out, st, pitch, counts: CBVocalStudio.counts() };
-                }"""
+            page.fill("#cb-sung-lyrics", "sun is up on the hill")
+            page.fill("#cb-sung-style", "clear pop")
+            page.fill("#cb-sung-seconds", "12")
+            page.click("#cb-sung-go")
+            page.wait_for_function(
+                "() => { const a=document.getElementById('cb-sung-audio'); return a && a.duration > 2 && a.readyState >= 2; }",
+                timeout=90000,
             )
-            if sung["counts"]["tools"] != 34 or sung["counts"]["presets"] != 11996:
-                raise SystemExit("count mismatch " + str(sung["counts"]))
-            if sung["st"]["peak"] <= 0.05:
-                raise SystemExit("silent vocal " + str(sung))
-            if sung["st"]["seconds"] < 4:
-                raise SystemExit("too short " + str(sung["st"]))
-
-            applied = page.evaluate(
-                """async () => {
-                  const preset = CBVocalStudio.search('Hall, 1.6s, 28% mix, Warm', 'Effect')[0];
-                  const result = await CBVocalStudio.apply(preset);
-                  const st = CBVocalStudio.state();
-                  return { result, peak: st.peak };
-                }"""
+            created = page.evaluate(
+                """() => ({
+                  duration: document.getElementById('cb-sung-audio').duration,
+                  peak: window.CBVocal && window.CBVocal.lastPeak(),
+                  hasOrig: window.CBVocal && window.CBVocal.hasOriginal(),
+                  title: document.title,
+                })"""
             )
-            if applied["peak"] <= 0.05:
-                raise SystemExit("effect silenced the vocal " + str(applied))
+            if not created["hasOrig"]:
+                raise SystemExit("create did not stash a song for the controls")
+            if not created["duration"] or created["duration"] < 2:
+                raise SystemExit("created song was too short")
 
+            page.fill("#vcVolume", "0.4")
+            page.click("#vcApply")
+            page.wait_for_function(
+                "() => (document.getElementById('vcStatus')||{}).textContent === 'Applied to the current song.'",
+                timeout=30000,
+            )
+            after = page.evaluate(
+                """() => ({
+                  peak: window.CBVocal && window.CBVocal.lastPeak(),
+                  duration: window.CBVocal && window.CBVocal.lastDuration(),
+                  volume: window.CBVocal.readControls().volume,
+                })"""
+            )
+            if after["volume"] != 0.4:
+                raise SystemExit("volume control did not stick")
+            if after["peak"] is None or after["peak"] < 0.02:
+                raise SystemExit("applied vocal was silent")
+            if created["peak"] and after["peak"] > created["peak"] * 0.85:
+                raise SystemExit(f"volume apply did not lower the peak: {created['peak']} -> {after['peak']}")
+
+            page.click("#vcReset")
+            page.wait_for_function(
+                "() => window.CBVocal && Math.abs(window.CBVocal.readControls().volume - 1) < 0.01",
+                timeout=30000,
+            )
+            browser.close()
             print({
-                "title": page.title(),
-                "counts": sung["counts"],
-                "peak": sung["st"]["peak"],
-                "seconds": sung["st"]["seconds"],
-                "effectPeak": applied["peak"],
+                "title": "Coffeebreak Vocal Studio",
+                "duration": created["duration"],
+                "peak": created["peak"],
+                "peakAfterVolume": after["peak"],
                 "ok": True,
             })
-            browser.close()
-        return 0
+            return 0
     finally:
-        server.send_signal(signal.SIGTERM)
+        server.terminate()
         try:
-            server.wait(timeout=3)
+            server.wait(timeout=5)
         except Exception:
             server.kill()
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
