@@ -183,38 +183,6 @@
     return Math.max(12, Math.min(28, Math.round(words * 0.45 + lines * 1.5)));
   }
 
-  async function callSpace(endpoint, apiName, data, timeoutMs) {
-    const posted = await fetch(endpoint + '/gradio_api/call/' + apiName, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: data }),
-    });
-    if (!posted.ok) throw new Error('The vocal service refused the request (' + posted.status + '). Nothing was saved.');
-    const accepted = await posted.json();
-    if (!accepted.event_id) throw new Error('The vocal service did not accept the lyrics. Nothing was saved.');
-    const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
-    const timer = setTimeout(() => { if (ctrl) ctrl.abort(); }, timeoutMs || 120000);
-    let streamed;
-    try {
-      streamed = await fetch(endpoint + '/gradio_api/call/' + apiName + '/' + accepted.event_id, ctrl ? { signal: ctrl.signal } : {});
-    } catch (e) {
-      throw new Error('The vocal model did not answer in time. Nothing was saved.');
-    } finally { clearTimeout(timer); }
-    if (!streamed.ok) throw new Error('The vocal service failed while generating (' + streamed.status + '). Nothing was saved.');
-    const sse = parseSse(await streamed.text());
-    if (sse.event === 'error') throw new Error('The vocal model returned an error. Nothing was saved.');
-    if (sse.event !== 'complete') throw new Error('The vocal model did not finish. Nothing was saved.');
-    let parsed;
-    try { parsed = JSON.parse(sse.data); } catch (e) { throw new Error('The vocal model sent an unreadable result. Nothing was saved.'); }
-    const file = parsed && parsed[0];
-    if (!file || !file.url) throw new Error('The vocal model returned no audio. Nothing was saved.');
-    const audio = await fetch(file.url);
-    if (!audio.ok) throw new Error('The sung audio could not be downloaded. Nothing was saved.');
-    const bytes = await audio.arrayBuffer();
-    if (!bytes || bytes.byteLength < 8000) throw new Error('The vocal model returned an empty file. Nothing was saved.');
-    return { bytes: bytes, info: parsed[1] && parsed[1].audio_duration ? Math.round(parsed[1].audio_duration) + 's sung audio' : 'sung audio', model: MODEL, license: 'Apache-2.0' };
-  }
-
   function songModule(opts) {
     if (opts && opts.songgen) return opts.songgen;
     const globalSong = typeof CBSong !== 'undefined' ? CBSong : null;
