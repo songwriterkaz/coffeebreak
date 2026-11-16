@@ -18,7 +18,16 @@ input,textarea,select{width:95%;padding:6px;margin:4px 0;border:1px solid #f8a;b
 <section id="inbox" class="card"></section><section id="sent" class="card"></section>
 <section id="compose" class="card"><h2>Compose</h2><input id="to" placeholder="To"><input id="subj" placeholder="Subject"><textarea id="body" rows="5" placeholder="Message"></textarea><button id="sendBtn" onclick="sendMail()">Send</button><p id="mailMsg"></p></section>
 <section id="shop" class="card"><h2>Coffee Menu</h2><div id="menu"></div><h3>Cart</h3><div id="cart"></div><input id="cname" placeholder="Your name"><input id="cnote" placeholder="Pickup or delivery notes"><button id="checkout" onclick="checkout()">Save order on this device</button><p id="orderMsg"></p><p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p></section>
-<footer><p><b>Disclaimer:</b> Karen O&#39;Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical items they bought but may not copy them. No ownership is claimed of any third-party brands named.</p><p><a href="https://www.tesla.com">Tesla</a> | <a href="https://www.starlink.com">Starlink</a> | <a href="https://coffeebreaks.itch.io">coffeebreaks.itch.io</a></p></footer>
+<div class="card" id="why-switch"><h2>Why switch</h2>
+<ul>
+<li>One US$10 purchase. No monthly fee for the software.</li>
+<li>Share one existing data plan through a phone or laptop hotspot.</li>
+<li>Free local mail between people on the hotspot, when the host runs the local Coffeebreak Mail server on that same computer.</li>
+</ul>
+<p>Coffeebreak does not give free internet. Data used on the hotspot counts on the host's plan. Local mail only works while that phone or laptop is sharing the connection.</p>
+<p><a href="../coffeebreak-wifi/coffeebreak-mail-local-hotspot.zip" download>Download the local mail server</a> for hotspot mode. Setup for the hotspot is on the <a href="../coffeebreak-wifi/">Coffeebreak WiFi hotspot</a> page.</p>
+</div>
+<footer><p><b>Disclaimer:</b> Karen O&#39;Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell what they bought but not copy it. Subject to Australian Consumer Law. No ownership is claimed of any third-party brands named.</p><p><a href="https://www.tesla.com">Tesla</a> | <a href="https://www.starlink.com">Starlink</a> | <a href="https://coffeebreaks.itch.io">coffeebreaks.itch.io</a></p></footer>
 <script>
 const K='cbcm',S=JSON.parse(localStorage.getItem(K)||'null')||{inbox:[],sent:[],cart:[],orders:[],deviceNotes:[]};
 if(!Array.isArray(S.inbox))S.inbox=[];if(!Array.isArray(S.sent))S.sent=[];if(!Array.isArray(S.cart))S.cart=[];if(!Array.isArray(S.orders))S.orders=[];if(!Array.isArray(S.deviceNotes))S.deviceNotes=[];
