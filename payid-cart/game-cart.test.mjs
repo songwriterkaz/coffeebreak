@@ -292,6 +292,14 @@ test('known game pages are in scope and stores, mail, and music tools are not', 
   assert.equal(game.isGamePage('apps/sensory-room/shop/index.html', '<title>Sensory Shop</title>'), false);
   assert.equal(game.isGamePage('apps/park-builder/index.html', '<title>Coffeebreak Park Builder</title>'), true);
   assert.equal(game.isGamePage('apps/kids-theme-park/index.html', '<title>Coffeebreak Rollercoaster of Fantasies</title>'), true);
+  assert.equal(game.isGamePage('apps/spirit-board-buy/index.html', '<title>Buy Spirit Board - $10</title>'), true);
+  assert.equal(game.isGamePage('apps/ghost-detector/index.html', '<title>Past Life Ghost Detector</title>'), true);
+  assert.equal(game.isGamePage('apps/ballerina-ghost-buy/index.html', '<title>Buy Ballerina Ghost - $10</title>'), true);
+  assert.equal(game.isGamePage('apps/ghost-dolls-plush-store-buy/index.html', '<title>Buy Ghost Dolls Plush Store - $10</title>'), false);
+  assert.equal(game.isGamePage('apps/ghost-merch-buy/index.html', '<title>Buy Ghost Merch Store - $10</title>'), false);
+  assert.equal(game.isGamePage('apps/cb-piano-buy/index.html', '<title>Buy Coffeebreak Grand Piano</title>'), false);
+  assert.equal(game.isGamePage('apps/cb-ghost-tools-12000-buy/index.html', '<title>Buy Ghost Tools 12000</title>'), false);
+  assert.equal(game.isGamePage('yellow-pages/index.html', '<title>Yellow Pages</title>'), false);
 });
 
 test('real food and prizes share the game currency and are physical', () => {

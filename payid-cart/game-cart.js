@@ -108,7 +108,25 @@
     /^apps\/rollercoaster\//,
     /^apps\/bigbanana\//,
     /^time-zone-quiz\//,
-    /^apps\/oz-quiz\//
+    /^apps\/oz-quiz\//,
+    /^apps\/ballerina-ghost/,
+    /^apps\/cb-ghost-academy/,
+    /^apps\/cb-ghost-coffee-ritual/,
+    /^apps\/cb-ghost-emf-lab/,
+    /^apps\/cb-ghost-evp-studio/,
+    /^apps\/cb-ghost-radar/,
+    /^apps\/cb-ghost-spirit-talker/,
+    /^apps\/cb-ghost-thermal-cam/,
+    /^apps\/cb-haunted-map/,
+    /^apps\/ghost-amps/,
+    /^apps\/ghost-box/,
+    /^apps\/ghost-detector/,
+    /^apps\/ghost-doll-past-life-reading/,
+    /^apps\/ghost-dolls(?:-buy|-free-demo)?\//,
+    /^apps\/new-age-spiritual/,
+    /^apps\/spirit-board/,
+    /^apps\/spirit-candles/,
+    /^apps\/spirit-messages/
   ];
 
   function isSellableName(name) {
