@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Coffeebreak Plush Hospital</title>
+<link rel="icon" href="cb-logo.jpg">
 <script type="importmap">
 {
   "imports": {
@@ -36,15 +37,24 @@ a { color: #a33b68; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 6;
-  max-height: 52px;
-  overflow: auto;
   background: rgba(255, 246, 250, 0.94);
   color: #5c3144;
   font: 12px/1.35 Georgia, serif;
-  padding: 6px 10px;
+  padding: 8px 12px;
   text-align: center;
 }
-#cb-game-legal p { margin: 0 0 4px; }
+#cb-game-legal p { margin: 0; }
+#cb-game-legal .rights {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .overlay, .sheet, #hud, #stick { display: none; }
 .overlay.open, .sheet.open { display: flex; }
 #hud.open { display: block; }
@@ -73,7 +83,8 @@ a { color: #a33b68; }
 .card h1 { font-size: 32px; line-height: 1.15; }
 .card p { margin: 8px 0; }
 .row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
-.logo { width: 132px; height: 74px; object-fit: cover; object-position: left top; border-radius: 12px; background: #fff; }
+.logo-frame { display: inline-block; width: 120px; height: 68px; overflow: hidden; border-radius: 12px; background: #fff; }
+.logo { width: 240px; height: 135px; display: block; }
 .fine { font-size: 13px; color: #6d4456; }
 #boot-note { min-height: 1.2em; color: #8a3458; }
 #hud {
@@ -117,7 +128,7 @@ a { color: #a33b68; }
   position: fixed;
   z-index: 40;
   left: 50%;
-  bottom: 24px;
+  bottom: 88px;
   transform: translateX(-50%);
   max-width: min(460px, calc(100% - 24px));
   background: #4a2436;
@@ -142,7 +153,7 @@ button.hot { background: #ffd36e; color: #4a2436; }
 <div id="stage"></div>
 <section id="screen-title" class="overlay block open" aria-label="Title">
   <div class="card">
-    <img class="logo" src="cb-logo.jpg" alt="Coffeebreak">
+    <span class="logo-frame"><img class="logo" src="cb-logo.jpg" alt="Coffeebreak"></span>
     <h1>Coffeebreak Plush Hospital</h1>
     <p>You are a plush doctor. Soft patients arrive in a warm pink ward.</p>
     <p>The free demo covers the first ward and 3 patients.</p>
@@ -249,6 +260,6 @@ button.hot { background: #ffd36e; color: #4a2436; }
 <div id="stick" aria-hidden="true"><div id="knob"></div></div>
 <div id="toast" role="status"></div>
 <script type="module" src="game.js"></script>
-<!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/plush-hospital" aria-label="Cart"><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/plush-hospital","currency":"USD","items":[{"id":"full","name":"Coffeebreak Plush Hospital","amount":"10.00","currency":"USD"}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> <a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p><p>Karen (Coffeebreak) keeps all rights to her products, designs, apps, games, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p></footer><!--cb-game-cart-end-->
+<!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/plush-hospital" aria-label="Cart"><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/plush-hospital","currency":"USD","items":[{"id":"full","name":"Coffeebreak Plush Hospital","amount":"10.00","currency":"USD"}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> <a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p><p class="rights">Karen (Coffeebreak) keeps all rights to her products, designs, apps, games, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p></footer><!--cb-game-cart-end-->
 </body>
 </html>

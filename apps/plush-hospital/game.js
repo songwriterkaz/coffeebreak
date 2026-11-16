@@ -113,7 +113,7 @@ let raycaster;
 const hands = [];
 
 function loadSave() {
-  const blank = { v: 1, hearts: 0, healed: 0, mute: false, announced: {} };
+  const blank = { v: 1, hearts: 0, healed: 0, mute: false, announced: {}, started: false };
   try {
     const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) return blank;
@@ -122,6 +122,7 @@ function loadSave() {
     blank.hearts = Number(data.hearts) || 0;
     blank.healed = Number(data.healed) || 0;
     blank.mute = data.mute === true;
+    blank.started = data.started === true || blank.healed > 0 || blank.hearts > 0;
     if (data.announced && typeof data.announced === 'object') blank.announced = data.announced;
     if (blank.healed > DEMO_LIMIT) blank.healed = DEMO_LIMIT;
     if (blank.hearts < 0) blank.hearts = 0;
@@ -494,7 +495,7 @@ function addBox(w, h, d, color, x, y, z) {
 
 function addWall(room, side) {
   const H = 3.62;
-  const wh = 2.45;
+  const wh = 1.35;
   const doorHalf = 0.85;
   const hasDoor = room.doors.indexOf(side) !== -1;
   const alongX = side === 'n' || side === 's';
@@ -552,10 +553,10 @@ function buildRooms() {
   }
   DOORS.forEach(function (door) {
     const mesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.7, 2.05),
+      new THREE.PlaneGeometry(1.7, 1.35),
       new THREE.MeshLambertMaterial({ color: 0xf7b7cf, transparent: true, opacity: 0.78, side: THREE.DoubleSide })
     );
-    mesh.position.set(door.x, 1.05, door.z);
+    mesh.position.set(door.x, 0.7, door.z);
     if (door.hx > door.hz) mesh.rotation.y = Math.PI / 2;
     scene.add(mesh);
     curtains.push({ door: door, mesh: mesh });
@@ -667,8 +668,8 @@ function ensurePatient() {
   patient = spec;
   patientMesh = makePlush(spec.color, false);
   applyAilment(patientMesh, spec.kind);
-  patientMesh.position.set(-0.55, 0, -1.35);
-  patientMesh.rotation.y = 0.6;
+  patientMesh.position.set(-1.35, 0, -0.9);
+  patientMesh.rotation.y = Math.atan2(0.15 - (-1.35), -((0.35) - (-0.9)));
   patientMesh.userData.action = function () { seePatient(); };
   const tag = labelSprite(spec.name);
   tag.position.y = 1.78;
@@ -680,10 +681,10 @@ function ensurePatient() {
 function placeCamera() {
   if (xr || !camera || !player) return;
   const f = forwardVector(yaw);
-  const back = 3.9;
-  const height = 1.9 + pitch * 0.85;
+  const back = 3.1;
+  const height = 3.55 + pitch * 0.4;
   camera.position.set(player.position.x - f.x * back, height, player.position.z - f.z * back);
-  camera.lookAt(player.position.x + f.x * 0.2, 1.05, player.position.z + f.z * 0.2);
+  camera.lookAt(player.position.x + f.x * 0.6, 0.7, player.position.z + f.z * 0.6);
   player.rotation.y = yaw;
 }
 
@@ -892,6 +893,7 @@ function tick() {
   }
   if (miniLive) stepMini(dt);
   if (belt) belt.visible = xr;
+  renderer.render(scene, camera);
 }
 
 function renderTutorial() {
@@ -919,6 +921,7 @@ function startPlay() {
     return;
   }
   mode = 'play';
+  save.started = true;
   if (!loopOn) {
     renderer.setAnimationLoop(tick);
     loopOn = true;
@@ -1505,9 +1508,10 @@ function mountVrButton() {
 function bootWorld() {
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0xf6d5e2);
-  scene.fog = new THREE.Fog(0xf8d0dc, 12, 34);
+  scene.fog = new THREE.Fog(0xf8d0dc, 16, 42);
   camera = new THREE.PerspectiveCamera(58, 1, 0.08, 80);
-  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer.setClearColor(0xf6d5e2, 1);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -1538,7 +1542,7 @@ function bootWorld() {
   scene.add(player);
   doctor = makePlush('#f4a6c2', true);
   player.add(doctor);
-  player.position.set(0.7, 0, 1.75);
+  player.position.set(0.15, 0, 0.35);
   refreshCurtains();
   buildBelt();
   setupHands();
@@ -1573,7 +1577,9 @@ function bindUi() {
   $('btn-continue').addEventListener('click', function () {
     let raw = null;
     try { raw = localStorage.getItem(SAVE_KEY); } catch (err) { raw = null; }
-    if (!raw) {
+    let parsed = null;
+    try { parsed = raw ? JSON.parse(raw) : null; } catch (err) { parsed = null; }
+    if (!parsed || parsed.started !== true) {
       toast('There is no saved visit yet.');
       return;
     }
@@ -1666,8 +1672,36 @@ function bindUi() {
 }
 
 function init() {
+  window.addEventListener('unhandledrejection', function (event) {
+    const reason = event.reason;
+    const msg = String(reason && reason.message ? reason.message : reason || '');
+    if (/xr|session|immersive|webxr/i.test(msg)) {
+      event.preventDefault();
+      toast('VR did not start. Touch and keyboard still work.');
+    }
+  });
+  window.PLUSH = {
+    state: function () {
+      return {
+        mode: mode,
+        hearts: save.hearts,
+        healed: save.healed,
+        x: player ? Math.round(player.position.x * 100) / 100 : null,
+        z: player ? Math.round(player.position.z * 100) / 100 : null,
+        yaw: Math.round(yaw * 100) / 100,
+        cam: camera ? {
+          x: Math.round(camera.position.x * 100) / 100,
+          y: Math.round(camera.position.y * 100) / 100,
+          z: Math.round(camera.position.z * 100) / 100
+        } : null,
+        meshes: scene ? scene.children.length : 0,
+        frames: renderer && renderer.info ? renderer.info.render.frame : 0
+      };
+    }
+  };
   paintSound();
-  saveGame();
+  const savedLine = $('saved-line');
+  if (savedLine) savedLine.textContent = 'Hearts saved: ' + save.hearts;
   bindUi();
   try {
     bootWorld();
