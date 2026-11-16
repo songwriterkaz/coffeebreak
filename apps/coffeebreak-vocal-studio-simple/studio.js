@@ -1,5 +1,5 @@
 /* Coffeebreak Vocal Studio Simple - lyrics, create, playback, and download.
-   Default singing voice is Twirling Bean, with Voice 2, the clear studio voice, and Speak still available. */
+   Default singing voice is Twirling Bean. Voice 2, the clear studio voice, baritone voices, Country Lisp Honky Tonk, and Speak stay available. */
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var PAY_LABEL = 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
@@ -30,8 +30,7 @@
   function selectedVoiceId() {
     var el = $('voicePick');
     var v = el ? el.value : 'twirl';
-    if (v === 'clear') return 'clear';
-    if (v === 'voice2') return 'voice2';
+    if (v === 'clear' || v === 'voice2' || v === 'bariwarm' || v === 'baricountry' || v === 'honky' || v === 'twirl') return v;
     return 'twirl';
   }
 
@@ -39,13 +38,22 @@
     var id = selectedVoiceId();
     if (id === 'clear' && window.CBVoiceClear) return window.CBVoiceClear;
     if (id === 'voice2') return window.CBVoice2 || window.CBVoice;
+    if (id === 'bariwarm' || id === 'baricountry') return window.CBVoiceBaritone || window.CBVoice;
+    if (id === 'honky') return window.CBVoiceHonky || window.CBVoice;
     return window.CBVoiceTwirl || window.CBVoice;
   }
 
   function voiceLabel(id) {
     if (id === 'clear') return 'the clear studio voice';
     if (id === 'voice2') return 'Voice 2';
+    if (id === 'bariwarm') return 'Baritone Warm';
+    if (id === 'baricountry') return 'Baritone Country';
+    if (id === 'honky') return 'Country Lisp Honky Tonk';
     return 'the Twirling Bean voice';
+  }
+
+  function usesBacking(id) {
+    return id === 'twirl' || id === 'bariwarm' || id === 'baricountry' || id === 'honky';
   }
 
   function backingOn() {
@@ -94,13 +102,21 @@
     if (words.length < 2) throw new Error('Write at least two words to sing.');
     var beat = 60 / Math.max(72, Math.min(140, bpm || 110));
     var seq = notes && notes.length ? notes : [];
-    if (!seq.length && selectedVoiceId() === 'twirl' && window.CBVoiceTwirl && window.CBVoiceTwirl.defaultMelody) {
-      seq = window.CBVoiceTwirl.defaultMelody(words.length);
+    var vid = selectedVoiceId();
+    var voice = currentVoice();
+    if (!seq.length && voice && voice.defaultMelody) {
+      if (vid === 'twirl' || vid === 'bariwarm' || vid === 'baricountry' || vid === 'honky') {
+        seq = voice.defaultMelody(words.length);
+      }
+    }
+    if (seq.length && voice && voice.transposeNotes && (vid === 'bariwarm' || vid === 'baricountry')) {
+      seq = voice.transposeNotes(seq);
     }
     var out = [];
     var t = 0;
+    var fallbackP = (vid === 'bariwarm' || vid === 'baricountry') ? 52 : (vid === 'twirl' || vid === 'honky' ? 57 : 64);
     for (var i = 0; i < words.length; i++) {
-      var src = seq.length ? seq[i % seq.length] : { p: selectedVoiceId() === 'twirl' ? 57 : 64, l: 1 };
+      var src = seq.length ? seq[i % seq.length] : { p: fallbackP, l: 1 };
       var dur = Math.max(0.24, (src.l || 1) * beat);
       out.push({ text: words[i], w: words[i], pitch: src.p, p: src.p, t: t, d: dur, duration: dur, rest: false });
       t += dur;
@@ -143,11 +159,13 @@
   async function singLyrics(lyrics, opts) {
     opts = opts || {};
     if (opts.voiceId && $('voicePick')) {
-      $('voicePick').value = opts.voiceId === 'clear' ? 'clear' : (opts.voiceId === 'voice2' ? 'voice2' : 'twirl');
+      var allowed = { twirl: 1, voice2: 1, clear: 1, bariwarm: 1, baricountry: 1, honky: 1 };
+      $('voicePick').value = allowed[opts.voiceId] ? opts.voiceId : 'twirl';
     }
     var voice = currentVoice();
     if (!voice) throw new Error('The Coffeebreak voice could not be loaded.');
-    var bpm = opts.bpm || (selectedVoiceId() === 'twirl' ? 100 : state.bpm);
+    var vid0 = selectedVoiceId();
+    var bpm = opts.bpm || (vid0 === 'honky' ? 112 : (vid0 === 'bariwarm' ? 92 : (vid0 === 'baricountry' || vid0 === 'twirl' ? 100 : state.bpm)));
     var notes = opts.notes || null;
     var seconds = opts.seconds || vocalSeconds(lyrics);
     var score = buildScore(lyrics, notes, bpm, seconds);
@@ -160,7 +178,10 @@
     state.mode = 'sing';
     setStatus('Singing with the Coffeebreak voice.');
     var style = opts.style ? Object.assign({}, opts.style) : {};
-    if (selectedVoiceId() === 'twirl' && style.backing == null) style.backing = backingOn();
+    var vid = selectedVoiceId();
+    if (usesBacking(vid) && style.backing == null) style.backing = backingOn();
+    if (vid === 'bariwarm' && style.flavor == null) style.flavor = 'warm';
+    if (vid === 'baricountry' && style.flavor == null) style.flavor = 'country';
     var wav = voice.sing(score, { seed: opts.seed == null ? state.seed : opts.seed, bpm: bpm, style: style });
     var dec = voice.decodeMono(wav);
     if (voice.peakOf(dec.samples) < 0.02) throw new Error('The Coffeebreak voice returned silence.');
@@ -336,7 +357,7 @@
         peak: state.samples && currentVoice() ? currentVoice().peakOf(state.samples) : 0,
         seconds: state.samples ? state.samples.length / state.sampleRate : 0,
         voiceId: selectedVoiceId(),
-        backing: selectedVoiceId() === 'twirl' && backingOn(),
+        backing: usesBacking(selectedVoiceId()) && backingOn(),
         mode: state.mode,
         speaking: !!state.speaking,
         canSpeak: !!(window.speechSynthesis && speechSynthesis.speak),

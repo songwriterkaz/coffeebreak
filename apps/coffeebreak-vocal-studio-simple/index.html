@@ -35,7 +35,7 @@ label.voice-pick{display:flex;gap:6px;align-items:center;font-size:14px}
 <img src="../cb-logo.png" alt="Coffeebreak logo">
 <div>
 <h1>Coffeebreak Vocal Studio Simple</h1>
-<p>Write lyrics, then sing them with the Twirling Bean voice, Voice 2 or the clear studio voice, or hear them spoken in your browser.</p>
+<p>Write lyrics, then sing them with the Twirling Bean voice, Voice 2, the clear studio voice, a baritone voice or Country Lisp Honky Tonk, or hear them spoken in your browser.</p>
 </div>
 </header>
 <main>
@@ -47,6 +47,9 @@ label.voice-pick{display:flex;gap:6px;align-items:center;font-size:14px}
 <option value="twirl" selected>Twirling Bean voice</option>
 <option value="voice2">Voice 2</option>
 <option value="clear">Clear studio voice</option>
+<option value="bariwarm">Baritone Warm</option>
+<option value="baricountry">Baritone Country</option>
+<option value="honky">Country Lisp Honky Tonk</option>
 </select>
 </label>
 <label class="voice-pick"><input type="checkbox" id="backingPick" checked> Backing music</label>
@@ -55,7 +58,7 @@ label.voice-pick{display:flex;gap:6px;align-items:center;font-size:14px}
 <button type="button" id="downloadGo">Download wav</button>
 <span class="hint" id="status"></span>
 </div>
-<p class="hint" id="honest">Create vocal sings the lyrics in your browser. Twirling Bean voice is the default singing voice. It is a synthesizer tuned toward a warmer, lower country singer, with optional guitar, bass and drums made in the page. Voice 2 and Clear studio voice are still available. Speak reads the lyrics in your device's built-in speaking voice. No outside singing service is used. The spoken voice can be played here, but it cannot be saved as a wav. Download wav is for the sung vocal. The singing voices are made by the page, not a recording of a person, and will not sound as finished as a paid singing service or the reference clip they were tuned toward.</p>
+<p class="hint" id="honest">Create vocal sings the lyrics in your browser. Twirling Bean voice is the default singing voice. Baritone Warm and Baritone Country are lower male-range voices. Country Lisp Honky Tonk is a country singer with a gentle lisp and twang, and an optional Country Band backing made in the page (drums, twangy guitar, pedal steel, bass and honky-tonk piano). Voice 2 and Clear studio voice are still available. Speak reads the lyrics in your device's built-in speaking voice. No outside singing service is used. The spoken voice can be played here, but it cannot be saved as a wav. Download wav is for the sung vocal. The singing voices are made by the page, not a recording of a person, and will not sound as finished as a paid singing service or the reference clip they were tuned toward.</p>
 <audio id="player" controls hidden></audio>
 <div class="paybox">
 <b>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</b><br>
@@ -79,7 +82,11 @@ $10 USD for Coffeebreak Vocal Studio Simple. Reference: <b data-pay-ref></b>.
 <script>window.CBVoiceClear = window.CBVoice;</script>
 <script src="voice-twirling.js"></script>
 <script>window.CBVoiceTwirl = window.CBVoice;</script>
+<script src="voice-baritone.js"></script>
+<script>window.CBVoiceBaritone = window.CBVoice;</script>
+<script src="voice-honkytonk.js"></script>
+<script>window.CBVoiceHonky = window.CBVoice;</script>
 <script src="studio.js"></script>
-<script src="../../cb-songgen/cbreport.js" data-app="Coffeebreak Vocal Studio Simple" data-version="vocal-simple-twirl"></script>
+<script src="../../cb-songgen/cbreport.js" data-app="Coffeebreak Vocal Studio Simple" data-version="vocal-simple-bari-honky"></script>
 </body>
 </html>
