@@ -57,6 +57,7 @@ footer{text-align:center;padding:24px;color:#8a6a50;font-size:13px}footer img{wi
 <section id="shop" class="tab">
  <div class="promo"><div><h2>Pick &amp; mix your favourites</h2><p>Lollies, chocolate, rock candy, retro, sour, gift boxes &amp; bulk – delivered Australia-wide.</p></div><input id="q" type="search" placeholder="🔍 Search 100+ sweets… e.g. sour straps, Caramilk, rock"></div>
  <div id="cats" class="cats"></div>
+ <p id="count"></p>
  <div id="grid" class="grid"></div>
  <p class="note">Genuine confectionery from Australian lolly shops. Contains allergens – ask me for full ingredients. Heat-sensitive chocolate may need express shipping in summer. Prices in AUD include delivery.</p>
 </section>
@@ -91,7 +92,7 @@ window.cbQty=(id,d)=>{const l=cart.find(l=>l.id==id);if(!l)return;l.qty+=d;if(l.
 const total=()=>Math.round(cart.reduce((a,l)=>a+price(find(l.id))*l.qty,0)*100)/100,count=()=>cart.reduce((a,l)=>a+l.qty,0);
 function drawCats(){$('cats').innerHTML=CATS.map(([c,e])=>`<button class="${c==cat?'on':''}" data-c="${c}"><span>${e}</span>${c}<em>${c=='All'?ALL.length:ALL.filter(p=>p.cat==c).length}</em></button>`).join('');
  $('cats').querySelectorAll('button').forEach(b=>b.onclick=()=>{cat=b.dataset.c;drawCats();drawGrid()})}
-function drawGrid(){const L=ALL.filter(p=>(cat=='All'||p.cat==cat)&&(!q||p.t.toLowerCase().includes(q)));$('count').textContent=L.length+' treats';
+function drawGrid(){const L=ALL.filter(p=>(cat=='All'||p.cat==cat)&&(!q||p.t.toLowerCase().includes(q)));const n=$('count');if(n)n.textContent=L.length+' treats';
  $('grid').innerHTML=L.map(p=>`<article class="pc"><div class="ph"><img src="${p.img}" alt="${esc(p.t)}" loading="lazy" onerror="this.src='cb-logo.png'"><span class="tag">${esc(p.cat)}</span></div><h3>${esc(p.t)}</h3><div class="row"><b>$${price(p).toFixed(2)}</b><button onclick="cbAdd('${p.id}')">+ Add</button></div></article>`).join('')||'<p class="empty">No sweets match that search 🍭</p>'}
 function lines(){return cart.map(l=>{const p=find(l.id);return{title:p.t+' ['+(p.supplier||'')+']',qty:l.qty,options:'',supplierUrl:p.supplierUrl,supplierPrice:p.supplierPrice,supplierShipping:p.supplierShipping,salePrice:price(p)}})}
 function summary(no){const C={name:$('cName').value,address:$('cAddr').value,phone:$('cPhone').value,email:$('cEmail').value};
