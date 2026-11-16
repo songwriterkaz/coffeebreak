@@ -206,6 +206,10 @@ test('order details use the Formsubmit mailbox and never mark a payment verified
   assert.match(mount, /orderFields\(/);
   assert.match(mount, /labelledInput\('Name', 'name'/);
   assert.match(mount, /labelledInput\('Email', 'email'/);
+  assert.match(mount, /labelledInput\('Delivery address', 'address'/);
+  assert.match(mount, /labelledInput\('Phone', 'phone'/);
+  assert.match(mount, /Real food & prizes/);
+  assert.match(mount, /Fulfilment starts after the PayID lands/);
   assert.doesNotMatch(mount, /I have paid|payment confirmed|order sent|paid:\s*true|verified:\s*true/i);
   const digital = game.honourClaim({
     storeId: 'apps/darts',
@@ -286,4 +290,68 @@ test('known game pages are in scope and stores, mail, and music tools are not', 
   assert.equal(game.isGamePage('yellow-pages/index.html', '<title>Yellow Pages</title>'), false);
   assert.equal(game.isGamePage('war-antiques-and-militaria/index.html', '<title>War Antiques</title>'), false);
   assert.equal(game.isGamePage('apps/sensory-room/shop/index.html', '<title>Sensory Shop</title>'), false);
+  assert.equal(game.isGamePage('apps/park-builder/index.html', '<title>Coffeebreak Park Builder</title>'), true);
+  assert.equal(game.isGamePage('apps/kids-theme-park/index.html', '<title>Coffeebreak Rollercoaster of Fantasies</title>'), true);
 });
+
+test('real food and prizes share the game currency and are physical', () => {
+  const game = api();
+  const usd = game.foodPrizeItems('USD');
+  assert.ok(usd.length >= 8);
+  usd.filter((item) => item.kind === 'food').forEach((item) => {
+    assert.equal(item.amount, '10.00');
+    assert.equal(item.currency, 'USD');
+    assert.equal(game.isPhysicalItem(item, 'apps/park-builder'), true);
+  });
+  const hamper = usd.find((item) => item.id === 'prize-hamper');
+  assert.equal(hamper.amount, '129.00');
+  assert.ok(Number(hamper.amount) > 10);
+  const aud = game.foodPrizeItems('AUD');
+  aud.filter((item) => item.kind === 'food').forEach((item) => {
+    assert.equal(item.amount, '15.00');
+    assert.equal(item.currency, 'AUD');
+  });
+  const offer = game.attachFoodPrizes({
+    storeId: 'apps/park-builder',
+    currency: 'USD',
+    items: [{ id: 'full', name: 'Coffeebreak Park Builder', amount: '10.00', currency: 'USD' }]
+  });
+  assert.equal(offer.items[0].amount, '10.00');
+  assert.ok(offer.items.some((item) => item.id === 'food-coffee'));
+  const session = game.createSession(offer);
+  assert.equal(game.add(session, 'food-coffee').ok, true);
+  assert.equal(game.add(session, 'prize-hamper').ok, true);
+  assert.equal(game.isPhysicalItem(session.lines[0], 'apps/park-builder'), true);
+  const fields = game.orderFields({
+    name: 'Ada Lovelace',
+    email: 'ada@example.com',
+    address: '12 Harbour St, Newcastle NSW 2300',
+    phone: '0400000000',
+    lines: session.lines,
+    total: '139.00',
+    currency: 'USD',
+    reference: 'CBPARKORDER0001'
+  });
+  assert.equal(fields.address, '12 Harbour St, Newcastle NSW 2300');
+  assert.equal(fields.phone, '0400000000');
+  assert.match(fields.items, /Park coffee/);
+  const claim = game.honourClaim({
+    storeId: 'apps/park-builder',
+    lines: session.lines,
+    address: fields.address,
+    phone: fields.phone,
+    reference: 'CBPARKORDER0001'
+  });
+  assert.equal(claim.physical, true);
+  assert.equal(claim.paid, false);
+  assert.equal(claim.address, fields.address);
+  const src = readFileSync(new URL('./game-cart.js', import.meta.url), 'utf8');
+  const mount = readFileSync(new URL('./game-mount.js', import.meta.url), 'utf8');
+  const orders = readFileSync(new URL('../apps/park-builder/park-orders.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(src + mount + orders, /doordash|woolworths|coles|ubereats|menulog|instacart|deliveroo|headspace|paypal|gumroad/i);
+  const html = game.mountPage('<title>Coffeebreak Park Builder</title></body></html>', 'apps/park-builder/index.html');
+  assert.match(html, /park-orders\.js/);
+  assert.match(html, /food-coffee/);
+  assert.match(html, /prize-hamper/);
+});
+

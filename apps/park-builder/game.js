@@ -27,6 +27,8 @@ const PIECES = [
   { id: 'TrackStraight', name: 'Coaster Track', cost: 60, fp: [4, 12] },
   { id: 'TrackRamp', name: 'Coaster Ramp', cost: 60, fp: [4, 12] },
   { id: 'FoodStall', name: 'Coffee Stall', cost: 80, fp: [10, 6] },
+  { id: 'GiftShop', name: 'Gift Shop', cost: 140, fp: [10, 6] },
+  { id: 'PrizeStall', name: 'Prize Stall', cost: 130, fp: [10, 6] },
   { id: 'Slide', name: 'Slide', cost: 120, fp: [6, 16] },
   { id: 'Swing', name: 'Swing', cost: 150, fp: [10, 6] },
   { id: 'Carousel', name: 'Carousel', cost: 300, fp: [16, 16] },
@@ -172,15 +174,18 @@ const B = {
       if (k % 2) box(g, 0.6, p.y - 0.3, 0.6, p.x, (p.y - 0.3) / 2, p.z, C.White);
     }
   },
-  FoodStall(g) {
+  stall(g, title) {
     box(g, 10, 3.5, 3, 0, 1.75, -1.5, C.Cream);
     for (const x of [-4.7, 4.7]) for (const z of [-2.7, 2.7]) box(g, 0.5, 7, 0.5, x, 3.5, z, C.White);
     for (let k = 0; k < 5; k++) box(g, 2, 0.4, 7, -4 + k * 2, 7.2, 0, k % 2 ? C.White : C.HotPink);
     box(g, 8, 1.6, 0.3, 0, 8.3, -3.2, C.Purple);
-    picPanel(g, 8, 1.6, 0, 8.3, -3.36, textTex('COFFEEBREAK CAFE', '#9646dc'));
+    picPanel(g, 8, 1.6, 0, 8.3, -3.36, textTex(title, '#9646dc'));
     cyl(g, 0.5, 1, -2, 4, -1.5, C.White); cyl(g, 0.45, 0.1, -2, 4.52, -1.5, C.Coffee);
     box(g, 1.4, 0.9, 1.4, 2, 3.95, -1.5, C.Pink);
   },
+  FoodStall(g) { this.stall(g, 'COFFEEBREAK CAFE'); },
+  GiftShop(g) { this.stall(g, 'GIFT SHOP'); },
+  PrizeStall(g) { this.stall(g, 'PRIZE STALL'); },
   Slide(g) {
     box(g, 6, 0.5, 5, 0, 8, 5, C.Purple);
     for (const x of [-2.7, 2.7]) for (const z of [2.8, 7.2]) box(g, 0.5, 8, 0.5, x, 4, z, C.White);
@@ -634,4 +639,4 @@ function frame() {
 setMode();
 frame();
 window.__setGhost = (x, z) => { ghostPos.set(PLOT.x + x, 0, PLOT.z + z); snapGhost(); };
-window.__game = { state, placed, npcs, place, selectPiece, goPark };
+window.__game = { state, placed, npcs, place, selectPiece, goPark, player, byId };

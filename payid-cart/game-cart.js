@@ -59,6 +59,11 @@
     'Add your name and a valid email.',
     'Order details were handed to the mailbox. Payment is not verified.',
     'The mailbox did not accept the order details yet. Payment is not verified.',
+    'Real food & prizes',
+    'Delivery address',
+    'Phone',
+    'Add your delivery name, address and phone.',
+    'Fulfilment starts after the PayID lands.',
     RIGHTS,
     'Tesla',
     'Starlink'
@@ -97,7 +102,13 @@
     /^apps\/cbbank\//,
     /^apps\/sensory-room\/index\.html$/,
     /^apps\/kids-pillow-fight\//,
-    /^apps\/fencing-duel\//
+    /^apps\/fencing-duel\//,
+    /^apps\/park-builder\//,
+    /^apps\/kids-theme-park\//,
+    /^apps\/rollercoaster\//,
+    /^apps\/bigbanana\//,
+    /^time-zone-quiz\//,
+    /^apps\/oz-quiz\//
   ];
 
   function isSellableName(name) {
@@ -216,10 +227,63 @@
     return { storeId: storeId, currency: currency, items: found };
   }
 
+  var FOOD_PRIZE_USD = [
+    { id: 'food-coffee', name: 'Park coffee', amount: '10.00', kind: 'food' },
+    { id: 'food-snacks', name: 'Park snack pack', amount: '10.00', kind: 'food' },
+    { id: 'food-icecream', name: 'Park ice cream', amount: '10.00', kind: 'food' },
+    { id: 'food-candy', name: 'Park candy bag', amount: '10.00', kind: 'food' },
+    { id: 'food-meal', name: 'Light park meal', amount: '10.00', kind: 'food' },
+    { id: 'prize-plush', name: 'Park prize plush', amount: '49.00', kind: 'prize' },
+    { id: 'prize-trophy', name: 'Park prize trophy', amount: '59.00', kind: 'prize' },
+    { id: 'prize-plush-large', name: 'Large park prize plush', amount: '89.00', kind: 'prize' },
+    { id: 'prize-hamper', name: 'Park gift hamper', amount: '129.00', kind: 'prize' }
+  ];
+  var FOOD_PRIZE_AUD = {
+    'food-coffee': '15.00',
+    'food-snacks': '15.00',
+    'food-icecream': '15.00',
+    'food-candy': '15.00',
+    'food-meal': '15.00',
+    'prize-plush': '70.00',
+    'prize-trophy': '85.00',
+    'prize-plush-large': '130.00',
+    'prize-hamper': '190.00'
+  };
+
+  function foodPrizeItems(currency) {
+    var cur = String(currency || 'USD').toUpperCase();
+    if (cur !== 'USD' && cur !== 'AUD') cur = 'USD';
+    return FOOD_PRIZE_USD.map(function (item) {
+      return {
+        id: item.id,
+        name: item.name,
+        amount: cur === 'AUD' ? FOOD_PRIZE_AUD[item.id] : item.amount,
+        currency: cur,
+        kind: item.kind
+      };
+    });
+  }
+
+  function attachFoodPrizes(offer) {
+    offer = offer || {};
+    var currency = offer.currency || null;
+    var items = Array.isArray(offer.items) ? offer.items.slice() : [];
+    if (!currency) {
+      return { storeId: offer.storeId, currency: currency, items: items };
+    }
+    foodPrizeItems(currency).forEach(function (extra) {
+      if (!items.some(function (have) { return have.id === extra.id; })) items.push(extra);
+    });
+    return { storeId: offer.storeId, currency: currency, items: items };
+  }
+
   function isPhysicalItem(item, storeId) {
     var name = String(item && item.name || '');
     var id = String(item && item.id || '');
+    var kind = String(item && item.kind || '');
     var store = String(storeId || '');
+    if (kind === 'food' || kind === 'prize') return true;
+    if (/^food-|^prize-/.test(id)) return true;
     if (id === 'full') return false;
     if (name === 'Coffeebreak Plush Hospital') return false;
     if (/plush-hospital/.test(store)) return true;
@@ -254,6 +318,8 @@
       storeId: String(input.storeId || ''),
       name: String(input.name || '').slice(0, 100),
       email: String(input.email || '').slice(0, 150),
+      address: String(input.address || '').slice(0, 300),
+      phone: String(input.phone || '').slice(0, 40),
       total: String(input.total || ''),
       currency: String(input.currency || ''),
       items: items
@@ -275,6 +341,8 @@
     return {
       name: String(input.name || '').slice(0, 100),
       email: String(input.email || '').slice(0, 150),
+      address: String(input.address || '').slice(0, 300),
+      phone: String(input.phone || '').slice(0, 40),
       items: items,
       total: total.trim(),
       reference: reference,
@@ -295,6 +363,7 @@
           name: item.name,
           amount: item.amount == null ? null : String(item.amount),
           currency: item.currency || opts.currency || null,
+          kind: item.kind || null,
           gap: item.gap || null
         };
       }),
@@ -490,7 +559,7 @@
 
   function mountPage(html, rel) {
     var src = stripLemon(html).replace(/<!--cb-game-cart-start-->[\s\S]*?<!--cb-game-cart-end-->/g, '');
-    var offer = readOffer(src, rel);
+    var offer = attachFoodPrizes(readOffer(src, rel));
     var payload = JSON.stringify({
       storeId: offer.storeId,
       currency: offer.currency,
@@ -504,8 +573,9 @@
       '<script src="' + prefix + 'cart.js"></script>',
       '<script src="' + prefix + 'game-cart.js"></script>',
       '<script src="' + prefix + 'game-mount.js"></script>',
+      /^apps\/park-builder\//.test(String(rel || '')) ? '<script src="park-orders.js"></script>' : '',
       legalBlock(src)
-    ].join('');
+    ].filter(Boolean).join('');
     var wrapped = '<!--cb-game-cart-start-->' + block + '<!--cb-game-cart-end-->';
     if (src.indexOf('</body>') !== -1) return src.replace('</body>', wrapped + '</body>');
     return src + wrapped;
@@ -520,6 +590,8 @@
     isSellableName: isSellableName,
     priceLabel: priceLabel,
     readOffer: readOffer,
+    foodPrizeItems: foodPrizeItems,
+    attachFoodPrizes: attachFoodPrizes,
     createSession: createSession,
     add: add,
     setQty: setQty,

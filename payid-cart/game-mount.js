@@ -129,10 +129,24 @@
       var itemsText = session.lines.map(function (line) {
         return line.qty + ' x ' + line.name;
       }).join(', ');
+      var physical = session.lines.some(function (line) {
+        return G.isPhysicalItem(line, session.storeId);
+      });
       form.append(
         honey,
         labelledInput('Name', 'name', session.customerName || '', { required: true }),
-        labelledInput('Email', 'email', session.customerEmail || '', { type: 'email', required: true }),
+        labelledInput('Email', 'email', session.customerEmail || '', { type: 'email', required: true })
+      );
+      if (physical) {
+        var shipNote = document.createElement('p');
+        shipNote.textContent = 'Fulfilment starts after the PayID lands.';
+        form.append(
+          shipNote,
+          labelledInput('Delivery address', 'address', session.customerAddress || '', { required: true }),
+          labelledInput('Phone', 'phone', session.customerPhone || '', { type: 'tel', required: true })
+        );
+      }
+      form.append(
         labelledInput('Items', 'items', itemsText, { readOnly: true }),
         labelledInput('Total', 'total', current.totalLabel + ' ' + current.currency, { readOnly: true }),
         labelledInput('Reference', 'reference', current.reference || '', { readOnly: true })
@@ -150,22 +164,35 @@
       form.addEventListener('input', function () {
         session.customerName = form.elements.name.value;
         session.customerEmail = form.elements.email.value;
+        if (form.elements.address) session.customerAddress = form.elements.address.value;
+        if (form.elements.phone) session.customerPhone = form.elements.phone.value;
       });
       form.addEventListener('submit', function (event) {
         event.preventDefault();
         if (honey.value) return;
         var name = form.elements.name.value.trim();
         var email = form.elements.email.value.trim();
+        var address = form.elements.address ? form.elements.address.value.trim() : '';
+        var phone = form.elements.phone ? form.elements.phone.value.trim() : '';
         session.customerName = name;
         session.customerEmail = email;
+        session.customerAddress = address;
+        session.customerPhone = phone;
         if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           session.orderNotice = 'Add your name and a valid email.';
+          status.textContent = session.orderNotice;
+          return;
+        }
+        if (physical && (!address || !phone)) {
+          session.orderNotice = 'Add your delivery name, address and phone.';
           status.textContent = session.orderNotice;
           return;
         }
         var fields = G.orderFields({
           name: name,
           email: email,
+          address: address,
+          phone: phone,
           lines: session.lines,
           total: current.totalLabel,
           currency: current.currency,
@@ -175,6 +202,8 @@
           storeId: session.storeId,
           name: name,
           email: email,
+          address: address,
+          phone: phone,
           lines: session.lines,
           total: current.totalLabel,
           currency: current.currency,
@@ -221,7 +250,7 @@
       heading.textContent = 'Coffeebreak cart';
       panel.appendChild(heading);
 
-      session.items.forEach(function (item) {
+      function renderItem(item) {
         var row = document.createElement('div');
         row.className = 'row';
         var info = document.createElement('div');
@@ -239,7 +268,15 @@
           }));
         }
         panel.appendChild(row);
-      });
+      }
+      session.items.filter(function (item) { return item.kind !== 'food' && item.kind !== 'prize'; }).forEach(renderItem);
+      var extras = session.items.filter(function (item) { return item.kind === 'food' || item.kind === 'prize'; });
+      if (extras.length) {
+        var extraHead = document.createElement('h2');
+        extraHead.textContent = 'Real food & prizes';
+        panel.appendChild(extraHead);
+        extras.forEach(renderItem);
+      }
 
       var lines = document.createElement('div');
       if (!session.lines.length) {
@@ -323,6 +360,23 @@
     paint();
     document.body.appendChild(toggle);
     document.body.appendChild(panel);
+    window.CBGameCart = {
+      add: function (id) {
+        var result = G.add(session, id);
+        persist();
+        paint();
+        panel.hidden = false;
+        toggle.textContent = 'Close cart';
+        toggle.setAttribute('aria-expanded', 'true');
+        return result;
+      },
+      open: function () {
+        panel.hidden = false;
+        toggle.textContent = 'Close cart';
+        toggle.setAttribute('aria-expanded', 'true');
+      },
+      items: function () { return session.items; }
+    };
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
