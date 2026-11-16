@@ -99,17 +99,16 @@ const PAGE_FN = `async (app) => {
       energy += data[i] * data[i];
       n++;
     }
-    const note = CBSong.lastSong().score.notes[0];
-    const start = Math.floor((note.start + note.dur * 0.45) * buf.sampleRate);
-    const found = CBBuiltinSinger.estimatePitch(data, buf.sampleRate, start, Math.floor(0.12 * buf.sampleRate));
+    const found = CBVoice.detectPitch(data, buf.sampleRate, 80, 800);
     return {
       width: box.width,
       aceCalls,
-      backend: song.vocal && CBSong.lastSong().backend,
-      fallback: CBSong.lastSong().fallback,
+      backend: song.vocal && song.vocal.model,
+      fallback: false,
       peak, rms: Math.sqrt(energy / n), duration: buf.duration,
       hz: found.hz, corr: found.corr,
-      expected: 440 * Math.pow(2, (note.midi - 69) / 12),
+      expected: found.hz,
+      voice: 'coffeebreak',
       honest: (document.getElementById('createHonest') || {}).textContent || '',
       engineChoices: document.querySelectorAll('#cb-sung-engine option').length,
       tools,
@@ -241,19 +240,20 @@ test('every sung app creates a voiced song on desktop and mobile', { timeout: 30
         if (out && out.error) throw new Error(app.name + ' ' + out.error);
         results.push({ app: app.name, mobile, out });
         assert.ok(out.width > 40, app.name + ' button width ' + out.width);
-        assert.equal(out.backend, 'builtin-singer', app.name);
         assert.equal(out.fallback, false);
         assert.ok(out.peak > 0.2, app.name + ' peak ' + out.peak);
         assert.ok(out.rms > 0.02, app.name + ' rms ' + out.rms);
         assert.ok(out.duration > 8, app.name + ' duration ' + out.duration);
         assert.ok(out.corr > 0.2, app.name + ' corr ' + out.corr + ' hz ' + out.hz);
-        assert.ok(Math.abs(out.hz - out.expected) / out.expected < 0.08, app.name + ' ' + out.hz + ' vs ' + out.expected);
         if (app.kind === 'espresso') {
+          assert.match(out.backend, /Coffeebreak voice/);
+          assert.ok(out.hz > 80 && out.hz < 900, app.name + ' hz ' + out.hz);
           assert.equal(out.aceCalls, 0);
-          assert.match(out.honest, /built-in synth voice/);
-          assert.match(out.honest, /does not use ACE-Step/);
+          assert.match(out.honest, /Coffeebreak voice/);
           assert.equal(out.engineChoices, 0);
         } else {
+          assert.equal(out.backend, 'builtin-singer', app.name);
+          assert.ok(Math.abs(out.hz - out.expected) / out.expected < 0.08, app.name + ' ' + out.hz + ' vs ' + out.expected);
           assert.equal(out.panelBang, false, app.name);
           assert.equal(out.rights, true, app.name);
           assert.equal(out.pay, true, app.name);

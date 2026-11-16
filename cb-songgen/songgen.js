@@ -35,6 +35,26 @@
       license: 'Apache-2.0',
       credit: 'DiffRhythm, an open model under the Apache-2.0 license',
     },
+    {
+      id: 'ace-step-jam',
+      endpoint: 'https://victor-ace-step-jam.hf.space',
+      api: 'generate',
+      kind: 'jam',
+      model: 'ACE-Step',
+      license: 'Apache-2.0',
+      credit: 'ACE-Step, an open model under the Apache-2.0 license',
+      timeout: 180000,
+    },
+    {
+      id: 'ace-step-cpu',
+      endpoint: 'https://werecooking-ace-step-cpu.hf.space',
+      api: 'generate',
+      kind: 'cpu',
+      model: 'ACE-Step CPU',
+      license: 'Apache-2.0',
+      credit: 'ACE-Step, an open model under the Apache-2.0 license',
+      timeout: 480000,
+    },
   ];
 
   function calm(text) {
@@ -91,6 +111,7 @@
       prompt: composePrompt(input),
       seconds: clampSeconds(input.seconds),
       seed: seed,
+      bpm: Math.max(72, Math.min(140, Math.round(+input.bpm || 110))),
     };
   }
 
@@ -128,6 +149,37 @@
         ref_audio_path: null,
         audio_prompt: null,
       });
+    }
+    if (backend.kind === 'jam') {
+      if (schema && schema.names && schema.names.length) {
+        return setNamed(schema, {
+          prompt: job.prompt,
+          lyrics: formatLyrics(job.lyrics),
+          audio_duration: job.seconds,
+          infer_step: 8,
+          guidance_scale: 7,
+          seed: job.seed,
+          lora_name_or_path: '',
+          lora_weight: 0.8,
+        });
+      }
+      return [job.prompt, formatLyrics(job.lyrics), job.seconds, 8, 7, job.seed, '', 0.8];
+    }
+    if (backend.kind === 'cpu') {
+      const duration = Math.max(10, Math.min(24, job.seconds));
+      if (schema && schema.names && schema.names.length) {
+        return setNamed(schema, {
+          caption: job.prompt,
+          lyrics: formatLyrics(job.lyrics),
+          bpm: job.bpm || 110,
+          duration: duration,
+          seed: job.seed,
+          steps: 8,
+          lora_select: 'None (no LoRA)',
+          lm_model_select: 'acestep-5Hz-lm-1.7B-Q8_0.gguf',
+        });
+      }
+      return [job.prompt, formatLyrics(job.lyrics), job.bpm || 110, duration, job.seed, 8, 'None (no LoRA)', 'acestep-5Hz-lm-1.7B-Q8_0.gguf'];
     }
     return setNamed(schema, {
       selected_model: 'acestep-v15-xl-turbo',
@@ -381,7 +433,7 @@
     const schemas = opts.schemas || {};
     const schema = schemas[backend.id] || await fetchSchema(backend, fetchImpl);
     const data = buildData(backend, schema, job);
-    const sung = await callSpace(backend, data, opts.timeoutMs || 180000, fetchImpl);
+    const sung = await callSpace(backend, data, backend.timeout || opts.timeoutMs || 180000, fetchImpl);
     return {
       bytes: sung.bytes,
       mime: sung.mime,
@@ -406,7 +458,15 @@
     }
     const backends = opts.backends || BACKENDS;
     const errors = [];
+    const tell = msg => {
+      if (typeof opts.onStatus === 'function') {
+        try { opts.onStatus(msg); } catch (e) {}
+      }
+    };
     for (let i = 0; i < backends.length; i++) {
+      if (i === 0) tell('Generating the sung song. This can take a few minutes.');
+      else if (backends[i].kind === 'cpu') tell('The GPU singing service is not available. Trying the CPU backup. This can take a few minutes.');
+      else tell('Trying another public singing service.');
       try {
         last = await runBackend(backends[i], job, opts);
         return last;

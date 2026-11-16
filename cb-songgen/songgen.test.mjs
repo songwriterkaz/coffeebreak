@@ -162,3 +162,22 @@ test('fewer than two words is refused before any service is called', async () =>
   );
   assert.equal(called, false);
 });
+
+test('the CPU and GPU backups fill the ACE-Step lyric forms', () => {
+  const job = { lyrics: 'sun is up on the hill', prompt: 'pop, soft vocal', seconds: 16, seed: 7, bpm: 110 };
+  const jamSchema = { names: ['prompt', 'lyrics', 'audio_duration', 'infer_step', 'guidance_scale', 'seed', 'lora_name_or_path', 'lora_weight'], defaults: [null, null, 60, 8, 7, -1, '', 0.8] };
+  const cpuSchema = { names: ['caption', 'lyrics', 'bpm', 'duration', 'seed', 'steps', 'lora_select', 'lm_model_select'], defaults: [null, null, 120, 10, -1, 8, 'None (no LoRA)', 'acestep-5Hz-lm-1.7B-Q8_0.gguf'] };
+  const jam = song.BACKENDS.find(b => b.kind === 'jam');
+  const cpu = song.BACKENDS.find(b => b.kind === 'cpu');
+  assert.ok(jam && cpu);
+  const jamData = song.buildData(jam, jamSchema, job);
+  assert.equal(jamData[0], 'pop, soft vocal');
+  assert.match(jamData[1], /sun is up on the hill/);
+  assert.equal(jamData[2], 16);
+  const cpuData = song.buildData(cpu, cpuSchema, job);
+  assert.equal(cpuData[0], 'pop, soft vocal');
+  assert.match(cpuData[1], /sun is up on the hill/);
+  assert.equal(cpuData[2], 110);
+  assert.equal(cpuData[3], 16);
+  assert.equal(cpuData[6], 'None (no LoRA)');
+});

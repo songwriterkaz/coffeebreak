@@ -1,6 +1,6 @@
 /* Coffeebreak Studio Espresso - Create and My songs.
-   The sung vocal and backing are the built-in synth voice. This page does not call ACE-Step.
-   Pitch, timing, and level edit that audio. */
+   Vocals are sung by the Coffeebreak voice in the browser. No outside singing service is used.
+   Pitch, timing, and level edit that returned audio. Drums, bass and keys use this studio's instruments. */
 (function () {
   const C = window.CBCore;
   const LIB = idbLibrary();
@@ -138,13 +138,23 @@
     const style = C.readStyle(input);
     const prog = C.progressionFor(style);
     const seed = input.seed == null ? 1 + Math.floor(Math.random() * 50) : input.seed | 0;
-    C.buildScore(lyrics, [], style.bpm);
-    const prompt = [input.prompt, style.genre, style.mood, style.bpm + ' BPM'].filter(Boolean).join(', ');
-    const seconds = input.seconds || C.vocalSeconds(lyrics);
-    const sung = await C.singAceStep(lyrics, { prompt: prompt, seed: seed, seconds: seconds });
+    const moodIndex = Math.max(0, C.MOODS.indexOf(style.mood));
+    const previousSig = P.sig;
+    P.sig = 4;
+    let melody;
+    try { melody = genMelody(style.key, moodIndex, seed, 8); }
+    finally { P.sig = previousSig; }
+    const sung = await C.singVoice(lyrics, {
+      notes: melody,
+      seed: seed,
+      bpm: style.bpm,
+      key: style.key,
+      seconds: input.seconds || C.vocalSeconds(lyrics),
+      onStatus: input.onStatus,
+    });
     const ctx = AC();
     const decoded = await ctx.decodeAudioData(sung.bytes.slice(0));
-    if (peakBuf(decoded) < 0.02) throw new Error('The vocal model returned silence. Nothing was saved.');
+    if (peakBuf(decoded) < 0.02) throw new Error('The Coffeebreak voice returned silence. Nothing was saved.');
     const vocal = trimBuffer(decoded);
     const previous = JSON.stringify(P);
     try {
@@ -155,7 +165,8 @@
       P.bpm = style.bpm;
       P.sig = 4;
       P.lyrics = lyrics;
-      const parts = ['sung vocal', 'backing music'];
+      const bars = Math.max(4, Math.min(16, Math.ceil(s2b(vocal.duration) / P.sig)));
+      const parts = arrange(style, prog, melody, bars);
       const vocalTrack = addTrack('audio', null, 'Vocals');
       if (!vocalTrack) throw new Error('The vocal track could not be added. Nothing was saved.');
       audioClip(vocalTrack, vocal, 0, 'Vocals');
@@ -165,7 +176,7 @@
       P.markers = [{ b: 0, name: 'Song' }];
       SEL.t = vocalTrack.id;
       const keyName = C.NOTE_NAMES[style.key] + (prog.minor ? ' minor' : ' major');
-      const summary = style.genre + ', ' + style.mood + ', ' + keyName + ', ' + style.bpm + ' BPM. The built-in synth voice sang the lyrics with drums, bass and chords.';
+      const summary = style.genre + ', ' + style.mood + ', ' + keyName + ', ' + style.bpm + ' BPM. Sung with the Coffeebreak voice, with drums, bass and keys from this studio.';
       const record = {
         id: P.songId,
         title: P.name,
@@ -176,7 +187,7 @@
         level: vocalTrack.vol,
         pitch: 0,
         file: sung.bytes,
-        mime: sung.mime || 'audio/mpeg',
+        mime: sung.mime || 'audio/wav',
         backend: sung.backend || '',
         vocal: { model: sung.model, info: sung.info, license: sung.license, credit: sung.credit || '' },
         packed: await packProject().arrayBuffer(),
@@ -201,11 +212,11 @@
   async function downloadSong(id) {
     const record = await LIB.get(id);
     if (!record || !record.file) throw new Error('That song file is not in this browser.');
-    const blob = new Blob([record.file], { type: record.mime || 'audio/mpeg' });
+    const blob = new Blob([record.file], { type: record.mime || 'audio/wav' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    const ext = String(record.mime || '').indexOf('wav') >= 0 ? '.wav' : '.mp3';
+    const ext = (record.mime || '').indexOf('wav') >= 0 ? '.wav' : ((record.mime || '').indexOf('mpeg') >= 0 || (record.mime || '').indexOf('mp3') >= 0 ? '.mp3' : '.wav');
     a.download = (record.title || 'song').replace(/[^\w]+/g, '-').slice(0, 40) + ext;
     document.body.appendChild(a);
     a.click();
@@ -366,7 +377,7 @@
     const el = $('#createResult');
     if (!el) return;
     el.hidden = false;
-    el.innerHTML = `<p><b>Lyrics</b></p><p class="lyric-block">${esc(record.lyrics || '')}</p><p><b>Vocal</b></p><p>The full song is saved in My songs and on the track named Vocals.</p><p class="hint">${esc(record.summary)} ${esc(record.vocal.model)}, ${esc(record.vocal.license)}. ${esc(record.vocal.info)}</p>`;
+    el.innerHTML = `<p><b>Lyrics</b></p><p class="lyric-block">${esc(record.lyrics || '')}</p><p><b>Vocal</b></p><p>The song is saved in My songs. The vocal is the Coffeebreak voice, on the track named Vocals.</p><p class="hint">${esc(record.summary || '')} ${esc((record.vocal && record.vocal.info) || '')}</p>`;
   }
 
   function setStatus(text) {
@@ -424,10 +435,10 @@
     busy = true;
     const button = $('#createGo');
     if (button) button.disabled = true;
-    setStatus('Singing with the built-in synth voice.');
+    setStatus('Singing with the Coffeebreak voice.');
     try {
       AC();
-      await createSong(input);
+      await createSong(Object.assign(input, { onStatus: setStatus }));
       setStatus('Saved in My songs. Pitch, timing, level, and sing again are under the vocal.');
       toast('Song saved in My songs');
     } catch (err) {
@@ -465,7 +476,7 @@
       <div class="vocal-action">
         <span class="field-label" id="vocalLabel">Full song</span>
         <div class="row"><button type="button" id="createGo" class="big">Create song</button><span id="createStatus" class="hint"></span></div>
-        <p class="hint" id="createHonest">Press Create song to sing the lyrics with the built-in synth voice. It is a synthesizer in this browser, not a recording of a person, and it does not use ACE-Step. You hear the words on a melody with drums, bass and chords, and the song is saved in My songs. You get 100 percent commercial rights to songs you make here.</p>
+        <p class="hint" id="createHonest">Press Create song to make a full song from the lyrics and style. The vocal is the Coffeebreak voice, sung in your browser. Drums, bass and keys come from this studio. The song is saved in My songs. The Coffeebreak voice is a sung voice made by the page, not a recording of a person, and it will not sound as finished as a paid singing service.</p>
       </div>
       <details id="createMore"><summary>More choices</summary>
         <div class="row"><label class="mini">Title <input id="createTitle" type="text" maxlength="80"></label>
@@ -505,7 +516,7 @@
     if ($('#bSave')) $('#bSave').onclick = () => saveLocal();
     if ($('#pSave')) $('#pSave').onclick = () => saveLocal();
     fillPay();
-    if (!DEMO && $('#sub')) $('#sub').textContent = 'Paste lyrics, then press Create song. The built-in synth voice sings them';
+    if (!DEMO && $('#sub')) $('#sub').textContent = 'Paste lyrics, then press Create song for a sung vocal in the Coffeebreak voice';
     const arrange = $('#t-arrange');
     if (arrange && !$('#studioFind')) {
       const find = document.createElement('div');
@@ -658,14 +669,14 @@
 
   async function decodeSung(sung) {
     const buf = await AC().decodeAudioData(sung.bytes.slice(0));
-    if (peakBuf(buf) < 0.02) throw new Error('The vocal model returned silence. Nothing was changed.');
+    if (peakBuf(buf) < 0.02) throw new Error('The Coffeebreak voice returned silence. Nothing was changed.');
     return trimBuffer(buf);
   }
 
   async function singAgain(lyrics) {
     const text = String(lyrics || '').trim();
     if (C.wordsOf(text).length < 2) throw new Error('Write at least two words to sing.');
-    const sung = await C.singAceStep(text, {});
+    const sung = await C.singVoice(text, { onStatus: setStatus, bpm: P && P.bpm, key: P && P.key, seconds: C.vocalSeconds(text) });
     const buf = await decodeSung(sung);
     const vocal = findVocal();
     if (!vocal) throw new Error('No vocal to edit.');
@@ -686,7 +697,7 @@
     if (!vocal) throw new Error('No vocal to edit.');
     const clip = vocal.clips[0];
     const base = BUFS[clip.takes[clip.take || 0]];
-    const sung = await C.singAceStep(lyrics, { line: line });
+    const sung = await C.singVoice(lyrics, { line: line, onStatus: setStatus, bpm: P && P.bpm, key: P && P.key });
     let piece = await decodeSung(sung);
     piece = await matchRate(piece, base.sampleRate, base.numberOfChannels);
     const start = Math.floor(base.length * index / lines.length);

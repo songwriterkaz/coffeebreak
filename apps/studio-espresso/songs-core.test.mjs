@@ -68,29 +68,27 @@ test('a personal library stores and removes songs', async () => {
   assert.equal((await lib.list()).length, 1);
 });
 
-test('Create song asks the shared module for a full sung song', async () => {
+test('Create song sings with the Coffeebreak voice at the written pitch', async () => {
   assert.equal(core.vocalSeconds('sun is up on the hill'), 12);
-  const bytes = new Uint8Array(9000);
-  bytes[0] = 0x49; bytes[1] = 0x44; bytes[2] = 0x33;
-  let seen = null;
-  const sung = await core.singAceStep('sun is up on the hill', {
-    seconds: 12,
-    seed: 3,
-    prompt: 'country',
-    songgen: {
-      async generateSong(job) {
-        seen = job;
-        return { bytes: bytes.buffer, model: 'ACE-Step/Ace-Step1.5', license: 'MIT', credit: 'ACE-Step 1.5, an open model under the MIT license', info: 'test audio', backend: 'ace-step-v15', mime: 'audio/mpeg' };
-      },
-    },
-  });
-  assert.equal(seen.seconds, 12);
-  assert.equal(seen.engine, 'builtin');
-  assert.match(seen.prompt, /country/);
-  assert.match(seen.lyrics, /sun is up on the hill/);
-  assert.equal(sung.model, 'ACE-Step/Ace-Step1.5');
-  assert.equal(sung.license, 'MIT');
-  assert.equal(sung.bytes, bytes.buffer);
+  const notes = [
+    { p: 69, s: 0, l: 2, v: 0.8 },
+    { p: 69, s: 2, l: 2, v: 0.8 },
+    { p: 69, s: 4, l: 2, v: 0.8 },
+  ];
+  const sung = await core.singVoice('la la la', { notes: notes, bpm: 80, seed: 3, seconds: 2.4 });
+  assert.equal(sung.model, 'Coffeebreak voice');
+  assert.equal(sung.backend, 'coffeebreak-voice');
+  assert.equal(sung.mime, 'audio/wav');
+  assert.ok(sung.bytes.byteLength > 1000);
+  const alias = await core.singAceStep('la la la', { notes: notes, bpm: 80, seed: 3, seconds: 2.4 });
+  assert.equal(alias.model, 'Coffeebreak voice');
+  const voice = require('./voice.js');
+  const dec = voice.decodeMono(sung.bytes);
+  const peak = voice.peakOf(dec.samples);
+  assert.ok(peak > 0.05, 'peak ' + peak);
+  const got = voice.detectPitch(dec.samples, dec.sampleRate, 300, 600);
+  const cents = 1200 * Math.log2(got.hz / 440);
+  assert.ok(Math.abs(cents) < 30, 'pitch ' + got.hz + ' Hz, ' + cents.toFixed(1) + ' cents');
 });
 
 test('Studio Espresso sings locally and does not call ACE-Step', async () => {
@@ -100,8 +98,8 @@ test('Studio Espresso sings locally and does not call ACE-Step', async () => {
   try {
     const sung = await core.singAceStep('sun is up on the hill', { seconds: 10, seed: 2, prompt: 'pop' });
     assert.equal(called, false);
-    assert.equal(sung.backend, 'builtin-singer');
-    assert.match(sung.model, /built-in synth/);
+    assert.equal(sung.backend, 'coffeebreak-voice');
+    assert.match(sung.model, /Coffeebreak voice/);
     assert.equal(sung.mime, 'audio/wav');
     const stats = core.wavStats(sung.bytes);
     assert.ok(stats.peak > 0.05, 'peak ' + stats.peak);
