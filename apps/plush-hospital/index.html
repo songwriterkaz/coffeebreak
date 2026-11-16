@@ -36,7 +36,7 @@ a { color: #a33b68; }
 #cb-game-legal {
   position: fixed;
   top: 0; left: 0; right: 0;
-  z-index: 6;
+  z-index: 20;
   background: rgba(255, 246, 250, 0.94);
   color: #5c3144;
   font: 12px/1.35 Georgia, serif;
@@ -147,6 +147,12 @@ a { color: #a33b68; }
 .tap { min-width: 92px; }
 button.hot { background: #ffd36e; color: #4a2436; }
 #vr-button, #VRButton { z-index: 80; }
+#screen-shop .card { width: min(920px, 100%); }
+.toys { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 10px; margin: 10px 0; }
+.toy { background: #fff; border-radius: 16px; padding: 8px 8px 12px; text-align: center; box-shadow: inset 0 0 0 2px #f3d5e0; }
+.toy svg { width: 112px; height: 132px; display: block; margin: 0 auto; }
+.toy h3 { font-size: 16px; line-height: 1.25; margin: 6px 0 2px; color: #a33b68; }
+.toy p { margin: 4px 0; }
 </style>
 </head>
 <body data-mode="game">
@@ -156,6 +162,7 @@ button.hot { background: #ffd36e; color: #4a2436; }
     <span class="logo-frame"><img class="logo" src="cb-logo.jpg" alt="Coffeebreak"></span>
     <h1>Coffeebreak Plush Hospital</h1>
     <p>You are a plush doctor. Soft patients arrive in a warm pink ward.</p>
+    <p>The Gift Shop sells that doctor and the patients as plush.</p>
     <p>The free demo covers the first ward and 3 patients.</p>
     <p>Full game $10 USD.</p>
     <p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
@@ -164,6 +171,7 @@ button.hot { background: #ffd36e; color: #4a2436; }
       <button type="button" id="btn-play">Play</button>
       <button type="button" id="btn-tutorial">Tutorial</button>
       <button type="button" id="btn-continue" class="quiet">Continue</button>
+      <button type="button" id="btn-title-shop">Gift Shop</button>
       <button type="button" id="btn-title-sound" class="quiet">Sound on</button>
       <button type="button" id="btn-title-cart" class="quiet">Cart</button>
     </div>
@@ -200,6 +208,7 @@ button.hot { background: #ffd36e; color: #4a2436; }
     <button type="button" id="btn-patient">See the patient</button>
     <button type="button" id="btn-door" class="quiet">About this door</button>
     <button type="button" id="btn-rooms" class="quiet">Rooms</button>
+    <button type="button" id="btn-shop" class="quiet">Gift Shop</button>
     <button type="button" id="btn-help" class="quiet">Help</button>
     <button type="button" id="btn-sound" class="quiet">Sound on</button>
     <button type="button" id="btn-menu" class="quiet">Menu</button>
@@ -242,6 +251,162 @@ button.hot { background: #ffd36e; color: #4a2436; }
     </div>
   </div>
 </section>
+<section id="screen-shop" class="overlay block" aria-label="Gift Shop">
+  <div class="card">
+    <span class="logo-frame"><img class="logo" src="cb-logo.jpg" alt="Coffeebreak"></span>
+    <h2>Gift Shop</h2>
+    <p>Take home the plush doctor and the patients from this ward. Each plush is US$35.</p>
+    <p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+    <p class="fine">Use the cart total, PayID, and reference in your own banking app. This page does not mark a payment as received. The ward unlock stays 10.00 USD in the same cart.</p>
+    <div class="toys">
+      <article class="toy">
+        <svg viewBox="0 0 160 190" role="img" aria-label="Pink plush doctor">
+          <ellipse cx="80" cy="178" rx="40" ry="8" fill="#e7b3c6"/>
+          <ellipse cx="48" cy="48" rx="16" ry="20" fill="#f4a6c2"/>
+          <ellipse cx="112" cy="48" rx="16" ry="20" fill="#f4a6c2"/>
+          <ellipse cx="48" cy="50" rx="8" ry="11" fill="#ffd0e0"/>
+          <ellipse cx="112" cy="50" rx="8" ry="11" fill="#ffd0e0"/>
+          <ellipse cx="80" cy="138" rx="48" ry="40" fill="#f4a6c2"/>
+          <path d="M38 112 Q80 98 122 112 L114 164 Q80 176 46 164 Z" fill="#fff8fb"/>
+          <path d="M80 108 V162" stroke="#f4a6c2" stroke-width="2"/>
+          <circle cx="80" cy="74" r="32" fill="#f4a6c2"/>
+          <circle cx="68" cy="76" r="4" fill="#4a2436"/>
+          <circle cx="92" cy="76" r="4" fill="#4a2436"/>
+          <circle cx="68" cy="76" r="10" fill="none" stroke="#6a3044" stroke-width="2"/>
+          <circle cx="92" cy="76" r="10" fill="none" stroke="#6a3044" stroke-width="2"/>
+          <path d="M78 76 H82" stroke="#6a3044" stroke-width="2"/>
+          <ellipse cx="56" cy="86" rx="6" ry="3.5" fill="#ff8fb3"/>
+          <ellipse cx="104" cy="86" rx="6" ry="3.5" fill="#ff8fb3"/>
+          <path d="M70 92 Q80 100 90 92" fill="none" stroke="#4a2436" stroke-width="2" stroke-linecap="round"/>
+          <path d="M60 124 Q80 146 102 122" fill="none" stroke="#6a3044" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="102" cy="122" r="5" fill="#6a3044"/>
+          <circle cx="104" cy="142" r="7" fill="#f7b6cf" stroke="#a33b68" stroke-width="1.5"/>
+        </svg>
+        <h3>Pink plush doctor</h3>
+        <p><b>$35 USD</b></p>
+        <p class="fine">The plush doctor from the Pink Ward, in a white coat with glasses, a stethoscope, and a pink badge.</p>
+        <button type="button" class="shop-add" data-plush="Pink plush doctor">Add to cart</button>
+      </article>
+      <article class="toy">
+        <svg viewBox="0 0 160 190" role="img" aria-label="Pip the torn-seam bunny">
+          <ellipse cx="80" cy="178" rx="40" ry="8" fill="#e7b3c6"/>
+          <ellipse cx="58" cy="36" rx="14" ry="34" fill="#f4a8c4" transform="rotate(-12 58 36)"/>
+          <ellipse cx="102" cy="36" rx="14" ry="34" fill="#f4a8c4" transform="rotate(12 102 36)"/>
+          <ellipse cx="58" cy="40" rx="7" ry="20" fill="#ffd0e0" transform="rotate(-12 58 40)"/>
+          <ellipse cx="102" cy="40" rx="7" ry="20" fill="#ffd0e0" transform="rotate(12 102 40)"/>
+          <ellipse cx="80" cy="136" rx="46" ry="42" fill="#f4a8c4"/>
+          <circle cx="80" cy="78" r="30" fill="#f4a8c4"/>
+          <circle cx="68" cy="78" r="4.5" fill="#4a2436"/>
+          <circle cx="92" cy="78" r="4.5" fill="#4a2436"/>
+          <ellipse cx="56" cy="88" rx="6" ry="3.5" fill="#ff8fb3"/>
+          <ellipse cx="104" cy="88" rx="6" ry="3.5" fill="#ff8fb3"/>
+          <path d="M70 94 Q80 102 90 94" fill="none" stroke="#4a2436" stroke-width="2" stroke-linecap="round"/>
+          <path d="M108 112 L122 168" fill="none" stroke="#6a3044" stroke-width="3" stroke-dasharray="5 4" stroke-linecap="round"/>
+          <path d="M114 128 L126 122" stroke="#6a3044" stroke-width="2"/>
+          <path d="M118 150 L130 144" stroke="#6a3044" stroke-width="2"/>
+        </svg>
+        <h3>Pip the torn-seam bunny</h3>
+        <p><b>$35 USD</b></p>
+        <p class="fine">Pip from the ward. A pink bunny with a torn seam along one side.</p>
+        <button type="button" class="shop-add" data-plush="Pip the torn-seam bunny">Add to cart</button>
+      </article>
+      <article class="toy">
+        <svg viewBox="0 0 160 190" role="img" aria-label="Mallow the stuffing bear">
+          <ellipse cx="80" cy="178" rx="40" ry="8" fill="#e7b3c6"/>
+          <circle cx="46" cy="62" r="18" fill="#f7c0d4"/>
+          <circle cx="114" cy="62" r="18" fill="#f7c0d4"/>
+          <circle cx="46" cy="62" r="9" fill="#ffd6e4"/>
+          <circle cx="114" cy="62" r="9" fill="#ffd6e4"/>
+          <ellipse cx="80" cy="142" rx="50" ry="30" fill="#f7c0d4"/>
+          <circle cx="80" cy="86" r="32" fill="#f7c0d4"/>
+          <circle cx="68" cy="88" r="4.5" fill="#4a2436"/>
+          <circle cx="92" cy="88" r="4.5" fill="#4a2436"/>
+          <ellipse cx="80" cy="100" rx="8" ry="6" fill="#e978a8"/>
+          <path d="M70 108 Q80 114 90 108" fill="none" stroke="#4a2436" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="124" cy="128" r="10" fill="#fff6ea"/>
+          <circle cx="132" cy="146" r="9" fill="#fff6ea"/>
+          <circle cx="122" cy="160" r="8" fill="#fff6ea"/>
+        </svg>
+        <h3>Mallow the stuffing bear</h3>
+        <p><b>$35 USD</b></p>
+        <p class="fine">Mallow from the ward. A flat little bear with stuffing puffs at the side.</p>
+        <button type="button" class="shop-add" data-plush="Mallow the stuffing bear">Add to cart</button>
+      </article>
+      <article class="toy">
+        <svg viewBox="0 0 160 190" role="img" aria-label="Dot the button-eye kitty">
+          <ellipse cx="80" cy="178" rx="40" ry="8" fill="#e7b3c6"/>
+          <path d="M42 78 L58 28 L78 70 Z" fill="#e98ab0"/>
+          <path d="M118 78 L102 28 L82 70 Z" fill="#e98ab0"/>
+          <path d="M50 70 L60 40 L72 68 Z" fill="#ffd0e0"/>
+          <path d="M110 70 L100 40 L88 68 Z" fill="#ffd0e0"/>
+          <ellipse cx="80" cy="138" rx="46" ry="40" fill="#e98ab0"/>
+          <circle cx="80" cy="82" r="30" fill="#e98ab0"/>
+          <circle cx="66" cy="82" r="4.5" fill="#4a2436"/>
+          <circle cx="96" cy="84" r="8" fill="#4a2436"/>
+          <circle cx="93" cy="81" r="1.4" fill="#fff7f4"/>
+          <circle cx="99" cy="81" r="1.4" fill="#fff7f4"/>
+          <circle cx="93" cy="87" r="1.4" fill="#fff7f4"/>
+          <circle cx="99" cy="87" r="1.4" fill="#fff7f4"/>
+          <ellipse cx="54" cy="92" rx="6" ry="3.5" fill="#ff8fb3"/>
+          <path d="M70 98 Q80 104 90 98" fill="none" stroke="#4a2436" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="128" cy="162" r="10" fill="#4a2436"/>
+          <circle cx="125" cy="159" r="1.6" fill="#fff7f4"/>
+          <circle cx="131" cy="159" r="1.6" fill="#fff7f4"/>
+          <circle cx="125" cy="165" r="1.6" fill="#fff7f4"/>
+          <circle cx="131" cy="165" r="1.6" fill="#fff7f4"/>
+        </svg>
+        <h3>Dot the button-eye kitty</h3>
+        <p><b>$35 USD</b></p>
+        <p class="fine">Dot from the ward. A pink kitty whose button eye has come loose.</p>
+        <button type="button" class="shop-add" data-plush="Dot the button-eye kitty">Add to cart</button>
+      </article>
+      <article class="toy">
+        <svg viewBox="0 0 160 190" role="img" aria-label="Nib the fever pup">
+          <ellipse cx="80" cy="178" rx="40" ry="8" fill="#e7b3c6"/>
+          <ellipse cx="36" cy="78" rx="16" ry="28" fill="#c9856a" transform="rotate(28 36 78)"/>
+          <ellipse cx="124" cy="78" rx="16" ry="28" fill="#c9856a" transform="rotate(-28 124 78)"/>
+          <ellipse cx="80" cy="136" rx="46" ry="42" fill="#f3b0c0"/>
+          <circle cx="80" cy="78" r="32" fill="#f3b0c0"/>
+          <circle cx="68" cy="78" r="4.5" fill="#4a2436"/>
+          <circle cx="92" cy="78" r="4.5" fill="#4a2436"/>
+          <ellipse cx="54" cy="90" rx="10" ry="7" fill="#ff6f91"/>
+          <ellipse cx="106" cy="90" rx="10" ry="7" fill="#ff6f91"/>
+          <ellipse cx="80" cy="96" rx="7" ry="5" fill="#a33b68"/>
+          <path d="M70 106 Q80 114 90 106" fill="none" stroke="#4a2436" stroke-width="2" stroke-linecap="round"/>
+          <rect x="112" y="118" width="8" height="36" rx="3" fill="#fff8fb" stroke="#6a3044" stroke-width="1.5"/>
+          <rect x="112" y="140" width="8" height="14" fill="#e978a8"/>
+        </svg>
+        <h3>Nib the fever pup</h3>
+        <p><b>$35 USD</b></p>
+        <p class="fine">Nib from the ward. A warm pup with flushed cheeks.</p>
+        <button type="button" class="shop-add" data-plush="Nib the fever pup">Add to cart</button>
+      </article>
+      <article class="toy">
+        <svg viewBox="0 0 160 190" role="img" aria-label="Rosie the sad-mood plush">
+          <ellipse cx="80" cy="178" rx="40" ry="8" fill="#e7b3c6"/>
+          <ellipse cx="50" cy="58" rx="16" ry="22" fill="#e7a0c0" transform="rotate(-24 50 58)"/>
+          <ellipse cx="110" cy="58" rx="16" ry="22" fill="#e7a0c0" transform="rotate(24 110 58)"/>
+          <ellipse cx="80" cy="142" rx="48" ry="36" fill="#e7a0c0"/>
+          <circle cx="80" cy="84" r="32" fill="#e7a0c0"/>
+          <ellipse cx="66" cy="92" rx="5" ry="3.5" fill="#4a2436"/>
+          <ellipse cx="94" cy="92" rx="5" ry="3.5" fill="#4a2436"/>
+          <ellipse cx="56" cy="102" rx="6" ry="3.5" fill="#ff8fb3"/>
+          <ellipse cx="104" cy="102" rx="6" ry="3.5" fill="#ff8fb3"/>
+          <path d="M68 112 Q80 104 92 112" fill="none" stroke="#4a2436" stroke-width="2" stroke-linecap="round"/>
+          <path d="M108 78 q6 8 2 14" fill="none" stroke="#7eb6e6" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <h3>Rosie the sad-mood plush</h3>
+        <p><b>$35 USD</b></p>
+        <p class="fine">Rosie from the ward. A soft plush with a small frown.</p>
+        <button type="button" class="shop-add" data-plush="Rosie the sad-mood plush">Add to cart</button>
+      </article>
+    </div>
+    <p class="fine"><strong>Disclaimer:</strong> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</p>
+    <div class="row">
+      <button type="button" id="btn-shop-close" class="quiet">Close</button>
+    </div>
+  </div>
+</section>
 <section id="screen-pay" class="overlay block" aria-label="Full game">
   <div class="card">
     <h2>Full game</h2>
@@ -260,6 +425,6 @@ button.hot { background: #ffd36e; color: #4a2436; }
 <div id="stick" aria-hidden="true"><div id="knob"></div></div>
 <div id="toast" role="status"></div>
 <script type="module" src="game.js"></script>
-<!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/plush-hospital" aria-label="Cart"><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/plush-hospital","currency":"USD","items":[{"id":"full","name":"Coffeebreak Plush Hospital","amount":"10.00","currency":"USD"}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> <a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p><p class="rights">Karen (Coffeebreak) keeps all rights to her products, designs, apps, games, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p></footer><!--cb-game-cart-end-->
+<!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/plush-hospital" aria-label="Cart"><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/plush-hospital","currency":"USD","items":[{"id":"pink-plush-doctor-1","name":"Pink plush doctor","amount":"35.00","currency":"USD"},{"id":"pip-the-torn-seam-bunny-2","name":"Pip the torn-seam bunny","amount":"35.00","currency":"USD"},{"id":"mallow-the-stuffing-bear-3","name":"Mallow the stuffing bear","amount":"35.00","currency":"USD"},{"id":"dot-the-button-eye-kitty-4","name":"Dot the button-eye kitty","amount":"35.00","currency":"USD"},{"id":"nib-the-fever-pup-5","name":"Nib the fever pup","amount":"35.00","currency":"USD"},{"id":"rosie-the-sad-mood-plush-6","name":"Rosie the sad-mood plush","amount":"35.00","currency":"USD"},{"id":"coffeebreak-plush-hospital-7","name":"Coffeebreak Plush Hospital","amount":"10.00","currency":"USD"}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> <a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p><p class="rights">Karen (Coffeebreak) keeps all rights to her products, designs, apps, games, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p></footer><!--cb-game-cart-end-->
 </body>
 </html>
