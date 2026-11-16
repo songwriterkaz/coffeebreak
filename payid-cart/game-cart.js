@@ -22,6 +22,7 @@
   }
 
   var GAP = 'Price coming soon. No payment is requested.';
+  var GAME_ORDERS_EMAIL = 'coffeebreakhq+orders@mail.grokbot.com';
   var PAY_HINT = 'Use the total, PayID, and reference in your own banking app if you pay. This page does not convert the price and does not mark a payment as received.';
   var RIGHTS = 'Karen (Coffeebreak) keeps all rights to her products, designs, apps, games, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.';
   var UI_STRINGS = [
@@ -47,6 +48,17 @@
     'Copy reference',
     'Report a problem',
     'Total',
+    'Name',
+    'Email',
+    'Items',
+    'Reference',
+    "I've paid by PayID, unlock now",
+    "I've paid by PayID, confirm this order",
+    'Unlocked on this device. Payment is not verified.',
+    'Order reference',
+    'Add your name and a valid email.',
+    'Order details were handed to the mailbox. Payment is not verified.',
+    'The mailbox did not accept the order details yet. Payment is not verified.',
     RIGHTS,
     'Tesla',
     'Starlink'
@@ -202,6 +214,74 @@
     if (found.length === 1) found[0].id = 'full';
     else found.forEach(function (item, index) { item.id = slug(item.name, index + 1); });
     return { storeId: storeId, currency: currency, items: found };
+  }
+
+  function isPhysicalItem(item, storeId) {
+    var name = String(item && item.name || '');
+    var id = String(item && item.id || '');
+    var store = String(storeId || '');
+    if (id === 'full') return false;
+    if (name === 'Coffeebreak Plush Hospital') return false;
+    if (/plush-hospital/.test(store)) return true;
+    if (/\bplush\b/i.test(name) && !/hospital/i.test(name)) return true;
+    return false;
+  }
+
+  function unlockKey(storeId) {
+    return 'cb-payid-unlock:' + String(storeId || 'game');
+  }
+
+  function honourClaim(input) {
+    input = input || {};
+    var lines = Array.isArray(input.lines) ? input.lines : [];
+    var items = lines.map(function (line) {
+      return {
+        id: line.id,
+        name: line.name,
+        qty: line.qty,
+        physical: isPhysicalItem(line, input.storeId)
+      };
+    });
+    var digital = items.some(function (item) { return !item.physical; });
+    return {
+      unlocked: digital && items.length > 0,
+      physical: items.some(function (item) { return item.physical; }),
+      paid: false,
+      verified: false,
+      confirmed: false,
+      customerClaimsPaid: items.length > 0,
+      reference: input.reference || '',
+      storeId: String(input.storeId || ''),
+      name: String(input.name || '').slice(0, 100),
+      email: String(input.email || '').slice(0, 150),
+      total: String(input.total || ''),
+      currency: String(input.currency || ''),
+      items: items
+    };
+  }
+
+  function ordersEndpoint() {
+    return 'https://formsubmit.co/ajax/coffeebreakhq%2Borders@mail.grokbot.com';
+  }
+
+  function orderFields(input) {
+    input = input || {};
+    var lines = Array.isArray(input.lines) ? input.lines : [];
+    var items = lines.map(function (line) {
+      return line.qty + ' x ' + line.name;
+    }).join(', ');
+    var total = String(input.total || '') + (input.currency ? ' ' + input.currency : '');
+    var reference = input.reference || '';
+    return {
+      name: String(input.name || '').slice(0, 100),
+      email: String(input.email || '').slice(0, 150),
+      items: items,
+      total: total.trim(),
+      reference: reference,
+      _subject: 'Coffeebreak order ' + (reference || 'draft'),
+      _captcha: 'false',
+      _honey: ''
+    };
   }
 
   function createSession(opts) {
@@ -433,6 +513,7 @@
 
   return {
     GAP: GAP,
+    GAME_ORDERS_EMAIL: GAME_ORDERS_EMAIL,
     PAY_HINT: PAY_HINT,
     RIGHTS: RIGHTS,
     UI_STRINGS: UI_STRINGS,
@@ -448,6 +529,11 @@
     listGamePages: listGamePages,
     stripLemon: stripLemon,
     mountPage: mountPage,
-    assetPrefix: assetPrefix
+    assetPrefix: assetPrefix,
+    ordersEndpoint: ordersEndpoint,
+    orderFields: orderFields,
+    isPhysicalItem: isPhysicalItem,
+    unlockKey: unlockKey,
+    honourClaim: honourClaim
   };
 });

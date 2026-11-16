@@ -175,6 +175,74 @@ test('published game copy keeps its price and currency', () => {
   assert.equal(rebate.items[0].amount, '10.00');
 });
 
+test('order details use the Formsubmit mailbox and never mark a payment verified', () => {
+  const game = api();
+  assert.equal(game.GAME_ORDERS_EMAIL, 'coffeebreakhq+orders@mail.grokbot.com');
+  assert.equal(game.ordersEndpoint(), 'https://formsubmit.co/ajax/coffeebreakhq%2Borders@mail.grokbot.com');
+  const fields = game.orderFields({
+    name: 'Ada Lovelace',
+    email: 'ada@example.com',
+    lines: [{ id: 'full', name: 'Coffeebreak Darts', qty: 2 }],
+    total: '20.00',
+    currency: 'USD',
+    reference: 'CBTESTREFERENCE1'
+  });
+  assert.equal(fields.name, 'Ada Lovelace');
+  assert.equal(fields.email, 'ada@example.com');
+  assert.equal(fields.items, '2 x Coffeebreak Darts');
+  assert.equal(fields.total, '20.00 USD');
+  assert.equal(fields.reference, 'CBTESTREFERENCE1');
+  assert.equal(fields._captcha, 'false');
+  assert.equal(fields._honey, '');
+  assert.match(fields._subject, /CBTESTREFERENCE1/);
+  assert.equal(JSON.stringify(fields).includes('verified'), false);
+  const mount = readFileSync(new URL('./game-mount.js', import.meta.url), 'utf8');
+  assert.match(mount, /cb-game-checkout/);
+  assert.match(mount, /I've paid by PayID, unlock now/);
+  assert.match(mount, /I've paid by PayID, confirm this order/);
+  assert.match(mount, /honourClaim\(/);
+  assert.match(mount, /unlockKey\(/);
+  assert.match(mount, /ordersEndpoint\(\)/);
+  assert.match(mount, /orderFields\(/);
+  assert.match(mount, /labelledInput\('Name', 'name'/);
+  assert.match(mount, /labelledInput\('Email', 'email'/);
+  assert.doesNotMatch(mount, /I have paid|payment confirmed|order sent|paid:\s*true|verified:\s*true/i);
+  const digital = game.honourClaim({
+    storeId: 'apps/darts',
+    name: 'Ada Lovelace',
+    email: 'ada@example.com',
+    lines: [{ id: 'full', name: 'Coffeebreak Darts', qty: 1 }],
+    total: '10.00',
+    currency: 'USD',
+    reference: 'CBTESTREFERENCE1'
+  });
+  assert.equal(digital.unlocked, true);
+  assert.equal(digital.paid, false);
+  assert.equal(digital.verified, false);
+  assert.equal(digital.confirmed, false);
+  assert.equal(digital.customerClaimsPaid, true);
+  assert.equal(game.unlockKey('apps/darts'), 'cb-payid-unlock:apps/darts');
+  const plush = game.honourClaim({
+    storeId: 'apps/plush-hospital',
+    lines: [{ id: 'pink-plush-doctor-1', name: 'Pink plush doctor', qty: 1 }],
+    reference: 'CBPLUSHORDER0001'
+  });
+  assert.equal(plush.unlocked, false);
+  assert.equal(plush.physical, true);
+  assert.equal(plush.paid, false);
+  const gameAndPlush = game.honourClaim({
+    storeId: 'apps/plush-hospital',
+    lines: [
+      { id: 'pink-plush-doctor-1', name: 'Pink plush doctor', qty: 1 },
+      { id: 'coffeebreak-plush-hospital-7', name: 'Coffeebreak Plush Hospital', qty: 1 }
+    ],
+    reference: 'CBMIXEDORDER0001'
+  });
+  assert.equal(gameAndPlush.unlocked, true);
+  assert.equal(gameAndPlush.physical, true);
+  assert.equal(gameAndPlush.paid, false);
+});
+
 test('added cart text has no exclamation mark, Headspace, PayPal, or Gumroad', () => {
   const game = api();
   const mount = readFileSync(new URL('./game-mount.js', import.meta.url), 'utf8');
