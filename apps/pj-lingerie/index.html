@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak PJs and Lingerie</title>
+<meta name="description" content="Coffeebreak pyjamas, satin sets, robes, briefs and slippers. Illustrated garments only. Pay by PayID.">
+<link rel="icon" href="../cb-logo.png">
+<style>
+:root{--bg:#f8eef2;--card:#fffafb;--ink:#3a2430;--soft:#6d5160;--line:#efd3de;--acc:#9a3d62}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+header,main,footer{max-width:980px;margin:0 auto}
+header{display:flex;gap:14px;align-items:center;padding:16px}
+header img{width:64px;height:auto;border-radius:12px;background:#fff}
+h1{margin:0;font-size:clamp(1.35rem,3vw,1.9rem)}
+header p{margin:2px 0 0;color:var(--soft)}
+main{padding:0 16px 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.art{height:110px;border-radius:12px;background:linear-gradient(#fff,#f6e4ea);display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.garment{position:relative}
+.pants{width:54px;height:62px;border:3px solid #c45b7a;border-top:0;border-radius:0 0 16px 16px;background:linear-gradient(#f7d5e0,#e7a8bc)}
+.pants:before,.pants:after{content:"";position:absolute;top:-16px;width:22px;height:18px;border:3px solid #c45b7a;border-bottom:0;background:#f7d5e0}
+.pants:before{left:-3px;border-radius:10px 0 0 0}.pants:after{right:-3px;border-radius:0 10px 0 0}
+.satin{width:70px;height:74px;border-radius:12px 12px 18px 18px;background:linear-gradient(120deg,#fff,#e9b7cb 40%,#fff 55%,#d98aa6);border:3px solid #a14b68;box-shadow:inset 0 0 0 6px rgba(255,255,255,.45)}
+.robe{width:68px;height:78px;background:linear-gradient(#f3d5c4,#e7b49a);clip-path:polygon(20% 0,80% 0,100% 100%,0 100%);border-radius:8px}
+.briefs{width:58px;height:28px;border:3px solid #8d4d68;border-radius:14px 14px 10px 10px;background:#f4c9d6}
+.slip{width:64px;height:28px;border-radius:16px 16px 8px 8px;background:linear-gradient(#f7f1e8,#e6d3c4);border:3px solid #b08968;box-shadow:18px 0 0 -14px #e6d3c4}
+h2{margin:0 0 6px;font-size:1.1rem}
+.price{font-weight:800;color:var(--acc)}
+.btn{min-height:44px;border:0;border-radius:10px;background:var(--acc);color:#fff;font:inherit;font-weight:700;padding:10px 14px;cursor:pointer}
+.btn.alt{background:#fff;color:var(--acc);border:1px solid var(--line)}
+.note{background:#fff;border-left:4px solid var(--acc);padding:10px 12px;border-radius:8px}
+#catalog{margin-bottom:14px}
+footer{padding:8px 16px 32px;color:var(--soft);font-size:.9rem}
+footer img{width:48px;height:auto;border-radius:10px}
+.links{display:flex;flex-wrap:wrap;gap:12px}
+.links a{color:var(--acc)}
+</style>
+<script id="cb-pages-bar-script" src="../../pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<header>
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="64" height="48">
+  <div>
+    <h1>Coffeebreak PJs and Lingerie</h1>
+    <p>Pyjamas, robes, briefs and slippers</p>
+  </div>
+</header>
+<main>
+  <p class="note">Illustrated garments only. No photos of people. Sleepwear and lingerie drawn as flat shapes.</p>
+  <section id="catalog" class="grid" aria-label="Products"></section>
+  <section class="card" id="checkout" aria-label="Cart"></section>
+</main>
+<footer>
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="48" height="36">
+  <p>Karen (Coffeebreak) keeps all rights to her products, designs, apps, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p>
+  <p class="links">
+    <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a>
+    <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>
+    <a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Coffeebreak on YouTube</a>
+    <a href="../../">Coffeebreak hub</a>
+  </p>
+</footer>
+<script src="../../payid-cart/cart.js"></script>
+<script src="../cb-static-checkout.js"></script>
+<script>
+(function () {
+  var PRODUCTS = [
+    { id: 'pants', name: 'Pyjama pants', amount: '55.00', price: 'US$55', art: 'pants' },
+    { id: 'satin', name: 'Satin pyjama set', amount: '55.00', price: 'US$55', art: 'satin' },
+    { id: 'robe', name: 'Robe', amount: '60.00', price: 'US$60', art: 'robe' },
+    { id: 'briefs', name: 'Briefs', amount: '15.00', price: 'US$15', art: 'briefs' },
+    { id: 'slippers', name: 'Slippers', amount: '15.00', price: 'US$15', art: 'slip' }
+  ];
+  var cart = [];
+  var ui = CBStaticCheckout.mount('checkout', {
+    storeId: 'pj-lingerie',
+    storeName: 'Coffeebreak PJs and Lingerie',
+    currency: 'USD',
+    getItems: function () { return cart; },
+    onQty: function (id, qty) {
+      cart.forEach(function (line) { if (line.id === id) line.qty = Math.max(1, Math.min(20, qty)); });
+      ui.refresh();
+    },
+    onRemove: function (id) {
+      cart = cart.filter(function (line) { return line.id !== id; });
+      ui.refresh();
+    }
+  });
+  var catalog = document.getElementById('catalog');
+  PRODUCTS.forEach(function (product) {
+    var card = document.createElement('article');
+    card.className = 'card';
+    var art = document.createElement('div');
+    art.className = 'art';
+    art.setAttribute('aria-hidden', 'true');
+    var shape = document.createElement('div');
+    shape.className = 'garment ' + product.art;
+    art.appendChild(shape);
+    var title = document.createElement('h2');
+    title.textContent = product.name;
+    var price = document.createElement('p');
+    price.className = 'price';
+    price.textContent = product.price;
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn';
+    button.textContent = 'Add to cart';
+    button.addEventListener('click', function () {
+      var line = null;
+      cart.forEach(function (item) { if (item.id === product.id) line = item; });
+      if (line) { if (line.qty < 20) line.qty += 1; }
+      else cart.push({ id: product.id, name: product.name, amount: product.amount, qty: 1 });
+      ui.refresh();
+    });
+    card.append(art, title, price, button);
+    catalog.appendChild(card);
+  });
+})();
+</script>
+</body>
+</html>
