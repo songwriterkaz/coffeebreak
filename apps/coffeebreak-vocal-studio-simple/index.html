@@ -19,6 +19,8 @@ footer button,.go,button{border:0;border-radius:999px;padding:8px 14px;backgroun
 .go{background:#a01455;color:#fff}
 button:disabled{opacity:.6;cursor:default}
 textarea{width:100%;padding:8px;border:1px solid #e3a0bf;border-radius:8px;background:#fff;min-height:120px;resize:vertical}
+select{font:inherit;border:1px solid #e3a0bf;border-radius:8px;padding:6px 10px;background:#fff;color:#3a1028}
+label.voice-pick{display:flex;gap:6px;align-items:center;font-size:14px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
 .hint{color:#6a2a4a;font-size:14px}
 #status{min-height:1.2em}
@@ -33,18 +35,25 @@ textarea{width:100%;padding:8px;border:1px solid #e3a0bf;border-radius:8px;backg
 <img src="../cb-logo.png" alt="Coffeebreak logo">
 <div>
 <h1>Coffeebreak Vocal Studio Simple</h1>
-<p>Write lyrics, then sing them with the original Coffeebreak voice in your browser.</p>
+<p>Write lyrics, then sing them with Voice 2 or the clear studio voice, or hear them spoken in your browser.</p>
 </div>
 </header>
 <main>
 <label for="lyrics">Lyrics</label>
 <textarea id="lyrics" aria-label="Lyrics" placeholder="Paste or type the words to sing"></textarea>
 <div class="row">
+<label class="voice-pick">Singing voice
+<select id="voicePick" aria-label="Singing voice">
+<option value="voice2" selected>Voice 2</option>
+<option value="clear">Clear studio voice</option>
+</select>
+</label>
 <button type="button" class="go" id="createGo">Create vocal</button>
+<button type="button" id="speakGo">Speak</button>
 <button type="button" id="downloadGo">Download wav</button>
 <span class="hint" id="status"></span>
 </div>
-<p class="hint" id="honest">The vocal is the original Coffeebreak voice, sung in your browser. No outside singing service is used. The Coffeebreak voice is a sung voice made by the page, not a recording of a person, and it will not sound as finished as a paid singing service.</p>
+<p class="hint" id="honest">Create vocal sings the lyrics in your browser. Voice 2 is the default singing voice. Clear studio voice is the later clearer pass. Speak reads the lyrics in your device's built-in speaking voice. No outside singing service is used. The spoken voice can be played here, but it cannot be saved as a wav. Download wav is for the sung vocal. The singing voices are made by the page, not a recording of a person, and will not sound as finished as a paid singing service.</p>
 <audio id="player" controls hidden></audio>
 <div class="paybox">
 <b>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</b><br>
@@ -62,8 +71,11 @@ $10 USD for Coffeebreak Vocal Studio Simple. Reference: <b data-pay-ref></b>.
 <p><button type="button" id="reportBtn">Report a problem</button></p>
 </div>
 </footer>
-<script src="voice.js"></script>
+<script src="voice-2.js"></script>
+<script>window.CBVoice2 = window.CBVoice;</script>
+<script src="voice-clear.js"></script>
+<script>window.CBVoiceClear = window.CBVoice; window.CBVoice = window.CBVoice2;</script>
 <script src="studio.js"></script>
-<script src="../../cb-songgen/cbreport.js" data-app="Coffeebreak Vocal Studio Simple" data-version="vocal-simple1"></script>
+<script src="../../cb-songgen/cbreport.js" data-app="Coffeebreak Vocal Studio Simple" data-version="vocal-simple2"></script>
 </body>
 </html>

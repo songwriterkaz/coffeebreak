@@ -11,7 +11,9 @@
     wav: null,
     samples: null,
     sampleRate: 44100,
-    audio: null
+    audio: null,
+    mode: '',
+    speaking: false
   };
 
   function wordsOf(text) {
@@ -24,6 +26,21 @@
     var el = $('status');
     if (el) el.textContent = text || '';
   }
+
+  function selectedVoiceId() {
+    var el = $('voicePick');
+    return el && el.value === 'clear' ? 'clear' : 'voice2';
+  }
+
+  function currentVoice() {
+    if (selectedVoiceId() === 'clear' && window.CBVoiceClear) return window.CBVoiceClear;
+    return window.CBVoice2 || window.CBVoice;
+  }
+
+  function voiceLabel(id) {
+    return id === 'clear' ? 'the clear studio voice' : 'Voice 2';
+  }
+
 
   function mint(rng) {
     var alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -91,7 +108,7 @@
   function encodeAndHold(samples, sr, wavMaybe) {
     state.samples = samples;
     state.sampleRate = sr;
-    state.wav = wavMaybe || CBVoice.encodeWav(samples, null, sr);
+    state.wav = wavMaybe || currentVoice().encodeWav(samples, null, sr);
     return state.wav;
   }
 
@@ -110,7 +127,8 @@
 
   async function singLyrics(lyrics, opts) {
     opts = opts || {};
-    var voice = window.CBVoice;
+    if (opts.voiceId && $('voicePick')) $('voicePick').value = opts.voiceId === 'clear' ? 'clear' : 'voice2';
+    var voice = currentVoice();
     if (!voice) throw new Error('The Coffeebreak voice could not be loaded.');
     var bpm = opts.bpm || state.bpm;
     var notes = opts.notes || null;
@@ -121,6 +139,8 @@
       score.notes.forEach(function (n) { n.t = Math.max(0, n.t + shift); });
       score.seconds += Math.max(0, shift);
     }
+    stopSpeech();
+    state.mode = 'sing';
     setStatus('Singing with the Coffeebreak voice.');
     var wav = voice.sing(score, { seed: opts.seed == null ? state.seed : opts.seed, bpm: bpm, style: opts.style || {} });
     var dec = voice.decodeMono(wav);
@@ -129,7 +149,7 @@
     state.lyrics = lyrics;
     state.bpm = bpm;
     playWav(state.wav);
-    setStatus('Ready. The vocal is the original Coffeebreak voice.');
+    setStatus('Ready. The vocal is ' + voiceLabel(selectedVoiceId()) + '.');
     return { peak: voice.peakOf(dec.samples), seconds: dec.samples.length / dec.sampleRate };
   }
 
@@ -147,8 +167,106 @@
     }
   }
 
+
+  function stopSpeech() {
+    state.speaking = false;
+    try {
+      if (window.speechSynthesis) speechSynthesis.cancel();
+    } catch (e) {}
+  }
+
+  function pickVoice(voices) {
+    voices = voices || [];
+    var best = null;
+    var bestScore = -1;
+    for (var i = 0; i < voices.length; i++) {
+      var v = voices[i];
+      var lang = String(v.lang || '').toLowerCase();
+      var name = String(v.name || '').toLowerCase();
+      var score = -1;
+      if (/en-au/.test(lang) || /australian/.test(name)) score = 40;
+      else if (/en-gb/.test(lang) || /uk english|british/.test(name)) score = 30;
+      else if (/en-us/.test(lang) || /american/.test(name)) score = 20;
+      else if (/^en/.test(lang)) score = 10;
+      if (score < 0) continue;
+      if (v.localService) score += 8;
+      if (/whisper|zarvox|bad news|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|ralph|samantha|princess|albert/.test(name)) score -= 15;
+      if (score > bestScore) {
+        bestScore = score;
+        best = v;
+      }
+    }
+    return best;
+  }
+
+  function whenVoices(done) {
+    var voices = speechSynthesis.getVoices() || [];
+    if (voices.length) {
+      done(voices);
+      return;
+    }
+    var finished = false;
+    var finish = function () {
+      if (finished) return;
+      finished = true;
+      done(speechSynthesis.getVoices() || []);
+    };
+    if (typeof speechSynthesis.addEventListener === 'function') {
+      speechSynthesis.addEventListener('voiceschanged', finish);
+    } else {
+      speechSynthesis.onvoiceschanged = finish;
+    }
+    setTimeout(finish, 500);
+  }
+
+  function onSpeak() {
+    var lyrics = ($('lyrics').value || '').trim();
+    if (wordsOf(lyrics).length < 2) {
+      setStatus('Write at least two words to speak.');
+      return;
+    }
+    if (!window.speechSynthesis || typeof speechSynthesis.speak !== 'function') {
+      setStatus('Spoken playback is not available in this browser.');
+      return;
+    }
+    stopSpeech();
+    if (state.audio) {
+      try { state.audio.pause(); } catch (e) {}
+    }
+    state.mode = 'speak';
+    setStatus('Speaking the lyrics.');
+    whenVoices(function (voices) {
+      var u = new SpeechSynthesisUtterance(lyrics);
+      var voice = pickVoice(voices);
+      if (voice) {
+        u.voice = voice;
+        if (voice.lang) u.lang = voice.lang;
+      } else {
+        u.lang = 'en-AU';
+      }
+      u.rate = 0.96;
+      u.pitch = 1;
+      u.onstart = function () {
+        state.speaking = true;
+        setStatus('Speaking the lyrics.');
+      };
+      u.onend = function () {
+        state.speaking = false;
+        setStatus('Ready. The speaking voice can be played, but it cannot be saved as a wav.');
+      };
+      u.onerror = function () {
+        state.speaking = false;
+        setStatus('The speaking voice could not be played.');
+      };
+      speechSynthesis.speak(u);
+    });
+  }
+
   function onDownload() {
-    if (!state.wav) { setStatus('Create a vocal first.'); return; }
+    if (!state.wav) {
+      setStatus('The speaking voice can be played, but it cannot be saved as a wav. Create a vocal to download a wav.');
+      return;
+    }
     var a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([state.wav], { type: 'audio/wav' }));
     a.download = 'coffeebreak-vocal.wav';
@@ -160,7 +278,9 @@
   function mount() {
     fillPay();
     $('createGo').onclick = onCreate;
+    $('speakGo').onclick = onSpeak;
     $('downloadGo').onclick = onDownload;
+    window.addEventListener('pagehide', stopSpeech);
     var report = $('reportBtn');
     if (report) report.onclick = function () {
       if (window.__cbreport && window.__cbreport.open) window.__cbreport.open();
@@ -170,11 +290,18 @@
   window.CBVocalStudio = {
     sing: singLyrics,
     readCart: function () { return readCart(window.localStorage); },
+    speak: onSpeak,
+    stopSpeech: stopSpeech,
     state: function () {
       return {
         hasVocal: !!state.samples,
-        peak: state.samples && window.CBVoice ? CBVoice.peakOf(state.samples) : 0,
-        seconds: state.samples ? state.samples.length / state.sampleRate : 0
+        peak: state.samples && currentVoice() ? currentVoice().peakOf(state.samples) : 0,
+        seconds: state.samples ? state.samples.length / state.sampleRate : 0,
+        voiceId: selectedVoiceId(),
+        mode: state.mode,
+        speaking: !!state.speaking,
+        canSpeak: !!(window.speechSynthesis && speechSynthesis.speak),
+        canDownloadSpeech: false
       };
     }
   };
