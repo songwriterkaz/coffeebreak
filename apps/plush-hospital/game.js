@@ -31,6 +31,17 @@ const QUEUE = [
   { name: 'Rosie', kind: 'sad', color: '#e7a0c0' }
 ];
 
+const SHOP_ITEMS = [
+  { name: 'Pink plush doctor', color: '#f4a6c2', coat: true, kind: '' },
+  { name: 'Pip the torn-seam bunny', color: '#f4a8c4', coat: false, kind: 'seam' },
+  { name: 'Mallow the stuffing bear', color: '#f7c0d4', coat: false, kind: 'stuff' },
+  { name: 'Dot the button-eye kitty', color: '#e98ab0', coat: false, kind: 'eye' },
+  { name: 'Nib the fever pup', color: '#f3b0c0', coat: false, kind: 'fever' },
+  { name: 'Rosie the sad-mood plush', color: '#e7a0c0', coat: false, kind: 'sad' }
+];
+
+const GAME_UNLOCK = 'Coffeebreak Plush Hospital';
+
 const KINDS = {
   seam: { label: 'Torn seam', tool: 'needle', text: 'A seam has split along the side.' },
   stuff: { label: 'Lost stuffing', tool: 'stuffing', text: 'This plush is a little flat.' },
@@ -66,6 +77,7 @@ let mode = 'title';
 let tutorialReturn = 'title';
 let step = 0;
 let payFrom = 'title';
+let shopFrom = 'title';
 let patient = null;
 let healing = false;
 let miniPractice = false;
@@ -178,6 +190,7 @@ function showPanels() {
   show('screen-tutorial', mode === 'tutorial');
   show('screen-mini', mode === 'mini');
   show('screen-pay', mode === 'pay');
+  show('screen-shop', mode === 'shop');
   const playish = mode === 'play' || mode === 'chart' || mode === 'rooms';
   show('hud', playish);
   show('screen-chart', mode === 'chart');
@@ -616,6 +629,26 @@ function dressWard() {
     bloom.position.set(7.2 + f * 0.35, 0.55, 7.7);
     scene.add(stem, bloom);
     f += 1;
+  }
+  dressGiftShop();
+}
+
+function dressGiftShop() {
+  addBox(2.55, 0.46, 0.72, 0xd7a07a, 2.05, 0.23, 2.05);
+  addBox(2.35, 0.08, 0.56, 0xf7c3d4, 2.05, 0.48, 2.05);
+  const sign = labelSprite('Gift Shop');
+  sign.position.set(2.05, 1.62, 2.05);
+  scene.add(sign);
+  let i = 0;
+  while (i < SHOP_ITEMS.length) {
+    const item = SHOP_ITEMS[i];
+    const plush = makePlush(item.color, item.coat);
+    if (item.kind) applyAilment(plush, item.kind);
+    plush.scale.set(0.32, 0.32, 0.32);
+    plush.position.set(0.95 + i * 0.42, 0.5, 2.05);
+    plush.rotation.y = 0.45;
+    scene.add(plush);
+    i += 1;
   }
 }
 
@@ -1267,7 +1300,7 @@ function openPay(from) {
   showPanels();
 }
 
-function openCart(tries) {
+function withCart(fn, tries) {
   const n = tries || 0;
   const toggle = $('cb-game-cart-toggle');
   const panel = $('cb-game-cart-panel');
@@ -1276,29 +1309,83 @@ function openCart(tries) {
       toast('The cart did not load. Reload the page.');
       return;
     }
-    window.setTimeout(function () { openCart(n + 1); }, 150);
+    window.setTimeout(function () { withCart(fn, n + 1); }, 150);
     return;
   }
   if (panel.hidden) toggle.click();
-  const text = panel.textContent || '';
-  if (text.indexOf('Your cart is empty.') !== -1) {
-    const buttons = panel.querySelectorAll('button');
-    let i = 0;
-    while (i < buttons.length) {
-      if (buttons[i].textContent === 'Add to cart') {
-        buttons[i].click();
-        break;
-      }
-      i += 1;
-    }
-  }
-  toast('Cart open. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com');
+  fn(panel);
   cartTries = n;
+}
+
+function addButtonFor(panel, name) {
+  const rows = panel.querySelectorAll('.row');
+  let i = 0;
+  while (i < rows.length) {
+    const strong = rows[i].querySelector('strong');
+    if (strong && strong.textContent === name) {
+      const buttons = rows[i].querySelectorAll('button');
+      let b = 0;
+      while (b < buttons.length) {
+        if (buttons[b].textContent === 'Add to cart') return buttons[b];
+        b += 1;
+      }
+    }
+    i += 1;
+  }
+  return null;
+}
+
+function openCart(tries) {
+  withCart(function (panel) {
+    const text = panel.textContent || '';
+    if (text.indexOf('Your cart is empty.') !== -1) {
+      const add = addButtonFor(panel, GAME_UNLOCK);
+      if (add) add.click();
+      else {
+        const buttons = panel.querySelectorAll('button');
+        let i = 0;
+        while (i < buttons.length) {
+          if (buttons[i].textContent === 'Add to cart') {
+            buttons[i].click();
+            break;
+          }
+          i += 1;
+        }
+      }
+    }
+    toast('Cart open. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com');
+  }, tries);
+}
+
+function addPlushToCart(name) {
+  withCart(function (panel) {
+    const add = addButtonFor(panel, name);
+    if (!add) {
+      toast('That plush is not listed in the cart yet. Reload the page.');
+      return;
+    }
+    add.click();
+    toast(name + ' is in the cart. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com. This page does not mark a payment as received.');
+  }, 0);
+}
+
+function openShop(from) {
+  shopFrom = from === 'play' ? 'play' : 'title';
+  const close = $('btn-shop-close');
+  if (close) close.textContent = shopFrom === 'play' ? 'Back to the ward' : 'Title screen';
+  mode = 'shop';
+  showPanels();
+  blip();
 }
 
 function openRooms() {
   const list = $('room-list');
   list.replaceChildren();
+  const shop = document.createElement('button');
+  shop.type = 'button';
+  shop.textContent = 'Gift Shop';
+  shop.addEventListener('click', function () { openShop('play'); });
+  list.appendChild(shop);
   ROOMS.forEach(function (room) {
     const button = document.createElement('button');
     button.type = 'button';
@@ -1335,6 +1422,11 @@ function openRooms() {
 }
 
 function goBack() {
+  if (mode === 'shop') {
+    mode = shopFrom === 'play' ? 'play' : 'title';
+    showPanels();
+    return;
+  }
   if (mode === 'mini') {
     hideMini(miniPractice ? 'tutorial' : 'chart');
     return;
@@ -1591,6 +1683,14 @@ function bindUi() {
   $('btn-title-sound').addEventListener('click', function () { setMute(save.mute ? false : true); });
   $('btn-sound').addEventListener('click', function () { setMute(save.mute ? false : true); });
   $('btn-title-cart').addEventListener('click', function () { openCart(0); });
+  $('btn-title-shop').addEventListener('click', function () { openShop('title'); });
+  $('btn-shop').addEventListener('click', function () { openShop('play'); });
+  $('btn-shop-close').addEventListener('click', function () { goBack(); });
+  document.querySelectorAll('.shop-add').forEach(function (button) {
+    button.addEventListener('click', function () {
+      addPlushToCart(button.getAttribute('data-plush') || '');
+    });
+  });
   $('btn-pay-cart').addEventListener('click', function () { openCart(0); });
   $('btn-tut-back').addEventListener('click', function () {
     if (step === 0) {
