@@ -1,6 +1,6 @@
 /* Coffeebreak Studio Espresso - Create and My songs.
-   Vocals are sung by ACE-Step (Apache-2.0) via its public Space.
-   Pitch, timing, and level edit that returned audio. Drums, bass and keys use this studio's instruments. */
+   The sung vocal and backing are the built-in synth voice. This page does not call ACE-Step.
+   Pitch, timing, and level edit that audio. */
 (function () {
   const C = window.CBCore;
   const LIB = idbLibrary();
@@ -165,7 +165,7 @@
       P.markers = [{ b: 0, name: 'Song' }];
       SEL.t = vocalTrack.id;
       const keyName = C.NOTE_NAMES[style.key] + (prog.minor ? ' minor' : ' major');
-      const summary = style.genre + ', ' + style.mood + ', ' + keyName + ', ' + style.bpm + ' BPM. Full song with a sung vocal and backing music. ' + (sung.credit || sung.model) + '.';
+      const summary = style.genre + ', ' + style.mood + ', ' + keyName + ', ' + style.bpm + ' BPM. The built-in synth voice sang the lyrics with drums, bass and chords.';
       const record = {
         id: P.songId,
         title: P.name,
@@ -205,7 +205,8 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = (record.title || 'song').replace(/[^\w]+/g, '-').slice(0, 40) + '.mp3';
+    const ext = String(record.mime || '').indexOf('wav') >= 0 ? '.wav' : '.mp3';
+    a.download = (record.title || 'song').replace(/[^\w]+/g, '-').slice(0, 40) + ext;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -423,7 +424,7 @@
     busy = true;
     const button = $('#createGo');
     if (button) button.disabled = true;
-    setStatus('Generating the full song. This can take a few minutes.');
+    setStatus('Singing with the built-in synth voice.');
     try {
       AC();
       await createSong(input);
@@ -464,7 +465,7 @@
       <div class="vocal-action">
         <span class="field-label" id="vocalLabel">Full song</span>
         <div class="row"><button type="button" id="createGo" class="big">Create song</button><span id="createStatus" class="hint"></span></div>
-        <p class="hint" id="createHonest">Press Create song to make a full song from the lyrics and style. The result has a sung vocal and backing music from an open model, and it is saved in My songs. You get 100 percent commercial rights to songs you make here. If the service fails, nothing is saved and no stand-in song is played.</p>
+        <p class="hint" id="createHonest">Press Create song to sing the lyrics with the built-in synth voice. It is a synthesizer in this browser, not a recording of a person, and it does not use ACE-Step. You hear the words on a melody with drums, bass and chords, and the song is saved in My songs. You get 100 percent commercial rights to songs you make here.</p>
       </div>
       <details id="createMore"><summary>More choices</summary>
         <div class="row"><label class="mini">Title <input id="createTitle" type="text" maxlength="80"></label>
@@ -504,7 +505,7 @@
     if ($('#bSave')) $('#bSave').onclick = () => saveLocal();
     if ($('#pSave')) $('#pSave').onclick = () => saveLocal();
     fillPay();
-    if (!DEMO && $('#sub')) $('#sub').textContent = 'Paste lyrics, then press Create song for a sung vocal';
+    if (!DEMO && $('#sub')) $('#sub').textContent = 'Paste lyrics, then press Create song. The built-in synth voice sings them';
     const arrange = $('#t-arrange');
     if (arrange && !$('#studioFind')) {
       const find = document.createElement('div');

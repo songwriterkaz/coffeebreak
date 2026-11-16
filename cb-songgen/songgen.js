@@ -1,6 +1,7 @@
 /* Coffeebreak shared full-song client.
-   Calls public open-model Spaces. It never invents audio and never plays a stand-in file.
-   ACE-Step 1.5 is MIT. DiffRhythm is Apache-2.0. This file is Coffeebreak, not those projects. */
+   The default singer is the built-in browser synth in builtin-singer.js.
+   ACE-Step 1.5 (MIT) and DiffRhythm (Apache-2.0) stay optional. If they are busy,
+   Create still returns the built-in synth voice. This file is Coffeebreak, not those projects. */
 (function (root, factory) {
   const api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
@@ -336,7 +337,35 @@
   }
 
   function busyText(message) {
-    return /quota|busy|exceeded|zerogpu|try again/i.test(message || '');
+    return /quota|busy|exceeded|zerogpu|try again|queue full/i.test(message || '');
+  }
+
+  function singer() {
+    const host = typeof globalThis !== 'undefined' ? globalThis : this;
+    if (host.CBBuiltinSinger && host.CBBuiltinSinger.sing) return host.CBBuiltinSinger;
+    if (typeof require === 'function') return require('./builtin-singer.js');
+    throw new Error('The built-in singer is not loaded.');
+  }
+
+  function renderBuiltin(job) {
+    const sung = singer().sing({
+      lyrics: job.lyrics,
+      prompt: job.prompt,
+      seconds: job.seconds,
+      seed: job.seed,
+    });
+    return {
+      bytes: sung.bytes,
+      mime: sung.mime,
+      info: sung.info,
+      model: sung.model,
+      license: sung.license,
+      credit: sung.credit,
+      backend: 'builtin-singer',
+      seconds: sung.seconds,
+      score: sung.score,
+      fallback: false,
+    };
   }
 
   function plainFailure(errors) {
@@ -365,21 +394,37 @@
     };
   }
 
+  let last = null;
+
   async function generateSong(input, opts) {
     opts = opts || {};
     const job = jobOf(input);
+    const engine = String(opts.engine || input.engine || 'builtin');
+    if (engine !== 'ace') {
+      last = renderBuiltin(job);
+      return last;
+    }
     const backends = opts.backends || BACKENDS;
     const errors = [];
     for (let i = 0; i < backends.length; i++) {
       try {
-        return await runBackend(backends[i], job, opts);
+        last = await runBackend(backends[i], job, opts);
+        return last;
       } catch (err) {
         errors.push((backends[i].id || 'service') + ': ' + (err && err.message ? err.message : 'failed'));
       }
     }
-    const failure = new Error(plainFailure(errors));
-    failure.errors = errors;
-    throw failure;
+    if (opts.allowFallback === false) {
+      const failure = new Error(plainFailure(errors));
+      failure.errors = errors;
+      throw failure;
+    }
+    last = renderBuiltin(job);
+    last.fallback = true;
+    last.aceErrors = errors;
+    last.info = 'ACE-Step was busy, so the built-in synth voice sang this song. ' + last.info;
+    last.credit = 'the built-in synth voice, because ACE-Step was busy. ' + last.credit;
+    return last;
   }
 
   return {
@@ -394,5 +439,6 @@
     queueMessages: queueMessages,
     generateSong: generateSong,
     plainFailure: plainFailure,
+    lastSong: function () { return last; },
   };
 });

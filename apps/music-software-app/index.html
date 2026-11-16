@@ -56,4 +56,4 @@ chunks=[];mr=new MediaRecorder(stream);mr.ondataavailable=e=>chunks.push(e.data)
 function recStop(){if(mr&&mr.state!=='inactive'){mr.stop();recst.textContent='Stopped. Your take is below.'}}
 function show(id){document.querySelectorAll('section').forEach(s=>s.hidden=s.id!==id);document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.s===id))}
 show('s1');
-</script><script src="cb-fullscreen.js"></script><script src="../../payid-cart/cart.js"></script><script src="../../cb-songgen/songgen.js"></script><script src="../../cb-songgen/panel.js"></script><script src="../../cb-songgen/cbreport.js" data-app="Coffeebreak Music Software" data-version="sung1"></script></body></html>
+</script><script src="cb-fullscreen.js"></script><script src="../../payid-cart/cart.js"></script><script src="../../cb-songgen/builtin-singer.js"></script><script src="../../cb-songgen/songgen.js"></script><script src="../../cb-songgen/panel.js"></script><script src="../../cb-songgen/cbreport.js" data-app="Coffeebreak Music Software" data-version="sung1"></script></body></html>

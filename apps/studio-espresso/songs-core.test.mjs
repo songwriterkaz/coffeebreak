@@ -85,9 +85,28 @@ test('Create song asks the shared module for a full sung song', async () => {
     },
   });
   assert.equal(seen.seconds, 12);
+  assert.equal(seen.engine, 'builtin');
   assert.match(seen.prompt, /country/);
   assert.match(seen.lyrics, /sun is up on the hill/);
   assert.equal(sung.model, 'ACE-Step/Ace-Step1.5');
   assert.equal(sung.license, 'MIT');
   assert.equal(sung.bytes, bytes.buffer);
+});
+
+test('Studio Espresso sings locally and does not call ACE-Step', async () => {
+  let called = false;
+  const original = globalThis.fetch;
+  globalThis.fetch = async () => { called = true; throw new Error('ace'); };
+  try {
+    const sung = await core.singAceStep('sun is up on the hill', { seconds: 10, seed: 2, prompt: 'pop' });
+    assert.equal(called, false);
+    assert.equal(sung.backend, 'builtin-singer');
+    assert.match(sung.model, /built-in synth/);
+    assert.equal(sung.mime, 'audio/wav');
+    const stats = core.wavStats(sung.bytes);
+    assert.ok(stats.peak > 0.05, 'peak ' + stats.peak);
+    assert.ok(stats.rms > 0.01, 'rms ' + stats.rms);
+  } finally {
+    globalThis.fetch = original;
+  }
 });

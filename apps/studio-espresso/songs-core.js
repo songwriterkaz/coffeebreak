@@ -1,6 +1,5 @@
-/* Coffeebreak Studio Espresso - create, library, and ACE-Step vocal client.
-   ACE-Step (ACE-Step/ACE-Step) is Apache-2.0. This file calls the public
-   Space. It does not synthesise a singer locally. */
+/* Coffeebreak Studio Espresso - create and library.
+   Songs are sung by the shared built-in synth voice. This page does not call ACE-Step. */
 (function (root, factory) {
   const api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
@@ -8,8 +7,8 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   const PAY_LABEL = 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
   const CART_KEY = 'cbx-espresso-cart';
-  const MODEL = 'ACE-Step/ACE-Step';
-  const ENDPOINT = 'https://ace-step-ace-step.hf.space';
+  const MODEL = 'Coffeebreak built-in synth voice';
+  const ENDPOINT = 'builtin';
   const VOICES = [
     { id: 'en1', label: 'English demo voice 1 (GTSinger reference)', api: 'EN singer 1 — GTSinger' },
     { id: 'en2', label: 'English demo voice 2 (Opencpop reference)', api: 'EN singer 2 — Opencpop' },
@@ -203,8 +202,7 @@
       prompt: prompt,
       seconds: seconds,
       seed: opts.seed,
-      timeoutMs: opts.timeoutMs,
-      fetchImpl: opts.fetchImpl,
+      engine: 'builtin',
     });
     sung.seconds = seconds;
     return sung;

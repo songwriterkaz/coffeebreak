@@ -17,7 +17,7 @@ test('a live open model returns a full song file', { timeout: 560000 }, async ()
     prompt: 'bright pop, clear sung vocal, acoustic guitar, bass and drums',
     seconds: 20,
     seed: 7,
-  }, { timeoutMs: 170000 });
+  }, { engine: 'ace', allowFallback: false, timeoutMs: 170000 });
   assert.ok(sung.bytes.byteLength > 20000, 'bytes ' + sung.bytes.byteLength);
   assert.equal(song.looksLikeAudio(sung.bytes), true);
   assert.match(sung.model, /ACE-Step|DiffRhythm/);
