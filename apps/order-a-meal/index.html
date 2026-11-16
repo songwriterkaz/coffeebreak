@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Order a Meal</title>
+<meta name="description" content="Order your meal on Uber Eats. Coffeebreak is not affiliated with Uber Eats.">
+<link rel="icon" href="logo.png">
+<style>
+:root{--bg:#f4e9dc;--card:#fffaf3;--ink:#3a2316;--soft:#6b4a36;--acc:#7a4a2b;--btn:#6b3f24;--btnink:#fff;--line:#c9a98a;--warn:#8a4b00}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+header{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--card);border-bottom:2px solid var(--line)}
+header img{width:56px;height:auto;border-radius:12px}
+header h1{margin:0;font-size:1.25rem}
+header p{margin:0;color:var(--soft);font-size:.9rem}
+main{max-width:640px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+h2{margin:0 0 10px;font-size:1.2rem}
+.lede{margin:0 0 14px;color:var(--soft)}
+.note{background:#fff3e0;border-left:4px solid var(--warn);padding:12px;border-radius:8px;font-size:.95rem;margin:0 0 16px}
+.picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:0 0 16px}
+.pick,.big{display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;font:inherit;font-weight:700;border-radius:12px}
+.pick{min-height:48px;padding:12px 14px;background:#ead8c3;color:var(--ink);border:1px solid var(--line)}
+.big{min-height:56px;padding:18px;background:var(--btn);color:var(--btnink);font-size:1.15rem;width:100%}
+.pick:focus,.big:focus{outline:3px solid var(--acc);outline-offset:2px}
+footer{max-width:640px;margin:0 auto;padding:16px 16px 28px;font-size:.85rem;color:var(--soft)}
+footer a{color:var(--acc)}
+.links{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px}
+#cb-hubbar{max-width:640px;margin:8px auto 24px;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px/1.5 system-ui,sans-serif}
+#cb-hubbar a{color:#d6336c}
+@media (max-width:400px){
+  header{padding:10px 12px;gap:10px}
+  header img{width:48px}
+  header h1{font-size:1.1rem}
+  main{padding:12px}
+}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<header>
+  <img src="logo.png" alt="Coffeebreak logo">
+  <div>
+    <h1>Coffeebreak Order a Meal</h1>
+    <p>A short page for ordering one meal</p>
+  </div>
+</header>
+<main>
+  <section class="card">
+    <h2>Order your meal</h2>
+    <p class="lede">Pick a meal type to search Uber Eats Australia, or open Uber Eats to choose for yourself.</p>
+    <p class="note">The order is placed and paid on Uber Eats. Coffeebreak is not affiliated with Uber Eats.</p>
+    <div class="picks" aria-label="Meal type quick picks">
+      <a class="pick" href="https://www.ubereats.com/au/search?q=breakfast" target="_blank" rel="noopener noreferrer">Breakfast</a>
+      <a class="pick" href="https://www.ubereats.com/au/search?q=lunch" target="_blank" rel="noopener noreferrer">Lunch</a>
+      <a class="pick" href="https://www.ubereats.com/au/search?q=dinner" target="_blank" rel="noopener noreferrer">Dinner</a>
+      <a class="pick" href="https://www.ubereats.com/au/search?q=coffee" target="_blank" rel="noopener noreferrer">Coffee</a>
+      <a class="pick" href="https://www.ubereats.com/au/search?q=dessert" target="_blank" rel="noopener noreferrer">Dessert</a>
+    </div>
+    <a class="big" href="https://www.ubereats.com/au" target="_blank" rel="noopener noreferrer">Order on Uber Eats</a>
+  </section>
+</main>
+<footer>
+  <p>Karen O'Brien (Coffeebreak) keeps all rights to this app, its design, name and logo. Buyers may resell physical items they make or print with it, but may not copy the app or make their own versions.</p>
+  <p>Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</p>
+  <div class="links">
+    <a href="https://coffeebreaks.itch.io">https://coffeebreaks.itch.io</a>
+    <a href="https://www.tesla.com">Tesla</a>
+    <a href="https://www.starlink.com">Starlink</a>
+  </div>
+</footer>
+<div id="cb-hubbar">
+  <p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
+  <p>Free to use. Tip if you like: PayID darkokaz@gmx.com (Teachers Mutual Bank). Put the app name in the reference.</p>
+</div>
+</body>
+</html>
