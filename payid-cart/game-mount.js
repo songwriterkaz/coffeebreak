@@ -31,7 +31,7 @@
     }
 
     var style = document.createElement('style');
-    style.textContent = '#cb-game-cart-toggle,#cb-game-cart-panel button,#cb-game-cart-panel a{min-height:44px;min-width:44px}#cb-game-cart-toggle{position:fixed;right:12px;bottom:76px;z-index:2147483002;background:#e8559a;color:#fff;border:0;border-radius:999px;padding:10px 16px;font:700 16px/1.2 system-ui,sans-serif;cursor:pointer}#cb-game-cart-panel{position:fixed;right:12px;bottom:128px;z-index:2147483002;width:min(420px,calc(100% - 24px));max-height:70vh;overflow:auto;background:#fff;color:#3a1f2c;border:2px solid #e8559a;border-radius:16px;padding:12px;font:15px/1.4 system-ui,sans-serif}#cb-game-cart-panel h2{margin:0 0 8px;font-size:1.1rem}#cb-game-cart-panel button{background:#e8559a;color:#fff;border:0;border-radius:10px;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer}#cb-game-cart-panel button.quiet{background:#fff;color:#b8336f;border:1px solid #e8559a}#cb-game-cart-panel a{color:#b8336f;font-weight:700}#cb-game-cart-panel .row{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:8px 0}';
+    style.textContent = '#cb-game-cart-toggle,#cb-game-cart-panel button,#cb-game-cart-panel a{min-height:44px;min-width:44px}#cb-game-cart-toggle{position:fixed;right:12px;bottom:76px;z-index:2147483002;background:#e8559a;color:#fff;border:0;border-radius:999px;padding:10px 16px;font:700 16px/1.2 system-ui,sans-serif;cursor:pointer}#cb-game-cart-panel{position:fixed;right:12px;bottom:128px;z-index:2147483002;width:min(420px,calc(100% - 24px));max-height:70vh;overflow:auto;background:#fff;color:#3a1f2c;border:2px solid #e8559a;border-radius:16px;padding:12px;font:15px/1.4 system-ui,sans-serif}#cb-game-cart-panel h2{margin:0 0 8px;font-size:1.1rem}#cb-game-cart-panel button{background:#e8559a;color:#fff;border:0;border-radius:10px;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer}#cb-game-cart-panel button.quiet{background:#fff;color:#b8336f;border:1px solid #e8559a}#cb-game-cart-panel a{color:#b8336f;font-weight:700}#cb-game-cart-panel .row{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:8px 0}#cb-game-cart-panel label{display:block;font-weight:700;margin-top:8px}#cb-game-cart-panel input{display:block;width:100%;min-height:44px;margin-top:4px;padding:8px 10px;border:1px solid #e8559a;border-radius:10px;font:inherit;box-sizing:border-box}';
     document.head.appendChild(style);
 
     var toggle = document.createElement('button');
@@ -69,6 +69,125 @@
       if (className) button.className = className;
       button.addEventListener('click', onClick);
       return button;
+    }
+
+    function labelledInput(labelText, name, value, opts) {
+      opts = opts || {};
+      var wrap = document.createElement('label');
+      wrap.appendChild(document.createTextNode(labelText));
+      var input = document.createElement('input');
+      input.name = name;
+      input.value = value == null ? '' : String(value);
+      if (opts.type) input.type = opts.type;
+      if (opts.readOnly) input.readOnly = true;
+      if (opts.required) input.required = true;
+      wrap.appendChild(input);
+      return wrap;
+    }
+
+    function payStep(current) {
+      var wrap = document.createElement('div');
+      wrap.id = 'cb-game-pay';
+      var total = document.createElement('p');
+      total.textContent = 'Total: ' + current.totalLabel + ' ' + current.currency;
+      var label = document.createElement('p');
+      label.textContent = 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
+      var ref = document.createElement('p');
+      ref.textContent = current.reference ? 'Reference: ' + current.reference : 'Add a priced item to mint a reference.';
+      var stepsHead = document.createElement('p');
+      stepsHead.textContent = 'How to pay';
+      var steps = document.createElement('ol');
+      ['Open your banking app.', 'Send the total to that PayID.', 'Put the reference in the payment description.'].forEach(function (text) {
+        var item = document.createElement('li');
+        item.textContent = text;
+        steps.appendChild(item);
+      });
+      var hint = document.createElement('p');
+      hint.textContent = G.PAY_HINT;
+      wrap.append(total, label, ref, stepsHead, steps, hint);
+      (current.notices || []).forEach(function (text) {
+        var note = document.createElement('p');
+        note.textContent = text;
+        wrap.appendChild(note);
+      });
+      var copies = C.copyFields(current);
+      wrap.append(
+        copyButton('Copy amount', copies.amount),
+        copyButton('Copy PayID', copies.payId),
+        copyButton('Copy reference', copies.reference)
+      );
+      var form = document.createElement('form');
+      form.id = 'cb-game-order';
+      form.noValidate = true;
+      var honey = document.createElement('input');
+      honey.name = '_honey';
+      honey.tabIndex = -1;
+      honey.autocomplete = 'off';
+      honey.setAttribute('aria-hidden', 'true');
+      honey.style.position = 'absolute';
+      honey.style.left = '-9999px';
+      var itemsText = session.lines.map(function (line) {
+        return line.qty + ' x ' + line.name;
+      }).join(', ');
+      form.append(
+        honey,
+        labelledInput('Name', 'name', session.customerName || '', { required: true }),
+        labelledInput('Email', 'email', session.customerEmail || '', { type: 'email', required: true }),
+        labelledInput('Items', 'items', itemsText, { readOnly: true }),
+        labelledInput('Total', 'total', current.totalLabel + ' ' + current.currency, { readOnly: true }),
+        labelledInput('Reference', 'reference', current.reference || '', { readOnly: true })
+      );
+      var submit = document.createElement('button');
+      submit.type = 'submit';
+      submit.textContent = 'Send order details';
+      var status = document.createElement('p');
+      status.id = 'cb-game-order-status';
+      status.textContent = session.orderNotice || '';
+      form.append(submit, status);
+      form.addEventListener('input', function () {
+        session.customerName = form.elements.name.value;
+        session.customerEmail = form.elements.email.value;
+      });
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (honey.value) return;
+        var name = form.elements.name.value.trim();
+        var email = form.elements.email.value.trim();
+        session.customerName = name;
+        session.customerEmail = email;
+        if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          session.orderNotice = 'Add your name and a valid email.';
+          status.textContent = session.orderNotice;
+          return;
+        }
+        var fields = G.orderFields({
+          name: name,
+          email: email,
+          lines: session.lines,
+          total: current.totalLabel,
+          currency: current.currency,
+          reference: current.reference
+        });
+        session.orderNotice = 'Payment is not verified. Reference: ' + (current.reference || '');
+        status.textContent = session.orderNotice;
+        fetch(G.ordersEndpoint(), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(fields)
+        }).then(function (res) { return res.json(); }).then(function (body) {
+          if (body && (body.success === true || body.success === 'true')) {
+            session.orderNotice = 'Order details were handed to the mailbox. Payment is not verified. Reference: ' + (current.reference || '');
+          } else {
+            session.orderNotice = 'The mailbox did not accept the order details yet. Payment is not verified. Reference: ' + (current.reference || '');
+          }
+          status.textContent = session.orderNotice;
+        }).catch(function () {
+          session.orderNotice = 'The mailbox did not accept the order details yet. Payment is not verified. Reference: ' + (current.reference || '');
+          status.textContent = session.orderNotice;
+        });
+      });
+      wrap.appendChild(form);
+      return wrap;
     }
 
     function paint() {
@@ -138,51 +257,23 @@
       }
       panel.appendChild(lines);
 
+      if (!session.lines.length) session.showPay = false;
       var payable = session.lines.length && (current.showTransferInstructions || current.mode === 'quote-before-transfer');
       if (current.mode === 'gap' || !session.currency) {
         var gap = document.createElement('p');
         gap.textContent = current.gap || G.GAP;
         panel.appendChild(gap);
       } else if (payable) {
-        var total = document.createElement('p');
-        total.textContent = 'Total: ' + current.totalLabel + ' ' + current.currency;
-        var label = document.createElement('p');
-        label.textContent = 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
-        var checkout = document.createElement('h3');
+        var checkout = document.createElement('button');
+        checkout.type = 'button';
+        checkout.id = 'cb-game-checkout';
         checkout.textContent = 'Checkout';
-        var ref = document.createElement('p');
-        ref.textContent = current.reference ? 'Reference: ' + current.reference : 'Add a priced item to mint a reference.';
-        var stepsHead = document.createElement('p');
-        stepsHead.textContent = 'How to pay';
-        var steps = document.createElement('ol');
-        ;['Open your banking app.', 'Send the total to that PayID.', 'Put the reference in the payment description.'].forEach(function (text) {
-          var item = document.createElement('li');
-          item.textContent = text;
-          steps.appendChild(item);
+        checkout.addEventListener('click', function () {
+          session.showPay = true;
+          paint();
         });
-        var hint = document.createElement('p');
-        hint.textContent = G.PAY_HINT;
-        panel.append(checkout, total, label, ref, stepsHead, steps, hint);
-        (current.notices || []).forEach(function (text) {
-          var note = document.createElement('p');
-          note.textContent = text;
-          panel.appendChild(note);
-        });
-        var copies = C.copyFields(current);
-        panel.append(
-          copyButton('Copy amount', copies.amount),
-          copyButton('Copy PayID', copies.payId),
-          copyButton('Copy reference', copies.reference)
-        );
-        if (current.reference) {
-          var draft = C.draftMailto(current);
-          var mailNote = document.createElement('p');
-          mailNote.textContent = draft.notice;
-          var link = document.createElement('a');
-          link.href = draft.href;
-          link.textContent = 'Open email draft';
-          panel.append(mailNote, link);
-        }
+        panel.appendChild(checkout);
+        if (session.showPay) panel.appendChild(payStep(current));
       }
       var report = document.createElement('p');
       var reportLink = document.createElement('a');

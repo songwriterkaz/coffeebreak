@@ -175,6 +175,37 @@ test('published game copy keeps its price and currency', () => {
   assert.equal(rebate.items[0].amount, '10.00');
 });
 
+test('order details use the Formsubmit mailbox and never mark a payment verified', () => {
+  const game = api();
+  assert.equal(game.GAME_ORDERS_EMAIL, 'coffeebreakhq+orders@mail.grokbot.com');
+  assert.equal(game.ordersEndpoint(), 'https://formsubmit.co/ajax/coffeebreakhq%2Borders@mail.grokbot.com');
+  const fields = game.orderFields({
+    name: 'Ada Lovelace',
+    email: 'ada@example.com',
+    lines: [{ id: 'full', name: 'Coffeebreak Darts', qty: 2 }],
+    total: '20.00',
+    currency: 'USD',
+    reference: 'CBTESTREFERENCE1'
+  });
+  assert.equal(fields.name, 'Ada Lovelace');
+  assert.equal(fields.email, 'ada@example.com');
+  assert.equal(fields.items, '2 x Coffeebreak Darts');
+  assert.equal(fields.total, '20.00 USD');
+  assert.equal(fields.reference, 'CBTESTREFERENCE1');
+  assert.equal(fields._captcha, 'false');
+  assert.equal(fields._honey, '');
+  assert.match(fields._subject, /CBTESTREFERENCE1/);
+  assert.equal(JSON.stringify(fields).includes('verified'), false);
+  const mount = readFileSync(new URL('./game-mount.js', import.meta.url), 'utf8');
+  assert.match(mount, /cb-game-checkout/);
+  assert.match(mount, /Send order details/);
+  assert.match(mount, /ordersEndpoint\(\)/);
+  assert.match(mount, /orderFields\(/);
+  assert.match(mount, /labelledInput\('Name', 'name'/);
+  assert.match(mount, /labelledInput\('Email', 'email'/);
+  assert.doesNotMatch(mount, /I have paid|payment confirmed|order sent|paid:\s*true|verified:\s*true/i);
+});
+
 test('added cart text has no exclamation mark, Headspace, PayPal, or Gumroad', () => {
   const game = api();
   const mount = readFileSync(new URL('./game-mount.js', import.meta.url), 'utf8');
