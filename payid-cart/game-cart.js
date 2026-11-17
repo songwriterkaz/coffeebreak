@@ -885,6 +885,21 @@
     return found;
   }
 
+  function statedSale(html) {
+    var source = sourceOf(html);
+    var mem = /Membership[^$]{0,40}\$(\d+(?:\.\d{1,2})?)\s*(USD|AUD)/i.exec(source);
+    if (mem && !nearBack(source, mem.index)) {
+      return { name: 'Coffeebreak Membership', amount: money(mem[1]), currency: mem[2].toUpperCase() };
+    }
+    var sold = /for \$(\d+(?:\.\d{1,2})?)(?!\d)/i.exec(source);
+    if (sold && !nearBack(source, sold.index) && Number(sold[1]) !== 2) {
+      var tail = source.slice(sold.index, sold.index + 28);
+      var code = /\b(USD|AUD)\b/i.exec(tail);
+      return { name: titleOf(html) || 'Coffeebreak app', amount: money(sold[1]), currency: code ? code[1].toUpperCase() : 'USD' };
+    }
+    return null;
+  }
+
   function readSellerOffer(html, rel) {
     var path = String(rel || '');
     if (skippedSeller(path)) return null;
@@ -920,6 +935,14 @@
     var cards = htmlShopCards(html);
     if (cards) return { storeId: storeId, currency: cards[0].currency, items: cards };
     if (/referral\s*\/\s*matching service only|estimates only, not quotes/i.test(String(html || ''))) return null;
+    var stated = statedSale(html);
+    if (stated) {
+      return {
+        storeId: storeId,
+        currency: stated.currency,
+        items: [{ id: 'full', name: stated.name, amount: stated.amount, currency: stated.currency }]
+      };
+    }
     if (/coming soon/i.test(titleOf(html)) || /not for sale/i.test(String(html || ''))) return null;
     if (isCameraPage(path, html)) {
       return {
