@@ -26,7 +26,7 @@ textarea{min-height:88px;resize:vertical}
 .hero{position:relative;margin:0;border-radius:20px;overflow:hidden;aspect-ratio:16/9;background:#2a1610}
 .hero img{width:100%;height:100%;object-fit:cover;display:block}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,22,16,.08),rgba(42,22,16,.2) 45%,rgba(42,22,16,.5));pointer-events:none}
-.caption{margin:8px 0 0;font-size:.85rem;color:var(--soft)}
+.caption,.credits{margin:8px 0 0;font-size:.85rem;color:var(--soft)}.credits{margin-top:4px}
 .restos{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:0 0 12px}
 .resto{min-height:48px;padding:0;overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);font:inherit;font-weight:700;text-align:left;cursor:pointer;box-shadow:0 6px 16px rgba(58,35,22,.1)}
 .resto img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#ead8c3}
@@ -82,6 +82,7 @@ footer a{color:var(--acc)}
     <div class="hero-overlay" aria-hidden="true"></div>
   </figure>
   <p class="caption">Images are illustrative.</p>
+  <p class="credits">Photos from Unsplash, used under the Unsplash Licence.</p>
 </div>
 <main>
   <section class="card">
