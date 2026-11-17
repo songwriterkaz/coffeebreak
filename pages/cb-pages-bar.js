@@ -19,3 +19,13 @@
   if (document.body) inject();
   else document.addEventListener('DOMContentLoaded', inject);
 })();
+
+/* Load the shared verse-of-the-day footer line */
+(function(){
+  if (window.__CB_VERSE__ || document.getElementById('cb-verse-script')) return;
+  var s = document.createElement('script');
+  s.id = 'cb-verse-script';
+  s.src = 'https://songwriterkaz.github.io/coffeebreak/pages/cb-verse.js';
+  s.defer = true;
+  (document.head || document.documentElement).appendChild(s);
+})();
