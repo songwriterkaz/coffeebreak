@@ -8,6 +8,8 @@
   var SHORTS = 'https://www.youtube.com/@coffeebreakTVSERIES/shorts';
   var SPOTIFY = 'https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7';
   var APPLE = 'https://music.apple.com/au/artist/karen-obrien/535470355';
+  var EBAY = 'https://www.ebay.com.au/str/coffeebreakluckydips';
+  var LUCKY = 'https://songwriterkaz.github.io/coffeebreak/stores/ebay/';
 
   function floating(el){
     for (var e = el; e && e !== document.body; e = e.parentElement) {
@@ -74,6 +76,13 @@
     links.appendChild(sep());
     links.appendChild(link(APPLE, 'Apple Music'));
     box.appendChild(links);
+
+    var shop = document.createElement('p');
+    shop.style.cssText = 'margin:8px 0 0';
+    shop.appendChild(link(EBAY, 'Shop Coffeebreak Lucky Dips on eBay'));
+    shop.appendChild(sep());
+    shop.appendChild(link(LUCKY, 'Lucky Dips page'));
+    box.appendChild(shop);
 
     if (host && host.parentNode) host.parentNode.insertBefore(box, host);
     else document.body.appendChild(box);
