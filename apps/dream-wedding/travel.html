@@ -63,4 +63,4 @@ function upd(){const f=$('from').value||'Sydney',t=$('to').value||'Bali',d1=$('d
 $('mk').onclick=()=>{const f=$('from').value,t=$('to').value,s=$('surprise').checked;const fc=code(f)||f.slice(0,3).toUpperCase(),tc=code(t)||t.slice(0,3).toUpperCase();
  $('pass').style.display='block';$('route').textContent=fc+' ✈ '+(s?'???':tc);$('pinfo').textContent='Depart '+$('d1').value+' · Guests '+$('n').value+' · Destination: '+(s?'a surprise':t);
  $('reveal').style.display=s?'inline-block':'none';$('reveal').onclick=()=>{$('route').textContent=fc+' ✈ '+tc;$('pinfo').textContent='Depart '+$('d1').value+' · Guests '+$('n').value+' · Destination: '+t;$('reveal').style.display='none'}};
-</script></body></html>
+</script><script id="cb-verse-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-verse.js" defer></script></body></html>

@@ -45,4 +45,4 @@ $('tag').onclick=()=>{if(used())return lock();const m=$('mine').value,n=clean($(
  jar.push(e);localStorage.setItem(K,JSON.stringify(jar.slice(-60)));fx(()=>{render(e);showJar();lock();$('cardsec').scrollIntoView({behavior:'smooth'});});};
 $('dl').onclick=()=>{const a=document.createElement('a');a.download='team-tag-it-wish-card.png';a.href=$('card').toDataURL('image/png');a.click();};
 showJar();lock();const last=jar.find(e=>e.day==today);if(last){logo.onload=girl.onload=()=>render(last);if(logo.complete&&girl.complete)render(last);}
-</script></body></html>
+</script><script id="cb-verse-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-verse.js" defer></script></body></html>
