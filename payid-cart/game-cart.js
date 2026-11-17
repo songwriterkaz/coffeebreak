@@ -22,8 +22,8 @@
   }
 
   var GAP = 'Price coming soon. No payment is requested.';
-  var GAME_ORDERS_EMAIL = 'coffeebreakhq+orders@mail.grokbot.com';
-  var PAY_HINT = 'Use the total, PayID, and reference in your own banking app if you pay. This page does not convert the price and does not mark a payment as received.';
+  var GAME_ORDERS_EMAIL = 'darkokaz@gmx.com';
+  var PAY_HINT = 'Use the PayID, reference, and the Australian dollar amount in your own banking app. This page does not mark a payment as received.';
   var RIGHTS = 'Karen (Coffeebreak) keeps all rights to her products, designs, apps, games, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.';
   var UI_STRINGS = [
     'Cart',
@@ -37,6 +37,7 @@
     'How to pay',
     'Open your banking app.',
     'Send the total to that PayID.',
+    'Send the Australian dollar amount to that PayID.',
     'Put the reference in the payment description.',
     'Price coming soon',
     GAP,
@@ -54,6 +55,11 @@
     'Reference',
     "I've paid by PayID, unlock now",
     "I've paid by PayID, confirm this order",
+    'Place order',
+    'Open cart',
+    'Email this order',
+    'Copy AUD amount',
+    'Transfer',
     'Unlocked on this device. Payment is not verified.',
     'Order reference',
     'Add your name and a valid email.',
@@ -108,7 +114,25 @@
     /^apps\/rollercoaster\//,
     /^apps\/bigbanana\//,
     /^time-zone-quiz\//,
-    /^apps\/oz-quiz\//
+    /^apps\/oz-quiz\//,
+    /^apps\/ballerina-ghost/,
+    /^apps\/cb-ghost-academy/,
+    /^apps\/cb-ghost-coffee-ritual/,
+    /^apps\/cb-ghost-emf-lab/,
+    /^apps\/cb-ghost-evp-studio/,
+    /^apps\/cb-ghost-radar/,
+    /^apps\/cb-ghost-spirit-talker/,
+    /^apps\/cb-ghost-thermal-cam/,
+    /^apps\/cb-haunted-map/,
+    /^apps\/ghost-amps/,
+    /^apps\/ghost-box/,
+    /^apps\/ghost-detector/,
+    /^apps\/ghost-doll-past-life-reading/,
+    /^apps\/ghost-dolls(?:-buy|-free-demo)?\//,
+    /^apps\/new-age-spiritual/,
+    /^apps\/spirit-board/,
+    /^apps\/spirit-candles/,
+    /^apps\/spirit-messages/
   ];
 
   function isSellableName(name) {
@@ -184,6 +208,16 @@
       if (!isSellableName(cardName) || !cardCurrency) continue;
       cards.push({ id: slug(cardName, cards.length + 1), name: cardName, amount: money(cardMatch[2]), currency: cardCurrency });
     }
+    var h4Re = /<h4>([^<]+)<\/h4>[\s\S]{0,500}?\$(\d+(?:\.\d{1,2})?)\s*(USD|AUD)?/gi;
+    var h4Match;
+    while ((h4Match = h4Re.exec(source))) {
+      var h4Name = cleanTitle(h4Match[1]);
+      if (!isSellableName(h4Name)) continue;
+      var h4Amt = Number(h4Match[2]);
+      var h4Amount = money(h4Amt > 10 ? h4Match[2] : '10.00');
+      var h4Currency = assignCurrency(h4Amount, h4Match[3]) || 'USD';
+      cards.push({ id: slug(h4Name, cards.length + 1), name: h4Name, amount: h4Amount, currency: h4Currency, kind: 'physical' });
+    }
     if (cards.length >= 2) {
       return { storeId: storeId, currency: cards[0].currency, items: cards };
     }
@@ -218,6 +252,8 @@
         items: [{ id: 'full', name: title, amount: '10.00', currency: 'USD' }]
       };
     }
+    var vending = readVendingSnacks(html, rel);
+    if (vending) return vending;
     if (!found.length) return pricedDefault();
     var currency = found[0].currency;
     var mixed = found.some(function (item) { return item.currency !== currency; });
@@ -277,16 +313,40 @@
     return { storeId: offer.storeId, currency: currency, items: items };
   }
 
+  function readVendingSnacks(html, rel) {
+    if (!/apps\/cb-vr-vending(\/|$)/.test(String(rel || ''))) return null;
+    var items = [];
+    var re = /\{code:'([^']+)',name:'([^']+)',price:(\d+(?:\.\d+)?)/g;
+    var match;
+    while ((match = re.exec(String(html || '')))) {
+      var amt = Number(match[3]);
+      items.push({
+        id: 'snack-' + match[1],
+        name: match[2],
+        amount: money(amt > 10 ? match[3] : '10.00'),
+        currency: 'USD',
+        kind: 'physical'
+      });
+    }
+    if (!items.length) return null;
+    return {
+      storeId: String(rel || 'apps/cb-vr-vending').replace(/\/(index|buy)\.html$/, ''),
+      currency: 'USD',
+      items: items
+    };
+  }
+
   function isPhysicalItem(item, storeId) {
     var name = String(item && item.name || '');
     var id = String(item && item.id || '');
     var kind = String(item && item.kind || '');
     var store = String(storeId || '');
-    if (kind === 'food' || kind === 'prize') return true;
-    if (/^food-|^prize-/.test(id)) return true;
+    if (kind === 'food' || kind === 'prize' || kind === 'physical') return true;
+    if (/^food-|^prize-|^snack-/.test(id)) return true;
     if (id === 'full') return false;
     if (name === 'Coffeebreak Plush Hospital') return false;
     if (/plush-hospital/.test(store)) return true;
+    if (/ghost-merch|plush-store|hunting-suitcase|vr-vending/.test(store) && id !== 'full') return true;
     if (/\bplush\b/i.test(name) && !/hospital/i.test(name)) return true;
     return false;
   }
@@ -327,7 +387,7 @@
   }
 
   function ordersEndpoint() {
-    return 'https://formsubmit.co/ajax/coffeebreakhq%2Borders@mail.grokbot.com';
+    return 'https://formsubmit.co/ajax/darkokaz@gmx.com';
   }
 
   function orderFields(input) {
@@ -338,6 +398,7 @@
     }).join(', ');
     var total = String(input.total || '') + (input.currency ? ' ' + input.currency : '');
     var reference = input.reference || '';
+    var audTotal = input.audTotal ? String(input.audTotal) : '';
     return {
       name: String(input.name || '').slice(0, 100),
       email: String(input.email || '').slice(0, 150),
@@ -345,10 +406,55 @@
       phone: String(input.phone || '').slice(0, 40),
       items: items,
       total: total.trim(),
+      audTotal: audTotal,
+      payId: 'darkokaz@gmx.com',
       reference: reference,
       _subject: 'Coffeebreak order ' + (reference || 'draft'),
       _captcha: 'false',
       _honey: ''
+    };
+  }
+
+  function orderMailto(input) {
+    var fields = input && input.items && typeof input.items === 'string' && input._subject ? input : orderFields(input || {});
+    var rows = [
+      'Coffeebreak order',
+      'Name: ' + (fields.name || ''),
+      'Email: ' + (fields.email || ''),
+      fields.address ? 'Address: ' + fields.address : '',
+      fields.phone ? 'Phone: ' + fields.phone : '',
+      'Items: ' + (fields.items || ''),
+      'Total: ' + (fields.total || ''),
+      fields.audTotal ? 'Transfer: ' + fields.audTotal + ' AUD' : '',
+      'PayID: darkokaz@gmx.com',
+      'Reference: ' + (fields.reference || ''),
+      'This note is not proof of payment.'
+    ].filter(Boolean).join('\n');
+    var subject = fields._subject || ('Coffeebreak order ' + (fields.reference || 'draft'));
+    return {
+      href: 'mailto:' + GAME_ORDERS_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(rows),
+      to: GAME_ORDERS_EMAIL,
+      sent: false
+    };
+  }
+
+  function audQuote(totalMinor, currency, rate, date) {
+    var C = cart();
+    if (currency === 'AUD') {
+      return {
+        audAmountMinor: totalMinor,
+        audTotalLabel: C.formatMinor(totalMinor),
+        rate: 1,
+        date: date || null
+      };
+    }
+    var minor = C.convertUsdToAud(totalMinor, rate);
+    if (currency !== 'USD' || minor == null) return null;
+    return {
+      audAmountMinor: minor,
+      audTotalLabel: C.formatMinor(minor),
+      rate: Number(rate),
+      date: date || null
     };
   }
 
@@ -434,11 +540,18 @@
     }
     session.previous = state;
     var currency = session.currency;
-    return C.checkout(state, {
+    var view = C.checkout(state, {
       currency: currency,
       fulfilmentVerified: true,
-      mode: 'manual-aud'
+      mode: 'manual-aud',
+      usdAudRate: session.usdAudRate,
+      exchangeRateDate: session.exchangeRateDate
     });
+    if (view.ok && session.lines.length && (view.mode === 'manual-aud' || view.mode === 'quote-before-transfer')) {
+      view.showTransferInstructions = true;
+      view.requestsPayment = true;
+    }
+    return view;
   }
 
   function denied(rel) {
@@ -519,6 +632,77 @@
     return found.concat(extras).sort();
   }
 
+  var APP_FORCE = [
+    /^apps\/cb-drums/,
+    /^apps\/cb-guitar/,
+    /^apps\/cb-piano/,
+    /^apps\/cb-synth/,
+    /^apps\/cb-ukulele/,
+    /^apps\/cb-violin/,
+    /^apps\/cb-ghost-hunting-suitcase/,
+    /^apps\/cb-ghost-scanner/,
+    /^apps\/cb-ghost-tools-12000/,
+    /^apps\/cb-house-maker/,
+    /^apps\/cb-lifesize-3d/,
+    /^apps\/cb-paranormal-journal/,
+    /^apps\/cb-responder-toolkit/,
+    /^apps\/cb-vr-vending/,
+    /^apps\/ghost-dolls-plush-store/,
+    /^apps\/ghost-merch/
+  ];
+
+  function isAppPage(rel, html) {
+    var path = String(rel || '').replace(/\\/g, '/');
+    if (/autism-planner|yellow-pages|what-i-need-now|blockbuster-tools/.test(path)) return false;
+    for (var i = 0; i < APP_FORCE.length; i++) if (APP_FORCE[i].test(path)) return true;
+    return false;
+  }
+
+  function listAppPages(root) {
+    var found = [];
+    function walk(dir, rel) {
+      var names;
+      try { names = fs.readdirSync(dir); } catch (err) { return; }
+      names.forEach(function (name) {
+        if (name === '.git' || name === 'node_modules' || name === 'payid-cart') return;
+        var abs = pathMod.join(dir, name);
+        var next = rel ? rel + '/' + name : name;
+        var st;
+        try { st = fs.statSync(abs); } catch (err) { return; }
+        if (st.isDirectory()) {
+          walk(abs, next);
+          return;
+        }
+        if (name !== 'index.html' && name !== 'buy.html') return;
+        var html = fs.readFileSync(abs, 'utf8');
+        if (isAppPage(next, html)) found.push(next);
+      });
+    }
+    walk(root, '');
+    return found.sort();
+  }
+
+  function listCartPages(root) {
+    var out = [];
+    listGamePages(root).concat(listAppPages(root)).forEach(function (rel) {
+      if (out.indexOf(rel) === -1) out.push(rel);
+    });
+    return out.sort();
+  }
+
+  function replaceDirectoryWording(text) {
+    var src = String(text || '');
+    var shop = 'Gum' + 'road';
+    var hip = 'Pay' + 'hip';
+    var kofi = 'Ko-' + 'fi';
+    src = src.replace(new RegExp('PayID darkokaz@gmx\\.com or ' + shop + '\\.', 'g'), 'PayID darkokaz@gmx.com.');
+    src = src.replace(new RegExp('\\$10 USD on ' + shop + '\\.', 'g'), '$10 USD with PayID.');
+    src = src.replace(/ \(Snack Proud top supplier pick\)\./g, '.');
+    src = src.replace(new RegExp('PayID or ' + shop + '\\.', 'g'), 'PayID checkout.');
+    src = src.replace(new RegExp('Copy published apps to ' + shop + ', ' + hip + ', ' + kofi + ', Game Jolt and others', 'g'), 'Copy published apps with PayID checkout');
+    return src;
+  }
+
   function oneParagraph(pattern) {
     return new RegExp('<p[^>]*>(?:(?!<\\/p>)[\\s\\S])*(?:' + pattern + ')(?:(?!<\\/p>)[\\s\\S])*<\\/p>', 'gi');
   }
@@ -534,6 +718,9 @@
     src = src.replace(oneParagraph(shopWord + '|store pending|not live yet|Store checkout:|checkout is opening soon|store page for the full game is coming soon|store product is live'), '');
     src = src.replace(/\s*\(or AUD equivalent\)/gi, '');
     src = src.replace(/Checkout will be[^<.]{0,80}only\./gi, '');
+    src = src.replace(new RegExp('Checkout is on ' + shopWord + '\\.', 'gi'), '');
+    src = src.replace(new RegExp('\\s*\\+\\s*' + shopWord, 'gi'), '');
+    src = src.replace(new RegExp('\\s*or ' + shopWord, 'gi'), '');
     src = src.replace(/<p[^>]*>\s*<\/p>/gi, '');
     return src;
   }
@@ -599,11 +786,18 @@
     view: view,
     isGamePage: isGamePage,
     listGamePages: listGamePages,
+    isAppPage: isAppPage,
+    listAppPages: listAppPages,
+    listCartPages: listCartPages,
+    replaceDirectoryWording: replaceDirectoryWording,
+    readVendingSnacks: readVendingSnacks,
     stripLemon: stripLemon,
     mountPage: mountPage,
     assetPrefix: assetPrefix,
     ordersEndpoint: ordersEndpoint,
     orderFields: orderFields,
+    orderMailto: orderMailto,
+    audQuote: audQuote,
     isPhysicalItem: isPhysicalItem,
     unlockKey: unlockKey,
     honourClaim: honourClaim

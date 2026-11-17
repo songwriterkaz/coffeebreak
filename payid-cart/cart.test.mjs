@@ -196,6 +196,29 @@ test('manual AUD, quote, enquiry, gated, and demo stay in their lanes', () => {
   assert.equal(bad.paid, false);
 });
 
+test('a USD cart with a guide rate shows an Australian dollar transfer amount', () => {
+  const api = cart();
+  const lines = [{ id: 'sku', name: 'Kept price', unitMinor: 2000, qty: 1 }];
+  const state = api.buildState({ storeId: 'shop', currency: 'USD', lines, rng: seqRng(4) });
+  const view = api.checkout(state, {
+    currency: 'USD',
+    mode: 'manual-aud',
+    fulfilmentVerified: true,
+    usdAudRate: 1.48,
+    exchangeRateDate: '2026-11-16'
+  });
+  assert.equal(view.mode, 'quote-before-transfer');
+  assert.equal(view.currency, 'USD');
+  assert.equal(view.totalLabel, '20.00');
+  assert.equal(view.audAmountMinor, 2960);
+  assert.equal(view.audTotalLabel, '29.60');
+  assert.equal(view.exchangeRate, 1.48);
+  assert.equal(view.requestsPayment, true);
+  assert.equal(view.showTransferInstructions, true);
+  assert.equal(api.convertUsdToAud(2000, 1.48), 2960);
+  assert.equal(api.copyFields(view).amount, '29.60');
+});
+
 test('names are escaped and handoff does not send or deliver', () => {
   const api = cart();
   const nasty = '<img src=x onerror=alert(1)>';

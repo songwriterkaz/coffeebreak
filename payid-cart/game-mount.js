@@ -31,7 +31,7 @@
     }
 
     var style = document.createElement('style');
-    style.textContent = '#cb-game-cart-toggle,#cb-game-cart-panel button,#cb-game-cart-panel a{min-height:44px;min-width:44px}#cb-game-cart-toggle{position:fixed;right:12px;bottom:76px;z-index:2147483002;background:#e8559a;color:#fff;border:0;border-radius:999px;padding:10px 16px;font:700 16px/1.2 system-ui,sans-serif;cursor:pointer}#cb-game-cart-panel{position:fixed;right:12px;bottom:128px;z-index:2147483002;width:min(420px,calc(100% - 24px));max-height:70vh;overflow:auto;background:#fff;color:#3a1f2c;border:2px solid #e8559a;border-radius:16px;padding:12px;font:15px/1.4 system-ui,sans-serif}#cb-game-cart-panel h2{margin:0 0 8px;font-size:1.1rem}#cb-game-cart-panel button{background:#e8559a;color:#fff;border:0;border-radius:10px;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer}#cb-game-cart-panel button.quiet{background:#fff;color:#b8336f;border:1px solid #e8559a}#cb-game-cart-panel a{color:#b8336f;font-weight:700}#cb-game-cart-panel .row{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:8px 0}#cb-game-cart-panel label{display:block;font-weight:700;margin-top:8px}#cb-game-cart-panel input{display:block;width:100%;min-height:44px;margin-top:4px;padding:8px 10px;border:1px solid #e8559a;border-radius:10px;font:inherit;box-sizing:border-box}';
+    style.textContent = '#cb-game-cart-toggle,#cb-game-cart-panel button,#cb-game-cart-panel a,#cb-game-open-cart{min-height:44px;min-width:44px}#cb-game-cart-toggle{position:fixed;left:12px;right:auto;bottom:16px;z-index:2147483646;background:#e8559a;color:#fff;border:0;border-radius:999px;padding:10px 16px;font:700 16px/1.2 system-ui,sans-serif;cursor:pointer}#cb-game-cart-panel{position:fixed;left:12px;right:auto;bottom:76px;z-index:2147483646;width:min(420px,calc(100% - 24px));max-height:70vh;overflow:auto;background:#fff;color:#3a1f2c;border:2px solid #e8559a;border-radius:16px;padding:12px;font:15px/1.4 system-ui,sans-serif}#cb-game-open-cart{display:inline-block;margin:8px 0;background:#e8559a;color:#fff;border:0;border-radius:10px;padding:8px 12px;font:700 16px/1.2 system-ui,sans-serif;cursor:pointer}#cb-game-cart-panel h2{margin:0 0 8px;font-size:1.1rem}#cb-game-cart-panel button{background:#e8559a;color:#fff;border:0;border-radius:10px;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer}#cb-game-cart-panel button.quiet{background:#fff;color:#b8336f;border:1px solid #e8559a}#cb-game-cart-panel a{color:#b8336f;font-weight:700}#cb-game-cart-panel .row{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:8px 0}#cb-game-cart-panel label{display:block;font-weight:700;margin-top:8px}#cb-game-cart-panel input{display:block;width:100%;min-height:44px;margin-top:4px;padding:8px 10px;border:1px solid #e8559a;border-radius:10px;font:inherit;box-sizing:border-box}';
     document.head.appendChild(style);
 
     var toggle = document.createElement('button');
@@ -42,9 +42,12 @@
     panel.id = 'cb-game-cart-panel';
     panel.hidden = true;
     toggle.addEventListener('click', function () {
-      panel.hidden = !panel.hidden;
-      toggle.textContent = panel.hidden ? 'Cart' : 'Close cart';
-      toggle.setAttribute('aria-expanded', panel.hidden ? 'false' : 'true');
+      if (panel.hidden) openCart();
+      else {
+        panel.hidden = true;
+        toggle.textContent = 'Cart';
+        toggle.setAttribute('aria-expanded', 'false');
+      }
     });
 
     function persist() {
@@ -60,6 +63,81 @@
         session.previous = state;
         C.persist(storage, key, state);
       }
+    }
+
+    function fallbackCopy(value) {
+      var input = document.createElement('textarea');
+      input.value = value;
+      input.setAttribute('readonly', '');
+      input.style.position = 'absolute';
+      input.style.left = '-9999px';
+      document.body.appendChild(input);
+      input.select();
+      try { document.execCommand('copy'); } catch (err) {}
+      document.body.removeChild(input);
+    }
+
+    function copyValue(value) {
+      if (!value) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(value).catch(function () { fallbackCopy(value); });
+      } else {
+        fallbackCopy(value);
+      }
+    }
+
+    function formatRateDate(value) {
+      if (!value) return '';
+      var parsed = new Date(value);
+      if (isNaN(parsed.getTime())) return String(value);
+      var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return parsed.getDate() + ' ' + months[parsed.getMonth()] + ' ' + parsed.getFullYear();
+    }
+
+    function requestAudRate() {
+      if (session.currency !== 'USD' || session.usdAudRate) return;
+      if (session.rateTried) return;
+      session.rateTried = true;
+      var urls = [
+        'https://api.frankfurter.app/latest?from=USD&to=AUD',
+        'https://open.er-api.com/v6/latest/USD'
+      ];
+      function use(quote) {
+        if (!quote || !(Number(quote.rate) > 0)) return false;
+        session.usdAudRate = Number(quote.rate);
+        session.exchangeRateDate = quote.date || '';
+        paint();
+        return true;
+      }
+      function fromBody(data) {
+        if (data && data.rates && data.rates.AUD) {
+          return { rate: Number(data.rates.AUD), date: data.date || data.time_last_update_utc || '' };
+        }
+        return null;
+      }
+      function next(i) {
+        if (i >= urls.length) return;
+        fetch(urls[i], { method: 'GET' }).then(function (res) { return res.json(); }).then(function (data) {
+          if (!use(fromBody(data))) next(i + 1);
+        }).catch(function () { next(i + 1); });
+      }
+      next(0);
+    }
+
+    function openCart() {
+      panel.hidden = false;
+      toggle.textContent = 'Close cart';
+      toggle.setAttribute('aria-expanded', 'true');
+      requestAudRate();
+    }
+
+    if (section && !document.getElementById('cb-game-open-cart')) {
+      var openInPage = document.createElement('button');
+      openInPage.id = 'cb-game-open-cart';
+      openInPage.type = 'button';
+      openInPage.textContent = 'Open cart';
+      openInPage.addEventListener('click', openCart);
+      section.appendChild(openInPage);
     }
 
     function lineButton(label, className, onClick) {
@@ -86,10 +164,17 @@
     }
 
     function payStep(current) {
+      requestAudRate();
       var wrap = document.createElement('div');
       wrap.id = 'cb-game-pay';
       var total = document.createElement('p');
-      total.textContent = 'Total: ' + current.totalLabel + ' ' + current.currency;
+      if (current.currency === 'AUD') {
+        total.textContent = 'Total: ' + current.totalLabel + ' AUD';
+      } else if (current.audTotalLabel) {
+        total.textContent = 'Total: US$' + current.totalLabel + '. Transfer A$' + current.audTotalLabel + (current.exchangeRate ? ' (guide rate 1 USD = ' + Number(current.exchangeRate).toFixed(4) + ' AUD' + (current.exchangeRateDate ? ' on ' + formatRateDate(current.exchangeRateDate) : '') + '). Your bank may use a slightly different rate.' : '.');
+      } else {
+        total.textContent = 'Total: ' + current.totalLabel + ' ' + current.currency + '. Transfer the Australian dollar equivalent of that amount to the PayID. Your bank will convert it.';
+      }
       var label = document.createElement('p');
       label.textContent = 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
       var ref = document.createElement('p');
@@ -97,7 +182,7 @@
       var stepsHead = document.createElement('p');
       stepsHead.textContent = 'How to pay';
       var steps = document.createElement('ol');
-      ['Open your banking app.', 'Send the total to that PayID.', 'Put the reference in the payment description.'].forEach(function (text) {
+      ['Open your banking app.', 'Send the Australian dollar amount to that PayID.', 'Put the reference in the payment description.'].forEach(function (text) {
         var item = document.createElement('li');
         item.textContent = text;
         steps.appendChild(item);
@@ -106,13 +191,15 @@
       hint.textContent = G.PAY_HINT;
       wrap.append(total, label, ref, stepsHead, steps, hint);
       (current.notices || []).forEach(function (text) {
+        if (/not delivered to the merchant|does not calculate an Australian dollar amount|This page does not move money/i.test(text)) return;
         var note = document.createElement('p');
         note.textContent = text;
         wrap.appendChild(note);
       });
       var copies = C.copyFields(current);
+      var amountLabel = current.audTotalLabel && current.currency !== 'AUD' ? 'Copy AUD amount' : 'Copy amount';
       wrap.append(
-        copyButton('Copy amount', copies.amount),
+        copyButton(amountLabel, copies.amount),
         copyButton('Copy PayID', copies.payId),
         copyButton('Copy reference', copies.reference)
       );
@@ -148,7 +235,7 @@
       }
       form.append(
         labelledInput('Items', 'items', itemsText, { readOnly: true }),
-        labelledInput('Total', 'total', current.totalLabel + ' ' + current.currency, { readOnly: true }),
+        labelledInput('Total', 'total', current.audTotalLabel && current.currency !== 'AUD' ? current.totalLabel + ' ' + current.currency + ' (transfer ' + current.audTotalLabel + ' AUD)' : current.totalLabel + ' ' + current.currency, { readOnly: true }),
         labelledInput('Reference', 'reference', current.reference || '', { readOnly: true })
       );
       var digital = session.lines.some(function (line) {
@@ -156,7 +243,7 @@
       });
       var submit = document.createElement('button');
       submit.type = 'submit';
-      submit.textContent = digital ? "I've paid by PayID, unlock now" : "I've paid by PayID, confirm this order";
+      submit.textContent = digital ? "Place order, I've paid by PayID, unlock now" : "Place order, I've paid by PayID, confirm this order";
       var status = document.createElement('p');
       status.id = 'cb-game-order-status';
       status.textContent = session.orderNotice || '';
@@ -196,6 +283,7 @@
           lines: session.lines,
           total: current.totalLabel,
           currency: current.currency,
+          audTotal: current.audTotalLabel || '',
           reference: current.reference
         });
         var claim = G.honourClaim({
@@ -223,23 +311,52 @@
         status.textContent = session.orderNotice;
         persist();
         var baseNotice = session.orderNotice;
+        function showMailFallback(notice) {
+          var draft = G.orderMailto(fields);
+          session.orderNotice = notice + ' You can email the order with the link below.';
+          status.textContent = session.orderNotice;
+          if (!wrap.querySelector('#cb-game-order-mail')) {
+            var mail = document.createElement('a');
+            mail.id = 'cb-game-order-mail';
+            mail.href = draft.href;
+            mail.textContent = 'Email this order';
+            wrap.appendChild(mail);
+          }
+          try { window.location.href = draft.href; } catch (err) {}
+        }
         fetch(G.ordersEndpoint(), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(fields)
-        }).then(function (res) { return res.json(); }).then(function (body) {
-          if (body && (body.success === true || body.success === 'true')) {
+        }).then(function (res) { return res.json().then(function (body) { return { res: res, body: body }; }).catch(function () { return { res: res, body: null }; }); }).then(function (result) {
+          var body = result.body || {};
+          var ok = body.success === true || body.success === 'true';
+          if (ok) {
             session.orderNotice = baseNotice + ' Order details were handed to the mailbox.';
+            status.textContent = session.orderNotice;
           } else {
-            session.orderNotice = baseNotice + ' The mailbox did not accept the order details yet.';
+            showMailFallback(baseNotice + ' The mailbox did not accept the order details yet.');
           }
-          status.textContent = session.orderNotice;
         }).catch(function () {
-          session.orderNotice = baseNotice + ' The mailbox did not accept the order details yet.';
-          status.textContent = session.orderNotice;
+          showMailFallback(baseNotice + ' The mailbox did not accept the order details yet.');
         });
       });
+      var draftLink = document.createElement('a');
+      draftLink.id = 'cb-game-order-mail-draft';
+      draftLink.href = G.orderMailto({
+        name: session.customerName || '',
+        email: session.customerEmail || '',
+        address: session.customerAddress || '',
+        phone: session.customerPhone || '',
+        lines: session.lines,
+        total: current.totalLabel,
+        currency: current.currency,
+        audTotal: current.audTotalLabel || '',
+        reference: current.reference
+      }).href;
+      draftLink.textContent = 'Email this order';
       wrap.appendChild(form);
+      wrap.appendChild(draftLink);
       return wrap;
     }
 
@@ -319,7 +436,7 @@
       panel.appendChild(lines);
 
       if (!session.lines.length) session.showPay = false;
-      var payable = session.lines.length && (current.showTransferInstructions || current.mode === 'quote-before-transfer');
+      var payable = session.lines.length && session.currency && current.mode !== 'gap' && current.mode !== 'enquiry-only' && current.mode !== 'gated' && current.mode !== 'demo';
       if (current.mode === 'gap' || !session.currency) {
         var gap = document.createElement('p');
         gap.textContent = current.gap || G.GAP;
@@ -351,8 +468,7 @@
       button.textContent = text;
       button.disabled = !value;
       button.addEventListener('click', function () {
-        if (!value || !navigator.clipboard || !navigator.clipboard.writeText) return;
-        navigator.clipboard.writeText(value).catch(function () {});
+        copyValue(value);
       });
       return button;
     }
@@ -365,16 +481,10 @@
         var result = G.add(session, id);
         persist();
         paint();
-        panel.hidden = false;
-        toggle.textContent = 'Close cart';
-        toggle.setAttribute('aria-expanded', 'true');
+        openCart();
         return result;
       },
-      open: function () {
-        panel.hidden = false;
-        toggle.textContent = 'Close cart';
-        toggle.setAttribute('aria-expanded', 'true');
-      },
+      open: openCart,
       items: function () { return session.items; }
     };
   }

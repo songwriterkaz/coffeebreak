@@ -1,0 +1,14 @@
+:root{--bg:#ffe0f2;--ink:#3a0a2a;--muted:#8a3a6a;--card:#ffffff;--line:#ff9ad5;--accent:#ff1493;--accent-ink:#fff;--now:#ffe3f2;--now-line:#ff1493;--next:#fff0f8;--next-line:#ff69b4;--break:#ffd6ec;--break-line:#d6007a;--done:#ffeef7;--shadow:0 6px 18px rgba(255,20,147,.18);--font:"Trebuchet MS","Segoe UI",system-ui,sans-serif}
+body{background:linear-gradient(160deg,#ff9ad5,#ffe0f2 45%,#ffc2e8)!important;color:var(--ink);font-weight:500}
+h1,h2{color:#c2006b!important;font-weight:900!important}
+.site-header h1{font-size:1.5em}
+.badge{background:#ff1493!important;color:#fff!important;font-weight:900}
+.panel{border:3px solid #ff9ad5!important;border-radius:22px!important}
+button,.btn{background:#ff1493;color:#fff;font-weight:800;border-radius:14px}
+button.ghost{background:#ffe3f2!important;color:#c2006b!important}
+.slot .title,.title{color:#ff1493;font-weight:900}
+.hero{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#ff1493,#ff69b4);color:#fff;border-radius:22px;padding:14px;margin:0 0 14px;box-shadow:0 6px 18px #ff149355}
+.hero svg{width:120px;height:120px;flex:0 0 auto}
+.hero h2{color:#fff!important;font-size:1.5em;margin:0}
+.hero p{margin:4px 0 0;font-weight:700;color:#fff}
+#timerArc{stroke:#ff1493}
