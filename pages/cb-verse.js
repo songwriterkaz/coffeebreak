@@ -35,3 +35,13 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', inject);
   else inject();
 })();
+
+/* Load the shared Listen to Coffeebreak music section */
+(function(){
+  if (window.__CB_LISTEN__ || document.getElementById('cb-listen-script')) return;
+  var s = document.createElement('script');
+  s.id = 'cb-listen-script';
+  s.src = 'https://songwriterkaz.github.io/coffeebreak/pages/cb-listen.js';
+  s.defer = true;
+  (document.head || document.documentElement).appendChild(s);
+})();
