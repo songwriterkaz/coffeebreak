@@ -1024,9 +1024,42 @@
   function wireSearch(main) { var f = $i("tl-sf"), i = $i("tl-q"), t = null; function go() { var q = i.value.trim(); runSearch(q, $i("tl-sr")); } i.oninput = function () { clearTimeout(t); t = setTimeout(go, 220); }; f.onsubmit = function (e) { e.preventDefault(); clearTimeout(t); go(); }; if (i.value) go(); }
   var SN = 0;
   function runSearch(q, out, lim) { var my = ++SN; lim = lim || 50; if (!q) { out.innerHTML = ""; return; } out.innerHTML = '<p class="meta">Searching...</p>'; searchIdx().then(function (d) { if (my !== SN) return; var toks = norm(q), ql = q.toLowerCase().trim(), res = []; if (!toks.length) { out.innerHTML = ""; return; } for (var i = 0; i < d.rows.length; i++) { var s = scoreRow(d.rows[i], toks, ql); if (s >= 0) res.push([s, d.rows[i]]); } res.sort(function (a, b) { return b[0] - a[0]; }); out.innerHTML = '<p class="meta">' + (res.length ? res.length.toLocaleString("en-AU") + " tool" + (res.length === 1 ? "" : "s") + " found" : "No tools found. Try fewer or simpler words.") + '</p><div class="tl-list">' + res.slice(0, lim).map(function (x) { return toolLink(x[1][0], x[1][1], x[1][2]); }).join("") + "</div>" + (res.length > lim ? '<button class="btn ghost" id="tl-more" type="button">Show more</button>' : ""); var m = document.getElementById("tl-more"); if (m) m.onclick = function () { runSearch(q, out, lim + 100); }; }).catch(function (e) { out.innerHTML = '<p class="err">' + esc(e.message) + "</p>"; }); }
+  /* ---------- KJV Bible (King James Version, public domain) ---------- */
+  var KJV_URL = "https://songwriterkaz.github.io/coffeebreak/apps/bible-phone/kjv.js";
+  var VOTD = [[18,22,0],[23,28,10],[49,3,12],[22,39,30],[19,2,4],[5,0,8],[18,45,0],[39,10,27],[42,13,26],[44,7,27],[18,117,23],[59,4,6],[22,40,9],[18,120,1],[18,29,1],[23,29,16],[18,146,2],[42,2,15],[18,33,17],[22,25,2],[42,13,0],[45,12,3]];
+  function kjv() {
+    if (window.KJV && window.KJV.length) return Promise.resolve(window.KJV);
+    if (kjv.p) return kjv.p;
+    kjv.p = new Promise(function (ok, no) { var s = document.createElement("script"); s.src = KJV_URL; s.onload = function () { if (window.KJV && window.KJV.length) ok(window.KJV); else { kjv.p = null; no(new Error("The Bible text could not load, please try again")); } }; s.onerror = function () { kjv.p = null; no(new Error("The Bible text could not load, please check your connection and try again")); }; document.head.appendChild(s); });
+    return kjv.p;
+  }
+  function vBible(main) {
+    document.title = "KJV Bible · Coffeebreak Tools";
+    main.innerHTML = '<p class="tl-crumb"><a href="#tools">Tools</a> › KJV Bible</p><div class="card tl-tool"><div class="tl-th"><img src="cb-logo.jpg" alt="Coffeebreak logo" class="tl-logo sm"><h2>KJV Bible</h2></div><div id="kb-body"><p class="meta">Loading the Bible...</p></div></div>';
+    kjv().then(function (B) {
+      var pos; try { pos = JSON.parse(localStorage.getItem("cb_kjv_pos") || "null"); } catch (e) {} if (!pos || !B[pos.b]) pos = { b: 42, c: 0 };
+      var now = new Date(), day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60000) / 864e5), vd = VOTD[day % VOTD.length];
+      function ref(b, c, v) { return B[b][0] + " " + (c + 1) + (v != null ? ":" + (v + 1) : ""); }
+      $i("kb-body").innerHTML = '<div class="card" style="margin:0 0 12px"><b>Verse of the day</b><p style="font-style:italic;margin:6px 0">' + esc(B[vd[0]][1][vd[1]][vd[2]]) + '</p><a href="#" id="kb-vd">' + esc(ref(vd[0], vd[1], vd[2])) + ' (KJV)</a></div>' +
+        '<div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><select id="kb-b" aria-label="Book"></select><select id="kb-c" aria-label="Chapter"></select><button class="btn ghost" type="button" id="kb-prev">← Back</button><button class="btn ghost" type="button" id="kb-next">Next →</button></div>' +
+        '<div style="display:flex;gap:8px;margin:10px 0"><input type="search" id="kb-q" placeholder="Search the Bible, eg faith hope" aria-label="Search the Bible" style="flex:1"><button class="btn" type="button" id="kb-go">Search</button></div>' +
+        '<div id="kb-out" style="line-height:1.6"></div><p class="meta">King James Version (public domain). Your place is saved on this device.</p>';
+      function fill() { $i("kb-b").innerHTML = B.map(function (b, i) { return '<option value="' + i + '"' + (i === pos.b ? " selected" : "") + ">" + esc(b[0]) + "</option>"; }).join(""); $i("kb-c").innerHTML = B[pos.b][1].map(function (c, i) { return '<option value="' + i + '"' + (i === pos.c ? " selected" : "") + ">Chapter " + (i + 1) + "</option>"; }).join(""); }
+      function read(hv) { if (!B[pos.b][1][pos.c]) pos.c = 0; try { localStorage.setItem("cb_kjv_pos", JSON.stringify(pos)); } catch (e) {} fill(); $i("kb-out").innerHTML = "<h3>" + esc(ref(pos.b, pos.c)) + "</h3>" + B[pos.b][1][pos.c].map(function (v, i) { return '<span id="kb-v' + i + '"' + (i === hv ? ' style="background:rgba(255,200,0,.3)"' : "") + '><sup>' + (i + 1) + "</sup> " + esc(v) + " </span>"; }).join(""); if (hv != null) { var e = document.getElementById("kb-v" + hv); if (e) e.scrollIntoView({ block: "center" }); } }
+      function step(d) { var b = pos.b, c = pos.c + d; if (c < 0) { b--; if (b < 0) return; c = B[b][1].length - 1; } else if (c >= B[b][1].length) { b++; if (b >= B.length) return; c = 0; } pos = { b: b, c: c }; read(); }
+      function search() { var q = $i("kb-q").value.trim().toLowerCase(); if (q.length < 2) { toast("Type at least 2 letters"); return; } var out = [], n = 0; B.forEach(function (b, bi) { b[1].forEach(function (c, ci) { c.forEach(function (v, vi) { if (v.toLowerCase().indexOf(q) >= 0) { n++; if (out.length < 100) out.push('<p class="kb-hit" data-b="' + bi + '" data-c="' + ci + '" data-v="' + vi + '" style="cursor:pointer;margin:6px 0"><b>' + esc(ref(bi, ci, vi)) + "</b> " + esc(v) + "</p>"); } }); }); }); $i("kb-out").innerHTML = "<p class=\"meta\">" + n.toLocaleString("en-AU") + " verses found" + (n > 100 ? ", showing 100" : "") + ". Tap one to read the chapter.</p>" + out.join(""); }
+      $i("kb-b").onchange = function () { pos = { b: +this.value, c: 0 }; read(); };
+      $i("kb-c").onchange = function () { pos.c = +this.value; read(); };
+      $i("kb-prev").onclick = function () { step(-1); }; $i("kb-next").onclick = function () { step(1); };
+      $i("kb-go").onclick = search; $i("kb-q").onkeydown = function (e) { if (e.key === "Enter") search(); };
+      $i("kb-out").onclick = function (e) { var h = e.target.closest(".kb-hit"); if (!h) return; pos = { b: +h.dataset.b, c: +h.dataset.c }; read(+h.dataset.v); };
+      $i("kb-vd").onclick = function (e) { e.preventDefault(); pos = { b: vd[0], c: vd[1] }; read(vd[2]); };
+      read();
+    }).catch(function (e) { $i("kb-body").innerHTML = '<p class="err">' + esc(e.message) + '</p><button class="btn" type="button" onclick="location.reload()">Try again</button>'; });
+  }
   function vHub(main) {
     var rc = recent();
-    main.innerHTML = head() + searchBox() + (rc.length ? '<h3>Recently used</h3><div class="tl-list">' + rc.map(function (r) { return toolLink(r[0], r[1]); }).join("") + "</div>" : "") + '<h3>Browse by category</h3><div class="tl-cats">' + IDX.cats.map(function (c) { return '<a class="tl-cat" href="#tools/c/' + c.id + '"><span class="tl-ic" aria-hidden="true">' + esc(c.icon) + "</span><b>" + esc(c.name) + "</b><small>" + c.count.toLocaleString("en-AU") + " tools</small></a>"; }).join("") + '</div><p class="meta center">Every tool runs in your browser. Photos, videos and sounds you open stay on your device.</p>';
+    main.innerHTML = head() + searchBox() + '<h3>Bible</h3><div class="tl-cats"><a class="tl-cat" href="#tools/bible"><span class="tl-ic" aria-hidden="true">📖</span><b>KJV Bible</b><small>Read, search, verse of the day</small></a></div>' + (rc.length ? '<h3>Recently used</h3><div class="tl-list">' + rc.map(function (r) { return toolLink(r[0], r[1]); }).join("") + "</div>" : "") + '<h3>Browse by category</h3><div class="tl-cats">' + IDX.cats.map(function (c) { return '<a class="tl-cat" href="#tools/c/' + c.id + '"><span class="tl-ic" aria-hidden="true">' + esc(c.icon) + "</span><b>" + esc(c.name) + "</b><small>" + c.count.toLocaleString("en-AU") + " tools</small></a>"; }).join("") + '</div><p class="meta center">Every tool runs in your browser. Photos, videos and sounds you open stay on your device.</p>';
     wireSearch(main);
   }
   function vCat(main, cat, gsel) {
@@ -1058,6 +1091,7 @@
   T.render = function (main, parts) {
     cleanup(); parts = parts || [];
     main.innerHTML = '<p class="meta center">Loading tools...</p>';
+    if (parts[1] === "bible") { vBible(main); return Promise.resolve(); }
     return index().then(function () { if (parts[1] === "c") vCat(main, parts[2], parts[3] != null && parts[3] !== "" ? +parts[3] : null); else if (parts[1] === "t") vTool(main, parts[2]); else vHub(main); }).catch(function (e) { main.innerHTML = '<div class="card"><p class="err">' + esc(e.message) + '</p><button class="btn" type="button" onclick="location.reload()">Try again</button></div>'; });
   };
   T.engines = E;
