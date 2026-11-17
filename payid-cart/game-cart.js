@@ -853,6 +853,8 @@
 
   function siblingCatalogue(rel) {
     if (!fs || !pathMod) return '';
+    var base = pathMod.basename(String(rel || ''));
+    if (base !== 'index.html' && base !== 'buy.html') return '';
     var dir = pathMod.join(__dirname, '..', pathMod.dirname(String(rel || '')));
     var chunks = [];
     ['products.js', 'shop.js'].forEach(function (name) {
@@ -883,6 +885,15 @@
     var currency = found[0].currency;
     if (found.some(function (item) { return item.currency !== currency; })) return null;
     return found;
+  }
+
+  function taggedPrice(html) {
+    var source = sourceOf(html);
+    var tag = /class="price"[^>]*>\s*\$(\d{1,3}(?:,\d{3})+|\d+(?:\.\d{1,2})?)\s*(USD|AUD)/i.exec(source);
+    if (!tag || nearBack(source, tag.index)) return null;
+    var amount = money(String(tag[1]).replace(/,/g, ''));
+    if (amount === '0.00' || amount === '2.00') return null;
+    return { name: titleOf(html) || 'Coffeebreak', amount: amount, currency: tag[2].toUpperCase() };
   }
 
   function statedSale(html) {
@@ -935,6 +946,21 @@
     var cards = htmlShopCards(html);
     if (cards) return { storeId: storeId, currency: cards[0].currency, items: cards };
     if (/referral\s*\/\s*matching service only|estimates only, not quotes/i.test(String(html || ''))) return null;
+    var tagged = taggedPrice(html);
+    if (tagged) {
+      var physical = /laptop|kit|instrument/i.test(path + ' ' + tagged.name);
+      return {
+        storeId: storeId,
+        currency: tagged.currency,
+        items: [{
+          id: physical ? 'goods-item' : 'full',
+          name: tagged.name,
+          amount: tagged.amount,
+          currency: tagged.currency,
+          kind: physical ? 'physical' : null
+        }]
+      };
+    }
     var stated = statedSale(html);
     if (stated) {
       return {
