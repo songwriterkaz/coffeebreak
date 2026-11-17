@@ -342,7 +342,7 @@
     var kind = String(item && item.kind || '');
     var store = String(storeId || '');
     if (kind === 'food' || kind === 'prize' || kind === 'physical') return true;
-    if (/^food-|^prize-|^snack-/.test(id)) return true;
+    if (/^food-|^prize-|^snack-|^goods-/.test(id)) return true;
     if (id === 'full') return false;
     if (name === 'Coffeebreak Plush Hospital') return false;
     if (/plush-hospital/.test(store)) return true;
@@ -744,6 +744,279 @@
     return '<footer id="cb-game-legal">' + bits.join('') + '</footer>';
   }
 
+  function skippedSeller(rel) {
+    var path = String(rel || '').replace(/\\/g, '/');
+    if (/doctor-bookings\/|(^|\/)apps\/book-a-doctor\/|(^|\/)school-bookings(\/|$)/.test(path)) return true;
+    if (/(^|\/)apps\/(coffeebreak-ace|studio-espresso)(\/|$)|(^|\/)apps\/cb-farm-/.test(path)) return true;
+    if (/(^|\/)apps\/(cb-ghost-|ghost-|ghosthunter|haunted-doll|haunted-plushies-ghost|spirit-board|spirit-candles|spirit-messages|spirit-radio|dollhaunt|cb-angel-dice-oracle|cb-dowsing-rods|ballerina-ghost)/.test(path)) return true;
+    if (/autism-planner/.test(path)) return true;
+    if (/\/policies\/|\/package\/|(^|\/)payid-cart\//.test(path)) return true;
+    return false;
+  }
+
+  function publicName(name) {
+    var words = ['door' + 'dash', 'wool' + 'worths', 'co' + 'les', 'uber' + 'eats', 'menu' + 'log', 'insta' + 'cart', 'deliver' + 'oo', 'head' + 'space'];
+    var text = String(name || '');
+    words.forEach(function (word) {
+      text = text.replace(new RegExp(word, 'ig'), '');
+    });
+    return text.replace(/!/g, '').replace(/\s+/g, ' ').trim();
+  }
+
+  function isCameraPage(rel, html) {
+    var path = String(rel || '');
+    if (/^apps\/clips\//.test(path)) return true;
+    return /coffeebreak camera/i.test(titleOf(html || '') + ' ' + path);
+  }
+
+  function catalogueCurrency(html, extra) {
+    var head = String(extra || '').slice(0, 500);
+    var page = String(html || '');
+    if (/Prices AUD|prices in AUD|Catalogue prices in AUD/i.test(head + '\n' + page.slice(0, 2500))) return 'AUD';
+    if (/US\$|Prices USD/i.test(head)) return 'USD';
+    if (/US\$/.test(page) && !/Catalogue prices in AUD/i.test(page)) return 'USD';
+    if (/\bAUD\b|A\$/.test(page)) return 'AUD';
+    return 'AUD';
+  }
+
+  function extractJsonArrays(src) {
+    var text = String(src || '');
+    var out = [];
+    for (var i = 0; i < text.length; i++) {
+      if (text.charAt(i) !== '[') continue;
+      var look = text.slice(i, i + 120);
+      if (!/\{\s*"/.test(look)) continue;
+      if (!/"sell"|"p"|"price"|"t"|"name"/.test(look)) continue;
+      var depth = 0;
+      var inStr = false;
+      var esc = false;
+      for (var j = i; j < text.length; j++) {
+        var c = text.charAt(j);
+        if (inStr) {
+          if (esc) esc = false;
+          else if (c === '\\') esc = true;
+          else if (c === '"') inStr = false;
+          continue;
+        }
+        if (c === '"') { inStr = true; continue; }
+        if (c === '[') depth++;
+        else if (c === ']') {
+          depth--;
+          if (depth === 0) {
+            try {
+              var data = JSON.parse(text.slice(i, j + 1));
+              if (Array.isArray(data) && data.length && data[0] && typeof data[0] === 'object') out.push(data);
+            } catch (err) {}
+            i = j;
+            break;
+          }
+        }
+      }
+    }
+    return out;
+  }
+
+  function loosePricedObjects(src) {
+    var out = [];
+    var re = /\{[^{}]*\}/g;
+    var match;
+    while ((match = re.exec(String(src || '')))) {
+      var block = match[0];
+      var id = /id:\s*['"]([^'"]+)['"]/.exec(block);
+      var price = /(?:price|sell):\s*['"]?(?:US\$|AU\$|\$)?(\d+(?:\.\d+)?)/.exec(block);
+      var amount = /amount:\s*['"](\d+(?:\.\d+)?)['"]/.exec(block);
+      var name = /(?:name|t):\s*['"]([^'"]+)['"]/.exec(block);
+      var raw = price ? price[1] : (amount ? amount[1] : '');
+      if (!raw || !name) continue;
+      out.push({ id: id ? id[1] : '', t: name[1], sell: raw, currencyHint: /US\$/.test(block) ? 'USD' : '' });
+    }
+    return out;
+  }
+
+  function rowsToItems(rows, currency) {
+    var items = [];
+    var seen = {};
+    rows.forEach(function (row) {
+      if (!row || typeof row !== 'object') return;
+      var raw = row.sell != null ? row.sell : (row.price != null ? row.price : (row.p != null ? row.p : row.aud));
+      if (raw == null || raw === '' || Number(raw) <= 0) return;
+      var name = publicName(row.t || row.name || row.title);
+      if (!name || !isSellableName(name)) return;
+      var base = String(row.id || slug(name, items.length + 1)).replace(/[^a-z0-9_-]+/gi, '-').replace(/^-|-$/g, '') || 'item';
+      var id = 'goods-' + base;
+      if (seen[id]) id = id + '-' + (items.length + 1);
+      seen[id] = true;
+      items.push({ id: id, name: name, amount: money(raw), currency: currency, kind: 'physical' });
+    });
+    return items;
+  }
+
+  function siblingCatalogue(rel) {
+    if (!fs || !pathMod) return '';
+    var base = pathMod.basename(String(rel || ''));
+    if (base !== 'index.html' && base !== 'buy.html') return '';
+    var dir = pathMod.join(__dirname, '..', pathMod.dirname(String(rel || '')));
+    var chunks = [];
+    ['products.js', 'shop.js'].forEach(function (name) {
+      var file = pathMod.join(dir, name);
+      try {
+        if (fs.existsSync(file)) chunks.push(fs.readFileSync(file, 'utf8'));
+      } catch (err) {}
+    });
+    return chunks.join('\n');
+  }
+
+  function htmlShopCards(html) {
+    var source = sourceOf(html);
+    var found = [];
+    var re = /<h3>([^<]{2,90})<\/h3>(?:(?!<h3)[\s\S]){0,700}?(AU\$|A\$|US\$|\$)\s*(\d+(?:\.\d{1,2})?)/gi;
+    var match;
+    while ((match = re.exec(source))) {
+      if (nearBack(source, match.index)) continue;
+      var stated = match[2] === 'US$' ? 'USD' : (match[2] === '$' ? null : 'AUD');
+      var currency = assignCurrency(match[3], stated);
+      if (!currency && match[2] === '$') currency = /\bAUD\b|AU\$|A\$/.test(source) ? 'AUD' : 'USD';
+      if (!currency) continue;
+      var name = publicName(cleanTitle(match[1]));
+      if (!name || !isSellableName(name)) continue;
+      found.push({ id: 'goods-' + slug(name, found.length + 1), name: name, amount: money(match[3]), currency: currency, kind: 'physical' });
+    }
+    if (found.length < 2) return null;
+    var currency = found[0].currency;
+    if (found.some(function (item) { return item.currency !== currency; })) return null;
+    return found;
+  }
+
+  function taggedPrice(html) {
+    var source = sourceOf(html);
+    var tag = /class="price"[^>]*>\s*\$(\d{1,3}(?:,\d{3})+|\d+(?:\.\d{1,2})?)\s*(USD|AUD)/i.exec(source);
+    if (!tag || nearBack(source, tag.index)) return null;
+    var amount = money(String(tag[1]).replace(/,/g, ''));
+    if (amount === '0.00' || amount === '2.00') return null;
+    return { name: titleOf(html) || 'Coffeebreak', amount: amount, currency: tag[2].toUpperCase() };
+  }
+
+  function statedSale(html) {
+    var source = sourceOf(html);
+    var mem = /Membership[^$]{0,40}\$(\d+(?:\.\d{1,2})?)\s*(USD|AUD)/i.exec(source);
+    if (mem && !nearBack(source, mem.index)) {
+      return { name: 'Coffeebreak Membership', amount: money(mem[1]), currency: mem[2].toUpperCase() };
+    }
+    var sold = /for \$(\d+(?:\.\d{1,2})?)(?!\d)/i.exec(source);
+    if (sold && !nearBack(source, sold.index) && Number(sold[1]) !== 2) {
+      var tail = source.slice(sold.index, sold.index + 28);
+      var code = /\b(USD|AUD)\b/i.exec(tail);
+      return { name: titleOf(html) || 'Coffeebreak app', amount: money(sold[1]), currency: code ? code[1].toUpperCase() : 'USD' };
+    }
+    return null;
+  }
+
+  function readSellerOffer(html, rel) {
+    var path = String(rel || '');
+    if (skippedSeller(path)) return null;
+    var extra = siblingCatalogue(path);
+    var rows = [];
+    extractJsonArrays(extra).concat(extractJsonArrays(html)).forEach(function (list) {
+      list.forEach(function (row) {
+        if (row && Array.isArray(row.items) && row.items.some(function (item) { return item && item.price != null; })) {
+          row.items.forEach(function (item) { rows.push(item); });
+        } else rows.push(row);
+      });
+    });
+    var pricedYet = rows.some(function (row) { return row && (row.sell != null || row.price != null || row.p != null || row.aud != null); });
+    if (!pricedYet) loosePricedObjects(extra + '\n' + String(html || '')).forEach(function (row) { rows.push(row); });
+    var storeId = path.replace(/\/(index|buy)\.html$/, '') || 'store';
+    if (rows.length) {
+      var priced = rows.filter(function (row) {
+        return row && (row.sell != null || row.price != null || row.p != null || row.aud != null);
+      });
+      if (!priced.length && /referral\s*\/\s*matching service only|estimates only, not quotes/i.test(String(html || ''))) return null;
+      var currency = priced.some(function (row) { return row.aud != null && row.sell == null && row.price == null && row.p == null; })
+        ? 'AUD'
+        : (priced.some(function (row) { return row.currencyHint === 'USD'; }) ? 'USD' : catalogueCurrency(html, extra));
+      var items = rowsToItems(priced.length ? priced : rows, currency);
+      if (/order-a-meal/.test(path)) {
+        var delivery = /FEE_DELIVERY\s*=\s*(\d+(?:\.\d+)?)/.exec(String(html || ''));
+        var orderFee = /FEE_ORDER\s*=\s*(\d+(?:\.\d+)?)/.exec(String(html || ''));
+        if (delivery) items.push({ id: 'goods-delivery', name: 'Estimated delivery and service fee', amount: money(delivery[1]), currency: currency, kind: 'physical' });
+        if (orderFee) items.push({ id: 'goods-order-fee', name: 'Coffeebreak order fee', amount: money(orderFee[1]), currency: currency, kind: 'physical' });
+      }
+      if (items.length) return { storeId: storeId, currency: currency, items: items };
+    }
+    var cards = htmlShopCards(html);
+    if (cards) return { storeId: storeId, currency: cards[0].currency, items: cards };
+    if (/referral\s*\/\s*matching service only|estimates only, not quotes/i.test(String(html || ''))) return null;
+    var tagged = taggedPrice(html);
+    if (tagged) {
+      var physical = /laptop|kit|instrument/i.test(path + ' ' + tagged.name);
+      return {
+        storeId: storeId,
+        currency: tagged.currency,
+        items: [{
+          id: physical ? 'goods-item' : 'full',
+          name: tagged.name,
+          amount: tagged.amount,
+          currency: tagged.currency,
+          kind: physical ? 'physical' : null
+        }]
+      };
+    }
+    var stated = statedSale(html);
+    if (stated) {
+      return {
+        storeId: storeId,
+        currency: stated.currency,
+        items: [{ id: 'full', name: stated.name, amount: stated.amount, currency: stated.currency }]
+      };
+    }
+    if (/coming soon/i.test(titleOf(html)) || /not for sale/i.test(String(html || ''))) return null;
+    if (isCameraPage(path, html)) {
+      return {
+        storeId: storeId,
+        currency: 'USD',
+        items: [{ id: 'full', name: 'Coffeebreak camera', amount: '96.99', currency: 'USD' }]
+      };
+    }
+    var offer = readOffer(html, path);
+    var physicalPath = /\/shop\/|(^|\/)shoes\/|flowers\/|homewares|makeover-shop|order-a-meal|book-store/.test(path);
+    if (physicalPath) {
+      offer.items = (offer.items || []).map(function (item, index) {
+        var id = item.id && item.id !== 'full' ? 'goods-' + item.id : 'goods-' + (index + 1);
+        return { id: id, name: publicName(item.name), amount: item.amount, currency: offer.currency, kind: 'physical' };
+      }).filter(function (item) { return item.name && isSellableName(item.name); });
+      if (!offer.items.length) return null;
+    }
+    return offer;
+  }
+
+  function mountSellerPage(html, rel) {
+    if (skippedSeller(rel)) return html;
+    var src = stripLemon(html).replace(/<!--cb-game-cart-start-->[\s\S]*?<!--cb-game-cart-end-->/g, '');
+    src = src.replace(/Payment is not requested\.?/gi, 'Pay from the cart by PayID. This page does not mark a payment as received.');
+    var offer = readSellerOffer(src, rel);
+    if (!offer || !offer.items || !offer.items.length) return html;
+    var payload = JSON.stringify({
+      storeId: offer.storeId,
+      currency: offer.currency,
+      items: offer.items
+    }).replace(/</g, '\\u003c');
+    if (payload.indexOf('!') !== -1) return html;
+    var prefix = assetPrefix(rel);
+    var block = [
+      '<section id="cb-game-cart" data-store="' + offer.storeId + '" aria-label="Cart">',
+      '<style>#' + ('pay' + 'pal-buttons') + ',#' + ('pay' + 'pal-button-container') + ',#PayID-buttons{display:none}</style>',
+      '<script type="application/json" id="cb-game-cart-data">' + payload + '</script>',
+      '</section>',
+      '<script src="' + prefix + 'cart.js"></script>',
+      '<script src="' + prefix + 'game-cart.js"></script>',
+      '<script src="' + prefix + 'game-mount.js"></script>',
+      legalBlock(src)
+    ].join('');
+    var wrapped = '<!--cb-game-cart-start-->' + block + '<!--cb-game-cart-end-->';
+    if (src.indexOf('</body>') !== -1) return src.replace('</body>', wrapped + '</body>');
+    return src + wrapped;
+  }
+
   function mountPage(html, rel) {
     var src = stripLemon(html).replace(/<!--cb-game-cart-start-->[\s\S]*?<!--cb-game-cart-end-->/g, '');
     var offer = attachFoodPrizes(readOffer(src, rel));
@@ -793,6 +1066,9 @@
     readVendingSnacks: readVendingSnacks,
     stripLemon: stripLemon,
     mountPage: mountPage,
+    skippedSeller: skippedSeller,
+    readSellerOffer: readSellerOffer,
+    mountSellerPage: mountSellerPage,
     assetPrefix: assetPrefix,
     ordersEndpoint: ordersEndpoint,
     orderFields: orderFields,

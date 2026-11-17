@@ -239,7 +239,7 @@ footer p{margin:2px 0}
   <label class="btn light">Open project file<input type="file" id="openProj" accept=".json,application/json" hidden></label>
   <button class="btn light" id="newProj">New project</button>
  </div>
- <p class="status" id="recStatus"></p>
+ 
 </div></section>
 
 <section class="panel" id="p-shop"><div class="card">
@@ -536,5 +536,5 @@ syncControls();buildKb();buildDrums();buildStrings();buildMixer();buildTracks();
 idbLoad().then(function(bl){var any=bl.some(Boolean);if(!any)return;var a=initAudio();return Promise.all(bl.map(function(b,i){if(!b)return null;return b.arrayBuffer().then(function(ab){return a.ctx.decodeAudioData(ab)}).then(function(buf){takes[i]=buf;drawWave(i)}).catch(function(){})})).then(function(){status('#recStatus','Your saved takes are back.')})});
 })();
 </script>
-</body>
+<!--cb-game-cart-start--><section id="cb-game-cart" data-store="virtual-music-studio" aria-label="Cart"><style>#paypal-buttons,#paypal-button-container,#PayID-buttons{display:none}</style><script type="application/json" id="cb-game-cart-data">{"storeId":"virtual-music-studio","currency":"AUD","items":[{"id":"goods-full-pink-studio-kit-1","name":"Full Pink Studio Kit","amount":"449.00","currency":"AUD","kind":"physical"},{"id":"goods-lite-pink-studio-kit-2","name":"Lite Pink Studio Kit","amount":"279.00","currency":"AUD","kind":"physical"}]}</script></section><script src="../payid-cart/cart.js"></script><script src="../payid-cart/game-cart.js"></script><script src="../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p><a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p></footer><!--cb-game-cart-end--></body>
 </html>

@@ -432,3 +432,41 @@ test('paid apps and stores use the shared PayID cart and stay out of the game li
   assert.match(wording, /PayID/);
 });
 
+function sellerPage(rel) {
+  return readFileSync(new URL('../' + rel, import.meta.url), 'utf8');
+}
+
+test('seller pages keep catalogue prices and physical goods do not unlock', () => {
+  const game = api();
+  assert.equal(game.skippedSeller('apps/cb-ghost-scanner/index.html'), true);
+  assert.equal(game.skippedSeller('apps/studio-espresso/index.html'), true);
+  assert.equal(game.skippedSeller('apps/cb-farm-demo/index.html'), true);
+  assert.equal(game.skippedSeller('school-bookings/index.html'), true);
+  assert.equal(game.skippedSeller('doctor-bookings/index.html'), true);
+  assert.equal(game.skippedSeller('apps/book-a-doctor/index.html'), true);
+  assert.equal(game.skippedSeller('apps/coffeebreak-ace/index.html'), true);
+  const shoes = game.readSellerOffer(sellerPage('shoes/index.html'), 'shoes/index.html');
+  assert.equal(shoes.currency, 'AUD');
+  assert.ok(shoes.items.length >= 50);
+  assert.equal(shoes.items[0].amount, '138.95');
+  assert.equal(shoes.items[0].kind, 'physical');
+  assert.equal(game.isPhysicalItem(shoes.items[0], 'shoes'), true);
+  const flowers = game.readSellerOffer(sellerPage('apps/flowers/index.html'), 'apps/flowers/index.html');
+  assert.equal(flowers.currency, 'AUD');
+  assert.equal(flowers.items[0].amount, '170.05');
+  const camera = game.readSellerOffer(sellerPage('apps/clips/index.html'), 'apps/clips/index.html');
+  assert.equal(camera.currency, 'USD');
+  assert.equal(camera.items.length, 1);
+  assert.equal(camera.items[0].amount, '96.99');
+  assert.equal(game.isPhysicalItem(camera.items[0], 'apps/clips'), false);
+  const mounted = game.mountSellerPage(sellerPage('shoes/index.html'), 'shoes/index.html');
+  assert.match(mounted, /cb-game-cart-start/);
+  assert.match(mounted, /<script src="cb-pay\.js"><\/script>/);
+  assert.match(mounted, /payid-cart\/game-mount\.js/);
+  const block = mounted.match(/<!--cb-game-cart-start-->([\s\S]*?)<!--cb-game-cart-end-->/)[1];
+  assert.equal(block.includes('!'), false);
+  assert.doesNotMatch(block, /headspace|doordash|woolworths|gumroad|paypal\.com/i);
+  assert.match(mounted, /https:\/\/www\.tesla\.com/);
+  assert.match(mounted, /https:\/\/www\.starlink\.com/);
+});
+
