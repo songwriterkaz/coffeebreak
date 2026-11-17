@@ -54,7 +54,7 @@ footer img{width:48px;height:auto;border-radius:10px}
       <label for="f-email">Email</label><input id="f-email" type="email" required autocomplete="email">
       <label for="f-notes">Notes</label><textarea id="f-notes" required placeholder="Horse, shoe size if you know it, and suburb"></textarea>
       <button class="btn" type="submit">Email farrier enquiry</button>
-      <p id="f-out"></p>
+      
     </form>
   </section>
   <section class="card" id="checkout" aria-label="Cart"></section>
@@ -104,7 +104,7 @@ footer img{width:48px;height:auto;border-radius:10px}
   PRODUCTS.forEach(function (product) {
     var card = document.createElement('article');
     card.className = 'card';
-    card.innerHTML = '<div class="art" aria-hidden="true"></div><h2></h2><p class="price"></p><p class="note" hidden></p><button type="button" class="btn">Add to cart</button>';
+    card.innerHTML = '<div class="art" aria-hidden="true"></div><h2></h2><button type="button" class="btn">Add to cart</button>';
     card.querySelector('.art').textContent = product.art;
     card.querySelector('h2').textContent = product.name;
     card.querySelector('.price').textContent = product.price;
@@ -146,5 +146,5 @@ footer img{width:48px;height:auto;border-radius:10px}
   });
 })();
 </script>
-</body>
+<!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/stable-store" aria-label="Cart"><style>#paypal-buttons,#paypal-button-container,#PayID-buttons{display:none}</style><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/stable-store","currency":"USD","items":[{"id":"goods-hay-mini","name":"Hay mini bale","amount":"35.00","currency":"USD","kind":"physical"},{"id":"goods-hay-bundle","name":"Hay delivery bundle of 15 bales (Newcastle/Hunter delivery only)","amount":"450.00","currency":"USD","kind":"physical"},{"id":"goods-feed","name":"Feed bag","amount":"50.00","currency":"USD","kind":"physical"},{"id":"goods-groom","name":"Grooming kit","amount":"35.00","currency":"USD","kind":"physical"},{"id":"goods-halter","name":"Tack: halter","amount":"60.00","currency":"USD","kind":"physical"},{"id":"goods-lead","name":"Tack: lead rope","amount":"60.00","currency":"USD","kind":"physical"},{"id":"goods-pad","name":"Tack: saddle pad","amount":"60.00","currency":"USD","kind":"physical"},{"id":"goods-pick","name":"Small stable tool: hoof pick","amount":"15.00","currency":"USD","kind":"physical"},{"id":"goods-bucket","name":"Small stable tool: bucket","amount":"15.00","currency":"USD","kind":"physical"},{"id":"goods-fork","name":"Small stable tool: stable fork","amount":"15.00","currency":"USD","kind":"physical"}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p><a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p></footer><!--cb-game-cart-end--></body>
 </html>
