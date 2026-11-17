@@ -836,7 +836,7 @@
     var seen = {};
     rows.forEach(function (row) {
       if (!row || typeof row !== 'object') return;
-      var raw = row.sell != null ? row.sell : (row.price != null ? row.price : row.p);
+      var raw = row.sell != null ? row.sell : (row.price != null ? row.price : (row.p != null ? row.p : row.aud));
       if (raw == null || raw === '' || Number(raw) <= 0) return;
       var name = publicName(row.t || row.name || row.title);
       if (!name || !isSellableName(name)) return;
@@ -862,6 +862,27 @@
     return chunks.join('\n');
   }
 
+  function htmlShopCards(html) {
+    var source = sourceOf(html);
+    var found = [];
+    var re = /<h3>([^<]{2,90})<\/h3>(?:(?!<h3)[\s\S]){0,700}?(AU\$|A\$|US\$|\$)\s*(\d+(?:\.\d{1,2})?)/gi;
+    var match;
+    while ((match = re.exec(source))) {
+      if (nearBack(source, match.index)) continue;
+      var stated = match[2] === 'US$' ? 'USD' : (match[2] === '$' ? null : 'AUD');
+      var currency = assignCurrency(match[3], stated);
+      if (!currency && match[2] === '$') currency = /\bAUD\b|AU\$|A\$/.test(source) ? 'AUD' : 'USD';
+      if (!currency) continue;
+      var name = publicName(cleanTitle(match[1]));
+      if (!name || !isSellableName(name)) continue;
+      found.push({ id: 'goods-' + slug(name, found.length + 1), name: name, amount: money(match[3]), currency: currency, kind: 'physical' });
+    }
+    if (found.length < 2) return null;
+    var currency = found[0].currency;
+    if (found.some(function (item) { return item.currency !== currency; })) return null;
+    return found;
+  }
+
   function readSellerOffer(html, rel) {
     var path = String(rel || '');
     if (skippedSeller(path)) return null;
@@ -873,10 +894,19 @@
     if (!rows.length) loosePricedObjects(extra).forEach(function (row) { rows.push(row); });
     var storeId = path.replace(/\/(index|buy)\.html$/, '') || 'store';
     if (rows.length) {
-      var currency = catalogueCurrency(html, extra);
-      var items = rowsToItems(rows, currency);
+      var priced = rows.filter(function (row) {
+        return row && (row.sell != null || row.price != null || row.p != null || row.aud != null);
+      });
+      if (!priced.length && /referral\s*\/\s*matching service only|estimates only, not quotes/i.test(String(html || ''))) return null;
+      var currency = priced.some(function (row) { return row.aud != null && row.sell == null && row.price == null && row.p == null; })
+        ? 'AUD'
+        : catalogueCurrency(html, extra);
+      var items = rowsToItems(priced.length ? priced : rows, currency);
       if (items.length) return { storeId: storeId, currency: currency, items: items };
     }
+    var cards = htmlShopCards(html);
+    if (cards) return { storeId: storeId, currency: cards[0].currency, items: cards };
+    if (/referral\s*\/\s*matching service only|estimates only, not quotes/i.test(String(html || ''))) return null;
     if (isCameraPage(path, html)) {
       return {
         storeId: storeId,
