@@ -823,10 +823,12 @@
     while ((match = re.exec(String(src || '')))) {
       var block = match[0];
       var id = /id:\s*['"]([^'"]+)['"]/.exec(block);
-      var price = /(?:price|sell):\s*(\d+(?:\.\d+)?)/.exec(block);
+      var price = /(?:price|sell):\s*['"]?(?:US\$|AU\$|\$)?(\d+(?:\.\d+)?)/.exec(block);
+      var amount = /amount:\s*['"](\d+(?:\.\d+)?)['"]/.exec(block);
       var name = /(?:name|t):\s*['"]([^'"]+)['"]/.exec(block);
-      if (!price || !name) continue;
-      out.push({ id: id ? id[1] : '', t: name[1], sell: price[1] });
+      var raw = price ? price[1] : (amount ? amount[1] : '');
+      if (!raw || !name) continue;
+      out.push({ id: id ? id[1] : '', t: name[1], sell: raw, currencyHint: /US\$/.test(block) ? 'USD' : '' });
     }
     return out;
   }
@@ -889,9 +891,14 @@
     var extra = siblingCatalogue(path);
     var rows = [];
     extractJsonArrays(extra).concat(extractJsonArrays(html)).forEach(function (list) {
-      list.forEach(function (row) { rows.push(row); });
+      list.forEach(function (row) {
+        if (row && Array.isArray(row.items) && row.items.some(function (item) { return item && item.price != null; })) {
+          row.items.forEach(function (item) { rows.push(item); });
+        } else rows.push(row);
+      });
     });
-    if (!rows.length) loosePricedObjects(extra).forEach(function (row) { rows.push(row); });
+    var pricedYet = rows.some(function (row) { return row && (row.sell != null || row.price != null || row.p != null || row.aud != null); });
+    if (!pricedYet) loosePricedObjects(extra + '\n' + String(html || '')).forEach(function (row) { rows.push(row); });
     var storeId = path.replace(/\/(index|buy)\.html$/, '') || 'store';
     if (rows.length) {
       var priced = rows.filter(function (row) {
@@ -900,13 +907,20 @@
       if (!priced.length && /referral\s*\/\s*matching service only|estimates only, not quotes/i.test(String(html || ''))) return null;
       var currency = priced.some(function (row) { return row.aud != null && row.sell == null && row.price == null && row.p == null; })
         ? 'AUD'
-        : catalogueCurrency(html, extra);
+        : (priced.some(function (row) { return row.currencyHint === 'USD'; }) ? 'USD' : catalogueCurrency(html, extra));
       var items = rowsToItems(priced.length ? priced : rows, currency);
+      if (/order-a-meal/.test(path)) {
+        var delivery = /FEE_DELIVERY\s*=\s*(\d+(?:\.\d+)?)/.exec(String(html || ''));
+        var orderFee = /FEE_ORDER\s*=\s*(\d+(?:\.\d+)?)/.exec(String(html || ''));
+        if (delivery) items.push({ id: 'goods-delivery', name: 'Estimated delivery and service fee', amount: money(delivery[1]), currency: currency, kind: 'physical' });
+        if (orderFee) items.push({ id: 'goods-order-fee', name: 'Coffeebreak order fee', amount: money(orderFee[1]), currency: currency, kind: 'physical' });
+      }
       if (items.length) return { storeId: storeId, currency: currency, items: items };
     }
     var cards = htmlShopCards(html);
     if (cards) return { storeId: storeId, currency: cards[0].currency, items: cards };
     if (/referral\s*\/\s*matching service only|estimates only, not quotes/i.test(String(html || ''))) return null;
+    if (/coming soon/i.test(titleOf(html)) || /not for sale/i.test(String(html || ''))) return null;
     if (isCameraPage(path, html)) {
       return {
         storeId: storeId,
