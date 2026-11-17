@@ -33,14 +33,22 @@ body.touch #joy,body.touch #jump{display:block}
 #help{position:fixed;top:64px;right:8px;font-size:12px;background:#0006;padding:6px 10px;border-radius:10px;line-height:1.4}
 body.touch #help{display:none}
 @media (max-width:700px){.panel{bottom:96px}.pill{font-size:13px;padding:5px 9px;white-space:nowrap}#now{max-width:40vw;overflow:hidden;text-overflow:ellipsis}#top img{height:38px}#bar button{padding:7px 8px;font-size:13px}#jump{bottom:150px}#joy{bottom:130px}}
-#start{position:fixed;inset:0;background:radial-gradient(#ff8cc8,#9646dc);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:9;text-align:center;padding:20px}
-#start img{width:min(260px,60vw)}
+#start{position:fixed;inset:0;background:radial-gradient(#ff8cc8,#9646dc);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:9;text-align:center;padding:56px 16px 130px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#start img{width:min(260px,60vw);flex:0 0 auto}
 #start h1{margin:0;font-size:34px;text-shadow:0 3px 0 #9646dc}
 #start button{font-size:22px;padding:14px 28px}
 #online{background:#2a1640cc}
 #nick{font:bold 20px "Trebuchet MS",Arial;padding:10px 14px;border-radius:14px;border:3px solid #fff;width:min(280px,80vw);text-align:center;color:#9646dc;user-select:text;-webkit-user-select:text}
 #nickErr{min-height:18px;font-weight:bold;color:#fff3a0}
 .live-note{font-size:14px;max-width:340px}
+@media (max-width:430px), (max-height:900px){
+  #start{justify-content:flex-start;gap:10px}
+  #start img{width:min(150px,40vw)}
+  #start h1{font-size:26px}
+  #start button{font-size:18px;padding:12px 24px}
+  #nick{font-size:18px;padding:8px 12px}
+  .live-note{font-size:13px}
+}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 <script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>

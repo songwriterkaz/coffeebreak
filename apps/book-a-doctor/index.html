@@ -172,11 +172,9 @@ footer img{width:44px;height:44px;border-radius:50%;object-fit:cover;display:blo
 <section class="panel" id="p-guide" role="tabpanel" aria-labelledby="t-guide" hidden>
 <div class="card">
 <h2>Guided booking help</h2>
-<p>If you would rather not work it out alone, Karen can help you pick a clinic and book it through the clinic's own booking page.</p>
-<div class="price">$15 flat fee</div>
-<p class="hint">One fee for one guided booking. You pay the clinic separately for your appointment.</p>
+<p>If you would rather not work it out alone, Karen can help you pick a clinic and book it through the clinic's own booking page. This help is free.</p>
 <div class="note warn">Karen is not a medical service and gives no medical advice. Do not send health details. In an emergency call 000.</div>
-<h3>What the fee covers</h3>
+<h3>What the help covers</h3>
 <ul class="t">
 <li>Karen looks at the clinic booking pages that suit your state, in person or video choice and preferred days and times.</li>
 <li>She helps you choose one and book it through that clinic's own booking page, with you.</li>
@@ -184,7 +182,6 @@ footer img{width:44px;height:44px;border-radius:50%;object-fit:cover;display:blo
 </ul>
 <h3>Terms</h3>
 <ul class="t">
-<li>Refund: if Karen cannot find a booking for you, the $15 is refunded in full.</li>
 <li>No health information is collected. The request form asks only for the details listed below.</li>
 <li>No guarantee of availability. Clinics decide what times they offer and what they charge.</li>
 <li>Karen is not a medical service, does not give medical advice and does not choose a doctor for medical reasons.</li>
@@ -192,19 +189,7 @@ footer img{width:44px;height:44px;border-radius:50%;object-fit:cover;display:blo
 </div>
 
 <div class="card">
-<h2>Step 1. Pay by PayID</h2>
-<p class="hint">Send $15 to this PayID, which is an email address.</p>
-<div class="pay"><div class="v" id="payid">darkokaz@gmx.com</div><button class="btn" id="cpPay">Copy PayID</button></div>
-<label class="f" for="rName">Payment reference: your first name</label>
-<input type="text" id="rName" autocomplete="off">
-<label class="f" for="rDate">Payment reference: date you pay</label>
-<input type="date" id="rDate">
-<div class="pay" style="margin-top:10px"><div class="v" id="refOut">Guided booking</div><button class="btn" id="cpRef">Copy reference</button></div>
-<div class="msg" id="payMsg" role="status"></div>
-</div>
-
-<div class="card">
-<h2>Step 2. Send your request</h2>
+<h2>Send your request</h2>
 <div class="note">Please give only the details below. Do not write anything about your health, symptoms, medicines or conditions.</div>
 <label class="f" for="gName">First name</label>
 <input type="text" id="gName" autocomplete="off">
@@ -455,20 +440,12 @@ function teleProg(){var all=$('teleList').querySelectorAll('input'),on=$('teleLi
 teleProg();
 
 /* ---------- guided booking ---------- */
-var TO='songwriterkaz@gmail.com',PAYID='darkokaz@gmx.com';
-$('cpPay').addEventListener('click',function(){copyText(PAYID,'payMsg','PayID copied')});
+var TO='songwriterkaz@gmail.com';
 $('cpTo').addEventListener('click',function(){copyText(TO,'gMsg','Email address copied')});
-function fmtDate(d){if(!d)return '';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0]}
-function refText(){var n=$('rName').value.trim(),d=fmtDate($('rDate').value);return 'Guided booking'+(n?' '+n:'')+(d?' '+d:'')}
-function upRef(){$('refOut').textContent=refText()}
-$('rName').addEventListener('input',upRef);$('rDate').addEventListener('input',upRef);
-$('cpRef').addEventListener('click',function(){copyText(refText(),'payMsg','Reference copied')});
-$('gName').addEventListener('input',function(){if(!$('rName').value){$('rName').value=$('gName').value;upRef()}});
 function gText(){
   return ['Hello Karen,','','I would like guided booking help. This message has no health details.','',
   'First name: '+$('gName').value.trim(),'Contact: '+$('gContact').value.trim(),'State or territory: '+$('gState').value,'In person or video: '+$('gMode').value,'Preferred days and times: '+$('gWhen').value.trim().replace(/\n+/g,' '),'',
-  'I will pay the $15 fee by PayID to '+PAYID+' with the reference: '+refText(),
-  'I understand the terms: refund if no booking is found, no guarantee of availability, I pay the clinic separately, and Karen gives no medical advice.','','Thank you'].join('\n');
+  'I understand the terms: this help is free, no guarantee of availability, I pay the clinic separately, and Karen gives no medical advice.','','Thank you'].join('\n');
 }
 $('mkMsg').addEventListener('click',function(){
   var miss=[];if(!$('gName').value.trim())miss.push('first name');if(!$('gContact').value.trim())miss.push('contact');if(!$('gState').value)miss.push('state');if(!$('gMode').value)miss.push('in person or video');if(!$('gWhen').value.trim())miss.push('preferred days and times');
