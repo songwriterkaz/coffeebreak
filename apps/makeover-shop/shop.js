@@ -44,6 +44,7 @@
   var PRODUCTS = [
     { id: 'prd-wig-day', kind: 'product', price: 45, emoji: '👩', name: 'Everyday soft wig', blurb: 'A soft everyday wig in a natural shade, ready to wear.' },
     { id: 'prd-wig-party', kind: 'product', price: 45, emoji: '🎉', name: 'Party colour wig', blurb: 'A bright party wig for a night out or a costume look.' },
+    { id: 'prd-wig-realistic', kind: 'product', price: 10000, emoji: '👱', name: 'Realistic Blonde Moving Wig', blurb: 'Realistic, lifelike hair that moves when touched.', href: '../wig-3d/' },
     { id: 'prd-makeup', kind: 'product', price: 35, emoji: '💄', name: 'Makeup kit', blurb: 'Colour pots and brushes for one complete look.' },
     { id: 'prd-clips', kind: 'product', price: 15, emoji: '📎', name: 'Hair clips', blurb: 'A set of light hair clips for finishing a style.' },
     { id: 'prd-scrunchies', kind: 'product', price: 15, emoji: '🎀', name: 'Scrunchies', blurb: 'Soft scrunchies for tying hair without a heavy kit.' },
@@ -69,12 +70,18 @@
     });
   }
 
+  function grouped(text) {
+    var bits = String(text).split('.');
+    bits[0] = bits[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return bits.join('.');
+  }
+
   function money(amount) {
-    return 'US$' + amount.toFixed(2);
+    return 'US$' + grouped(amount.toFixed(2));
   }
 
   function priceTag(amount) {
-    return amount % 1 === 0 ? ('US$' + amount) : money(amount);
+    return 'US$' + grouped(amount % 1 === 0 ? String(amount) : amount.toFixed(2));
   }
 
   function findLook(group, id) {
@@ -210,10 +217,12 @@
 
   function renderCatalog(list, hostId) {
     $(hostId).innerHTML = list.map(function (item) {
+      var title = escapeHtml(item.name);
+      if (item.href) title = '<a href="' + escapeHtml(item.href) + '">' + title + '</a>';
       return '<article class="item">' +
         '<span class="badge">' + (item.kind === 'service' ? 'Service' : 'Product') + '</span>' +
         '<span class="emoji" aria-hidden="true">' + item.emoji + '</span>' +
-        '<h3>' + escapeHtml(item.name) + '</h3>' +
+        '<h3>' + title + '</h3>' +
         '<p>' + escapeHtml(item.blurb) + '</p>' +
         '<p class="price">' + priceTag(item.price) + '</p>' +
         '<button type="button" class="btn" data-add="' + item.id + '">Add to cart</button>' +
