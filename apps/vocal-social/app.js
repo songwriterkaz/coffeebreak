@@ -4,8 +4,6 @@
   var API = (window.CB_VS_API || '').replace(/\/+$/, '');
   var LOCAL = 'cb-vocal-social-v2';
   var OLD = 'cb-vocal-social-v1';
-  var UNLOCK_KEY = 'cb-payid-unlock:apps/vocal-social';
-  var FREE_GENS = 1;
   var AVATARS = 12;
 
   var local = { token: '', profile: null, email: '', usedGens: 0, owner: false };
@@ -28,22 +26,6 @@
     } catch (e) {}
   }
   function saveLocal() { try { localStorage.setItem(LOCAL, JSON.stringify(local)); } catch (e) {} }
-
-  function normName(n) { return String(n || '').trim().toLowerCase().replace(/[’']/g, "'"); }
-  function isOwner() {
-    var n = normName(local.profile && local.profile.name) || normName(local.oldName);
-    var e = String(local.email || '').trim().toLowerCase();
-    return n === "karen o'brien" || n === 'karen obrien' || e === 'darkokaz@gmx.com';
-  }
-  function isUnlocked() { if (isOwner()) return true; try { return !!localStorage.getItem(UNLOCK_KEY); } catch (e) { return false; } }
-  function canGenerate() { return isUnlocked() || (local.usedGens || 0) < FREE_GENS; }
-  function accessNote() {
-    if (isOwner()) return 'Owner copy is on for Karen on this device. Making songs is free for you here.';
-    if (isUnlocked()) return 'This device is unlocked for the full app. Payment was not verified by this page.';
-    var left = Math.max(0, FREE_GENS - (local.usedGens || 0));
-    if (left) return 'You can make ' + left + ' song as a free preview. The full app is US$10 via the PayID cart. Listening, posting, likes and comments are free.';
-    return 'The free preview song has been used. Unlock song making for US$10 via the PayID cart. Listening, posting, likes and comments stay free.';
-  }
 
   /* ---------- API ---------- */
   function api(path, opts) {
@@ -505,19 +487,16 @@
     $('prof-name').value = p ? p.name : (local.oldName || '');
     $('prof-handle').value = p ? p.handle : '';
     $('prof-bio').value = p ? (p.bio || '') : '';
-    $('prof-email').value = local.email || '';
     meAvatar = p ? avatarIndex(p.avatar, p.id) : 0;
     renderAvatarPick($('avatar-pick'), meAvatar, function (i) { meAvatar = i; });
-    $('access-note').textContent = accessNote();
   }
   function saveProfile() {
-    local.email = ($('prof-email').value || '').trim(); saveLocal();
     var data = { name: $('prof-name').value, handle: $('prof-handle').value, bio: $('prof-bio').value, avatar: 'a:' + meAvatar };
     var req = local.token ? api('/api/me', { method: 'PATCH', body: data }) : api('/api/profiles', { method: 'POST', body: data });
     req.then(function (j) {
       if (j.token) local.token = j.token;
       local.profile = j.profile; saveLocal(); renderNav(); renderMe();
-      status(isOwner() ? 'Profile saved. The owner copy is on for this device.' : 'Profile saved.');
+      status('Profile saved.');
     }, function (err) { status(err.message); });
   }
 
@@ -555,7 +534,6 @@
   }
 
   async function onGenerate() {
-    if (!canGenerate()) { status(accessNote()); location.hash = '#me'; return; }
     var lyrics = ($('lyrics').value || '').trim();
     try { await waitForEngine(); } catch (err) { status(err.message); return; }
     if (window.CBCore.wordsOf(lyrics).length < 2) { status('Write at least two words to sing.'); return; }
@@ -574,7 +552,6 @@
       var mix = await window.CBSongs.mixWav(meta.id);
       var ctx = window.AC ? window.AC() : new (window.AudioContext || window.webkitAudioContext)();
       var buf = await ctx.decodeAudioData(mix.bytes.slice(0));
-      if (!isUnlocked()) { local.usedGens = (local.usedGens || 0) + 1; saveLocal(); }
       if (state.draft && state.draft.url) URL.revokeObjectURL(state.draft.url);
       var wavBlob = new Blob([mix.bytes], { type: 'audio/wav' });
       state.draft = {
@@ -646,7 +623,6 @@
     });
     $('people-q').addEventListener('input', function () { clearTimeout(peopleTimer); peopleTimer = setTimeout(renderPeople, 300); });
     window.addEventListener('hashchange', route);
-    window.addEventListener('cb-payid-unlock', function () { status('This device is unlocked for the full app. Payment was not verified by this page.'); $('access-note').textContent = accessNote(); });
   }
 
   loadLocal();
