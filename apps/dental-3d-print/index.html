@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak 3D Dental Print</title>
+<meta name="description" content="Education, visualisation and print-preparation tool for dental models. Not a medical device and not for diagnosis or treatment planning.">
+<link rel="icon" href="../cb-logo.png">
+<link rel="stylesheet" href="style.css">
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<header class="app-head">
+  <img src="../cb-logo.png" alt="Coffeebreak logo">
+  <div>
+    <h1>Coffeebreak 3D Dental Print</h1>
+    <p>Prepare a model for a dental printer. Education and visualisation only.</p>
+    <div class="price-row">
+      <strong id="owner-state">Full version US$10 for customers.</strong>
+      <button type="button" id="owner" class="ghost">Owner access</button>
+      <button type="button" id="owner-off" class="ghost" hidden>Turn owner access off</button>
+    </div>
+  </div>
+</header>
+
+<section class="notice" aria-label="Important notice">
+  <strong>Not a medical device. Not TGA-registered. Not for diagnosis or treatment planning.</strong>
+  <p>This is an education, visualisation and print-preparation tool. Any appliance or guide used in a patient must be designed and validated by a registered dental practitioner using approved software and biocompatible resins under the manufacturer's instructions.</p>
+  <p>Do not store patient data here. Remove patient names from files before you import them. Projects stay in this browser and are not uploaded.</p>
+</section>
+
+<div class="layout">
+  <div>
+    <section class="card" id="drop">
+      <h2>Import a scan</h2>
+      <p class="muted">STL, OBJ or PLY. Drag a file here or choose one. Intraoral exports are treated as Z-up.</p>
+      <label class="file-btn">Choose file<input id="file" type="file" accept=".stl,.obj,.ply,model/stl"></label>
+    </section>
+
+    <section class="card">
+      <h2>Library</h2>
+      <p class="muted">Procedural models for teaching and demos. They are not patient scans.</p>
+      <div class="row">
+        <button type="button" id="add-upper" class="solid">Upper arch</button>
+        <button type="button" id="add-lower" class="solid">Lower arch</button>
+      </div>
+      <div class="row">
+        <label class="field">FDI tooth
+          <select id="fdi"></select>
+        </label>
+        <button type="button" id="add-tooth">Add tooth</button>
+      </div>
+      <div class="row">
+        <button type="button" id="add-base">Model base</button>
+        <button type="button" id="add-crown">Crown</button>
+        <button type="button" id="add-splint">Night guard</button>
+        <button type="button" id="add-aligner">Aligner shell</button>
+        <button type="button" id="add-bite">Bite block</button>
+        <button type="button" id="add-study">Study model</button>
+        <button type="button" id="add-implant">Implant analog</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>On the plate</h2>
+      <div id="parts"></div>
+      <div class="row">
+        <button type="button" id="delete-part">Remove selected</button>
+        <button type="button" id="undo">Undo</button>
+        <button type="button" id="redo">Redo</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Prepare</h2>
+      <div class="row">
+        <label class="field">Scale %<input id="scale" type="number" value="100" min="1" max="1000" step="1"></label>
+        <label class="field">Rotate X<input id="rot-x" type="number" value="0" step="1"></label>
+        <label class="field">Rotate Y<input id="rot-y" type="number" value="0" step="1"></label>
+        <label class="field">Rotate Z<input id="rot-z" type="number" value="0" step="1"></label>
+      </div>
+      <div class="row">
+        <label class="field">Move X mm<input id="tx" type="number" value="0" step="0.5"></label>
+        <label class="field">Move Y mm<input id="ty" type="number" value="0" step="0.5"></label>
+        <label class="field">Move Z mm<input id="tz" type="number" value="0" step="0.5"></label>
+      </div>
+      <div class="row">
+        <button type="button" id="apply-transform" class="solid">Apply transform</button>
+        <button type="button" id="auto-orient">Auto-orient</button>
+        <button type="button" id="auto-place">Place on plate</button>
+      </div>
+      <div class="row">
+        <label class="field">Wall mm<input id="wall" type="number" value="2" min="0.4" max="6" step="0.1"></label>
+        <label class="field">Drain holes<input id="drains" type="number" value="2" min="0" max="8" step="1"></label>
+        <label class="field">Hole mm<input id="drain-dia" type="number" value="2" min="0.6" max="6" step="0.1"></label>
+      </div>
+      <button type="button" id="apply-hollow">Hollow selected</button>
+      <div class="row">
+        <label class="field">Support spacing mm<input id="spacing" type="number" value="4" min="1.5" max="12" step="0.5"></label>
+        <label class="field">Tip mm<input id="tip" type="number" value="0.4" min="0.15" max="1.2" step="0.05"></label>
+      </div>
+      <div class="row">
+        <button type="button" id="build-supports">Build supports</button>
+        <button type="button" id="clear-supports">Clear supports</button>
+      </div>
+      <p class="muted">Supports are basic cones under overhangs. Density is the spacing. Confirm them in the slicer.</p>
+    </section>
+
+    <section class="card">
+      <h2>Case label</h2>
+      <p class="muted">Use a case ID only. Do not type a patient name.</p>
+      <div class="row">
+        <label class="field">Case ID<input id="case-id" type="text" maxlength="16" autocomplete="off" placeholder="CASE-1042"></label>
+        <label class="field">Mark
+          <select id="label-mode">
+            <option value="emboss">Embossed</option>
+            <option value="engrave">Engraved</option>
+          </select>
+        </label>
+      </div>
+      <button type="button" id="add-plinth">Add plinth with label</button>
+    </section>
+
+    <section class="card">
+      <h2>Printer and resin</h2>
+      <p class="muted">Approximate, user-editable presets. Not manufacturer-certified. Printer and resin names belong to their owners.</p>
+      <label class="field">Preset<select id="printer"></select></label>
+      <div class="row">
+        <label class="field">Width X mm<input id="plate-x" type="number" min="10" max="400" step="1" value="145"></label>
+        <label class="field">Depth Z mm<input id="plate-z" type="number" min="10" max="400" step="1" value="145"></label>
+        <label class="field">Height Y mm<input id="plate-y" type="number" min="10" max="400" step="1" value="185"></label>
+      </div>
+      <label class="field">Resin<select id="resin"></select></label>
+      <p class="muted">Follow the resin manufacturer's validated workflow. Exposure and price below are editable estimates only.</p>
+      <div class="row">
+        <label class="field">Layer mm<input id="layer" type="number" value="0.05" min="0.01" max="0.2" step="0.01"></label>
+        <label class="field">Exposure s<input id="exposure" type="number" value="2.5" min="0.2" max="30" step="0.1"></label>
+        <label class="field">Move s<input id="move" type="number" value="4" min="0" max="30" step="0.1"></label>
+        <label class="field">US$ per ml<input id="price" type="number" value="0.18" min="0" max="20" step="0.01"></label>
+      </div>
+      <p id="estimate">Add a model to see volume, resin and time estimates.</p>
+      <p id="fit" class="muted"></p>
+    </section>
+
+    <section class="card">
+      <h2>Export</h2>
+      <div class="row">
+        <button type="button" id="export-stl" class="solid">Export STL</button>
+        <button type="button" id="export-3mf">Export 3MF</button>
+      </div>
+      <p class="muted">This app does not slice to printer-proprietary formats. Open the STL in the printer slicer, for example PreForm, RayWare or Chitubox.</p>
+    </section>
+
+    <section class="card">
+      <h2>Projects on this browser</h2>
+      <div class="row">
+        <button type="button" id="save-project">Save project</button>
+        <button type="button" id="open-project">Open</button>
+        <button type="button" id="delete-project">Delete saved</button>
+      </div>
+      <label class="field">Saved<select id="projects"></select></label>
+      <p id="status" class="muted" role="status"></p>
+    </section>
+
+    <section class="card">
+      <h2>Instrument library</h2>
+      <p class="muted">A search of this repository found no 3D dental program and no 12,000-tool dental instrument library. The nearest Coffeebreak tools are linked below. They are not dental instrument catalogues.</p>
+      <p><a href="../3d-converter/">Coffeebreak 3D Converter</a></p>
+      <p><a href="../cb-responder-toolkit/">Coffeebreak Responder Toolkit (12,000 reference tools)</a></p>
+    </section>
+  </div>
+
+  <div>
+    <div id="view" aria-label="3D view"></div>
+    <div class="view-tools">
+      <label><input id="wire" type="checkbox"> Wireframe</label>
+      <label>Section
+        <select id="section-axis">
+          <option value="y">Axial</option>
+          <option value="x">Sagittal</option>
+          <option value="z">Coronal</option>
+        </select>
+      </label>
+      <label class="field">Cut<input id="section" type="range" min="0" max="100" value="100"></label>
+      <label><input id="measure" type="checkbox"> Measure</label>
+      <span id="measure-read" class="muted"></span>
+    </div>
+    <p class="muted">Drag to orbit, right-drag or two fingers to pan, scroll or pinch to zoom. Solid shading is the default. Turn on wireframe for edges.</p>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="card">
+    <img src="../cb-logo.png" alt="Coffeebreak logo">
+    <p>Karen O'Brien is a Coffeebreak songwriter and creator from Newcastle NSW.</p>
+    <p>Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions.</p>
+    <p>Formlabs, SprintRay, Asiga, Elegoo, Anycubic, PreForm, RayWare, Chitubox and resin brand names belong to their owners. Presets are approximate and user-editable. They are not manufacturer-certified and do not imply endorsement.</p>
+    <p>Full version US$10. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+    <p><a href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st">Support Coffeebreak on GoFundMe</a></p>
+    <p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a></p>
+    <p><a href="../../">Back to the Coffeebreak hub</a></p>
+  </div>
+</footer>
+
+<dialog id="owner-dialog">
+  <form id="owner-form">
+    <p>Owner PIN</p>
+    <input id="owner-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="12">
+    <p id="owner-msg" class="muted"></p>
+    <div class="row">
+      <button type="submit" class="solid">Unlock</button>
+      <button type="button" id="owner-cancel">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<section id="cb-game-cart" data-store="apps/dental-3d-print" aria-label="Cart">
+<script type="application/json" id="cb-game-cart-data">{"storeId":"apps/dental-3d-print","currency":"USD","items":[{"id":"full","name":"Coffeebreak 3D Dental Print","amount":"10.00","currency":"USD"}]}</script>
+</section>
+<script src="../../payid-cart/cart.js"></script>
+<script src="../../payid-cart/game-cart.js"></script>
+<script src="../../payid-cart/game-mount.js"></script>
+<script type="importmap">
+{"imports":{"three":"./vendor/three.module.js"}}
+</script>
+<script type="module" src="./app.js"></script>
+<style>
+#cb-game-cart-toggle, #cb-game-cart-panel { left: auto; right: 12px; }
+</style>
+</body>
+</html>
