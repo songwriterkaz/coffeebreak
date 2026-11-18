@@ -49,11 +49,63 @@ body.touch #help{display:none}
   #nick{font-size:18px;padding:8px 12px}
   .live-note{font-size:13px}
 }
+#payidCoins{width:min(460px,92vw);background:#2a1640ee;border:3px solid #ff8cc8;border-radius:18px;padding:12px;text-align:left;color:#fff;touch-action:auto;user-select:text;-webkit-user-select:text}
+#payidCoins h2,#payidCoins h3{margin:8px 0 6px;text-align:center;color:#ff8cc8}
+#payidCoins h2{font-size:22px}
+#payidCoins p,#payidCoins label{margin:6px 0;font-size:14px;line-height:1.4;font-weight:normal}
+#payidCoins button{font-size:15px;padding:9px 12px;margin:4px}
+#payidCoins input[type="text"],#payidCoins input:not([type]),#payidFriend,#payidRedeemCode,#payidCreditRef{display:block;width:100%;font:bold 16px "Trebuchet MS",Arial;padding:8px 10px;border-radius:12px;border:3px solid #fff;color:#9646dc;touch-action:auto;user-select:text;-webkit-user-select:text}
+#payidCoins input[type="checkbox"]{width:auto;margin-right:6px}
+.payid-label{font-weight:bold}
+.payid-card{background:#fff;color:#3a1248;border-radius:14px;padding:12px;margin-top:8px}
+.payid-card p{color:#3a1248}
+#payidCard[hidden],#payidOwnerBox[hidden]{display:none}
+#payidCoinsDock.show{flex-direction:column;align-items:stretch;width:min(460px,94vw);z-index:8;text-align:left}
+#payidCoinsDock #payidCoins{border:0;background:transparent;padding:0;width:100%}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 <script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
 </head><body>
-<div id="start"><img src="assets/logo.png" alt="Coffeebreak"><h1>Coffeebreak Park Builder</h1><div>Build your own pink music park with speakers and rides</div><div class="live-note">Play live with real players. Pick a nickname so friends can see you. There is no chat.</div><input id="nick" maxlength="16" placeholder="Your nickname" autocomplete="off" aria-label="Your nickname"><div id="nickErr"></div><button id="play">Play</button></div>
+<div id="start"><img src="assets/logo.png" alt="Coffeebreak"><h1>Coffeebreak Park Builder</h1><div>Build your own pink music park with speakers and rides</div><div class="live-note">Play live with real players. Pick a nickname so friends can see you. There is no chat.</div><input id="nick" maxlength="16" placeholder="Your nickname" autocomplete="off" aria-label="Your nickname"><div id="nickErr"></div><button id="play">Play</button>
+<!--payid-coins-start-->
+<section id="payidCoins" aria-label="Buy coins with PayID">
+<h2>Buy coins with PayID</h2>
+<p>Choose a coin pack. Coins are credited once the payment is received and checked.</p>
+<p>Coins are for in-game use only and have no cash value or refunds to PayID.</p>
+<p class="payid-label">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+<div id="payidSelfPacks">
+<button type="button" data-kind="self" data-pack="pack-100">100 coins A$1</button>
+<button type="button" data-kind="self" data-pack="pack-1200">1,200 coins A$10</button>
+<button type="button" data-kind="self" data-pack="pack-6500">6,500 coins A$50</button>
+</div>
+<div id="payidCard" hidden></div>
+<h3>Send coins to a friend</h3>
+<p>Enter the friend's name or email and choose a pack. You pay by the same PayID card and a reference, then share the gift code.</p>
+<label for="payidFriend">Friend name or email</label>
+<input id="payidFriend" maxlength="80" autocomplete="off" aria-label="Friend name or email">
+<p id="payidFriendMsg"></p>
+<div id="payidGiftPacks">
+<button type="button" data-kind="gift" data-pack="pack-100">100 coins A$1</button>
+<button type="button" data-kind="gift" data-pack="pack-1200">1,200 coins A$10</button>
+<button type="button" data-kind="gift" data-pack="pack-6500">6,500 coins A$50</button>
+</div>
+<h3>Redeem a gift code</h3>
+<input id="payidRedeemCode" maxlength="16" autocomplete="off" aria-label="Gift code">
+<button type="button" id="payidRedeemBtn">Redeem gift code</button>
+<p id="payidRedeemMsg"></p>
+<h3>Saved references</h3>
+<div id="payidSaved"></div>
+<label class="owner-toggle" for="payidOwnerToggle"><input type="checkbox" id="payidOwnerToggle"> I am Karen, the owner of this game</label>
+<div id="payidOwnerBox" hidden>
+<h3>Credit a reference</h3>
+<p>Credit a reference after you see that payment in the bank. This page does not credit coins by itself.</p>
+<input id="payidCreditRef" maxlength="16" autocomplete="off" aria-label="Reference to credit">
+<button type="button" id="payidCreditBtn">Credit reference</button>
+<p id="payidCreditMsg"></p>
+</div>
+</section>
+<!--payid-coins-end-->
+</div>
 <div id="top"><img src="assets/logo.png" alt="Coffeebreak"><span class="pill" id="coins">100 coins</span><span class="pill" id="mode">Exploring</span><span class="pill" id="online">Offline</span><span class="pill" id="now" style="display:none"></span></div>
 <div id="help">WASD or arrows to walk, Space to jump<br>Drag to look around, wheel to zoom<br>In build mode click the ground to move the piece, R rotates, Enter places<br>Players shows real people online and lets you visit their parks</div>
 <div id="msg"></div>
@@ -61,11 +113,13 @@ body.touch #help{display:none}
 <div id="music" class="panel"></div>
 <div id="outfits" class="panel"></div>
 <div id="parks" class="panel"></div>
+<div id="payidCoinsDock" class="panel" aria-label="Buy coins with PayID"></div>
 <div id="bar">
-<button id="bBuild">Build</button><button id="bRotate" class="alt">Rotate</button><button id="bPlace">Place</button><button id="bDelete" class="alt">Delete</button><button id="bMusic">Music</button><button id="bOutfit" class="alt">Outfit</button><button id="bPark">My Park</button><button id="bParks" class="alt">Players</button><button id="bOrders">Food & prizes</button><button id="bDone" class="alt">Done</button>
+<button id="bBuild">Build</button><button id="bRotate" class="alt">Rotate</button><button id="bPlace">Place</button><button id="bDelete" class="alt">Delete</button><button id="bMusic">Music</button><button id="bCoins">Coins</button><button id="bOutfit" class="alt">Outfit</button><button id="bPark">My Park</button><button id="bParks" class="alt">Players</button><button id="bOrders">Food & prizes</button><button id="bDone" class="alt">Done</button>
 </div>
 <div id="joy"><div id="knob"></div></div><button id="jump">Jump</button>
 <div id="parkOrders" class="panel"></div>
+<script src="payid-coins.js"></script>
 <script type="module" src="game.js"></script>
 <script src="cbreport.js"></script><script src="cb-plus.js" data-app="Coffeebreak Coffeebreak Park Builder" data-url="https://coffeebreaks.itch.io" data-kind="app" data-howto=""></script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
 <p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>

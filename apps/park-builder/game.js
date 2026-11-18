@@ -5,12 +5,14 @@ import { startLive, cleanName, savedNick } from './live.js';
 const CFG = { plotSize: 96, grid: 4, maxPieces: 150, startCoins: 100, coinsPerTick: 5, visitorBonus: 3, tickSeconds: 10 };
 const PLOT = { x: 0, z: 124 };
 const C = { Pink: 0xff8cc8, HotPink: 0xff3caa, Purple: 0x9646dc, Lilac: 0xd7b4f5, Cream: 0xfff0e6, White: 0xffffff, Black: 0x281932, Coffee: 0x784b32 };
+// Full Coffee Break, I'm Weak and Knee Deep files are not in this repo (those paths 404).
+// Playlist uses songs that exist. Coffee Break and I'm Weak are the 30 second previews, looped.
 const TRACKS = [
-  { name: 'Coffee Break', file: 'tracks/coffee-break.mp3' },
-  { name: 'Sweet Juices Cotton Candy', file: 'tracks/sweet-juices-cotton-candy.mp3' },
-  { name: 'Drip Drip Drip (Country)', file: 'tracks/drip-drip-drip-country.mp3' },
-  { name: "I'm Weak", file: 'tracks/im-weak.mp3' },
-  { name: 'Knee Deep Mashup', file: 'tracks/knee-deep-mashup.mp3' },
+  { name: 'Sweet Juices Cotton Candy', file: '../../radio/music/sweet-juices-cotton-candy.mp3' },
+  { name: 'Drip Drip Drip (Country)', file: '../../radio/music/drip-drip-drip-country.mp3' },
+  { name: 'Coffeebreak', file: '../../radio/music/coffeebreak.mp3' },
+  { name: 'Coffee Break', file: '../../records-store/previews/coffee-break.mp3' },
+  { name: "I'm Weak", file: '../../records-store/previews/im-weak-you-control-my-body-now.mp3' },
 ];
 const OUTFITS = [
   { name: 'Pink Latte', top: 0xff8cc8, bottom: 0x9646dc, extra: 'Bow' },
@@ -383,22 +385,121 @@ const insidePlot = p => Math.abs(p.x - PLOT.x) < h && Math.abs(p.z - PLOT.z) < h
 const live = { visiting: null, visitPlaced: [], myId: '', online: 0, speed: 0, step() {}, onPark() {}, onOutfit() {}, goHome() {}, renderParks() {}, visitorsInMyPark: () => 0, start() {} };
 
 // ---------- audio ----------
-let audio = null, analyser = null, actx = null, level = 0, fdata = null;
-function playTrack(i) {
-  state.track = i; save();
-  try {
-    if (!audio) {
-      audio = new Audio(); audio.loop = true; audio.crossOrigin = 'anonymous';
-      actx = new (window.AudioContext || window.webkitAudioContext)();
-      const src = actx.createMediaElementSource(audio); analyser = actx.createAnalyser(); analyser.fftSize = 256;
-      src.connect(analyser); analyser.connect(actx.destination); fdata = new Uint8Array(analyser.frequencyBinCount);
-    }
-    if (actx.state === 'suspended') actx.resume();
-    audio.src = TRACKS[i].file; audio.play().catch(() => {});
-    $('now').style.display = ''; $('now').textContent = 'Playing ' + TRACKS[i].name;
-  } catch (e) {}
+// HTML audio only. A Web Audio graph plus crossOrigin stayed silent when the file 404'd
+// or the context was suspended, which is what mobile Safari does before a gesture.
+let audio = null, level = 0, musicToken = 0, musicHops = 0, resumeOnGesture = false;
+function trackIndex(i) {
+  i = i | 0;
+  if (i < 0 || i >= TRACKS.length) return 0;
+  return i;
 }
-function stopMusic() { if (audio) audio.pause(); $('now').style.display = 'none'; state.track = -1; save(); }
+function ensureAudio() {
+  if (audio) return audio;
+  audio = new Audio();
+  audio.loop = true;
+  audio.preload = 'auto';
+  audio.playsInline = true;
+  audio.setAttribute('playsinline', '');
+  audio.setAttribute('webkit-playsinline', '');
+  audio.style.display = 'none';
+  document.body.appendChild(audio);
+  return audio;
+}
+function setMusicButton(on) {
+  const btn = $('bMusic');
+  if (!btn) return;
+  btn.textContent = on ? 'Music on' : 'Music off';
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+}
+function showNow(i) {
+  const el = $('now');
+  if (!el) return;
+  el.style.display = '';
+  el.style.pointerEvents = 'auto';
+  el.style.cursor = 'pointer';
+  el.textContent = 'Playing ' + TRACKS[i].name;
+}
+function playTrack(i) {
+  i = trackIndex(i);
+  state.track = i;
+  state.musicOn = true;
+  save();
+  ensureAudio();
+  const my = ++musicToken;
+  const file = TRACKS[i].file;
+  if (audio.dataset.file !== file) {
+    audio.dataset.file = file;
+    audio.src = file;
+  }
+  showNow(i);
+  setMusicButton(true);
+  let started;
+  try { started = audio.play(); }
+  catch (e) { started = Promise.reject(e); }
+  const ok = () => {
+    if (my !== musicToken) return;
+    musicHops = 0;
+    resumeOnGesture = false;
+    showNow(i);
+    setMusicButton(true);
+  };
+  const denied = () => {
+    if (my !== musicToken) return;
+    resumeOnGesture = true;
+    setMusicButton(false);
+    const el = $('now');
+    if (el) el.style.display = 'none';
+    toast('Tap again to turn music on');
+  };
+  const failedFile = () => {
+    if (my !== musicToken) return;
+    musicHops += 1;
+    if (musicHops < TRACKS.length) { playTrack(i + 1); return; }
+    musicHops = 0;
+    state.musicOn = false;
+    resumeOnGesture = false;
+    save();
+    setMusicButton(false);
+    toast('Music did not load. Try another song.');
+  };
+  if (started && started.then) {
+    started.then(ok, () => { if (audio.error) failedFile(); else denied(); });
+  } else ok();
+}
+function stopMusic() {
+  musicToken += 1;
+  state.musicOn = false;
+  resumeOnGesture = false;
+  if (audio) audio.pause();
+  const el = $('now');
+  if (el) { el.style.display = 'none'; el.textContent = ''; }
+  setMusicButton(false);
+  save();
+}
+function renderMusic() {
+  const el = $('music');
+  el.innerHTML = '<h3>Coffeebreak music</h3>';
+  const on = !!(audio && !audio.paused);
+  const power = document.createElement('button');
+  power.type = 'button';
+  power.textContent = on ? 'Turn music off' : 'Turn music on';
+  power.onclick = () => { if (audio && !audio.paused) stopMusic(); else playTrack(trackIndex(state.track)); closePanels(); };
+  el.appendChild(power);
+  TRACKS.forEach((t, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = t.name;
+    b.onclick = () => { musicHops = 0; playTrack(i); closePanels(); };
+    el.appendChild(b);
+  });
+}
+addEventListener('pointerdown', (e) => {
+  if (!resumeOnGesture || state.musicOn === false) return;
+  const tag = e.target && e.target.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'BUTTON' || tag === 'A' || tag === 'LABEL') return;
+  resumeOnGesture = false;
+  playTrack(trackIndex(state.track));
+}, true);
 
 // ---------- UI ----------
 const $ = id => document.getElementById(id);
@@ -482,11 +583,16 @@ $('bBuild').onclick = () => { if (live.visiting) { live.goHome(); goPark(); toas
 $('bRotate').onclick = () => { rot = (rot + 1) % 4; snapGhost(); };
 $('bPlace').onclick = place;
 $('bDelete').onclick = del;
-$('bMusic').onclick = () => toggle('music', () => {
-  const el = $('music'); el.innerHTML = '<h3>Coffeebreak music</h3>';
-  TRACKS.forEach((t, i) => { const b = document.createElement('button'); b.textContent = t.name; b.onclick = () => { playTrack(i); closePanels(); }; el.appendChild(b); });
-  const s = document.createElement('button'); s.className = 'alt'; s.textContent = 'Stop'; s.onclick = () => { stopMusic(); closePanels(); }; el.appendChild(s);
-});
+$('bMusic').onclick = () => {
+  if (audio && !audio.paused) { stopMusic(); closePanels(); return; }
+  musicHops = 0;
+  playTrack(trackIndex(state.track));
+  closePanels();
+  renderMusic();
+  $('music').classList.add('show');
+};
+if ($('now')) $('now').onclick = () => toggle('music', renderMusic);
+setMusicButton(false);
 $('bOutfit').onclick = () => toggle('outfits', () => {
   const el = $('outfits'); el.innerHTML = '<h3>Outfits</h3>';
   OUTFITS.forEach((o, i) => { const b = document.createElement('button'); b.textContent = o.name; b.style.background = '#' + o.top.toString(16).padStart(6, '0'); b.style.color = i === 3 || i === 2 ? '#784b32' : '#fff'; b.onclick = () => { state.outfit = i; setOutfit(player, o); save(); live.onOutfit(); closePanels(); toast(o.name + ' on'); }; el.appendChild(b); });
@@ -500,7 +606,8 @@ $('play').onclick = () => {
   const nick = raw ? cleanName(raw) : 'Player ' + Math.floor(100 + Math.random() * 900);
   if (!nick) { $('nickErr').textContent = 'Please pick a kinder nickname, using letters and numbers'; return; }
   try { localStorage.setItem('coffeebreakParkBuilder_nick', raw ? nick : ''); } catch (e) {}
-  $('start').style.display = 'none'; if (state.track >= 0) playTrack(state.track);
+  $('start').style.display = 'none';
+  if (state.musicOn !== false) { musicHops = 0; playTrack(trackIndex(state.track)); }
   live.start(nick);
 };
 
@@ -564,7 +671,7 @@ const tmpQ = new THREE.Quaternion();
 function frame() {
   const dt = Math.min(0.05, clock.getDelta()); T += dt;
   // music level
-  if (analyser && audio && !audio.paused) { analyser.getByteFrequencyData(fdata); let s = 0; for (let i = 0; i < 24; i++) s += fdata[i]; level = level * 0.6 + (s / 24 / 255) * 0.4; }
+  if (audio && !audio.paused) level = level * 0.85 + (0.35 + 0.25 * Math.sin(T * 8)) * 0.15;
   else level = level * 0.9 + (0.25 + 0.15 * Math.sin(T * 8)) * 0.1;
   // player movement
   let mx = (keys.KeyD || keys.ArrowRight ? 1 : 0) - (keys.KeyA || keys.ArrowLeft ? 1 : 0) + joy.x;
