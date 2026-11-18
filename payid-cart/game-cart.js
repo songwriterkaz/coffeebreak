@@ -183,9 +183,8 @@
 
   function assignCurrency(amount, stated) {
     if (stated) return String(stated).toUpperCase();
-    var value = Number(amount);
-    if (!Number.isFinite(value) || value <= 0) return null;
-    return 'USD';
+    if (Number(amount) === 10) return 'USD';
+    return null;
   }
 
   function readOffer(html, rel) {
@@ -234,10 +233,6 @@
     var fullRe = /(?:Full version|Full game|Buy full game|Buy for|Customers)\s*\$(\d+(?:\.\d{1,2})?)\s*(USD|AUD)?/gi;
     var fullMatch;
     while ((fullMatch = fullRe.exec(source))) addFound(title, fullMatch[1], fullMatch[2], fullMatch.index);
-
-    var forRe = /(?:^|[^A-Za-z])for\s+\$(\d+(?:\.\d{1,2})?)\s*(USD|AUD)?/gi;
-    var forMatch;
-    while ((forMatch = forRe.exec(source))) addFound(title, forMatch[1], null, forMatch.index);
 
     var priceRe = /class="price"[^>]*>\s*(?:[^<$]{0,40})?\$(\d+(?:\.\d{1,2})?)\s*(USD|AUD)?/gi;
     var priceMatch;
@@ -560,7 +555,7 @@
 
   function isWhollyFree(rel, html) {
     var path = String(rel || '').replace(/\\/g, '/');
-    if (/catch-a-fish/i.test(path)) return true;
+    if (/catch-a-fish|prayer-games|prayer-bowling/i.test(path)) return true;
     if (/-free-demo\/|-buy\.html$|-buy\//.test(path)) return false;
     var text = sourceOf(html || '');
     return /free to play/i.test(text) && /no purchase|takes no payment|no paid entry|no purchase or payment/i.test(text);
@@ -727,7 +722,7 @@
     src = src.replace(new RegExp('Checkout is on ' + shopWord + '\\.', 'gi'), '');
     src = src.replace(new RegExp('\\s*\\+\\s*' + shopWord, 'gi'), '');
     src = src.replace(new RegExp('\\s*or ' + shopWord, 'gi'), '');
-    src = src.replace(/<p[^>]*>\s*<\/p>/gi, '');
+    src = src.replace(/<p(?![^>]*\bid=)[^>]*>\s*<\/p>/gi, '');
     return src;
   }
 

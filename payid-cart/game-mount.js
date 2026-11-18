@@ -1,12 +1,8 @@
-/* In-page game cart. Add to cart stays on the page. Checkout is the shared PayID script.
-   It does not mark a payment received. */
+/* In-page game cart. Uses CoffeebreakGameCart and CoffeebreakCart. It does not mark a payment received. */
 (function () {
   var G = window.CoffeebreakGameCart;
   var C = window.CoffeebreakCart;
-  var Checkout = window.CBStaticCheckout;
   if (!G || !C) return;
-
-  var LABEL = (Checkout && Checkout.LABEL) || 'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
 
   function boot() {
     var section = document.getElementById('cb-game-cart');
@@ -27,11 +23,10 @@
       var restored = C.restore(storage, key);
       if (restored && restored.lines) {
         session.lines = restored.lines.filter(function (line) {
-          return session.items.some(function (item) {
-            return item.id === line.id && item.amount != null && G.isSellableName(item.name);
-          });
+          return session.items.some(function (item) { return item.id === line.id && item.amount != null && G.isSellableName(item.name); });
         });
         session.previous = restored;
+        session.customerClaimsPaid = restored.customerClaimsPaid === true;
       }
     }
 
@@ -39,17 +34,10 @@
     style.textContent = '#cb-game-cart-toggle,#cb-game-cart-panel button,#cb-game-cart-panel a,#cb-game-open-cart{min-height:44px;min-width:44px}#cb-game-cart-toggle{position:fixed;left:12px;right:auto;bottom:16px;z-index:2147483646;background:#e8559a;color:#fff;border:0;border-radius:999px;padding:10px 16px;font:700 16px/1.2 system-ui,sans-serif;cursor:pointer}#cb-game-cart-panel{position:fixed;left:12px;right:auto;bottom:76px;z-index:2147483646;width:min(420px,calc(100% - 24px));max-height:70vh;overflow:auto;background:#fff;color:#3a1f2c;border:2px solid #e8559a;border-radius:16px;padding:12px;font:15px/1.4 system-ui,sans-serif}#cb-game-open-cart{display:inline-block;margin:8px 0;background:#e8559a;color:#fff;border:0;border-radius:10px;padding:8px 12px;font:700 16px/1.2 system-ui,sans-serif;cursor:pointer}#cb-game-cart-panel h2{margin:0 0 8px;font-size:1.1rem}#cb-game-cart-panel button{background:#e8559a;color:#fff;border:0;border-radius:10px;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer}#cb-game-cart-panel button.quiet{background:#fff;color:#b8336f;border:1px solid #e8559a}#cb-game-cart-panel a{color:#b8336f;font-weight:700}#cb-game-cart-panel .row{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:8px 0}#cb-game-cart-panel label{display:block;font-weight:700;margin-top:8px}#cb-game-cart-panel input{display:block;width:100%;min-height:44px;margin-top:4px;padding:8px 10px;border:1px solid #e8559a;border-radius:10px;font:inherit;box-sizing:border-box}';
     document.head.appendChild(style);
 
-    var sellable = session.items.filter(function (item) {
-      return item.amount != null && item.amount !== '' && G.isSellableName(item.name);
-    });
-
     var toggle = document.createElement('button');
     toggle.id = 'cb-game-cart-toggle';
     toggle.type = 'button';
     toggle.textContent = 'Cart';
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.setAttribute('aria-controls', 'cb-game-cart-panel');
-
     var panel = document.createElement('div');
     panel.id = 'cb-game-cart-panel';
     panel.hidden = true;
@@ -69,7 +57,7 @@
         currency: session.currency,
         lines: session.lines,
         previous: session.previous,
-        customerClaimsPaid: false
+        customerClaimsPaid: session.customerClaimsPaid === true
       });
       if (state.ok) {
         session.previous = state;
@@ -155,12 +143,9 @@
     function lineButton(label, className, onClick) {
       var button = document.createElement('button');
       button.type = 'button';
-      button.textContent = 'Add to cart';
-      button.setAttribute('aria-label', 'Add to cart: ' + item.name);
-      button.addEventListener('click', function (event) {
-        event.stopPropagation();
-        addItem(item.id);
-      });
+      button.textContent = label;
+      if (className) button.className = className;
+      button.addEventListener('click', onClick);
       return button;
     }
 
@@ -385,6 +370,7 @@
       function renderItem(item) {
         var row = document.createElement('div');
         row.className = 'row';
+        var info = document.createElement('div');
         var name = document.createElement('strong');
         name.textContent = item.name;
         var price = document.createElement('div');
@@ -484,12 +470,10 @@
       button.addEventListener('click', function () {
         copyValue(value);
       });
-    } else {
-      primary.disabled = true;
+      return button;
     }
-    section.setAttribute('data-pay-label', LABEL);
 
-    document.body.appendChild(primary);
+    paint();
     document.body.appendChild(toggle);
     document.body.appendChild(panel);
     window.CBGameCart = {

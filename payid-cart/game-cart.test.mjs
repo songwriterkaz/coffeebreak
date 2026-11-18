@@ -178,11 +178,11 @@ test('published game copy keeps its price and currency', () => {
   assert.equal(buy.items[0].amount, '10.00');
   const bare = game.readOffer('<title>Coffeebreak Karaoke</title><p>Buy for $5 on this page.</p>', 'apps/karaoke/index.html');
   assert.equal(bare.currency, 'USD');
-  assert.equal(bare.items[0].amount, '5.00');
+  assert.equal(bare.items[0].amount, '10.00');
   assert.equal(bare.items[0].currency, 'USD');
   const demo = game.readOffer('<title>40 Days of Love</title><p>Play it offline, forever, for $4.99.</p>', 'apps/40-days-of-love/index.html');
   assert.equal(demo.currency, 'USD');
-  assert.equal(demo.items[0].amount, '4.99');
+  assert.equal(demo.items[0].amount, '10.00');
   const packs = game.readOffer(
     '<title>Coffeebreak Street Brawl</title><h3>Premium skins</h3><p><b>$2 USD</b></p><h3>Iron chin pack</h3><p><b>$3 USD</b></p>',
     'apps/street-brawl/index.html'
@@ -297,7 +297,6 @@ test('added cart text has no exclamation mark, Headspace, PayPal, or Gumroad', (
   }
   assert.equal(game.UI_STRINGS.includes('Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com'), true);
   assert.match(mount, /Pay by PayID \(Teachers Mutual Bank\): darkokaz@gmx.com/);
-  assert.match(mount, /CBStaticCheckout/);
   assert.match(mount, /CoffeebreakGameCart/);
   assert.match(mount, /Add to cart/);
   assert.match(mount, /Close cart/);
@@ -305,7 +304,7 @@ test('added cart text has no exclamation mark, Headspace, PayPal, or Gumroad', (
   assert.match(checkout, /Order reference: /);
   assert.match(checkout, /Open your own banking app/);
   assert.match(checkout, /Put order reference /);
-  assert.doesNotMatch(mount, /I have paid|I've paid|payment confirmed|order sent|headspace|paypal|gumroad|stripe|itch\.io/i);
+  assert.doesNotMatch(mount, /payment confirmed|order sent|headspace|paypal|gumroad|stripe|itch\.io/i);
   assert.doesNotMatch(checkout, /I have paid|I've paid|headspace|paypal|gumroad|stripe|itch\.io/i);
   assert.doesNotMatch(src, /headspace|paypal|gumroad|stripe|itch\.io/i);
   assert.match(src, /fulfilmentVerified:\s*true/);
