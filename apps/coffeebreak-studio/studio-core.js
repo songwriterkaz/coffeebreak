@@ -1,8 +1,10 @@
 // Coffeebreak Studio core: talks to free public ACE-Step Spaces on Hugging Face.
 // ACE-Step is open-source by ACE Studio & StepFun. Coffeebreak did not make the model.
+// Order matters: the free allowance is shared per internet connection, so the engine
+// that was verified working goes first and a broken one cannot use it up.
 export const BACKENDS = [
-  { id: "ACE-Step/Ace-Step-v1.5", name: "ACE-Step 1.5 (official demo)", kind: "v15" },
   { id: "victor/ace-step-jam", name: "ACE-Step Jam (community demo)", kind: "jam" },
+  { id: "ACE-Step/Ace-Step-v1.5", name: "ACE-Step 1.5 (official demo)", kind: "v15" },
   { id: "Kansasfan/Ace-Step-v1.5", name: "ACE-Step 1.5 (community copy)", kind: "v15" },
   { id: "Blursed/Ace-Step-v1.5", name: "ACE-Step 1.5 (community copy 2)", kind: "v15" }
 ];
