@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak Luxury Homes</title>
+<meta name="description" content="Coffeebreak Luxury Homes is a referral showcase for mansions, waterfront homes, penthouses and acreage in New South Wales. Coffeebreak does not sell property and adds no markup. Enquiries are passed to a licensed NSW agent.">
+<link rel="icon" href="cb-logo.png">
+<style>
+:root{
+  --bg:#10161c;
+  --bg2:#182028;
+  --ink:#f4efe4;
+  --muted:#c9c0b0;
+  --gold:#c6a567;
+  --gold2:#e8d5a3;
+  --card:#1c252e;
+  --line:rgba(198,165,103,.35);
+  --form:#f4efe4;
+  --formink:#1a1610;
+  --warn:#3a2f1c;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:radial-gradient(1200px 600px at 50% -10%, #243140 0%, var(--bg) 55%);
+  color:var(--ink);
+  font:16px/1.55 system-ui,Segoe UI,Roboto,sans-serif;
+}
+a{color:var(--gold2)}
+a:hover,a:focus{color:#fff}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 16px}
+header.hero{
+  display:flex;gap:20px;align-items:center;flex-wrap:wrap;
+  margin-bottom:28px;
+}
+header.hero img{
+  width:84px;height:84px;object-fit:cover;border-radius:50%;
+  background:#fff;border:2px solid var(--gold);flex:0 0 auto;
+}
+h1,h2{font-family:Palatino Linotype,Palatino,Georgia,serif;font-weight:600;letter-spacing:.01em}
+h1{margin:0 0 8px;font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1.2;color:var(--gold2)}
+.lead,.sub{margin:0 0 10px;color:var(--muted);max-width:70ch}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:22px 0 32px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.step b{display:block;color:var(--gold);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.styles{margin:10px 0 36px}
+.styles h2{margin:0 0 8px;font-size:1.55rem;color:var(--gold2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:16px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  display:flex;flex-direction:column;padding:0;color:inherit;text-align:left;
+  cursor:pointer;font:inherit;
+}
+.card:hover,.card:focus{outline:2px solid var(--gold);outline-offset:2px}
+.art{display:block;width:100%;height:auto;background:#0b1016}
+.card h3{margin:14px 16px 6px;font-size:1.2rem;color:var(--gold2)}
+.card p{margin:0 16px 16px;color:var(--muted);font-size:.95rem}
+.enquire{background:linear-gradient(180deg,rgba(198,165,103,.08),transparent),var(--bg2);
+  border:1px solid var(--line);border-radius:20px;padding:22px 22px 26px;margin:0 0 28px}
+.enquire h2{margin:0 0 10px;font-size:1.55rem;color:var(--gold2)}
+.disclosure{
+  background:var(--warn);border-left:4px solid var(--gold);border-radius:12px;
+  padding:14px 16px;margin:0 0 18px;color:var(--ink);font-size:.98rem;
+}
+form{display:grid;gap:12px;max-width:640px}
+label{display:block;font-weight:650;font-size:.92rem}
+input,select,textarea{
+  display:block;width:100%;margin-top:5px;padding:11px 12px;min-height:44px;
+  border-radius:10px;border:1px solid #c9bfae;background:var(--form);color:var(--formink);font:inherit;
+}
+button#send{
+  min-height:48px;width:fit-content;padding:12px 26px;border:0;border-radius:999px;
+  background:var(--gold);color:#1a1610;font:700 16px system-ui,sans-serif;cursor:pointer;
+}
+button#send:hover,button#send:focus{background:var(--gold2)}
+button#send:disabled{opacity:.6;cursor:not-allowed}
+#status{margin:4px 0 0;min-height:1.3em;color:var(--gold2)}
+.honey{display:none}
+footer.legal{
+  padding:12px 0 48px;color:var(--muted);font-size:.92rem;border-top:1px solid var(--line);
+}
+footer.legal img{width:60px;height:60px;object-fit:cover;border-radius:50%;display:block;margin:16px 0 10px}
+footer.legal p{margin:0 0 10px;max-width:80ch}
+.links{display:flex;flex-wrap:wrap;gap:14px}
+@media(max-width:520px){header.hero{justify-content:center;text-align:center}.lead,.sub{margin-left:auto;margin-right:auto}}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <img src="cb-logo.png" alt="Coffeebreak logo" width="84" height="84">
+    <div>
+      <h1>Coffeebreak Luxury Homes</h1>
+      <p class="lead">A referral showcase for mansions, waterfront homes, penthouses and acreage in New South Wales. Coffeebreak does not sell houses and adds no markup. Fill in an enquiry and it is passed to a licensed NSW agent, who may pay Coffeebreak a referral fee.</p>
+    </div>
+  </header>
+
+  <section class="steps" aria-label="How a referral works">
+    <div class="step"><b>1. Enquire</b>Tell us your name, email, budget, preferred area and the style of home you have in mind.</div>
+    <div class="step"><b>2. Introduction</b>Coffeebreak passes your enquiry to a licensed NSW real estate agent.</div>
+    <div class="step"><b>3. The agent takes it from there</b>The agent contacts you about properties that may suit. Coffeebreak does not sell property and does not add a markup to the price you pay.</div>
+  </section>
+
+  <section class="styles" aria-labelledby="styles-heading">
+    <h2 id="styles-heading">Example styles</h2>
+    <p class="sub">These illustrated cards are style examples only. They are not real listings, and no prices are shown. Choose a style to add it to the enquiry form.</p>
+    <div class="grid">
+      <button type="button" class="card" data-type="mansion" aria-label="Choose mansion style">
+        <svg class="art" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="m-sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3a4a63"/>
+              <stop offset="55%" stop-color="#6a5360"/>
+              <stop offset="100%" stop-color="#c9a07a"/>
+            </linearGradient>
+            <linearGradient id="m-lawn" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2f4a38"/>
+              <stop offset="100%" stop-color="#1b2c22"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="240" fill="url(#m-sky)"/>
+          <circle cx="320" cy="46" r="22" fill="#f3d9a4" opacity=".85"/>
+          <ellipse cx="80" cy="70" rx="50" ry="16" fill="#d8c4b0" opacity=".25"/>
+          <ellipse cx="200" cy="58" rx="70" ry="18" fill="#d8c4b0" opacity=".18"/>
+          <rect x="0" y="150" width="400" height="90" fill="url(#m-lawn)"/>
+          <path d="M0 150 C80 142 140 158 200 148 C270 136 330 156 400 144 V150 H0 Z" fill="#35563f"/>
+          <path d="M40 230 C90 200 150 210 200 198 C260 184 320 210 370 230" fill="none" stroke="#cbb48a" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="200" cy="196" r="10" fill="#9aa8b4" opacity=".8"/>
+          <circle cx="200" cy="196" r="5" fill="#d9e4ee"/>
+          <rect x="36" y="118" width="70" height="62" fill="#e8d8c2"/>
+          <polygon points="36,118 71,96 106,118" fill="#5c3d36"/>
+          <rect x="294" y="118" width="70" height="62" fill="#e8d8c2"/>
+          <polygon points="294,118 329,96 364,118" fill="#5c3d36"/>
+          <rect x="96" y="96" width="208" height="86" fill="#f0e2cc"/>
+          <polygon points="96,96 200,58 304,96" fill="#4e342e"/>
+          <rect x="168" y="108" width="64" height="74" fill="#f7eee0"/>
+          <rect x="178" y="118" width="10" height="48" fill="#efe6d4" stroke="#c6a567" stroke-width="1.2"/>
+          <rect x="212" y="118" width="10" height="48" fill="#efe6d4" stroke="#c6a567" stroke-width="1.2"/>
+          <rect x="188" y="148" width="24" height="34" fill="#3c2a26"/>
+          <g fill="#f7e7b0">
+            <rect x="50" y="132" width="16" height="18"/>
+            <rect x="76" y="132" width="16" height="18"/>
+            <rect x="114" y="120" width="16" height="18"/>
+            <rect x="140" y="120" width="16" height="18"/>
+            <rect x="244" y="120" width="16" height="18"/>
+            <rect x="270" y="120" width="16" height="18"/>
+            <rect x="308" y="132" width="16" height="18"/>
+            <rect x="334" y="132" width="16" height="18"/>
+          </g>
+          <rect x="188" y="70" width="24" height="22" fill="#e8d8c2"/>
+          <polygon points="188,70 200,58 212,70" fill="#4e342e"/>
+          <g fill="#1e3326">
+            <ellipse cx="28" cy="168" rx="12" ry="28"/>
+            <ellipse cx="372" cy="168" rx="12" ry="28"/>
+            <rect x="26" y="166" width="4" height="28"/>
+            <rect x="370" y="166" width="4" height="28"/>
+          </g>
+        </svg>
+        <h3>Mansion</h3>
+        <p>A grand formal residence with a long drive, a columned entry and formal gardens.</p>
+      </button>
+
+      <button type="button" class="card" data-type="waterfront" aria-label="Choose waterfront style">
+        <svg class="art" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="w-sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1c3a52"/>
+              <stop offset="60%" stop-color="#4e6d80"/>
+              <stop offset="100%" stop-color="#efc3a0"/>
+            </linearGradient>
+            <linearGradient id="w-sea" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#6ea0b4"/>
+              <stop offset="100%" stop-color="#1d3f52"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="240" fill="url(#w-sky)"/>
+          <circle cx="70" cy="52" r="20" fill="#f6d7a8"/>
+          <path d="M0 128 C60 118 110 138 170 126 C230 114 290 132 400 120 V240 H0 Z" fill="url(#w-sea)"/>
+          <path d="M0 128 C60 118 110 138 170 126 C230 114 290 132 400 120 V136 C290 148 230 130 170 142 C110 154 60 134 0 144 Z" fill="#8eb8c4" opacity=".6"/>
+          <rect x="86" y="86" width="190" height="64" rx="2" fill="#ece4d6"/>
+          <rect x="86" y="86" width="190" height="10" fill="#c6a567"/>
+          <rect x="102" y="104" width="44" height="32" fill="#9ec4d2"/>
+          <rect x="158" y="104" width="44" height="32" fill="#9ec4d2"/>
+          <rect x="214" y="104" width="44" height="32" fill="#9ec4d2"/>
+          <rect x="70" y="148" width="230" height="10" fill="#8a6a46"/>
+          <rect x="70" y="148" width="10" height="18" fill="#6d5336"/>
+          <rect x="290" y="148" width="10" height="18" fill="#6d5336"/>
+          <path d="M300 166 L390 166 L390 176 L300 176 Z" fill="#7a5a38"/>
+          <rect x="300" y="166" width="90" height="4" fill="#c4a078"/>
+          <rect x="384" y="150" width="4" height="20" fill="#5b4030"/>
+          <path d="M388 150 L410 168 L388 168 Z" fill="#d9c4a0"/>
+          <ellipse cx="360" cy="186" rx="28" ry="6" fill="#163240" opacity=".35"/>
+        </svg>
+        <h3>Waterfront</h3>
+        <p>A contemporary home on the water, with a wide terrace and a private jetty.</p>
+      </button>
+
+      <button type="button" class="card" data-type="penthouse" aria-label="Choose penthouse style">
+        <svg class="art" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="p-sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#12182a"/>
+              <stop offset="100%" stop-color="#3a2a40"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="240" fill="url(#p-sky)"/>
+          <circle cx="330" cy="40" r="14" fill="#f0e2c0" opacity=".8"/>
+          <g fill="#1a2233">
+            <rect x="20" y="110" width="40" height="130"/>
+            <rect x="70" y="80" width="36" height="160"/>
+            <rect x="116" y="98" width="50" height="142"/>
+            <rect x="300" y="70" width="44" height="170"/>
+            <rect x="350" y="100" width="40" height="140"/>
+          </g>
+          <g fill="#f3d9a0" opacity=".55">
+            <rect x="28" y="120" width="6" height="8"/>
+            <rect x="40" y="120" width="6" height="8"/>
+            <rect x="28" y="136" width="6" height="8"/>
+            <rect x="40" y="136" width="6" height="8"/>
+            <rect x="78" y="92" width="6" height="8"/>
+            <rect x="90" y="92" width="6" height="8"/>
+            <rect x="126" y="110" width="8" height="10"/>
+            <rect x="142" y="110" width="8" height="10"/>
+            <rect x="310" y="82" width="8" height="10"/>
+            <rect x="326" y="82" width="8" height="10"/>
+            <rect x="360" y="112" width="6" height="8"/>
+          </g>
+          <rect x="150" y="40" width="140" height="200" fill="#2a3346"/>
+          <rect x="150" y="88" width="140" height="12" fill="#c6a567"/>
+          <rect x="162" y="52" width="116" height="36" fill="#d7b56a" opacity=".95"/>
+          <rect x="170" y="58" width="28" height="22" fill="#8fb8c8"/>
+          <rect x="206" y="58" width="28" height="22" fill="#8fb8c8"/>
+          <rect x="242" y="58" width="28" height="22" fill="#8fb8c8"/>
+          <rect x="160" y="86" width="120" height="6" fill="#e8d5a3"/>
+          <g fill="#3e8a6a">
+            <rect x="168" y="74" width="8" height="12"/>
+            <rect x="264" y="74" width="8" height="12"/>
+          </g>
+          <g fill="#f3d9a0" opacity=".7">
+            <rect x="166" y="110" width="16" height="20"/>
+            <rect x="192" y="110" width="16" height="20"/>
+            <rect x="218" y="110" width="16" height="20"/>
+            <rect x="244" y="110" width="16" height="20"/>
+            <rect x="166" y="140" width="16" height="20"/>
+            <rect x="192" y="140" width="16" height="20"/>
+            <rect x="218" y="140" width="16" height="20"/>
+            <rect x="244" y="140" width="16" height="20"/>
+          </g>
+        </svg>
+        <h3>Penthouse</h3>
+        <p>A top-floor city residence with a wide terrace and views across the skyline.</p>
+      </button>
+
+      <button type="button" class="card" data-type="acreage" aria-label="Choose acreage style">
+        <svg class="art" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="a-sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#5b7aa0"/>
+              <stop offset="70%" stop-color="#efd3a8"/>
+              <stop offset="100%" stop-color="#e8c48a"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="240" fill="url(#a-sky)"/>
+          <circle cx="300" cy="48" r="20" fill="#f5e0b0"/>
+          <path d="M0 130 C70 110 130 124 190 112 C260 98 320 120 400 108 V240 H0 Z" fill="#6b8a4e"/>
+          <path d="M0 168 C90 150 160 176 240 158 C310 144 360 170 400 160 V240 H0 Z" fill="#4f6d3b"/>
+          <g stroke="#2f3f24" stroke-width="2" fill="none">
+            <path d="M10 186 H390"/>
+            <path d="M20 174 V198 M60 174 V198 M100 174 V198 M140 174 V198 M180 174 V198 M220 174 V198 M260 174 V198 M300 174 V198 M340 174 V198 M380 174 V198"/>
+          </g>
+          <ellipse cx="70" cy="150" rx="22" ry="36" fill="#2e4a2c"/>
+          <rect x="66" y="150" width="8" height="36" fill="#3a2a1c"/>
+          <ellipse cx="348" cy="146" rx="26" ry="40" fill="#33502f"/>
+          <rect x="344" y="148" width="8" height="40" fill="#3a2a1c"/>
+          <rect x="150" y="118" width="130" height="58" fill="#efe0c8"/>
+          <polygon points="150,118 215,90 280,118" fill="#6b3f2e"/>
+          <rect x="200" y="140" width="22" height="36" fill="#4a3024"/>
+          <g fill="#f3e2b0">
+            <rect x="164" y="130" width="16" height="16"/>
+            <rect x="248" y="130" width="16" height="16"/>
+          </g>
+          <rect x="150" y="168" width="130" height="8" fill="#d7c09a"/>
+          <rect x="312" y="128" width="8" height="46" fill="#8a8f94"/>
+          <circle cx="316" cy="122" r="14" fill="none" stroke="#8a8f94" stroke-width="3"/>
+          <path d="M80 200 C120 190 160 198 200 188" fill="none" stroke="#c3b08a" stroke-width="5"/>
+        </svg>
+        <h3>Acreage</h3>
+        <p>A country homestead set among paddocks, trees and a wide New South Wales sky.</p>
+      </button>
+    </div>
+  </section>
+
+  <section class="enquire" id="enquire" aria-labelledby="enquire-heading">
+    <h2 id="enquire-heading">Send an enquiry</h2>
+    <p class="disclosure" role="note">Coffeebreak may receive a referral fee from the licensed agent you are introduced to. This fee is paid by the agent and does not change the price you pay. Coffeebreak is not a licensed real estate agent and does not sell property.</p>
+    <form id="enquiry-form" novalidate>
+      <input type="hidden" name="_subject" value="Coffeebreak Luxury Homes enquiry">
+      <input type="hidden" name="_captcha" value="false">
+      <input class="honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label>Name
+        <input name="name" required maxlength="100" autocomplete="name">
+      </label>
+      <label>Email
+        <input name="email" type="email" required maxlength="150" autocomplete="email">
+      </label>
+      <label>Budget
+        <input name="budget" required maxlength="120" placeholder="For example, AU$2 million to AU$5 million">
+      </label>
+      <label>Preferred area
+        <input name="preferred_area" required maxlength="150" placeholder="For example, Sydney Harbour, the Hunter, or the NSW South Coast">
+      </label>
+      <label>Type
+        <select name="type" id="home-type" required>
+          <option value="">Choose a style</option>
+          <option value="mansion">Mansion</option>
+          <option value="waterfront">Waterfront</option>
+          <option value="penthouse">Penthouse</option>
+          <option value="acreage">Acreage</option>
+        </select>
+      </label>
+      <button type="submit" id="send">Send enquiry</button>
+      <p id="status" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <footer class="legal">
+    <img src="cb-logo.png" alt="Coffeebreak logo" width="60" height="60">
+    <p>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell what they bought, but may not copy it or make their own versions. Subject to Australian Consumer Law. Coffeebreak claims no ownership of third-party brands named, which belong to their owners. Coffeebreak is not a licensed real estate agent and does not sell property.</p>
+    <p class="links"><a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak Apps Hub</a> <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
+  </footer>
+</main>
+<script>
+(function(){
+  var form = document.getElementById('enquiry-form');
+  var status = document.getElementById('status');
+  var btn = document.getElementById('send');
+  var typeSelect = document.getElementById('home-type');
+
+  document.querySelectorAll('.card[data-type]').forEach(function(card){
+    card.addEventListener('click', function(){
+      typeSelect.value = card.getAttribute('data-type');
+      document.getElementById('enquire').scrollIntoView({behavior:'smooth', block:'start'});
+      typeSelect.focus({preventScroll:true});
+    });
+  });
+
+  function mailFallback(data){
+    var lines = [
+      'Name: ' + (data.name || ''),
+      'Email: ' + (data.email || ''),
+      'Budget: ' + (data.budget || ''),
+      'Preferred area: ' + (data.preferred_area || ''),
+      'Type: ' + (data.type || '')
+    ];
+    var href = 'mailto:darkokaz@gmx.com'
+      + '?subject=' + encodeURIComponent('Coffeebreak Luxury Homes enquiry')
+      + '&body=' + encodeURIComponent(lines.join('\n'));
+    window.location.href = href;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (form._honey && form._honey.value) return;
+    if (form.checkValidity() === false){
+      status.textContent = 'Please fill in your name, email, budget, preferred area and property type.';
+      return;
+    }
+    btn.disabled = true;
+    status.textContent = 'Sending your enquiry.';
+    var data = {};
+    new FormData(form).forEach(function(value, key){ data[key] = value; });
+    fetch('https://formsubmit.co/ajax/darkokaz@gmx.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function(res){ return res.json(); }).then(function(json){
+      if (json && (json.success === true || json.success === 'true')){
+        form.reset();
+        status.textContent = 'Thank you. Your enquiry has been sent. Coffeebreak will pass it to a licensed NSW agent.';
+      } else {
+        throw new Error('formsubmit');
+      }
+    }).catch(function(){
+      mailFallback(data);
+      status.textContent = 'The form could not be sent in the browser. Your email app should open so you can send the enquiry to Coffeebreak.';
+    }).then(function(){ btn.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>
