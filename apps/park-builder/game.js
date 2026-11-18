@@ -1,15 +1,18 @@
 import * as THREE from 'three';
+import { startLive, cleanName, savedNick } from './live.js';
 
 // ---------- settings (same as the Roblox Config) ----------
 const CFG = { plotSize: 96, grid: 4, maxPieces: 150, startCoins: 100, coinsPerTick: 5, visitorBonus: 3, tickSeconds: 10 };
 const PLOT = { x: 0, z: 124 };
 const C = { Pink: 0xff8cc8, HotPink: 0xff3caa, Purple: 0x9646dc, Lilac: 0xd7b4f5, Cream: 0xfff0e6, White: 0xffffff, Black: 0x281932, Coffee: 0x784b32 };
+// Full Coffee Break, I'm Weak and Knee Deep files are not in this repo (those paths 404).
+// Playlist uses songs that exist. Coffee Break and I'm Weak are the 30 second previews, looped.
 const TRACKS = [
-  { name: 'Coffee Break', file: 'tracks/coffee-break.mp3' },
-  { name: 'Sweet Juices Cotton Candy', file: 'tracks/sweet-juices-cotton-candy.mp3' },
-  { name: 'Drip Drip Drip (Country)', file: 'tracks/drip-drip-drip-country.mp3' },
-  { name: "I'm Weak", file: 'tracks/im-weak.mp3' },
-  { name: 'Knee Deep Mashup', file: 'tracks/knee-deep-mashup.mp3' },
+  { name: 'Sweet Juices Cotton Candy', file: '../../radio/music/sweet-juices-cotton-candy.mp3' },
+  { name: 'Drip Drip Drip (Country)', file: '../../radio/music/drip-drip-drip-country.mp3' },
+  { name: 'Coffeebreak', file: '../../radio/music/coffeebreak.mp3' },
+  { name: 'Coffee Break', file: '../../records-store/previews/coffee-break.mp3' },
+  { name: "I'm Weak", file: '../../records-store/previews/im-weak-you-control-my-body-now.mp3' },
 ];
 const OUTFITS = [
   { name: 'Pink Latte', top: 0xff8cc8, bottom: 0x9646dc, extra: 'Bow' },
@@ -27,6 +30,8 @@ const PIECES = [
   { id: 'TrackStraight', name: 'Coaster Track', cost: 60, fp: [4, 12] },
   { id: 'TrackRamp', name: 'Coaster Ramp', cost: 60, fp: [4, 12] },
   { id: 'FoodStall', name: 'Coffee Stall', cost: 80, fp: [10, 6] },
+  { id: 'GiftShop', name: 'Gift Shop', cost: 140, fp: [10, 6] },
+  { id: 'PrizeStall', name: 'Prize Stall', cost: 130, fp: [10, 6] },
   { id: 'Slide', name: 'Slide', cost: 120, fp: [6, 16] },
   { id: 'Swing', name: 'Swing', cost: 150, fp: [10, 6] },
   { id: 'Carousel', name: 'Carousel', cost: 300, fp: [16, 16] },
@@ -172,15 +177,18 @@ const B = {
       if (k % 2) box(g, 0.6, p.y - 0.3, 0.6, p.x, (p.y - 0.3) / 2, p.z, C.White);
     }
   },
-  FoodStall(g) {
+  stall(g, title) {
     box(g, 10, 3.5, 3, 0, 1.75, -1.5, C.Cream);
     for (const x of [-4.7, 4.7]) for (const z of [-2.7, 2.7]) box(g, 0.5, 7, 0.5, x, 3.5, z, C.White);
     for (let k = 0; k < 5; k++) box(g, 2, 0.4, 7, -4 + k * 2, 7.2, 0, k % 2 ? C.White : C.HotPink);
     box(g, 8, 1.6, 0.3, 0, 8.3, -3.2, C.Purple);
-    picPanel(g, 8, 1.6, 0, 8.3, -3.36, textTex('COFFEEBREAK CAFE', '#9646dc'));
+    picPanel(g, 8, 1.6, 0, 8.3, -3.36, textTex(title, '#9646dc'));
     cyl(g, 0.5, 1, -2, 4, -1.5, C.White); cyl(g, 0.45, 0.1, -2, 4.52, -1.5, C.Coffee);
     box(g, 1.4, 0.9, 1.4, 2, 3.95, -1.5, C.Pink);
   },
+  FoodStall(g) { this.stall(g, 'COFFEEBREAK CAFE'); },
+  GiftShop(g) { this.stall(g, 'GIFT SHOP'); },
+  PrizeStall(g) { this.stall(g, 'PRIZE STALL'); },
   Slide(g) {
     box(g, 6, 0.5, 5, 0, 8, 5, C.Purple);
     for (const x of [-2.7, 2.7]) for (const z of [2.8, 7.2]) box(g, 0.5, 8, 0.5, x, 4, z, C.White);
@@ -371,67 +379,127 @@ function animateWalk(av, speed, t) {
   p.la.rotation.x = s; p.ra.rotation.x = -s; p.ll.rotation.x = -s; p.rl.rotation.x = s;
 }
 
-// ---------- NPC visitors ----------
-const npcNames = ['Mia', 'Zoe', 'Leo', 'Ava', 'Kai', 'Ruby', 'Max', 'Lily'];
-const npcs = [];
-for (let i = 0; i < 8; i++) {
-  const o = OUTFITS[i % 4];
-  const av = makeAvatar(i % 2 ? o.bottom : o.top, i % 2 ? o.top : o.bottom, o.extra, [0xffd9b8, 0xc68e64, 0x8d5a3b, 0xf1c8a5][i % 4]);
-  av.position.set(Math.cos(i) * 25, 0, Math.sin(i) * 25);
-  const tag = new THREE.Sprite(new THREE.SpriteMaterial({ map: textTex(npcNames[i], '#9646dc'), depthTest: true }));
-  tag.scale.set(4, 1, 1); tag.position.y = 7; av.add(tag);
-  scene.add(av);
-  npcs.push({ av, target: new THREE.Vector3(), wait: Math.random() * 3, inPark: false, name: npcNames[i] });
-}
-function pickTarget(n) {
-  const goPark = placed.length > 0 && Math.random() < 0.65;
-  if (goPark) {
-    const p = placed[Math.floor(Math.random() * placed.length)].group.position;
-    n.target.set(p.x + (Math.random() - 0.5) * 14, 0, p.z - 6 - Math.random() * 6);
-    n.target.x = Math.max(PLOT.x - h + 3, Math.min(PLOT.x + h - 3, n.target.x));
-    n.target.z = Math.max(PLOT.z - h + 3, Math.min(PLOT.z + h - 3, n.target.z));
-  } else { const a = Math.random() * Math.PI * 2, r = 12 + Math.random() * 24; n.target.set(Math.cos(a) * r, 0, Math.sin(a) * r); }
-}
-npcs.forEach(pickTarget);
+// ---------- Only real players: no computer-made visitors (Karen, 17 Nov 2026) ----------
+// Other real players are shown live by live.js.
 const insidePlot = p => Math.abs(p.x - PLOT.x) < h && Math.abs(p.z - PLOT.z) < h;
-function stepNpc(n, dt, t) {
-  const p = n.av.position;
-  if (n.wait > 0) { n.wait -= dt; animateWalk(n.av, 0, t); n.av.userData.body.position.y = Math.abs(Math.sin(t * 6)) * 0.3 * (Math.sin(t) > 0 ? 1 : 0); return; }
-  const d = n.target.clone().sub(p); d.y = 0;
-  const dist = d.length();
-  // route through plot gate: if going between plaza and plot, head for gate first
-  const gate = new THREE.Vector3(PLOT.x, 0, PLOT.z - h);
-  let dir = d;
-  if (insidePlot(n.target) !== insidePlot(p) && Math.abs(p.x - gate.x) > 4 && Math.abs(p.z - gate.z) < 6) dir = gate.clone().sub(p);
-  else if (insidePlot(n.target) !== insidePlot(p) && Math.abs(p.z - gate.z) >= 6 && Math.abs(p.x - gate.x) > 4) dir = new THREE.Vector3(gate.x - p.x, 0, gate.z - p.z);
-  if (dist < 1) { n.wait = 2 + Math.random() * 5; pickTarget(n); return; }
-  dir.y = 0; dir.normalize();
-  p.addScaledVector(dir, 7 * dt);
-  n.av.rotation.y = Math.atan2(-dir.x, -dir.z);
-  animateWalk(n.av, 7, t + n.name.length);
-  n.av.userData.body.position.y = 0;
-  const now = insidePlot(p);
-  if (now && !n.inPark) toast(`${n.name} is visiting your park`);
-  n.inPark = now;
-}
+const live = { visiting: null, visitPlaced: [], myId: '', online: 0, speed: 0, step() {}, onPark() {}, onOutfit() {}, goHome() {}, renderParks() {}, visitorsInMyPark: () => 0, start() {} };
 
 // ---------- audio ----------
-let audio = null, analyser = null, actx = null, level = 0, fdata = null;
-function playTrack(i) {
-  state.track = i; save();
-  try {
-    if (!audio) {
-      audio = new Audio(); audio.loop = true; audio.crossOrigin = 'anonymous';
-      actx = new (window.AudioContext || window.webkitAudioContext)();
-      const src = actx.createMediaElementSource(audio); analyser = actx.createAnalyser(); analyser.fftSize = 256;
-      src.connect(analyser); analyser.connect(actx.destination); fdata = new Uint8Array(analyser.frequencyBinCount);
-    }
-    if (actx.state === 'suspended') actx.resume();
-    audio.src = TRACKS[i].file; audio.play().catch(() => {});
-    $('now').style.display = ''; $('now').textContent = 'Playing ' + TRACKS[i].name;
-  } catch (e) {}
+// HTML audio only. A Web Audio graph plus crossOrigin stayed silent when the file 404'd
+// or the context was suspended, which is what mobile Safari does before a gesture.
+let audio = null, level = 0, musicToken = 0, musicHops = 0, resumeOnGesture = false;
+function trackIndex(i) {
+  i = i | 0;
+  if (i < 0 || i >= TRACKS.length) return 0;
+  return i;
 }
-function stopMusic() { if (audio) audio.pause(); $('now').style.display = 'none'; state.track = -1; save(); }
+function ensureAudio() {
+  if (audio) return audio;
+  audio = new Audio();
+  audio.loop = true;
+  audio.preload = 'auto';
+  audio.playsInline = true;
+  audio.setAttribute('playsinline', '');
+  audio.setAttribute('webkit-playsinline', '');
+  audio.style.display = 'none';
+  document.body.appendChild(audio);
+  return audio;
+}
+function setMusicButton(on) {
+  const btn = $('bMusic');
+  if (!btn) return;
+  btn.textContent = on ? 'Music on' : 'Music off';
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+}
+function showNow(i) {
+  const el = $('now');
+  if (!el) return;
+  el.style.display = '';
+  el.style.pointerEvents = 'auto';
+  el.style.cursor = 'pointer';
+  el.textContent = 'Playing ' + TRACKS[i].name;
+}
+function playTrack(i) {
+  i = trackIndex(i);
+  state.track = i;
+  state.musicOn = true;
+  save();
+  ensureAudio();
+  const my = ++musicToken;
+  const file = TRACKS[i].file;
+  if (audio.dataset.file !== file) {
+    audio.dataset.file = file;
+    audio.src = file;
+  }
+  showNow(i);
+  setMusicButton(true);
+  let started;
+  try { started = audio.play(); }
+  catch (e) { started = Promise.reject(e); }
+  const ok = () => {
+    if (my !== musicToken) return;
+    musicHops = 0;
+    resumeOnGesture = false;
+    showNow(i);
+    setMusicButton(true);
+  };
+  const denied = () => {
+    if (my !== musicToken) return;
+    resumeOnGesture = true;
+    setMusicButton(false);
+    const el = $('now');
+    if (el) el.style.display = 'none';
+    toast('Tap again to turn music on');
+  };
+  const failedFile = () => {
+    if (my !== musicToken) return;
+    musicHops += 1;
+    if (musicHops < TRACKS.length) { playTrack(i + 1); return; }
+    musicHops = 0;
+    state.musicOn = false;
+    resumeOnGesture = false;
+    save();
+    setMusicButton(false);
+    toast('Music did not load. Try another song.');
+  };
+  if (started && started.then) {
+    started.then(ok, () => { if (audio.error) failedFile(); else denied(); });
+  } else ok();
+}
+function stopMusic() {
+  musicToken += 1;
+  state.musicOn = false;
+  resumeOnGesture = false;
+  if (audio) audio.pause();
+  const el = $('now');
+  if (el) { el.style.display = 'none'; el.textContent = ''; }
+  setMusicButton(false);
+  save();
+}
+function renderMusic() {
+  const el = $('music');
+  el.innerHTML = '<h3>Coffeebreak music</h3>';
+  const on = !!(audio && !audio.paused);
+  const power = document.createElement('button');
+  power.type = 'button';
+  power.textContent = on ? 'Turn music off' : 'Turn music on';
+  power.onclick = () => { if (audio && !audio.paused) stopMusic(); else playTrack(trackIndex(state.track)); closePanels(); };
+  el.appendChild(power);
+  TRACKS.forEach((t, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = t.name;
+    b.onclick = () => { musicHops = 0; playTrack(i); closePanels(); };
+    el.appendChild(b);
+  });
+}
+addEventListener('pointerdown', (e) => {
+  if (!resumeOnGesture || state.musicOn === false) return;
+  const tag = e.target && e.target.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'BUTTON' || tag === 'A' || tag === 'LABEL') return;
+  resumeOnGesture = false;
+  playTrack(trackIndex(state.track));
+}, true);
 
 // ---------- UI ----------
 const $ = id => document.getElementById(id);
@@ -489,46 +557,64 @@ function placeGhostInFront() {
   ghostPos.copy(player.position).addScaledVector(f, 14); snapGhost();
 }
 function place() {
+  if (live.visiting) return toast('You are visiting ' + live.visiting.name + "'s park. Press My Park to build at home");
   if (!buildMode || !selected) return toast('Press Build and pick a piece first');
   const x = ghost.userData.lx, z = ghost.userData.lz;
   if (placed.length >= CFG.maxPieces) return toast('Your park is full');
   if (overlaps(selected, x, z, rot)) return toast('Something is already there');
   const d = { id: selected, x, z, r: rot, v: variant };
-  state.pieces.push(d); addPlaced(d); save(); toast(byId[selected].name + ' placed');
+  state.pieces.push(d); addPlaced(d); save(); live.onPark(); toast(byId[selected].name + ' placed');
   if (selected === 'Poster') selectPiece('Poster');
 }
 function del() {
+  if (live.visiting) return toast('You can only change your own park');
   const ref = buildMode && ghost ? ghost.position : player.position;
   let best = null, bd = 16;
   for (const p of placed) { const dd = p.group.position.distanceTo(ref); if (dd < bd) { bd = dd; best = p; } }
   if (!best) return toast('Stand next to a piece in your park to delete it');
   unregister(best.group); scene.remove(best.group);
-  placed.splice(placed.indexOf(best), 1); state.pieces.splice(state.pieces.indexOf(best.data), 1); save();
+  placed.splice(placed.indexOf(best), 1); state.pieces.splice(state.pieces.indexOf(best.data), 1); save(); live.onPark();
   toast(byId[best.data.id].name + ' removed');
 }
 function goPark() { player.position.set(PLOT.x, 0, PLOT.z - h + 6); player.rotation.y = Math.PI; camYaw = Math.PI; vel.set(0, 0, 0); }
 function done() { buildMode = false; selected = null; if (ghost) { unregister(ghost); scene.remove(ghost); ghost = null; } closePanels(); setMode(); }
 function toggle(id, fill) { const el = $(id), was = el.classList.contains('show'); closePanels(); if (!was) { fill(); el.classList.add('show'); } }
-$('bBuild').onclick = () => { buildMode = true; setMode(); toggle('pieces', renderPieces); };
+$('bBuild').onclick = () => { if (live.visiting) { live.goHome(); goPark(); toast('Back in your park, ready to build'); } buildMode = true; setMode(); toggle('pieces', renderPieces); };
 $('bRotate').onclick = () => { rot = (rot + 1) % 4; snapGhost(); };
 $('bPlace').onclick = place;
 $('bDelete').onclick = del;
-$('bMusic').onclick = () => toggle('music', () => {
-  const el = $('music'); el.innerHTML = '<h3>Coffeebreak music</h3>';
-  TRACKS.forEach((t, i) => { const b = document.createElement('button'); b.textContent = t.name; b.onclick = () => { playTrack(i); closePanels(); }; el.appendChild(b); });
-  const s = document.createElement('button'); s.className = 'alt'; s.textContent = 'Stop'; s.onclick = () => { stopMusic(); closePanels(); }; el.appendChild(s);
-});
+$('bMusic').onclick = () => {
+  if (audio && !audio.paused) { stopMusic(); closePanels(); return; }
+  musicHops = 0;
+  playTrack(trackIndex(state.track));
+  closePanels();
+  renderMusic();
+  $('music').classList.add('show');
+};
+if ($('now')) $('now').onclick = () => toggle('music', renderMusic);
+setMusicButton(false);
 $('bOutfit').onclick = () => toggle('outfits', () => {
   const el = $('outfits'); el.innerHTML = '<h3>Outfits</h3>';
-  OUTFITS.forEach((o, i) => { const b = document.createElement('button'); b.textContent = o.name; b.style.background = '#' + o.top.toString(16).padStart(6, '0'); b.style.color = i === 3 || i === 2 ? '#784b32' : '#fff'; b.onclick = () => { state.outfit = i; setOutfit(player, o); save(); closePanels(); toast(o.name + ' on'); }; el.appendChild(b); });
+  OUTFITS.forEach((o, i) => { const b = document.createElement('button'); b.textContent = o.name; b.style.background = '#' + o.top.toString(16).padStart(6, '0'); b.style.color = i === 3 || i === 2 ? '#784b32' : '#fff'; b.onclick = () => { state.outfit = i; setOutfit(player, o); save(); live.onOutfit(); closePanels(); toast(o.name + ' on'); }; el.appendChild(b); });
 });
-$('bPark').onclick = () => { closePanels(); goPark(); toast('Welcome to your park'); };
+$('bPark').onclick = () => { closePanels(); live.goHome(); goPark(); toast('Welcome to your park'); };
 $('bDone').onclick = done;
-$('play').onclick = () => { $('start').style.display = 'none'; if (state.track >= 0) playTrack(state.track); };
+$('bParks').onclick = () => toggle('parks', live.renderParks);
+$('nick').value = savedNick();
+$('play').onclick = () => {
+  const raw = $('nick').value.trim();
+  const nick = raw ? cleanName(raw) : 'Player ' + Math.floor(100 + Math.random() * 900);
+  if (!nick) { $('nickErr').textContent = 'Please pick a kinder nickname, using letters and numbers'; return; }
+  try { localStorage.setItem('coffeebreakParkBuilder_nick', raw ? nick : ''); } catch (e) {}
+  $('start').style.display = 'none';
+  if (state.musicOn !== false) { musicHops = 0; playTrack(trackIndex(state.track)); }
+  live.start(nick);
+};
 
 // ---------- input ----------
 const keys = {};
 addEventListener('keydown', e => {
+  if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
   keys[e.code] = true;
   if (e.code === 'KeyR') { rot = (rot + 1) % 4; snapGhost(); }
   if (e.code === 'Enter') place();
@@ -571,10 +657,10 @@ $('jump').addEventListener('pointerdown', e => { e.preventDefault(); jumpQueued 
 
 // ---------- coins tick ----------
 setInterval(() => {
-  const visitors = npcs.filter(n => n.inPark).length;
+  const visitors = live.visitorsInMyPark();
   const gain = CFG.coinsPerTick + visitors * CFG.visitorBonus;
   state.coins += gain; updateCoins(); save();
-  toast(visitors ? `+${gain} coins (${visitors} visitors in your park)` : `+${gain} coins`);
+  toast(visitors ? `+${gain} coins (${visitors} real ${visitors === 1 ? 'player' : 'players'} in your park)` : `+${gain} coins`);
 }, CFG.tickSeconds * 1000);
 addEventListener('beforeunload', save);
 
@@ -585,7 +671,7 @@ const tmpQ = new THREE.Quaternion();
 function frame() {
   const dt = Math.min(0.05, clock.getDelta()); T += dt;
   // music level
-  if (analyser && audio && !audio.paused) { analyser.getByteFrequencyData(fdata); let s = 0; for (let i = 0; i < 24; i++) s += fdata[i]; level = level * 0.6 + (s / 24 / 255) * 0.4; }
+  if (audio && !audio.paused) level = level * 0.85 + (0.35 + 0.25 * Math.sin(T * 8)) * 0.15;
   else level = level * 0.9 + (0.25 + 0.15 * Math.sin(T * 8)) * 0.1;
   // player movement
   let mx = (keys.KeyD || keys.ArrowRight ? 1 : 0) - (keys.KeyA || keys.ArrowLeft ? 1 : 0) + joy.x;
@@ -601,7 +687,8 @@ function frame() {
   vel.y -= 50 * dt; player.position.y += vel.y * dt;
   if (player.position.y <= 0) { player.position.y = 0; vel.y = 0; onGround = true; }
   player.position.x = Math.max(-280, Math.min(280, player.position.x)); player.position.z = Math.max(-280, Math.min(280, player.position.z));
-  animateWalk(player, onGround ? ml * sp : 0, T);
+  live.speed = onGround ? ml * sp : 0;
+  animateWalk(player, live.speed, T);
   if (!onGround) { const p = player.userData.parts; p.la.rotation.x = p.ra.rotation.x = -2.6; }
   // camera
   const target = player.position.clone().add(new THREE.Vector3(0, 4, 0));
@@ -627,11 +714,12 @@ function frame() {
     const a = coasterPoint(t), b = coasterPoint((t + 0.01) % 1);
     c.obj.position.set(a.x, a.y + 1.2, a.z); c.obj.lookAt(b.x, b.y + 1.2, b.z);
   }
-  for (const n of npcs) stepNpc(n, dt, T);
+  live.step(dt, T);
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
 }
 setMode();
 frame();
 window.__setGhost = (x, z) => { ghostPos.set(PLOT.x + x, 0, PLOT.z + z); snapGhost(); };
-window.__game = { state, placed, npcs, place, selectPiece, goPark };
+window.__game = { state, get placed() { return live.visiting ? live.visitPlaced : placed; }, ownPlaced: placed, place, selectPiece, goPark, player, byId, live };
+startLive({ THREE, scene, makeAvatar, setOutfit, textTex, animateWalk, buildPiece, unregister, player, state, OUTFITS, placed, PLOT, half: h, plotSign, toast, $, live, closePanels, enterPlot: goPark });

@@ -19,3 +19,33 @@
   if (document.body) inject();
   else document.addEventListener('DOMContentLoaded', inject);
 })();
+
+/* Load the shared verse-of-the-day footer line */
+(function(){
+  if (window.__CB_VERSE__ || document.getElementById('cb-verse-script')) return;
+  var s = document.createElement('script');
+  s.id = 'cb-verse-script';
+  s.src = 'https://songwriterkaz.github.io/coffeebreak/pages/cb-verse.js';
+  s.defer = true;
+  (document.head || document.documentElement).appendChild(s);
+})();
+
+/* Load the shared Listen to Coffeebreak music section */
+(function(){
+  if (window.__CB_LISTEN__ || document.getElementById('cb-listen-script')) return;
+  var s = document.createElement('script');
+  s.id = 'cb-listen-script';
+  s.src = 'https://songwriterkaz.github.io/coffeebreak/pages/cb-listen.js';
+  s.defer = true;
+  (document.head || document.documentElement).appendChild(s);
+})();
+
+/* Load the shared GoFundMe donation link */
+(function(){
+  if (window.__CB_GOFUNDME__ || document.getElementById('cb-gofundme-script')) return;
+  var s = document.createElement('script');
+  s.id = 'cb-gofundme-script';
+  s.src = 'https://songwriterkaz.github.io/coffeebreak/pages/cb-gofundme.js';
+  s.defer = true;
+  (document.head || document.documentElement).appendChild(s);
+})();

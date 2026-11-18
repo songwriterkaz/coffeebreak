@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coffeebreak Spirit Smudge</title>
+<link rel="icon" href="logo.png">
+<style>
+:root { --ink:#f3eee6; --muted:#cbbfae; --bg:#161310; --panel:#241f1a; --accent:#c4a36a; }
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 50% 0%,#2a231c,#161310 60%);color:var(--ink);font:16px/1.5 system-ui,sans-serif;min-height:100vh}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#1c1814ee;border-bottom:1px solid #3a322a;position:sticky;top:0;z-index:5}
+header img{width:52px;height:52px;border-radius:50%;background:#fff;object-fit:contain}
+header h1{margin:0;font-size:1.15rem;flex:1}
+.badge{background:var(--accent);color:#22190f;border-radius:999px;padding:4px 10px;font-weight:700;font-size:12px}
+.note{max-width:980px;margin:0 auto;padding:12px 16px 0;color:var(--muted)}
+.stage-wrap{max-width:980px;margin:12px auto;height:min(68vh,640px);min-height:360px;border-radius:18px;overflow:hidden;border:1px solid #3a322a;box-shadow:0 10px 40px #0008;background:#111}
+#stage{display:block;width:100%;height:100%}
+.controls{max-width:980px;margin:0 auto;padding:0 16px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{background:var(--accent);color:#22190f;border:0;border-radius:12px;padding:10px 14px;min-height:44px;font:inherit;font-weight:700;cursor:pointer}
+button.ghost{background:#3a322a;color:var(--ink)}
+#sceneStatus{color:var(--muted);flex:1;min-width:200px}
+.cb-cart,.footer{max-width:980px;margin:0 auto 16px;padding:16px;color:var(--muted);font-size:.92rem}
+.cb-cart{background:var(--panel);border:1px solid #3a322a;border-radius:16px}
+.cb-cart h2,.cb-cart-total{color:var(--ink)}
+.cb-cart-actions{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.cb-cart-quiet{background:#3a322a;color:var(--ink)}
+.cb-cart a,.footer a{color:#e6d3a8}
+.footer{text-align:center;line-height:1.55;padding-bottom:48px}
+.footer img{width:64px;height:64px;border-radius:14px;background:#fff;object-fit:contain}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body data-store="spirit-smudge">
+<header>
+  <img src="logo.png" alt="Coffeebreak logo" width="52" height="52">
+  <h1>Spirit Smudge</h1>
+  <span class="badge">US$10</span>
+</header>
+<p class="note">A calm 3D sage bundle. Drag to turn and wave it. Light the tip for a glowing ember and drifting smoke. For quiet atmosphere only. This is not a medical or religious service.</p>
+<div class="stage-wrap"><canvas id="stage" aria-label="3D sage smudge stick"></canvas></div>
+<div class="controls">
+  <button type="button" id="btnLight">Light</button>
+  <button type="button" class="ghost" id="btnExtinguish">Extinguish</button>
+  <button type="button" class="ghost" id="btnResetView">Reset view</button>
+  <button type="button" class="ghost" id="btnAmbient">Quiet ambient on</button>
+  <p id="sceneStatus" role="status"></p>
+</div>
+<section id="cb-payid-cart" class="cb-cart"></section>
+<footer class="footer">
+  <p><img src="logo.png" alt="Coffeebreak logo" width="64" height="64"></p>
+  <p><b>Disclaimer:</b> Karen O'Brien (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell physical products they bought but may not copy them or make their own versions. No copyright or ownership is claimed of any third-party brands named. Trademarks belong to their owners.</p>
+  <p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com · No PayPal</p>
+  <p><a href="https://www.tesla.com" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" rel="noopener">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a></p>
+</footer>
+<script src="../../payid-cart/cart.js"></script>
+<script src="cb-app-cart.js"></script>
+<script src="app.js"></script>
+<script>
+CBAppCart.mount('cb-payid-cart', {
+  storeId: 'spirit-smudge',
+  id: 'spirit-smudge',
+  name: 'Coffeebreak Spirit Smudge',
+  unitMinor: 1000,
+  currency: 'USD'
+});
+</script>
+</body>
+</html>

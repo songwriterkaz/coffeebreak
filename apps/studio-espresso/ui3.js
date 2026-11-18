@@ -245,7 +245,7 @@ function demoSong(){ P=newProject(); P.name='Coffeebreak demo'; P.bpm=110; const
  P.loop={on:false,s:0,e:S*4}; SEL.t=P.tracks[0].id; SEL.c=null; P.lyrics='Sun is up on the Coffeebreak farm\nPink boots on and a basket on my arm\nKicking marshmallows up the mud\nPink and white flying where the puddles flood'; }
 /* ---------- start-up ---------- */
 const VIEWS={arrange:()=>{renderHeads();drawTL();renderInspector()},piano:prView,drums:drView,inst:instView,mixer:mixView,editor:edView,master:masterView,library:libView,export:projList,tools:tmView};
-function initKeys(){ const held={}; window.addEventListener('keydown',e=>{ const tag=e.target.tagName; if(/INPUT|SELECT|TEXTAREA/.test(tag)&&e.target.type!=='range'&&e.target.type!=='checkbox')return; const k=e.key.toLowerCase(),mod=e.ctrlKey||e.metaKey;
+function initKeys(){ if(window.CB_SONGS_HEADLESS)return; const held={}; window.addEventListener('keydown',e=>{ const tag=e.target.tagName; if(/INPUT|SELECT|TEXTAREA/.test(tag)&&e.target.type!=='range'&&e.target.type!=='checkbox')return; const k=e.key.toLowerCase(),mod=e.ctrlKey||e.metaKey;
   if(prefs.keys&&!mod&&CKEYS.includes(k)&&CUR==='piano'){ if(!held[k]){held[k]=1;midiOn(KOCT*12+12+CKEYS.indexOf(k),0.8)} e.preventDefault(); return; }
   if(k===' '){e.preventDefault();play()} else if(k==='home'||k==='enter'){e.preventDefault();goStart()} else if(mod&&k==='z'){e.preventDefault();e.shiftKey?redo():undo()} else if(mod&&k==='y'){e.preventDefault();redo()} else if(mod&&k==='s'){e.preventDefault();saveLocal()}
   else if(mod&&k==='c'){const c=selClip();if(c){CLIPBOARD=JSON.parse(JSON.stringify(c));toast('Clip copied')}} else if(mod&&k==='v'){const t=selTrack();if(CLIPBOARD&&t&&t.kind!=='bus'&&(t.kind==='audio')===(CLIPBOARD.takes.length>0)){snap();const n=JSON.parse(JSON.stringify(CLIPBOARD));n.id=nid('c');n.start=T.pos;t.clips.push(n);SEL.c=n.id;refreshAll()}}
@@ -265,9 +265,9 @@ function init(){ applyTheme(); buildSections(); if(DEMO){$('#demoBanner').classL
  $('#aImp').onclick=()=>$('#impFile').click(); $('#aMk').onclick=()=>{const n=prompt('Marker name','Chorus');if(n){snap();P.markers.push({b:T.pos,name:n});drawTL()}}; $('#aZi').onclick=()=>{Z=Math.min(160,Z*1.25);drawTL()}; $('#aZo').onclick=()=>{Z=Math.max(6,Z/1.25);drawTL()};
  $$('#t-arrange [data-m]').forEach(b=>b.onclick=()=>{ARR_MODE=b.dataset.m;$$('#t-arrange [data-m]').forEach(x=>x.classList.toggle('on',x===b))});
  $('#kOd').onclick=()=>{KOCT=Math.max(1,KOCT-1);renderKeys()}; $('#kOu').onclick=()=>{KOCT=Math.min(7,KOCT+1);renderKeys()};
- initArrange(); initPiano(); initDrums(); initInst(); initEditor(); initMaster(); initTools(); initKaraoke(); initExport(); initSettings(); initKeys();
+ initArrange(); initPiano(); initDrums(); initInst(); initEditor(); initMaster(); initTools(); initKaraoke(); initExport(); initSettings(); if(!window.CB_SONGS_HEADLESS) initKeys();
  $('#libQ').oninput=libView; $('#libCat').onchange=libView; $('#prCk').classList.toggle('on',!!prefs.keys); $('#prCk').textContent='Computer keys: '+(prefs.keys?'on':'off');
- demoSong(); showTab('arrange'); refreshAll(); requestAnimationFrame(frame); window.addEventListener('resize',()=>drawTL());
+ demoSong(); showTab('arrange'); refreshAll(); if(!window.CB_SONGS_HEADLESS){ requestAnimationFrame(frame); window.addEventListener('resize',()=>drawTL()); }
  document.addEventListener('pointerdown',()=>{ if(ctx&&ctx.state==='suspended')ctx.resume(); },{passive:true}); initTypedFieldFocus(); }
 init();
 // test hooks

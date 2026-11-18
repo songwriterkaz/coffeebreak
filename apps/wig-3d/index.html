@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Realistic Blonde Moving Wig</title>
+<meta name="description" content="Realistic Blonde Moving Wig. Realistic, lifelike hair that moves when touched. US$10,000. Pay by PayID.">
+<link rel="icon" href="../cb-logo.png">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,serif;background:#2b1d2e;color:#f7c6d9}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#1d1320}
+header img{height:44px;width:auto;border-radius:8px;background:#fdf6f0}
+header h1{font-size:18px;margin:0;letter-spacing:3px}
+main{max-width:900px;margin:auto;padding:14px}
+h2{color:#f7c6d9;margin:6px 0 10px}
+.dis{background:#f5e3ea;color:#3a2a2a;border-radius:10px;padding:12px;font-size:15px;line-height:1.4}
+.price{font-size:22px;font-weight:700;margin:8px 0}
+iframe{width:100%;height:78vh;min-height:520px;border:0;border-radius:12px;background:#000;display:block;margin:12px 0}
+.btn{display:inline-block;background:#b5527a;color:#fff;text-decoration:none;border:0;border-radius:10px;padding:12px 16px;margin:4px 6px 4px 0;font:inherit;font-weight:700;cursor:pointer}
+.btn.alt{background:#fff;color:#b5527a;border:1px solid #e7b7c8}
+a{color:#f7c6d9}
+.card{background:#3a2740;border-radius:12px;padding:14px;margin:12px 0}
+label{display:block;font-weight:700;margin:10px 0 4px}
+input,textarea{width:100%;padding:11px;border:1px solid #e7b7c8;border-radius:10px;font:inherit}
+textarea{min-height:80px}
+.f{font-size:12px;color:#d9b3c4;padding:20px;text-align:center;max-width:900px;margin:auto}
+.links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.links a{color:#f7c6d9}
+</style>
+</head>
+<body>
+<header>
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="64" height="44">
+  <h1>COFFEEBREAK</h1>
+</header>
+<main>
+  <h2>Realistic Blonde Moving Wig</h2>
+  <p>Realistic, lifelike hair that moves when touched.</p>
+  <p class="price">US$10,000</p>
+  <p class="dis" id="wigDisclaimer">Concept design by Karen O'Brien / Coffeebreak. The 3D wig is a design preview. The wig you receive may not have a silicone base; it may be an HD lace or similar see-through base. Photos and 3D views are for illustration. Karen O'Brien keeps all rights to this design, name and logo.</p>
+  <p>Stroke the hair to make it move, and drag in rotate mode to turn the wig. Preview colours are part of the 3D view. <a href="original/index.html" target="_blank" rel="noopener">Open full screen</a></p>
+  <iframe id="wig3d" src="original/index.html" title="Realistic Blonde Moving Wig" allow="fullscreen"></iframe>
+  <p><button type="button" class="btn" id="add-wig">Add to cart</button></p>
+  <section class="card" id="checkout" aria-label="Cart"></section>
+</main>
+<footer class="f">
+  <img src="../cb-logo.png" alt="Coffeebreak logo" width="48" height="36">
+  <p>Coffeebreak songwriter and creator from Newcastle NSW.</p>
+  <p>&copy; Karen O'Brien (Coffeebreak). Karen keeps all rights to her products, designs, apps, name and logo. Buyers may resell the physical items they bought but may not copy them or make their own versions. Coffeebreak claims no ownership of any third-party brands named; they belong to their owners and are named only for description.</p>
+  <p class="links">
+    <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a>
+    <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>
+    <a href="https://www.youtube.com/@coffeebreakTVSERIES/streams" target="_blank" rel="noopener">Coffeebreak Radio 24/7 (YouTube)</a>
+    <a href="https://www.youtube.com/channel/UCNuPovMUFJDrl9fhztDgy4w?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
+  </p>
+</footer>
+<script src="../../payid-cart/cart.js"></script>
+<script src="../cb-static-checkout.js"></script>
+<script>
+(function () {
+  var PRODUCT = {
+    id: 'realistic-blonde-moving-wig',
+    name: 'Realistic Blonde Moving Wig',
+    amount: '10000.00'
+  };
+  var cart = [];
+  var ui = CBStaticCheckout.mount('checkout', {
+    storeId: 'wig-3d',
+    storeName: 'Realistic Blonde Moving Wig',
+    currency: 'USD',
+    getItems: function () { return cart; },
+    onQty: function (id, qty) {
+      cart.forEach(function (line) { if (line.id === id) line.qty = Math.max(1, Math.min(20, qty)); });
+      ui.refresh();
+    },
+    onRemove: function (id) {
+      cart = cart.filter(function (line) { return line.id !== id; });
+      ui.refresh();
+    }
+  });
+  document.getElementById('add-wig').addEventListener('click', function () {
+    var line = null;
+    cart.forEach(function (item) { if (item.id === PRODUCT.id) line = item; });
+    if (line) { if (line.qty < 20) line.qty += 1; }
+    else cart.push({ id: PRODUCT.id, name: PRODUCT.name, amount: PRODUCT.amount, qty: 1 });
+    ui.refresh();
+    document.getElementById('checkout').scrollIntoView({ block: 'nearest' });
+  });
+})();
+</script>
+<script id="cb-verse-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-verse.js" defer></script></body>
+</html>

@@ -189,6 +189,12 @@
     return /^[A-Z]{3}$/.test(code) ? code : null;
   }
 
+  function convertUsdToAud(usdMinor, rate) {
+    var n = Number(rate);
+    if (!(n > 0)) return null;
+    return Math.round(Number(usdMinor) * n);
+  }
+
   function decideMode(config, currency) {
     if (config.mode === 'demo' || config.demo === true) return 'demo';
     if (config.mode === 'gated' || config.physicalOrders === 'closed') return 'gated';
@@ -199,7 +205,8 @@
     return 'manual-aud';
   }
 
-  function noticesFor(mode) {
+  function noticesFor(mode, extra) {
+    extra = extra || {};
     var common = [
       'This page does not move money.',
       'A saved browser cart is not delivered to the merchant.'
@@ -211,8 +218,16 @@
       ]);
     }
     if (mode === 'quote-before-transfer') {
+      if (extra.usdAudRate) {
+        return common.concat([
+          'Prices stay in their original currency.',
+          'A guide Australian dollar amount is shown for the PayID transfer. Your bank may use a slightly different rate.',
+          'The merchant checks the bank receipt before treating a transfer as received.'
+        ]);
+      }
       return common.concat([
-        'Prices stay in their original currency. This page does not calculate an Australian dollar amount.'
+        'Prices stay in their original currency.',
+        'PayID is an Australian dollar transfer. Ask your bank to convert the total, or use the guide amount when it appears.'
       ]);
     }
     if (mode === 'gated') {
@@ -244,14 +259,22 @@
     var totalMinor = lines.length ? sumMinor(lines.map(function (line) { return lineMinor(line.unitMinor, line.qty); })) : 0;
     var claim = state.customerClaimsPaid === true && lines.length > 0;
     var asks = mode === 'manual-aud' && lines.length > 0;
-    return {
+    var rate = Number(config.usdAudRate);
+    var hasRate = currency === 'USD' && lines.length > 0 && rate > 0;
+    var audMinor = asks ? totalMinor : null;
+    if (hasRate) audMinor = convertUsdToAud(totalMinor, rate);
+    if (hasRate) {
+      asks = true;
+    }
+    var view = {
       ok: true,
       mode: mode,
       currency: currency,
       lines: lines,
       totalMinor: totalMinor,
       totalLabel: formatMinor(totalMinor),
-      audAmountMinor: asks ? totalMinor : null,
+      audAmountMinor: audMinor,
+      audTotalLabel: audMinor != null ? formatMinor(audMinor) : null,
       requestsPayment: asks,
       showTransferInstructions: asks,
       reference: lines.length ? (state.reference || null) : null,
@@ -263,8 +286,13 @@
       confirmed: false,
       bankVerified: false,
       status: claim ? 'customer_reported_unverified' : 'draft',
-      notices: noticesFor(mode)
+      notices: noticesFor(mode, { usdAudRate: hasRate ? rate : null, exchangeRateDate: config.exchangeRateDate || null })
     };
+    if (hasRate) {
+      view.exchangeRate = rate;
+      view.exchangeRateDate = config.exchangeRateDate || null;
+    }
+    return view;
   }
 
   function externalPaymentFlags() {
@@ -338,7 +366,8 @@
       'Coffeebreak cart summary',
       'This note is not proof of payment.',
       'Currency: ' + (view.currency || ''),
-      'Total: ' + (view.totalLabel || '0.00'),
+      'Total: ' + (view.totalLabel || '0.00') + (view.currency ? ' ' + view.currency : ''),
+      view.audTotalLabel && view.currency !== 'AUD' ? 'Transfer: ' + view.audTotalLabel + ' AUD' : '',
       'Reference: ' + (view.reference || '(none)'),
       PAYMENT_LABEL,
       'Orders contact: ' + ORDERS_EMAIL,
@@ -432,7 +461,9 @@
       currency: currency,
       fulfilmentVerified: options.fulfilmentVerified === true,
       mode: options.mode,
-      demo: options.demo === true
+      demo: options.demo === true,
+      usdAudRate: options.usdAudRate,
+      exchangeRateDate: options.exchangeRateDate
     });
     view.snapshotKey = state.snapshotKey;
     return view;
@@ -441,9 +472,11 @@
   function copyFields(view) {
     view = view || {};
     return {
-      amount: view.totalLabel || null,
+      amount: view.audTotalLabel || view.totalLabel || null,
       payId: view.payId || PAYID,
-      reference: view.reference || null
+      reference: view.reference || null,
+      listedAmount: view.totalLabel || null,
+      currency: view.currency || null
     };
   }
 
@@ -456,6 +489,7 @@
     lineMinor: lineMinor,
     sumMinor: sumMinor,
     formatMinor: formatMinor,
+    convertUsdToAud: convertUsdToAud,
     escapeHtml: escapeHtml,
     buildState: buildState,
     changeQty: changeQty,

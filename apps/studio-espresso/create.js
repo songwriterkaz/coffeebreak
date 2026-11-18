@@ -741,12 +741,32 @@
     return ctx.startRendering();
   }
 
-  mount();
+  async function mixWav(id) {
+    const record = await LIB.get(id);
+    if (!record || !record.packed) throw new Error('That song is not in this browser.');
+    const previous = await packProject().arrayBuffer();
+    const tab = (typeof CUR !== 'undefined') ? CUR : null;
+    try {
+      await unpackProject(record.packed.slice ? record.packed.slice(0) : record.packed);
+      const mix = await renderSong({ master: false, tail: 0.35 });
+      const blob = encodeWAV(mix);
+      const bytes = await blob.arrayBuffer();
+      return { bytes: bytes, mime: 'audio/wav', title: record.title, duration: mix.duration, id: record.id, lyrics: record.lyrics, summary: record.summary, style: record.style };
+    } finally {
+      try { await unpackProject(previous.slice(0)); } catch (e) {}
+      if (tab && typeof showTab === 'function') showTab(tab);
+    }
+  }
+
+  if (!window.CB_SONGS_HEADLESS) mount();
   window.CBSongs = {
     create: createSong,
     play: playSong,
     open: openSong,
     list: () => LIB.list(),
+    get: (id) => LIB.get(id),
+    download: downloadSong,
+    mixWav: mixWav,
     cart: () => C.readCart(localStorage),
     setLevel: (id, value) => runEdit(id, () => setVocalLevel(value)),
     nudgePitch: (id, semi) => runEdit(id, () => nudgePitch(semi)),

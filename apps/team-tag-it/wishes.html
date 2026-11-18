@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Two Wishes - Team Tag It</title>
+<!doctype html><html lang="en"><head><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Two Wishes - Team Tag It</title>
 <style>body{margin:0;font-family:Georgia,serif;color:#7a1048;background:#ffe4f0 url(img/bg.jpg)}header{background:linear-gradient(90deg,#e0117a,#ff9ac8);padding:10px 16px;display:flex;gap:12px;align-items:center}header img{width:54px;border-radius:50%;border:3px solid #fff}header h1{margin:0;color:#fff;font-size:24px}header i{color:#fff}
 section{max-width:820px;margin:14px auto;background:rgba(255,255,255,.93);border:3px solid #ff9ac8;border-radius:16px;padding:14px}h2{color:#e0117a;margin-top:0}label{display:block;margin:8px 0;font-weight:bold}input,textarea{width:100%;box-sizing:border-box;padding:8px;border:2px solid #ff9ac8;border-radius:10px;font:inherit}
 button,a.btn{background:#ff4fa3;color:#fff;border:2px solid #ffc0dc;border-radius:22px;padding:9px 20px;font-weight:bold;font-size:16px;cursor:pointer;text-decoration:none;display:inline-block;margin:4px}canvas{max-width:100%;border-radius:14px;border:2px solid #ff9ac8}
@@ -45,4 +45,4 @@ $('tag').onclick=()=>{if(used())return lock();const m=$('mine').value,n=clean($(
  jar.push(e);localStorage.setItem(K,JSON.stringify(jar.slice(-60)));fx(()=>{render(e);showJar();lock();$('cardsec').scrollIntoView({behavior:'smooth'});});};
 $('dl').onclick=()=>{const a=document.createElement('a');a.download='team-tag-it-wish-card.png';a.href=$('card').toDataURL('image/png');a.click();};
 showJar();lock();const last=jar.find(e=>e.day==today);if(last){logo.onload=girl.onload=()=>render(last);if(logo.complete&&girl.complete)render(last);}
-</script></body></html>
+</script><script id="cb-verse-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-verse.js" defer></script></body></html>
