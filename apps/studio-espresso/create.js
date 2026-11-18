@@ -170,8 +170,11 @@
       const vocalTrack = addTrack('audio', null, 'Vocals');
       if (!vocalTrack) throw new Error('The vocal track could not be added. Nothing was saved.');
       audioClip(vocalTrack, vocal, 0, 'Vocals');
-      vocalTrack.vol = 0.95;
-      vocalTrack.sendA = 0.16;
+      vocalTrack.vol = input.vocalLevel > 0 ? Math.min(1.5, +input.vocalLevel) : 0.95;
+      vocalTrack.sendA = input.vocalLevel > 0 ? 0.1 : 0.16;
+      if (input.bandLevel > 0 && input.bandLevel < 1) {
+        P.tracks.forEach(t => { if (t !== vocalTrack && typeof t.vol === 'number') t.vol = t.vol * input.bandLevel; });
+      }
       parts.push('vocals');
       P.markers = [{ b: 0, name: 'Song' }];
       SEL.t = vocalTrack.id;

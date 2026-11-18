@@ -4,19 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Coffeebreak Vocal Social</title>
-<meta name="description" content="Coffeebreak Vocal Social is a song-with-vocals maker and local feed. Type lyrics, pick a style, generate a sung vocal in your browser, then post, like, comment and follow on this device.">
+<meta name="description" content="Coffeebreak Vocal Social: type lyrics, get a song with sung vocals made in your browser, then share it on a shared feed with likes, comments, follows and remixes.">
 <link rel="icon" href="cb-logo.png">
 <link rel="stylesheet" href="app.css">
-<script>window.CB_SONGS_HEADLESS=true;</script>
+<script>window.CB_SONGS_HEADLESS=true;window.CB_USE_NEURAL_SINGER=true;</script>
 <script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
 </head>
 <body>
 <header class="top">
-  <a class="brand" href="#make">
+  <a class="brand" href="#feed">
     <img src="cb-logo.png" alt="Coffeebreak logo" width="56" height="56">
     <span>
       <h1>Coffeebreak Vocal Social</h1>
-      <small>Make a song with vocals, then post it to a feed on this device</small>
+      <small>Sing your lyrics, share the song, remix each other</small>
     </span>
   </a>
 </header>
@@ -24,22 +24,29 @@
 <p class="bar muted">Owner copy free for Karen · Customers US$10 · PayID darkokaz@gmx.com</p>
 
 <main id="vs-app" class="wrap">
-  <p class="honest">This is a social feed stored in this browser only. Posts, likes, comments, follows and your profile are saved in localStorage. Song audio is saved in IndexedDB on this device. Other people do not see your feed unless they use this same browser. A share link can reopen a post here, or carry the lyrics and style so someone else can generate their own take. Payment through the PayID cart is not checked by this page.</p>
-
   <nav class="tabs" aria-label="Vocal Social">
-    <a href="#make" data-r="make">Make</a>
     <a href="#feed" data-r="feed">Feed</a>
+    <a href="#make" data-r="make">Make</a>
     <a href="#people" data-r="people">People</a>
     <a href="#me" data-r="me">Me</a>
   </nav>
 
   <p id="vs-status" class="status" role="status" aria-live="polite"></p>
 
+  <section id="view-feed" class="view" hidden>
+    <div class="feed-modes" role="tablist" aria-label="Feed">
+      <button type="button" class="chip" data-mode="trending" aria-pressed="true">For you</button>
+      <button type="button" class="chip" data-mode="latest" aria-pressed="false">Latest</button>
+      <button type="button" class="chip" data-mode="following" aria-pressed="false">Following</button>
+    </div>
+    <div id="reel" class="reel" aria-label="Songs"></div>
+  </section>
+
   <section id="view-make" class="view" hidden>
-    <h2>Write a song</h2>
-    <p class="hint">The vocal is the Coffeebreak voice used in Studio Espresso, sung in your browser. Drums, bass and keys come from that same studio engine. No outside singing service is used. The Coffeebreak voice is made by the page, not a recording of a person, and it will not sound as finished as a paid singing service.</p>
+    <h2>Make a song with vocals</h2>
+    <div id="remix-banner" class="remix-banner" hidden></div>
     <label>Lyrics
-      <textarea id="lyrics" maxlength="2000" rows="8" placeholder="Type the words you want sung"></textarea>
+      <textarea id="lyrics" maxlength="2000" rows="7" placeholder="Type the words you want sung"></textarea>
     </label>
     <div class="row">
       <label>Style
@@ -47,6 +54,9 @@
       </label>
       <label>Mood
         <select id="mood"></select>
+      </label>
+      <label>Voice
+        <select id="voice"><option value="female" selected>Female</option><option value="male">Male</option></select>
       </label>
     </div>
     <div class="row">
@@ -61,58 +71,70 @@
       <input id="desc" type="text" maxlength="120" placeholder="slow country in G minor">
     </label>
     <div class="row actions">
-      <button type="button" id="btn-generate" class="btn">Create song</button>
+      <button type="button" id="btn-generate" class="btn big">Create song</button>
     </div>
+    <p class="hint small">The vocal is sung in your browser. Each word is voiced by the free, open Piper voice and tuned to the melody, with drums, bass and keys from the Coffeebreak studio. The first song on a device downloads the voice once (about 60 MB). No paid service is used, and it will not sound as finished as a studio singer.</p>
     <div id="draft" class="draft" hidden>
-      <p id="draft-meta"></p>
-      <audio id="draft-audio" controls></audio>
+      <div class="draft-art" id="draft-art">
+        <button type="button" class="play-big" id="draft-play" aria-label="Play your song"></button>
+        <canvas class="wave" id="draft-wave" width="600" height="70" aria-hidden="true"></canvas>
+      </div>
+      <p id="draft-meta" class="meta"></p>
       <div class="row actions">
+        <button type="button" id="btn-post" class="btn">Post to Vocal Social</button>
         <button type="button" id="btn-download" class="btn quiet">Download WAV</button>
-        <button type="button" id="btn-post" class="btn">Post to feed</button>
       </div>
     </div>
   </section>
 
-  <section id="view-feed" class="view" hidden>
-    <h2>Feed</h2>
-    <div class="row">
-      <button type="button" class="btn quiet" id="feed-all" aria-pressed="true">All posts</button>
-      <button type="button" class="btn quiet" id="feed-following" aria-pressed="false">Following</button>
-    </div>
-    <div id="feed-list"></div>
-  </section>
-
   <section id="view-people" class="view" hidden>
     <h2>People</h2>
-    <p class="hint">These profiles exist on this device only. Following is saved in localStorage.</p>
-    <div id="people-list"></div>
+    <label>Search
+      <input id="people-q" type="search" maxlength="30" placeholder="Name or handle" autocomplete="off">
+    </label>
+    <div id="people-list" class="people"></div>
+  </section>
+
+  <section id="view-profile" class="view" hidden>
+    <div id="profile-box"></div>
   </section>
 
   <section id="view-me" class="view" hidden>
     <h2>Your profile</h2>
-    <p class="hint">This profile stays on this device. There is no photo upload. Your avatar is initials in a coloured circle, not a personal photograph.</p>
+    <div id="me-summary"></div>
     <label>Display name
-      <input id="prof-name" type="text" maxlength="60" autocomplete="name">
+      <input id="prof-name" type="text" maxlength="40" autocomplete="nickname">
     </label>
     <label>Handle
-      <input id="prof-handle" type="text" maxlength="30" autocomplete="username">
-    </label>
-    <label>Email, optional, used only on this device
-      <input id="prof-email" type="email" maxlength="120" autocomplete="email">
+      <input id="prof-handle" type="text" maxlength="20" autocomplete="username" placeholder="letters, numbers and _">
     </label>
     <label>Bio
-      <textarea id="prof-bio" maxlength="240" rows="3"></textarea>
+      <textarea id="prof-bio" maxlength="160" rows="2"></textarea>
     </label>
-    <p class="hint">If you are Karen O'Brien, set your display name to Karen O'Brien (or use the PayID email darkokaz@gmx.com) to use the owner copy for free on this device.</p>
+    <p class="field-label">Avatar</p>
+    <div id="avatar-pick" class="avatar-pick" role="radiogroup" aria-label="Avatar"></div>
+    <p class="hint small">Avatars are generated art. There are no photo or image uploads on Vocal Social.</p>
+    <label>Owner email, optional, kept only on this device
+      <input id="prof-email" type="email" maxlength="120" autocomplete="email">
+    </label>
     <div class="row actions">
       <button type="button" id="btn-save-profile" class="btn">Save profile</button>
     </div>
     <p id="access-note" class="hint"></p>
     <h3>How to pay</h3>
-    <p class="hint">The full app is US$10. Use the PayID cart below. This page does not mark a payment as received. After you use "I've paid by PayID, unlock now" in the cart, this device unlocks. Karen uses the owner copy for free.</p>
-    <div id="my-posts"></div>
+    <p class="hint">Making songs is US$10 for the full app, with one free preview song. Listening, posting, likes, comments and follows are free. Use the PayID cart below. This page does not check payments. After you use "I've paid by PayID, unlock now" in the cart, this device unlocks. Karen uses the owner copy for free.</p>
+    <h3>House rules</h3>
+    <p class="hint small">Vocal Social is a clean, all-ages space. Text and sung songs only, no images, no links, no swearing, no adult content. Songs up to 4 MB. Use Report on anything that breaks the rules. Posts and comments with several reports are hidden automatically. Posting is limited to a few songs an hour.</p>
   </section>
 </main>
+
+<div id="sheet" class="sheet" hidden>
+  <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="sheet-head"><h3 id="sheet-title"></h3><button type="button" class="x" id="sheet-close" aria-label="Close">×</button></div>
+    <div id="sheet-body"></div>
+  </div>
+</div>
+<audio id="player" preload="none"></audio>
 
 <footer class="legal">
   <img src="cb-logo.png" alt="Coffeebreak logo" width="60" height="60">
@@ -166,8 +188,10 @@
 <script src="../studio-espresso/ui2.js"></script>
 <script src="../studio-espresso/ui3.js"></script>
 <script src="../../cb-voice/voice.js"></script>
+<script src="../../cb-voice/neural-sing.js"></script>
 <script src="../studio-espresso/songs-core.js"></script>
 <script src="../studio-espresso/create.js"></script>
+<script>window.CB_VS_API="https://cb-vocal-social.coffeebreaks.workers.dev";</script>
 <script src="app.js"></script>
 <script src="../../pages/cb-listen.js" defer></script>
 </body>
