@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Studio – make full songs with vocals</title>
+<meta name="description" content="Type a style and your lyrics, get a full song with vocals. Free, in your browser.">
+<link rel="stylesheet" href="studio.css">
+</head>
+<body>
+<header class="hero">
+  <a class="hub" href="../../">&larr; Coffeebreak hub</a>
+  <h1>☕ Coffeebreak Studio</h1>
+  <p class="tag">Type a style and your lyrics. Get back a full song <b>with vocals</b>.</p>
+  <p class="free">Free for now &mdash; tip Karen a coffee via PayID (Teachers Mutual Bank): <b>darkokaz@gmx.com</b></p>
+</header>
+
+<main>
+<section class="card" id="maker">
+  <h2>1. Your song</h2>
+  <label for="title">Song title</label>
+  <input id="title" maxlength="80" placeholder="My Coffeebreak Song">
+
+  <label for="style">Style tags <small>(genre, voice, instruments, mood, BPM)</small></label>
+  <input id="style" maxlength="400" value="upbeat pop, female vocal, acoustic guitar, warm, catchy, 110 BPM">
+  <div class="chips" id="chips"></div>
+
+  <label for="lyrics">Lyrics <small>(use [verse], [chorus], [bridge] on their own lines)</small></label>
+  <textarea id="lyrics" rows="10">[verse]
+Morning coffee, sunshine on my face
+Coffeebreak, my favourite place
+
+[chorus]
+Sing it loud, sing it sweet
+Coffeebreak with a happy beat</textarea>
+  <label class="inline"><input type="checkbox" id="instrumental"> Instrumental (no vocals)</label>
+
+  <div class="row">
+    <div>
+      <label for="duration">Length: <b id="durOut">30</b> seconds</label>
+      <input type="range" id="duration" min="10" max="120" step="5" value="30">
+    </div>
+    <div>
+      <label for="lang">Singing language</label>
+      <select id="lang">
+        <option value="en" selected>English</option><option value="es">Spanish</option><option value="fr">French</option>
+        <option value="de">German</option><option value="it">Italian</option><option value="pt">Portuguese</option>
+        <option value="ja">Japanese</option><option value="ko">Korean</option><option value="zh">Chinese</option>
+      </select>
+    </div>
+  </div>
+
+  <button id="go" class="big">🎤 Make my song</button>
+  <p id="status" class="status" role="status" aria-live="polite">Ready when you are.</p>
+
+  <details class="adv">
+    <summary>Making lots of songs? (optional)</summary>
+    <p>The free music engine gives each internet connection a small daily allowance. If it says the free allowance is used up,
+    you can make a free Hugging Face account, create a <b>read</b> token at
+    <a href="https://huggingface.co/settings/tokens" target="_blank" rel="noopener">huggingface.co/settings/tokens</a>, and paste it here for a bigger allowance.
+    It is saved only in this browser and sent only to Hugging Face.</p>
+    <input id="token" type="password" placeholder="hf_..." autocomplete="off">
+    <button id="saveToken" class="small">Save token</button> <button id="clearToken" class="small ghost">Remove</button>
+  </details>
+</section>
+
+<section class="card" id="result" hidden>
+  <h2>2. Your new song</h2>
+  <p id="resTitle" class="restitle"></p>
+  <audio id="player" controls></audio>
+  <p><a id="dl" class="btn" download>⬇ Download</a></p>
+  <p class="small muted" id="resInfo"></p>
+</section>
+
+<section class="card" id="sample">
+  <h2>Hear a sample</h2>
+  <p class="muted small">Made by this studio's engine from the default style and lyrics above (30 seconds).</p>
+  <audio controls preload="none" src="sample.mp3"></audio>
+</section>
+
+<section class="card" id="saved">
+  <h2>My saved songs</h2>
+  <p class="muted small">Saved in this browser only. Download anything you want to keep forever.</p>
+  <ul id="songList"></ul>
+</section>
+
+<section class="card support">
+  <h2>Support Coffeebreak</h2>
+  <p>Coffee tip via PayID (Teachers Mutual Bank): <b>darkokaz@gmx.com</b></p>
+  <p><a class="btn" href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener">💗 Donate on GoFundMe</a></p>
+</section>
+</main>
+
+<footer>
+  <p class="credit">Powered by open-source <a href="https://github.com/ace-step/ACE-Step-1.5" target="_blank" rel="noopener">ACE-Step</a> by ACE Studio &amp; StepFun, running on free public
+  <a href="https://huggingface.co/spaces/ACE-Step/Ace-Step-v1.5" target="_blank" rel="noopener">Hugging Face Spaces</a>. Coffeebreak did not make the ACE-Step model and is not affiliated with ACE Studio, StepFun or Hugging Face.</p>
+  <p class="disclaimer"><b>Disclaimer:</b> Songs are made by an AI model on free shared servers, so they can be slow, busy or unavailable, and results vary.
+  Only use lyrics you wrote or have the right to use, and don't imitate real artists. You are responsible for how you use and share your songs; check the ACE-Step licence before commercial use.
+  Coffeebreak gives no guarantee about availability or results. Nothing here is financial, legal or professional advice.</p>
+  <p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> · <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> · <a href="../../">Coffeebreak hub</a> · <a href="../studio-espresso/">Studio Espresso</a></p>
+</footer>
+<script type="module" src="studio.js"></script>
+</body>
+</html>
