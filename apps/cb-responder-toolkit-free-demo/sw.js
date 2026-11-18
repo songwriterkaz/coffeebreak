@@ -1,4 +1,4 @@
-const CACHE = 'cb-responder-toolkit-v1';
+const CACHE = 'cb-responder-toolkit-v1-gfm1';
 const ASSETS = ['./', './index.html', './style.css', './tools.js', './app.js', './cb-logo.png', './manifest.webmanifest'];
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(ASSETS); }).then(function () { return self.skipWaiting(); }));

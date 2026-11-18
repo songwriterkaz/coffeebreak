@@ -39,3 +39,13 @@
   s.defer = true;
   (document.head || document.documentElement).appendChild(s);
 })();
+
+/* Load the shared GoFundMe donation link */
+(function(){
+  if (window.__CB_GOFUNDME__ || document.getElementById('cb-gofundme-script')) return;
+  var s = document.createElement('script');
+  s.id = 'cb-gofundme-script';
+  s.src = 'https://songwriterkaz.github.io/coffeebreak/pages/cb-gofundme.js';
+  s.defer = true;
+  (document.head || document.documentElement).appendChild(s);
+})();

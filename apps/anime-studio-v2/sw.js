@@ -1,2 +1,4 @@
-const C='cb-anime-v3';self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(['index.html','manifest.json','logo.png','icon-192.png','icon-512.png']))));
+const C='cb-anime-v3-gfm1';self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(['index.html','manifest.json','logo.png','icon-192.png','icon-512.png']))));
 self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+
+self.addEventListener('activate',function(e){var keep=(typeof C!=='undefined'&&C)||(typeof CACHE!=='undefined'&&CACHE)||(typeof K!=='undefined'&&K)||(typeof V!=='undefined'&&V)||'';if(!keep)return;var stem=String(keep).replace(/-gfm1$/,'');e.waitUntil(caches.keys().then(function(keys){return Promise.all(keys.filter(function(k){return k!==keep&&k.indexOf(stem)===0}).map(function(k){return caches.delete(k)}))}).then(function(){return self.clients.claim()}))});
