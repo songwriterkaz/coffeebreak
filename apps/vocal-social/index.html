@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Vocal Social</title>
+<meta name="description" content="Coffeebreak Vocal Social is a song-with-vocals maker and local feed. Type lyrics, pick a style, generate a sung vocal in your browser, then post, like, comment and follow on this device.">
+<link rel="icon" href="cb-logo.png">
+<link rel="stylesheet" href="app.css">
+<script>window.CB_SONGS_HEADLESS=true;</script>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#make">
+    <img src="cb-logo.png" alt="Coffeebreak logo" width="56" height="56">
+    <span>
+      <h1>Coffeebreak Vocal Social</h1>
+      <small>Make a song with vocals, then post it to a feed on this device</small>
+    </span>
+  </a>
+</header>
+
+<p class="bar muted">Owner copy free for Karen · Customers US$10 · PayID darkokaz@gmx.com</p>
+
+<main id="vs-app" class="wrap">
+  <p class="honest">This is a social feed stored in this browser only. Posts, likes, comments, follows and your profile are saved in localStorage. Song audio is saved in IndexedDB on this device. Other people do not see your feed unless they use this same browser. A share link can reopen a post here, or carry the lyrics and style so someone else can generate their own take. Payment through the PayID cart is not checked by this page.</p>
+
+  <nav class="tabs" aria-label="Vocal Social">
+    <a href="#make" data-r="make">Make</a>
+    <a href="#feed" data-r="feed">Feed</a>
+    <a href="#people" data-r="people">People</a>
+    <a href="#me" data-r="me">Me</a>
+  </nav>
+
+  <p id="vs-status" class="status" role="status" aria-live="polite"></p>
+
+  <section id="view-make" class="view" hidden>
+    <h2>Write a song</h2>
+    <p class="hint">The vocal is the Coffeebreak voice used in Studio Espresso, sung in your browser. Drums, bass and keys come from that same studio engine. No outside singing service is used. The Coffeebreak voice is made by the page, not a recording of a person, and it will not sound as finished as a paid singing service.</p>
+    <label>Lyrics
+      <textarea id="lyrics" maxlength="2000" rows="8" placeholder="Type the words you want sung"></textarea>
+    </label>
+    <div class="row">
+      <label>Style
+        <select id="genre"></select>
+      </label>
+      <label>Mood
+        <select id="mood"></select>
+      </label>
+    </div>
+    <div class="row">
+      <label>Title, optional
+        <input id="title" type="text" maxlength="80" autocomplete="off">
+      </label>
+      <label>BPM, optional
+        <input id="bpm" type="number" min="72" max="140" placeholder="110">
+      </label>
+    </div>
+    <label>Describe the song, optional
+      <input id="desc" type="text" maxlength="120" placeholder="slow country in G minor">
+    </label>
+    <div class="row actions">
+      <button type="button" id="btn-generate" class="btn">Create song</button>
+    </div>
+    <div id="draft" class="draft" hidden>
+      <p id="draft-meta"></p>
+      <audio id="draft-audio" controls></audio>
+      <div class="row actions">
+        <button type="button" id="btn-download" class="btn quiet">Download WAV</button>
+        <button type="button" id="btn-post" class="btn">Post to feed</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-feed" class="view" hidden>
+    <h2>Feed</h2>
+    <div class="row">
+      <button type="button" class="btn quiet" id="feed-all" aria-pressed="true">All posts</button>
+      <button type="button" class="btn quiet" id="feed-following" aria-pressed="false">Following</button>
+    </div>
+    <div id="feed-list"></div>
+  </section>
+
+  <section id="view-people" class="view" hidden>
+    <h2>People</h2>
+    <p class="hint">These profiles exist on this device only. Following is saved in localStorage.</p>
+    <div id="people-list"></div>
+  </section>
+
+  <section id="view-me" class="view" hidden>
+    <h2>Your profile</h2>
+    <p class="hint">This profile stays on this device. There is no photo upload. Your avatar is initials in a coloured circle, not a personal photograph.</p>
+    <label>Display name
+      <input id="prof-name" type="text" maxlength="60" autocomplete="name">
+    </label>
+    <label>Handle
+      <input id="prof-handle" type="text" maxlength="30" autocomplete="username">
+    </label>
+    <label>Email, optional, used only on this device
+      <input id="prof-email" type="email" maxlength="120" autocomplete="email">
+    </label>
+    <label>Bio
+      <textarea id="prof-bio" maxlength="240" rows="3"></textarea>
+    </label>
+    <p class="hint">If you are Karen O'Brien, set your display name to Karen O'Brien (or use the PayID email darkokaz@gmx.com) to use the owner copy for free on this device.</p>
+    <div class="row actions">
+      <button type="button" id="btn-save-profile" class="btn">Save profile</button>
+    </div>
+    <p id="access-note" class="hint"></p>
+    <h3>How to pay</h3>
+    <p class="hint">The full app is US$10. Use the PayID cart below. This page does not mark a payment as received. After you use "I've paid by PayID, unlock now" in the cart, this device unlocks. Karen uses the owner copy for free.</p>
+    <div id="my-posts"></div>
+  </section>
+</main>
+
+<footer class="legal">
+  <img src="cb-logo.png" alt="Coffeebreak logo" width="60" height="60">
+  <p><b>Disclaimer:</b> Provided as is for personal and entertainment use. It is not professional, medical, legal or financial advice. Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Subject to Australian Consumer Law. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners. Coffeebreak is not affiliated with or endorsed by them.</p>
+  <p>© Coffeebreak · Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com · Apps US$10 · Karen gets them free as owner</p>
+  <p class="links">Supporting the future with <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a></p>
+</footer>
+
+<!-- Hidden Studio Espresso shell so the existing in-browser vocal and song engine can run on this page. -->
+<div id="studio-shell" aria-hidden="true">
+  <header>
+    <div class="ttl"><h2>Studio engine</h2><small id="sub">headless</small></div>
+    <div class="transport">
+      <button id="bPlay" type="button">Play</button>
+      <button id="bStop" type="button">Stop</button>
+      <button id="bRec" class="rec" type="button">Rec</button>
+      <button id="bLoop" class="tg" type="button">Loop</button>
+      <button id="bMetro" class="tg" type="button">Click</button>
+      <button id="bCount" class="tg" type="button">Count-in</button>
+      <button id="bPunch" class="tg" type="button">Punch</button>
+      <span id="pos" class="pos">1.1.00</span>
+      <label>BPM <input type="number" id="iBpm" min="30" max="300" value="120"></label>
+      <label>Sig <select id="iSig"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option></select></label>
+      <label>Snap <select id="iSnap"><option value="0">Off</option><option value="0.25">1/16</option><option value="0.5">1/8</option><option value="1" selected>Beat</option><option value="4">Bar</option></select></label>
+      <button id="bUndo" type="button">Undo</button>
+      <button id="bRedo" type="button">Redo</button>
+      <button id="bSave" type="button">Save</button>
+      <canvas id="mMeter" width="120" height="16"></canvas>
+    </div>
+  </header>
+  <div id="demoBanner" class="banner hidden"></div>
+  <nav id="tabs"></nav>
+  <main id="main"></main>
+  <div id="toast" class="toast hidden"></div>
+</div>
+
+<!--cb-game-cart-start-->
+<section id="cb-game-cart" data-store="apps/vocal-social" aria-label="Cart">
+  <script type="application/json" id="cb-game-cart-data">{"storeId":"apps/vocal-social","currency":"USD","items":[{"id":"full","name":"Coffeebreak Vocal Social full app","amount":"10.00","currency":"USD"}]}</script>
+</section>
+<script src="../../payid-cart/cart.js"></script>
+<script src="../../payid-cart/game-cart.js"></script>
+<script src="../../payid-cart/game-mount.js"></script>
+<!--cb-game-cart-end-->
+
+<script src="../studio-espresso/lame.min.js"></script>
+<script src="../studio-espresso/dsp.js"></script>
+<script src="../studio-espresso/engine.js"></script>
+<script src="../studio-espresso/fx2.js"></script>
+<script src="../studio-espresso/ui.js"></script>
+<script src="../studio-espresso/ui2.js"></script>
+<script src="../studio-espresso/ui3.js"></script>
+<script src="../../cb-voice/voice.js"></script>
+<script src="../studio-espresso/songs-core.js"></script>
+<script src="../studio-espresso/create.js"></script>
+<script src="app.js"></script>
+<script src="../../pages/cb-listen.js" defer></script>
+</body>
+</html>

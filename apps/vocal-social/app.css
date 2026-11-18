@@ -1,0 +1,96 @@
+:root{
+  --bg:#fde8f2;
+  --card:#fff8fb;
+  --ink:#4a1030;
+  --soft:#7a4460;
+  --line:#f0b8d0;
+  --pink:#e75b9a;
+  --pink2:#ff4f9a;
+  --btnink:#fff;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:linear-gradient(160deg,#ffe0ef,#ffc2dd 55%,#fde8f2);
+  color:var(--ink);
+  font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif;
+}
+a{color:#b8336f}
+a:hover,a:focus{color:#7a1d46}
+.top{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:14px 18px;background:var(--card);border-bottom:2px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.brand img{width:56px;height:56px;border-radius:50%;background:#3a1a10;flex:none}
+.brand h1{margin:0;font-size:1.25rem}
+.brand small{display:block;color:var(--soft);font-size:.9rem}
+.bar{
+  margin:0;padding:10px 18px;text-align:center;font-weight:700;
+  background:#ff4f9a;color:#fff;
+}
+.bar.muted{background:#fff0f7;color:var(--ink);border-bottom:1px solid var(--line);font-weight:650}
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 40px}
+.honest,.hint,.disclosure{
+  background:#fff;border-left:4px solid var(--pink);border-radius:12px;
+  padding:12px 14px;color:var(--soft);margin:0 0 16px;
+}
+.hint{background:#fff8fb;border-left-color:var(--line)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.tabs a{
+  min-height:44px;padding:8px 16px;border-radius:999px;text-decoration:none;
+  background:#fff;color:var(--ink);font-weight:700;border:1px solid var(--line);
+  display:inline-flex;align-items:center;
+}
+.tabs a.on{background:var(--pink2);color:#fff;border-color:var(--pink2)}
+.status{min-height:1.4em;margin:0 0 12px;color:#7a1d46;font-weight:650}
+.view h2,.view h3{margin:0 0 10px;color:#d6336c}
+label{display:block;font-weight:700;margin:12px 0 4px}
+input,select,textarea{
+  display:block;width:100%;margin-top:5px;padding:11px 12px;min-height:44px;
+  border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;
+}
+textarea{min-height:120px;resize:vertical}
+.row{display:flex;flex-wrap:wrap;gap:12px}
+.row > label{flex:1 1 180px}
+.actions{margin:16px 0 8px}
+.btn{
+  min-height:44px;min-width:44px;padding:10px 18px;border:0;border-radius:12px;
+  background:var(--pink2);color:var(--btnink);font:700 16px system-ui,sans-serif;cursor:pointer;
+}
+.btn.quiet{background:#fff;color:#b8336f;border:1px solid var(--pink)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn[aria-pressed="true"]{background:var(--pink2);color:#fff;border-color:var(--pink2)}
+.draft,.card{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:14px 0;
+}
+.draft audio,.card audio{width:100%;margin:8px 0}
+.avatar{
+  width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  font-weight:800;color:#fff;background:var(--pink);flex:none;letter-spacing:.02em;
+}
+.post-head{display:flex;gap:10px;align-items:center;margin:0 0 8px}
+.post-head .who{margin:0;font-weight:800}
+.post-head .meta{margin:0;color:var(--soft);font-size:.9rem}
+.lyrics{white-space:pre-wrap;background:#fff;border-radius:12px;padding:10px 12px;margin:8px 0}
+.comments{margin:10px 0 0;padding:0;list-style:none}
+.comments li{border-top:1px solid var(--line);padding:8px 0}
+.comment-form{display:flex;gap:8px;align-items:flex-end;margin-top:8px}
+.comment-form input{flex:1}
+footer.legal{
+  padding:16px 18px 96px;color:var(--soft);font-size:.92rem;
+  border-top:1px solid var(--line);background:var(--card);
+}
+footer.legal img{width:60px;height:60px;border-radius:50%;display:block;margin:0 0 10px;background:#3a1a10}
+footer.legal p{margin:0 0 10px;max-width:80ch}
+.links{display:flex;flex-wrap:wrap;gap:12px}
+/* Keep the Studio Espresso engine in the document, off-screen, so it can generate. */
+#studio-shell{
+  position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;
+  pointer-events:none;opacity:0;
+}
+.toast.hidden,.hidden{display:none}
+@media(max-width:560px){
+  .brand h1{font-size:1.1rem}
+  .wrap{padding:14px 12px 32px}
+}
