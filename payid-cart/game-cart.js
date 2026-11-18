@@ -46,14 +46,12 @@
     'Email',
     'Items',
     'Reference',
-    "I've paid by PayID, unlock now",
-    "I've paid by PayID, confirm this order",
     'Place order',
     'Open cart',
     'Email this order',
     'Copy AUD amount',
     'Transfer',
-    'Unlocked on this device. Payment is not verified.',
+    'Payment is pending and is not verified. Karen will send access once the PayID lands.',
     'Order reference',
     'Add your name and a valid email.',
     'Order details were handed to the mailbox. Payment is not verified.',
@@ -359,9 +357,8 @@
         physical: isPhysicalItem(line, input.storeId)
       };
     });
-    var digital = items.some(function (item) { return !item.physical; });
     return {
-      unlocked: digital && items.length > 0,
+      unlocked: false,
       physical: items.some(function (item) { return item.physical; }),
       paid: false,
       verified: false,

@@ -232,10 +232,10 @@ test('order details use the Formsubmit mailbox and never mark a payment verified
   assert.equal(JSON.stringify(fields).includes('verified'), false);
   const mount = readFileSync(new URL('./game-mount.js', import.meta.url), 'utf8');
   assert.match(mount, /cb-game-checkout/);
-  assert.match(mount, /I've paid by PayID, unlock now/);
-  assert.match(mount, /I've paid by PayID, confirm this order/);
-  assert.match(mount, /honourClaim\(/);
-  assert.match(mount, /unlockKey\(/);
+  assert.match(mount, /Place order/);
+  assert.match(mount, /Payment is pending and is not verified/);
+  assert.match(mount, /Karen will send access once the PayID lands/);
+  assert.doesNotMatch(mount, /unlock now|Unlocked on this device|data-cb-payid-unlock|honourClaim\(|unlockKey\(/);
   assert.match(mount, /ordersEndpoint\(\)/);
   assert.match(mount, /orderMailto\(/);
   assert.match(mount, /Email this order/);
@@ -259,7 +259,7 @@ test('order details use the Formsubmit mailbox and never mark a payment verified
     currency: 'USD',
     reference: 'CBTESTREFERENCE1'
   });
-  assert.equal(digital.unlocked, true);
+  assert.equal(digital.unlocked, false);
   assert.equal(digital.paid, false);
   assert.equal(digital.verified, false);
   assert.equal(digital.confirmed, false);
@@ -281,7 +281,7 @@ test('order details use the Formsubmit mailbox and never mark a payment verified
     ],
     reference: 'CBMIXEDORDER0001'
   });
-  assert.equal(gameAndPlush.unlocked, true);
+  assert.equal(gameAndPlush.unlocked, false);
   assert.equal(gameAndPlush.physical, true);
   assert.equal(gameAndPlush.paid, false);
 });
