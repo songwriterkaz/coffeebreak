@@ -180,6 +180,9 @@ test('published game copy keeps its price and currency', () => {
   assert.equal(bare.currency, 'USD');
   assert.equal(bare.items[0].amount, '10.00');
   assert.equal(bare.items[0].currency, 'USD');
+  const demo = game.readOffer('<title>40 Days of Love</title><p>Play it offline, forever, for $4.99.</p>', 'apps/40-days-of-love/index.html');
+  assert.equal(demo.currency, 'USD');
+  assert.equal(demo.items[0].amount, '10.00');
   const packs = game.readOffer(
     '<title>Coffeebreak Street Brawl</title><h3>Premium skins</h3><p><b>$2 USD</b></p><h3>Iron chin pack</h3><p><b>$3 USD</b></p>',
     'apps/street-brawl/index.html'
@@ -229,10 +232,10 @@ test('order details use the Formsubmit mailbox and never mark a payment verified
   assert.equal(JSON.stringify(fields).includes('verified'), false);
   const mount = readFileSync(new URL('./game-mount.js', import.meta.url), 'utf8');
   assert.match(mount, /cb-game-checkout/);
-  assert.match(mount, /I've paid by PayID, unlock now/);
-  assert.match(mount, /I've paid by PayID, confirm this order/);
-  assert.match(mount, /honourClaim\(/);
-  assert.match(mount, /unlockKey\(/);
+  assert.match(mount, /Place order/);
+  assert.match(mount, /Payment is pending and is not verified/);
+  assert.match(mount, /Karen will send access once the PayID lands/);
+  assert.doesNotMatch(mount, /unlock now|Unlocked on this device|data-cb-payid-unlock|honourClaim\(|unlockKey\(/);
   assert.match(mount, /ordersEndpoint\(\)/);
   assert.match(mount, /orderMailto\(/);
   assert.match(mount, /Email this order/);
@@ -256,7 +259,7 @@ test('order details use the Formsubmit mailbox and never mark a payment verified
     currency: 'USD',
     reference: 'CBTESTREFERENCE1'
   });
-  assert.equal(digital.unlocked, true);
+  assert.equal(digital.unlocked, false);
   assert.equal(digital.paid, false);
   assert.equal(digital.verified, false);
   assert.equal(digital.confirmed, false);
@@ -278,7 +281,7 @@ test('order details use the Formsubmit mailbox and never mark a payment verified
     ],
     reference: 'CBMIXEDORDER0001'
   });
-  assert.equal(gameAndPlush.unlocked, true);
+  assert.equal(gameAndPlush.unlocked, false);
   assert.equal(gameAndPlush.physical, true);
   assert.equal(gameAndPlush.paid, false);
 });
@@ -286,24 +289,27 @@ test('order details use the Formsubmit mailbox and never mark a payment verified
 test('added cart text has no exclamation mark, Headspace, PayPal, or Gumroad', () => {
   const game = api();
   const mount = readFileSync(new URL('./game-mount.js', import.meta.url), 'utf8');
+  const checkout = readFileSync(new URL('../apps/cb-static-checkout.js', import.meta.url), 'utf8');
   const src = readFileSync(new URL('./game-cart.js', import.meta.url), 'utf8');
   for (const text of game.UI_STRINGS) {
     assert.equal(text.includes('!'), false, text);
-    assert.doesNotMatch(text, /headspace|paypal|gumroad|payhip|ko-fi/i);
+    assert.doesNotMatch(text, /headspace|paypal|gumroad|payhip|ko-fi|stripe|itch\.io/i);
   }
+  assert.equal(game.UI_STRINGS.includes('Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com'), true);
   assert.match(mount, /Pay by PayID \(Teachers Mutual Bank\): darkokaz@gmx.com/);
   assert.match(mount, /CoffeebreakGameCart/);
   assert.match(mount, /Add to cart/);
-  assert.match(mount, /Reduce quantity/);
-  assert.match(mount, /Increase quantity/);
-  assert.match(mount, /Remove/);
-  assert.match(mount, /How to pay/);
-  assert.match(mount, /Open your banking app/);
-  assert.match(mount, /Put the reference in the payment description/);
-  assert.doesNotMatch(mount, /I have paid|payment confirmed|order sent|headspace|paypal|gumroad/i);
-  assert.doesNotMatch(src, /headspace|paypal|gumroad/i);
+  assert.match(mount, /Close cart/);
+  assert.match(checkout, /Pay by PayID \(Teachers Mutual Bank\): darkokaz@gmx.com/);
+  assert.match(checkout, /Order reference: /);
+  assert.match(checkout, /Open your own banking app/);
+  assert.match(checkout, /Put order reference /);
+  assert.doesNotMatch(mount, /payment confirmed|order sent|headspace|paypal|gumroad|stripe|itch\.io/i);
+  assert.doesNotMatch(checkout, /I have paid|I've paid|headspace|paypal|gumroad|stripe|itch\.io/i);
+  assert.doesNotMatch(src, /headspace|paypal|gumroad|stripe|itch\.io/i);
   assert.match(src, /fulfilmentVerified:\s*true/);
   assert.doesNotMatch(src, /fulfilmentVerified:\s*false/);
+  assert.match(src, /cb-static-checkout\.js/);
 });
 
 test('known game pages are in scope and stores, mail, and music tools are not', () => {

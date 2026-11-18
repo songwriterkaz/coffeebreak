@@ -238,12 +238,9 @@
         labelledInput('Total', 'total', current.audTotalLabel && current.currency !== 'AUD' ? current.totalLabel + ' ' + current.currency + ' (transfer ' + current.audTotalLabel + ' AUD)' : current.totalLabel + ' ' + current.currency, { readOnly: true }),
         labelledInput('Reference', 'reference', current.reference || '', { readOnly: true })
       );
-      var digital = session.lines.some(function (line) {
-        return !G.isPhysicalItem(line, session.storeId);
-      });
       var submit = document.createElement('button');
       submit.type = 'submit';
-      submit.textContent = digital ? "Place order, I've paid by PayID, unlock now" : "Place order, I've paid by PayID, confirm this order";
+      submit.textContent = 'Place order';
       var status = document.createElement('p');
       status.id = 'cb-game-order-status';
       status.textContent = session.orderNotice || '';
@@ -286,28 +283,8 @@
           audTotal: current.audTotalLabel || '',
           reference: current.reference
         });
-        var claim = G.honourClaim({
-          storeId: session.storeId,
-          name: name,
-          email: email,
-          address: address,
-          phone: phone,
-          lines: session.lines,
-          total: current.totalLabel,
-          currency: current.currency,
-          reference: current.reference
-        });
-        session.customerClaimsPaid = true;
-        if (claim.unlocked) {
-          try {
-            if (storage) storage.setItem(G.unlockKey(session.storeId), JSON.stringify(claim));
-          } catch (err) {}
-          document.documentElement.setAttribute('data-cb-payid-unlock', session.storeId);
-          try { window.dispatchEvent(new CustomEvent('cb-payid-unlock', { detail: claim })); } catch (err) {}
-          session.orderNotice = 'Unlocked on this device. Payment is not verified. Reference: ' + claim.reference;
-        } else {
-          session.orderNotice = 'Order reference: ' + claim.reference + '. Payment is not verified.';
-        }
+        session.customerClaimsPaid = false;
+        session.orderNotice = 'Order reference: ' + (current.reference || '') + '. Payment is pending and is not verified. Karen will send access once the PayID lands.';
         status.textContent = session.orderNotice;
         persist();
         var baseNotice = session.orderNotice;

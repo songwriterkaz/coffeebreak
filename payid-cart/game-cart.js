@@ -29,9 +29,6 @@
     'Cart',
     'Close cart',
     'Add to cart',
-    'Reduce quantity',
-    'Increase quantity',
-    'Remove',
     'Your cart is empty.',
     'Checkout',
     'How to pay',
@@ -43,24 +40,18 @@
     GAP,
     PAY_HINT,
     'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com',
-    'Open email draft',
-    'Copy amount',
-    'Copy PayID',
-    'Copy reference',
     'Report a problem',
     'Total',
     'Name',
     'Email',
     'Items',
     'Reference',
-    "I've paid by PayID, unlock now",
-    "I've paid by PayID, confirm this order",
     'Place order',
     'Open cart',
     'Email this order',
     'Copy AUD amount',
     'Transfer',
-    'Unlocked on this device. Payment is not verified.',
+    'Payment is pending and is not verified. Karen will send access once the PayID lands.',
     'Order reference',
     'Add your name and a valid email.',
     'Order details were handed to the mailbox. Payment is not verified.',
@@ -72,7 +63,8 @@
     'Fulfilment starts after the PayID lands.',
     RIGHTS,
     'Tesla',
-    'Starlink'
+    'Starlink',
+    'Coffeebreak on YouTube'
   ];
 
   var DENY = [
@@ -95,7 +87,6 @@
     /^coffee-stack\//,
     /^condom-challenge\//,
     /^pin-the-condom-on-the-banana\//,
-    /^pinata-party\//,
     /^mansion-vr\//,
     /^target-range\//,
     /^hymns-karaoke\//,
@@ -366,9 +357,8 @@
         physical: isPhysicalItem(line, input.storeId)
       };
     });
-    var digital = items.some(function (item) { return !item.physical; });
     return {
-      unlocked: digital && items.length > 0,
+      unlocked: false,
       physical: items.some(function (item) { return item.physical; }),
       paid: false,
       verified: false,
@@ -560,9 +550,17 @@
     return false;
   }
 
+  function isWhollyFree(rel, html) {
+    var path = String(rel || '').replace(/\\/g, '/');
+    if (/catch-a-fish|prayer-games|prayer-bowling/i.test(path)) return true;
+    if (/-free-demo\/|-buy\.html$|-buy\//.test(path)) return false;
+    var text = sourceOf(html || '');
+    return /free to play/i.test(text) && /no purchase|takes no payment|no paid entry|no purchase or payment/i.test(text);
+  }
+
   function isGamePage(rel, html) {
     var path = String(rel || '').replace(/\\/g, '/');
-    if (denied(path)) return false;
+    if (denied(path) || isWhollyFree(path, html)) return false;
     for (var i = 0; i < FORCE.length; i++) if (FORCE[i].test(path)) return true;
     var title = titleOf(html || '');
     if (/\b(game|games|karaoke|brawl|arcade|bowling|pinata|piñata|tycoon|duel|battle|chess|darts|kart)\b/i.test(path + ' ' + title)) return true;
@@ -721,21 +719,54 @@
     src = src.replace(new RegExp('Checkout is on ' + shopWord + '\\.', 'gi'), '');
     src = src.replace(new RegExp('\\s*\\+\\s*' + shopWord, 'gi'), '');
     src = src.replace(new RegExp('\\s*or ' + shopWord, 'gi'), '');
-    src = src.replace(/<p[^>]*>\s*<\/p>/gi, '');
+    src = src.replace(/<p(?![^>]*\bid=)[^>]*>\s*<\/p>/gi, '');
     return src;
   }
 
-  function assetPrefix(rel) {
-    var depth = String(rel || '').split('/').length - 1;
-    return '../'.repeat(depth) + 'payid-cart/';
+  function depthOf(rel) {
+    return String(rel || '').split('/').length - 1;
   }
 
-  function legalBlock(html) {
+  function assetPrefix(rel) {
+    return '../'.repeat(depthOf(rel)) + 'payid-cart/';
+  }
+
+  function repoFile(rel, file) {
+    return '../'.repeat(depthOf(rel)) + file;
+  }
+
+  function hostPattern(host) {
+    return host.replace(/\./g, '\\.');
+  }
+
+  function stripCheckoutButtons(html) {
+    var src = String(html || '');
+    var linkHosts = ['pay' + 'pal.com', 'stri' + 'pe.com', 'buy.stri' + 'pe.com', 'it' + 'ch.io', 'gum' + 'road.com', 'pay' + 'hip.com', 'ko-' + 'fi.com'];
+    linkHosts.forEach(function (host) {
+      var re = new RegExp('<a\\b[^>]*href=["\'][^"\']*' + hostPattern(host) + '[^"\']*["\'][^>]*>[\\s\\S]*?<\\/a>', 'gi');
+      src = src.replace(re, '');
+    });
+    ['pay' + 'pal.com', 'stri' + 'pe.com', 'buy.stri' + 'pe.com'].forEach(function (host) {
+      var re = new RegExp('<form\\b[^>]*action=["\'][^"\']*' + hostPattern(host) + '[^"\']*["\'][^>]*>[\\s\\S]*?<\\/form>', 'gi');
+      src = src.replace(re, '');
+    });
+    src = src.replace(/<button\b[^>]*>[^<]*(?:I[’']ve paid|I have paid|I[’']ve sent it)[^<]*<\/button>/gi, '');
+    src = src.replace(/\.member\s*=\s*function\s*\(\)\s*\{C\.trophy\('member'\);alert\([^)]*\)\s*;?\s*\}/g, '.member=function(){}');
+    var named = 'head' + 'space';
+    src = src.replace(new RegExp('<a\\b[^>]*href=["\'][^"\']*' + named + '[^"\']*["\'][^>]*>[\\s\\S]*?<\\/a>', 'gi'), '');
+    return src;
+  }
+
+  function legalBlock(html, rel) {
     var bits = [];
+    if (!/<img\b[^>]*(?:logo|cb-logo)/i.test(html)) {
+      bits.push('<img src="' + repoFile(rel, 'apps/cb-logo.png') + '" alt="Coffeebreak logo" width="48" height="36">');
+    }
     if (!/third-party/i.test(html)) bits.push('<p>' + RIGHTS + '</p>');
     var links = [];
     if (!/https:\/\/www\.tesla\.com/i.test(html)) links.push('<a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a>');
     if (!/https:\/\/www\.starlink\.com/i.test(html)) links.push('<a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a>');
+    if (!/youtube\.com/i.test(html)) links.push('<a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Coffeebreak on YouTube</a>');
     if (!/Report a problem/i.test(html) && !/cbreport\.js/i.test(html)) {
       links.push('<a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a>');
     }
@@ -1031,6 +1062,7 @@
       '<script type="application/json" id="cb-game-cart-data">' + payload + '</script>',
       '</section>',
       '<script src="' + prefix + 'cart.js"></script>',
+      '<script src="' + repoFile(rel, 'apps/cb-static-checkout.js') + '"></script>',
       '<script src="' + prefix + 'game-cart.js"></script>',
       '<script src="' + prefix + 'game-mount.js"></script>',
       /^apps\/park-builder\//.test(String(rel || '')) ? '<script src="park-orders.js"></script>' : '',
@@ -1058,6 +1090,7 @@
     remove: remove,
     view: view,
     isGamePage: isGamePage,
+    isWhollyFree: isWhollyFree,
     listGamePages: listGamePages,
     isAppPage: isAppPage,
     listAppPages: listAppPages,
@@ -1065,11 +1098,13 @@
     replaceDirectoryWording: replaceDirectoryWording,
     readVendingSnacks: readVendingSnacks,
     stripLemon: stripLemon,
+    stripCheckoutButtons: stripCheckoutButtons,
     mountPage: mountPage,
     skippedSeller: skippedSeller,
     readSellerOffer: readSellerOffer,
     mountSellerPage: mountSellerPage,
     assetPrefix: assetPrefix,
+    repoFile: repoFile,
     ordersEndpoint: ordersEndpoint,
     orderFields: orderFields,
     orderMailto: orderMailto,

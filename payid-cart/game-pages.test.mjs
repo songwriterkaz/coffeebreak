@@ -26,7 +26,7 @@ test('every in-repo game page mounts the shared PayID cart', () => {
     const block = html.match(/<!--cb-game-cart-start-->([\s\S]*?)<!--cb-game-cart-end-->/);
     assert.ok(block, rel);
     assert.equal(block[1].includes('!'), false, rel);
-    assert.doesNotMatch(block[1], /headspace|paypal|gumroad|payhip|ko-fi/i, rel);
+    assert.doesNotMatch(block[1], /headspace|paypal|gumroad|payhip|ko-fi|itch\.io|stripe/i, rel);
     const data = JSON.parse(block[1].match(/<script type="application\/json" id="cb-game-cart-data">([\s\S]*?)<\/script>/)[1]);
     const offer = game.attachFoodPrizes(game.readOffer(html, rel));
     assert.equal(data.currency, offer.currency, rel);
@@ -41,7 +41,7 @@ test('every in-repo game page mounts the shared PayID cart', () => {
     assert.match(html, /https:\/\/www\.starlink\.com/, rel);
     assert.match(html, /Report a problem|cbreport\.js/, rel);
     assert.match(html, /third-party/i, rel);
-    assert.doesNotMatch(html, /gumroad\.com|payhip\.com|ko-fi\.com|href="#pending"|store pending/i, rel);
+    assert.doesNotMatch(html, /gumroad\.com|payhip\.com|ko-fi\.com|href="#pending"|store pending|headspace/i, rel);
   }
   assert.ok(priced.USD + priced.AUD > 0);
   console.log('GAME CARTS pages=' + pages.length + ' aud=' + priced.AUD + ' usd=' + priced.USD + ' gap=' + priced.gap);
