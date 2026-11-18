@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS profiles (id TEXT PRIMARY KEY, handle TEXT UNIQUE NOT NULL, name TEXT NOT NULL, bio TEXT DEFAULT '', avatar TEXT DEFAULT '', token_hash TEXT NOT NULL, ip_hash TEXT, created INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS posts (id TEXT PRIMARY KEY, user_id TEXT NOT NULL, title TEXT NOT NULL, lyrics TEXT NOT NULL, genre TEXT, mood TEXT, bpm INTEGER, summary TEXT, duration REAL, peaks TEXT, remix_of TEXT, audio_bytes INTEGER, created INTEGER NOT NULL, likes INTEGER DEFAULT 0, comments INTEGER DEFAULT 0, plays INTEGER DEFAULT 0, remixes INTEGER DEFAULT 0, reports INTEGER DEFAULT 0, hidden INTEGER DEFAULT 0, ip_hash TEXT);
+CREATE INDEX IF NOT EXISTS posts_created ON posts(hidden, created DESC);
+CREATE INDEX IF NOT EXISTS posts_user ON posts(user_id, created DESC);
+CREATE INDEX IF NOT EXISTS posts_remix ON posts(remix_of);
+CREATE TABLE IF NOT EXISTS likes (post_id TEXT NOT NULL, user_id TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY (post_id, user_id));
+CREATE TABLE IF NOT EXISTS comments (id TEXT PRIMARY KEY, post_id TEXT NOT NULL, user_id TEXT NOT NULL, text TEXT NOT NULL, created INTEGER NOT NULL, reports INTEGER DEFAULT 0, hidden INTEGER DEFAULT 0);
+CREATE INDEX IF NOT EXISTS comments_post ON comments(post_id, created);
+CREATE TABLE IF NOT EXISTS follows (follower TEXT NOT NULL, followee TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY (follower, followee));
+CREATE INDEX IF NOT EXISTS follows_followee ON follows(followee);
+CREATE TABLE IF NOT EXISTS reports (target_type TEXT NOT NULL, target_id TEXT NOT NULL, user_id TEXT NOT NULL, reason TEXT, created INTEGER NOT NULL, PRIMARY KEY (target_type, target_id, user_id));
+CREATE TABLE IF NOT EXISTS events (who TEXT NOT NULL, kind TEXT NOT NULL, created INTEGER NOT NULL);
+CREATE INDEX IF NOT EXISTS events_who ON events(who, kind, created);
