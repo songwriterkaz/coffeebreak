@@ -16,7 +16,7 @@
     <img src="cb-logo.png" alt="Coffeebreak logo" width="56" height="56">
     <span>
       <h1>Coffeebreak Vocal Social</h1>
-      <small>Sing your lyrics, share the song, remix each other</small>
+      <small>Sing your lyrics, battle, level up and remix each other</small>
     </span>
   </a>
 </header>
@@ -26,11 +26,13 @@
 <main id="vs-app" class="wrap">
   <nav class="tabs" aria-label="Vocal Social">
     <a href="#feed" data-r="feed">Feed</a>
+    <a href="#play" data-r="play">Play</a>
     <a href="#make" data-r="make">Make</a>
     <a href="#people" data-r="people">People</a>
     <a href="#me" data-r="me">Me</a>
   </nav>
 
+  <div id="hud" class="hud" hidden></div>
   <p id="vs-status" class="status" role="status" aria-live="polite"></p>
 
   <section id="view-feed" class="view" hidden>
@@ -40,6 +42,10 @@
       <button type="button" class="chip" data-mode="following" aria-pressed="false">Following</button>
     </div>
     <div id="reel" class="reel" aria-label="Songs"></div>
+  </section>
+
+  <section id="view-play" class="view" hidden>
+    <div id="play-box"></div>
   </section>
 
   <section id="view-make" class="view" hidden>
@@ -70,6 +76,7 @@
     <label>Describe the song, optional
       <input id="desc" type="text" maxlength="120" placeholder="slow country in G minor">
     </label>
+    <label id="chal-row" class="chal-row" hidden><input type="checkbox" id="chal-on"> <span id="chal-label">Enter today's challenge</span></label>
     <div class="row actions">
       <button type="button" id="btn-generate" class="btn big">Create song</button>
     </div>
@@ -130,6 +137,9 @@
   </div>
 </div>
 <audio id="player" preload="none"></audio>
+<div id="fx-layer" class="fx-layer" aria-live="polite"></div>
+<canvas id="fx-confetti" class="fx-confetti" hidden aria-hidden="true"></canvas>
+<div id="fx-celebrate" class="fx-celebrate" hidden role="dialog" aria-modal="true"></div>
 
 <footer class="legal">
   <img src="cb-logo.png" alt="Coffeebreak logo" width="60" height="60">

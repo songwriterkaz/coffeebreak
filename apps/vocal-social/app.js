@@ -60,6 +60,8 @@
   function avatarNode(author, size) {
     var s = el('span', 'avatar'); s.style.width = s.style.height = (size || 44) + 'px';
     s.innerHTML = avatarSvg(avatarIndex(author && author.avatar, author && author.id), size || 44);
+    if (author && author.frame) s.classList.add('frame-' + author.frame);
+    if (author && author.level && (size || 44) >= 40) s.appendChild(el('span', 'lvl', String(author.level)));
     return s;
   }
   function artBackground(id) {
@@ -137,6 +139,7 @@
     var pr = player.play();
     state.autoplay = true;
     if (pr && pr.catch) pr.catch(function () { state.autoplay = false; setPlaying(false); });
+    if (postId) questPlay();
     if (postId && !state.played[postId]) { state.played[postId] = 1; api('/api/posts/' + postId + '/play', { method: 'POST' }).catch(function () {}); }
   }
 
@@ -157,7 +160,7 @@
       go.addEventListener('click', function () {
         go.disabled = true; msg.textContent = 'Making your profile.';
         api('/api/profiles', { method: 'POST', body: { name: nm.value, handle: hd.value, avatar: 'a:' + chosen } }).then(function (j) {
-          local.token = j.token; local.profile = j.profile; saveLocal(); closeSheet(); renderNav(); resolve(j.profile);
+          local.token = j.token; local.profile = j.profile; saveLocal(); closeSheet(); renderNav(); loadGame(); resolve(j.profile);
         }, function (err) { go.disabled = false; msg.textContent = err.message; });
       });
       body.append(l1, l2, el('p', 'field-label', 'Avatar'), pick, go, msg);
@@ -194,16 +197,19 @@
     var i = hash.indexOf('='); var name = i < 0 ? hash : hash.slice(0, i); var arg = i < 0 ? '' : decodeURIComponent(hash.slice(i + 1));
     if (name === 'post' && arg) { showView('feed'); openFeed(state.mode, arg); return; }
     if (name === 'u' && arg) { showView('profile'); renderProfile(arg); return; }
+    if (name === 'make' && arg === 'challenge') { showView('make'); setupChallengeToggle(true); return; }
     if (name === 'make' && arg) { applyShareMake(arg); showView('make'); return; }
     if (name === 'remix' && arg) { showView('make'); startRemix(arg); return; }
-    if (['make', 'feed', 'people', 'me'].indexOf(name) < 0) name = 'feed';
+    if (['make', 'feed', 'people', 'me', 'play'].indexOf(name) < 0) name = 'feed';
     showView(name);
     if (name === 'feed') openFeed(state.mode);
     if (name === 'people') renderPeople();
     if (name === 'me') renderMe();
+    if (name === 'play') renderPlay();
+    if (name === 'make') setupChallengeToggle(false);
   }
   function showView(name) {
-    ['make', 'feed', 'people', 'me', 'profile'].forEach(function (id) { var v = $('view-' + id); if (v) v.hidden = id !== name; });
+    ['make', 'feed', 'people', 'me', 'profile', 'play'].forEach(function (id) { var v = $('view-' + id); if (v) v.hidden = id !== name; });
     document.querySelectorAll('nav.tabs a').forEach(function (a) { a.classList.toggle('on', a.getAttribute('data-r') === name); });
     if (name !== 'feed' && player && !player.paused) player.pause();
   }
@@ -281,6 +287,7 @@
       var rm = el('a', 'tag remix-of', 'Remix of ' + post.remixOf.title + (post.remixOf.handle ? ' by @' + post.remixOf.handle : ''));
       rm.href = '#post=' + encodeURIComponent(post.remixOf.id); top.appendChild(rm);
     }
+    if (post.challenge) top.appendChild(el('span', 'tag chal-tag', '🎯 ' + post.challenge.theme + ' challenge'));
     card.appendChild(top);
 
     var mid = el('div', 'clip-mid');
@@ -333,7 +340,8 @@
         return api('/api/posts/' + post.id + '/like', { method: 'POST' });
       }).then(function (j) {
         post.liked = j.liked; post.likes = j.likes; like.classList.toggle('on', j.liked); like.querySelector('.n').textContent = fmtCount(j.likes);
-        if (j.liked) { like.classList.remove('pop'); void like.offsetWidth; like.classList.add('pop'); }
+        if (j.liked) { like.classList.remove('pop'); void like.offsetWidth; like.classList.add('pop'); sfx('like'); burstHeart(card); }
+        handleGame(j.game);
       }).catch(function (err) { if (err) status(err.message); });
     }
     like.addEventListener('click', doLike);
@@ -344,6 +352,9 @@
     return card;
   }
 
+  function burstHeart(card) {
+    var h = el('div', 'heart-burst', '♥'); card.appendChild(h); setTimeout(function () { h.remove(); }, 900);
+  }
   function postUrl(id) { return location.origin + location.pathname + '#post=' + encodeURIComponent(id); }
   function sharePost(post) {
     var url = postUrl(post.id);
@@ -406,7 +417,7 @@
         return api('/api/posts/' + post.id + '/comments', { method: 'POST', body: { text: text } });
       }).then(function (j) {
         if (list.firstChild && list.firstChild.classList && list.firstChild.classList.contains('hint')) list.replaceChildren();
-        list.appendChild(row(j.comment)); input.value = ''; msg.textContent = '';
+        list.appendChild(row(j.comment)); input.value = ''; msg.textContent = ''; handleGame(j.game);
         post.comments += 1; if (btn) btn.querySelector('.n').textContent = fmtCount(post.comments);
         if (!$('sheet').hidden) $('sheet-title').textContent = commentsLabel(post.comments);
       }, function (err) { msg.textContent = err.message; if ($('sheet').hidden) openComments(post, btn); }).then(function () { send.disabled = false; });
@@ -419,7 +430,7 @@
     if (local.profile && local.profile.id === userId) { b.textContent = 'You'; b.disabled = true; b.className = 'btn quiet'; return b; }
     b.addEventListener('click', function () {
       ensureAccount('Join to follow singers.').then(function () { return api('/api/follow/' + userId, { method: 'POST' }); }).then(function (j) {
-        b.textContent = j.following ? 'Following' : 'Follow'; b.className = 'btn' + (j.following ? ' quiet' : ''); if (onChange) onChange(j);
+        b.textContent = j.following ? 'Following' : 'Follow'; b.className = 'btn' + (j.following ? ' quiet' : ''); if (onChange) onChange(j); handleGame(j.game);
       }).catch(function (err) { if (err) status(err.message); });
     });
     return b;
@@ -437,6 +448,9 @@
       function stat(n, l) { var s = el('div'); s.appendChild(el('b', null, fmtCount(n))); s.appendChild(el('span', null, l)); stats.appendChild(s); return s; }
       stat(p.posts, 'songs'); var fol = stat(p.followers, 'followers'); stat(p.following, 'following'); stat(p.likes, 'likes');
       box.appendChild(stats);
+      var lvl = el('p', 'meta prof-level', 'Level ' + (p.level || 1) + ' · ' + fmtCount(p.xp || 0) + ' XP' + (p.streak ? ' · 🔥 ' + p.streak + ' day streak' : ''));
+      box.appendChild(lvl);
+      if (p.badges && p.badges.length) { var br = el('div', 'badge-row'); p.badges.forEach(function (b) { var x = el('span', 'badge-pill', b.icon + ' ' + b.name); x.title = b.desc; br.appendChild(x); }); box.appendChild(br); }
       var acts = el('div', 'row actions');
       acts.appendChild(followButton(p.id, p.youFollow, function (r) { fol.querySelector('b').textContent = fmtCount(r.followers); }));
       var sh = el('button', 'btn quiet', 'Share profile'); sh.type = 'button';
@@ -498,6 +512,326 @@
       local.profile = j.profile; saveLocal(); renderNav(); renderMe();
       status('Profile saved.');
     }, function (err) { status(err.message); });
+  }
+
+
+  /* ================= Game layer ================= */
+  var FRAME_NAMES = { '': 'No frame', bronze: 'Bronze ring', silver: 'Silver ring', gold: 'Gold ring', neon: 'Neon glow', rainbow: 'Rainbow spin', crown: 'Star crown' };
+  var sfxCtx = null;
+  function sfxOn() { return local.sfx !== false; }
+  function tone(freq, start, dur, type, vol) {
+    try {
+      if (!sfxCtx) sfxCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (sfxCtx.state === 'suspended') sfxCtx.resume();
+      var t = sfxCtx.currentTime + start; var o = sfxCtx.createOscillator(); var g = sfxCtx.createGain();
+      o.type = type || 'sine'; o.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.12, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(sfxCtx.destination); o.start(t); o.stop(t + dur + 0.02);
+    } catch (e) {}
+  }
+  function sfx(kind) {
+    if (!sfxOn()) return;
+    if (kind === 'xp') { tone(880, 0, 0.12, 'triangle'); tone(1320, 0.07, 0.16, 'triangle'); }
+    else if (kind === 'like') { tone(660, 0, 0.1, 'sine'); tone(990, 0.06, 0.14, 'sine'); }
+    else if (kind === 'vote') { tone(523, 0, 0.1, 'square', 0.05); tone(784, 0.08, 0.18, 'square', 0.05); }
+    else if (kind === 'badge') { [784, 988, 1175, 1568].forEach(function (f, i) { tone(f, i * 0.09, 0.25, 'triangle'); }); }
+    else if (kind === 'level') { [523, 659, 784, 1047, 784, 1047].forEach(function (f, i) { tone(f, i * 0.11, 0.3, i > 3 ? 'square' : 'triangle', i > 3 ? 0.06 : 0.12); }); }
+    else if (kind === 'tap') tone(1200, 0, 0.05, 'sine', 0.05);
+  }
+
+  function framed(node, author) {
+    var f = author && author.frame; if (f) node.classList.add('frame-' + f);
+    return node;
+  }
+  function levelChip(level) { var c = el('span', 'lvl', 'Lv ' + (level || 1)); return c; }
+
+  var floatSlot = 0;
+  function floatXp(text, cls) {
+    var layer = $('fx-layer'); var n = el('div', 'fx-float ' + (cls || ''), text);
+    n.style.left = '50%'; n.style.top = ((floatSlot++ % 4) * 48) + 'px'; layer.appendChild(n);
+    setTimeout(function () { floatSlot = Math.max(0, floatSlot - 1); }, 1800);
+    setTimeout(function () { n.remove(); }, 1800);
+  }
+  function confetti(ms) {
+    var c = $('fx-confetti'); var ctx = c.getContext('2d'); c.hidden = false;
+    c.width = innerWidth; c.height = innerHeight;
+    var cols = ['#ff4f9a', '#ffd200', '#00c2a8', '#7b2ff7', '#ff8a5c', '#fff'];
+    var bits = []; for (var i = 0; i < 140; i++) bits.push({ x: Math.random() * c.width, y: -20 - Math.random() * c.height * 0.5, vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 4, r: Math.random() * 6.3, s: 5 + Math.random() * 7, c: cols[i % cols.length] });
+    var end = Date.now() + (ms || 2200);
+    (function frame() {
+      ctx.clearRect(0, 0, c.width, c.height);
+      bits.forEach(function (b) { b.x += b.vx; b.y += b.vy; b.r += 0.1; ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.r); ctx.fillStyle = b.c; ctx.fillRect(-b.s / 2, -b.s / 4, b.s, b.s / 2); ctx.restore(); });
+      if (Date.now() < end) requestAnimationFrame(frame); else { ctx.clearRect(0, 0, c.width, c.height); c.hidden = true; }
+    })();
+  }
+  var celebrateQueue = [];
+  function celebrate(title, lines, icon) {
+    celebrateQueue.push([title, lines, icon]);
+    if (celebrateQueue.length === 1) showNextCelebrate();
+  }
+  function showNextCelebrate() {
+    var item = celebrateQueue[0]; if (!item) return;
+    var box = $('fx-celebrate'); box.replaceChildren();
+    var card = el('div', 'celebrate-card');
+    card.appendChild(el('div', 'celebrate-icon', item[2] || '🎉'));
+    card.appendChild(el('h3', null, item[0]));
+    item[1].forEach(function (l) { card.appendChild(el('p', null, l)); });
+    var ok = el('button', 'btn', 'Nice'); ok.type = 'button';
+    ok.addEventListener('click', function () { box.hidden = true; celebrateQueue.shift(); setTimeout(showNextCelebrate, 150); });
+    card.appendChild(ok); box.appendChild(card); box.hidden = false;
+  }
+  function handleGame(g) {
+    if (!g) return;
+    state.game = Object.assign(state.game || {}, { xp: g.xp, level: g.level, levelXp: g.levelXp, nextXp: g.nextXp, streak: g.streak });
+    if (g.gained > 0) {
+      sfx('xp');
+      (g.reasons || []).forEach(function (r, i) { setTimeout(function () { floatXp('+' + r.points + ' XP · ' + r.label); }, i * 380); });
+    }
+    (g.badges || []).forEach(function (b) { setTimeout(function () { sfx('badge'); }, 300); celebrate('Badge unlocked', [b.name, b.desc], b.icon); });
+    if (g.levelUp) {
+      setTimeout(function () { sfx('level'); confetti(); }, 200);
+      var lines = ['You reached level ' + g.levelUp + '.'];
+      (g.frames || []).forEach(function (f) { lines.push('New avatar frame: ' + f.name + '. Pick it on the Play tab.'); });
+      celebrate('Level up', lines, '⭐');
+    }
+    renderHud();
+  }
+  function renderHud() {
+    var h = $('hud'); if (!h) return;
+    var g = state.game;
+    if (!local.token || !g) { h.hidden = true; return; }
+    h.hidden = false; h.replaceChildren();
+    h.appendChild(el('span', 'hud-lvl', 'Lv ' + g.level));
+    var bar = el('span', 'hud-bar'); var fill = el('span', 'hud-fill');
+    var pct = Math.max(0, Math.min(100, (g.xp - g.levelXp) * 100 / Math.max(1, g.nextXp - g.levelXp)));
+    bar.appendChild(fill); h.appendChild(bar);
+    requestAnimationFrame(function () { fill.style.width = pct + '%'; });
+    h.appendChild(el('span', 'hud-xp', fmtCount(g.xp) + ' XP'));
+    h.appendChild(el('span', 'hud-streak' + (g.streak ? ' on' : ''), '🔥 ' + (g.streak || 0)));
+  }
+  function loadGame() {
+    if (!local.token) { renderHud(); return Promise.resolve(null); }
+    return api('/api/game/me').then(function (j) { state.game = j.game; renderHud(); return j.game; }, function () { return null; });
+  }
+  function questPlay() {
+    if (!local.token || state.questPlayed) return;
+    state.questPlayed = true;
+    api('/api/quest/play', { method: 'POST' }).then(function (j) { handleGame(j.game); }).catch(function () {});
+  }
+
+  /* ---------- Play tab ---------- */
+  function card(title, cls) { var c = el('section', 'game-card ' + (cls || '')); if (title) c.appendChild(el('h3', null, title)); return c; }
+  function renderPlay() {
+    var box = $('play-box'); box.replaceChildren();
+    var top = card(null, 'me-card'); box.appendChild(top);
+    var chal = card('Daily challenge', 'chal-card'); box.appendChild(chal);
+    var bat = card('Song battle', 'battle-card'); box.appendChild(bat);
+    var quest = card('Starter quest', 'quest-card'); box.appendChild(quest);
+    var lb = card('Leaderboard', 'lb-card'); box.appendChild(lb);
+    var bd = card('Badges', 'badge-card'); box.appendChild(bd);
+    var fr = card('Avatar frames', 'frame-card'); box.appendChild(fr);
+    var snd = el('label', 'sfx-toggle'); var cb = el('input'); cb.type = 'checkbox'; cb.checked = sfxOn();
+    cb.addEventListener('change', function () { local.sfx = cb.checked; saveLocal(); if (cb.checked) sfx('tap'); });
+    snd.append(cb, el('span', null, ' Sound effects')); box.appendChild(snd);
+
+    renderChallenge(chal); renderBattle(bat); renderLeaderboard(lb, 'week');
+    if (!local.token) {
+      top.appendChild(el('h3', null, 'Play Vocal Social'));
+      top.appendChild(el('p', null, 'Earn XP for making songs, voting in battles, entering the daily challenge, likes and kind comments. Level up to unlock avatar frames and collect badges. It is all free.'));
+      var j = el('button', 'btn', 'Join and start the quest'); j.type = 'button';
+      j.addEventListener('click', function () { ensureAccount('Join to start earning XP.').then(function () { loadGame().then(renderPlay); }).catch(function () {}); });
+      top.appendChild(j);
+      quest.appendChild(el('p', 'hint small', 'Join to start the starter quest.'));
+      bd.appendChild(el('p', 'hint small', 'Join to collect badges.'));
+      fr.appendChild(el('p', 'hint small', 'Join and level up to unlock frames.'));
+      return;
+    }
+    top.appendChild(el('p', 'hint small', 'Loading your progress.'));
+    loadGame().then(function (g) {
+      if (!g) return;
+      top.replaceChildren();
+      var row = el('div', 'me-row');
+      row.appendChild(framed(avatarNode(local.profile, 64), { frame: g.frame }));
+      var info = el('div', 'me-info');
+      info.appendChild(el('b', null, (local.profile && local.profile.name) || 'You'));
+      info.appendChild(el('span', 'big-lvl', 'Level ' + g.level));
+      row.appendChild(info);
+      var st = el('div', 'streak-box' + (g.streak ? ' on' : ''));
+      st.appendChild(el('span', 'flame', '🔥')); st.appendChild(el('b', null, String(g.streak))); st.appendChild(el('small', null, g.streak === 1 ? 'day streak' : 'day streak'));
+      row.appendChild(st);
+      top.appendChild(row);
+      var bar = el('div', 'xp-bar'); var fill = el('div', 'xp-fill'); bar.appendChild(fill); top.appendChild(bar);
+      var pct = Math.max(0, Math.min(100, (g.xp - g.levelXp) * 100 / Math.max(1, g.nextXp - g.levelXp)));
+      requestAnimationFrame(function () { requestAnimationFrame(function () { fill.style.width = pct + '%'; }); });
+      top.appendChild(el('p', 'meta', fmtCount(g.xp) + ' XP · ' + fmtCount(g.nextXp - g.xp) + ' XP to level ' + (g.level + 1) + ' · ' + fmtCount(g.weekXp) + ' XP this week'));
+      top.appendChild(el('p', 'hint small', g.postedToday ? 'You posted today, so your streak is safe.' : 'Post a song today to ' + (g.streak ? 'keep' : 'start') + ' your streak.'));
+
+      var done = g.quest.filter(function (q) { return q.done; }).length;
+      quest.appendChild(el('p', 'meta', done + ' of ' + g.quest.length + ' done' + (done === g.quest.length ? '. Quest complete.' : '')));
+      var qb = el('div', 'xp-bar small'); var qf = el('div', 'xp-fill'); qb.appendChild(qf); quest.appendChild(qb);
+      requestAnimationFrame(function () { requestAnimationFrame(function () { qf.style.width = (done * 100 / g.quest.length) + '%'; }); });
+      var ul = el('ul', 'quest');
+      var go = { play: '#feed', like: '#feed', vote: '#play', post: '#make', comment: '#feed', follow: '#people', challenge: '#make=challenge' };
+      g.quest.forEach(function (q) {
+        var li = el('li', q.done ? 'done' : ''); li.appendChild(el('span', 'tick', q.done ? '✓' : '○'));
+        if (q.done) li.appendChild(el('span', null, q.name)); else { var a = el('a', null, q.name); a.href = go[q.id] || '#feed'; li.appendChild(a); }
+        ul.appendChild(li);
+      });
+      quest.appendChild(ul);
+
+      var have = {}; g.badges.forEach(function (b) { have[b.id] = 1; });
+      var grid = el('div', 'badges');
+      g.allBadges.forEach(function (b) {
+        var t = el('div', 'badge' + (have[b.id] ? ' got' : '')); t.title = b.desc;
+        t.appendChild(el('span', 'b-icon', b.icon)); t.appendChild(el('b', null, b.name)); t.appendChild(el('small', null, b.desc));
+        grid.appendChild(t);
+      });
+      bd.appendChild(el('p', 'meta', g.badges.length + ' of ' + g.allBadges.length + ' collected'));
+      bd.appendChild(grid);
+
+      var fg = el('div', 'frames');
+      g.frames.forEach(function (f) {
+        var b = el('button', 'frame-opt' + (f.unlocked ? '' : ' locked') + (g.frame === f.id ? ' on' : '')); b.type = 'button';
+        b.appendChild(framed(avatarNode(local.profile, 48), { frame: f.id }));
+        b.appendChild(el('small', null, f.unlocked ? f.name : 'Level ' + f.level));
+        b.disabled = !f.unlocked;
+        b.addEventListener('click', function () {
+          api('/api/me', { method: 'PATCH', body: { frame: f.id } }).then(function (j) { local.profile = j.profile; saveLocal(); sfx('tap'); renderPlay(); }, function (err) { status(err.message); });
+        });
+        fg.appendChild(b);
+      });
+      fr.appendChild(fg);
+    });
+  }
+
+  function renderChallenge(box) {
+    var body = el('div'); box.appendChild(body); body.appendChild(el('p', 'hint small', 'Loading today\'s challenge.'));
+    api('/api/challenge').then(function (j) {
+      var c = j.challenge; state.challenge = c; body.replaceChildren();
+      var big = el('div', 'chal-big'); big.appendChild(el('span', 'chal-theme', c.theme)); big.appendChild(el('span', 'chal-word', 'Use the word "' + c.word + '"'));
+      body.appendChild(big);
+      body.appendChild(el('p', 'meta', fmtCount(c.entries) + ' entries today · +' + c.xp + ' XP for entering · a new challenge every day'));
+      var go = el('a', 'btn', state.game && state.game.challenge && state.game.challenge.entered ? 'Enter again' : 'Take the challenge'); go.href = '#make=challenge';
+      body.appendChild(go);
+      if (j.top.length) {
+        body.appendChild(el('p', 'field-label', 'Top entries'));
+        var row = el('div', 'mini-row');
+        j.top.forEach(function (p) {
+          var t = el('a', 'tile mini'); t.href = '#post=' + encodeURIComponent(p.id); t.style.background = artBackground(p.id);
+          t.appendChild(el('b', null, p.title)); t.appendChild(el('span', null, '♥ ' + fmtCount(p.likes) + ' · @' + p.author.handle));
+          row.appendChild(t);
+        });
+        body.appendChild(row);
+      }
+    }, function (err) { body.replaceChildren(el('p', 'hint small', err.message)); });
+  }
+
+  function countdown(ends) {
+    var s = Math.max(0, Math.floor((ends - Date.now()) / 1000));
+    var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60);
+    return h ? h + 'h ' + m + 'm left' : m + 'm left';
+  }
+  function renderBattle(box) {
+    var body = el('div'); box.appendChild(body); body.appendChild(el('p', 'hint small', 'Finding a battle.'));
+    api('/api/battle').then(function (j) {
+      body.replaceChildren();
+      var bt = j.battle;
+      if (bt) box.dataset.battle = bt.id;
+      if (!bt) { body.appendChild(el('p', 'hint small', 'Battles start when at least two singers have posted songs. Post one to get in the ring.')); return; }
+      body.appendChild(el('p', 'meta', 'Listen to both, then vote for your favourite. +3 XP for voting, +100 XP to the winner. ' + countdown(bt.ends) + '.'));
+      var ring = el('div', 'ring'); body.appendChild(ring);
+      var sides = {};
+      ['a', 'b'].forEach(function (side, i) {
+        var p = bt[side]; var s = el('div', 'side side-' + side); s.style.background = artBackground(p.id);
+        var play = el('button', 'play-big small'); play.type = 'button'; play.innerHTML = ICON.play; play.setAttribute('aria-label', 'Play ' + p.title);
+        var canvas = el('canvas', 'wave'); canvas.width = 300; canvas.height = 40;
+        var item = { card: s, canvas: canvas, peaks: p.peaks, button: play, src: p.audio };
+        play.addEventListener('click', function () { playItem(item, p.audio, p.id); });
+        s.appendChild(play);
+        s.appendChild(el('b', 'side-title', p.title));
+        var who = el('a', 'side-who', '@' + p.author.handle); who.href = '#u=' + encodeURIComponent(p.author.handle); s.appendChild(who);
+        s.appendChild(canvas); drawWave(canvas, p.peaks, 0);
+        var meter = el('div', 'meter'); var mf = el('div', 'meter-fill'); meter.appendChild(mf); var pc = el('span', 'pct', '');
+        s.appendChild(meter); s.appendChild(pc);
+        var vote = el('button', 'btn vote-btn', 'Vote ' + (i ? 'B' : 'A')); vote.type = 'button';
+        vote.addEventListener('click', function () {
+          var wasGuest = !local.token;
+          ensureAccount('Join to vote in battles.').then(function () {
+            vote.disabled = true;
+            return api('/api/battles/' + bt.id + '/vote', { method: 'POST', body: { choice: side } });
+          }).then(function (r) {
+            sfx('vote'); s.classList.add('picked'); bt = r.battle; showCounts(); handleGame(r.game); if (wasGuest) setTimeout(function () { if (location.hash === '#play') renderPlay(); }, 2600);
+          }).catch(function (err) { vote.disabled = false; if (err) status(err.message); });
+        });
+        s.appendChild(vote);
+        sides[side] = { el: s, fill: mf, pct: pc, vote: vote };
+        ring.appendChild(s);
+        if (!i) ring.appendChild(el('div', 'vs', 'VS'));
+      });
+      function showCounts() {
+        if (bt.aVotes == null) return;
+        var tot = Math.max(1, bt.aVotes + bt.bVotes);
+        [['a', bt.aVotes], ['b', bt.bVotes]].forEach(function (x) {
+          var sd = sides[x[0]]; var pct = Math.round(x[1] * 100 / tot);
+          sd.vote.disabled = true; sd.vote.textContent = bt.voted === x[0] ? 'Your vote' : (bt.own ? 'Your battle' : 'Vote ' + x[0].toUpperCase());
+          requestAnimationFrame(function () { sd.fill.style.width = pct + '%'; });
+          sd.pct.textContent = pct + '% · ' + x[1] + (x[1] === 1 ? ' vote' : ' votes');
+        });
+        if (bt.voted) sides[bt.voted].el.classList.add('picked');
+      }
+      showCounts();
+      if (bt.voted || bt.own) {
+        var next = el('button', 'btn quiet', 'Next battle'); next.type = 'button';
+        next.addEventListener('click', function () { box.replaceChildren(el('h3', null, 'Song battle')); renderBattle(box); });
+        body.appendChild(next);
+      }
+      if (j.past && j.past.length) {
+        body.appendChild(el('p', 'field-label', 'Recent winners'));
+        j.past.forEach(function (pb) {
+          var w = pb.winner === pb.a.id ? pb.a : pb.b;
+          var a = el('a', 'winner', '🏆 ' + w.title + ' by @' + w.author.handle + ' (' + pb.aVotes + ' to ' + pb.bVotes + ')'); a.href = '#post=' + encodeURIComponent(w.id);
+          body.appendChild(a);
+        });
+      }
+    }, function (err) { body.replaceChildren(el('p', 'hint small', err.message)); });
+  }
+
+  function renderLeaderboard(box, period) {
+    box.replaceChildren(el('h3', null, 'Leaderboard'));
+    var tabs = el('div', 'feed-modes');
+    [['week', 'This week'], ['all', 'All time']].forEach(function (t) {
+      var c = el('button', 'chip', t[1]); c.type = 'button'; c.setAttribute('aria-pressed', String(period === t[0]));
+      c.addEventListener('click', function () { renderLeaderboard(box, t[0]); });
+      tabs.appendChild(c);
+    });
+    box.appendChild(tabs);
+    var list = el('ol', 'leaders'); box.appendChild(list); list.appendChild(el('li', 'hint small', 'Loading.'));
+    api('/api/leaderboard?period=' + period).then(function (j) {
+      list.replaceChildren();
+      if (!j.leaders.length) list.appendChild(el('li', 'hint small', 'No XP earned yet this week. Be the first on the board.'));
+      j.leaders.forEach(function (u) {
+        var li = el('li', 'leader' + (local.profile && local.profile.id === u.id ? ' me' : '') + (u.rank <= 3 ? ' top' + u.rank : ''));
+        li.appendChild(el('span', 'rank', u.rank <= 3 ? ['🥇', '🥈', '🥉'][u.rank - 1] : String(u.rank)));
+        var a = el('a', 'person-link'); a.href = '#u=' + encodeURIComponent(u.handle);
+        a.appendChild(framed(avatarNode(u, 36), u));
+        var t = el('span'); t.appendChild(el('b', null, u.name)); t.appendChild(el('small', null, '@' + u.handle + ' · Lv ' + u.level)); a.appendChild(t);
+        li.appendChild(a);
+        li.appendChild(el('span', 'score', fmtCount(u.score) + ' XP'));
+        list.appendChild(li);
+      });
+    }, function (err) { list.replaceChildren(el('li', 'hint small', err.message)); });
+  }
+
+  /* ---------- challenge on Make ---------- */
+  function setupChallengeToggle(on) {
+    var row = $('chal-row');
+    var fill = function (c) {
+      $('chal-label').textContent = 'Enter today\'s challenge: ' + c.theme + '. Use the word "' + c.word + '" in your lyrics for +' + (c.xp || 40) + ' XP.';
+      if (on) { $('chal-on').checked = true; if (!$('lyrics').value.trim()) $('lyrics').placeholder = 'Write about ' + c.theme.toLowerCase() + ' and use the word ' + c.word; }
+      row.hidden = false;
+    };
+    if (state.challenge) fill(state.challenge);
+    else api('/api/challenge').then(function (j) { state.challenge = j.challenge; fill(j.challenge); }).catch(function () {});
   }
 
   /* ---------- make ---------- */
@@ -596,11 +930,13 @@
       var form = new FormData();
       form.append('meta', JSON.stringify({
         title: state.draft.title, lyrics: state.draft.lyrics, genre: state.draft.genre, mood: state.draft.mood, bpm: state.draft.bpm,
-        summary: state.draft.summary, duration: state.draft.duration, peaks: state.draft.peaks, remixOf: state.remixOf ? state.remixOf.id : null
+        summary: state.draft.summary, duration: state.draft.duration, peaks: state.draft.peaks, remixOf: state.remixOf ? state.remixOf.id : null, challenge: !!($('chal-on') && $('chal-on').checked)
       }));
       form.append('audio', mp3, 'song.mp3');
       status('Posting.');
       var j = await api('/api/posts', { method: 'POST', body: form });
+      if ($('chal-on')) $('chal-on').checked = false;
+      handleGame(j.game);
       state.remixOf = null; $('remix-banner').hidden = true;
       status('Posted. Everyone on Vocal Social can hear it now.');
       setMode('latest');
@@ -630,5 +966,6 @@
   bind();
   renderNav();
   route();
+  loadGame();
   waitForEngine().then(function () { fillStyleSelects(); if (/^#(make=|remix=)/.test(location.hash)) route(); }).catch(function (err) { if (!location.hash || location.hash.indexOf('#make') === 0) status(err.message); });
 })();
