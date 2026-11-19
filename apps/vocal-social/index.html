@@ -30,6 +30,7 @@
     <a href="#make" data-r="make">Make</a>
     <a href="#people" data-r="people">People</a>
     <a href="#me" data-r="me">Me</a>
+    <a href="#shop" class="cb-shop-tab" data-cb-real-shop>Shop</a>
   </nav>
 
   <div id="hud" class="hud" hidden></div>
@@ -191,6 +192,8 @@
 <script src="../studio-espresso/create.js"></script>
 <script>window.CB_VS_API="https://cb-vocal-social.coffeebreaks.workers.dev";</script>
 <script src="app.js"></script>
+<script type="application/json" id="cb-real-shop-data">{"title": "Real things for singers", "logo": "cb-logo.png", "note": "Coffeebreak music, merch and gear for singing. Each card opens in a new tab, so your song stays here.", "items": [{"name": "Billionaire by Coffeebreak", "price": "Listen on Apple Music", "store": "Apple Music", "url": "https://music.apple.com/au/album/billionaire/1542958072?i=1542958079", "icon": "🎵", "bg": "linear-gradient(135deg,#ffd6e8,#ffb3d1)", "cta": "Listen on Apple Music"}, {"name": "Coffeebreak Records: Everything Bundle", "price": "A$20", "store": "Coffeebreak Records", "checkout": "PayID", "url": "../../records-store/", "icon": "💿", "bg": "linear-gradient(135deg,#e8e0ff,#cbb8ff)"}, {"name": "Coffeebreak album", "price": "A$10", "store": "Coffeebreak Records", "checkout": "PayID", "url": "../../records-store/", "icon": "🎶", "bg": "linear-gradient(135deg,#e0f0ff,#b8d8ff)"}, {"name": "Noise reduction headphones", "price": "US$51.95", "store": "Coffeebreak Sensory Shop", "checkout": "PayID cart", "url": "../../stores/sensory-shop/#item-quiet-headphones", "icon": "🎧", "bg": "linear-gradient(135deg,#ffe0f0,#e6dcff)"}, {"name": "Coffeebreak Tee (Black), logo design", "price": "A$40.05", "store": "Coffeebreak Merch", "checkout": "PayID cart", "url": "../../apps/merch/", "icon": "👕", "bg": "linear-gradient(135deg,#eee,#cfcfcf)"}, {"name": "Coffeebreak Hoodie (Black), logo design", "price": "A$69.05", "store": "Coffeebreak Merch", "checkout": "PayID cart", "url": "../../apps/merch/", "icon": "🧥", "bg": "linear-gradient(135deg,#eee,#cfcfcf)"}, {"name": "Coffeebreak Mug 11oz, logo design", "price": "A$32.05", "store": "Coffeebreak Merch", "checkout": "PayID cart", "url": "../../apps/merch/", "icon": "☕", "bg": "linear-gradient(135deg,#fff3e0,#f5d6b0)"}], "foot": "Prices as shown in each store on 19 Nov 2026. Store checkout is PayID. Vocal Social stays free and the real items are optional."}</script>
+<script src="../../pages/cb-real-shop.js" defer></script>
 <script src="../../pages/cb-listen.js" defer></script>
 </body>
 </html>
