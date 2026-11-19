@@ -41,6 +41,21 @@
   function wrap(vb, body, rainbow) { return '<svg viewBox="' + vb + '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g' + (rainbow ? ' class="rainbow"' : '') + '>' + body + '</g></svg>'; }
 
   var ART = {
+    'colour-wash': function (c, on) {
+      return wrap('0 0 100 100', '<path d="M50 40 L8 96 L92 96 Z" fill="' + c + '" opacity="' + (on ? '.35' : '.08') + '" class="fx"/><rect x="47" y="40" width="6" height="40" fill="#ccc"/><ellipse cx="50" cy="88" rx="16" ry="6" fill="#ddd"/><rect x="36" y="22" width="28" height="20" rx="8" fill="#3a2a5a"/><ellipse cx="50" cy="42" rx="12" ry="4" fill="' + c + '" class="fx"/>', c === 'rainbow');
+    },
+    'hum-speaker': function (c, on) {
+      return wrap('0 0 100 100', '<rect x="28" y="16" width="44" height="72" rx="8" fill="#4a3a6a"/><circle cx="50" cy="44" r="15" fill="' + (on ? c : '#888') + '" class="fx"/><circle cx="50" cy="44" r="6" fill="#2a1d4a"/><circle cx="50" cy="74" r="6" fill="#ddd"/>' + (on ? '<path d="M80 34 Q88 44 80 54 M86 28 Q98 44 86 60" stroke="' + c + '" stroke-width="3" fill="none" opacity=".6"/>' : ''), c === 'rainbow');
+    },
+    'breathe-light': function (c, on) {
+      return wrap('0 0 100 100', '<rect x="14" y="10" width="72" height="72" rx="10" fill="#2a1d4a"/><circle cx="50" cy="44" r="22" stroke="' + (on ? c : '#777') + '" stroke-width="5" fill="none" class="fx"/><circle cx="50" cy="44" r="12" stroke="' + (on ? c : '#777') + '" stroke-width="2" fill="none" opacity=".5"/><text x="50" y="94" font-size="11" text-anchor="middle" fill="#fff" font-family="system-ui,sans-serif">in and out</text>', c === 'rainbow');
+    },
+    'sparkle-panel': function (c) {
+      var s = '<rect x="18" y="30" width="64" height="62" rx="8" fill="#f2e8ff"/>';
+      for (var i = 0; i < 12; i++) s += '<circle class="fib fx" cx="' + (22 + (i * 23) % 58) + '" cy="' + (6 + (i * 11) % 26) + '" r="' + (1.6 + i % 3) + '" fill="' + c + '"/>';
+      for (var r = 0; r < 3; r++) for (var q = 0; q < 3; q++) s += '<circle cx="' + (34 + q * 16) + '" cy="' + (46 + r * 16) + '" r="4" fill="' + ((r + q) % 2 ? '#ffd6f0' : '#d6ecff') + '"/>';
+      return wrap('0 0 100 100', s, c === 'rainbow');
+    },
     'star-ceiling': function (c, on) {
       var s = '<rect x="8" y="30" width="84" height="40" rx="20" fill="#1a1035" stroke="#fff6"/>';
       for (var i = 0; i < 9; i++) s += '<circle class="fib fx" cx="' + (18 + i * 8) + '" cy="' + (42 + (i % 3) * 8) + '" r="' + (1.6 + i % 2) + '" fill="' + (on ? c : '#887') + '"/>';
@@ -141,6 +156,10 @@
     { id: 'pod-swing', name: 'Pod swing', zone: 'floor', tall: true, coin: 70, kind: 'swing', tags: ['movement', 'seat'], shop: 'pod-swing', desc: 'A cosy hanging pod. Tap to sway.' },
     { id: 'fidget-basket', name: 'Quiet fidget basket', zone: 'floor', coin: 30, kind: 'fidget', tags: ['touch', 'busy hands', 'quiet'], shop: 'silent-fidget-pack', desc: 'Silent fidgets in a basket. Tap for a squish.' },
     { id: 'tactile-stones', name: 'Tactile floor stones', zone: 'floor', coin: 40, kind: 'stones', tags: ['touch', 'movement'], shop: 'tactile-stones', desc: 'Bumpy stepping stones. Tap to hop across.' },
+    { id: 'colour-wash', name: 'Colour wash lamp', zone: 'floor', coin: 45, kind: 'wash', tags: ['light'], shop: null, classic: true, desc: 'Bathes the whole room in a slow, soft colour. Tap to change colour.' },
+    { id: 'hum-speaker', name: 'Soft hum speaker', zone: 'floor', coin: 25, kind: 'hum', tags: ['sound', 'quiet'], shop: null, classic: true, desc: 'A low, gentle hum. Tap to switch it on or off.' },
+    { id: 'breathe-light', name: 'Breathing circle light', zone: 'wall', coin: 35, kind: 'breathe', tags: ['light', 'quiet'], shop: null, classic: true, desc: 'A ring of light that slowly grows and shrinks. Tap to switch it on or off.' },
+    { id: 'sparkle-panel', name: 'Sparkle wall panel', zone: 'wall', coin: 30, kind: 'sparkle', tags: ['touch', 'light'], shop: null, classic: true, desc: 'Touch it to send up a soft puff of sparkles.' },
     { id: 'crash-pad', name: 'Soft crash pad', zone: 'floor', coin: 60, kind: 'cosy', tags: ['movement', 'pressure', 'seat'], shop: 'crash-pad', desc: 'A big soft landing pad. Tap to flop.' }
   ];
 

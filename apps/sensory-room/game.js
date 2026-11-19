@@ -122,7 +122,19 @@ function stopMusic() {
   setTimeout(() => m.oscs.forEach(o => { try { o.stop(); } catch (e) {} }), 3000);
 }
 const anyOn = kind => Object.values(placedMap).some(o => o.item.kind === kind && o.p.on);
-function syncMusic() { if ((st.music || anyOn('galaxy')) && ac) startMusic(); else stopMusic(); }
+let humNodes = null;
+function syncHum() {
+  const on = !!ac && anyOn('hum');
+  if (on && !humNodes) {
+    const g = ac.createGain(); g.gain.value = 0.0001; g.connect(master);
+    const o1 = ac.createOscillator(), o2 = ac.createOscillator(); o1.type = o2.type = 'sine'; o1.frequency.value = 110; o2.frequency.value = 164.8;
+    o1.connect(g); o2.connect(g); o1.start(); o2.start(); g.gain.setTargetAtTime(0.07, ac.currentTime, 1.5); humNodes = { g, o1, o2 };
+  } else if (!on && humNodes) {
+    const h = humNodes; humNodes = null; h.g.gain.setTargetAtTime(0.0001, ac.currentTime, 0.6);
+    setTimeout(() => { try { h.o1.stop(); h.o2.stop(); } catch (e) {} }, 2500);
+  }
+}
+function syncMusic() { if ((st.music || anyOn('galaxy')) && ac) startMusic(); else stopMusic(); syncHum(); }
 
 // ---------- renderer ----------
 const isTouch = matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
@@ -219,6 +231,8 @@ const galaxyTex = canvasTex(256, (g, s) => {
   for (let i = 0; i < 120; i++) { const a = Math.random() * Math.PI * 6, d = (a / (Math.PI * 6)) * s * 0.45; g.fillStyle = 'rgba(255,255,255,.8)'; g.fillRect(s / 2 + Math.cos(a) * d, s / 2 + Math.sin(a) * d, 1.6, 1.6); }
 });
 
+const LBL = {};
+['in', 'out'].forEach(k => { LBL[k] = canvasTex(256, (g, s) => { g.font = '600 44px system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(255,255,255,.92)'; g.fillText(k === 'in' ? 'Breathe in' : 'Breathe out', s / 2, s / 2); }); });
 function tubeMat(op, em) { const m = new THREE.MeshLambertMaterial({ color: 0xffffff, transparent: true, opacity: op, emissive: 0xffffff, emissiveIntensity: em }); m.userData.glowy = true; return m; }
 function buildItem(id) {
   const g = new THREE.Group();
@@ -322,6 +336,34 @@ function buildItem(id) {
       box(g, 6, 0.4, 0.2, 0, 5, 0.45, '#9646dc'); ud.slider = ball(g, 0.4, -2, 5, 0.6, '#ff3caa');
       ['#4cb8ff', '#5cf0a0', '#ffcf5c', '#ff5cc0', '#b07cff'].forEach((c, i) => ball(g, 0.35, -2 + i, 3.9, 0.5, c));
       ud.use = 'Play with'; break; }
+    case 'colour-wash': {
+      cyl(g, 1.3, 1.6, 0.5, 0, 0.25, 0, '#dddddd'); cyl(g, 0.2, 0.2, 2.6, 0, 1.6, 0, '#cccccc');
+      const head = new THREE.Group(); head.position.set(0, 3, 0); head.rotation.x = -0.5; g.add(head);
+      cyl(head, 1, 0.7, 1.4, 0, 0, 0, '#3a2a5a');
+      const lm = tubeMat(0.95, 0.9); const lens = cyl(head, 0.85, 0.85, 0.1, 0, 0.72, 0, lm, 20); ud.tintMats.push(lm);
+      const L = new THREE.PointLight(0xffffff, 0, 0, 1); L.position.set(0, 6, 1); g.add(L); ud.wash = L;
+      glow(5, 16); ud.radius = 1.8; ud.use = 'Change'; break; }
+    case 'hum-speaker': {
+      box(g, 2.2, 3, 1.8, 0, 1.5, 0, '#4a3a6a');
+      const cm = mat('#ffffff', 0.4); ud.tintMats.push(cm); cm.userData.glowy = true;
+      const cone = cyl(g, 0.7, 0.7, 0.15, 0, 1.9, 0.92, cm, 20); cone.rotation.x = Math.PI / 2; ud.cone = cone;
+      const tw = cyl(g, 0.25, 0.25, 0.15, 0, 0.7, 0.92, '#dddddd', 12); tw.rotation.x = Math.PI / 2;
+      ud.radius = 1.6; ud.use = 'Switch'; break; }
+    case 'breathe-light': {
+      box(g, 6, 6, 0.3, 0, 6.5, 0.2, '#2a1d4a');
+      const rm = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8, depthWrite: false });
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(2, 0.18, 10, 48), rm); ring.position.set(0, 6.5, 0.5); g.add(ring); ud.ring = ring; ud.colorMats.push(rm);
+      const lbl = new THREE.Sprite(new THREE.SpriteMaterial({ map: LBL.in, transparent: true, depthWrite: false })); lbl.scale.set(4, 1, 1); lbl.position.set(0, 2.6, 0.8); g.add(lbl); ud.lbl = lbl;
+      ud.use = 'Switch'; break; }
+    case 'sparkle-panel': {
+      box(g, 5, 5, 0.3, 0, 6, 0.2, '#f2e8ff');
+      for (let r = 0; r < 4; r++) for (let q = 0; q < 4; q++) ball(g, 0.22, -1.5 + q, 4.5 + r, 0.4, (r + q) % 2 ? '#ffd6f0' : '#d6ecff');
+      const n = 46, pos = new Float32Array(n * 3), base = [];
+      for (let i = 0; i < n; i++) base.push({ x: (Math.random() - 0.5) * 5, y: Math.random() * 2, z: 0.6 + Math.random() * 2.5, d: Math.random() });
+      const sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      const sm = new THREE.PointsMaterial({ size: 0.7, map: dotTex, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, color: 0xffffff });
+      const pts = new THREE.Points(sg, sm); pts.frustumCulled = false; g.add(pts); ud.sparks = { pts, base, mat: sm, t: 0 }; ud.colorMats.push(sm);
+      ud.use = 'Touch'; break; }
     case 'headphones': {
       box(g, 0.3, 0.3, 1.2, 0, 7.6, 0.6, '#dddddd');
       const band = new THREE.Mesh(new THREE.TorusGeometry(1, 0.15, 8, 24, Math.PI), sharedMat('#ff8cc8')); band.position.set(0, 6.4, 1); g.add(band);
@@ -360,6 +402,7 @@ function applyColour(o, k, T) {
   ud.colorMats.forEach(m => m.color.copy(o.cur));
   ud.tintMats.forEach(m => { m.color.copy(o.cur); if (m.userData.glowy) m.emissive.copy(o.cur); });
   if (ud.glow) ud.glow.material.color.copy(o.cur);
+  if (ud.wash) ud.wash.color.copy(o.cur);
 }
 
 // ---------- characters (blocky, Park Builder style) ----------
@@ -626,6 +669,10 @@ function useItem(slotId) {
     case 'rain': cycleColour(p); SFX.rain(); emote(player, 'note'); ud.tipT = 3; note = 'You tip the tube and listen to the rain.'; break;
     case 'sequin': cycleColour(p); reach(); SFX.click(); emote(player, 'sparkle'); note = 'The sequins flip to ' + colourName(p.color) + '.'; break;
     case 'fidget': reach(); SFX.click(); ud.boost = 3; emote(player, 'heart'); note = 'Spin, slide, click.'; break;
+    case 'wash': if (p.on === false) p.on = true; else cycleColour(p); reach(); SFX.chime(); emote(player, 'calm'); note = 'The room fills with a slow ' + colourName(p.color).toLowerCase() + ' glow.'; break;
+    case 'hum': p.on = p.on === false; audio(); SFX.click(); emote(player, 'note'); note = p.on ? 'A low, gentle hum fades in.' : 'The hum fades out.'; break;
+    case 'breathe': p.on = p.on === false; SFX.sparkle(); emote(player, 'calm'); note = p.on ? 'The ring slowly grows and shrinks. Follow it in and out if you like.' : 'Switched off.'; break;
+    case 'sparkle': cycleColour(p); reach(); ud.sparks.t = 3.2; SFX.sparkle(); emote(player, 'sparkle'); note = 'A soft puff of ' + colourName(p.color).toLowerCase() + ' sparkles.'; break;
     case 'stones': hopStones(o); SFX.click(); note = 'Hop across the bumpy stones.'; break;
     case 'quiet': quietUntil = Date.now() + 15000; setVol(); setTimeout(setVol, 15100); setExtra(player, 'Headphones'); setTimeout(() => setExtra(player, lookColours().extra), 15000); emote(player, 'calm'); note = 'Headphones on. The room is quieter for 15 seconds.'; break;
     case 'cosy': case 'swing': sitOn(slotId); note = it.kind === 'swing' ? 'Swinging gently. Move to hop off.' : 'Nice and cosy. Move to get up.'; award(it.kind === 'swing' ? 'swing' : 'cosy'); break;
@@ -655,7 +702,7 @@ function openSheet(slotId, note) {
   $('sheetTitle').textContent = it.name;
   $('sheetText').textContent = (note ? note + ' ' : '') + it.desc;
   const btns = $('sheetBtns'); btns.replaceChildren();
-  if (['fibre', 'bubble', 'sequin', 'rain', 'cosy', 'swing'].indexOf(it.kind) >= 0) {
+  if (['fibre', 'bubble', 'sequin', 'rain', 'cosy', 'swing', 'wash', 'breathe', 'sparkle', 'hum'].indexOf(it.kind) >= 0) {
     SR.COLORS.forEach(c => {
       if ((it.kind === 'cosy' || it.kind === 'swing') && c.id === 'rainbow') return;
       const b = document.createElement('button'); b.type = 'button'; b.className = 'sw';
@@ -665,7 +712,9 @@ function openSheet(slotId, note) {
       btns.appendChild(b);
     });
   }
-  const real = document.createElement('a'); real.href = SHOP_URL + '#item-' + it.shop; real.className = 'getreal'; real.textContent = 'Get the real one, US$' + shop.price;
+  let real;
+  if (shop) { real = document.createElement('a'); real.href = SHOP_URL + '#item-' + it.shop; real.className = 'getreal'; real.textContent = 'Get the real one, US$' + shop.price; }
+  else { real = document.createElement('a'); real.href = SHOP_URL; real.className = 'getreal'; real.textContent = 'Browse real sensory tools'; }
   const back = p.gift ? 0 : it.coin;
   const away = document.createElement('button'); away.type = 'button'; away.className = 'alt';
   away.textContent = back ? 'Put away (+' + back + ' coins)' : 'Put away (welcome gift)';
@@ -733,7 +782,7 @@ function renderVisitor() {
 function renderBadges() { const b = $('badges'); b.replaceChildren(); BADGES.forEach(x => { const s = document.createElement('span'); s.className = 'badge' + (st.badges[x.id] ? ' got' : ''); s.textContent = x.name; b.appendChild(s); }); }
 function renderReal() {
   const box2 = $('realList'); box2.replaceChildren(); const seen = {};
-  SR.ITEMS.forEach(it => { if (seen[it.shop]) return; seen[it.shop] = 1; const s = SR.SHOP[it.shop]; const a = document.createElement('a'); a.className = 'real'; a.href = SHOP_URL + '#item-' + it.shop; a.innerHTML = '<span></span><b></b>'; a.firstChild.textContent = s.name; a.lastChild.textContent = 'US$' + s.price; box2.appendChild(a); });
+  SR.ITEMS.forEach(it => { if (!it.shop || seen[it.shop]) return; seen[it.shop] = 1; const s = SR.SHOP[it.shop]; const a = document.createElement('a'); a.className = 'real'; a.href = SHOP_URL + '#item-' + it.shop; a.innerHTML = '<span></span><b></b>'; a.firstChild.textContent = s.name; a.lastChild.textContent = 'US$' + s.price; box2.appendChild(a); });
 }
 function renderMe() {
   const box2 = $('meOpts'); box2.replaceChildren();
@@ -934,6 +983,21 @@ function frame() {
     if (ud.fish) { ud.fish.position.y = 4.8 + Math.sin(T * 0.5 / S) * 1.2; ud.fish.rotation.y = T * 0.4 / S; }
     if (ud.sway) { const amp = pState.sit && pState.sit.slotId === ud.slotId ? 0.22 : 0.05; ud.sway.rotation.x = Math.sin(T * 1.1 / S) * amp; }
     if (ud.spin.length) { const b = ud.boost > 0 ? 2.5 : 1; ud.boost = Math.max(0, (ud.boost || 0) - dt); ud.spin.forEach((s2, i) => { s2.rotation.z += dt * (0.4 + i * 0.15) * b / S; }); if (ud.slider) ud.slider.position.x = Math.sin(T * 0.5 / S) * 2.4; }
+    if (ud.wash) ud.wash.intensity = o.on * 22;
+    if (ud.cone) ud.cone.scale.setScalar(1 + o.on * 0.05 * Math.sin(T * 2.2));
+    if (ud.ring) {
+      const ph = T * 0.55 / S, b = (Math.sin(ph) + 1) / 2, inn = Math.cos(ph) > 0;
+      ud.ring.scale.setScalar(0.55 + 0.6 * b); ud.ring.material.opacity = o.on * (0.45 + 0.4 * b);
+      if (ud.lbl.userData.inn !== inn) { ud.lbl.userData.inn = inn; ud.lbl.material.map = inn ? LBL.in : LBL.out; ud.lbl.material.needsUpdate = true; }
+      ud.lbl.material.opacity = o.on * 0.9;
+    }
+    if (ud.sparks) {
+      const sp = ud.sparks; if (sp.t > 0 || sp.mat.opacity > 0) {
+        sp.t = Math.max(0, sp.t - dt / S); const k = 1 - sp.t / 3.2, arr = sp.pts.geometry.attributes.position.array;
+        sp.base.forEach((b, i) => { const kk = Math.min(1, k * (0.7 + b.d * 0.5)); arr[i * 3] = b.x * (0.5 + kk * 0.8); arr[i * 3 + 1] = 4 + b.y + kk * 6; arr[i * 3 + 2] = b.z; });
+        sp.pts.geometry.attributes.position.needsUpdate = true; sp.mat.opacity = sp.t > 0 ? Math.sin(Math.min(1, k) * Math.PI) * 0.85 : 0;
+      }
+    }
     if (ud.tube) { ud.tipT = Math.max(0, (ud.tipT || 0) - dt); ud.tube.rotation.z = 0.35 + Math.sin(Math.min(1, ud.tipT / 3) * Math.PI) * 0.9; }
   });
   npcStep(dt, T);
