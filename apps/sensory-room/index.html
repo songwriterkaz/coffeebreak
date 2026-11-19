@@ -4,42 +4,41 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Coffeebreak Sensory Room</title>
-<meta name="description" content="Design a bright, calm sensory room. Place fibre optic light waterfalls, bubble tubes, star ceilings, swings, beanbags and fidget walls, then welcome visitors. Free to play.">
+<meta name="description" content="Walk your own character around a bright, calm sensory room. Build fibre optic light waterfalls, bubble tubes, star ceilings, swings and beanbags, then welcome visitors. Free to play.">
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <meta name="theme-color" content="#2a1640">
 <link rel="stylesheet" href="style.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 <script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
 </head>
 <body>
-<header class="top">
-  <img src="logo.png" alt="Coffeebreak logo" width="48" height="48">
-  <div class="ttl"><h1>Coffeebreak Sensory Room</h1><p class="sub">Free to play. Build a calm, glowing room.</p></div>
-  <span class="pill" id="coins" aria-live="polite">0 coins</span>
-</header>
+<section id="game" aria-label="Coffeebreak Sensory Room game">
+  <div id="view"></div>
+  <div id="top">
+    <img src="logo.png" alt="Coffeebreak logo" width="44" height="44">
+    <span class="pill" id="coins" aria-live="polite">0 coins</span>
+    <span class="pill alt" id="mode">Exploring</span>
+    <button type="button" id="calmPill" class="pill btnpill" aria-pressed="false">Calm off</button>
+  </div>
+  <div id="help">WASD or arrows to walk. E to use. B to build. Drag to look around. Tap the floor or an item to walk there.</div>
+  <p id="msg" role="status" aria-live="polite"></p>
+  <div id="joy" aria-label="Joystick"><div id="knob"></div></div>
+  <button type="button" id="useBtn" hidden>Use</button>
+  <button type="button" id="infoBtn" class="alt" hidden>Info</button>
 
-<main>
-  <div id="stageWrap">
-    <div id="stage" aria-label="Your sensory room">
-      <div id="roomBg"></div>
-      <div id="glow"></div>
-      <div id="stars" aria-hidden="true"></div>
-      <div id="galaxy" aria-hidden="true"></div>
-      <div id="slots"></div>
-      <div id="dim" aria-hidden="true"></div>
-    </div>
-    <p id="msg" role="status" aria-live="polite"></p>
+  <div id="bar">
+    <button type="button" id="bBuild">Build</button>
+    <button type="button" id="bVisit" class="alt">Visitors</button>
+    <button type="button" id="bMe">Me</button>
+    <button type="button" id="bCalm" class="alt">Calm</button>
+    <button type="button" id="bReal">Real tools</button>
+    <button type="button" id="bAbout" class="alt">About</button>
   </div>
 
-  <nav class="tabs" role="tablist">
-    <button type="button" role="tab" data-tab="build" class="on">Build</button>
-    <button type="button" role="tab" data-tab="visitor">Visitors</button>
-    <button type="button" role="tab" data-tab="calm">Calm</button>
-    <button type="button" role="tab" data-tab="real">Real tools</button>
-  </nav>
-
-  <section class="tabp on" id="tab-build" aria-label="Build">
-    <p class="hint" id="buildHint">Pick an item, then tap a glowing spot in the room. Tap a placed item to play with it.</p>
+  <div id="pBuild" class="panel" aria-label="Build">
+    <h3>Build</h3>
+    <p class="hint" id="buildHint">Pick an item, then tap a glowing pad or walk onto it and press Place. Ceiling and wall items have their pad on the floor below them.</p>
     <div class="zones">
       <button type="button" data-zone="all" class="on">All</button>
       <button type="button" data-zone="ceiling">Ceiling</button>
@@ -47,60 +46,76 @@
       <button type="button" data-zone="floor">Floor</button>
     </div>
     <div id="palette"></div>
-  </section>
+    <button type="button" class="closeP alt">Close</button>
+  </div>
 
-  <section class="tabp" id="tab-visitor" aria-label="Visitors">
+  <div id="pVisit" class="panel" aria-label="Visitors">
+    <h3>Visitors</h3>
+    <p class="hint">Visitors are game characters, not real people. Each one likes different things.</p>
     <div id="visitorCard"></div>
     <div id="levelList"></div>
     <h3>Badges</h3>
     <div id="badges"></div>
-  </section>
+    <button type="button" class="closeP alt">Close</button>
+  </div>
 
-  <section class="tabp" id="tab-calm" aria-label="Calm settings">
+  <div id="pMe" class="panel" aria-label="Customise your character">
+    <h3>Your character</h3>
+    <div id="meOpts"></div>
+    <button type="button" class="closeP alt">Close</button>
+  </div>
+
+  <div id="pCalm" class="panel" aria-label="Calm settings">
+    <h3>Calm settings</h3>
     <label class="row"><input type="checkbox" id="calmToggle"> <span><b>Calm mode</b> (low stimulation: softer colours, slower movement, quieter sounds)</span></label>
     <label class="row col">Volume <input type="range" id="vol" min="0" max="100" step="5"><span id="volV"></span></label>
     <label class="row col">Brightness <input type="range" id="bright" min="20" max="100" step="5"><span id="brightV"></span></label>
     <label class="row"><input type="checkbox" id="musicToggle"> <span>Soft background music</span></label>
     <div class="row col"><span>Wall colour</span><div id="paints"></div></div>
     <p class="hint">Nothing in this game flashes or strobes. Colour changes fade slowly. If your device asks for reduced motion, calm mode starts on.</p>
-    <button type="button" id="resetBtn" class="ghost">Start a new room</button>
-  </section>
+    <button type="button" id="resetBtn" class="alt">Start a new room</button>
+    <button type="button" class="closeP alt">Close</button>
+  </div>
 
-  <section class="tabp" id="tab-real" aria-label="Real sensory tools">
+  <div id="pReal" class="panel" aria-label="Real sensory tools">
+    <h3>Real tools</h3>
     <p>Every item in this game is a real sensory tool you can buy for a real room. Prices are in US dollars and include delivery within Australia. Pay from the cart by PayID.</p>
     <p><a class="big" href="../../stores/sensory-shop/">Open the Coffeebreak Sensory Shop</a></p>
     <div id="realList"></div>
-    <p class="sendrow"><button type="button" class="ghost">Send money</button></p>
-  </section>
+    <p class="sendrow"><button type="button" class="alt">Send money</button></p>
+    <button type="button" class="closeP alt">Close</button>
+  </div>
 
-  <div id="sheet" hidden role="dialog" aria-modal="false" aria-labelledby="sheetTitle">
-    <div class="sheetIn">
-      <h2 id="sheetTitle"></h2>
-      <p id="sheetText"></p>
-      <div id="sheetBtns"></div>
-    </div>
+  <div id="sheet" hidden role="dialog" aria-labelledby="sheetTitle">
+    <h2 id="sheetTitle"></h2>
+    <p id="sheetText"></p>
+    <div id="sheetBtns"></div>
   </div>
 
   <div id="start" role="dialog" aria-labelledby="startTitle">
-    <img src="logo.png" alt="Coffeebreak logo" width="140" height="140">
+    <img src="logo.png" alt="Coffeebreak logo" width="120" height="120">
     <h2 id="startTitle">Coffeebreak Sensory Room</h2>
-    <p>Design a calm, bright sensory room. Place fibre optic light waterfalls, bubble tubes, star ceilings, swings and cosy beanbags. Tap them to change colours and hear soft sounds. Welcome visitors who each like different things and earn coins.</p>
+    <p>Walk your own character around a calm, glowing sensory room. Build fibre optic light waterfalls, bubble tubes, star ceilings, swings and cosy beanbags. Sit, swing, touch the fibre optics to change colours and watch the bubbles. Welcome visitors who each like different things and earn coins.</p>
     <p class="hint">Free to play. Coins are only for the game and are never sold.</p>
     <label class="row center"><input type="checkbox" id="startCalm"> <span>Start in calm mode</span></label>
     <button type="button" id="playBtn" class="big">Play</button>
+    <p id="loadErr" class="hint" hidden>The 3D room could not load on this device. Try another browser.</p>
   </div>
-</main>
+</section>
 
-<footer class="foot">
+<footer class="foot" id="about">
   <img src="logo.png" alt="Coffeebreak logo" width="56" height="56">
+  <h2>Coffeebreak Sensory Room</h2>
+  <p>Free to play. Walk with WASD, the arrow keys, the joystick or by tapping the floor. Use items with E or the Use button. Your room and character save on this device.</p>
   <p class="care">This is a game for fun and room ideas. It is not a therapy service and does not give medical, health or therapy advice. Every person is different, so ask the person who will use a room what they like, and follow each product's safety and installation instructions.</p>
   <p><b>Disclaimer:</b> Provided as is for personal and entertainment use. Karen (Coffeebreak) keeps all rights to her products, designs, apps, games, the Coffeebreak name and logo. Other brands belong to their owners. Coffeebreak is not affiliated with or endorsed by them.</p>
   <p>Like the old version? <a href="classic.html">Open the classic sensory room</a>.</p>
   <div id="cb-gofundme" class="gofund"><a class="gfm" href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener">Donate on GoFundMe</a><p class="hint">A donation is optional and does not buy coins or items.</p></div>
-  <p class="links">Supporting the future with <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> · <a href="../../">Coffeebreak hub</a> · <a href="../../stores/sensory-shop/">Sensory Shop</a></p>
+  <p class="links">Supporting the future with <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> · <a href="../../">Coffeebreak hub</a> · <a href="../../stores/sensory-shop/">Sensory Shop</a> · <a href="#game">Back to the game</a></p>
 </footer>
 <script src="items.js"></script>
-<script src="game.js"></script>
+<script type="module" src="game.js"></script>
+<script>setTimeout(function(){ if(!window.CBSensoryRoom){ var e=document.getElementById('loadErr'); if(e) e.hidden=false; } }, 12000);</script>
 <script src="../../pages/cb-listen.js" defer></script>
 </body>
 </html>
