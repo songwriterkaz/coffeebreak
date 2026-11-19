@@ -1,53 +1,180 @@
-<!DOCTYPE html><html lang="en"><head><!--cb-frame-fix--><style id="cb-frame-fix-css">html{height:100%!important;overflow:hidden!important}body{height:100%!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:auto!important;margin-top:0}</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--cb-frame-fix-->
+<style id="cb-frame-fix-css">html{height:100%!important;overflow:hidden!important}body{height:100%!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:auto!important;margin-top:0}</style>
 <script>/*cb-frame-fix: storage + dialogs safe inside itch's sandboxed, cross-origin iframe*/(function(){function mem(){var d={};return{getItem:function(k){k=String(k);return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[String(k)]=String(v)},removeItem:function(k){delete d[String(k)]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}}
 function px(st){return new Proxy(st,{get:function(t,k){if(k in t)return typeof t[k]=='function'?t[k].bind(t):t[k];return t.getItem(k)===null?undefined:t.getItem(k)},set:function(t,k,v){t.setItem(k,v);return true},deleteProperty:function(t,k){t.removeItem(k);return true},has:function(t,k){return k in t||t.getItem(k)!==null},ownKeys:function(t){var a=[];for(var i=0;i<t.length;i++)a.push(t.key(i));return a},getOwnPropertyDescriptor:function(t,k){var v=t.getItem(k);return v===null?undefined:{value:v,writable:true,enumerable:true,configurable:true}}})}
 ['localStorage','sessionStorage'].forEach(function(n){var ok=false;try{var s=window[n];s.setItem('__cbt','1');s.removeItem('__cbt');ok=true}catch(e){}if(!ok){try{Object.defineProperty(window,n,{value:px(mem()),configurable:true})}catch(e){}}});
 function toast(m){try{var t=document.createElement('div');t.textContent=String(m);t.style.cssText='position:fixed;left:50%;top:16px;transform:translateX(-50%);max-width:90%;background:#2a1d14;color:#fff;padding:12px 18px;border-radius:10px;z-index:2147483647;font:15px system-ui,sans-serif;box-shadow:0 4px 14px #0006';(document.body||document.documentElement).appendChild(t);setTimeout(function(){t.remove()},4500)}catch(e){}}
 var A=window.alert,C=window.confirm;window.alert=function(m){var t=Date.now();try{A.call(window,m)}catch(e){}if(Date.now()-t<30)toast(m)};window.confirm=function(m){var t=Date.now(),r=false;try{r=C.call(window,m)}catch(e){}if(!r&&Date.now()-t<30)return true;return r};
 window.__cbNav=function(u){var w=null;try{w=window.open(u,'_blank')}catch(e){}if(!w){var a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}};})();</script>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Titanic Card Game</title>
-<style>*{box-sizing:border-box}body{margin:0;font-family:'Trebuchet MS',system-ui,sans-serif;background:linear-gradient(160deg,#2b1a10,#5a3620 55%,#a8743f) fixed;color:#2b1a10;min-height:100vh}
-header{text-align:center;color:#fff;padding:10px}header img{width:64px;height:64px;border-radius:50%;border:3px solid #f1c76a;vertical-align:middle}header h1{display:inline-block;margin:0 0 0 10px;vertical-align:middle;font-size:1.6em;text-shadow:0 2px 0 rgba(0,0,0,.4)}
-nav{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:8px}nav button,.b{border:0;border-radius:18px;padding:9px 14px;font-weight:700;background:#fff7e8;color:#3b2414;cursor:pointer;font:inherit;font-weight:700}nav button.on,.b.on{background:#f1c76a}.b{background:#6b4226;color:#fff;margin:3px}.b:disabled{opacity:.45}
-main{max-width:980px;margin:10px auto;padding:0 10px 90px}.card{background:#fff7e8;border-radius:14px;padding:14px;box-shadow:0 4px 14px rgba(0,0,0,.3);margin-bottom:12px}
-.small{font-size:.85em;opacity:.8}footer{text-align:center;color:#fff;padding:14px}footer a{color:#f1c76a}select,input{font:inherit;padding:6px;border-radius:8px;border:1px solid #a8743f}
-#clock{font-weight:700}.track{display:flex;gap:2px;margin:6px 0}.track i{flex:1;height:10px;background:#cfe0ee;border-radius:3px}.track i.d{background:#1d4f7a}
-.hand{display:flex;flex-wrap:wrap;gap:8px}.tc{width:150px;min-height:190px;border-radius:10px;padding:8px;background:#fff;border:3px solid #6b4226;cursor:pointer;font-size:12px;position:relative}.tc b{display:block;font-size:14px;margin-bottom:3px}.tc .ty{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#fff;border-radius:6px;padding:1px 6px;display:inline-block;margin-bottom:4px}
-.tc.sel{outline:4px solid #f1c76a;transform:translateY(-6px)}.tc .f{font-style:italic;color:#444;margin-top:4px}
-.Room .ty{background:#6b4226}.Crew .ty{background:#0a1a2f}.Passenger .ty{background:#2e6b3a}.Lifeboat .ty{background:#b56a00}.Event .ty{background:#5b2c83}
-.opp{display:flex;gap:10px;flex-wrap:wrap}.opp>div{flex:1;min-width:180px;background:#eef4f8;border-radius:10px;padding:8px}#log{max-height:150px;overflow:auto;font-size:13px}
-</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
-</head><body>
-<header><img src="cb-logo.jpg" alt="Coffeebreak logo"><h1>Coffeebreak Titanic Card Game</h1></header>
-<main id="main"><div class="card" id="setup"><h2>Coffeebreak Titanic Card Game</h2><p>A respectful card game about RMS Titanic's maiden voyage, April 1912. Work with the crew to get passengers into lifeboats before the ship goes down.</p>
-<label>Computer opponents <select id="nai"><option>1</option><option selected>2</option><option>3</option></select></label> <button class="b" id="start">Start game</button> <button class="b" id="rulesb">Rules</button>
-<p class="small">More than 1,500 people lost their lives on 15 April 1912. This game honours them and the crew who stayed at their posts.</p></div>
-<div class="card" id="rules" style="display:none"><h3>How to play</h3><ol>
-<li>The clock starts at 11:40 pm (iceberg strike). Each round is 10 minutes. The ship sinks at 2:20 am, so there are 16 rounds.</li>
-<li>On your turn, draw 2 cards. Event cards take effect straight away.</li>
-<li><b>Launch a lifeboat:</b> select 1 Lifeboat card + 1 officer (Crew card) + up to 4 Passenger cards, then press Launch. Each passenger saved scores 2 points (1 point extra if a child card).</li>
-<li><b>Lay a set:</b> 3 different Room cards (+4 points) or 3 different Crew cards (+4 points). Crew used in a set can't launch boats, so choose wisely.</li>
-<li>Hand limit 8: at the end of your turn, extra cards are discarded.</li>
-<li>Undo takes back your actions this turn (not the draw).</li>
-<li>Most points when the ship sinks wins. Read the facts on each card: they're all true history.</li></ol><button class="b" id="rclose">Close</button></div>
-<div id="game" style="display:none">
-<div class="card"><span id="clock"></span> · Deck: <span id="dk"></span><div class="track" id="track"></div><div class="opp" id="opp"></div></div>
-<div class="card"><h3 style="margin:0 0 6px">Your hand · Score <span id="me"></span></h3><div class="hand" id="hand"></div>
-<div><button class="b" id="launch">🚣 Launch lifeboat</button><button class="b" id="set">🃏 Lay set</button><button class="b" id="undo">↶ Undo</button><button class="b" id="end">End turn ▶</button><button class="b" id="rulesb2">Rules</button></div><div id="msg" class="small"></div></div>
-<div class="card"><b>Ship's log</b><div id="log"></div></div></div>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Titanic Card Game</title>
+<meta name="description" content="A respectful Coffeebreak card game about RMS Titanic's maiden voyage in April 1912. Launch lifeboats, lay sets, and beat the clock before 2:20 am.">
+<style>
+:root{--navy:#071422;--deep:#0b1d33;--panel:#10243d;--card:#f4efe4;--gold:#e3c37a;--ink:#132033;--foam:#d7e6f2}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Trebuchet MS", "Segoe UI", system-ui, sans-serif;color:var(--ink);background:
+  radial-gradient(ellipse at 50% -10%, #1a3a5c 0%, transparent 55%),
+  linear-gradient(180deg,#071422 0%,#0b1d33 42%,#123048 70%,#1b2a22 100%);
+  background-attachment:fixed;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:
+  radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.7), transparent),
+  radial-gradient(1px 1px at 28% 8%, rgba(255,255,255,.45), transparent),
+  radial-gradient(1px 1px at 63% 14%, rgba(255,255,255,.6), transparent),
+  radial-gradient(1px 1px at 81% 6%, rgba(255,255,255,.4), transparent),
+  radial-gradient(1px 1px at 91% 22%, rgba(255,255,255,.5), transparent);
+  opacity:.7;z-index:0}
+header{position:relative;z-index:2;text-align:center;color:#fff;padding:16px 12px 8px}
+header img{width:72px;height:72px;border-radius:50%;border:3px solid var(--gold);vertical-align:middle;background:#fff;object-fit:cover}
+header h1{display:inline-block;margin:0 0 0 12px;vertical-align:middle;font-size:clamp(1.15rem,4vw,1.85rem);text-shadow:0 2px 0 rgba(0,0,0,.45)}
+header .sub{margin:8px 0 0;color:var(--gold);font-size:.95rem}
+.b,button.b{border:0;border-radius:18px;padding:10px 16px;font:inherit;font-weight:700;background:#6b4226;color:#fff;margin:3px;cursor:pointer;min-height:44px}
+.b:disabled,button.b:disabled{opacity:.45;cursor:not-allowed}
+.b.ghost{background:#fff7e8;color:#3b2414}
+.b.on,.b.ghost.on{background:var(--gold);color:#2b1a10}
+main{position:relative;z-index:1;max-width:1040px;margin:10px auto;padding:0 12px 40px}
+.panel{background:rgba(244,239,228,.96);border-radius:16px;padding:16px;box-shadow:0 8px 28px rgba(0,0,0,.35);margin-bottom:14px;border:1px solid rgba(227,195,122,.35)}
+.small{font-size:.85em;opacity:.85}
+.memorial{margin-top:12px;padding:10px 12px;border-left:4px solid var(--gold);background:rgba(7,20,34,.06);font-size:.92em}
+#clock{font-weight:700;font-size:1.15em;letter-spacing:.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline}
+.track{display:flex;gap:3px;margin:8px 0 4px}
+.track i{flex:1;height:12px;background:#cfe0ee;border-radius:3px}
+.track i.d{background:#1d4f7a;box-shadow:0 0 0 1px rgba(227,195,122,.4) inset}
+.track-labels{display:flex;justify-content:space-between;font-size:11px;color:#345;margin-bottom:8px}
+.opp{display:flex;gap:10px;flex-wrap:wrap}
+.opp>div{flex:1;min-width:160px;background:#eef4f8;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:2px}
+.opp>div.on{outline:3px solid var(--gold);background:#fff6dc}
+.hand{display:flex;flex-wrap:wrap;gap:10px}
+.tc{width:160px;min-height:208px;border-radius:12px;padding:10px;background:#fff;border:3px solid #6b4226;cursor:pointer;font-size:12px;text-align:left;color:inherit;font:inherit;box-shadow:0 4px 10px rgba(0,0,0,.12);transition:transform .15s ease, box-shadow .15s ease}
+.tc b{display:block;font-size:14px;margin-bottom:4px;line-height:1.25}
+.tc .ty{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#fff;border-radius:6px;padding:2px 6px;display:inline-block;margin-bottom:6px}
+.tc.sel{outline:4px solid var(--gold);transform:translateY(-8px);box-shadow:0 10px 18px rgba(0,0,0,.25)}
+.tc .f{font-style:italic;color:#444;margin-top:4px;line-height:1.35}
+.tc:disabled{cursor:default;opacity:.92}
+.Room{border-color:#6b4226}.Room .ty{background:#6b4226}
+.Crew{border-color:#0a1a2f}.Crew .ty{background:#0a1a2f}
+.Crew.officer{background:linear-gradient(#fff, #eef3ff)}
+.Passenger{border-color:#2e6b3a}.Passenger .ty{background:#2e6b3a}
+.Passenger.child{background:linear-gradient(#fff,#f3ffe8)}
+.Lifeboat{border-color:#b56a00}.Lifeboat .ty{background:#b56a00}
+.Event .ty{background:#5b2c83}
+.actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center;position:sticky;bottom:8px;background:rgba(244,239,228,.94);padding:8px;border-radius:14px;z-index:5;box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+#msg{margin:8px 0 0}
+#log{max-height:180px;overflow:auto;font-size:13px;line-height:1.45}
+#log div{padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+#over{display:none}
+#over ol{padding-left:1.2em}
+#turnflag{font-weight:700;color:#0b1d33}
+.links{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:center;margin:10px 0}
+.links a,.panel a,footer a{color:#0a4d8c}
+footer.site{position:relative;z-index:1;text-align:center;color:#fff;padding:18px 12px 28px}
+footer.site a{color:var(--gold)}
+label{display:inline-flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap}
+select,input,textarea{font:inherit;padding:8px;border-radius:8px;border:1px solid #a8743f}
+@media (max-width:640px){
+  .hand{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:8px 2px 14px;scroll-snap-type:x mandatory}
+  .tc{flex:0 0 150px;scroll-snap-align:start}
+  header h1{display:block;margin:8px 0 0;font-size:1.35rem}
+  .actions{bottom:0;margin:0 -16px;border-radius:0;padding:10px 16px}
+}
+@media (prefers-reduced-motion:reduce){
+  .tc,.tc.sel{transition:none;transform:none}
+}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<header>
+  <img src="cb-logo.jpg" width="72" height="72" alt="Coffeebreak logo">
+  <h1>Coffeebreak Titanic Card Game</h1>
+  <p class="sub">A respectful card game about the night of 14 to 15 April 1912</p>
+</header>
+<main id="main">
+  <div class="panel" id="setup">
+    <h2>Work with the crew</h2>
+    <p>RMS Titanic is sinking in the North Atlantic. Draw cards, launch lifeboats with an officer on board, and lay sets of rooms or crew before the clock reaches 2:20 am.</p>
+    <label>Computer opponents
+      <select id="nai" aria-label="Number of computer opponents">
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+      </select>
+    </label>
+    <div>
+      <button class="b" id="start">Start game</button>
+      <button class="b ghost" id="rulesb">Rules</button>
+    </div>
+    <p class="small" id="bestsetup"></p>
+    <p class="memorial">More than 1,500 people lost their lives on 15 April 1912. This game honours them and the crew who stayed at their posts. The facts on each card are from the historical record.</p>
+    <p class="links">
+      <a href="https://songwriterkaz.github.io/coffeebreak/apps/titanic-card-game/">Play on GitHub Pages</a>
+      <a href="https://coffeebreakmusican.itch.io">Coffeebreak on itch.io</a>
+    </p>
+  </div>
+
+  <div class="panel" id="rules" style="display:none">
+    <h3>How to play</h3>
+    <ol>
+      <li>The clock starts at 11:40 pm, when the ship strikes the iceberg. Each full round is 10 minutes. The ship sinks at 2:20 am, after 16 rounds.</li>
+      <li>On your turn, you draw 2 cards. Event cards take effect at once and are not kept in your hand.</li>
+      <li><b>Launch a lifeboat:</b> select 1 Lifeboat card, 1 officer (Captain Smith, Murdoch, Lightoller, Pitman, Boxhall or Lowe), and 1 to 4 Passenger cards, then press Launch lifeboat. Each passenger saved scores 2 points, plus 1 extra point for a child card.</li>
+      <li><b>Lay a set:</b> 3 different Room cards, or 3 different Crew cards, score 4 points. Crew used in a set cannot launch a boat, so choose carefully.</li>
+      <li>You may launch or lay more than once in the same turn if you have the cards.</li>
+      <li>Hand limit 8: at the end of your turn, extra cards are discarded.</li>
+      <li>Undo takes back your launches and sets this turn. It does not take back the cards you drew.</li>
+      <li>The player with the most points when the ship sinks wins. If scores are level, the player who saved more passengers is ahead.</li>
+    </ol>
+    <button class="b ghost" id="rclose">Close rules</button>
+  </div>
+
+  <div id="game" style="display:none">
+    <div class="panel">
+      <div class="meta">
+        <span id="clock"></span>
+        <span>Deck: <b id="dk"></b></span>
+        <span id="turnflag"></span>
+        <button class="b ghost" id="mute" type="button" aria-pressed="false">Sound on</button>
+      </div>
+      <div class="track" id="track" aria-hidden="true"></div>
+      <div class="track-labels"><span>11:40 pm</span><span>2:20 am</span></div>
+      <div class="opp" id="opp"></div>
+    </div>
+    <div class="panel">
+      <h3 style="margin:0 0 6px">Your hand · Score <span id="me">0</span></h3>
+      <p class="small" id="mysaved"></p>
+      <div class="hand" id="hand"></div>
+      <div class="actions">
+        <button class="b" id="launch">Launch lifeboat</button>
+        <button class="b" id="set">Lay set</button>
+        <button class="b ghost" id="undo">Undo</button>
+        <button class="b" id="end">End turn</button>
+        <button class="b ghost" id="rulesb2">Rules</button>
+      </div>
+      <div id="msg" class="small"></div>
+    </div>
+    <div class="panel" id="over">
+      <h3>The ship has gone down</h3>
+      <ol id="overbody"></ol>
+      <button class="b" id="again">Play again</button>
+    </div>
+    <div class="panel">
+      <b>Ship's log</b>
+      <div id="log"></div>
+    </div>
+  </div>
 </main>
-<footer>Made by Coffeebreak, Newcastle NSW · <span class="small">Pay what you want · a respectful game about RMS Titanic, 1912</span></footer>
+<footer class="site">
+  <p>Made by Coffeebreak, Newcastle NSW</p>
+  <p class="small"><a href="https://songwriterkaz.github.io/coffeebreak/apps/titanic-card-game/">Play the GitHub Pages version</a> · <a href="https://coffeebreakmusican.itch.io">Coffeebreak music and games on itch.io</a></p>
+  <p><small>Disclaimer: Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners. Titanic, White Star Line and related names are used only to describe historical events.</small></p>
+  <p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p>
+</footer>
 <script src="game.js"></script>
-<!-- cb-radio -->
-<div id="cbRadio" style="position:fixed;left:12px;bottom:12px;z-index:9999;font-family:sans-serif;max-width:320px">
-<button onclick="var p=document.getElementById('cbRadioP');p.style.display=p.style.display!=='block'?'block':'none'" style="background:#222;color:#fff;border:0;border-radius:20px;padding:8px 14px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3)">&#9835; Coffeebreak Radio</button>
-<div id="cbRadioP" style="display:none;margin-top:6px;background:#fff;color:#222;padding:8px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.3);font-size:13px;width:304px">
-<div style="display:flex;gap:6px;margin-bottom:6px"><button onclick="cbRT('s')" id="cbRTs" style="flex:1;border:0;border-radius:8px;padding:6px;cursor:pointer;background:#1db954;color:#fff">Spotify</button><button onclick="cbRT('y')" id="cbRTy" style="flex:1;border:0;border-radius:8px;padding:6px;cursor:pointer;background:#eee;color:#222">&#9654; Shorts</button><button onclick="cbRT('m')" id="cbRTm" style="flex:1;border:0;border-radius:8px;padding:6px;cursor:pointer;background:#eee;color:#222">YouTube Music</button></div>
-<div id="cbRadioS" style="color:#666;padding:10px;text-align:center">Tap a tab to play</div><div id="cbRadioY" style="display:none"></div><div id="cbRadioM" style="display:none"></div>
-<div style="margin-top:6px">Listen on <a href="https://open.spotify.com/artist/05R0I9sslP9GnbSg6KzEr7" target="_blank" rel="noopener">Spotify</a> / <a href="https://music.apple.com/au/album/billionaire/1542958072" target="_blank" rel="noopener">Apple Music</a> / <a href="https://www.youtube.com/@coffeebreakTVSERIES/shorts" target="_blank" rel="noopener">YouTube</a><br><a href="https://music.youtube.com/channel/UC-JT9WEOQZ2p7Qr6AfypT5w" target="_blank" rel="noopener">Listen on YouTube Music</a></div>
-</div></div>
-<script>function cbRT(t){var P={s:['cbRadioS','<iframe style="border-radius:10px" src="https://open.spotify.com/embed/artist/05R0I9sslP9GnbSg6KzEr7?utm_source=generator" width="300" height="152" frameborder="0" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>','#1db954'],y:['cbRadioY','<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UUSHNuPovMUFJDrl9fhztDgy4w&rel=0&playsinline=1" style="width:216px;aspect-ratio:9/16;height:384px;border:0;border-radius:10px;display:block;margin:auto" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy" title="Coffeebreak TV Shorts"></iframe>','#f00'],m:['cbRadioM','<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU-JT9WEOQZ2p7Qr6AfypT5w&rel=0&playsinline=1" style="width:100%;aspect-ratio:16/9;border:0;border-radius:10px;display:block" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy" title="Coffeebreak on YouTube Music"></iframe>','#c00']};for(var k in P){var e=document.getElementById(P[k][0]),b=document.getElementById('cbRT'+k);if(k==t){if(!e.dataset.l){e.dataset.l=1;if(k=='s')e.style.padding=0;e.innerHTML=P[k][1];}e.style.display='block';b.style.background=P[k][2];b.style.color='#fff';}else{e.style.display='none';b.style.background='#eee';b.style.color='#222';}}}</script>
-<!-- /cb-radio -->
 <script src="cb-earnings.js"></script>
 <!--cb-contact-start-->
 <section id="cb-contact" aria-label="Email me"><h2>✉ Email me</h2><p class="cbc-sub">Questions, custom orders or anything else? Send me a message.</p>
@@ -62,7 +189,9 @@ main{max-width:980px;margin:10px auto;padding:0 10px 90px}.card{background:#fff7
 <script>/*cb-bar-fix: move overlapping floating buttons into a clear bar under the header*/(function(){function fx(e){var s=getComputedStyle(e),r=e.getBoundingClientRect();return s.position=='fixed'&&s.display!='none'&&r.width>0&&r.height>0}function ov(a,b){a=a.getBoundingClientRect();b=b.getBoundingClientRect();return a.left<b.right-4&&b.left<a.right-4&&a.top<b.bottom-4&&b.top<a.bottom-4}function go(){var em=document.getElementById('cbc-float');if(!em||em.closest('#cbBar'))return;var others=[].filter.call(document.querySelectorAll('body *'),function(e){return e!==em&&!e.contains(em)&&!em.contains(e)&&fx(e)&&e.getBoundingClientRect().width<700&&ov(e,em)});if(!others.length)return;var bar=document.getElementById('cbBar');if(!bar){bar=document.createElement('nav');bar.id='cbBar';bar.setAttribute('aria-label','Listen and contact');var h=document.querySelector('body > header, header');if(h&&h.getBoundingClientRect().top<200&&getComputedStyle(h).position!='fixed')h.parentNode.insertBefore(bar,h.nextSibling);else document.body.insertBefore(bar,document.body.firstChild)}others.forEach(function(o){if(/radio|suno|listen|music|♫|📻/i.test(o.innerText||o.id||''))bar.appendChild(o)});bar.appendChild(em)}function run(){[300,1500,4000].forEach(function(t){setTimeout(go,t)})}if(document.readyState=='complete')run();else addEventListener('load',run)})();</script>
 <div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
 <p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
-<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
+<p><b>&#9749; This game is US$10</b> through the PayID cart below. PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
 <p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
-<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div><!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/titanic-card-game" aria-label="Cart"><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/titanic-card-game","currency":"USD","items":[{"id":"full","name":"Coffeebreak Titanic Card Game","amount":"10.00","currency":"USD"},{"id":"food-coffee","name":"Park coffee","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-snacks","name":"Park snack pack","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-icecream","name":"Park ice cream","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-candy","name":"Park candy bag","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-meal","name":"Light park meal","amount":"10.00","currency":"USD","kind":"food"},{"id":"prize-plush","name":"Park prize plush","amount":"49.00","currency":"USD","kind":"prize"},{"id":"prize-trophy","name":"Park prize trophy","amount":"59.00","currency":"USD","kind":"prize"},{"id":"prize-plush-large","name":"Large park prize plush","amount":"89.00","currency":"USD","kind":"prize"},{"id":"prize-hamper","name":"Park gift hamper","amount":"129.00","currency":"USD","kind":"prize"}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p>Karen (Coffeebreak) keeps all rights to her products, designs, apps, games, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p><p><a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p></footer><!--cb-game-cart-end--></body></html>
-<script defer src="https://static.itch.io/htmlgame.js" type="text/javascript"></script>
+<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div><!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/titanic-card-game" aria-label="Cart"><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/titanic-card-game","currency":"USD","items":[{"id":"full","name":"Coffeebreak Titanic Card Game","amount":"10.00","currency":"USD"},{"id":"food-coffee","name":"Park coffee","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-snacks","name":"Park snack pack","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-icecream","name":"Park ice cream","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-candy","name":"Park candy bag","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-meal","name":"Light park meal","amount":"10.00","currency":"USD","kind":"food"},{"id":"prize-plush","name":"Park prize plush","amount":"49.00","currency":"USD","kind":"prize"},{"id":"prize-trophy","name":"Park prize trophy","amount":"59.00","currency":"USD","kind":"prize"},{"id":"prize-plush-large","name":"Large park prize plush","amount":"89.00","currency":"USD","kind":"prize"},{"id":"prize-hamper","name":"Park gift hamper","amount":"129.00","currency":"USD","kind":"prize"}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p>Karen (Coffeebreak) keeps all rights to her products, designs, apps, games, the Coffeebreak name and logo. Buyers may resell physical items they bought from Coffeebreak, but may not copy, reproduce or make their own versions of Coffeebreak products, designs or apps. Third-party trademarks and brand names belong to their respective owners. Coffeebreak is not affiliated with or endorsed by them.</p><p><a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p></footer><!--cb-game-cart-end-->
+<script src="../../pages/cb-listen.js" defer></script>
+</body>
+</html>
