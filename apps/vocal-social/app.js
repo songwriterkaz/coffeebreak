@@ -200,16 +200,17 @@
     if (name === 'make' && arg === 'challenge') { showView('make'); setupChallengeToggle(true); return; }
     if (name === 'make' && arg) { applyShareMake(arg); showView('make'); return; }
     if (name === 'remix' && arg) { showView('make'); startRemix(arg); return; }
-    if (['make', 'feed', 'people', 'me', 'play'].indexOf(name) < 0) name = 'feed';
+    if (['make', 'feed', 'people', 'me', 'play', 'vocals'].indexOf(name) < 0) name = 'feed';
     showView(name);
     if (name === 'feed') openFeed(state.mode);
     if (name === 'people') renderPeople();
     if (name === 'me') renderMe();
     if (name === 'play') renderPlay();
-    if (name === 'make') setupChallengeToggle(false);
+    if (name === 'make') { setupChallengeToggle(false); syncVocalPicked(); }
+    if (name === 'vocals') renderVocals();
   }
   function showView(name) {
-    ['make', 'feed', 'people', 'me', 'profile', 'play'].forEach(function (id) { var v = $('view-' + id); if (v) v.hidden = id !== name; });
+    ['make', 'feed', 'people', 'me', 'profile', 'play', 'vocals'].forEach(function (id) { var v = $('view-' + id); if (v) v.hidden = id !== name; });
     document.querySelectorAll('nav.tabs a').forEach(function (a) { a.classList.toggle('on', a.getAttribute('data-r') === name); });
     if (name !== 'feed' && player && !player.paused) player.pause();
   }
@@ -875,7 +876,13 @@
     status('Getting the singer ready.');
     try {
       if (window.AC) try { window.AC(); } catch (e) {}
-      window.CB_NEURAL_VOICE = $('voice').value;
+      var picked = window.CBVocals && window.CBVocals.getSelected && window.CBVocals.getSelected();
+      if (picked) {
+        window.CB_NEURAL_VOICE = picked.gender || $('voice').value;
+        if ($('voice')) $('voice').value = window.CB_NEURAL_VOICE;
+      } else {
+        window.CB_NEURAL_VOICE = $('voice').value;
+      }
       var meta = await window.CBSongs.create({
         lyrics: lyrics, genre: $('genre').value, mood: $('mood').value,
         bpm: $('bpm').value ? Number($('bpm').value) : undefined,
@@ -895,7 +902,8 @@
       };
       var d = $('draft'); d.hidden = false;
       $('draft-art').style.background = artBackground(meta.id);
-      $('draft-meta').textContent = (state.draft.title || 'Song') + ' · ' + (state.draft.summary || '');
+      var vocName = (window.CBVocals && window.CBVocals.selectedName && window.CBVocals.selectedName()) || '';
+      $('draft-meta').textContent = (state.draft.title || 'Song') + ' · ' + (state.draft.summary || '') + (vocName ? ' · ' + vocName : '');
       var item = { card: $('draft-art'), canvas: $('draft-wave'), peaks: state.draft.peaks, button: $('draft-play'), src: state.draft.url };
       state.draftItem = item; $('draft-play').innerHTML = ICON.play;
       drawWave(item.canvas, item.peaks, 0);
@@ -945,6 +953,100 @@
     finally { btn.disabled = false; }
   }
 
+  /* ---------- vocals library ---------- */
+  var vocState = { q: '', type: '', range: '', style: '', emotion: '', effect: '', pitch: '', page: 0, filtersReady: false };
+  var vocPreviewUrl = '';
+  function vocFilters() {
+    return { type: vocState.type, range: vocState.range, style: vocState.style, emotion: vocState.emotion, effect: vocState.effect, pitch: vocState.pitch };
+  }
+  function fillVocFilters() {
+    if (vocState.filtersReady || !window.CBVocals) return;
+    var d = window.CBVocals.dims();
+    function fill(id, arr) {
+      var s = $(id); if (!s) return;
+      s.innerHTML = '<option value="">All</option>' + arr.map(function (v) { return '<option value="' + v + '">' + v + '</option>'; }).join('');
+    }
+    fill('voc-type', d.types);
+    fill('voc-range', d.ranges);
+    fill('voc-style', d.styles);
+    fill('voc-emotion', d.emotions);
+    fill('voc-effect', d.effects);
+    fill('voc-pitch', d.pitches);
+    vocState.filtersReady = true;
+  }
+  function syncVocalPicked() {
+    var elp = $('vocal-picked');
+    if (!elp || !window.CBVocals) return;
+    var p = window.CBVocals.getSelected();
+    if (!p) { elp.innerHTML = 'Browse the <a href="#vocals">12,000 vocals</a> and pick one before you sing.'; return; }
+    elp.innerHTML = 'Vocal: <b></b> · <a href="#vocals">Change vocal</a>';
+    elp.querySelector('b').textContent = p.name;
+    if ($('voice')) $('voice').value = p.gender;
+  }
+  function useVocal(id) {
+    if (!window.CBVocals) return;
+    window.CBVocals.setSelected(id);
+    syncVocalPicked();
+    renderVocals();
+    status('Using ' + window.CBVocals.selectedName() + '. Open Make to sing with it.');
+  }
+  function previewVocal(id) {
+    if (!window.CBVocals) { status('The vocal library is not ready yet.'); return; }
+    var p = window.CBVocals.presetAt(id);
+    if (!p) return;
+    status('Playing a preview of ' + p.name + '.');
+    try {
+      var bytes = window.CBVocals.previewWav(p);
+      var blob = new Blob([bytes], { type: 'audio/wav' });
+      if (vocPreviewUrl) URL.revokeObjectURL(vocPreviewUrl);
+      vocPreviewUrl = URL.createObjectURL(blob);
+      var player = $('player');
+      if (!player) throw new Error('The player is not ready.');
+      player.src = vocPreviewUrl;
+      var play = player.play();
+      if (play && play.catch) play.catch(function () { status('Press Preview again to hear ' + p.name + '.'); });
+      else status('Preview: ' + p.name);
+    } catch (err) {
+      if (window.console) console.error(err);
+      status(err.message || 'That vocal could not be previewed.');
+    }
+  }
+  function renderVocals() {
+    if (!window.CBVocals) { status('The vocal library is not ready yet.'); return; }
+    fillVocFilters();
+    var box = $('voc-list');
+    var result = window.CBVocals.search(vocState.q, vocFilters(), vocState.page);
+    if (vocState.page > result.pages - 1) { vocState.page = Math.max(0, result.pages - 1); result = window.CBVocals.search(vocState.q, vocFilters(), vocState.page); }
+    var selected = window.CBVocals.getSelected();
+    var cur = $('voc-current');
+    if (cur) cur.textContent = selected ? ('Selected: ' + selected.name) : 'No vocal selected yet.';
+    var count = $('voc-count');
+    if (count) {
+      var from = result.total ? (result.page * result.pageSize + 1) : 0;
+      var to = Math.min(result.total, (result.page + 1) * result.pageSize);
+      count.textContent = result.total ? ('Showing ' + from + '–' + to + ' of ' + result.total + ' vocals') : 'No vocals match that search.';
+    }
+    box.replaceChildren();
+    result.items.forEach(function (p) {
+      var row = el('div', 'voc-item' + (selected && selected.id === p.id ? ' on' : ''));
+      row.setAttribute('role', 'listitem');
+      var name = el('p', 'voc-name', p.name);
+      var meta = el('p', 'meta', p.range + ' · ' + p.gender + ' · ' + p.effect + ' · ' + p.pitch);
+      var actions = el('div', 'voc-actions');
+      var prev = el('button', 'btn quiet', 'Preview'); prev.type = 'button';
+      prev.addEventListener('click', function (ev) { ev.stopPropagation(); previewVocal(p.id); });
+      var use = el('button', 'btn', 'Use this vocal'); use.type = 'button';
+      use.addEventListener('click', function (ev) { ev.stopPropagation(); useVocal(p.id); location.hash = '#make'; });
+      actions.appendChild(prev); actions.appendChild(use);
+      row.appendChild(name); row.appendChild(meta); row.appendChild(actions);
+      row.addEventListener('click', function () { useVocal(p.id); });
+      box.appendChild(row);
+    });
+    var prevB = $('voc-prev'), nextB = $('voc-next');
+    if (prevB) prevB.disabled = result.page <= 0;
+    if (nextB) nextB.disabled = result.page >= result.pages - 1;
+  }
+
   function bind() {
     $('btn-generate').addEventListener('click', function () { onGenerate(); });
     $('btn-download').addEventListener('click', downloadDraft);
@@ -958,6 +1060,18 @@
       c.addEventListener('click', function () { if (location.hash.indexOf('#post=') === 0) history.replaceState(null, '', '#feed'); openFeed(c.dataset.mode); });
     });
     $('people-q').addEventListener('input', function () { clearTimeout(peopleTimer); peopleTimer = setTimeout(renderPeople, 300); });
+    var vocTimer = 0;
+    function vocChange() { vocState.page = 0; renderVocals(); }
+    if ($('voc-q')) $('voc-q').addEventListener('input', function () {
+      vocState.q = $('voc-q').value || '';
+      clearTimeout(vocTimer); vocTimer = setTimeout(vocChange, 200);
+    });
+    [['voc-type', 'type'], ['voc-range', 'range'], ['voc-style', 'style'], ['voc-emotion', 'emotion'], ['voc-effect', 'effect'], ['voc-pitch', 'pitch']].forEach(function (pair) {
+      var node = $(pair[0]); if (!node) return;
+      node.addEventListener('change', function () { vocState[pair[1]] = node.value || ''; vocChange(); });
+    });
+    if ($('voc-prev')) $('voc-prev').addEventListener('click', function () { if (vocState.page > 0) { vocState.page--; renderVocals(); } });
+    if ($('voc-next')) $('voc-next').addEventListener('click', function () { vocState.page++; renderVocals(); });
     window.addEventListener('hashchange', route);
   }
 
@@ -965,6 +1079,7 @@
   setupPlayer();
   bind();
   renderNav();
+  syncVocalPicked();
   route();
   loadGame();
   waitForEngine().then(function () { fillStyleSelects(); if (/^#(make=|remix=)/.test(location.hash)) route(); }).catch(function (err) { if (!location.hash || location.hash.indexOf('#make') === 0) status(err.message); });

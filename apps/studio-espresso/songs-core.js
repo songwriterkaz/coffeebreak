@@ -225,38 +225,32 @@
       score.seconds = target;
     }
     const g = (typeof globalThis !== 'undefined') ? globalThis : {};
+    if (g.CBVocals && typeof g.CBVocals.prepareScore === 'function') g.CBVocals.prepareScore(score, opts.vocalPreset);
+    function packSung(bytes, model, license, credit, info, backend) {
+      if (g.CBVocals && typeof g.CBVocals.processSungWavMaybe === 'function') {
+        const out = g.CBVocals.processSungWavMaybe(bytes, opts);
+        if (out) bytes = out;
+      }
+      let extra = '';
+      if (opts.vocalPreset && opts.vocalPreset.name) extra = ' Vocal: ' + opts.vocalPreset.name + '.';
+      else if (g.CBVocals && typeof g.CBVocals.selectedName === 'function' && g.CBVocals.selectedName()) extra = ' Vocal: ' + g.CBVocals.selectedName() + '.';
+      return { bytes: bytes, mime: 'audio/wav', model: model, license: license, credit: credit, info: info + extra, backend: backend, seconds: score.seconds };
+    }
     if (!opts.voice && g.CB_USE_NEURAL_SINGER && g.CBNeuralSing && typeof g.CBNeuralSing.sing === 'function') {
       try {
         const nwav = await g.CBNeuralSing.sing(score, { voice: g.CB_NEURAL_VOICE || 'female', onStatus: opts.onStatus, stretch: 1 });
         if (nwav && nwav.byteLength > 100) {
-          return {
-            bytes: nwav,
-            mime: 'audio/wav',
-            model: 'Coffeebreak neural singer',
-            license: 'Piper voice (MIT), run in your browser',
-            credit: 'Coffeebreak neural singer',
-            info: 'Sung in your browser: each word is spoken by the open Piper voice, then tuned and held to the melody.',
-            backend: 'neural-sing',
-            seconds: score.seconds,
-          };
+          return packSung(nwav, 'Coffeebreak neural singer', 'Piper voice (MIT), run in your browser', 'Coffeebreak neural singer', 'Sung in your browser: each word is spoken by the open Piper voice, then tuned and held to the melody.', 'neural-sing');
         }
       } catch (err) {
         if (typeof opts.onStatus === 'function') opts.onStatus('The neural singing voice could not load here, so the simpler Coffeebreak voice is singing instead.');
         if (g.console) g.console.warn('neural singer failed', err);
       }
     }
-    const wav = await voice.sing(score, { seed: opts.seed, key: opts.key, bpm: bpm });
+    const style = opts.style || (g.CBVocals && typeof g.CBVocals.voiceStyle === 'function' ? g.CBVocals.voiceStyle(opts.vocalPreset || (g.CBVocals.getSelected && g.CBVocals.getSelected())) : {});
+    const wav = await voice.sing(score, { seed: opts.seed, key: opts.key, bpm: bpm, style: style || {} });
     if (!wav || wav.byteLength < 100) throw new Error('The Coffeebreak voice returned silence. Nothing was saved.');
-    return {
-      bytes: wav,
-      mime: 'audio/wav',
-      model: MODEL,
-      license: '',
-      credit: 'Coffeebreak voice',
-      info: 'Sung in the browser with the Coffeebreak voice.',
-      backend: 'coffeebreak-voice',
-      seconds: score.seconds,
-    };
+    return packSung(wav, MODEL, '', 'Coffeebreak voice', 'Sung in the browser with the Coffeebreak voice.', 'coffeebreak-voice');
   }
 
   function singAceStep(lyrics, opts) {

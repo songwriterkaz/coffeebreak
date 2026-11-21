@@ -28,6 +28,7 @@
     <a href="#feed" data-r="feed">Feed</a>
     <a href="#play" data-r="play">Play</a>
     <a href="#make" data-r="make">Make</a>
+    <a href="#vocals" data-r="vocals">Vocals</a>
     <a href="#people" data-r="people">People</a>
     <a href="#me" data-r="me">Me</a>
     <a href="#shop" class="cb-shop-tab" data-cb-real-shop>Shop</a>
@@ -81,6 +82,7 @@
     <div class="row actions">
       <button type="button" id="btn-generate" class="btn big">Create song</button>
     </div>
+    <p id="vocal-picked" class="hint small"></p>
     <p class="hint small">The vocal is sung in your browser. Each word is voiced by the free, open Piper voice and tuned to the melody, with drums, bass and keys from the Coffeebreak studio. The first song on a device downloads the voice once (about 60 MB). No paid service is used, and it will not sound as finished as a studio singer.</p>
     <div id="draft" class="draft" hidden>
       <div class="draft-art" id="draft-art">
@@ -101,6 +103,41 @@
       <input id="people-q" type="search" maxlength="30" placeholder="Name or handle" autocomplete="off">
     </label>
     <div id="people-list" class="people"></div>
+  </section>
+
+  <section id="view-vocals" class="view" hidden>
+    <h2>Vocals</h2>
+    <p class="hint">A library of 12,000 vocal presets for singing in your browser. Each one has a name and changes the sound when you preview it or use it to sing lyrics. Search and filter, press Preview, then Use this vocal when you make a song. All of them are free.</p>
+    <p id="voc-current" class="hint"></p>
+    <label>Search
+      <input id="voc-q" type="search" maxlength="80" placeholder="Name, style, emotion or effect" autocomplete="off">
+    </label>
+    <div class="row voc-filters">
+      <label>Type
+        <select id="voc-type"></select>
+      </label>
+      <label>Range
+        <select id="voc-range"></select>
+      </label>
+      <label>Style
+        <select id="voc-style"></select>
+      </label>
+      <label>Emotion
+        <select id="voc-emotion"></select>
+      </label>
+      <label>Effect
+        <select id="voc-effect"></select>
+      </label>
+      <label>Pitch
+        <select id="voc-pitch"></select>
+      </label>
+    </div>
+    <p id="voc-count" class="meta"></p>
+    <div id="voc-list" class="voc-list"></div>
+    <div class="row actions voc-pager">
+      <button type="button" id="voc-prev" class="btn quiet">Previous</button>
+      <button type="button" id="voc-next" class="btn quiet">Next</button>
+    </div>
   </section>
 
   <section id="view-profile" class="view" hidden>
@@ -188,6 +225,7 @@
 <script src="../studio-espresso/ui3.js"></script>
 <script src="../../cb-voice/voice.js"></script>
 <script src="../../cb-voice/neural-sing.js"></script>
+<script src="vocals.js"></script>
 <script src="../studio-espresso/songs-core.js"></script>
 <script src="../studio-espresso/create.js"></script>
 <script>window.CB_VS_API="https://cb-vocal-social.coffeebreaks.workers.dev";</script>
