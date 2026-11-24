@@ -47,6 +47,7 @@ button { min-height: 44px; }
 }
 .tabs a[aria-current="page"] { background: var(--cup); color: #fff; border-color: var(--cup); }
 .wrap { max-width: 760px; margin: 0 auto; padding: 8px 16px 48px; }
+.karen-note { border-left: 6px solid var(--cup); background: #fff; }
 .card, .lesson, .rules, .help-card, .cert, .sheet {
   background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px;
   margin: 0 0 14px;

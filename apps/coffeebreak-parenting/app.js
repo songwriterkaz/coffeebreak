@@ -559,7 +559,9 @@
       else if (q) bits += " · quiz " + q.score + "/" + q.total;
       return '<a class="mod" href="#/m/' + m.id + '"><strong>' + m.id + '. ' + esc(m.title) + '</strong><span class="soft">' + esc(m.focus) + ' · ' + bits + '</span></a>';
     }).join("");
-    return '<section class="card"><h2>A course for strengthening your family</h2>' +
+    return '<section class="card karen-note"><h2>A note from Karen</h2>' +
+      '<p>I\'m Karen O\'Brien, and I straight out don\'t believe in mandatory reporting. This course is about supporting and strengthening families, not watching or reporting on them. You\'re safe to learn here without judgement.</p></section>' +
+      '<section class="card"><h2>A course for strengthening your family</h2>' +
       '<p>Seven short modules. Each one has a few practical lessons, a worksheet you can print, and a five-question quiz. There is no judgement here and nothing to buy. The point is a calmer house, clearer talk, and more people in your corner.</p>' +
       '<p class="soft">This is general support from Karen O\'Brien, written for parents and carers. It is not therapy, a diagnosis, legal advice, or a reporting tool. If someone is unsafe, open Need help now.</p>' +
       '<div class="meter" aria-hidden="true"><span style="width:' + pct + '%"></span></div>' +
