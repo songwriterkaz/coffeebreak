@@ -45,10 +45,12 @@ canvas.view{width:100%;background:var(--tl);border-radius:10px;display:block;tou
 .songrow.playing{background:#fff0f6}
 .songmeta{flex:1;min-width:180px;display:flex;flex-direction:column;gap:2px}
 .paybox{margin-top:10px;padding:8px 10px;border:2px solid var(--a);border-radius:12px}
-.studio-foot{max-width:860px;margin:28px auto 48px;padding:14px 16px;background:#fff;border:2px solid var(--a);border-radius:16px;display:flex;gap:12px;align-items:flex-start}
+.studio-foot{max-width:860px;margin:28px auto 48px;padding:14px 16px;background:#fff;border:2px solid var(--a);border-radius:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start}
+.studio-foot > div{flex:1 1 16rem;min-width:0}
 .studio-foot img{width:54px;height:54px;border-radius:10px;object-fit:cover;flex:none}
 .studio-foot p{margin:4px 0}
 .studio-foot a{color:var(--a)}
+.song-rights{margin:8px 0;padding:8px 10px;border:2px solid var(--a);border-radius:12px;background:var(--card);font-weight:600}
 #createLyrics{min-height:180px;font-size:16px}
 #createGo{font-size:1.05rem;padding:8px 20px}
 #t-create details{margin:10px 0}

@@ -459,6 +459,13 @@
     return cart;
   }
 
+  const SONG_RIGHTS = 'You own 100% of the commercial rights to songs you create in Studio Espresso. You can release, sell, stream and license them without paying royalties to Coffeebreak.';
+  function songRightsHtml(id) {
+    if (window.CB_SONGS_HEADLESS) return '';
+    if ((document.title || '').indexOf('Studio Espresso') < 0) return '';
+    return '<p class="song-rights" id="' + id + '">' + SONG_RIGHTS + '</p>';
+  }
+
   function mount() {
     const player = document.createElement('div');
     player.id = 'songPlayer';
@@ -480,6 +487,7 @@
         <span class="field-label" id="vocalLabel">Full song</span>
         <div class="row"><button type="button" id="createGo" class="big">Create song</button><span id="createStatus" class="hint"></span></div>
         <p class="hint" id="createHonest">Press Create song to make a full song from the lyrics and style. The vocal is the Coffeebreak voice, sung in your browser. Drums, bass and keys come from this studio. The song is saved in My songs. The Coffeebreak voice is a sung voice made by the page, not a recording of a person, and it will not sound as finished as a paid singing service.</p>
+        ${songRightsHtml('createRights')}
       </div>
       <details id="createMore"><summary>More choices</summary>
         <div class="row"><label class="mini">Title <input id="createTitle" type="text" maxlength="80"></label>
