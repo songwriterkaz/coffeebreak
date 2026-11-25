@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Colour Candle</title>
+<style>
+body{margin:0;min-height:100vh;background:#1a1020;color:#ffe9f4;font-family:system-ui,sans-serif;text-align:center}
+main{max-width:520px;margin:auto;padding:20px}
+canvas{width:min(280px,70vw);height:auto;background:transparent}
+input[type=color]{width:72px;height:48px;border:0;background:transparent}
+button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:700;margin:4px}
+a{color:#ffb3d9}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<main>
+<p><a href="../../">Coffeebreak hub</a></p>
+<img src="../cb-logo.png" alt="Coffeebreak logo" width="64" height="64" style="border-radius:12px">
+<h1>Colour candle</h1>
+<p>A drawn candle. The colour changes on the screen. There is no real flame.</p>
+<canvas id="c" width="280" height="420"></canvas>
+<p><label>Wax <input id="wax" type="color" value="#ff8fbf"></label> <label>Flame <input id="flame" type="color" value="#ffd36a"></label></p>
+<p><button type="button" id="flick">Flicker</button> <button type="button" id="still">Hold still</button></p>
+<p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+<p><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st">Support Coffeebreak on GoFundMe</a></p>
+</main>
+<script>
+var c=document.getElementById('c'),x=c.getContext('2d'),wax='#ff8fbf',flame='#ffd36a',on=true,t=0;
+document.getElementById('wax').oninput=function(){wax=this.value};
+document.getElementById('flame').oninput=function(){flame=this.value};
+document.getElementById('flick').onclick=function(){on=true};
+document.getElementById('still').onclick=function(){on=false};
+function frame(){
+ t+=0.08;x.clearRect(0,0,280,420);
+ x.fillStyle=wax;x.beginPath();x.moveTo(90,160);x.lineTo(190,160);x.lineTo(170,360);x.lineTo(110,360);x.closePath();x.fill();
+ x.fillStyle='#fff';x.fillRect(134,150,12,28);
+ var h=on?18+Math.sin(t)*8:22;
+ x.fillStyle=flame;x.beginPath();x.ellipse(140,140-h/2,16,h,0,0,7);x.fill();
+ requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>

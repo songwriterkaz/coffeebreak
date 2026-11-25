@@ -61,6 +61,11 @@
       var limit = document.createElement('p');
       limit.textContent = 'A saved cart stays in this browser. Opening an email draft does not send it. This page does not mark a payment as received.';
       box.append(note, total, ref, label, limit);
+      if (typeof window.CB_STORE_NOTE === 'string' && window.CB_STORE_NOTE) {
+        var restriction = document.createElement('p');
+        restriction.textContent = window.CB_STORE_NOTE;
+        box.appendChild(restriction);
+      }
       var copies = C.copyFields(view);
       box.append(copyButton('Copy amount', copies.amount), copyButton('Copy PayID', copies.payId), copyButton('Copy reference', copies.reference));
       if (view.reference) {
@@ -89,6 +94,7 @@
     }
 
     paint();
+    document.addEventListener('click', function () { paint(); });
     if (window.MutationObserver) {
       var obs = new MutationObserver(function () { paint(); });
       var lines = document.getElementById('lines');

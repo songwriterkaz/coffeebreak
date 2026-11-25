@@ -25,16 +25,20 @@ button{background:#3a1424;color:#ffe9c7;border:2px solid #e8cea0;border-radius:1
 <img id="art" src="assets/hero.png" alt="Coffeebreak"><h1>📻 Coffeebreak Radio 24/7</h1><div id="live">● LIVE · SHUFFLE · NONSTOP</div>
 <div id="np">Press play to tune in</div><div id="bar"><div id="pf"></div></div><div id="nx"></div>
 <div><button id="play">▶ Tune In</button><button id="skip">⏭ Skip</button><input id="vol" type="range" min="0" max="1" step="0.05" value="0.8"></div>
-<div id="cnt" style="font-size:12px;color:#ccb999;margin-top:6px"></div></div>
+<div id="cnt" style="font-size:12px;color:#ccb999;margin-top:6px"></div>
+<div id="soon" style="max-width:420px;margin:10px auto 0;font:14px/1.4 system-ui,sans-serif;color:#e8cea0"></div></div>
 <div id="lb"><a href="https://music.apple.com/au/album/billionaire/1542958072?i=1542958079" target="_blank" rel="noopener">🍎 Apple Music</a><a href="https://suno.com/@coffeebreakkobs" target="_blank" rel="noopener">🎵 Suno</a><a href="https://www.youtube.com/@coffeebreakTVSERIES?sub_confirmation=1" target="_blank" rel="noopener">▶ YouTube</a><a href="https://coffeebreaks.itch.io/" target="_blank" rel="noopener">☕ More on itch</a></div>
 <div id="adult">⚠️ Some music may contain adult themes or language. Listener discretion advised.</div>
 <audio id="a" preload="auto"></audio><script src="assets/music/playlist.js"></script><script>
-var L=window.PLAYLIST.slice(),a=document.getElementById('a'),q=[],i=-1,K='cbRadio247';
+var L=(window.PLAYLIST||[]).filter(function(s){return s&&s.url}),a=document.getElementById('a'),q=[],i=-1,K='cbRadio247',fails=0;
 function sh(){q=L.map(function(_,j){return j});for(var j=q.length-1;j>0;j--){var k=Math.random()*(j+1)|0,t=q[j];q[j]=q[k];q[k]=t}}
-function nxt(){i++;if(i>=q.length){var last=q[q.length-1];sh();if(q[0]===last&&q.length>1){q.push(q.shift())}i=0}var s=L[q[i]];a.src=/^https?:/.test(s.file)?s.file:'assets/music/'+s.file;a.play().catch(function(){});
-document.getElementById('np').textContent='Now playing: '+s.title;var n=L[q[(i+1)%q.length]];document.getElementById('nx').textContent='Up next: '+(i+1<q.length?n.title:'(reshuffle)');
-var c=+(localStorage.getItem(K)||0)+1;localStorage.setItem(K,c);document.getElementById('cnt').textContent=L.length+' songs on rotation · you\'ve heard '+c;document.body.className='on'}
-a.addEventListener('ended',nxt);a.addEventListener('error',function(){setTimeout(nxt,500)});
+function nxt(){if(!L.length){document.getElementById('np').textContent='Song coming soon';return}
+i++;if(i>=q.length){var last=q[q.length-1];sh();if(q[0]===last&&q.length>1){q.push(q.shift())}i=0}var s=L[q[i]];a.src=s.url;var p=a.play();if(p)p.catch(function(){});
+document.getElementById('np').textContent='Now playing: '+s.title;var n=L[q[(i+1)%q.length]];document.getElementById('nx').textContent='Up next: '+n.title;
+var c=+(localStorage.getItem(K)||0)+1;localStorage.setItem(K,c);document.getElementById('cnt').textContent=L.length+' songs on rotation. Heard this visit: '+c;document.body.className='on'}
+a.addEventListener('ended',function(){fails=0;nxt()});
+a.addEventListener('error',function(){if(++fails>L.length){document.getElementById('np').textContent='Song coming soon';return}setTimeout(nxt,400)});
+var soon=window.PLAYLIST_SOON||[];if(soon.length)document.getElementById('soon').textContent='Song coming soon: '+soon.join(', ')+'.';
 a.addEventListener('timeupdate',function(){if(a.duration)document.getElementById('pf').style.width=(100*a.currentTime/a.duration)+'%'});
 document.getElementById('play').onclick=function(){if(i<0){sh();nxt();this.textContent='⏸ Pause'}else if(a.paused){a.play();this.textContent='⏸ Pause';document.body.className='on'}else{a.pause();this.textContent='▶ Play';document.body.className=''}};
 document.getElementById('skip').onclick=function(){if(i<0)document.getElementById('play').click();else nxt()};

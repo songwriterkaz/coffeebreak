@@ -7,13 +7,13 @@ var A=window.alert,C=window.confirm;window.alert=function(m){var t=Date.now();tr
 window.__cbNav=function(u){var w=null;try{w=window.open(u,'_blank')}catch(e){}if(!w){var a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}};})();</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Fantasy Gear Shop</title><link rel="stylesheet" href="style.css"><script src="cb-fullscreen.js"></script><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
 </head><body data-store="COFFEEBREAK FANTASY GEAR">
-<div class="strip">Secure checkout with PayPal or PayID • Prices in AUD include delivery within Australia • Overseas orders welcome</div>
+<div class="strip">Catalogue prices in AUD. Payment is not requested. Delivery is not confirmed on this page.</div>
 <header><img id="cb-logo" src="cb-sports-logo.png" alt="Coffeebreak" style="width:120px;border-radius:14px"><div class="float">⚔️</div><h1>Coffeebreak Fantasy Gear Shop</h1><p class="tag">Real foam swords, squeaky hammers, inflatable mallets and fantasy costumes – delivered Australia-wide &amp; worldwide</p>
 <nav><button data-t="shop" class="on">Shop</button><button data-t="cart">🛒 Cart (<span id="cc">0</span>)</button></nav></header>
 <main>
 <section id="shop"><input id="q" placeholder="Search…" aria-label="Search"><div id="filters"></div><div class="grid" id="grid"></div><div id="toast"></div>
 <p class="note">Costume and toy weapons only. Genuine products from Australian costume retailers.</p></section>
-<section id="cart" hidden><h2>Your cart</h2><div id="lines"></div><p class="tot">Total: AUD $<span id="tot">0.00</span> <small>(delivery included)</small></p>
+<section id="cart" hidden><h2>Your cart</h2><div id="lines"></div><p class="tot">Total: AUD $<span id="tot">0.00</span> <small>(catalogue total)</small></p>
 <div class="form"><input id="cName" placeholder="Your name"><input id="cEmail" type="email" placeholder="Email"><input id="cPhone" placeholder="Phone"><textarea id="cAddr" placeholder="Delivery address (street, suburb, state, postcode)"></textarea></div>
 <div id="paypal-buttons"></div></section>
 </main><!--cb-contact-start-->

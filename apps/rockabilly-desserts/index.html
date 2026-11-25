@@ -1,12 +1,65 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-restore-v1"><title>Coffeebreak Rockabilly Desserts</title><style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:820px;margin:auto;padding:24px}.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}h1{color:#d6336c}.price{font-size:1.6em;font-weight:800;color:#d6336c}textarea{width:100%;min-height:110px;border:2px solid #ffb3d1;border-radius:14px;padding:10px;font:inherit;box-sizing:border-box}input,select{border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;margin:2px}.pad{display:inline-block;width:28px;height:28px;margin:2px;border-radius:6px;background:#ffd6e8;cursor:pointer}.pad.on{background:#ff4f9a}#g div{font-family:monospace;white-space:pre}.blk{background:#4a1030}.wht{background:#ff8fbf}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.item{background:#fff0f6;border-radius:14px;padding:12px;margin:6px 0}.sample{border:3px dashed #ff4f9a}footer{text-align:center;padding:24px}a{color:#d6336c}</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
-</head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p>
-<div class="card"><h1>Coffeebreak Rockabilly Desserts</h1><p class="price">Free</p><p>A planner for this app: add tasks or entries, tick them off, and keep notes saved on your device.</p><p><small>This Coffeebreak app is free to use. It runs in your browser and saves on this device only.</small></p></div>
-<div class="card"><h2>Use it</h2><p><input id=it placeholder="Add an entry" style="width:70%"> <button id=ad>Add</button></p><ul id=ls></ul><textarea id=nt placeholder="Notes"></textarea><script>
-var KEY='cb-tool-'+location.pathname,D=JSON.parse(localStorage.getItem(KEY)||'null')||{l:[['Use it entry',0]],n:''};nt.value=D.n;
-function r(){localStorage.setItem(KEY,JSON.stringify(D));ls.innerHTML=D.l.map((x,i)=>'<li><label><input type=checkbox data-i='+i+(x[1]?' checked':'')+'> '+x[0].replace(/</g,'')+'</label></li>').join('')}r();
-ad.onclick=()=>{if(it.value){D.l.push([it.value,0]);it.value='';r()}};ls.onchange=e=>{D.l[e.target.dataset.i][1]^=1;r()};nt.oninput=()=>{D.n=nt.value;r()}</script></div>
-<div class="card"><h2>&#9749; Buy Karen a coffee</h2><p>Enjoying this app? Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference. Tips and music sales keep Coffeebreak free.</p></div>
-<div class="card"><small><b>Disclaimer:</b> Provided as is for personal and entertainment use. Not professional, medical, legal, or financial advice. <b>Trademarks:</b> Coffeebreak and all app names are trademarks of Karen O'Brien. Other names and brands belong to their owners and do not imply endorsement.</small></div>
-<p><a href="../../">&larr; Back to the Coffeebreak hub</a></p>
-</main><footer>Coffeebreak &middot; Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></footer></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Rockabilly Desserts</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#2a1020,#ffd0e6);color:#4a1030}
+main{max-width:900px;margin:auto;padding:24px}
+.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 30px #ff69b433;margin:16px 0}
+h1,h2{color:#d6336c}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.dessert{background:#fff0f6;border-radius:18px;padding:12px;text-align:center}
+.swatch{height:110px;border-radius:16px;margin-bottom:8px}
+footer{text-align:center;padding:24px;color:#fff}
+footer a{color:#ffe0f0}
+footer img{width:72px;height:72px;border-radius:12px}
+a{color:#d6336c}
+button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<main>
+<p><a href="../../">Coffeebreak hub</a></p>
+<div class="card">
+<img src="../cb-logo.png" alt="Coffeebreak logo" width="72" height="72" style="border-radius:12px">
+<h1>Coffeebreak Rockabilly Desserts</h1>
+<p>A digital card set of five diner desserts. Drawn colours only, no photos. US$10 for the set. You get a licence to use the cards. This page does not ship food.</p>
+</div>
+<div class="card">
+<div class="grid">
+<article class="dessert"><div class="swatch" style="background:radial-gradient(circle at 50% 40%,#fff,#ff4f9a 55%,#7a1028)"></div><h2>Cherry malt float</h2><p>Pink soda, cherry ice cream, a tall glass.</p></article>
+<article class="dessert"><div class="swatch" style="background:linear-gradient(#ffe36e,#f4c07a 40%,#ff4f9a)"></div><h2>Banana split</h2><p>Three scoops, banana, cherry on top.</p></article>
+<article class="dessert"><div class="swatch" style="background:linear-gradient(#fff,#ffb3d9)"></div><h2>Pink milkshake</h2><p>Strawberry shake in a chrome beaker.</p></article>
+<article class="dessert"><div class="swatch" style="background:conic-gradient(#ff4f9a,#ffe36e,#fff,#ff4f9a)"></div><h2>Rockabilly sundae</h2><p>Ice cream, fudge stripe, whipped top.</p></article>
+<article class="dessert"><div class="swatch" style="background:radial-gradient(circle,#c47a3a,#4a2414)"></div><h2>Coffee doughnut</h2><p>Glazed ring with a coffee stripe.</p></article>
+</div>
+<p><button type="button" id="add">Open cart</button></p>
+<p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+</div>
+<div class="card">
+<p>Coffeebreak makes music, apps and stores that run in the browser.</p>
+<p><small>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers receive a licence to use what they bought. They may not copy the files or make their own versions. Third-party trademarks belong to their owners. Coffeebreak is not affiliated with or endorsed by them.</small></p>
+<p><a href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener">Support Coffeebreak on GoFundMe</a></p>
+</div>
+</main>
+<footer>
+<img src="../cb-logo.png" alt="Coffeebreak logo">
+<p>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></p>
+</footer>
+<section id="cb-game-cart" data-store="apps/rockabilly-desserts" aria-label="Cart">
+<script type="application/json" id="cb-game-cart-data">{"storeId":"apps/rockabilly-desserts","currency":"USD","items":[{"id":"card-set","name":"Rockabilly Desserts digital card set","amount":"10.00","currency":"USD"}]}</script>
+</section>
+<script src="../../payid-cart/cart.js"></script>
+<script src="../../payid-cart/game-cart.js"></script>
+<script src="../../payid-cart/game-mount.js"></script>
+<script>
+document.getElementById('add').onclick=function(){
+ var open=document.getElementById('cb-game-cart-toggle');
+ if(open) open.click();
+};
+</script>
+</body>
+</html>

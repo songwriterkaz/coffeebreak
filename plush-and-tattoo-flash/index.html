@@ -18,6 +18,7 @@ const PRICES = {
     'plush-09-bean': 80,   // Bean plush toy
     'plush-10-queen': 80,   // Queen plush toy
     'plush-11-espresso': 80,   // Espresso plush toy
+    'digital-characters-pack': 10,   // Digital flash cards, plush designs and activity book, US$10
     'flash-01-coffeebreak-girl': 20,   // Coffeebreak Girl tattoo flash print
     'flash-02-coffee-bean-buddy': 20,   // Coffee Bean Buddy tattoo flash print
     'flash-03-bean-buddy-pal': 20,   // Bean Buddy Pal tattoo flash print
@@ -106,14 +107,30 @@ footer a{color:#c2185b}
 }
 </style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
 </head><body>
-<header><img src="cb-logo.png" alt="Coffeebreak logo"><div><h1>Coffeebreak Plush and Tattoo Flash</h1><p>Every Coffeebreak TV Series character as a plush toy and a classic tattoo flash print</p></div></header>
-<nav><button class="on" data-s="plush">Plush toys</button><button data-s="flash">Tattoo flash</button></nav>
+<header><img src="cb-logo.png" alt="Coffeebreak logo"><div><h1>Coffeebreak Plush and Tattoo Flash</h1><p>Plush toys, tattoo flash prints, and the digital Coffeebreak Characters pack</p></div></header>
+<nav><button class="on" data-s="plush">Plush toys</button><button data-s="flash">Tattoo flash</button><button data-s="digital">Digital pack</button></nav>
 <main>
 <section id="plush"><h2>Plush toys</h2><div class="grid" id="gPlush"></div></section>
 <section id="flash" hidden><h2>Tattoo flash</h2><div class="grid" id="gFlash"></div></section>
+<section id="digital" hidden>
+<h2>Digital pack</h2>
+<article class="card">
+<img class="pic" src="contact-sheet-plush.jpg" alt="Coffeebreak Characters plush designs">
+<div class="body">
+<div class="kind">Download</div>
+<h3>Coffeebreak Characters pack</h3>
+<p>Ten printable flash cards, ten plush toy designs, and an 18 page activity book with colouring pages, a word search, matching games, a maze and an answer key. Personal use after you pay.</p>
+<p><a href="pack/">Open the printable pack</a></p>
+<div class="row"><span class="price">US$10.00</span><button class="add" data-id="digital-characters-pack">Add to cart</button></div>
+<p class="small">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+</div>
+</article>
+</section>
 </main>
-<footer><div class="who"><img src="cb-logo.png" alt="Coffeebreak logo"><span>Coffeebreak by Karen O'Brien, songwriter and creator from Newcastle NSW. <a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">coffeebreaks.itch.io</a></span></div>
-Karen keeps all rights to these products, designs, name and logo. Buyers may resell physical products they bought, but may not copy the designs or make their own versions. Coffeebreak claims no ownership of any third-party brand, product or platform names, which belong to their owners. Copyright 2026 Coffeebreak.</footer>
+<footer><div class="who"><img src="cb-logo.png" alt="Coffeebreak logo"><span>Coffeebreak by Karen O'Brien, songwriter and creator from Newcastle NSW.</span></div>
+<p>Karen keeps all rights to these products, designs, name and logo. Buyers may resell physical products they bought, but may not copy the designs or make their own versions. Karen O'Brien claims no ownership of third-party brands. Those names belong to their owners. Nothing on this page excludes, restricts or modifies any right or remedy you have under the Australian Consumer Law.</p>
+<p><a href="https://www.tesla.com">Tesla</a> <a href="https://www.starlink.com">Starlink</a></p>
+</footer>
 
 <button id="cartBtn" aria-label="Open cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.4"/><circle cx="19" cy="21" r="1.4"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>Cart <span id="count">0</span></button>
 <div id="shade"></div>
@@ -126,6 +143,16 @@ Karen keeps all rights to these products, designs, name and logo. Buyers may res
 
 <script>
 const PRODUCTS = [
+{
+"id": "digital-characters-pack",
+"kind": "digital",
+"currency": "USD",
+"name": "Coffeebreak Characters pack",
+"label": "Digital download",
+"blurb": "Ten printable flash cards, ten plush toy designs, and an 18 page activity book.",
+"img": "contact-sheet-plush.jpg",
+"num": "00"
+},
 {
 "id": "plush-01-coffeebreak-girl",
 "kind": "plush",
@@ -327,16 +354,16 @@ const PRODUCTS = [
 ];
 const KEY='coffeebreak-plush-flash-cart-v1';
 const $=s=>document.querySelector(s);
-const money=n=>'$'+n.toFixed(2)+' '+CURRENCY;
 const price=id=>Number(PRICES[id]||0);
 const byId=Object.fromEntries(PRODUCTS.map(p=>[p.id,p]));
+function lineMoney(id,n){const p=byId[id];const amount=n==null?price(id):n;if(p&&p.currency==='USD')return 'US$'+amount.toFixed(2);return '$'+amount.toFixed(2)+' AUD'}
+function totalLabel(){let aud=0,usd=0;for(const [k,q] of Object.entries(cart)){if(byId[k]&&byId[k].currency==='USD')usd+=price(k)*q;else aud+=price(k)*q}const parts=[];if(aud)parts.push('$'+aud.toFixed(2)+' AUD');if(usd)parts.push('US$'+usd.toFixed(2));return parts.join(' and ')||'$0.00 AUD'}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let cart={}, mem={};
 function load(){try{cart=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){cart=mem}
  for(const k in cart){if(!byId[k]||cart[k]<1)delete cart[k]}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(cart))}catch(e){mem=cart}}
 const count=()=>Object.values(cart).reduce((a,b)=>a+b,0);
-const total=()=>Object.entries(cart).reduce((a,[k,q])=>a+price(k)*q,0);
 let view='cart';
 
 function renderGrid(){
@@ -344,7 +371,7 @@ function renderGrid(){
   el.innerHTML=PRODUCTS.filter(p=>p.kind===kind).map(p=>`<article class="card ${kind}">
    <img class="pic" loading="lazy" src="${p.img}" alt="${esc(p.name)} ${esc(p.label.toLowerCase())}" data-full="${p.img}">
    <div class="body"><div class="kind">${p.num} &middot; ${esc(p.label)}</div><h3>${esc(p.name)}</h3><p>${esc(p.blurb)}</p>
-   <div class="row"><span class="price">${money(price(p.id))}</span><button class="add" data-id="${p.id}">Add to cart</button></div></div></article>`).join('');
+   <div class="row"><span class="price">${lineMoney(p.id,price(p.id))}</span><button class="add" data-id="${p.id}">Add to cart</button></div></div></article>`).join('');
  }
 }
 function add(id){cart[id]=(cart[id]||0)+1;save();renderCart()}
@@ -352,9 +379,9 @@ function setQty(id,q){if(q<1)delete cart[id];else cart[id]=q;save();renderCart()
 
 function summaryText(){
  const f=id=>($('#'+id)||{}).value||'';
- const lines=Object.entries(cart).map(([k,q])=>{const p=byId[k];return `${q} x ${p.name} (${p.label}) @ ${money(price(k))} = ${money(price(k)*q)}`});
- return ['Coffeebreak order '+orderRef(),'',...lines,'','Items: '+count(),'Total: '+money(total()),'',
-  'Paid by PayID ('+PAYID.bank+') to '+PAYID.id,'Payment reference: '+orderRef(),'',
+ const lines=Object.entries(cart).map(([k,q])=>{const p=byId[k];return `${q} x ${p.name} (${p.label}) @ ${lineMoney(k,price(k))} = ${lineMoney(k,price(k)*q)}`});
+ return ['Coffeebreak order '+orderRef(),'',...lines,'','Items: '+count(),'Total: '+totalLabel(),'',
+  'Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com','Payment reference: '+orderRef(),'',
   'Name: '+f('fName'),'Email: '+f('fEmail'),'Postal address: '+f('fAddr').replace(/\n/g,', ')].join('\n');
 }
 function orderRef(){let r;try{r=localStorage.getItem(KEY+'-ref')}catch(e){}
@@ -371,19 +398,19 @@ function renderCart(){
  if(view==='checkout'&&count()===0)view='cart';
  if(view==='cart'){
   $('#dTitle').textContent='Your cart';
-  body.innerHTML=count()===0?'<div class="empty">Your cart is empty.<br>Tap Add to cart on any plush toy or flash print.</div>':
+  body.innerHTML=count()===0?'<div class="empty">Your cart is empty.<br>Tap Add to cart on a plush toy, a flash print, or the digital pack.</div>':
    Object.entries(cart).map(([k,q])=>{const p=byId[k];return `<div class="line" data-id="${k}"><img src="${p.img}" alt=""><div>
-    <div class="nm">${esc(p.name)}</div><div class="sub">${esc(p.label)} &middot; ${money(price(k))} each</div>
+    <div class="nm">${esc(p.name)}</div><div class="sub">${esc(p.label)} &middot; ${lineMoney(k,price(k))} each</div>
     <div class="qty"><button class="dec" aria-label="Less">&minus;</button><span class="q">${q}</span><button class="inc" aria-label="More">+</button>
-    <button class="rm">Remove</button><span class="lt">${money(price(k)*q)}</span></div></div></div>`}).join('');
-  foot.innerHTML=`<div class="total"><span>Total</span><span id="tot">${money(total())}</span></div>
+    <button class="rm">Remove</button><span class="lt">${lineMoney(k,price(k)*q)}</span></div></div></div>`}).join('');
+  foot.innerHTML=`<div class="total"><span>Total</span><span id="tot">${totalLabel()}</span></div>
    <button class="big" id="toCheckout" ${count()?'':'disabled'}>Checkout</button>
    <button class="big alt" id="keep">Keep shopping</button>`;
  } else {
   $('#dTitle').textContent='Checkout';
   const keep={n:($('#fName')||{}).value||'',e:($('#fEmail')||{}).value||'',a:($('#fAddr')||{}).value||''};
-  body.innerHTML=`<div class="pay"><div class="lbl">Pay by PayID (${esc(PAYID.bank)})</div><div class="id">${esc(PAYID.id)}</div>
-    <div>Amount: <b>${money(total())}</b><br>Reference: <b>${orderRef()}</b></div>
+  body.innerHTML=`<div class="pay"><div class="lbl">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</div>
+    <div>Amount: <b>${totalLabel()}</b><br>Reference: <b>${orderRef()}</b></div>
     <button class="big alt" id="copyId">Copy PayID</button></div>
    <ol class="steps"><li>Pay the total by PayID in your banking app, using the reference above.</li>
     <li>Add your details below, then copy the order summary.</li>
@@ -392,7 +419,7 @@ function renderCart(){
    <label for="fEmail">Your email</label><input id="fEmail" type="email" autocomplete="email" value="${esc(keep.e)}">
    <label for="fAddr">Postal address</label><textarea id="fAddr" rows="3" autocomplete="street-address">${esc(keep.a)}</textarea>
    <label for="summary">Order summary</label><textarea id="summary" readonly></textarea>`;
-  foot.innerHTML=`<div class="total"><span>Total</span><span id="tot">${money(total())}</span></div>
+  foot.innerHTML=`<div class="total"><span>Total</span><span id="tot">${totalLabel()}</span></div>
    <button class="big" id="copySum">Copy order summary</button><button class="big alt" id="back">Back to cart</button>`;
   $('#summary').value=summaryText();
  }
@@ -401,7 +428,7 @@ document.addEventListener('input',e=>{if(['fName','fEmail','fAddr'].includes(e.t
 document.addEventListener('click',e=>{
  const t=e.target.closest('button,img.pic,#lb,#shade');if(!t)return;
  if(t.classList.contains('add')){add(t.dataset.id);t.classList.add('done');t.textContent='Added';setTimeout(()=>{t.classList.remove('done');t.textContent='Add to cart'},1200);return}
- if(t.matches('nav button')){document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===t));$('#plush').hidden=t.dataset.s!=='plush';$('#flash').hidden=t.dataset.s!=='flash';window.scrollTo({top:0});return}
+ if(t.matches('nav button')){document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===t));['plush','flash','digital'].forEach(id=>{document.getElementById(id).hidden=t.dataset.s!==id});window.scrollTo({top:0});return}
  if(t.id==='cartBtn'){view='cart';renderCart();document.body.classList.add('open');return}
  if(t.id==='close'||t.id==='shade'||t.id==='keep'){document.body.classList.remove('open');return}
  if(t.id==='toCheckout'){view='checkout';renderCart();return}
@@ -415,4 +442,5 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.body.classList.remove('open');$('#lb').style.display='none'}});
 load();renderGrid();renderCart();
+if(location.hash==='#digital'){const b=document.querySelector('nav button[data-s="digital"]');if(b)b.click()}
 </script></body></html>

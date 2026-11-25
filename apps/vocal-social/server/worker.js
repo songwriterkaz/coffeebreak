@@ -4,7 +4,7 @@ const HIDE_AT_REPORTS = 3;
 const BLOCK = ['fuck','fuk','fck','shit','cunt','bitch','slut','whore','dick','cock','pussy','penis','vagina','nude','nudes','naked','porn','porno','sex','sexy','boobs','tits','anal','cum','rape','nigger','nigga','faggot','fag','retard','kys','onlyfans','hookup','horny','milf','dildo','blowjob','handjob','bastard','wank','wanker','twat','prick','motherfucker'];
 const BLOCK_RE = new RegExp('(^|[^a-z])(' + BLOCK.join('|') + ')(s|es|ing|ed|er|ers|y)?($|[^a-z])', 'i');
 const LINK_RE = /(https?:\/\/|www\.|\.(com|net|org|io|ly|xyz|au)\b)/i;
-const LIMITS = { profile: [30, 86400], post: [8, 3600], postip: [60, 86400], comment: [30, 3600], like: [300, 3600], follow: [200, 3600], report: [30, 86400], play: [600, 3600] };
+const LIMITS = { profile: [30, 86400], post: [8, 3600], postip: [60, 86400], comment: [30, 3600], like: [300, 3600], follow: [200, 3600], report: [30, 86400], play: [600, 3600], wall: [30, 3600] };
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -82,6 +82,90 @@ async function profileOut(env, row, me) {
     ...levelInfo(g ? g.xp : 0), frame: g ? g.frame || '' : '', streak: liveStreak(g), badges: bd.results.map(x => ({ id: x.badge, ...(BADGES[x.badge] || {}) })),
     followers: c[0].results[0].n, following: c[1].results[0].n, posts: c[2].results[0].n, likes: c[2].results[0].l,
     youFollow: !!(c[3].results && c[3].results.length) };
+}
+
+const WALL_CHANNELS = ['vocal', 'parenting'];
+const WALL_COLS = `w.id, w.user_id, w.wall_id, w.channel, w.text, w.created, w.comments,
+  u.handle AS u_handle, u.name AS u_name, u.avatar AS u_avatar,
+  o.handle AS w_handle, o.name AS w_name`;
+const WALL_FROM = `FROM wall_posts w JOIN profiles u ON u.id = w.user_id JOIN profiles o ON o.id = w.wall_id`;
+function shapeWall(row) {
+  return {
+    id: row.id, text: row.text, channel: row.channel, created: row.created, comments: row.comments, device: false,
+    author: { id: row.user_id, handle: row.u_handle, name: row.u_name, avatar: row.u_avatar },
+    wall: { id: row.wall_id, handle: row.w_handle, name: row.w_name }
+  };
+}
+async function wallRoute(req, env, me, ip, seg, p, m) {
+  if (p === '/api/walls/capabilities' && m === 'GET') {
+    return json({ walls: true, channels: WALL_CHANNELS, shared: true });
+  }
+  if (seg[1] !== 'walls') return null;
+  const channelOf = (value) => WALL_CHANNELS.indexOf(value) >= 0 ? value : '';
+  if (p === '/api/walls/feed' && m === 'GET') {
+    const url = new URL(req.url);
+    const channel = channelOf(url.searchParams.get('channel') || 'vocal');
+    if (!channel) return fail('Unknown channel.');
+    const before = +url.searchParams.get('before') || 0;
+    const rows = await env.DB.prepare(`SELECT ${WALL_COLS} ${WALL_FROM} WHERE w.hidden = 0 AND w.channel = ? ${before ? 'AND w.created < ?' : ''} ORDER BY w.created DESC LIMIT 40`)
+      .bind(...[channel].concat(before ? [before] : [])).all();
+    return json({ shared: true, channel, posts: rows.results.map(shapeWall) });
+  }
+  if (p === '/api/walls' && m === 'POST') {
+    if (!me) return fail('Make a profile first.', 401);
+    const b = await req.json().catch(() => ({}));
+    const channel = channelOf(clean(b.channel, 20) || 'vocal');
+    if (!channel) return fail('Unknown channel.');
+    const text = clean(b.text, channel === 'parenting' ? 500 : 500);
+    if (!text) return fail('Write something first.');
+    const bad = policy([['Post', text, true]]);
+    if (bad) return fail(bad);
+    let wall = me;
+    const handle = clean(b.wall, 20).toLowerCase().replace(/[^a-z0-9_]/g, '');
+    if (handle && handle !== me.handle) {
+      wall = await env.DB.prepare('SELECT id, handle, name FROM profiles WHERE handle = ?').bind(handle).first();
+      if (!wall) return fail('That wall is not here.', 404);
+    }
+    if (await limited(env, me.id, 'wall')) return fail('You have posted a lot this hour. Try again later.', 429);
+    const id = rid('w');
+    await env.DB.prepare('INSERT INTO wall_posts (id, user_id, wall_id, channel, text, created) VALUES (?,?,?,?,?,?)')
+      .bind(id, me.id, wall.id, channel, text, now()).run();
+    const row = await env.DB.prepare(`SELECT ${WALL_COLS} ${WALL_FROM} WHERE w.id = ?`).bind(id).first();
+    return json({ post: shapeWall(row), shared: true });
+  }
+  if (seg[1] === 'walls' && seg[2] && seg[2] !== 'feed' && !seg[3] && m === 'GET') {
+    const url = new URL(req.url);
+    const channel = channelOf(url.searchParams.get('channel') || 'vocal');
+    if (!channel) return fail('Unknown channel.');
+    const handle = decodeURIComponent(seg[2]).toLowerCase();
+    const who = await env.DB.prepare('SELECT id, handle, name FROM profiles WHERE handle = ? OR id = ?').bind(handle, seg[2]).first();
+    if (!who) return fail('That wall is not here.', 404);
+    const rows = await env.DB.prepare(`SELECT ${WALL_COLS} ${WALL_FROM} WHERE w.hidden = 0 AND w.channel = ? AND w.wall_id = ? ORDER BY w.created DESC LIMIT 60`)
+      .bind(channel, who.id).all();
+    return json({ shared: true, channel, wall: { id: who.id, handle: who.handle, name: who.name }, posts: rows.results.map(shapeWall) });
+  }
+  if (seg[1] === 'walls' && seg[2] && seg[3] === 'comments' && m === 'GET') {
+    const rows = await env.DB.prepare('SELECT c.id, c.text, c.created, u.id AS uid, u.handle, u.name, u.avatar FROM wall_comments c JOIN profiles u ON u.id = c.user_id WHERE c.post_id = ? AND c.hidden = 0 ORDER BY c.created ASC LIMIT 200').bind(seg[2]).all();
+    return json({ comments: rows.results.map(r => ({ id: r.id, text: r.text, created: r.created, device: false, author: { id: r.uid, handle: r.handle, name: r.name, avatar: r.avatar } })) });
+  }
+  if (seg[1] === 'walls' && seg[2] && seg[3] === 'comments' && m === 'POST') {
+    if (!me) return fail('Make a profile first.', 401);
+    const b = await req.json().catch(() => ({}));
+    const text = clean(b.text, 280);
+    if (!text) return fail('Write a comment first.');
+    const bad = policy([['Comment', text, true]]);
+    if (bad) return fail(bad);
+    const post = await env.DB.prepare('SELECT id FROM wall_posts WHERE id = ? AND hidden = 0').bind(seg[2]).first();
+    if (!post) return fail('That post is not here.', 404);
+    if (await limited(env, me.id, 'comment')) return fail('You have commented a lot this hour. Try again later.', 429);
+    const cid = rid('c');
+    await env.DB.batch([
+      env.DB.prepare('INSERT INTO wall_comments (id, post_id, user_id, text, created) VALUES (?,?,?,?,?)').bind(cid, seg[2], me.id, text, now()),
+      env.DB.prepare('UPDATE wall_posts SET comments = comments + 1 WHERE id = ?').bind(seg[2])
+    ]);
+    return json({ comment: { id: cid, text, created: now(), device: false, author: { id: me.id, handle: me.handle, name: me.name, avatar: me.avatar } }, shared: true });
+  }
+  return null;
 }
 
 async function route(req, env, url) {
@@ -580,6 +664,8 @@ async function gameRoute(req, env, url, me, ip, seg, p, m) {
     await game.award(me.id, 'play', sydDay(), XP.play, 'Listened today');
     return json({ game: await game.result() });
   }
+  const wall = await wallRoute(req, env, me, ip, seg, p, m);
+  if (wall) return wall;
   return null;
 }
 

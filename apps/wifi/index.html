@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak WiFi login demo</title>
+<style>
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#1a1020;font-family:system-ui,sans-serif;color:#3a1030}
+.portal{width:min(440px,92vw);background:#fff;border-radius:20px;padding:22px;text-align:center}
+h1{color:#d6336c;margin:8px 0}
+input{width:100%;box-sizing:border-box;padding:12px;border:2px solid #ffb3d1;border-radius:12px;margin:8px 0;font:inherit}
+button{width:100%;background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:12px;font-weight:800;cursor:pointer}
+.note{font-size:.9rem;text-align:left}
+a{color:#d6336c}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<form class="portal" id="f">
+<img src="../cb-logo.png" alt="Coffeebreak logo" width="72" height="72" style="border-radius:16px">
+<h1>Coffeebreak WiFi</h1>
+<p>Demo login page. This does not join a network, and it does not keep a password.</p>
+<label>Name<input name="name" autocomplete="name" placeholder="Your name"></label>
+<label>This is not a password<input type="password" name="fake" placeholder="Leave blank" autocomplete="off"></label>
+<button type="submit">Show the demo result</button>
+<p id="out" class="note" hidden></p>
+<p class="note">The real hotspot kit, if you want the download, is on the <a href="../../coffeebreak-wifi/">Coffeebreak WiFi Hotspot</a> page.</p>
+<p class="note">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+<p class="note"><a href="https://www.tesla.com">Tesla</a> · <a href="https://www.starlink.com">Starlink</a> · <a href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st">Support Coffeebreak on GoFundMe</a></p>
+<p class="note"><a href="../../">Coffeebreak hub</a></p>
+</form>
+<script>
+document.getElementById('f').onsubmit=function(e){
+ e.preventDefault();
+ var box=document.getElementById('out');
+ box.hidden=false;
+ box.textContent='Demo only. No network was joined, and nothing was saved.';
+};
+</script>
+</body>
+</html>

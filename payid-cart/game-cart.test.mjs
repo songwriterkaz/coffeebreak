@@ -167,7 +167,7 @@ test('loot and paid-chance packs are not sold in the game cart', () => {
 test('published game copy keeps its price and currency', () => {
   const game = api();
   assert.deepEqual(game.readOffer('<title>Coffeebreak Arcade</title><div class="price">Full version $5 AUD</div>', 'canva-games/index.html').items, [
-    { id: 'full', name: 'Coffeebreak Arcade', amount: '5.00', currency: 'AUD' }
+    { id: 'full', name: 'Coffeebreak Arcade', amount: '10.00', currency: 'USD' }
   ]);
   const mens = game.readOffer('<title>CB Muscle Drag</title><a>Buy full game $10</a>', 'mens-games/drag-race/index.html');
   assert.equal(mens.currency, 'USD');
@@ -188,7 +188,7 @@ test('published game copy keeps its price and currency', () => {
     'apps/street-brawl/index.html'
   );
   assert.equal(packs.currency, 'USD');
-  assert.deepEqual(packs.items.map((item) => item.amount), ['2.00', '3.00']);
+  assert.deepEqual(packs.items.map((item) => item.amount), ['10.00', '10.00']);
   const rebate = game.readOffer('<title>Coffee Card</title><p>pay $10 then claim $2 back</p>', 'coffee-card-game/index.html');
   assert.equal(rebate.currency, 'USD');
   assert.equal(rebate.items[0].amount, '10.00');

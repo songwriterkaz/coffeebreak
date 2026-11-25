@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="Back-to-wall bath">
+<rect width="640" height="480" fill="#f4f7f8"/>
+<path d="M90 340 h460 v-40 c0-90-70-150-150-150 h-160 c-80 0-150 60-150 150z" fill="#e7eef2" stroke="#8fa0aa" stroke-width="6"/>
+<path d="M120 300 h400 v-16 c0-70-56-120-126-120 h-148 c-70 0-126 50-126 120z" fill="#f7fbff"/>
+<ellipse cx="320" cy="250" rx="150" ry="36" fill="#d5e6f1"/>
+<rect x="250" y="150" width="140" height="28" rx="8" fill="#c5d0d6"/>
+</svg>

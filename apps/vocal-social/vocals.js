@@ -307,26 +307,28 @@
   }
 
   function fxReverb(channels, sr, wet, decay) {
-    wet = wet == null ? 0.38 : wet;
-    decay = decay == null ? 0.86 : decay;
-    var delays = [0.0297, 0.0371, 0.0411, 0.0437, 0.0533, 0.0671];
+    wet = wet == null ? 0.34 : wet;
+    decay = decay == null ? 0.72 : decay;
+    var delays = [0.0179, 0.0263, 0.0317, 0.0409, 0.0531, 0.0677, 0.0793, 0.0971];
+    var damp = Math.exp(-2 * Math.PI * 3800 / sr);
     for (var c = 0; c < channels.length; c++) {
       var src = channels[c];
       var n = src.length;
       var acc = new Float32Array(n);
       for (var d = 0; d < delays.length; d++) {
-        var len = Math.max(2, Math.round((delays[d] + c * 0.0017) * sr));
+        var len = Math.max(2, Math.round((delays[d] + c * 0.0021) * sr));
         var buf = new Float32Array(len);
-        var bi = 0, y = 0;
+        var bi = 0, y = 0, lp = 0;
         for (var i = 0; i < n; i++) {
           y = buf[bi];
-          buf[bi] = src[i] + y * decay;
-          acc[i] += y;
+          lp = damp * lp + (1 - damp) * y;
+          buf[bi] = src[i] + lp * decay;
+          acc[i] += lp;
           bi++; if (bi >= len) bi = 0;
         }
       }
       var g = wet / delays.length;
-      var dry = 1 - wet * 0.55;
+      var dry = 1 - wet * 0.42;
       for (var k = 0; k < n; k++) src[k] = src[k] * dry + acc[k] * g;
     }
   }
@@ -349,12 +351,17 @@
   }
 
   function fxHarmony(channels, sr) {
+    var lag = Math.max(1, Math.round(0.016 * sr));
     for (var c = 0; c < channels.length; c++) {
       var src = channels[c];
-      var fifth = shiftChannel(src, 7);
-      var third = shiftChannel(src, 4);
+      var fifth = shiftChannel(src, 6.96);
+      var third = shiftChannel(src, 3.9);
+      var low = shiftChannel(src, -11.9);
       var out = new Float32Array(src.length);
-      for (var i = 0; i < src.length; i++) out[i] = src[i] * 0.78 + fifth[i] * 0.32 + third[i] * 0.22;
+      for (var i = 0; i < src.length; i++) {
+        var h = i >= lag ? i - lag : 0;
+        out[i] = src[i] * 0.7 + fifth[h] * 0.2 + third[h] * 0.15 + low[h] * 0.12;
+      }
       channels[c] = out;
     }
   }
@@ -395,7 +402,7 @@
         }
       }
       for (var j = 0; j < out.length; j++) src[j] = norm[j] > 1e-6 ? out[j] / norm[j] : src[j];
-      applyFilter(channels.slice(c, c + 1), sr, 'peaking', 1200, 8, 4.5);
+      applyFilter(channels.slice(c, c + 1), sr, 'peaking', 1600, 1.1, 1.1);
     }
   }
 
@@ -457,6 +464,7 @@
     var channels = copyChannels(wav.channels);
     toneEQ(channels, wav.sr, preset);
     applyEffect(channels, wav.sr, preset);
+    if (preset.effect !== 'Reverb') fxReverb(channels, wav.sr, 0.16, 0.62);
     normalize(channels, 0.89);
     return encodeWav(channels, wav.sr);
   }

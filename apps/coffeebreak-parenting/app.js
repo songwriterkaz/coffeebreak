@@ -469,6 +469,9 @@
 
   var progress = load(PROGRESS_KEY, { certificateName: "", lessons: {}, quizzes: {}, notes: {}, completedAt: "" });
   var feed = load(FEED_KEY, { nick: "", posts: [], showHidden: false });
+  var dayClient = window.CBWalls ? window.CBWalls.create({ api: "https://cb-vocal-social.coffeebreaks.workers.dev", channel: "parenting", storageKey: "cb-walls-parenting-v1" }) : null;
+  var dayCache = null;
+  var dayShared = false;
   if (!progress.lessons) progress.lessons = {};
   if (!progress.quizzes) progress.quizzes = {};
   if (!progress.notes) progress.notes = {};
@@ -537,6 +540,21 @@
     else html = viewHome();
     app.innerHTML = html;
     app.focus();
+    if (p[0] === "day" && dayClient && !route.fresh) {
+      dayClient.feed().then(function (j) {
+        dayShared = !!j.shared;
+        var posts = j.posts || [];
+        return Promise.all(posts.map(function (post) {
+          if (post.device || (post.comments && post.comments.length)) return post;
+          return dayClient.commentsFor(post.id).then(function (list) { post.comments = list || []; return post; }, function () { return post; });
+        })).then(function (full) {
+          dayCache = full;
+          route.fresh = true;
+          route();
+          route.fresh = false;
+        });
+      });
+    }
     var cur = p[0] === "day" ? "day" : p[0] === "certificate" ? "certificate" : p[0] === "help" ? "help" : "course";
     document.querySelectorAll(".tabs a").forEach(function (a) {
       var on = (a.getAttribute("href") === "#/" && cur === "course") ||
@@ -661,23 +679,37 @@
       '<p class="soft">Coffeebreak Parenting is a free course. It is not a crisis service, and it does not watch your family. Nothing you type in the lessons is sent to Coffeebreak.</p></article>';
   }
 
+  function dayList() {
+    var rows = [];
+    var seen = {};
+    (dayCache || []).forEach(function (p) { if (p && !seen[p.id]) { seen[p.id] = 1; rows.push(p); } });
+    feed.posts.forEach(function (p) {
+      if (seen[p.id]) return;
+      seen[p.id] = 1;
+      rows.push({ id: p.id, text: p.text, created: p.at, device: true, legacy: true, author: { name: p.name }, comments: p.comments || [], hidden: p.hidden, reported: p.reported, react: p.react });
+    });
+    return rows.filter(function (p) { return feed.showHidden || !p.hidden; });
+  }
+
   function viewDay() {
-    var posts = feed.posts.filter(function (p) { return feed.showHidden || !p.hidden; });
+    var posts = dayList();
     var hiddenN = feed.posts.filter(function (p) { return p.hidden; }).length;
     var list = posts.map(renderPost).join("");
     if (!posts.length) list = '<p class="card">No posts on this device yet. When you write one, it stays in this browser.</p>';
     var chips = PROMPTS.map(function (t) {
       return '<button type="button" class="btn quiet" data-act="prompt" data-text="' + esc(t) + '">' + esc(t) + "</button>";
     }).join(" ");
-    return '<section class="rules"><h2>How was your day?</h2>' +
-      '<p><strong>On this device for now.</strong> This is a friendly natter saved in this browser only. It is not a shared feed. Other parents cannot see it, and Coffeebreak does not receive it.</p>' +
+    var note = dayShared
+      ? "<p><strong>Shared parenting channel.</strong> This uses the same wall newsfeed as Vocal Social, on a separate parenting channel. A post here is on your wall and in that channel for everyone.</p>"
+      : "<p><strong>On this device for now.</strong> The shared parenting channel is the Vocal Social wall Worker. It is not deployed yet, so this natter stays in this browser. Other parents cannot see it, and Coffeebreak does not receive it.</p>";
+    return '<section class="rules"><h2>How was your day?</h2>' + note +
       "<ul><li>Use a first name or a nickname only.</li><li>Do not name other people or children.</li><li>Be kind. Warm chat about your own day is welcome. Pile-ons and insults are not.</li></ul>" +
       "<p>Report and Hide work on this device. A report is not sent anywhere, because nothing here is shared. Hide puts a post or comment out of the way until you choose to show hidden ones.</p></section>" +
       '<form id="day-form" class="card"><label>First name or nickname<input id="day-nick" type="text" maxlength="24" autocomplete="nickname" value="' + esc(feed.nick || "") + '"></label>' +
       '<label>Your day<textarea id="day-text" maxlength="500" placeholder="The funny bit, the messy bit, the small win"></textarea></label>' +
       '<label class="check"><input id="day-ok" type="checkbox"> I am using a first name or nickname, and I have not named other people or children.</label>' +
       '<p class="row">' + chips + "</p>" +
-      '<p id="day-msg" class="ui" role="status"></p><button class="btn" type="submit">Post on this device</button></form>' +
+      '<p id="day-msg" class="ui" role="status"></p><button class="btn" type="submit">Post</button></form>' +
       '<p class="row ui"><button type="button" class="btn quiet" data-act="toggle-hidden">' + (feed.showHidden ? "Hide the hidden ones" : "Show hidden") + "</button>" +
       (hiddenN ? '<span class="soft">' + hiddenN + " hidden on this device</span>" : "") + "</p>" + list;
   }
@@ -689,13 +721,17 @@
       return '<button type="button" class="btn quiet react" data-act="react" data-id="' + esc(p.id) + '" data-key="' + key + '" aria-pressed="' + (on ? "true" : "false") + '">' + label + (on ? " · yes" : "") + "</button>";
     }).join(" ");
     var comments = (p.comments || []).filter(function (c) { return feed.showHidden || !c.hidden; }).map(function (c) {
-      return '<div class="comment"><p class="meta">' + esc(c.name) + " · " + esc(when(c.at)) + (c.reported ? " · reported on this device" : "") + "</p><p>" + esc(c.text) + "</p>" +
+      var cname = (c.author && (c.author.name || c.author.handle)) || c.name || "Someone";
+      var cat = c.created || c.at || Date.now();
+      return '<div class="comment"><p class="meta">' + esc(cname) + " · " + esc(when(cat)) + (c.device ? " · On this device for now" : "") + (c.reported ? " · reported on this device" : "") + "</p><p>" + esc(c.text) + "</p>" +
         '<p class="row"><button type="button" class="btn warn" data-act="report-comment" data-post="' + esc(p.id) + '" data-id="' + esc(c.id) + '">Report</button>' +
         '<button type="button" class="btn quiet" data-act="hide-comment" data-post="' + esc(p.id) + '" data-id="' + esc(c.id) + '">' + (c.hidden ? "Hidden" : "Hide") + "</button>" +
         (c.hidden ? '<button type="button" class="btn quiet" data-act="unhide-comment" data-post="' + esc(p.id) + '" data-id="' + esc(c.id) + '">Unhide</button>' : "") +
         "</p></div>";
     }).join("");
-    return '<article class="post"><p class="meta">' + esc(p.name) + " · " + esc(when(p.at)) + (p.reported ? " · reported on this device" : "") + (p.hidden ? " · hidden" : "") + "</p>" +
+    var pname = (p.author && p.author.name) || p.name || "Someone";
+    var pat = p.created || p.at || Date.now();
+    return '<article class="post"><p class="meta">' + esc(pname) + " · " + esc(when(pat)) + (p.device ? " · On this device for now" : "") + (p.reported ? " · reported on this device" : "") + (p.hidden ? " · hidden" : "") + "</p>" +
       "<p>" + esc(p.text) + "</p><p class=\"row\">" + reacts +
       '<button type="button" class="btn warn" data-act="report-post" data-id="' + esc(p.id) + '">Report</button>' +
       '<button type="button" class="btn quiet" data-act="hide-post" data-id="' + esc(p.id) + '">' + (p.hidden ? "Hidden" : "Hide") + "</button>" +
@@ -832,16 +868,26 @@
       if (!nick || !text) { if (msg2) msg2.textContent = "Add a first name or nickname, and a few words about your day."; return; }
       if (!ok) { if (msg2) msg2.textContent = "Tick the box to confirm: nickname only, and no other people or children named."; return; }
       feed.nick = nick;
-      feed.posts.unshift({ id: rid("p"), name: nick, text: text, at: Date.now(), react: {}, comments: [], hidden: false, reported: false });
-      if (feed.posts.length > 100) feed.posts.length = 100;
       save(FEED_KEY, feed);
-      route();
+      if (!dayClient) {
+        feed.posts.unshift({ id: rid("p"), name: nick, text: text, at: Date.now(), react: {}, comments: [], hidden: false, reported: false });
+        if (feed.posts.length > 100) feed.posts.length = 100;
+        save(FEED_KEY, feed);
+        route();
+        return;
+      }
+      dayClient.publish(text, nick).then(function () { route(); }, function (err) { if (msg2) msg2.textContent = err.message; });
     } else if (form.classList.contains("comment-form")) {
       e.preventDefault();
       var post = findPost(form.getAttribute("data-post"));
       var field = form.querySelector("textarea");
       var text2 = field ? field.value.trim().slice(0, 280) : "";
-      if (!post || !text2) return;
+      if (!text2) return;
+      if (!post && dayClient) {
+        dayClient.comment(form.getAttribute("data-post"), text2, feed.nick || "Me").then(function () { route(); });
+        return;
+      }
+      if (!post) return;
       var name = (feed.nick || "Me").slice(0, 24);
       post.comments = post.comments || [];
       post.comments.push({ id: rid("c"), name: name, text: text2, at: Date.now(), hidden: false, reported: false });

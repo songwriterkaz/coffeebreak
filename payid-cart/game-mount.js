@@ -182,7 +182,7 @@
       var stepsHead = document.createElement('p');
       stepsHead.textContent = 'How to pay';
       var steps = document.createElement('ol');
-      ['Open your banking app.', 'Send the Australian dollar amount to that PayID.', 'Put the reference in the payment description.'].forEach(function (text) {
+      ['Open your banking app.', 'Send the Australian dollar amount to that PayID.', 'Put the order reference in the payment description.'].forEach(function (text) {
         var item = document.createElement('li');
         item.textContent = text;
         steps.appendChild(item);

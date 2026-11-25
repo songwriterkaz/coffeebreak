@@ -525,9 +525,22 @@
   }
   function studioTry() {
     var msg = document.getElementById('dl-msg');
-    if (msg) msg.textContent = 'Studio quality uses Coffeebreak Studio\'s ACE-Step path. Open it with these lyrics, or keep the in-browser voice here.';
-    try { sessionStorage.setItem('cb-lyricloop-lyrics', state.lyrics || ''); } catch (e) {}
-    window.open('../coffeebreak-studio/', '_blank', 'noopener');
+    var lyrics = (state.lyrics || '').trim();
+    if (!lyrics) { if (msg) msg.textContent = 'Write lyrics first. The in-browser voice can still sing the preview line.'; return; }
+    if (!window.CBStudioQuality) { if (msg) msg.textContent = 'Studio quality is not on this page. Download the sung WAV from the in-browser voice.'; return; }
+    if (msg) msg.textContent = 'Asking the same ACE-Step path as Coffeebreak Studio.';
+    window.CBStudioQuality.sing(lyrics, 'country vocal, warm, 100 BPM', function (t) { if (msg) msg.textContent = t; }).then(function (made) {
+      if (!msg) return;
+      msg.textContent = 'Studio file ready from ' + (made.backend || 'ACE-Step') + '. If you would rather keep the in-browser voice, use Download sung WAV. ';
+      var a = document.createElement('a');
+      a.href = made.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = 'Open the studio file';
+      msg.appendChild(a);
+    }, function (err) {
+      if (msg) msg.textContent = 'Studio quality did not answer (' + (err.message || 'busy') + '). Download sung WAV uses the in-browser voice.';
+    });
   }
   function say(id, text) { var n = document.getElementById(id); if (n) n.textContent = text; }
 
