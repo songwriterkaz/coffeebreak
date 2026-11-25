@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak Report Builder</title>
+<meta name="description" content="A free writing aid for parents and carers. Guided reports for NDIS plan reviews, occupational therapists, doctors, schools and incident logs. Drafts stay on this device.">
+<meta name="theme-color" content="#f4ecdf">
+<link rel="icon" href="../cb-logo.png">
+<style>
+:root {
+  --bg: #f4ecdf;
+  --card: #fffaf3;
+  --ink: #2c2118;
+  --soft: #5c463c;
+  --line: #e3d2bf;
+  --cup: #8a4630;
+  --cup2: #c46b45;
+  --good: #1f6b45;
+  --tint: #f3e2d4;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: linear-gradient(180deg, #f7f1e6, var(--bg) 22%, #efe4d4);
+  color: var(--ink);
+  font: 17px/1.5 system-ui, Segoe UI, Roboto, sans-serif;
+}
+a { color: var(--cup); }
+a:hover { color: #5e2c1c; }
+img { max-width: 100%; }
+:focus-visible { outline: 3px solid var(--cup2); outline-offset: 2px; }
+.skip {
+  position: absolute; left: 12px; top: -40px; background: #fff; color: var(--ink);
+  padding: 8px 12px; border-radius: 8px; z-index: 5;
+}
+.skip:focus { top: 12px; }
+header.top {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 14px 16px; background: var(--card); border-bottom: 2px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; min-width: 0; }
+.brand img { width: 56px; height: 56px; border-radius: 50%; background: #3a1a10; object-fit: cover; flex: none; }
+.brand h1 { margin: 0; font-size: 1.35rem; line-height: 1.2; letter-spacing: 0.01em; }
+.brand small { display: block; color: var(--soft); font-size: 0.92rem; }
+.hub-link {
+  background: var(--cup); color: #fff; text-decoration: none; font-weight: 700;
+  padding: 10px 14px; border-radius: 999px; min-height: 44px; display: inline-flex; align-items: center;
+}
+.hub-link:hover { color: #fff; background: #6e2e24; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 16px 16px 48px; }
+.lede { margin: 0 0 12px; font-size: 1.05rem; }
+.notes { display: grid; gap: 8px; margin: 0 0 16px; }
+.note {
+  margin: 0; padding: 12px 14px; background: var(--card); border: 1px solid var(--line);
+  border-left: 6px solid var(--cup); border-radius: 14px;
+}
+.note strong { display: block; }
+.layout { display: grid; gap: 16px; align-items: start; }
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px;
+}
+fieldset { border: 1px solid var(--line); border-radius: 14px; margin: 0 0 14px; padding: 12px; background: #fff; }
+legend { font-weight: 750; padding: 0 6px; }
+label { display: block; font-weight: 700; margin: 12px 0 4px; }
+.hint { margin: 0 0 6px; color: var(--soft); font-size: 0.95rem; }
+input[type="text"], input[type="date"], input[type="time"], textarea, select {
+  width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid #c9b39f;
+  background: #fff; color: var(--ink); font: 16px/1.45 system-ui, Segoe UI, Roboto, sans-serif;
+}
+textarea { resize: vertical; min-height: 6.5em; }
+.pair { display: grid; gap: 10px; }
+.choices { display: grid; gap: 8px; }
+.choice {
+  display: grid; grid-template-columns: 1.25rem 1fr; gap: 8px 10px; align-items: start;
+  border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; background: #fff; cursor: pointer;
+}
+.choice input { margin-top: 4px; width: 1.15rem; height: 1.15rem; }
+.choice b { display: block; }
+.choice span { display: block; color: var(--soft); font-weight: 450; font-size: 0.95rem; }
+.choice.on { border-color: var(--cup); background: #f8ebe3; box-shadow: inset 0 0 0 1px var(--cup); }
+.starters { margin: 6px 0 2px; }
+.starters summary { cursor: pointer; color: var(--cup); font-weight: 650; min-height: 44px; display: flex; align-items: center; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+.chips button, .btn, button.btn {
+  appearance: none; border: 1px solid var(--line); background: #fff; color: var(--ink);
+  border-radius: 12px; padding: 10px 12px; font: 600 16px/1.3 system-ui, Segoe UI, Roboto, sans-serif;
+  cursor: pointer; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
+  text-decoration: none;
+}
+.btn.primary, button.primary { background: var(--cup); color: #fff; border-color: var(--cup); }
+.btn.primary:hover, button.primary:hover { background: #6e2e24; }
+.btn.good { background: var(--good); color: #fff; border-color: var(--good); }
+.btn.quiet { background: #fff; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+.toolbar .btn { flex: 1 1 160px; text-align: center; text-decoration: none; }
+.preview-col { display: flex; flex-direction: column; gap: 8px; }
+#sheet {
+  background: #fff; color: #1a1a1a; border: 1px solid var(--line); border-radius: 16px;
+  padding: 22px 18px 28px; min-height: 280px;
+  font-family: Georgia, "Iowan Old Style", Palatino, "Palatino Linotype", serif;
+  font-size: 1.05rem; line-height: 1.45; box-shadow: 0 8px 24px #8a463014;
+}
+#sheet h1 { font-family: system-ui, Segoe UI, Roboto, sans-serif; font-size: 1.45rem; line-height: 1.25; margin: 0 0 6px; }
+#sheet h2 { font-family: system-ui, Segoe UI, Roboto, sans-serif; font-size: 1.05rem; margin: 1.1em 0 0.25em; }
+#sheet p { margin: 0.35em 0; }
+#sheet .sheet-note {
+  margin-top: 1.4em; padding-top: 0.75em; border-top: 1px solid #ddd;
+  font-family: system-ui, Segoe UI, Roboto, sans-serif; font-size: 0.92rem; color: #333;
+}
+#sheet .plain { white-space: pre-wrap; font-family: Georgia, Palatino, serif; }
+#sheet .empty-hint { color: var(--soft); font-family: system-ui, Segoe UI, Roboto, sans-serif; }
+.status { min-height: 1.4em; font-weight: 650; }
+.drafts { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+.drafts li {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between;
+  background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px;
+}
+.drafts p { margin: 0; }
+.draft-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+footer.legal { max-width: 1120px; margin: 0 auto; padding: 8px 16px 36px; color: var(--soft); }
+footer.legal p { margin: 0 0 8px; }
+@media (min-width: 720px) {
+  .pair { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 980px) {
+  .layout { grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr); }
+  .preview-col { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow: auto; }
+}
+@media (max-width: 599px) {
+  .toolbar .btn { flex-basis: 100%; }
+  header.top { align-items: flex-start; }
+}
+</style>
+<style media="print">
+/* Print stylesheet. In the print dialog, choose Save as PDF. */
+@page { margin: 16mm; }
+body { background: #fff; color: #000; }
+header.top.noprint,
+a.skip.noprint,
+.notes.noprint,
+form.noprint,
+.toolbar.noprint,
+p.noprint,
+footer.legal.noprint { display: none; }
+.wrap, footer.legal { max-width: none; margin: 0; padding: 0; }
+.layout { display: block; }
+.preview-col { position: static; max-height: none; overflow: visible; }
+#sheet {
+  border: 0; border-radius: 0; box-shadow: none; padding: 0; min-height: 0;
+  font-size: 12pt; color: #000; background: #fff;
+}
+#sheet h1 { font-size: 18pt; }
+#sheet h2 { font-size: 13pt; }
+#sheet .sheet-note { font-size: 10pt; color: #222; }
+a { color: #000; text-decoration: none; }
+</style>
+</head>
+<body>
+<a class="skip noprint" href="#form">Skip to questions</a>
+<header class="top noprint">
+  <a class="brand" href="../../">
+    <img src="../cb-logo.png" alt="Coffeebreak cup logo" width="56" height="56">
+    <span>
+      <h1>Coffeebreak Report Builder</h1>
+      <small>For parents and carers</small>
+    </span>
+  </a>
+  <a class="hub-link" href="../../">Coffeebreak hub</a>
+</header>
+<div class="wrap">
+  <p class="lede noprint">Write a clear report about your child for an occupational therapist, doctor, NDIS planner, support coordinator, school or similar. Pick a template, answer the prompts, then edit the wording before you copy or print it.</p>
+  <div class="notes noprint">
+    <p class="note" id="privacy-note"><strong>Privacy</strong> Everything you type stays on this device. Drafts are saved in this browser only. Nothing is uploaded, and there is no account. Another device, or clearing site data, will not have these drafts. Initials are enough if you would rather not store a full name.</p>
+    <p class="note" id="disclaimer-note"><strong>Disclaimer</strong> This is a writing aid for parents and carers. It is not medical, clinical, educational or legal advice, and it does not replace an assessment or letter from a qualified professional.</p>
+  </div>
+  <div class="layout">
+    <form id="form" class="noprint" action="#">
+      <fieldset>
+        <legend>Report template</legend>
+        <div class="choices" id="choices"></div>
+        <p><a class="btn quiet" href="#sheet">Jump to live preview</a></p>
+      </fieldset>
+      <fieldset>
+        <legend>About you and your child</legend>
+        <div class="pair">
+          <div class="field">
+            <label for="reportDate">Date of this report</label>
+            <input id="reportDate" name="reportDate" type="date" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="writer">Your name</label>
+            <input id="writer" name="writer" type="text" autocomplete="name" maxlength="160">
+          </div>
+        </div>
+        <div class="pair">
+          <div class="field">
+            <label for="role">Your relationship to the child</label>
+            <input id="role" name="role" type="text" autocomplete="off" maxlength="160" placeholder="Parent, carer or guardian">
+          </div>
+          <div class="field">
+            <label for="child">Child’s name or initials</label>
+            <p class="hint" id="hint-child">Initials are enough if you would rather not store a full name on this device.</p>
+            <input id="child" name="child" type="text" autocomplete="off" maxlength="160" aria-describedby="hint-child">
+          </div>
+        </div>
+        <div class="pair">
+          <div class="field">
+            <label for="age">Age</label>
+            <input id="age" name="age" type="text" inputmode="text" autocomplete="off" maxlength="40" placeholder="For example, 7 years">
+          </div>
+          <div class="field">
+            <label for="dob">Date of birth (optional)</label>
+            <input id="dob" name="dob" type="date" autocomplete="off">
+          </div>
+        </div>
+        <div class="field">
+          <label for="pronouns">Pronouns (optional)</label>
+          <input id="pronouns" name="pronouns" type="text" autocomplete="off" maxlength="80" placeholder="For example, she/her, he/him or they/them">
+        </div>
+        <div class="field">
+          <label for="diagnosis">Diagnosis (optional)</label>
+          <p class="hint" id="hint-diagnosis">Leave this blank if you do not have a diagnosis, or write how you describe your child’s needs in your own words.</p>
+          <textarea id="diagnosis" name="diagnosis" rows="3" maxlength="4000" aria-describedby="hint-diagnosis"></textarea>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend id="extra-legend">Report details</legend>
+        <div id="extra"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Daily life, goals and supports</legend>
+        <div class="field">
+          <label for="daily">Daily-living impacts</label>
+          <p class="hint" id="hint-daily"></p>
+          <textarea id="daily" name="daily" rows="6" maxlength="12000" aria-describedby="hint-daily"></textarea>
+          <details class="starters"><summary>Sentence starters</summary><div class="chips" id="start-daily"></div></details>
+        </div>
+        <div class="field">
+          <label for="goals">Goals</label>
+          <p class="hint" id="hint-goals"></p>
+          <textarea id="goals" name="goals" rows="5" maxlength="12000" aria-describedby="hint-goals"></textarea>
+          <details class="starters"><summary>Sentence starters</summary><div class="chips" id="start-goals"></div></details>
+        </div>
+        <div class="field">
+          <label for="supports">Supports used</label>
+          <p class="hint" id="hint-supports"></p>
+          <textarea id="supports" name="supports" rows="5" maxlength="12000" aria-describedby="hint-supports"></textarea>
+          <details class="starters"><summary>Sentence starters</summary><div class="chips" id="start-supports"></div></details>
+        </div>
+        <div class="field">
+          <label for="working">What is working</label>
+          <p class="hint" id="hint-working"></p>
+          <textarea id="working" name="working" rows="5" maxlength="12000" aria-describedby="hint-working"></textarea>
+          <details class="starters"><summary>Sentence starters</summary><div class="chips" id="start-working"></div></details>
+        </div>
+        <div class="field">
+          <label for="notWorking">What is not working</label>
+          <p class="hint" id="hint-notWorking"></p>
+          <textarea id="notWorking" name="notWorking" rows="5" maxlength="12000" aria-describedby="hint-notWorking"></textarea>
+          <details class="starters"><summary>Sentence starters</summary><div class="chips" id="start-notWorking"></div></details>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>What you are asking for</legend>
+        <div class="field">
+          <label for="requests">Requests</label>
+          <p class="hint" id="hint-requests"></p>
+          <textarea id="requests" name="requests" rows="5" maxlength="12000" aria-describedby="hint-requests"></textarea>
+          <details class="starters"><summary>Sentence starters</summary><div class="chips" id="start-requests"></div></details>
+        </div>
+      </fieldset>
+      <div class="toolbar">
+        <button class="btn primary" id="btn-save" type="submit">Save draft</button>
+        <button class="btn quiet" id="btn-new" type="button">New report</button>
+        <a class="btn quiet" href="#sheet">Jump to preview</a>
+      </div>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+      <section aria-labelledby="drafts-heading">
+        <h2 id="drafts-heading">Saved drafts</h2>
+        <p class="hint">Stored in this browser only. They are not sent to Coffeebreak.</p>
+        <ul class="drafts" id="drafts"></ul>
+        <p><button class="btn quiet" id="btn-clear-drafts" type="button">Delete all drafts</button></p>
+      </section>
+    </form>
+    <div class="preview-col">
+      <div class="toolbar noprint">
+        <button class="btn good" id="btn-copy" type="button">Copy report</button>
+        <button class="btn primary" id="btn-print" type="button">Print or save as PDF</button>
+        <button class="btn quiet" id="btn-rebuild" type="button">Rebuild preview from answers</button>
+      </div>
+      <p class="hint noprint" id="preview-state"></p>
+      <p class="hint noprint">To save a PDF, choose Print, then Save as PDF in the print dialog.</p>
+      <p class="hint noprint" id="empty-hint">Your report will appear here as you answer the questions. You can edit the wording afterwards.</p>
+      <article id="sheet" contenteditable="true" spellcheck="true" aria-label="Report preview. You can edit this text." tabindex="0"></article>
+    </div>
+  </div>
+</div>
+<footer class="legal noprint">
+  <p><a href="../../">Coffeebreak hub</a> · <a href="../../pages/">Coffeebreak Pages</a></p>
+  <p>Supporting the future with <a href="https://www.tesla.com" target="_blank" rel="noopener noreferrer">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener noreferrer">Starlink</a>. Coffeebreak is not affiliated with or endorsed by them.</p>
+  <p>Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</p>
+</footer>
+<noscript><p class="wrap">This report builder needs JavaScript. It runs only in your browser and does not send your answers anywhere.</p></noscript>
+<script>
+(function () {
+  'use strict';
+  var KEY_CURRENT = 'cb-report-builder-current';
+  var KEY_DRAFTS = 'cb-report-builder-drafts';
+  var SHARED_IDS = ['reportDate', 'writer', 'role', 'child', 'age', 'dob', 'pronouns', 'diagnosis', 'daily', 'goals', 'supports', 'working', 'notWorking', 'requests'];
+  var NARRATIVE = ['daily', 'goals', 'supports', 'working', 'notWorking', 'requests'];
+  var LABELS = {
+    daily: 'Daily-living impacts',
+    goals: 'Goals',
+    supports: 'Supports used',
+    working: 'What is working',
+    notWorking: 'What is not working',
+    requests: 'Requests'
+  };
+  var SHEET_NOTE = 'Written by a parent or carer as a personal summary, using Coffeebreak Report Builder. This is a writing aid. It is not medical, clinical, educational or legal advice.';
+  var TEMPLATES = [
+    {
+      id: 'ndis',
+      title: 'NDIS plan review or participant statement',
+      short: 'NDIS plan review',
+      audience: 'For an NDIS planner or support coordinator',
+      blurb: 'Everyday life, goals, and the supports you want considered at a plan review.',
+      legend: 'Plan review details',
+      fields: [
+        { id: 'ndisNumber', label: 'NDIS participant number (optional)', type: 'text', maxlength: 40, hint: 'Leave this blank if you would rather not store the number on this device.', auto: 'off' },
+        { id: 'planPeriod', label: 'Plan period', type: 'text', maxlength: 160, placeholder: 'For example, March 2025 to March 2026' },
+        { id: 'changed', label: 'What has changed since the last plan', type: 'textarea', rows: 4, hint: 'A new diagnosis, a school change, more or less help at home, or a shift in daily care.' }
+      ]
+    },
+    {
+      id: 'ot',
+      title: 'OT referral or update',
+      short: 'OT referral or update',
+      audience: 'For an occupational therapist',
+      blurb: 'Why you are asking for occupational therapy, and what daily life looks like right now.',
+      legend: 'Referral details',
+      fields: [
+        { id: 'otTo', label: 'Occupational therapist or clinic (optional)', type: 'text', maxlength: 160 },
+        { id: 'reason', label: 'Reason for the referral or update', type: 'textarea', rows: 4, hint: 'Say what you hope occupational therapy will help with.' },
+        { id: 'settings', label: 'Where support is needed', type: 'text', maxlength: 240, placeholder: 'Home, school, community' }
+      ]
+    },
+    {
+      id: 'doctor',
+      title: 'Doctor, GP or specialist visit summary',
+      short: 'Doctor visit summary',
+      audience: 'For a doctor, GP or specialist',
+      blurb: 'A short brief to take to an appointment, in your own words.',
+      legend: 'Visit details',
+      fields: [
+        { id: 'clinician', label: 'Doctor or clinic, and their role', type: 'text', maxlength: 200, placeholder: 'For example, GP, or paediatrician' },
+        { id: 'visitDate', label: 'Appointment date (optional)', type: 'date' },
+        { id: 'reason', label: 'Reason for the visit', type: 'textarea', rows: 4 },
+        { id: 'questions', label: 'Questions to ask', type: 'textarea', rows: 4, hint: 'Write the questions you do not want to forget.' },
+        { id: 'tried', label: 'What has already been tried (optional)', type: 'textarea', rows: 3, hint: 'Only what you know as the family. Skip anything you are unsure about.' }
+      ]
+    },
+    {
+      id: 'school',
+      title: 'School or teacher report',
+      short: 'School report',
+      audience: 'For a teacher or school',
+      blurb: 'What the school day is like, and what you are asking the school to do.',
+      legend: 'School details',
+      fields: [
+        { id: 'school', label: 'School', type: 'text', maxlength: 200 },
+        { id: 'year', label: 'Year or class', type: 'text', maxlength: 80 },
+        { id: 'teacher', label: 'Teacher or coordinator', type: 'text', maxlength: 160 },
+        { id: 'adjustments', label: 'Adjustments already in place', type: 'textarea', rows: 4, hint: 'Seating, breaks, visual supports, extra adult help, or anything the school already does.' }
+      ]
+    },
+    {
+      id: 'incident',
+      title: 'Incident or behaviour log',
+      short: 'Incident log',
+      audience: 'A factual note of what happened',
+      blurb: 'A calm record of one event, for a school, therapist, planner or coordinator.',
+      legend: 'What happened',
+      fields: [
+        { id: 'incidentDate', label: 'Date of the incident', type: 'date' },
+        { id: 'incidentTime', label: 'Time', type: 'time' },
+        { id: 'where', label: 'Where it happened', type: 'text', maxlength: 240 },
+        { id: 'whoThere', label: 'Who was there', type: 'text', maxlength: 240, hint: 'Roles are enough, such as teacher, support worker or parent.' },
+        { id: 'before', label: 'What was happening just before', type: 'textarea', rows: 3 },
+        { id: 'happened', label: 'What happened, in order', type: 'textarea', rows: 5, hint: 'Stick to what you saw or were told. Say so if you did not see it yourself.' },
+        { id: 'injuries', label: 'Injury, damage or safety concern (optional)', type: 'textarea', rows: 3 },
+        { id: 'told', label: 'Who has been told', type: 'text', maxlength: 240 }
+      ]
+    }
+  ];
+  var HINTS = {
+    ndis: {
+      daily: 'How disability affects ordinary days: care, meals, sleep, communication, getting out, and safety. One example is more useful than a long list.',
+      goals: 'What you want the next plan to make possible at home and in the community.',
+      supports: 'Paid and unpaid support already in place, including family, support workers, therapy and equipment.',
+      working: 'Supports or routines that help, and what would be lost without them.',
+      notWorking: 'Hours that run out, skills that do not carry over to home, or care the family is holding alone.',
+      requests: 'Supports you want considered, in everyday language. You do not need funding codes.'
+    },
+    ot: {
+      daily: 'Self-care, play, school tasks, sensory needs and getting around. A hard moment and a steadier moment are both useful.',
+      goals: 'Skills you hope will show up at home, not only in a therapy session.',
+      supports: 'What the family, school and any current therapy already do.',
+      working: 'Strategies, equipment or routines that help your child join in.',
+      notWorking: 'What still needs an adult, what tires everyone out, or what does not fit real life at home.',
+      requests: 'What you are asking the occupational therapist to assess, try or explain.'
+    },
+    doctor: {
+      daily: 'How this shows up in care, sleep, eating, school, mood and energy.',
+      goals: 'What a good outcome from care would look like for your child and family.',
+      supports: 'Therapies, school adjustments, medicines or home routines already in use. Write only what you know.',
+      working: 'What has eased symptoms or made the day more manageable.',
+      notWorking: 'What has not helped, or what is getting harder.',
+      requests: 'What you hope will come from the visit, such as a review, a referral, a letter, or a change to care.'
+    },
+    school: {
+      daily: 'How the school day goes: classwork, playground, noise, transitions, personal care and getting home.',
+      goals: 'What you want your child to manage more comfortably at school.',
+      supports: 'Help from family, therapists or school staff, and tools that travel between home and school.',
+      working: 'What helps in class and in the playground.',
+      notWorking: 'Times of day, places or tasks that regularly go badly.',
+      requests: 'What you are asking the teacher or school to put in place or review.'
+    },
+    incident: {
+      daily: 'How this kind of moment affects the rest of the day, including care, sleep, school or going out.',
+      goals: 'What a safer or calmer pattern would look like.',
+      supports: 'Who was available, and which strategies were already in place.',
+      working: 'What helped during or after the event.',
+      notWorking: 'What did not help, or what was missing.',
+      requests: 'Who should follow up, and what you are asking them to do.'
+    }
+  };
+  var STARTERS = {
+    daily: ['Getting dressed: ', 'Meals: ', 'Washing and hygiene: ', 'Sleep: ', 'Leaving the house: ', 'School or learning: ', 'Safety: '],
+    goals: ['In the next year we hope: ', 'At home we are working on: ', 'At school or in the community we are working on: '],
+    supports: ['Family and informal support: ', 'Paid support workers: ', 'Therapy: ', 'Equipment or routines: '],
+    working: ['This helps: ', 'We can tell it is helping because: '],
+    notWorking: ['This is still hard: ', 'The gap is: '],
+    requests: ['We are asking for: ', 'It would help if: ']
+  };
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var state = { template: 'ndis', shared: {}, extra: {}, manual: false, previewText: '', draftId: null };
+  var rendering = false;
+  var saveTimer = 0;
+  var store = openStore();
+  var sheet = document.getElementById('sheet');
+  var statusEl = document.getElementById('status');
+
+  function openStore() {
+    try {
+      var k = '__cb_rb_probe__';
+      localStorage.setItem(k, '1');
+      localStorage.removeItem(k);
+      return localStorage;
+    } catch (e) {
+      return null;
+    }
+  }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function todayISO() {
+    var d = new Date();
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  }
+  function prettyDate(iso) {
+    if (!iso) return '';
+    var p = String(iso).split('-');
+    if (p.length !== 3) return String(iso);
+    var mi = parseInt(p[1], 10) - 1;
+    var day = parseInt(p[2], 10);
+    if (mi < 0 || mi > 11 || !day) return String(iso);
+    return day + ' ' + MONTHS[mi] + ' ' + p[0];
+  }
+  function prettyTime(t) {
+    if (!t) return '';
+    var p = String(t).split(':');
+    var h = parseInt(p[0], 10);
+    var m = p[1] || '00';
+    if (isNaN(h)) return String(t);
+    var ap = h >= 12 ? 'pm' : 'am';
+    var h12 = h % 12;
+    if (h12 === 0) h12 = 12;
+    return h12 + ':' + m + ' ' + ap;
+  }
+  function stamp(ts) {
+    var d = new Date(ts);
+    if (isNaN(d.getTime())) return '';
+    return prettyDate(d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate())) + ', ' + prettyTime(pad(d.getHours()) + ':' + pad(d.getMinutes()));
+  }
+  function templateById(id) {
+    for (var i = 0; i < TEMPLATES.length; i++) if (TEMPLATES[i].id === id) return TEMPLATES[i];
+    return TEMPLATES[0];
+  }
+  function blankShared() {
+    var o = {};
+    SHARED_IDS.forEach(function (id) { o[id] = ''; });
+    o.reportDate = todayISO();
+    return o;
+  }
+  function readShared(obj) {
+    var o = blankShared();
+    SHARED_IDS.forEach(function (id) {
+      if (obj && Object.prototype.hasOwnProperty.call(obj, id) && obj[id] != null) o[id] = String(obj[id]);
+    });
+    return o;
+  }
+  function readExtra(obj) {
+    var out = {};
+    TEMPLATES.forEach(function (tpl) {
+      var src = obj && obj[tpl.id];
+      if (!src || typeof src !== 'object') return;
+      var bag = {};
+      tpl.fields.forEach(function (f) {
+        if (src[f.id] != null) bag[f.id] = String(src[f.id]);
+      });
+      out[tpl.id] = bag;
+    });
+    return out;
+  }
+  function extraBag() {
+    if (!state.extra[state.template]) state.extra[state.template] = {};
+    return state.extra[state.template];
+  }
+  function fieldValue(id) {
+    var el = document.getElementById(id);
+    return el ? el.value : '';
+  }
+  function setStatus(msg) { statusEl.textContent = msg || ''; }
+  function wordCount(text) {
+    var m = String(text || '').trim().match(/\S+/g);
+    return m ? m.length : 0;
+  }
+  function hasReportBody() {
+    var i;
+    for (i = 0; i < SHARED_IDS.length; i++) {
+      if (SHARED_IDS[i] === 'reportDate') continue;
+      if ((state.shared[SHARED_IDS[i]] || '').trim()) return true;
+    }
+    var bag = state.extra[state.template] || {};
+    var tpl = templateById(state.template);
+    for (i = 0; i < tpl.fields.length; i++) {
+      if ((bag[tpl.fields[i].id] || '').trim()) return true;
+    }
+    return false;
+  }
+  function draftTitle() {
+    var tpl = templateById(state.template);
+    var child = (state.shared.child || '').trim() || 'Unnamed child';
+    var date = prettyDate(state.shared.reportDate);
+    return [tpl.short, child, date].filter(Boolean).join(' · ');
+  }
+  function snapshot() {
+    return {
+      v: 1,
+      template: state.template,
+      shared: state.shared,
+      extra: state.extra,
+      manual: state.manual,
+      previewText: state.manual ? sheet.innerText : '',
+      draftId: state.draftId
+    };
+  }
+  function scheduleSave() {
+    if (!store) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      try { store.setItem(KEY_CURRENT, JSON.stringify(snapshot())); }
+      catch (e) { setStatus('This browser could not store the latest draft. You can still copy or print.'); }
+    }, 250);
+  }
+  function loadDrafts() {
+    if (!store) return [];
+    try {
+      var raw = JSON.parse(store.getItem(KEY_DRAFTS) || '[]');
+      return Array.isArray(raw) ? raw : [];
+    } catch (e) { return []; }
+  }
+  function writeDrafts(list) {
+    if (!store) { setStatus('This browser is not keeping drafts. You can still write, copy and print. Nothing is uploaded.'); return false; }
+    try {
+      store.setItem(KEY_DRAFTS, JSON.stringify(list));
+      return true;
+    } catch (e) {
+      setStatus('This browser could not store the draft. You can still copy or print.');
+      return false;
+    }
+  }
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function renderChoices() {
+    var box = document.getElementById('choices');
+    TEMPLATES.forEach(function (tpl) {
+      var label = el('label', 'choice');
+      var input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'template';
+      input.id = 'tpl-' + tpl.id;
+      input.value = tpl.id;
+      if (tpl.id === state.template) input.checked = true;
+      var text = el('span');
+      var b = el('b', '', tpl.title);
+      text.appendChild(b);
+      text.appendChild(el('span', '', tpl.blurb));
+      label.appendChild(input);
+      label.appendChild(text);
+      input.addEventListener('change', function () {
+        if (input.checked) onTemplate(tpl.id);
+      });
+      box.appendChild(label);
+    });
+    markChoice();
+  }
+  function markChoice() {
+    var nodes = document.querySelectorAll('.choice');
+    for (var i = 0; i < nodes.length; i++) {
+      var input = nodes[i].querySelector('input');
+      nodes[i].classList.toggle('on', !!(input && input.checked));
+    }
+  }
+  function applyHints() {
+    var hints = HINTS[state.template] || HINTS.ndis;
+    NARRATIVE.forEach(function (id) {
+      var p = document.getElementById('hint-' + id);
+      if (p) p.textContent = hints[id] || '';
+    });
+    document.getElementById('extra-legend').textContent = templateById(state.template).legend;
+  }
+  function renderStarters() {
+    NARRATIVE.forEach(function (id) {
+      var box = document.getElementById('start-' + id);
+      if (!box) return;
+      box.textContent = '';
+      (STARTERS[id] || []).forEach(function (line) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = line.trim();
+        b.addEventListener('click', function () { appendLine(id, line); });
+        box.appendChild(b);
+      });
+    });
+  }
+  function appendLine(id, line) {
+    var node = document.getElementById(id);
+    if (!node) return;
+    var v = node.value.replace(/\s+$/, '');
+    node.value = v ? (v + '\n' + line) : line;
+    state.shared[id] = node.value;
+    onEdit();
+  }
+  function renderExtras() {
+    var tpl = templateById(state.template);
+    var box = document.getElementById('extra');
+    var bag = extraBag();
+    box.textContent = '';
+    tpl.fields.forEach(function (f) {
+      var wrap = el('div', 'field');
+      var fid = 'x-' + f.id;
+      var label = el('label', '', f.label);
+      label.htmlFor = fid;
+      wrap.appendChild(label);
+      if (f.hint) {
+        var hint = el('p', 'hint', f.hint);
+        hint.id = 'hint-' + fid;
+        wrap.appendChild(hint);
+      }
+      var node;
+      if (f.type === 'textarea') {
+        node = document.createElement('textarea');
+        node.rows = f.rows || 4;
+        node.maxLength = 12000;
+      } else {
+        node = document.createElement('input');
+        node.type = f.type || 'text';
+        if (f.maxlength) node.maxLength = f.maxlength;
+        node.autocomplete = 'off';
+      }
+      node.id = fid;
+      node.value = bag[f.id] || '';
+      if (f.placeholder) node.placeholder = f.placeholder;
+      if (f.hint) node.setAttribute('aria-describedby', 'hint-' + fid);
+      node.addEventListener('input', function () {
+        extraBag()[f.id] = node.value;
+        onEdit();
+      });
+      wrap.appendChild(node);
+      box.appendChild(wrap);
+    });
+  }
+  function fillShared() {
+    SHARED_IDS.forEach(function (id) {
+      var node = document.getElementById(id);
+      if (node) node.value = state.shared[id] || '';
+    });
+  }
+  function bindShared() {
+    SHARED_IDS.forEach(function (id) {
+      var node = document.getElementById(id);
+      if (!node) return;
+      node.addEventListener('input', function () {
+        state.shared[id] = node.value;
+        onEdit();
+      });
+    });
+  }
+  function cleanLabel(label) {
+    return String(label).replace(/\s*\(optional\)/ig, '').trim();
+  }
+  function addLine(blocks, label, value) {
+    var v = (value || '').trim();
+    if (!v) return;
+    blocks.push({ t: 'p', x: label + ': ' + v });
+  }
+  function addSection(blocks, label, value) {
+    var v = (value || '').trim();
+    if (!v) return;
+    blocks.push({ t: 'h2', x: label });
+    v.split(/\n+/).forEach(function (para) {
+      if (para.trim()) blocks.push({ t: 'p', x: para.trim() });
+    });
+  }
+  function extraDisplay(f, raw) {
+    if (f.type === 'date') return prettyDate(raw);
+    if (f.type === 'time') return prettyTime(raw);
+    return (raw || '').trim();
+  }
+  function buildBlocks() {
+    var tpl = templateById(state.template);
+    var s = state.shared;
+    var blocks = [];
+    blocks.push({ t: 'h1', x: tpl.title });
+    blocks.push({ t: 'p', x: tpl.audience });
+    if ((s.reportDate || '').trim()) blocks.push({ t: 'p', x: 'Report date: ' + prettyDate(s.reportDate) });
+    var people = [];
+    var who = [s.writer, s.role].map(function (v) { return (v || '').trim(); }).filter(Boolean).join(', ');
+    if (who) people.push('Written by: ' + who);
+    if ((s.child || '').trim()) people.push('Child: ' + s.child.trim());
+    if ((s.age || '').trim()) people.push('Age: ' + s.age.trim());
+    if ((s.dob || '').trim()) people.push('Date of birth: ' + prettyDate(s.dob));
+    if ((s.pronouns || '').trim()) people.push('Pronouns: ' + s.pronouns.trim());
+    if (people.length) {
+      blocks.push({ t: 'h2', x: 'Child and family' });
+      people.forEach(function (line) { blocks.push({ t: 'p', x: line }); });
+    }
+    if ((s.diagnosis || '').trim()) addSection(blocks, 'Diagnosis', s.diagnosis);
+    var bag = state.extra[state.template] || {};
+    tpl.fields.forEach(function (f) {
+      var shown = extraDisplay(f, bag[f.id]);
+      if (!shown) return;
+      if (f.type === 'textarea') addSection(blocks, cleanLabel(f.label), shown);
+      else addLine(blocks, cleanLabel(f.label), shown);
+    });
+    NARRATIVE.forEach(function (id) { addSection(blocks, LABELS[id], s[id]); });
+    return blocks;
+  }
+  function renderPlain(text) {
+    rendering = true;
+    sheet.textContent = '';
+    sheet.appendChild(el('div', 'plain', text || ''));
+    rendering = false;
+  }
+  function renderSheet() {
+    rendering = true;
+    sheet.textContent = '';
+    var hint = document.getElementById('empty-hint');
+    if (!hasReportBody()) {
+      if (hint) hint.hidden = false;
+      sheet.appendChild(el('h1', '', templateById(state.template).title));
+      rendering = false;
+      setPreviewState();
+      return;
+    }
+    if (hint) hint.hidden = true;
+    buildBlocks().forEach(function (b) { sheet.appendChild(el(b.t, '', b.x)); });
+    sheet.appendChild(el('p', 'sheet-note', SHEET_NOTE));
+    rendering = false;
+    setPreviewState();
+  }
+  function showSheet() {
+    var hint = document.getElementById('empty-hint');
+    if (state.manual) {
+      if (hint) hint.hidden = true;
+      renderPlain(state.previewText);
+    } else renderSheet();
+    setPreviewState();
+  }
+  function setPreviewState() {
+    var n = wordCount(sheet.innerText);
+    var showCount = state.manual || hasReportBody();
+    var msg = showCount && n ? (n + (n === 1 ? ' word. ' : ' words. ')) : '';
+    if (state.manual) msg += 'The preview is edited by hand, so it will not change while you type. Rebuild the preview if you want it to follow the fields again.';
+    else msg += 'The preview follows your answers. You can click into it and change the wording.';
+    document.getElementById('preview-state').textContent = msg;
+  }
+  function onEdit() {
+    if (!state.manual) renderSheet();
+    else setPreviewState();
+    scheduleSave();
+  }
+  function onTemplate(next) {
+    if (next === state.template) return;
+    if (state.manual) {
+      var ok = window.confirm('The preview has been edited by hand. Changing the template keeps your answers. The preview stays as you edited it until you rebuild. Continue?');
+      if (!ok) {
+        var prev = document.getElementById('tpl-' + state.template);
+        if (prev) prev.checked = true;
+        markChoice();
+        return;
+      }
+    }
+    state.template = next;
+    markChoice();
+    renderExtras();
+    applyHints();
+    if (!state.manual) renderSheet();
+    scheduleSave();
+  }
+  function applySnapshot(data) {
+    var tpl = data && templateById(data.template);
+    state.template = tpl ? tpl.id : 'ndis';
+    if (data && data.template && !TEMPLATES.some(function (t) { return t.id === data.template; })) state.template = 'ndis';
+    state.shared = readShared(data && data.shared);
+    state.extra = readExtra(data && data.extra);
+    state.manual = !!(data && data.manual);
+    state.previewText = data && data.previewText ? String(data.previewText) : '';
+    state.draftId = data && data.draftId ? String(data.draftId) : null;
+    var radio = document.getElementById('tpl-' + state.template);
+    if (radio) radio.checked = true;
+    markChoice();
+    fillShared();
+    renderExtras();
+    applyHints();
+    showSheet();
+  }
+  function renderDraftList() {
+    var list = document.getElementById('drafts');
+    var drafts = loadDrafts();
+    list.textContent = '';
+    if (!drafts.length) {
+      var empty = el('li');
+      empty.appendChild(el('p', '', 'No saved drafts yet. Use Save draft to keep a copy in this browser.'));
+      list.appendChild(empty);
+      return;
+    }
+    drafts.forEach(function (item) {
+      var li = document.createElement('li');
+      var p = el('p');
+      p.appendChild(el('strong', '', item.title || 'Draft'));
+      p.appendChild(document.createElement('br'));
+      p.appendChild(document.createTextNode('Saved ' + stamp(item.savedAt)));
+      var actions = el('div', 'draft-actions');
+      var open = document.createElement('button');
+      open.type = 'button';
+      open.className = 'btn quiet';
+      open.textContent = 'Open';
+      open.setAttribute('aria-label', 'Open draft ' + (item.title || 'untitled'));
+      open.addEventListener('click', function () { openDraft(item); });
+      var del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'btn quiet';
+      del.textContent = 'Delete';
+      del.setAttribute('aria-label', 'Delete draft ' + (item.title || 'untitled'));
+      del.addEventListener('click', function () { deleteDraft(item.id); });
+      actions.appendChild(open);
+      actions.appendChild(del);
+      li.appendChild(p);
+      li.appendChild(actions);
+      list.appendChild(li);
+    });
+  }
+  function contentWorthKeeping() {
+    if (state.manual && (state.previewText || sheet.innerText || '').trim()) return true;
+    return hasReportBody();
+  }
+  function saveDraft() {
+    var drafts = loadDrafts();
+    var now = Date.now();
+    if (!state.draftId) state.draftId = 'd' + now;
+    var item = { id: state.draftId, savedAt: now, title: draftTitle(), data: snapshot() };
+    item.data.draftId = state.draftId;
+    var idx = -1;
+    for (var i = 0; i < drafts.length; i++) if (drafts[i].id === item.id) idx = i;
+    if (idx >= 0) drafts[idx] = item;
+    else drafts.unshift(item);
+    if (drafts.length > 40) drafts.length = 40;
+    if (!writeDrafts(drafts)) return;
+    try { if (store) store.setItem(KEY_CURRENT, JSON.stringify(snapshot())); } catch (e) {}
+    renderDraftList();
+    setStatus('Draft saved on this device.');
+  }
+  function openDraft(item) {
+    if (!item || !item.data) return;
+    if (item.id !== state.draftId && contentWorthKeeping()) {
+      var ok = window.confirm('Open this draft and replace the report on screen? Save the current report first if you have not already.');
+      if (!ok) return;
+    }
+    applySnapshot(item.data);
+    state.draftId = item.id;
+    scheduleSave();
+    setStatus('Draft opened on this device.');
+    window.scrollTo(0, 0);
+  }
+  function deleteDraft(id) {
+    var ok = window.confirm('Delete this saved draft? This cannot be undone.');
+    if (!ok) return;
+    var next = loadDrafts().filter(function (d) { return d.id !== id; });
+    if (!writeDrafts(next)) return;
+    if (state.draftId === id) state.draftId = null;
+    renderDraftList();
+    scheduleSave();
+    setStatus('Draft deleted from this device.');
+  }
+  function newReport() {
+    if (contentWorthKeeping()) {
+      var ok = window.confirm('Start a new report? The report on screen will be cleared. Save a draft first if you want to keep it.');
+      if (!ok) return;
+    }
+    state.template = 'ndis';
+    state.shared = blankShared();
+    state.extra = {};
+    state.manual = false;
+    state.previewText = '';
+    state.draftId = null;
+    var radio = document.getElementById('tpl-ndis');
+    if (radio) radio.checked = true;
+    markChoice();
+    fillShared();
+    renderExtras();
+    applyHints();
+    renderSheet();
+    scheduleSave();
+    setStatus('Started a new report.');
+  }
+  function copyReport() {
+    if (!state.manual && !hasReportBody()) {
+      setStatus('There is no report to copy yet.');
+      return;
+    }
+    var text = sheet.innerText.replace(/\n{3,}/g, '\n\n').trim();
+    var done = function () { setStatus('Report copied.'); };
+    var fail = function () { setStatus('Could not copy automatically. Select the preview and copy it from the menu.'); };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text, done, fail); });
+    } else fallbackCopy(text, done, fail);
+  }
+  function fallbackCopy(text, done, fail) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      var ok = document.execCommand('copy');
+      ta.remove();
+      if (ok) done(); else fail();
+    } catch (e) {
+      ta.remove();
+      fail();
+    }
+  }
+  function boot() {
+    state.shared = blankShared();
+    renderChoices();
+    bindShared();
+    renderStarters();
+    var restored = false;
+    if (store) {
+      try {
+        var raw = store.getItem(KEY_CURRENT);
+        if (raw) {
+          var data = JSON.parse(raw);
+          if (data && data.v === 1) {
+            applySnapshot(data);
+            restored = true;
+          }
+        }
+      } catch (e) { restored = false; }
+    }
+    if (!restored) {
+      fillShared();
+      renderExtras();
+      applyHints();
+      renderSheet();
+    }
+    renderDraftList();
+    if (!store) setStatus('This browser is not keeping drafts. You can still write, copy and print. Nothing is uploaded.');
+    document.getElementById('form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      saveDraft();
+    });
+    document.getElementById('btn-new').addEventListener('click', newReport);
+    document.getElementById('btn-copy').addEventListener('click', copyReport);
+    document.getElementById('btn-print').addEventListener('click', function () { window.print(); });
+    document.getElementById('btn-rebuild').addEventListener('click', function () {
+      state.manual = false;
+      state.previewText = '';
+      renderSheet();
+      scheduleSave();
+      setStatus('Preview rebuilt from your answers.');
+    });
+    document.getElementById('btn-clear-drafts').addEventListener('click', function () {
+      if (!loadDrafts().length) { setStatus('There are no saved drafts to delete.'); return; }
+      var ok = window.confirm('Delete all saved drafts from this browser? A report you already copied or printed is not affected.');
+      if (!ok) return;
+      if (!writeDrafts([])) return;
+      state.draftId = null;
+      renderDraftList();
+      scheduleSave();
+      setStatus('All saved drafts were deleted from this device.');
+    });
+    sheet.addEventListener('input', function () {
+      if (rendering) return;
+      state.manual = true;
+      state.previewText = sheet.innerText;
+      var hint = document.getElementById('empty-hint');
+      if (hint) hint.hidden = true;
+      setPreviewState();
+      scheduleSave();
+    });
+  }
+  boot();
+})();
+</script>
+</body>
+</html>
