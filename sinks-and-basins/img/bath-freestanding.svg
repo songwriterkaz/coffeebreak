@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="Freestanding oval bath">
+<rect width="640" height="480" fill="#f4f7f8"/>
+<ellipse cx="320" cy="280" rx="230" ry="90" fill="#d5dee4"/>
+<ellipse cx="320" cy="250" rx="210" ry="78" fill="#f7fbff" stroke="#8fa0aa" stroke-width="6"/>
+<ellipse cx="320" cy="250" rx="150" ry="40" fill="#d5e6f1"/>
+<rect x="292" y="150" width="56" height="48" rx="16" fill="#c5ced4"/>
+<circle cx="320" cy="142" r="12" fill="#8d9aa3"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="Built-in rectangular bath">
+<rect width="640" height="480" fill="#f4f7f8"/>
+<rect x="70" y="150" width="500" height="210" rx="28" fill="#d5dde2"/>
+<rect x="92" y="168" width="456" height="150" rx="18" fill="#f7fbff" stroke="#9aa8b2" stroke-width="6"/>
+<ellipse cx="320" cy="250" rx="170" ry="42" fill="#d7e7f2" opacity=".85"/>
+<rect x="300" y="118" width="40" height="36" rx="8" fill="#c5ced4"/>
+<circle cx="320" cy="112" r="10" fill="#8d9aa3"/>
+</svg>

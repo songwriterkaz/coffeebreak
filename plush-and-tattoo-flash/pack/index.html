@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak Characters pack</title>
+<link rel="icon" href="../cb-logo.png">
+<style>
+:root{--ink:#3c1428;--rose:#c2185b;--paper:#fffafc}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,Palatino,serif;background:#fce4ec;color:var(--ink)}
+a{color:var(--rose)}
+header{display:flex;gap:16px;align-items:center;padding:16px 20px;background:#fff;border-bottom:4px solid var(--rose)}
+header img{width:72px;height:72px;object-fit:contain}
+h1{margin:0;font-size:1.6rem}
+.price{font-family:system-ui,sans-serif;font-weight:800;color:var(--rose);font-size:1.4rem;margin:.2rem 0}
+.tools{display:flex;gap:8px;flex-wrap:wrap;padding:12px 20px}
+.tools a,.tools button{font:700 15px system-ui,sans-serif;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:10px 14px;text-decoration:none;cursor:pointer}
+main{max-width:920px;margin:0 auto;padding:0 16px 40px}
+.intro{background:#fff;border-radius:16px;padding:16px 18px;margin-bottom:16px}
+.sheet{background:#fff;width:min(100%,210mm);min-height:240mm;margin:14px auto;padding:14mm;border-radius:8px;box-shadow:0 4px 16px #c2185b22}
+.sheet h2{margin:0 0 8px;font-size:1.4rem}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:8mm}
+.card{border:2px dashed var(--rose);border-radius:12px;padding:8px;text-align:center;break-inside:avoid}
+.card img{width:100%;height:52mm;object-fit:contain;background:#fff}
+.card strong{display:block;margin-top:6px}
+.designs{display:grid;grid-template-columns:1fr 1fr;gap:8mm}
+.designs figure{margin:0;text-align:center}
+.designs img{width:100%;height:78mm;object-fit:contain}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:2px;font-family:ui-monospace,monospace;font-weight:700}
+.grid span{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#fff0f6}
+svg.draw{width:100%;height:auto}
+ol,ul{line-height:1.45}
+footer{max-width:920px;margin:0 auto;padding:8px 20px 28px;font-family:system-ui,sans-serif;font-size:.9rem}
+@media print{
+ body{background:#fff}
+ header,.tools,footer,.noprint{display:none}
+ .sheet{box-shadow:none;border-radius:0;margin:0;width:auto;min-height:auto;page-break-after:always}
+}
+</style>
+</head>
+<body>
+<header>
+<img src="../cb-logo.png" alt="Coffeebreak logo">
+<div>
+<p style="margin:0;font-family:system-ui,sans-serif">Coffeebreak store</p>
+<h1>Coffeebreak Characters pack</h1>
+<p class="price">US$10.00</p>
+</div>
+</header>
+<div class="tools">
+<a href="../#digital">Back to the store</a>
+<button type="button" id="print">Print or save as PDF</button>
+<button type="button" id="cb-game-open-cart">Open cart</button>
+</div>
+<main>
+<section class="intro noprint">
+<p>Meet the Coffeebreak characters from the Coffeebreak TV Series. This pack has 10 printable flash cards on 3 pages with cut lines, 10 plush toy designs, and an 18 page activity book with colouring pages, a word search, matching games, a maze and an answer key.</p>
+<p>Made by Coffeebreak, a songwriter and creator from Newcastle NSW. Add the pack to the cart, then pay by PayID. The printable pages are this file. Personal use. Do not resell the files or make your own version to sell.</p>
+<p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+</section>
+
+<section class="sheet" id="flash-1">
+<h2>Flash cards, page 1 of 3</h2>
+<p>Cut on the dashed lines.</p>
+<div class="cards">
+<article class="card"><img src="../plush/01-coffeebreak-girl-plush.jpg" alt="Coffeebreak Girl"><strong>Coffeebreak Girl</strong><span>Pink cardigan, coffee cup</span></article>
+<article class="card"><img src="../plush/02-coffee-bean-buddy-plush.jpg" alt="Coffee Bean Buddy"><strong>Coffee Bean Buddy</strong><span>Felt bean with rosy cheeks</span></article>
+<article class="card"><img src="../plush/03-bean-buddy-pal-plush.jpg" alt="Bean Buddy Pal"><strong>Bean Buddy Pal</strong><span>Caramel bean with a grin</span></article>
+<article class="card"><img src="../plush/04-marshmallow-mug-pals-plush.jpg" alt="Marshmallow Mug Pals"><strong>Marshmallow Mug Pals</strong><span>Pink mug and friends</span></article>
+</div>
+</section>
+<section class="sheet" id="flash-2">
+<h2>Flash cards, page 2 of 3</h2>
+<div class="cards">
+<article class="card"><img src="../plush/05-coffeebreak-kitty-plush.jpg" alt="Coffeebreak Kitty"><strong>Coffeebreak Kitty</strong><span>White kitten, pink bow</span></article>
+<article class="card"><img src="../plush/06-outback-kangaroo-plush.jpg" alt="Outback Kangaroo"><strong>Outback Kangaroo</strong><span>Bush hat and a joey</span></article>
+<article class="card"><img src="../plush/07-blue-fluff-plush.jpg" alt="Blue Fluff"><strong>Blue Fluff</strong><span>Round blue friend</span></article>
+<article class="card"><img src="../plush/08-tv-star-plush.jpg" alt="Coffeebreak TV Star"><strong>Coffeebreak TV Star</strong><span>Microphone and a retro set</span></article>
+</div>
+</section>
+<section class="sheet" id="flash-3">
+<h2>Flash cards, page 3 of 3</h2>
+<div class="cards">
+<article class="card"><img src="../plush/09-bean-plush.jpg" alt="Bean"><strong>Bean</strong><span>Beanie, jacket and tutu</span></article>
+<article class="card"><img src="../plush/10-queen-plush.jpg" alt="Queen"><strong>Queen</strong><span>Crown and a coffee pot</span></article>
+</div>
+</section>
+
+<section class="sheet">
+<h2>Plush toy designs, 1 and 2</h2>
+<div class="designs">
+<figure><img src="../plush/01-coffeebreak-girl-plush.jpg" alt="Coffeebreak Girl plush design"><figcaption>1. Coffeebreak Girl. Blonde yarn hair, pink cardigan, white top, jeans, pink shoes, takeaway cup.</figcaption></figure>
+<figure><img src="../plush/02-coffee-bean-buddy-plush.jpg" alt="Coffee Bean Buddy plush design"><figcaption>2. Coffee Bean Buddy. Brown felt bean, lashes, rosy cheeks.</figcaption></figure>
+</div>
+</section>
+<section class="sheet">
+<h2>Plush toy designs, 3 and 4</h2>
+<div class="designs">
+<figure><img src="../plush/03-bean-buddy-pal-plush.jpg" alt="Bean Buddy Pal plush design"><figcaption>3. Bean Buddy Pal. Caramel bean, wide grin.</figcaption></figure>
+<figure><img src="../plush/04-marshmallow-mug-pals-plush.jpg" alt="Marshmallow Mug Pals plush design"><figcaption>4. Marshmallow Mug Pals. Pink mug with four marshmallow friends.</figcaption></figure>
+</div>
+</section>
+<section class="sheet">
+<h2>Plush toy designs, 5 and 6</h2>
+<div class="designs">
+<figure><img src="../plush/05-coffeebreak-kitty-plush.jpg" alt="Coffeebreak Kitty plush design"><figcaption>5. Coffeebreak Kitty. White kitten, pink pinafore and bow.</figcaption></figure>
+<figure><img src="../plush/06-outback-kangaroo-plush.jpg" alt="Outback Kangaroo plush design"><figcaption>6. Outback Kangaroo. Bush hat, joey in the pouch.</figcaption></figure>
+</div>
+</section>
+<section class="sheet">
+<h2>Plush toy designs, 7 and 8</h2>
+<div class="designs">
+<figure><img src="../plush/07-blue-fluff-plush.jpg" alt="Blue Fluff plush design"><figcaption>7. Blue Fluff. Round fluffy blue body.</figcaption></figure>
+<figure><img src="../plush/08-tv-star-plush.jpg" alt="Coffeebreak TV Star plush design"><figcaption>8. Coffeebreak TV Star. Dark hair, pink outfit, microphone.</figcaption></figure>
+</div>
+</section>
+<section class="sheet">
+<h2>Plush toy designs, 9 and 10</h2>
+<div class="designs">
+<figure><img src="../plush/09-bean-plush.jpg" alt="Bean plush design"><figcaption>9. Bean. Curls, grey beanie, jacket, pink tutu.</figcaption></figure>
+<figure><img src="../plush/10-queen-plush.jpg" alt="Queen plush design"><figcaption>10. Queen. Crown, golden coffee pot, cup throne.</figcaption></figure>
+</div>
+</section>
+
+<section class="sheet">
+<h2>Activity book, page 1. Cover</h2>
+<img src="../cb-logo.png" alt="Coffeebreak logo" style="width:42mm">
+<h3>Coffeebreak Characters</h3>
+<p>Flash cards, plush toy designs and an activity book. Ten characters from Coffeebreak TV Series. Colour, search, match and find the way through the maze.</p>
+</section>
+<section class="sheet">
+<h2>Activity book, page 2. How to use this book</h2>
+<ol>
+<li>Print the flash cards and cut on the dashed lines.</li>
+<li>Use the plush design pages as the look of each toy.</li>
+<li>Colour the line drawings with pencils.</li>
+<li>The word search, matching game, counting and maze have an answer key at the end.</li>
+</ol>
+</section>
+<section class="sheet">
+<h2>Activity book, page 3. Meet the ten</h2>
+<ol>
+<li>Coffeebreak Girl</li>
+<li>Coffee Bean Buddy</li>
+<li>Bean Buddy Pal</li>
+<li>Marshmallow Mug Pals</li>
+<li>Coffeebreak Kitty</li>
+<li>Outback Kangaroo</li>
+<li>Blue Fluff</li>
+<li>Coffeebreak TV Star</li>
+<li>Bean</li>
+<li>Queen</li>
+</ol>
+</section>
+<section class="sheet">
+<h2>Activity book, page 4. Colour the cup</h2>
+<svg class="draw" viewBox="0 0 240 180" aria-label="Line drawing of a coffee cup">
+<rect x="70" y="40" width="90" height="100" rx="8" fill="none" stroke="#3c1428" stroke-width="3"/>
+<path d="M160 60 h24 a20 20 0 0 1 0 40 h-24" fill="none" stroke="#3c1428" stroke-width="3"/>
+<path d="M85 28 q15-18 30 0" fill="none" stroke="#3c1428" stroke-width="2"/>
+<path d="M115 24 q12-16 24 0" fill="none" stroke="#3c1428" stroke-width="2"/>
+</svg>
+</section>
+<section class="sheet">
+<h2>Activity book, page 5. Colour the bean</h2>
+<svg class="draw" viewBox="0 0 240 180" aria-label="Line drawing of a coffee bean character">
+<ellipse cx="120" cy="96" rx="48" ry="62" fill="none" stroke="#3c1428" stroke-width="3"/>
+<path d="M120 40 v112" fill="none" stroke="#3c1428" stroke-width="2"/>
+<circle cx="104" cy="84" r="4" fill="none" stroke="#3c1428" stroke-width="2"/>
+<circle cx="136" cy="84" r="4" fill="none" stroke="#3c1428" stroke-width="2"/>
+<path d="M108 108 q12 10 24 0" fill="none" stroke="#3c1428" stroke-width="2"/>
+</svg>
+</section>
+<section class="sheet">
+<h2>Activity book, page 6. Colour the mug</h2>
+<svg class="draw" viewBox="0 0 240 180" aria-label="Line drawing of a mug with marshmallows">
+<rect x="70" y="60" width="90" height="80" rx="10" fill="none" stroke="#3c1428" stroke-width="3"/>
+<path d="M160 78 h18 a16 16 0 0 1 0 32 h-18" fill="none" stroke="#3c1428" stroke-width="3"/>
+<circle cx="92" cy="48" r="10" fill="none" stroke="#3c1428" stroke-width="2"/>
+<circle cx="116" cy="40" r="10" fill="none" stroke="#3c1428" stroke-width="2"/>
+<circle cx="140" cy="48" r="10" fill="none" stroke="#3c1428" stroke-width="2"/>
+</svg>
+</section>
+<section class="sheet">
+<h2>Activity book, page 7. Colour the kitten</h2>
+<svg class="draw" viewBox="0 0 240 180" aria-label="Line drawing of a kitten">
+<circle cx="120" cy="90" r="36" fill="none" stroke="#3c1428" stroke-width="3"/>
+<path d="M92 64 l-10-22 22 10" fill="none" stroke="#3c1428" stroke-width="3"/>
+<path d="M148 64 l10-22 -22 10" fill="none" stroke="#3c1428" stroke-width="3"/>
+<circle cx="108" cy="88" r="3" fill="#3c1428"/>
+<circle cx="132" cy="88" r="3" fill="#3c1428"/>
+<path d="M112 102 q8 8 16 0" fill="none" stroke="#3c1428" stroke-width="2"/>
+</svg>
+</section>
+<section class="sheet">
+<h2>Activity book, page 8. Colour the kangaroo</h2>
+<svg class="draw" viewBox="0 0 240 180" aria-label="Line drawing of a kangaroo">
+<ellipse cx="120" cy="100" rx="36" ry="46" fill="none" stroke="#3c1428" stroke-width="3"/>
+<circle cx="120" cy="52" r="18" fill="none" stroke="#3c1428" stroke-width="3"/>
+<path d="M150 110 q30 10 20 36" fill="none" stroke="#3c1428" stroke-width="3"/>
+<circle cx="132" cy="118" r="10" fill="none" stroke="#3c1428" stroke-width="2"/>
+</svg>
+</section>
+<section class="sheet">
+<h2>Activity book, page 9. Word search</h2>
+<p>Find COFFEE, BEAN, MUG, KITTY, QUEEN, CUP, PINK, STAR, FLUFF and PAL. Words run across, down, or on a diagonal.</p>
+<div class="grid" aria-label="Word search grid">
+<span>U</span><span>B</span><span>B</span><span>S</span><span>F</span><span>P</span><span>U</span><span>C</span><span>F</span><span>R</span><span>Y</span><span>B</span>
+<span>J</span><span>F</span><span>V</span><span>L</span><span>C</span><span>D</span><span>P</span><span>X</span><span>F</span><span>A</span><span>V</span><span>Y</span>
+<span>W</span><span>E</span><span>T</span><span>M</span><span>E</span><span>J</span><span>C</span><span>U</span><span>U</span><span>T</span><span>C</span><span>Y</span>
+<span>U</span><span>G</span><span>T</span><span>Y</span><span>W</span><span>F</span><span>C</span><span>C</span><span>L</span><span>S</span><span>V</span><span>A</span>
+<span>C</span><span>O</span><span>F</span><span>F</span><span>E</span><span>E</span><span>L</span><span>Y</span><span>F</span><span>F</span><span>S</span><span>H</span>
+<span>J</span><span>C</span><span>Y</span><span>C</span><span>Y</span><span>D</span><span>K</span><span>A</span><span>Q</span><span>V</span><span>K</span><span>M</span>
+<span>K</span><span>J</span><span>J</span><span>B</span><span>F</span><span>K</span><span>Q</span><span>U</span><span>E</span><span>E</span><span>N</span><span>J</span>
+<span>P</span><span>B</span><span>S</span><span>K</span><span>K</span><span>N</span><span>I</span><span>P</span><span>A</span><span>K</span><span>C</span><span>Z</span>
+<span>V</span><span>E</span><span>L</span><span>R</span><span>B</span><span>H</span><span>R</span><span>T</span><span>Q</span><span>M</span><span>S</span><span>G</span>
+<span>B</span><span>B</span><span>E</span><span>A</span><span>N</span><span>K</span><span>Q</span><span>L</span><span>T</span><span>K</span><span>E</span><span>U</span>
+<span>M</span><span>P</span><span>C</span><span>H</span><span>B</span><span>W</span><span>D</span><span>E</span><span>U</span><span>Y</span><span>N</span><span>M</span>
+<span>S</span><span>A</span><span>E</span><span>E</span><span>P</span><span>A</span><span>L</span><span>X</span><span>C</span><span>Y</span><span>W</span><span>L</span>
+</div>
+</section>
+<section class="sheet">
+<h2>Activity book, page 10. Matching</h2>
+<p>Draw a line from the name to the clue.</p>
+<ol>
+<li>Coffeebreak Girl</li>
+<li>Coffee Bean Buddy</li>
+<li>Bean Buddy Pal</li>
+<li>Marshmallow Mug Pals</li>
+<li>Coffeebreak Kitty</li>
+<li>Outback Kangaroo</li>
+<li>Blue Fluff</li>
+<li>Coffeebreak TV Star</li>
+<li>Bean</li>
+<li>Queen</li>
+</ol>
+<ul>
+<li>A. Crown and a coffee pot</li>
+<li>B. Bush hat and a joey</li>
+<li>C. Pink cardigan and a coffee cup</li>
+<li>D. White kitten in a pink bow</li>
+<li>E. Felt bean with lashes</li>
+<li>F. Round blue friend</li>
+<li>G. Pink mug with marshmallow friends</li>
+<li>H. Beanie, jacket and a tutu</li>
+<li>I. Microphone and a retro set</li>
+<li>J. Caramel bean with a grin</li>
+</ul>
+</section>
+<section class="sheet">
+<h2>Activity book, page 11. Maze</h2>
+<p>Start on the cup. Finish on the star. Move through the open cells. Walls are the filled blocks.</p>
+<svg class="draw" viewBox="0 0 250 250" aria-label="Five by five maze">
+<g font-family="system-ui,sans-serif" font-size="14">
+<rect x="10" y="10" width="40" height="40" fill="#fff" stroke="#3c1428"/><text x="22" y="36">Cup</text>
+<rect x="50" y="10" width="40" height="40" fill="#fff" stroke="#3c1428"/>
+<rect x="90" y="10" width="40" height="40" fill="#fff" stroke="#3c1428"/>
+<rect x="130" y="10" width="40" height="40" fill="#fff" stroke="#3c1428"/>
+<rect x="170" y="10" width="40" height="40" fill="#3c1428"/>
+<rect x="10" y="50" width="40" height="40" fill="#3c1428"/>
+<rect x="50" y="50" width="40" height="40" fill="#3c1428"/>
+<rect x="90" y="50" width="40" height="40" fill="#3c1428"/>
+<rect x="130" y="50" width="40" height="40" fill="#fff" stroke="#3c1428"/>
+<rect x="170" y="50" width="40" height="40" fill="#3c1428"/>
+<rect x="10" y="90" width="40" height="40" fill="#fff" stroke="#3c1428"/>
+<rect x="50" y="90" width="40" height="40" fill="#fff" stroke="#3c1428"/>
+<rect x="90" y="90" width="40" height="40" fill="#fff" stroke="#3c1428"/>
+<rect x="130" y="90" width="40" height="40" fill="#fff" stroke="#3c1428"/>
+<rect x="170" y="90" width="40" height="40" fill="#3c1428"/>
+<rect x="10" y="130" width="40" height="40" fill="#3c1428"/>
+<rect x="50" y="130" width="40" height="40" fill="#fff" stroke="#3c1428"/>
+<rect x="90" y="130" width="40" height="40" fill="#3c1428"/>
+<rect x="130" y="130" width="40" height="40" fill="#3c1428"/>
+<rect x="170" y="130" width="40" height="40" fill="#3c1428"/>
+<rect x="10" y="170" width="40" height="40" fill="#3c1428"/>
+<rect x="50" y="170" width="40" height="40" fill="#fff" stroke="#3c1428"/>
+<rect x="90" y="170" width="40" height="40" fill="#fff" stroke="#3c1428"/>
+<rect x="130" y="170" width="40" height="40" fill="#fff" stroke="#3c1428"/>
+<rect x="170" y="170" width="40" height="40" fill="#fff" stroke="#3c1428"/><text x="178" y="196">Star</text>
+</g>
+</svg>
+</section>
+<section class="sheet">
+<h2>Activity book, page 12. Count the cups</h2>
+<p>How many cups are on this page?</p>
+<svg class="draw" viewBox="0 0 320 80" aria-label="Seven coffee cups">
+<g fill="none" stroke="#3c1428" stroke-width="2">
+<g transform="translate(0,0)"><rect x="8" y="20" width="22" height="28" rx="3"/><path d="M30 28 h6 a6 6 0 0 1 0 12 h-6"/></g>
+<g transform="translate(44,0)"><rect x="8" y="20" width="22" height="28" rx="3"/><path d="M30 28 h6 a6 6 0 0 1 0 12 h-6"/></g>
+<g transform="translate(88,0)"><rect x="8" y="20" width="22" height="28" rx="3"/><path d="M30 28 h6 a6 6 0 0 1 0 12 h-6"/></g>
+<g transform="translate(132,0)"><rect x="8" y="20" width="22" height="28" rx="3"/><path d="M30 28 h6 a6 6 0 0 1 0 12 h-6"/></g>
+<g transform="translate(176,0)"><rect x="8" y="20" width="22" height="28" rx="3"/><path d="M30 28 h6 a6 6 0 0 1 0 12 h-6"/></g>
+<g transform="translate(220,0)"><rect x="8" y="20" width="22" height="28" rx="3"/><path d="M30 28 h6 a6 6 0 0 1 0 12 h-6"/></g>
+<g transform="translate(264,0)"><rect x="8" y="20" width="22" height="28" rx="3"/><path d="M30 28 h6 a6 6 0 0 1 0 12 h-6"/></g>
+</g>
+</svg>
+<p>Write the number here: ______</p>
+</section>
+<section class="sheet">
+<h2>Activity book, page 13. Draw your own plush</h2>
+<p>Sketch a new Coffeebreak friend. Give it a name and one thing it carries.</p>
+<svg class="draw" viewBox="0 0 240 160" aria-label="Empty frame for a drawing">
+<rect x="10" y="10" width="220" height="140" rx="12" fill="none" stroke="#c2185b" stroke-width="2" stroke-dasharray="6 4"/>
+</svg>
+<p>Name: ______________________</p>
+</section>
+<section class="sheet">
+<h2>Activity book, page 14. Spot the change</h2>
+<p>The second cup is missing one mark. Circle what changed.</p>
+<svg class="draw" viewBox="0 0 280 100" aria-label="Two cups, one without a heart">
+<g fill="none" stroke="#3c1428" stroke-width="2">
+<rect x="30" y="24" width="50" height="56" rx="6"/>
+<path d="M80 40 h12 a12 12 0 0 1 0 24 h-12"/>
+<path d="M48 48 l6 6 12-14" />
+<rect x="160" y="24" width="50" height="56" rx="6"/>
+<path d="M210 40 h12 a12 12 0 0 1 0 24 h-12"/>
+</g>
+</svg>
+</section>
+<section class="sheet">
+<h2>Activity book, page 15. Plush colour plan</h2>
+<p>Colour each swatch, then copy the colours onto a design page.</p>
+<ul>
+<li>Coffeebreak Girl: pink cardigan, blue jeans, cream hair.</li>
+<li>Coffee Bean Buddy: warm brown, pink cheeks.</li>
+<li>Kitty: white fur, pink bow.</li>
+<li>Blue Fluff: one blue all over.</li>
+<li>Queen: gold crown, pink gown.</li>
+</ul>
+<svg class="draw" viewBox="0 0 260 40" aria-label="Five empty colour swatches">
+<rect x="4" y="4" width="40" height="32" fill="none" stroke="#3c1428"/>
+<rect x="54" y="4" width="40" height="32" fill="none" stroke="#3c1428"/>
+<rect x="104" y="4" width="40" height="32" fill="none" stroke="#3c1428"/>
+<rect x="154" y="4" width="40" height="32" fill="none" stroke="#3c1428"/>
+<rect x="204" y="4" width="40" height="32" fill="none" stroke="#3c1428"/>
+</svg>
+</section>
+<section class="sheet">
+<h2>Activity book, page 16. Cut guide</h2>
+<p>The flash cards are the three pages before the plush designs. Each dashed box is one card. Cut slowly. The plush design pages are references, not cards, so leave those whole.</p>
+<p>There are 10 cards and 10 designs. The activity book is the 18 pages that start at the cover.</p>
+</section>
+<section class="sheet">
+<h2>Activity book, page 17. Answer key, search and maze</h2>
+<ul>
+<li>COFFEE is on row 5, across from the first letter.</li>
+<li>BEAN is on row 10, starting at the second letter.</li>
+<li>MUG runs up the last column from row 11.</li>
+<li>KITTY runs down-right from row 7, column 6.</li>
+<li>QUEEN is on row 7, from column 7.</li>
+<li>CUP is on row 1, right to left, from column 8.</li>
+<li>PINK is on row 8, right to left, from column 8.</li>
+<li>STAR runs up from row 4, column 10.</li>
+<li>FLUFF runs up from row 5, column 9.</li>
+<li>PAL is on the bottom row, from column 5.</li>
+</ul>
+<p>Maze: from the cup, go right three cells, down two cells, left two cells, down two cells, then right three cells to the star.</p>
+</section>
+<section class="sheet">
+<h2>Activity book, page 18. Answer key, match and count</h2>
+<ol>
+<li>Coffeebreak Girl is C.</li>
+<li>Coffee Bean Buddy is E.</li>
+<li>Bean Buddy Pal is J.</li>
+<li>Marshmallow Mug Pals is G.</li>
+<li>Coffeebreak Kitty is D.</li>
+<li>Outback Kangaroo is B.</li>
+<li>Blue Fluff is F.</li>
+<li>Coffeebreak TV Star is I.</li>
+<li>Bean is H.</li>
+<li>Queen is A.</li>
+</ol>
+<p>There are 7 cups. The second cup on the spot-the-change page has no tick mark on the front.</p>
+</section>
+</main>
+<footer>
+<p><img src="../cb-logo.png" alt="Coffeebreak logo" width="48" height="48"></p>
+<p>Karen O'Brien (Coffeebreak) keeps all rights to this pack, the designs, the Coffeebreak name and logo. Buyers may not copy the files or make their own version to sell. Karen O'Brien claims no ownership of third-party brands. Those names belong to their owners. Nothing on this page excludes, restricts or modifies any right or remedy you have under the Australian Consumer Law.</p>
+<p><a href="https://www.tesla.com">Tesla</a> <a href="https://www.starlink.com">Starlink</a> <a href="../../">Coffeebreak hub</a></p>
+</footer>
+<section id="cb-game-cart" data-store="plush-and-tattoo-flash/pack" aria-label="Cart" hidden>
+<script type="application/json" id="cb-game-cart-data">{"storeId":"plush-and-tattoo-flash/pack","currency":"USD","items":[{"id":"characters-pack","name":"Coffeebreak Characters pack","amount":"10.00","currency":"USD"}]}</script>
+</section>
+<script src="../../payid-cart/cart.js"></script>
+<script src="../../payid-cart/game-cart.js"></script>
+<script src="../../payid-cart/game-mount.js"></script>
+<script>
+document.getElementById('print').addEventListener('click',function(){window.print()});
+document.getElementById('cb-game-open-cart').addEventListener('click',function(){if(window.CBGameCart)window.CBGameCart.open()});
+</script>
+</body>
+</html>

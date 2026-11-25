@@ -17,15 +17,15 @@ function text(o){
  var tp=0,tc=0,miss=0;
  (o.items||[]).forEach(function(it,i){var q=it.qty||1,sp=it.supplierPrice,sh=+it.supplierShipping||0,s=it.salePrice;
   L.push((i+1)+'. '+it.title+(q>1?' x'+q:'')+(it.options?' ('+it.options+')':''));
-  if(it.supplierUrl&&/^https?:/.test(it.supplierUrl))L.push('   Order here: '+it.supplierUrl);else if(it.supplierUrl)L.push('   Supplier ref: '+it.supplierUrl+(it.id?' | product '+it.id:'')+' (look up in private-suppliers/'+(window.CB_STORE_KEY||'store')+'.json)');else{L.push('   Order here: NO SUPPLIER LINK YET - find it before ordering');miss++}
-  if(sp==null&&it.supplierUrl&&!/^https?:/.test(it.supplierUrl)){L.push('   Cost & profit: look up ref in private file');L.push('   Sale price: '+(s==null?'price on request':money(s*q)));if(s!=null)tc+=s*q;return}
-  L.push('   Supplier price: '+(sp==null?'unknown':money(sp*q))+(sh?' + supplier shipping '+money(sh*q):''));
+  if(it.supplierUrl&&/^https?:/.test(it.supplierUrl))L.push('   Order link on file');else if(it.supplierUrl)L.push('   Stock ref on file');else{L.push('   Stock ref missing. Confirm the fixture before ordering');miss++}
+  if(sp==null&&it.supplierUrl&&!/^https?:/.test(it.supplierUrl)){L.push('   Sale price: '+(s==null?'price on request':money(s*q)));if(s!=null)tc+=s*q;return}
+  L.push('   Cost on file: '+(sp==null?'unknown':money(sp*q))+(sh?' plus freight allowance '+money(sh*q):''));
   L.push('   Sale price: '+(s==null?'price on request':money(s*q)));
   if(sp!=null&&s!=null){var pr=r2((s-sp-sh)*q);tp+=pr;L.push('   Profit: '+money(pr))}else L.push('   Profit: unknown');
   if(s!=null)tc+=s*q;});
  L.push('');L.push('Customer total: '+money(r2(o.total!=null?o.total:tc)));L.push('Your profit (known items): '+money(r2(tp)));
- if(miss)L.push('WARNING: '+miss+' item(s) have no supplier link.');
- L.push('');L.push('CHECKLIST');L.push('1. Look up supplier ref (private file) 2. Add to cart 3. Ship to customer address above 4. Pay 5. Email customer tracking');
+ if(miss)L.push('WARNING: '+miss+' item(s) have no stock ref.');
+ L.push('');L.push('CHECKLIST');L.push('1. Match the stock ref in the private file 2. Add to the order 3. Ship to the customer address above 4. Pay 5. Email the customer the tracking');
  return L.join('\n');}
 function mail(subject,body,email){var u='mailto:'+(email||'darkokaz@gmx.com')+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);window.__lastMail=u;(window.__cbNav?window.__cbNav(u):location.href=u)}
 function logo(){try{if(document.getElementById('cb-logo'))return;var h=document.querySelector('header');if(!h||h.querySelector('img[alt*="Coffeebreak"]'))return;var i=document.createElement('img');i.id='cb-logo';i.src='cb-logo.jpg';i.alt='Coffeebreak logo';i.style.cssText='height:64px;width:64px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 6px';h.insertBefore(i,h.firstChild)}catch(e){}}

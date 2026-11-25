@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="Corner bath">
+<rect width="640" height="480" fill="#f4f7f8"/>
+<path d="M120 360 h280 v-40 a160 160 0 0 0-160-160 h-120z" fill="#e4edf1" stroke="#8fa0aa" stroke-width="6"/>
+<path d="M150 330 h220 v-24 a120 120 0 0 0-120-120 h-100z" fill="#f7fbff"/>
+<ellipse cx="250" cy="270" rx="90" ry="36" fill="#d5e6f1"/>
+<circle cx="168" cy="188" r="12" fill="#8d9aa3"/>
+</svg>

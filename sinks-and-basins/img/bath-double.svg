@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="Double-ended freestanding bath">
+<rect width="640" height="480" fill="#f4f7f8"/>
+<rect x="80" y="190" width="480" height="150" rx="75" fill="#d5dee4"/>
+<rect x="100" y="206" width="440" height="110" rx="55" fill="#f7fbff" stroke="#8fa0aa" stroke-width="6"/>
+<ellipse cx="230" cy="262" rx="70" ry="28" fill="#d5e6f1"/>
+<ellipse cx="410" cy="262" rx="70" ry="28" fill="#d5e6f1"/>
+<circle cx="140" cy="180" r="12" fill="#8d9aa3"/>
+<circle cx="500" cy="180" r="12" fill="#8d9aa3"/>
+</svg>
