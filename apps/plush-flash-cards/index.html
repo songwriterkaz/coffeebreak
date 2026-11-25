@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coffeebreak Plush Toys Flash Cards</title>
+<style>
+:root{--bg:#fff3f8;--card:#fff;--ink:#4a2340;--muted:#8a6a80;--accent:#e0589a;--line:#f1cde0;--ok:#2e9e6a}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#fff;border-bottom:2px solid var(--line);flex-wrap:wrap}
+header>img{width:48px;height:48px;border-radius:50%;object-fit:cover}
+header h1{font-size:1.2rem;margin:0;flex:1;min-width:180px}header h1 small{display:block;font-size:.78rem;color:var(--muted);font-weight:500}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav button{background:#fff;color:var(--muted);border:2px solid var(--line);border-radius:999px;padding:8px 14px;font:700 .9rem system-ui;cursor:pointer;min-height:44px}
+nav button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+button{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:10px 16px;font:700 1rem system-ui;cursor:pointer;min-height:44px}
+button.ghost{background:#fbe3ef;color:var(--ink)}button:disabled{opacity:.45}
+main{width:100%;max-width:820px;margin:0 auto;padding:16px;flex:1}
+.panel{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px}
+.tab{display:none}.tab.on{display:block}
+select,input,textarea{font:inherit;padding:9px;border:2px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);max-width:100%}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.scene{perspective:1000px;margin:6px 0 12px}
+.fc{position:relative;height:300px;cursor:pointer;transition:transform .5s;transform-style:preserve-3d;outline-offset:4px}
+.fc.f{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;border:3px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;background:linear-gradient(160deg,#fff,#ffe6f1)}
+.face.back{transform:rotateY(180deg);background:linear-gradient(160deg,#fff,#e8f6ff)}
+.face .big{font-size:5.2rem;line-height:1}.face .q{font-size:1.45rem;font-weight:800;margin-top:8px}.face .a{font-size:1.25rem;font-weight:700}.face .hint{font-size:.85rem;color:var(--muted);margin-top:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.pos{text-align:center;color:var(--muted);font-weight:700}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+@media(max-width:520px){.opts{grid-template-columns:1fr}.face .big{font-size:4rem}}
+.opts button{background:#fff;color:var(--ink);border:2px solid var(--line)}
+.opts button.right{background:#d9f5e7;border-color:var(--ok)}.opts button.wrong{background:#ffe0e0;border-color:#d66}
+.prog p{margin:8px 0 2px;font-weight:700}.meter{height:12px;background:#f6dbe9;border-radius:99px;overflow:hidden}.meter i{display:block;height:100%;background:var(--ok)}
+.note{color:var(--muted);font-size:.88rem}
+.cbfoot{margin-top:18px;padding:14px 16px;background:#fff;border-top:2px solid var(--line);text-align:center;font-size:.85rem;color:var(--muted)}
+.cbfoot a{color:var(--accent)}
+.links{text-align:center;padding:8px;font-size:.9rem}.links a{color:var(--accent)}
+</style>
+<link rel="icon" href="img/logo.webp" type="image/webp"></head>
+<body>
+<header>
+<img src="img/logo.webp" alt="Coffeebreak logo">
+<h1>Coffeebreak Plush Toys Flash Cards<small>Learn with cuddly friends</small></h1>
+<nav id="nav"><button class="on" data-t="study">Study</button><button data-t="quiz">Quiz</button><button data-t="make">Make a card</button><button data-t="prog">Progress</button></nav>
+</header>
+<main>
+<section class="tab on" id="study">
+<div class="panel">
+<div class="bar"><label>Deck <select id="deck"></select></label><button class="ghost" id="shuf">Shuffle</button><button class="ghost" id="say">Read aloud</button></div>
+<div class="scene"><div class="fc" id="fc" tabindex="0" role="button" aria-label="Flash card. Press to flip"><div class="face" id="front"></div><div class="face back" id="back"></div></div></div>
+<div class="pos" id="pos"></div>
+<div class="row"><button class="ghost" id="prev">Back</button><button id="flip">Flip</button><button class="ghost" id="again">Show again</button><button id="know">I knew it</button><button class="ghost" id="next">Next</button></div>
+<p class="note">Tap the card or press space to flip it. Your progress stays on this device only.</p>
+</div>
+</section>
+<section class="tab" id="quiz">
+<div class="panel"><div class="bar"><label>Deck <select id="qdeck"></select></label><span id="qscore" class="note"></span></div>
+<div class="scene"><div class="face" style="position:relative;min-height:220px" id="qface"></div></div>
+<div class="opts" id="qopts"></div><p id="qmsg" class="pos" aria-live="polite"></p>
+<div class="row"><button id="qnext">Next question</button></div></div>
+</section>
+<section class="tab" id="make">
+<div class="panel"><h2 style="margin-top:0">Make your own card</h2>
+<p class="note">Cards you make go into your own deck called My Plush Cards. They are saved only in this browser.</p>
+<div class="bar"><label>Picture <select id="mEmoji"></select></label></div>
+<p><input id="mFront" maxlength="80" placeholder="Front of the card" style="width:100%"></p>
+<p><input id="mBack" maxlength="120" placeholder="Back of the card" style="width:100%"></p>
+<div class="row"><button id="mAdd">Add to my deck</button><button class="ghost" id="mDel">Delete my last card</button></div><p id="mMsg" class="pos" aria-live="polite"></p></div>
+</section>
+<section class="tab" id="prog">
+<div class="panel prog"><h2 style="margin-top:0">Progress</h2><div id="progList"></div><div class="row"><button class="ghost" id="reset">Reset my progress</button></div></div>
+</section>
+</main>
+<div class="links">Links: <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></div>
+<footer class="cbfoot">
+<p><a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> &middot; <a class="gfm" href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener">Support Coffeebreak on GoFundMe</a></p>
+<p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+<p>Karen (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell the physical items they bought, but may not copy them or make their own versions. Coffeebreak claims no ownership of third-party brands, which are named only to describe the items and belong to their owners.</p>
+<p>Supporting the future with <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
+</footer>
+<script>
+const $=id=>document.getElementById(id);
+const EM=['🧸','🐰','🦄','🐻','🐶','🐱','🐼','🦊','🐨','🐷','🐘','🦁','🐯','🐸','🐵','🐑','🦒','🐧','🐙','🦆'];
+const BASE={
+'Meet the Plush Friends':[
+['🧸','Which plush friend is this','Teddy bear','The teddy bear is the most loved plush toy in the world.'],
+['🐰','Which plush friend is this','Bunny','Plush bunnies often have long soft ears and a fluffy tail.'],
+['🦄','Which plush friend is this','Unicorn','A unicorn is a make believe horse with one horn.'],
+['🐼','Which plush friend is this','Panda','Real pandas eat bamboo for most of the day.'],
+['🐨','Which plush friend is this','Koala','Koalas are marsupials from Australia.'],
+['🦊','Which plush friend is this','Fox','Foxes have bushy tails and pointed ears.'],
+['🐘','Which plush friend is this','Elephant','Elephants are the largest land animals.'],
+['🦁','Which plush friend is this','Lion','A lion has a mane, and only the males grow one.'],
+['🐧','Which plush friend is this','Penguin','Penguins are birds that swim instead of fly.'],
+['🐙','Which plush friend is this','Octopus','An octopus has eight arms.'],
+['🦒','Which plush friend is this','Giraffe','Giraffes have the tallest necks of any animal.'],
+['🐸','Which plush friend is this','Frog','Frogs start life as tadpoles.']],
+'Counting With Plush':[
+['🧸🧸🧸','How many bears','3',''],['🐰🐰','How many bunnies','2',''],['🐼🐼🐼🐼','How many pandas','4',''],
+['🦊🦊🦊🦊🦊','How many foxes','5',''],['🐨🐨🐨🐨🐨🐨','How many koalas','6',''],['🐸🐸🐸🐸🐸🐸🐸','How many frogs','7',''],
+['🐧🐧🐧🐧🐧🐧🐧🐧','How many penguins','8',''],['🦄🦄🦄🦄🦄🦄🦄🦄🦄','How many unicorns','9','']],
+'Colours and Shapes':[
+['🔴','What colour is this circle','Red',''],['🔵','What colour is this circle','Blue',''],['🟢','What colour is this circle','Green',''],
+['🟡','What colour is this circle','Yellow',''],['🟣','What colour is this circle','Purple',''],['🟠','What colour is this circle','Orange',''],
+['🔺','How many sides has a triangle','3',''],['⬜','How many sides has a square','4','']],
+'All About Plush Toys':[
+['🧸','Which US president is the teddy bear named after','Theodore Roosevelt','Teddy was his nickname. The story dates from 1902.'],
+['🧵','What is the soft fuzzy fabric on a plush toy called','Plush','Plush fabric has a soft raised pile.'],
+['☁️','What is inside most plush toys','Polyester fibre fill','It is light, soft and springy.'],
+['🏷️','What should you read before washing a plush toy','The care label','Some can go in the machine and some need a gentle surface wash.'],
+['🌬️','How is a plush toy best dried','Air dried','Keep it away from direct heat.'],
+['👶','Why do plush toys have age labels','For safe play','Small parts can be a risk for very young children.'],
+['🧼','What do you use for a gentle surface clean','Mild soap and a damp cloth','Dab the spot, then let it dry fully.'],
+['🪡','How do you fix a small seam hole','Hand stitch it closed','Use small, tight stitches and strong thread.']]};
+let S;try{S=JSON.parse(localStorage.getItem('cbPlushFlash2')||'null')}catch(e){S=null}
+if(!S||typeof S!=='object')S={mine:[],known:{}};
+function save(){try{localStorage.setItem('cbPlushFlash2',JSON.stringify(S))}catch(e){}}
+function decks(){const d=Object.assign({},BASE);d['My Plush Cards']=S.mine;return d}
+function fillDecks(){const names=Object.keys(decks());['deck','qdeck'].forEach(id=>{const v=$(id).value;$(id).innerHTML=names.map(n=>`<option>${n}</option>`).join('');if(v&&names.includes(v))$(id).value=v})}
+$('mEmoji').innerHTML=EM.map(e=>`<option>${e}</option>`).join('');
+let order=[],idx=0;
+function cards(){return decks()[$('deck').value]||[]}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function resetOrder(){order=cards().map((_,i)=>i);idx=0}
+function show(){const c=cards();$('fc').classList.remove('f');
+ if(!c.length){$('front').innerHTML='<div class="q">No cards yet</div><div class="hint">Make a card on the Make a card tab</div>';$('back').innerHTML='';$('pos').textContent='';return}
+ if(order.length!==c.length)resetOrder();idx=(idx+order.length)%order.length;const k=c[order[idx]];
+ $('front').innerHTML=`<div class="big">${esc(k[0])}</div><div class="q">${esc(k[1])}</div><div class="hint">Tap to flip</div>`;
+ $('back').innerHTML=`<div class="big" style="font-size:3rem">${esc(k[0].slice(0,2))}</div><div class="a">${esc(k[2])}</div>${k[3]?`<div class="hint">${esc(k[3])}</div>`:''}`;
+ $('pos').textContent=`Card ${idx+1} of ${order.length}`}
+function mark(){const d=$('deck').value,c=cards();if(!c.length)return;const key=c[order[idx]][1]+'|'+c[order[idx]][2];S.known[d]=S.known[d]||[];if(!S.known[d].includes(key))S.known[d].push(key);save()}
+$('fc').onclick=$('flip').onclick=()=>$('fc').classList.toggle('f');
+$('fc').onkeydown=e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();$('fc').classList.toggle('f')}};
+$('next').onclick=()=>{idx++;show()};$('prev').onclick=()=>{idx--;show()};
+$('know').onclick=()=>{mark();idx++;show()};
+$('again').onclick=()=>{const c=cards();if(!c.length)return;const [x]=order.splice(idx,1);order.push(x);show()};
+$('shuf').onclick=()=>{resetOrder();for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}idx=0;show()};
+$('deck').onchange=()=>{resetOrder();show()};
+$('say').onclick=()=>{const c=cards();if(!c.length||!window.speechSynthesis)return;const k=c[order[idx]];speechSynthesis.cancel();const t=$('fc').classList.contains('f')?k[2]+'. '+k[3]:k[1];speechSynthesis.speak(new SpeechSynthesisUtterance(t))};
+// quiz
+let qa=null,qc=0,qt=0;
+function quiz(){const c=decks()[$('qdeck').value]||[];$('qmsg').textContent='';
+ if(c.length<2){$('qface').innerHTML='<div class="q">Add at least two cards to this deck to play</div>';$('qopts').innerHTML='';return}
+ const k=c[Math.floor(Math.random()*c.length)];qa=k[2];
+ $('qface').innerHTML=`<div class="big">${esc(k[0])}</div><div class="q">${esc(k[1])}</div>`;
+ const wrong=[...new Set(c.map(x=>x[2]).filter(a=>a!==k[2]))].sort(()=>Math.random()-.5).slice(0,3);
+ const opts=[k[2],...wrong].sort(()=>Math.random()-.5);
+ $('qopts').innerHTML='';opts.forEach(o=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>{if($('qopts').dataset.done)return;$('qopts').dataset.done=1;qt++;
+  if(o===qa){qc++;b.className='right';$('qmsg').textContent='Correct, the plush friends are cheering'}else{b.className='wrong';[...$('qopts').children].forEach(x=>{if(x.textContent===qa)x.className='right'});$('qmsg').textContent='Not quite. The answer is '+qa}
+  $('qscore').textContent=`Score ${qc} of ${qt}`};$('qopts').appendChild(b)});delete $('qopts').dataset.done}
+$('qnext').onclick=quiz;$('qdeck').onchange=()=>{qc=qt=0;$('qscore').textContent='';quiz()};
+// make
+$('mAdd').onclick=()=>{const f=$('mFront').value.trim(),b=$('mBack').value.trim();if(!f||!b){$('mMsg').textContent='Add both sides of the card first';return}
+ S.mine.push([$('mEmoji').value,f,b,'']);save();$('mFront').value=$('mBack').value='';$('mMsg').textContent='Card added to My Plush Cards';fillDecks();progress()};
+$('mDel').onclick=()=>{if(S.mine.pop()){save();$('mMsg').textContent='Last card deleted';fillDecks();resetOrder();show();progress()}else $('mMsg').textContent='There are no cards of yours to delete'};
+// progress
+function progress(){const d=decks();$('progList').innerHTML=Object.keys(d).map(n=>{const t=d[n].length,k=(S.known[n]||[]).length,p=t?Math.min(100,Math.round(100*k/t)):0;return `<p>${esc(n)}: ${Math.min(k,t)} of ${t} known (${p}%)</p><div class="meter"><i style="width:${p}%"></i></div>`}).join('')}
+$('reset').onclick=()=>{S.known={};save();progress()};
+$('nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));if(b.dataset.t==='quiz')quiz();if(b.dataset.t==='prog')progress()};
+fillDecks();resetOrder();show();progress();
+</script>
+<!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/plush-flash-cards" aria-label="Cart"><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/plush-flash-cards","currency":"USD","items":[{"id":"full","name":"Coffeebreak Plush Toys Flash Cards","amount":"10.00","currency":"USD"},{"id":"food-coffee","name":"Park coffee","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-snacks","name":"Park snack pack","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-icecream","name":"Park ice cream","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-candy","name":"Park candy bag","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-meal","name":"Light park meal","amount":"10.00","currency":"USD","kind":"food"},{"id":"prize-plush","name":"Park prize plush","amount":"49.00","currency":"USD","kind":"prize"},{"id":"prize-trophy","name":"Park prize trophy","amount":"59.00","currency":"USD","kind":"prize"},{"id":"prize-plush-large","name":"Large park prize plush","amount":"89.00","currency":"USD","kind":"prize"},{"id":"prize-hamper","name":"Park gift hamper","amount":"129.00","currency":"USD","kind":"prize"}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../apps/cb-static-checkout.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p>Subject to Australian Consumer Law.</p><p><a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Coffeebreak on YouTube</a> <a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p></footer><!--cb-game-cart-end--></body>
+</html>

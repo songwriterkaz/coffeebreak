@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coffeebreak Blockbuster Tools</title>
+<style>
+:root{--bg:#120d17;--card:#1d1626;--ink:#f6efff;--muted:#ab9dbd;--accent:#ffb02e;--line:#33284a}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{display:flex;flex-direction:column;background:radial-gradient(1000px 500px at 80% -10%,#3a1d4a,transparent),var(--bg)}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:rgba(8,5,12,.85);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;flex-wrap:wrap}
+header>img{width:46px;height:46px;border-radius:50%;object-fit:cover}
+header h1{font-size:1.15rem;margin:0;flex:1;min-width:170px}header h1 small{display:block;font-size:.75rem;color:var(--muted);font-weight:500}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav button{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font:600 .85rem system-ui;cursor:pointer}
+nav button.on{background:var(--accent);color:#2b1700;border-color:var(--accent)}
+button{background:var(--accent);color:#2b1700;border:0;border-radius:10px;padding:10px 16px;font:700 .95rem system-ui;cursor:pointer}
+button.ghost{background:#2c2240;color:var(--ink)}button:disabled{opacity:.45;cursor:default}
+main{width:100%;max-width:1400px;margin:0 auto;padding:16px;flex:1}
+.tab{display:none}.tab.on{display:grid;grid-template-columns:minmax(260px,1fr) 1.6fr;gap:16px}
+@media(max-width:900px){.tab.on{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.panel h2{font-size:1.1rem;margin:2px 0 8px}
+textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#140f1b;color:var(--ink);resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chip{background:#2c2240;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 10px;font:600 .82rem system-ui}
+.chip.on{background:#4b2e6b;border-color:#b67cff}
+.stage{position:relative;background:#0b0810;border:1px solid var(--line);border-radius:14px;overflow:hidden;min-height:420px}
+.stage canvas{width:100%;height:100%;display:block;position:absolute;inset:0;touch-action:none}
+.msg{position:absolute;left:0;right:0;bottom:14px;text-align:center;padding:0 16px;font-weight:700;pointer-events:none;text-shadow:0 2px 6px #000}
+.spell{margin-top:12px;padding:14px;border-radius:12px;background:linear-gradient(135deg,#2e1a44,#1a2f2a);font-family:Georgia,serif;font-size:1.08rem;line-height:1.6;display:none}
+.spell.on{display:block}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.note{color:var(--muted);font-size:.84rem}
+.safe{font-size:.84rem;background:#140f1b;border-left:4px solid var(--accent);padding:8px 10px;border-radius:8px;margin-top:12px}
+.links{text-align:center;padding:10px;font-size:.9rem}.links a{color:var(--accent);margin:0 8px}
+.cbfoot{text-align:center;color:var(--muted);font-size:.82rem;padding:16px;max-width:900px;margin:0 auto}.cbfoot a{color:var(--accent)}
+@media(max-width:600px){header{position:static}.stage{min-height:360px}}
+</style>
+<link rel="icon" href="img/logo.webp" type="image/webp"></head>
+<body>
+<header><img src="img/logo.webp" alt="Coffeebreak logo"><h1>Coffeebreak Blockbuster Tools<small>Brew it, burn it, shred it, let it go</small></h1>
+<nav id="nav"><button data-t="cauldron" class="on">Cauldron Spell</button><button data-t="burner">Report Burner</button><button data-t="shredder">Shredder</button></nav></header>
+<main>
+<section class="tab on" id="cauldron">
+<div class="panel"><h2>Cauldron Spell maker</h2>
+<p class="note">Type a worry, add some ingredients, then stir the cauldron and brew a spell to send it on its way.</p>
+<textarea id="cWorry" rows="4" placeholder="What is bothering you today"></textarea>
+<div class="chips" id="ingr"></div>
+<div class="row"><button id="cStir">Stir</button><button id="cBrew">Brew the spell</button><button class="ghost" id="cReset">Start again</button></div>
+<p class="note">Tip: drag around the cauldron to stir by hand. Stir <b id="stirs">0</b> of 3 times.</p>
+<div class="spell" id="spell"></div>
+<div class="safe">Nothing you type is saved or sent anywhere. It stays on this screen and is gone when you close the page.</div></div>
+<div class="stage" id="cStage"><canvas id="cCv"></canvas><div class="msg" id="cMsg">Drop your worry in the pot</div></div>
+</section>
+
+<section class="tab" id="burner">
+<div class="panel"><h2>Report Burner</h2>
+<p class="note">Type or paste that report, email or list you are sick of, then watch it go up in smoke. Safely, on screen only.</p>
+<textarea id="bText" rows="9" placeholder="Paste the annoying report here"></textarea>
+<div class="row"><button id="bGo">Burn it</button><button class="ghost" id="bAgain">New page</button><label class="note"><input type="checkbox" id="bSnd" checked> Crackle sound</label></div>
+<div class="safe">Nothing is saved or sent. The text is cleared when the page burns.</div></div>
+<div class="stage"><canvas id="bCv"></canvas><div class="msg" id="bMsg"></div></div>
+</section>
+
+<section class="tab" id="shredder">
+<div class="panel"><h2>Shredder</h2>
+<p class="note">Feed your words into the Coffeebreak shredder and watch them turn into strips. Choose cross cut for confetti.</p>
+<textarea id="sText" rows="9" placeholder="Type the things to shred"></textarea>
+<div class="row"><button id="sGo">Shred it</button><label class="note"><input type="radio" name="cut" value="strip" checked> Strip cut</label><label class="note"><input type="radio" name="cut" value="cross"> Cross cut</label><label class="note"><input type="checkbox" id="sSnd" checked> Motor sound</label></div>
+<div class="safe">Nothing is saved or sent. The text is cleared once it is shredded.</div></div>
+<div class="stage"><canvas id="sCv"></canvas><div class="msg" id="sMsg"></div></div>
+</section>
+</main>
+<div class="links">Links: <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></div>
+<footer class="cbfoot">
+<p><a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> &middot; <a class="gfm" href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener">Support Coffeebreak on GoFundMe</a></p>
+<p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+<p>Karen (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell the physical items they bought, but may not copy them or make their own versions. Coffeebreak claims no ownership of third-party brands, which are named only to describe the items and belong to their owners.</p>
+<p>Supporting the future with <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
+</footer>
+<script>
+const $=id=>document.getElementById(id);const R=(a,b)=>a+Math.random()*(b-a);const pick=a=>a[Math.floor(Math.random()*a.length)];
+$('nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));fitAll()};
+function fit(cv){const r=cv.getBoundingClientRect();const d=Math.min(2,devicePixelRatio||1);if(r.width&&(cv.width!==Math.round(r.width*d)||cv.height!==Math.round(r.height*d))){cv.width=Math.round(r.width*d);cv.height=Math.round(r.height*d)}return d}
+function fitAll(){['cCv','bCv','sCv'].forEach(i=>fit($(i)))}addEventListener('resize',fitAll);
+/* tiny sound engine, made live */
+let ac;function A(){if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume();return ac}
+function noise(dur,f,type,vol){const a=A(),n=Math.floor(a.sampleRate*dur),b=a.createBuffer(1,n,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;const s=a.createBufferSource();s.buffer=b;const fl=a.createBiquadFilter();fl.type=type||'bandpass';fl.frequency.value=f;const g=a.createGain();g.gain.value=vol;s.connect(fl);fl.connect(g);g.connect(a.destination);s.start();return {s,g}}
+function blip(f1,f2,d,v){const a=A(),o=a.createOscillator(),g=a.createGain(),t=a.currentTime;o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(a.destination);o.start();o.stop(t+d)}
+
+/* ===== Cauldron ===== */
+const ING=['a pinch of moonlight','three deep breaths','lavender','a cat whisker','starlight','a cup of strong coffee','a dragon scale','ocean salt','a four leaf clover','sunshine','a hug from a friend','a cheeky laugh'];
+let chosen=new Set(),stirs=0,stirAng=0,brewing=0,letters=[],sparks=[],cColor=[80,220,120],lastA=null,stirAccum=0;
+$('ingr').innerHTML=ING.map((x,i)=>`<button class="chip" data-i="${i}">${x}</button>`).join('');
+$('ingr').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;const i=+b.dataset.i;chosen.has(i)?chosen.delete(i):chosen.add(i);b.classList.toggle('on');const cols=[[180,120,255],[255,170,60],[90,200,255],[255,90,160],[120,240,140]];cColor=cols[chosen.size%cols.length];for(let k=0;k<10;k++)sparks.push(spark())};
+function spark(c){const cv=$('cCv');return {x:cv.width/2+R(-60,60),y:cv.height*.55,vx:R(-1.5,1.5),vy:R(-5,-2),life:R(40,90),c:c||cColor}}
+function doStir(){stirs=Math.min(3,stirs+1);$('stirs').textContent=stirs;stirAng+=Math.PI*2;for(let k=0;k<14;k++)sparks.push(spark());try{blip(220,110,.25,.08)}catch(e){}$('cMsg').textContent=stirs<3?'Keep stirring':'The potion is ready. Brew the spell'}
+$('cStir').onclick=()=>{dropWorry();doStir()};
+function dropWorry(){const t=$('cWorry').value.trim();if(!t||letters.length)return;const cv=$('cCv');t.slice(0,80).split('').forEach((ch,i)=>letters.push({ch,x:cv.width/2+R(-cv.width*.3,cv.width*.3),y:R(-200,-20)-i*6,vy:R(1,3),a:1}))}
+const cv0=$('cCv');
+cv0.addEventListener('pointerdown',e=>{lastA=ang(e);dropWorry()});cv0.addEventListener('pointermove',e=>{if(lastA==null||!(e.buttons||e.pointerType==='touch'))return;const a=ang(e);let d=a-lastA;if(d>Math.PI)d-=Math.PI*2;if(d<-Math.PI)d+=Math.PI*2;stirAng+=d;stirAccum+=Math.abs(d);lastA=a;if(stirAccum>Math.PI*2){stirAccum=0;doStir()}});addEventListener('pointerup',()=>lastA=null);
+function ang(e){const r=cv0.getBoundingClientRect();return Math.atan2(e.clientY-r.top-r.height*.6,e.clientX-r.left-r.width/2)}
+const OPEN=['By the light of the kettle moon','Bubble, bubble, let it go','With a swirl and a swish','By coffee steam and starlight','Hear me now, little cauldron'];
+const CLOSE=['So it fades, so it floats, so it is gone.','And all that is left is a calm, warm cup.','Tomorrow arrives lighter than today.','Shrink, worry, shrink, until you fit in a teaspoon.','Off you go, out the window, into the sea breeze.'];
+function makeSpell(w){const ing=[...chosen].map(i=>ING[i]);if(!ing.length)ing.push(pick(ING),pick(ING));const short=w.length>60?w.slice(0,57)+'...':w;
+ return `<b>${pick(OPEN)},</b><br>I add ${ing.slice(0,-1).join(', ')}${ing.length>1?' and ':''}${ing[ing.length-1]},<br>and I stir it ${stirs===3?'three':'a few'} times round.<br>The worry called "${esc(short)}"<br>dissolves into bubbles and rises as steam.<br><b>${pick(CLOSE)}</b>`}
+const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+$('cBrew').onclick=()=>{const w=$('cWorry').value.trim();if(!w){$('cMsg').textContent='Type a worry first';$('cWorry').focus();return}dropWorry();while(stirs<3)doStir();brewing=1;
+ try{for(let i=0;i<6;i++)setTimeout(()=>blip(R(300,700),R(900,1600),.3,.05),i*120)}catch(e){}
+ setTimeout(()=>{$('spell').innerHTML=makeSpell(w);$('spell').classList.add('on');$('cWorry').value='';$('cMsg').textContent='Spell cast. Your worry is now steam.'},1800)};
+$('cReset').onclick=()=>{stirs=0;$('stirs').textContent=0;brewing=0;letters=[];chosen.clear();document.querySelectorAll('.chip.on').forEach(c=>c.classList.remove('on'));$('spell').classList.remove('on');$('cWorry').value='';$('cMsg').textContent='Drop your worry in the pot'};
+let bub=[];
+function drawCauldron(t){const cv=$('cCv'),x=cv.getContext('2d'),W=cv.width,H=cv.height,d=devicePixelRatio>1?2:1;x.clearRect(0,0,W,H);
+ const cx=W/2,cy=H*.62,rw=Math.min(W*.36,H*.42),rh=rw*.28;
+ // fire
+ for(let i=0;i<7;i++){const fx=cx+(i-3)*rw*.22,fh=rw*.35*(0.7+.3*Math.sin(t/120+i*1.7));const g=x.createLinearGradient(0,cy+rw*.9,0,cy+rw*.9-fh);g.addColorStop(0,'rgba(255,90,0,.9)');g.addColorStop(1,'rgba(255,220,80,0)');x.fillStyle=g;x.beginPath();x.moveTo(fx-rw*.1,cy+rw*1.02);x.quadraticCurveTo(fx,cy+rw*.95-fh*1.2,fx+rw*.1,cy+rw*1.02);x.fill()}
+ // pot body
+ x.fillStyle='#1c1a22';x.beginPath();x.ellipse(cx,cy+rw*.35,rw*1.02,rw*.72,0,0,Math.PI*2);x.fill();
+ x.strokeStyle='#3b3646';x.lineWidth=6*d;x.stroke();
+ // legs
+ x.fillStyle='#1c1a22';[-.6,.6].forEach(k=>{x.fillRect(cx+k*rw-8*d,cy+rw*.95,16*d,rw*.15)});
+ // liquid
+ const [r,g,b]=cColor;const glow=brewing?1+.5*Math.sin(t/80):1;x.fillStyle=`rgb(${r},${g},${b})`;x.shadowColor=`rgb(${r},${g},${b})`;x.shadowBlur=30*glow*d;x.beginPath();x.ellipse(cx,cy,rw*.95,rh,0,0,Math.PI*2);x.fill();x.shadowBlur=0;
+ // swirl
+ x.strokeStyle='rgba(255,255,255,.35)';x.lineWidth=3*d;x.beginPath();for(let k=0;k<60;k++){const a=stirAng+k*.2,rr=k/60*rw*.85;const px=cx+Math.cos(a)*rr,py=cy+Math.sin(a)*rr*.27;k?x.lineTo(px,py):x.moveTo(px,py)}x.stroke();
+ // rim
+ x.strokeStyle='#4a4458';x.lineWidth=12*d;x.beginPath();x.ellipse(cx,cy,rw,rh+4*d,0,0,Math.PI*2);x.stroke();
+ // spoon
+ const sa=stirAng;x.strokeStyle='#8a5a32';x.lineWidth=10*d;x.lineCap='round';x.beginPath();x.moveTo(cx+Math.cos(sa)*rw*.5,cy+Math.sin(sa)*rh*.5);x.lineTo(cx+Math.cos(sa)*rw*.5+rw*.35,cy-rw*.9);x.stroke();
+ // bubbles
+ if(Math.random()<(brewing?.6:.2))bub.push({x:cx+R(-rw*.8,rw*.8),y:cy+R(-rh*.5,rh*.5),r:R(3,10)*d,l:0});
+ bub=bub.filter(o=>{o.l++;o.y-=(brewing?2:.6)*d;const a=1-o.l/50;if(a<=0)return false;x.strokeStyle=`rgba(255,255,255,${a})`;x.lineWidth=2*d;x.beginPath();x.arc(o.x,o.y,o.r,0,7);x.stroke();return true});
+ // letters falling in
+ x.font=`700 ${20*d}px Georgia`;x.textAlign='center';letters=letters.filter(l=>{if(l.y<cy-rh){l.y+=l.vy*d;l.vy+=.08}else{l.a-=.03;l.y+=.5;if(Math.random()<.1)sparks.push(spark())}if(l.a<=0)return false;x.fillStyle=`rgba(255,255,255,${l.a})`;x.fillText(l.ch,l.x+(cx-l.x)*Math.min(1,Math.max(0,(l.y+50)/(cy+50)))*.6,l.y);return true});
+ // sparks and steam
+ if(brewing&&Math.random()<.9)for(let k=0;k<3;k++)sparks.push({x:cx+R(-rw*.6,rw*.6),y:cy-rh,vx:R(-1,1),vy:R(-6,-2),life:R(60,140),c:pick([[255,220,120],[200,150,255],[120,255,200],cColor])});
+ sparks=sparks.filter(s=>{s.life--;s.x+=s.vx*d;s.y+=s.vy*d;s.vy*=.985;if(s.life<=0)return false;x.fillStyle=`rgba(${s.c[0]},${s.c[1]},${s.c[2]},${Math.min(1,s.life/40)})`;x.beginPath();x.arc(s.x,s.y,2.5*d,0,7);x.fill();return true});
+ if(brewing){brewing+=.01;if(brewing>4)brewing=0}}
+
+/* ===== Burner ===== */
+function paper(cv,text,title){const W=cv.width,H=cv.height,d=devicePixelRatio>1?2:1;const pw=Math.min(W*.7,H*.62),ph=pw*1.3;const p=document.createElement('canvas');p.width=pw;p.height=ph;const x=p.getContext('2d');
+ x.fillStyle='#fbf7ec';x.fillRect(0,0,pw,ph);x.strokeStyle='#d8cfb8';for(let y=pw*.18;y<ph;y+=pw*.06){x.beginPath();x.moveTo(pw*.06,y);x.lineTo(pw*.94,y);x.stroke()}
+ x.fillStyle='#222';x.font=`700 ${pw*.06}px Georgia`;x.fillText(title,pw*.06,pw*.12);x.font=`${pw*.038}px system-ui`;let y=pw*.22;const words=(text||'').split(/\s+/);let line='';
+ for(const w of words){const t=line?line+' '+w:w;if(x.measureText(t).width>pw*.88){x.fillText(line,pw*.06,y);y+=pw*.06;line=w;if(y>ph-pw*.04)break}else line=t}if(y<=ph-pw*.04)x.fillText(line,pw*.06,y);
+ return {c:p,x:(W-pw)/2,y:(H-ph)/2,w:pw,h:ph}}
+let burn=null;
+function startBurn(){const t=$('bText').value.trim();if(!t){$('bMsg').textContent='Type or paste something to burn';return}const cv=$('bCv');fit(cv);const P=paper(cv,t,'REPORT');
+ const cs=Math.max(4,Math.round(P.w/70)),nx=Math.ceil(P.w/cs),ny=Math.ceil(P.h/cs),th=new Float32Array(nx*ny);const ox=R(.2,.8);
+ for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const dx=i/nx-ox,dy=1-j/ny;th[j*nx+i]=Math.sqrt(dx*dx*.6+dy*dy)+Math.random()*.06+Math.sin(i*.7)*.02}
+ burn={P,cs,nx,ny,th,t:-.05,emb:[],smoke:[]};$('bText').value='';$('bMsg').textContent='';$('bGo').disabled=true;
+ if($('bSnd').checked)try{const n=noise(6,2500,'highpass',.0);n.g.gain.setValueAtTime(0,A().currentTime);n.g.gain.linearRampToValueAtTime(.06,A().currentTime+.5);n.g.gain.linearRampToValueAtTime(0,A().currentTime+6);burn.snd=setInterval(()=>noise(.02,R(1500,4000),'highpass',R(.1,.3)),90)}catch(e){}}
+$('bGo').onclick=startBurn;$('bAgain').onclick=()=>{burn=null;$('bMsg').textContent='';$('bText').focus()};
+function drawBurn(){const cv=$('bCv'),x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#0b0810';x.fillRect(0,0,W,H);
+ if(!burn){x.fillStyle='rgba(255,255,255,.35)';x.font=`600 ${Math.max(16,W/32)}px system-ui`;x.textAlign='center';x.fillText('Your report appears here, then burns',W/2,H/2);x.textAlign='left';return}
+ const b=burn,P=b.P;b.t+=.0045;x.drawImage(P.c,P.x,P.y);let alive=0;
+ for(let j=0;j<b.ny;j++)for(let i=0;i<b.nx;i++){const v=b.t-b.th[j*b.nx+i];const px=P.x+i*b.cs,py=P.y+j*b.cs;
+  if(v>.03){x.clearRect(px,py,b.cs+1,b.cs+1);x.fillStyle='#0b0810';x.fillRect(px,py,b.cs+1,b.cs+1)}
+  else if(v>0){alive++;x.fillStyle=v>.015?'#2a1205':`rgba(255,${Math.round(120+v*6000)},20,1)`;x.fillRect(px,py,b.cs+1,b.cs+1);if(Math.random()<.02)b.emb.push({x:px,y:py,vx:R(-.6,.6),vy:R(-2.5,-.8),l:R(30,80)});if(Math.random()<.006)b.smoke.push({x:px,y:py,r:R(10,30),l:0})}
+  else if(v>-.04){alive++;x.fillStyle=`rgba(120,70,20,${(.04+v)/.04*.6})`;x.fillRect(px,py,b.cs+1,b.cs+1)}else alive++}
+ b.smoke=b.smoke.filter(s=>{s.l++;s.y-=.8;s.r+=.4;const a=.25*(1-s.l/120);if(a<=0)return false;x.fillStyle=`rgba(120,110,120,${a})`;x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fill();return true});
+ b.emb=b.emb.filter(e=>{e.l--;e.x+=e.vx;e.y+=e.vy;if(e.l<=0)return false;x.fillStyle=`rgba(255,${150+Math.random()*100|0},40,${e.l/80})`;x.fillRect(e.x,e.y,3,3);return true});
+ if(!alive&&!b.done){b.done=1;clearInterval(b.snd);$('bMsg').textContent='Burnt to ashes. Nothing was saved or sent.';$('bGo').disabled=false}
+ if(b.done&&!b.emb.length&&!b.smoke.length){}}
+
+/* ===== Shredder ===== */
+let shred=null;
+$('sGo').onclick=()=>{const t=$('sText').value.trim();if(!t){$('sMsg').textContent='Type something to shred';return}const cv=$('sCv');fit(cv);const P=paper(cv,t,'TO SHRED');P.y=cv.height*.04;
+ const cross=document.querySelector('input[name=cut]:checked').value==='cross';const n=Math.max(10,Math.round(P.w/14));
+ shred={P,p:0,n,cross,bits:[],slot:cv.height*.45};$('sText').value='';$('sMsg').textContent='';$('sGo').disabled=true;
+ if($('sSnd').checked)try{const a=A(),o=a.createOscillator(),g=a.createGain();o.type='sawtooth';o.frequency.value=70;g.gain.value=.03;o.connect(g);g.connect(a.destination);o.start();shred.osc=o;shred.snd=noise(20,900,'bandpass',.08)}catch(e){}};
+function drawShred(){const cv=$('sCv'),x=cv.getContext('2d'),W=cv.width,H=cv.height,d=devicePixelRatio>1?2:1;x.fillStyle='#0b0810';x.fillRect(0,0,W,H);
+ const slot=shred?shred.slot:H*.45,bw=Math.min(W*.86,H*.85),bx=(W-bw)/2;
+ // bin
+ x.fillStyle='#262033';x.fillRect(bx+bw*.08,slot+H*.12,bw*.84,H-slot-H*.12);
+ if(shred){const s=shred,P=s.P;const total=P.h+(slot-P.y)+20;if(s.p<total)s.p+=P.h/260;
+  const top=P.y+s.p; // current y of paper top
+  // part above slot
+  const above=Math.max(0,Math.min(P.h,slot-top));if(above>0)x.drawImage(P.c,0,0,P.w,above,P.x,top,P.w,above);
+  // part below slot as strips
+  const below=Math.min(P.h,P.h-(slot-top)>0?Math.min(P.h,top+P.h-slot):0);const srcY0=Math.max(0,slot-top);const sw=P.w/s.n;
+  if(below>0){const len=Math.min(below,H*.12+40);for(let i=0;i<s.n;i++){const wig=Math.sin(i*1.3+s.p*.05)*6*d;const gap=(i-s.n/2)*3*d;
+    if(s.cross){/* cut into small bits that fall */}else{const sy=P.h-below;x.drawImage(P.c,i*sw,srcY0,sw,Math.min(len,P.h-srcY0),P.x+i*sw+gap+wig,slot+H*.03,sw-1,Math.min(len,P.h-srcY0))}}
+   // bits falling into bin
+   for(let k=0;k<(s.cross?s.n:3);k++)if(Math.random()<.6&&s.p<P.h+(slot-P.y)){const i=Math.floor(Math.random()*s.n);s.bits.push({sx:i*sw,sy:Math.min(P.h-8,srcY0+Math.random()*20),w:s.cross?sw:sw,h:s.cross?R(8,16)*d:R(40,90)*d,x:P.x+i*sw,y:slot+H*.03+H*.12,vx:R(-1,1),vy:R(1,3),r:R(-.3,.3),vr:R(-.05,.05)})}}
+  const floor=H-6*d;s.bits.forEach(b=>{if(b.y+b.h*.3<floor){b.x+=b.vx;b.y+=b.vy;b.vy+=.15;b.r+=b.vr}x.save();x.translate(b.x,b.y);x.rotate(b.r);x.drawImage(P.c,b.sx,b.sy,b.w,Math.min(b.h,P.h-b.sy),-b.w/2,-b.h/2,b.w,Math.min(b.h,P.h-b.sy));x.restore()});
+  if(s.bits.length>900)s.bits.splice(0,s.bits.length-900);
+  if(s.p>=total&&!s.done){s.done=1;try{s.osc.stop();s.snd.s.stop()}catch(e){}$('sMsg').textContent=s.cross?'Confetti. Nothing was saved or sent.':'Shredded into strips. Nothing was saved or sent.';$('sGo').disabled=false}}
+ else{x.fillStyle='rgba(255,255,255,.35)';x.font=`600 ${Math.max(16,W/32)}px system-ui`;x.textAlign='center';x.fillText('Your page feeds in here',W/2,slot*.5);x.textAlign='left'}
+ // shredder head
+ const g=x.createLinearGradient(0,slot-H*.05,0,slot+H*.1);g.addColorStop(0,'#5b5470');g.addColorStop(1,'#2e2840');x.fillStyle=g;x.beginPath();x.roundRect?x.roundRect(bx,slot-H*.04,bw,H*.13,14*d):x.rect(bx,slot-H*.04,bw,H*.13);x.fill();
+ x.fillStyle='#000';x.fillRect(bx+bw*.08,slot-2*d,bw*.84,5*d);
+ x.fillStyle=shred&&!shred.done?'#3ddc97':'#d6213b';x.beginPath();x.arc(bx+bw*.94,slot+H*.05,6*d,0,7);x.fill();
+ x.fillStyle='#ffb02e';x.font=`800 ${Math.max(12,bw/28)}px system-ui`;x.fillText('COFFEEBREAK SHREDDER',bx+bw*.06,slot+H*.065)}
+
+function loop(t){requestAnimationFrame(loop);const on=document.querySelector('.tab.on').id;if(on==='cauldron'){fit($('cCv'));drawCauldron(t)}else if(on==='burner'){if(!burn)fit($('bCv'));drawBurn()}else{if(!shred||shred.done&&false)fit($('sCv'));drawShred()}}
+requestAnimationFrame(loop);
+</script>
+<!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/blockbuster-tools" aria-label="Cart"><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/blockbuster-tools","currency":"USD","items":[{"id":"full","name":"Coffeebreak Blockbuster Tools","amount":"10.00","currency":"USD"},{"id":"food-coffee","name":"Park coffee","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-snacks","name":"Park snack pack","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-icecream","name":"Park ice cream","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-candy","name":"Park candy bag","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-meal","name":"Light park meal","amount":"10.00","currency":"USD","kind":"food"},{"id":"prize-plush","name":"Park prize plush","amount":"49.00","currency":"USD","kind":"prize"},{"id":"prize-trophy","name":"Park prize trophy","amount":"59.00","currency":"USD","kind":"prize"},{"id":"prize-plush-large","name":"Large park prize plush","amount":"89.00","currency":"USD","kind":"prize"},{"id":"prize-hamper","name":"Park gift hamper","amount":"129.00","currency":"USD","kind":"prize"}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../apps/cb-static-checkout.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p>Subject to Australian Consumer Law.</p><p><a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Coffeebreak on YouTube</a> <a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p></footer><!--cb-game-cart-end--></body>
+</html>

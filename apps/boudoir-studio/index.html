@@ -1,9 +1,91 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-gallery-v1"><title>Coffeebreak Boudoir Studio</title>
-<style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:1100px;margin:auto;padding:20px}h1{color:#d6336c}.price{font-size:1.4em;font-weight:800;color:#d6336c}.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.c{margin:0;background:#fff;border-radius:14px;padding:8px;text-align:center;box-shadow:0 4px 14px #ff69b433}.c img{width:100%;height:170px;object-fit:contain;border-radius:8px;background:#fff}.c figcaption{font-size:.75rem;margin-top:4px}a{color:#d6336c}</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
-</head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><h1>Coffeebreak Boudoir Studio</h1><p class="price">Free &middot; tip if you like</p><p>4 designs from Coffeebreak. Tap any picture to view it bigger.</p>
-<div class="g"><figure class="c"><a href="img/001.jpg" target="_blank"><img src="img/001.jpg" alt="cover" loading="lazy"></a><figcaption>cover</figcaption></figure><figure class="c"><a href="img/002.jpg" target="_blank"><img src="img/002.jpg" alt="screenshot 1 editor" loading="lazy"></a><figcaption>screenshot 1 editor</figcaption></figure><figure class="c"><a href="img/003.jpg" target="_blank"><img src="img/003.jpg" alt="screenshot 2 camera" loading="lazy"></a><figcaption>screenshot 2 camera</figcaption></figure><figure class="c"><a href="img/004.jpg" target="_blank"><img src="img/004.jpg" alt="screenshot 3 consent" loading="lazy"></a><figcaption>screenshot 3 consent</figcaption></figure></div></main><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
-<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
-<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
-<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
-<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coffeebreak Boudoir Studio</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="logo.png"><meta name="theme-color" content="#0e0c0b">
+<style>
+:root{--bk:#0e0c0b;--pn:#1a1614;--ch:#d9c08c;--bl:#e8b4b8;--tx:#f4ece2;--mu:#a89a8c}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bk);color:var(--tx);font:15px/1.4 Georgia,serif}
+body{display:flex;flex-direction:column;min-height:100vh}
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid #2c2522}
+header img{width:40px;height:40px;border-radius:50%}header h1{font-size:18px;margin:0;color:var(--ch);flex:1;letter-spacing:.5px}
+nav{display:flex;gap:4px;padding:6px;overflow-x:auto;background:var(--pn)}
+button,select,input,textarea{font:inherit;color:var(--tx);background:#2a2320;border:1px solid #4a3d36;border-radius:10px;padding:8px 12px}
+button{cursor:pointer}button.on,nav button.on{background:var(--ch);color:#1a1310;border-color:var(--ch)}button.bl{background:var(--bl);color:#1a1310}
+html,body{overflow-x:hidden}main{flex:1 0 auto;display:flex;flex-direction:column}section{display:none;flex:1 0 auto;flex-direction:column;padding:10px;gap:10px}section.on{display:flex}
+.stage{position:relative;flex:1;min-height:45vh;display:flex;align-items:center;justify-content:center;background:#000;border-radius:14px;overflow:hidden}
+.stage video,.stage canvas{max-width:100%;max-height:100%}
+.ov{position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.grid{background-image:linear-gradient(90deg,transparent 33%,#fff6 33.3%,transparent 33.6%,transparent 66.3%,#fff6 66.6%,transparent 67%),linear-gradient(transparent 33%,#fff6 33.3%,transparent 33.6%,transparent 66.3%,#fff6 66.6%,transparent 67%)}
+.ring{position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 0 9vmin #fff;display:none;z-index:5}.ring.warm{box-shadow:inset 0 0 0 9vmin #ffd9a8}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.count{position:absolute;font-size:22vmin;color:var(--ch);text-shadow:0 0 20px #000}
+.sl{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px 14px}.sl label{display:flex;flex-direction:column;font-size:13px;color:var(--mu)}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}.gal img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:10px;cursor:pointer}
+.card{background:var(--pn);border-radius:14px;padding:12px;border:1px solid #2c2522}.note{color:var(--bl);font-size:13px}
+.form label{display:block;margin:6px 0}.form input[type=text],.form input[type=date],.form textarea{width:100%}
+.sig{background:#fff;border-radius:8px;width:100%;height:140px;touch-action:none}
+footer{padding:10px;font-size:12px;color:var(--mu);text-align:center;border-top:1px solid #2c2522}
+#hide{position:fixed;inset:0;background:#f6f3ee;color:#333;z-index:20;display:none;align-items:center;justify-content:center;font-family:sans-serif}
+#lock{position:fixed;inset:0;background:var(--bk);z-index:15;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.modal{position:fixed;inset:0;background:#000c;z-index:12;display:none;align-items:center;justify-content:center;padding:16px}.modal .card{max-width:520px;max-height:90vh;overflow:auto}
+@media print{header,nav,footer{display:none}}
+</style></head><body>
+<header><img src="logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Boudoir Studio</h1><button id="qh" title="Quick hide">Hide</button></header>
+<nav id="nav"><button data-s="cam" class="on">Camera</button><button data-s="ed">Editor</button><button data-s="gal">Gallery</button><button data-s="con">Consent</button><button data-s="pro">Pro</button><button data-s="about">About</button></nav>
+<main>
+<section id="cam" class="on">
+ <div class="stage" id="camStage"><video id="vid" playsinline muted autoplay></video><div class="ov" id="poseOv"></div><div class="ov" id="gridOv"></div><div class="count" id="count"></div><p id="camMsg" style="position:absolute;color:var(--mu);padding:20px;text-align:center">Tap Start camera. Only photograph people who have given clear consent.</p></div>
+ <div class="row"><button class="bl" id="start">Start camera</button><button id="flip">Front/Back</button><button id="shoot" class="bl">Capture</button>
+ <select id="timer"><option value="0">No timer</option><option value="3">3 s timer</option><option value="10">10 s timer</option></select>
+ <select id="burst"><option value="1">Single</option><option value="3">Burst 3</option><option value="5">Burst 5</option></select>
+ <select id="ar"><option>4:5</option><option>1:1</option><option>9:16</option><option>3:2</option></select>
+ <select id="live"><option value="none">No filter</option><option value="soft">Soft light</option><option value="warm">Warm</option><option value="cool">Cool</option></select>
+ <button id="gridB">Grid</button><button id="mir">Mirror</button>
+ <select id="ringSel"><option value="">Ring light off</option><option value="w">White ring</option><option value="warm">Warm ring</option></select>
+ <select id="pose"><option value="">No pose guide</option><option value="stand">Standing S-curve</option><option value="seat">Seated</option><option value="lean">Leaning</option><option value="portrait">Portrait</option></select></div>
+</section>
+<section id="ed">
+ <div class="stage" id="edStage"><canvas id="cv"></canvas></div>
+ <div class="row"><button id="open">Open photo</button><input type="file" id="file" accept="image/*" hidden><button id="demo">Demo photo</button><button id="undo">Undo</button><button id="redo">Redo</button><button id="cmp">Hold to compare</button>
+ <button id="rot">Rotate 90</button><select id="crop"><option value="">Crop</option><option>4:5</option><option>1:1</option><option>9:16</option><option>3:2</option></select>
+ <button id="heal">Heal brush</button><button id="txtB">Add text</button><label class="row" style="color:var(--mu)"><input type="checkbox" id="wm">Coffeebreak watermark</label>
+ <button class="bl" id="saveG">Save to gallery</button><button id="expJ">Export JPG</button><button id="expP">Export PNG</button></div>
+ <div class="row" id="presets"></div>
+ <div class="sl" id="sliders"></div>
+</section>
+<section id="gal"><div class="row"><button id="setPin">Set or change PIN</button><button id="clrPin">Remove PIN</button><button id="lockNow">Lock now</button></div>
+ <p class="note">Your photos are stored only on this device. Nothing is uploaded or sent anywhere.</p><div class="gal" id="galGrid"></div></section>
+<section id="con"><div class="card form" id="conForm">
+ <h2 style="color:var(--ch);margin-top:0">Model Release and Consent Form</h2>
+ <p class="note">Consent is opt-in only. Tick each use separately. The model can withdraw consent at any time by telling the photographer in writing. Photos must not be used beyond what is ticked below.</p>
+ <label>Date <input type="date" id="cDate"></label><label>Model name <input type="text" id="cModel"></label><label>Model contact (optional) <input type="text" id="cMC"></label>
+ <label>Photographer name <input type="text" id="cPh"></label><label>Photographer contact (optional) <input type="text" id="cPC"></label>
+ <label><input type="checkbox" id="cAdult"> The model confirms they are 18 or over</label>
+ <fieldset><legend>The model agrees the photos may be used for (tick only what you agree to)</legend>
+ <label><input type="checkbox" data-u="personal"> Personal use only (kept by the model and photographer)</label>
+ <label><input type="checkbox" data-u="portfolio"> Photographer's portfolio</label>
+ <label><input type="checkbox" data-u="social"> Social media</label>
+ <label><input type="checkbox" data-u="sale"> Sale</label></fieldset>
+ <label>Any limits (eg no face shown, no tagging) <textarea id="cLim" rows="2"></textarea></label>
+ <div class="card" style="margin:8px 0"><h3 style="margin-top:0;color:var(--bl)">Extra support</h3>
+ <p>If the model has a disability or would like support, we recommend a support person of the model's own choice is present during the shoot and when signing.</p>
+ <label>Support person present (optional) <input type="text" id="cSup"></label>
+ <h4>Easy Read summary</h4><ul><li>You choose what the photos are used for.</li><li>Only the boxes you tick are allowed.</li><li>You can say stop at any time.</li><li>You can change your mind later and take back your yes.</li><li>You can bring someone you trust.</li><li>You get a copy of this form.</li></ul></div>
+ <h4>Right to withdraw</h4><p>The model may withdraw consent at any time. After withdrawal the photographer must stop any new use and remove the photos where they control them.</p>
+ <label>Model signature</label><canvas class="sig" id="sigM"></canvas><button data-clr="sigM">Clear</button>
+ <label>Photographer signature</label><canvas class="sig" id="sigP"></canvas><button data-clr="sigP">Clear</button>
+ <p class="note" id="cErr"></p><div class="row"><button class="bl" id="cPng">Export PNG</button><button id="cPdf">Export PDF</button></div></div></section>
+<section id="pro"><div class="card"><h2 style="color:var(--ch);margin-top:0">Pro looks US$10</h2>
+ <p>Unlocks Champagne, Noir B&amp;W, Vintage Film, Rose Gold and Coffeebreak Warm. Silk is free.</p>
+ <p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com, reference your email, and you'll be emailed an unlock code.</p>
+ <div class="row"><input id="code" placeholder="Unlock code"><button class="bl" id="unlock">Unlock</button></div><p class="note" id="proMsg"></p></div></section>
+<section id="about"><div class="card"><img src="logo.png" alt="" style="width:90px"><h2 style="color:var(--ch)">About</h2>
+ <p>Coffeebreak Boudoir Studio, a camera and photo editor for tasteful boudoir and glamour shoots, by Coffeebreak, Newcastle NSW.</p>
+ <p class="note">18+ only. Only photograph people who have given clear consent.</p>
+ <p>Your photos never leave your device. The app works offline.</p>
+ <p>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers and fans may resell the physical products and phones they bought, but may not copy them or make their own versions.</p>
+ <p><a style="color:var(--bl)" href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> &middot; <a style="color:var(--bl)" href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener">Support Coffeebreak on GoFundMe</a></p></div></section>
+</main>
+<footer>18+ only. Only photograph people who have given clear consent.<br>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers and fans may resell the physical products and phones they bought, but may not copy them or make their own versions.<br>Coffeebreak claims no ownership of third-party brands, which are named only to describe items and belong to their owners.<br>Supporting the future with <a href="https://www.tesla.com" target="_blank" rel="noopener" style="color:inherit">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener" style="color:inherit">Starlink</a></footer>
+<div id="hide"><div><h2>Notes</h2><p>Shopping: milk, bread, coffee beans</p><p style="font-size:12px;color:#999">Tap twice to return</p></div></div>
+<div id="lock"><img src="logo.png" style="width:80px" alt=""><p>Enter PIN</p><input id="pinIn" inputmode="numeric" maxlength="4" type="password" style="text-align:center;width:120px"><button class="bl" id="pinGo">Open</button><p class="note" id="pinMsg"></p></div>
+<div class="modal" id="ageM"><div class="card"><img src="logo.png" style="width:70px" alt=""><h2 style="color:var(--ch)">Welcome</h2><p>This app is for adults 18 and over.</p><p>Only photograph people who have given clear consent. Use the Consent tab to record it.</p><button class="bl" id="ageOk">I am 18 or over</button></div></div>
+<script src="lib.js"></script><script src="codes.js"></script><script src="app.js"></script>
+<!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/boudoir-studio" aria-label="Cart"><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/boudoir-studio","currency":"USD","items":[{"id":"full","name":"Coffeebreak Boudoir Studio","amount":"10.00","currency":"USD"},{"id":"food-coffee","name":"Park coffee","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-snacks","name":"Park snack pack","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-icecream","name":"Park ice cream","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-candy","name":"Park candy bag","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-meal","name":"Light park meal","amount":"10.00","currency":"USD","kind":"food"},{"id":"prize-plush","name":"Park prize plush","amount":"49.00","currency":"USD","kind":"prize"},{"id":"prize-trophy","name":"Park prize trophy","amount":"59.00","currency":"USD","kind":"prize"},{"id":"prize-plush-large","name":"Large park prize plush","amount":"89.00","currency":"USD","kind":"prize"},{"id":"prize-hamper","name":"Park gift hamper","amount":"129.00","currency":"USD","kind":"prize"}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../apps/cb-static-checkout.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p>Subject to Australian Consumer Law.</p><p><a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Coffeebreak on YouTube</a> <a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p></footer><!--cb-game-cart-end--></body></html>

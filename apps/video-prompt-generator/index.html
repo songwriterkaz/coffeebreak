@@ -26,8 +26,7 @@ textarea.out{min-height:150px;font-size:.92rem}
 .cbfoot{text-align:center;color:var(--muted);font-size:.82rem;padding:16px;max-width:900px;margin:0 auto}
 .cbfoot a{color:var(--accent)}
 </style>
-<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
-</head>
+<link rel="icon" href="img/logo.webp" type="image/webp"></head>
 <body>
 <header><img src="img/logo.webp" alt="Coffeebreak logo"><h1>Coffeebreak Video Prompt Generator</h1><button onclick="surprise()">Surprise me</button></header>
 <div class="wrap">
@@ -67,8 +66,10 @@ textarea.out{min-height:150px;font-size:.92rem}
 </div>
 </div>
 <footer class="cbfoot">
-<p><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">More from Coffeebreak at coffeebreaks.itch.io</a></p>
-<p>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell the physical products they bought, but may not copy them or make their own versions. Coffeebreak claims no ownership of third-party brands or products named; those trademarks belong to their owners and are used only to describe items.</p>
+<p><a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a> &middot; <a class="gfm" href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener">Support Coffeebreak on GoFundMe</a></p>
+<p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+<p>Karen (Coffeebreak) keeps all rights to her products, designs, apps, name and logo. Buyers may resell the physical items they bought, but may not copy them or make their own versions. Coffeebreak claims no ownership of third-party brands, which are named only to describe the items and belong to their owners.</p>
+<p>Supporting the future with <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a></p>
 </footer>
 <script>
 const O={
@@ -91,7 +92,7 @@ const long=`${cap(v('shot'))} of ${who} who ${what}, in ${v('where')} at ${v('wh
 $('oLong').value=long;
 $('oShort').value=`${who}, ${what}, ${v('where')}, ${v('when')}, ${v('shot')}, ${v('move')}, ${v('light')}, ${v('style')}, ${v('ar')}`;
 $('oNeg').value='blurry, warped faces, extra fingers, distorted hands, text, watermark, logos, flicker, low quality, cartoonish skin, nudity, violence';}
-function desc(){const t=v('title')||'Coffeebreak';$('oDesc').value=`${t}\n\n${v('sum')||'A new video from Coffeebreak.'}\n\nCoffeebreak TV Series\n\nMore songs, games and apps from Coffeebreak: https://coffeebreaks.itch.io\n\nCoffeebreak is a songwriter and creator from Newcastle NSW, Australia, making music, stories, games and handmade goods.\n\n#Coffeebreak #CoffeebreakTVSeries`}
+function desc(){const t=v('title')||'Coffeebreak';$('oDesc').value=`${t}\n\n${v('sum')||'A new video from Coffeebreak.'}\n\nCoffeebreak TV Series\n\nMore songs, games and apps from Coffeebreak: https://songwriterkaz.github.io/coffeebreak/\n\nCoffeebreak is a songwriter and creator from Newcastle NSW, Australia, making music, stories, games and handmade goods.\n\n#Coffeebreak #CoffeebreakTVSeries`}
 function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
 function surprise(){Object.keys(O).forEach(k=>$(k).value=pick(O[k]));$('whoOwn').value='';$('what').value=pick(acts);gen()}
 function cp(id){const t=$(id);t.select();navigator.clipboard?navigator.clipboard.writeText(t.value):document.execCommand('copy')}
@@ -100,6 +101,5 @@ function fav(){if(!$('oLong').value)gen();const a=favs();a.unshift($('oLong').va
 function drawFav(){const a=favs();$('favs').innerHTML=a.length?a.map((p,i)=>`<li>${p.replace(/</g,'&lt;')}<div class="btns"><button class="alt" onclick="navigator.clipboard.writeText(favs()[${i}])">Copy</button><button class="alt" onclick="const a=favs();a.splice(${i},1);localStorage.setItem('cbVidFav',JSON.stringify(a));drawFav()">Remove</button></div></li>`).join(''):'<li>No favourites yet</li>'}
 gen();desc();drawFav();
 </script>
-<div id="cb-tip" style="max-width:820px;margin:24px auto;padding:16px;background:#fff0f6;border-radius:16px;font-family:system-ui,sans-serif;color:#4a1030;text-align:center"><b>&#9749; Buy Karen a coffee</b><br>Send a coffee tip by PayID: <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.<br><a href="../../" style="color:#d6336c">&larr; Coffeebreak hub</a></div>
-</body>
+<!--cb-game-cart-start--><section id="cb-game-cart" data-store="apps/video-prompt-generator" aria-label="Cart"><script type="application/json" id="cb-game-cart-data">{"storeId":"apps/video-prompt-generator","currency":"USD","items":[{"id":"full","name":"Coffeebreak Video Prompt Generator","amount":"10.00","currency":"USD"},{"id":"food-coffee","name":"Park coffee","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-snacks","name":"Park snack pack","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-icecream","name":"Park ice cream","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-candy","name":"Park candy bag","amount":"10.00","currency":"USD","kind":"food"},{"id":"food-meal","name":"Light park meal","amount":"10.00","currency":"USD","kind":"food"},{"id":"prize-plush","name":"Park prize plush","amount":"49.00","currency":"USD","kind":"prize"},{"id":"prize-trophy","name":"Park prize trophy","amount":"59.00","currency":"USD","kind":"prize"},{"id":"prize-plush-large","name":"Large park prize plush","amount":"89.00","currency":"USD","kind":"prize"},{"id":"prize-hamper","name":"Park gift hamper","amount":"129.00","currency":"USD","kind":"prize"}]}</script></section><script src="../../payid-cart/cart.js"></script><script src="../../apps/cb-static-checkout.js"></script><script src="../../payid-cart/game-cart.js"></script><script src="../../payid-cart/game-mount.js"></script><footer id="cb-game-legal"><p>Subject to Australian Consumer Law.</p><p><a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Coffeebreak on YouTube</a> <a href="mailto:coffeebreakhq@mail.grokbot.com?subject=Coffeebreak%20game%20report">Report a problem</a></p></footer><!--cb-game-cart-end--></body>
 </html>
