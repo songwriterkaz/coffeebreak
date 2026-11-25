@@ -204,13 +204,14 @@ function throwSkee(power,aim){if(sk.st!=='aim'||sk.balls<=0)return;sk.st='fly';s
 function hockPtr(e){if(mode!=='Air hockey')return;ndc.set(e.clientX/innerWidth*2-1,-e.clientY/innerHeight*2+1);ray.setFromCamera(ndc,cam);const pl=new THREE.Plane(new THREE.Vector3(0,1,0),-0.95);const p=new THREE.Vector3();if(ray.ray.intersectPlane(pl,p)){hock.worldToLocal(p);hk.tx=p.x;hk.tz=p.z}}
 function dropClaw(){if(cl.st==='move')cl.st='down'}
 // ---------- karaoke ----------
-const SONGS=[['sweet-juices-cotton-candy','Sweet Juices Cotton Candy'],['drip-drip-drip-country','Drip Drip Drip (Country)'],['im-weak',"I'm Weak"],['knee-deep-mashup','Knee Deep Mashup']];
+const SONGS=[['/coffeebreak/virtual-music-studio/songs/sweet-juices-cotton-candy.mp3','Sweet Juices Cotton Candy'],['/coffeebreak/radio/music/drip-drip-drip-country.mp3','Drip Drip Drip (Country)'],['/coffeebreak/film-clips/media/s3.mp3',"I'm Weak"],['/coffeebreak/film-clips/media/s4.mp3','Knee Deep Mashup']];
 let song=SONGS[0][0];const audio=new Audio();audio.preload='none';
 SONGS.forEach(([k,n])=>{const b=document.createElement('button');b.className='b';b.style.margin='3px';b.textContent=n;b.onclick=()=>{song=k;[...$('songs').children].forEach(x=>x.classList.remove('on'));b.classList.add('on');stopSong();showLyrics(0)};$('songs').appendChild(b)});$('songs').children[0].classList.add('on');
 function showLyrics(t){const ly=(window.LYRICS||{})[song];if(!ly||ly.length<4){$('lyr').innerHTML='<p>Sing along in your own words. Lyrics for this song are not available yet.</p>';return}
  let i=ly.findIndex((l,j)=>t>=l[0]&&(j===ly.length-1||t<ly[j+1][0]));let h='';for(let j=Math.max(0,i-1);j<Math.min(ly.length,Math.max(0,i)+4);j++)h+='<div class="'+(j===i?'cur':'')+'">'+ly[j][1].replace(/</g,'')+'</div>';$('lyr').innerHTML=h||'<p>Get ready to sing</p>'}
 showLyrics(0);
-$('kplay').onclick=()=>{if(!audio.paused){stopSong();return}audio.src='music/'+song+'.mp3';audio.play().then(()=>{$('kplay').textContent='Stop'}).catch(()=>$('kmsg').textContent='Tap Play again to start the music')};
+audio.onerror=()=>{$('kmsg').textContent='Song coming soon'};
+$('kplay').onclick=()=>{if(!audio.paused){stopSong();return}audio.src=song;audio.play().then(()=>{$('kplay').textContent='Stop';$('kmsg').textContent=''}).catch(()=>{$('kmsg').textContent='Song coming soon'})};
 function stopSong(){audio.pause();$('kplay').textContent='Play'}
 audio.onended=()=>{$('kplay').textContent='Play';addT(5);$('kmsg').textContent='Great singing. 5 tickets'};
 let rec=null,chunks=[];

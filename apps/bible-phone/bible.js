@@ -102,5 +102,12 @@ function tb(id,v){$(id).onclick=function(){if(v==='read')turn(1,render);else tur
 tb('tRead','read');tb('tFind','find');tb('tMarks','marks');tb('tDay','day');tb('tPray','pray');tb('tPlan','plan');tb('tChurch','church');tb('tWall','wall');
 $('tPhone').onclick=function(){openRadio('')};
 setWall();render();
+window.CBBible={open:function(mode){
+ var c=$('cover');
+ if(c){c.classList.add('open');c.style.pointerEvents='none'}
+ if(mode==='day')show('day');
+ else if(mode==='phone')openRadio('');
+ else render();
+}};
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js').catch(function(){});
 })();
