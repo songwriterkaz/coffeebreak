@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak Digital Amp</title>
+<link rel="icon" href="../cb-logo.png">
+<meta name="description" content="Coffeebreak Practice Studio CB-60. Plug in, turn up, take a Coffeebreak.">
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#2b1710;color:#f0c973;font-size:16px;line-height:1.45}
+.wrap{width:min(860px,100%);margin:0 auto;padding:16px 14px 24px;flex:1}
+header{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.logo{width:84px;height:84px;object-fit:contain;background:#f0c973;border-radius:16px;flex:0 0 auto}
+h1{font-size:1.35rem;margin:0;color:#f0c973}
+h2{font-size:1rem;margin:2px 0;font-weight:700;color:#fff6df}
+.tag{margin:2px 0 0;color:#f0c973}
+.amp{background:#1c0e0a;border:4px solid #c9963c;border-radius:22px;padding:14px;box-shadow:inset 0 0 0 3px #2b1710}
+.grill{height:72px;border-radius:12px;border:3px solid #c9963c;margin-bottom:12px;background:repeating-linear-gradient(90deg,#1a0e0a 0 2px,#3a2418 2px 5px)}
+.nameplate{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}
+.badge{color:#c8506d;font-weight:800;letter-spacing:.12em}
+.status{margin:8px 0;padding:8px 10px;border-radius:10px;background:#3a2218;color:#fff6df;font-weight:700}
+.meter{display:flex;gap:4px;height:18px;align-items:flex-end;margin:8px 0 12px}
+.meter span{flex:1;height:20%;background:#4a2c22;border-radius:3px}
+.meter span.on{background:#c8506d;height:100%}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.controls button,.presets button{min-height:48px;padding:10px 14px;border-radius:999px;border:2px solid #c9963c;background:#2b1710;color:#f0c973;font-weight:800;cursor:pointer}
+.controls button[aria-pressed="true"],.presets button[aria-pressed="true"]{background:#c8506d;color:#fff6df;border-color:#c8506d}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px}
+.knobs{display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:12px}
+.knob{text-align:center;background:#3a2416;border-radius:16px;padding:10px 6px;border:1px solid #c9963c}
+.dial{width:78px;height:78px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 40% 35%,#f0c973,#c9963c 55%,#8a6424);position:relative;touch-action:none;cursor:grab;box-shadow:0 3px 0 #1a0d08}
+.dial:focus-visible{outline:3px solid #c8506d;outline-offset:3px}
+.pip{position:absolute;left:50%;top:50%;width:4px;height:28px;margin-left:-2px;margin-top:-30px;background:#c8506d;border-radius:3px;transform-origin:50% 100%;transform:rotate(var(--deg))}
+.kbtns{display:flex;justify-content:center;gap:6px;margin-top:8px}
+.kbtns button{width:40px;height:40px;border-radius:50%;border:2px solid #f0c973;background:#2b1710;color:#f0c973;font-weight:800;font-size:1.1rem;cursor:pointer}
+.klabel{margin:6px 0 0;font-weight:800}
+.kval{margin:0;color:#fff6df;font-variant-numeric:tabular-nums}
+.path{font-size:.92rem;color:#f0c973}
+.hint{font-size:.92rem}
+.paybox{width:min(860px,100%);margin:0 auto;padding:0 14px 8px}
+.box{border:2px dashed #c9963c;border-radius:16px;padding:12px;text-align:center;background:#1c0e0a}
+.price{margin:0 0 4px;font-size:1.15rem;font-weight:800;color:#f0c973}
+.paylabel{margin:0;font-weight:700;overflow-wrap:anywhere}
+footer{width:min(860px,100%);margin:0 auto;padding:8px 14px 28px;text-align:center;font-size:.92rem}
+footer a{color:#f0c973;font-weight:800;margin:0 6px}
+footer p{margin:6px 0}
+button:focus-visible,a:focus-visible{outline:3px solid #c8506d;outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<img class="logo" src="../cb-logo.png" alt="Coffeebreak logo" width="84" height="84">
+<div>
+<h1>Coffeebreak Digital Amp</h1>
+<h2>Coffeebreak Practice Studio CB-60</h2>
+<p class="tag">Plug in, turn up, take a Coffeebreak</p>
+</div>
+</header>
+<div class="amp">
+<div class="grill" aria-hidden="true"></div>
+<div class="nameplate"><span class="badge">CB-60</span><span>Practice Studio</span></div>
+<p id="ampStatus" class="status" role="status">Amp status: off</p>
+<div class="meter" id="meter" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<div class="controls">
+<button type="button" id="micBtn">Use mic or guitar</button>
+<button type="button" id="toneBtn">Test tone</button>
+<button type="button" id="strumBtn">Strum demo</button>
+<button type="button" id="stopBtn">Stop</button>
+</div>
+<div class="presets" id="presets">
+<button type="button" data-preset="Coffeebreak Clean">Coffeebreak Clean</button>
+<button type="button" data-preset="Morning Acoustic">Morning Acoustic</button>
+<button type="button" data-preset="Worship Warm">Worship Warm</button>
+<button type="button" data-preset="Karaoke Crunch">Karaoke Crunch</button>
+<button type="button" data-preset="Country Twang">Country Twang</button>
+<button type="button" data-preset="Lead Solo">Lead Solo</button>
+</div>
+<div class="knobs" id="knobs">
+<div class="knob" data-id="gain"><div class="dial" role="slider" tabindex="0" aria-label="Gain" aria-valuemin="0" aria-valuemax="10"><span class="pip"></span></div><div class="kbtns"><button type="button" data-dir="-1" aria-label="Decrease Gain">-</button><button type="button" data-dir="1" aria-label="Increase Gain">+</button></div><p class="klabel">Gain</p><p class="kval"></p></div>
+<div class="knob" data-id="bass"><div class="dial" role="slider" tabindex="0" aria-label="Bass" aria-valuemin="-12" aria-valuemax="12"><span class="pip"></span></div><div class="kbtns"><button type="button" data-dir="-1" aria-label="Decrease Bass">-</button><button type="button" data-dir="1" aria-label="Increase Bass">+</button></div><p class="klabel">Bass</p><p class="kval"></p></div>
+<div class="knob" data-id="mid"><div class="dial" role="slider" tabindex="0" aria-label="Mid" aria-valuemin="-12" aria-valuemax="12"><span class="pip"></span></div><div class="kbtns"><button type="button" data-dir="-1" aria-label="Decrease Mid">-</button><button type="button" data-dir="1" aria-label="Increase Mid">+</button></div><p class="klabel">Mid</p><p class="kval"></p></div>
+<div class="knob" data-id="treble"><div class="dial" role="slider" tabindex="0" aria-label="Treble" aria-valuemin="-12" aria-valuemax="12"><span class="pip"></span></div><div class="kbtns"><button type="button" data-dir="-1" aria-label="Decrease Treble">-</button><button type="button" data-dir="1" aria-label="Increase Treble">+</button></div><p class="klabel">Treble</p><p class="kval"></p></div>
+<div class="knob" data-id="volume"><div class="dial" role="slider" tabindex="0" aria-label="Volume" aria-valuemin="0" aria-valuemax="10"><span class="pip"></span></div><div class="kbtns"><button type="button" data-dir="-1" aria-label="Decrease Volume">-</button><button type="button" data-dir="1" aria-label="Increase Volume">+</button></div><p class="klabel">Volume</p><p class="kval"></p></div>
+<div class="knob" data-id="reverb"><div class="dial" role="slider" tabindex="0" aria-label="Reverb" aria-valuemin="0" aria-valuemax="10"><span class="pip"></span></div><div class="kbtns"><button type="button" data-dir="-1" aria-label="Decrease Reverb">-</button><button type="button" data-dir="1" aria-label="Increase Reverb">+</button></div><p class="klabel">Reverb</p><p class="kval"></p></div>
+<div class="knob" data-id="delay"><div class="dial" role="slider" tabindex="0" aria-label="Delay" aria-valuemin="0" aria-valuemax="10"><span class="pip"></span></div><div class="kbtns"><button type="button" data-dir="-1" aria-label="Decrease Delay">-</button><button type="button" data-dir="1" aria-label="Increase Delay">+</button></div><p class="klabel">Delay</p><p class="kval"></p></div>
+</div>
+<p class="path">Signal path: input, gain, waveshaper, bass, mid, treble, delay, convolver reverb, volume.</p>
+<p class="hint">Use headphones when the mic or guitar input is open, so the amp does not howl.</p>
+</div>
+</div>
+<aside class="paybox">
+<div class="box">
+<p class="price">Price US$10</p>
+<p class="paylabel">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+</div>
+</aside>
+<footer>
+<p><a href="https://www.tesla.com" target="_blank" rel="noopener noreferrer">Tesla</a><a href="https://www.starlink.com" target="_blank" rel="noopener noreferrer">Starlink</a><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener noreferrer">https://coffeebreaks.itch.io</a></p>
+<p>Karen keeps all rights to this app.</p>
+<p>Other brand names are trademarks of their respective owners. Coffeebreak claims no ownership of them, and they are named only to describe the items.</p>
+</footer>
+<script>
+(function () {
+  var SPECS = {
+    gain: {min: 0, max: 10, step: 0.5, drag: 0.1, dec: 1, unit: ''},
+    bass: {min: -12, max: 12, step: 1, drag: 1, dec: 0, unit: ' dB'},
+    mid: {min: -12, max: 12, step: 1, drag: 1, dec: 0, unit: ' dB'},
+    treble: {min: -12, max: 12, step: 1, drag: 1, dec: 0, unit: ' dB'},
+    volume: {min: 0, max: 10, step: 0.5, drag: 0.1, dec: 1, unit: ''},
+    reverb: {min: 0, max: 10, step: 0.5, drag: 0.1, dec: 1, unit: ''},
+    delay: {min: 0, max: 10, step: 0.5, drag: 0.1, dec: 1, unit: ''}
+  };
+  var PRESETS = {
+    'Coffeebreak Clean': {gain: 2, bass: 1, mid: 0, treble: 2, volume: 6, reverb: 2, delay: 0.5},
+    'Morning Acoustic': {gain: 1.5, bass: 3, mid: -2, treble: 4, volume: 5.5, reverb: 3.5, delay: 1},
+    'Worship Warm': {gain: 3, bass: 4, mid: 1, treble: 0, volume: 6, reverb: 6.5, delay: 2.5},
+    'Karaoke Crunch': {gain: 7.5, bass: 2, mid: 3, treble: 2, volume: 5, reverb: 2, delay: 1},
+    'Country Twang': {gain: 4.5, bass: -2, mid: 6, treble: 7, volume: 5.5, reverb: 1.5, delay: 4},
+    'Lead Solo': {gain: 8.5, bass: 1, mid: 2, treble: 5, volume: 6.5, reverb: 4.5, delay: 3.5}
+  };
+  var values = {
+    gain: 2, bass: 1, mid: 0, treble: 2, volume: 6, reverb: 2, delay: 0.5
+  };
+  var activePreset = 'Coffeebreak Clean';
+  var ctx = null;
+  var nodes = null;
+  var mode = 'off';
+  var micStream = null;
+  var micNode = null;
+  var tone = null;
+  var strumNodes = [];
+  var strumTimer = 0;
+  var metering = false;
+  var statusEl = document.getElementById('ampStatus');
+  var micBtn = document.getElementById('micBtn');
+  var toneBtn = document.getElementById('toneBtn');
+
+  function clamp(v, spec, step) {
+    var s = step;
+    var steps = Math.round((v - spec.min) / s);
+    var q = spec.min + steps * s;
+    q = Math.round(q * 1000) / 1000;
+    if (q < spec.min) q = spec.min;
+    if (q > spec.max) q = spec.max;
+    return q;
+  }
+
+  function formatValue(id) {
+    var spec = SPECS[id];
+    var v = values[id];
+    if (spec.dec === 0) {
+      var n = Math.round(v);
+      var sign = n > 0 ? '+' : '';
+      return sign + n + spec.unit;
+    }
+    return v.toFixed(spec.dec);
+  }
+
+  function degFor(id) {
+    var spec = SPECS[id];
+    var t = (values[id] - spec.min) / (spec.max - spec.min);
+    return -140 + t * 280;
+  }
+
+  function paint() {
+    Object.keys(SPECS).forEach(function (id) {
+      var knob = document.querySelector('.knob[data-id="' + id + '"]');
+      var dial = knob.querySelector('.dial');
+      dial.style.setProperty('--deg', degFor(id) + 'deg');
+      dial.setAttribute('aria-valuenow', String(values[id]));
+      dial.setAttribute('aria-valuetext', formatValue(id));
+      knob.querySelector('.kval').textContent = formatValue(id);
+    });
+    document.querySelectorAll('[data-preset]').forEach(function (btn) {
+      var on = btn.getAttribute('data-preset') === activePreset;
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    micBtn.setAttribute('aria-pressed', mode === 'mic' ? 'true' : 'false');
+    toneBtn.setAttribute('aria-pressed', mode === 'tone' ? 'true' : 'false');
+    micBtn.textContent = mode === 'mic' ? 'Stop mic or guitar' : 'Use mic or guitar';
+    toneBtn.textContent = mode === 'tone' ? 'Stop test tone' : 'Test tone';
+  }
+
+  function statusLine(extra) {
+    if (extra) {
+      statusEl.textContent = extra;
+      return;
+    }
+    var src = 'off';
+    if (mode === 'tone') src = 'test tone';
+    else if (mode === 'mic') src = 'mic or guitar live';
+    else if (mode === 'strum') src = 'strum demo';
+    else if (ctx === null) src = 'off';
+    else src = 'on';
+    var preset = activePreset === '' ? '' : ', preset ' + activePreset;
+    statusEl.textContent = 'Amp status: ' + src + preset;
+  }
+
+  function impulse(audio) {
+    var seconds = 2.2;
+    var rate = audio.sampleRate;
+    var len = Math.floor(rate * seconds);
+    var buffer = audio.createBuffer(2, len, rate);
+    var c = 0;
+    for (c = 0; c < 2; c++) {
+      var data = buffer.getChannelData(c);
+      var i = 0;
+      for (i = 0; i < len; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6);
+      }
+    }
+    return buffer;
+  }
+
+  function curve(drive) {
+    var n = 512;
+    var out = new Float32Array(n);
+    var k = drive * 6 + 0.4;
+    var norm = Math.tanh(k);
+    var i = 0;
+    for (i = 0; i < n; i++) {
+      var x = (i / (n - 1)) * 2 - 1;
+      out[i] = Math.tanh(k * x) / norm;
+    }
+    return out;
+  }
+
+  function build(audio) {
+    var input = audio.createGain();
+    var shaper = audio.createWaveShaper();
+    shaper.oversample = '2x';
+    var bass = audio.createBiquadFilter();
+    bass.type = 'lowshelf';
+    bass.frequency.value = 120;
+    var mid = audio.createBiquadFilter();
+    mid.type = 'peaking';
+    mid.frequency.value = 800;
+    mid.Q.value = 0.9;
+    var treble = audio.createBiquadFilter();
+    treble.type = 'highshelf';
+    treble.frequency.value = 3200;
+    var dry = audio.createGain();
+    var delay = audio.createDelay(1);
+    var delayWet = audio.createGain();
+    var feedback = audio.createGain();
+    feedback.gain.value = 0.28;
+    var convolver = audio.createConvolver();
+    convolver.buffer = impulse(audio);
+    var reverbWet = audio.createGain();
+    var master = audio.createGain();
+    var analyser = audio.createAnalyser();
+    analyser.fftSize = 256;
+    input.connect(shaper);
+    shaper.connect(bass);
+    bass.connect(mid);
+    mid.connect(treble);
+    treble.connect(dry);
+    dry.connect(master);
+    treble.connect(delay);
+    delay.connect(feedback);
+    feedback.connect(delay);
+    delay.connect(delayWet);
+    delayWet.connect(master);
+    treble.connect(convolver);
+    convolver.connect(reverbWet);
+    reverbWet.connect(master);
+    master.connect(audio.destination);
+    master.connect(analyser);
+    return {
+      input: input,
+      shaper: shaper,
+      bass: bass,
+      mid: mid,
+      treble: treble,
+      dry: dry,
+      delay: delay,
+      delayWet: delayWet,
+      feedback: feedback,
+      convolver: convolver,
+      reverbWet: reverbWet,
+      master: master,
+      analyser: analyser
+    };
+  }
+
+  function applyAudio() {
+    if (nodes === null || ctx === null) return;
+    var now = ctx.currentTime;
+    var g = values.gain;
+    nodes.input.gain.setTargetAtTime(0.35 + (g / 10) * 3.2, now, 0.03);
+    nodes.shaper.curve = curve(g);
+    nodes.bass.gain.setTargetAtTime(values.bass, now, 0.03);
+    nodes.mid.gain.setTargetAtTime(values.mid, now, 0.03);
+    nodes.treble.gain.setTargetAtTime(values.treble, now, 0.03);
+    nodes.master.gain.setTargetAtTime((values.volume / 10) * 0.7, now, 0.03);
+    nodes.reverbWet.gain.setTargetAtTime((values.reverb / 10) * 0.65, now, 0.03);
+    nodes.dry.gain.setTargetAtTime(1 - (values.reverb / 10) * 0.25, now, 0.03);
+    nodes.delay.delayTime.setTargetAtTime((values.delay / 10) * 0.48, now, 0.03);
+    nodes.delayWet.gain.setTargetAtTime((values.delay / 10) * 0.45, now, 0.03);
+  }
+
+  function startMeter() {
+    if (metering) return;
+    metering = true;
+    var smooth = 0;
+    var bars = document.getElementById('meter').children;
+    function frame() {
+      if (nodes === null) {
+        metering = false;
+        return;
+      }
+      var data = new Uint8Array(nodes.analyser.fftSize);
+      nodes.analyser.getByteTimeDomainData(data);
+      var peak = 0;
+      var i = 0;
+      for (i = 0; i < data.length; i++) {
+        var v = Math.abs(data[i] - 128) / 128;
+        if (v > peak) peak = v;
+      }
+      smooth = smooth * 0.65 + peak * 0.35;
+      var lit = Math.round(smooth * bars.length);
+      var b = 0;
+      for (b = 0; b < bars.length; b++) {
+        if (b < lit) bars[b].classList.add('on');
+        else bars[b].classList.remove('on');
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function ensure() {
+    if (ctx === null) { /* create below */ }
+    else {
+      if (ctx.state === 'suspended') ctx.resume();
+      return true;
+    }
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (AC === undefined) {
+      statusLine('Amp status: this browser has no Web Audio');
+      return false;
+    }
+    ctx = new AC();
+    nodes = build(ctx);
+    applyAudio();
+    startMeter();
+    if (ctx.state === 'suspended') ctx.resume();
+    return true;
+  }
+
+  function stopTone() {
+    if (tone === null) return;
+    try { tone.stop(); } catch (err) {}
+    try { tone.disconnect(); } catch (err) {}
+    tone = null;
+  }
+
+  function stopStrum() {
+    if (strumTimer) {
+      clearTimeout(strumTimer);
+      strumTimer = 0;
+    }
+    strumNodes.forEach(function (node) {
+      try { node.stop(); } catch (err) {}
+      try { node.disconnect(); } catch (err) {}
+    });
+    strumNodes = [];
+  }
+
+  function stopMic() {
+    if (micNode === null) { /* no mic node */ }
+    else {
+      try { micNode.disconnect(); } catch (err) {}
+      micNode = null;
+    }
+    if (micStream === null) return;
+    micStream.getTracks().forEach(function (track) { track.stop(); });
+    micStream = null;
+  }
+
+  function stopSources() {
+    stopTone();
+    stopStrum();
+    stopMic();
+    mode = ctx === null ? 'off' : 'on';
+    paint();
+    statusLine();
+  }
+
+  function setKnob(id, raw, step, fromPreset) {
+    values[id] = clamp(raw, SPECS[id], step);
+    if (fromPreset === false) activePreset = '';
+    paint();
+    applyAudio();
+    statusLine();
+  }
+
+  function applyPreset(name) {
+    var preset = PRESETS[name];
+    if (preset === undefined) return;
+    activePreset = name;
+    Object.keys(preset).forEach(function (id) {
+      values[id] = preset[id];
+    });
+    paint();
+    applyAudio();
+    statusLine();
+  }
+
+  function pointerValue(dial, ev, spec) {
+    var rect = dial.getBoundingClientRect();
+    var dx = ev.clientX - (rect.left + rect.width / 2);
+    var dy = ev.clientY - (rect.top + rect.height / 2);
+    if (Math.hypot(dx, dy) < 8) return null;
+    var deg = Math.atan2(dx, -dy) * 180 / Math.PI;
+    if (deg > 140) deg = 140;
+    if (deg < -140) deg = -140;
+    var t = (deg + 140) / 280;
+    return spec.min + t * (spec.max - spec.min);
+  }
+
+  document.querySelectorAll('.knob').forEach(function (knob) {
+    var id = knob.getAttribute('data-id');
+    var dial = knob.querySelector('.dial');
+    function drag(ev) {
+      var next = pointerValue(dial, ev, SPECS[id]);
+      if (next === null) return;
+      ensure();
+      setKnob(id, next, SPECS[id].drag, false);
+    }
+    dial.addEventListener('pointerdown', function (ev) {
+      if (ev.button === 0 || ev.button === undefined) {
+        dial.setPointerCapture(ev.pointerId);
+        drag(ev);
+      }
+    });
+    dial.addEventListener('pointermove', function (ev) {
+      if (dial.hasPointerCapture(ev.pointerId) === false) return;
+      drag(ev);
+    });
+    dial.addEventListener('keydown', function (ev) {
+      var step = SPECS[id].step;
+      if (ev.key === 'ArrowUp' || ev.key === 'ArrowRight') {
+        ensure();
+        setKnob(id, values[id] + step, step, false);
+        ev.preventDefault();
+      } else if (ev.key === 'ArrowDown' || ev.key === 'ArrowLeft') {
+        ensure();
+        setKnob(id, values[id] - step, step, false);
+        ev.preventDefault();
+      } else if (ev.key === 'Home') {
+        ensure();
+        setKnob(id, SPECS[id].min, step, false);
+        ev.preventDefault();
+      } else if (ev.key === 'End') {
+        ensure();
+        setKnob(id, SPECS[id].max, step, false);
+        ev.preventDefault();
+      }
+    });
+    knob.querySelectorAll('[data-dir]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var dir = Number(btn.getAttribute('data-dir'));
+        ensure();
+        setKnob(id, values[id] + dir * SPECS[id].step, SPECS[id].step, false);
+      });
+    });
+  });
+
+  document.querySelectorAll('[data-preset]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      ensure();
+      applyPreset(btn.getAttribute('data-preset'));
+    });
+  });
+
+  function startTone() {
+    if (ensure() === false) return;
+    stopSources();
+    var osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = 440;
+    var g = ctx.createGain();
+    g.gain.value = 0.12;
+    osc.connect(g);
+    g.connect(nodes.input);
+    osc.start();
+    tone = osc;
+    mode = 'tone';
+    paint();
+    statusLine();
+  }
+
+  function startStrum() {
+    if (ensure() === false) return;
+    stopSources();
+    var notes = [82.41, 110, 146.83, 196, 246.94, 329.63];
+    var start = ctx.currentTime + 0.05;
+    notes.forEach(function (freq, index) {
+      var t = start + index * 0.045;
+      var osc = ctx.createOscillator();
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.16, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 1.5);
+      osc.connect(g);
+      g.connect(nodes.input);
+      osc.start(t);
+      osc.stop(t + 1.6);
+      strumNodes.push(osc);
+      var len = Math.floor(ctx.sampleRate * 0.03);
+      var buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      var data = buf.getChannelData(0);
+      var i = 0;
+      for (i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len);
+      var noise = ctx.createBufferSource();
+      noise.buffer = buf;
+      var ng = ctx.createGain();
+      ng.gain.setValueAtTime(0.12, t);
+      ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.04);
+      noise.connect(ng);
+      ng.connect(nodes.input);
+      noise.start(t);
+      noise.stop(t + 0.05);
+      strumNodes.push(noise);
+    });
+    mode = 'strum';
+    paint();
+    statusLine();
+    strumTimer = setTimeout(function () {
+      if (mode === 'strum') {
+        mode = 'on';
+        paint();
+        statusLine();
+      }
+    }, 1800);
+  }
+
+  function onMic(stream) {
+    stopSources();
+    micStream = stream;
+    micNode = ctx.createMediaStreamSource(stream);
+    micNode.connect(nodes.input);
+    mode = 'mic';
+    paint();
+    statusLine();
+  }
+
+  function requestMic(constraints, isFallback) {
+    var devices = navigator.mediaDevices;
+    if (devices === undefined || devices.getUserMedia === undefined) {
+      statusLine('Amp status: this browser has no microphone access');
+      return;
+    }
+    if (ensure() === false) return;
+    statusLine('Amp status: asking for the microphone or guitar');
+    devices.getUserMedia(constraints).then(onMic, function (err) {
+      var name = err && err.name ? err.name : '';
+      if (isFallback === false && name === 'OverconstrainedError') {
+        requestMic({audio: true}, true);
+        return;
+      }
+      if (name === 'NotAllowedError' || name === 'PermissionDeniedError' || name === 'SecurityError') {
+        statusLine('Amp status: microphone permission was not granted');
+        return;
+      }
+      if (name === 'NotFoundError') {
+        statusLine('Amp status: no microphone or guitar input was found');
+        return;
+      }
+      statusLine('Amp status: the input could not be opened');
+    });
+  }
+
+  micBtn.addEventListener('click', function () {
+    if (mode === 'mic') {
+      stopSources();
+      return;
+    }
+    requestMic({audio: {echoCancellation: false, noiseSuppression: false, autoGainControl: false}}, false);
+  });
+  toneBtn.addEventListener('click', function () {
+    if (mode === 'tone') stopSources();
+    else startTone();
+  });
+  document.getElementById('strumBtn').addEventListener('click', startStrum);
+  document.getElementById('stopBtn').addEventListener('click', stopSources);
+
+  applyPreset('Coffeebreak Clean');
+  mode = 'off';
+  paint();
+  statusLine();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak PayID Card</title>
+<link rel="icon" href="../cb-logo.png">
+<meta name="description" content="Coffeebreak PayID Card. Save a name and PayID, build a request payment link, and donate.">
+<style>
+*{box-sizing:border-box}
+html{scroll-padding-top:12px}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#FFF8E1;color:#3E2723;font-size:16px;line-height:1.45}
+.wrap{width:min(440px,100%);margin:0 auto;padding:16px 16px 28px;flex:1}
+header{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.logo{width:84px;height:84px;object-fit:contain;background:#fff;border-radius:16px;border:2px solid #D7A86E;flex:0 0 auto}
+h1{font-size:1.15rem;line-height:1.3;margin:0;letter-spacing:.01em}
+h2{font-size:1.05rem;margin:0 0 10px}
+nav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+nav button{flex:1 1 30%;min-height:44px;border:2px solid #3E2723;background:#fff;color:#3E2723;border-radius:999px;padding:8px 10px;font-weight:700;cursor:pointer}
+nav button[aria-selected="true"]{background:#3E2723;color:#FFF8E1}
+.panel{background:#fff;border:2px solid #D7A86E;border-radius:18px;padding:14px;margin:0 0 12px}
+.card{background:linear-gradient(145deg,#3E2723,#5a3a30);color:#FFF8E1;border-radius:18px;padding:16px;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 20px #3E272333}
+.brand{color:#D7A86E;font-weight:800;letter-spacing:.08em;font-size:.8rem}
+.cardname{margin:18px 0 0;font-size:1.35rem;font-weight:800;overflow-wrap:anywhere}
+.cardpay{margin:4px 0 0;color:#D7A86E;overflow-wrap:anywhere}
+.balance{margin:12px 0 0;font-size:1.8rem;font-weight:800;color:#02A95C}
+.balance span{font-size:.95rem;font-weight:700;color:#3E2723;margin-left:6px}
+label{display:block;font-weight:700;margin:8px 0}
+input{width:100%;min-height:44px;padding:10px 12px;border:2px solid #D7A86E;border-radius:12px;background:#FFF8E1;color:#3E2723}
+button.primary,a.primary{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 16px;border:0;border-radius:999px;background:#02A95C;color:#fff;font-weight:800;text-decoration:none;cursor:pointer;width:100%;margin-top:8px}
+button.ghost{min-height:44px;margin-top:8px;width:100%;border-radius:999px;border:2px solid #3E2723;background:#fff;color:#3E2723;font-weight:700;cursor:pointer}
+.switch{display:flex;align-items:center;gap:10px;font-weight:800;margin:8px 0}
+.switch input{width:22px;height:22px;min-height:0;accent-color:#02A95C}
+.row{display:flex;gap:8px}
+.row button{flex:1}
+#status{min-height:1.4em;font-weight:700}
+.paybox{width:min(440px,100%);margin:0 auto;padding:0 16px 12px}
+.paybox .box{border:2px dashed #02A95C;background:#fff;border-radius:16px;padding:12px;text-align:center}
+.price{margin:0 0 4px;font-size:1.15rem;font-weight:800}
+.paylabel{margin:0;font-weight:700;overflow-wrap:anywhere}
+footer{width:min(440px,100%);margin:0 auto;padding:8px 16px 28px;text-align:center;font-size:.9rem}
+footer a{color:#3E2723;font-weight:800;margin:0 6px}
+footer p{margin:6px 0}
+ul{padding-left:18px;margin:8px 0}
+@media (max-width:380px){
+  nav button{flex-basis:46%;font-size:.92rem}
+  h1{font-size:1.02rem}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<img class="logo" src="../cb-logo.png" alt="Coffeebreak logo" width="84" height="84">
+<h1>COFFEEBREAK - Pay by PayID. Spend by PayID. Sip on us.</h1>
+</header>
+<nav aria-label="Card sections">
+<button type="button" data-tab="card" aria-selected="true">Card</button>
+<button type="button" data-tab="profile" aria-selected="false">Profile</button>
+<button type="button" data-tab="request" aria-selected="false">Request</button>
+<button type="button" data-tab="donate" aria-selected="false">Donate</button>
+<button type="button" data-tab="settings" aria-selected="false">Settings</button>
+</nav>
+
+<section class="panel" id="panel-card">
+<div class="card" id="liveCard">
+<div class="brand">COFFEEBREAK</div>
+<div>
+<p class="cardname" id="cardName">Your name</p>
+<p class="cardpay" id="cardPay">Add a PayID</p>
+</div>
+</div>
+<p class="balance" id="balance">$0.00 <span>balance</span></p>
+<p>This card shows $0.00 because a PayID payment leaves your bank. Nothing is stored as a balance here.</p>
+<label class="switch"><input type="checkbox" data-records="1"> Records on</label>
+<div id="incoming" hidden>
+<h2>Payment request</h2>
+<p id="inAmount"></p>
+<p id="inWho"></p>
+<p id="inPay"></p>
+<p id="inNote"></p>
+<p>Pay this PayID from your bank app.</p>
+<button type="button" class="ghost" id="flipCard">Show my card</button>
+</div>
+</section>
+
+<section class="panel" id="panel-profile" hidden>
+<h2>Your Profile</h2>
+<form id="profileForm">
+<label for="name">Name<input id="name" name="name" autocomplete="name" maxlength="80"></label>
+<label for="payid">PayID<input id="payid" name="payid" autocomplete="on" maxlength="120" inputmode="email"></label>
+<button class="primary" type="submit">Save Your Profile</button>
+</form>
+<p>The card preview updates as you type. Save stores the name and PayID in this browser.</p>
+</section>
+
+<section class="panel" id="panel-request" hidden>
+<h2>Request payment</h2>
+<p>Build a shareable link from your saved profile.</p>
+<label for="amount">Amount<input id="amount" inputmode="decimal" placeholder="0.00"></label>
+<label for="note">Note<input id="note" maxlength="140"></label>
+<button class="primary" type="button" id="build">Build shareable link</button>
+<label for="linkOut">Shareable link<input id="linkOut" readonly></label>
+<button class="ghost" type="button" id="copy">Copy link</button>
+</section>
+
+<section class="panel" id="panel-donate" hidden>
+<h2>Donation</h2>
+<a class="primary" href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener noreferrer">Donate</a>
+</section>
+
+<section class="panel" id="panel-settings" hidden>
+<h2>Settings</h2>
+<label class="switch"><input type="checkbox" data-records="1"> Records on</label>
+<p>Your profile and records stay in this browser.</p>
+<div id="recordList"></div>
+<button class="ghost" type="button" id="clearRecords">Clear records</button>
+<button class="ghost" type="button" id="clearProfile">Clear profile</button>
+</section>
+<p id="status" role="status"></p>
+</div>
+<aside class="paybox">
+<div class="box">
+<p class="price">Price US$10</p>
+<p class="paylabel">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+</div>
+</aside>
+<footer>
+<p><a href="https://www.tesla.com" target="_blank" rel="noopener noreferrer">Tesla</a><a href="https://www.starlink.com" target="_blank" rel="noopener noreferrer">Starlink</a><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener noreferrer">https://coffeebreaks.itch.io</a></p>
+<p>Karen keeps all rights to this app.</p>
+<p>Other brand names are trademarks of their respective owners. Coffeebreak claims no ownership of them, and they are named only to describe the items.</p>
+</footer>
+<script>
+(function () {
+  var KEY = 'cb-payid-card';
+  var state = load();
+  var nameInput = document.getElementById('name');
+  var payInput = document.getElementById('payid');
+  var cardName = document.getElementById('cardName');
+  var cardPay = document.getElementById('cardPay');
+  var statusEl = document.getElementById('status');
+  var incomingBox = document.getElementById('incoming');
+  var showIncoming = false;
+  var incoming = readIncoming();
+
+  nameInput.value = state.name;
+  payInput.value = state.payid;
+  if (incoming === null) showIncoming = false;
+  else showIncoming = true;
+
+  function load() {
+    var empty = {name: '', payid: '', recordsOn: false, records: []};
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw === null || raw === '') return empty;
+      var data = JSON.parse(raw);
+      if (data === null || typeof data === 'string' || typeof data === 'number') return empty;
+      empty.name = typeof data.name === 'string' ? data.name : '';
+      empty.payid = typeof data.payid === 'string' ? data.payid : '';
+      empty.recordsOn = data.recordsOn === true;
+      empty.records = Array.isArray(data.records) ? data.records.slice(0, 40) : [];
+      return empty;
+    } catch (err) {
+      return {name: '', payid: '', recordsOn: false, records: []};
+    }
+  }
+
+  function persist() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(state));
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function setStatus(text) {
+    statusEl.textContent = text;
+  }
+
+  function trim(value, max) {
+    var v = value === null || value === undefined ? '' : String(value);
+    v = v.replace(/\s+/g, ' ').trim();
+    if (v.length > max) v = v.slice(0, max);
+    return v;
+  }
+
+  function readIncoming() {
+    var params = new URLSearchParams(location.search);
+    var to = trim(params.get('to'), 120);
+    if (to === '') return null;
+    var amount = '';
+    var rawAmount = params.get('amount');
+    var n = Number(rawAmount);
+    if (Number.isFinite(n) && n >= 0 && n < 1000000) amount = n.toFixed(2);
+    return {
+      to: to,
+      name: trim(params.get('name'), 80),
+      amount: amount,
+      note: trim(params.get('note'), 140)
+    };
+  }
+
+  function record(text) {
+    if (state.recordsOn === false) return;
+    state.records.unshift({text: text, at: new Date().toISOString()});
+    if (state.records.length > 40) state.records.length = 40;
+  }
+
+  function renderCard() {
+    var name = nameInput.value.trim();
+    var payid = payInput.value.trim();
+    if (incoming === null || showIncoming === false) {
+      incomingBox.hidden = true;
+    } else {
+      name = incoming.name;
+      payid = incoming.to;
+      incomingBox.hidden = false;
+      document.getElementById('inAmount').textContent = incoming.amount === '' ? 'Amount not set' : 'Amount $' + incoming.amount;
+      document.getElementById('inWho').textContent = incoming.name === '' ? 'Name not set' : incoming.name;
+      document.getElementById('inPay').textContent = incoming.to;
+      document.getElementById('inNote').textContent = incoming.note;
+    }
+    cardName.textContent = name === '' ? 'Your name' : name;
+    cardPay.textContent = payid === '' ? 'Add a PayID' : payid;
+    var flip = document.getElementById('flipCard');
+    if (incoming === null) flip.hidden = true;
+    else {
+      flip.hidden = false;
+      flip.textContent = showIncoming === true ? 'Show my card' : 'Show the request';
+    }
+  }
+
+  function renderRecords() {
+    var list = document.getElementById('recordList');
+    list.replaceChildren();
+    if (state.recordsOn === false) {
+      var off = document.createElement('p');
+      off.textContent = 'Records are off.';
+      list.appendChild(off);
+      return;
+    }
+    if (state.records.length === 0) {
+      var empty = document.createElement('p');
+      empty.textContent = 'No records yet.';
+      list.appendChild(empty);
+      return;
+    }
+    var ul = document.createElement('ul');
+    state.records.forEach(function (item) {
+      var li = document.createElement('li');
+      var when = new Date(item.at);
+      var stamp = isNaN(when.getTime()) ? '' : when.toLocaleString() + ' · ';
+      li.textContent = stamp + (item.text || 'Record');
+      ul.appendChild(li);
+    });
+    list.appendChild(ul);
+  }
+
+  function syncRecords() {
+    document.querySelectorAll('[data-records]').forEach(function (box) {
+      box.checked = state.recordsOn === true;
+    });
+    renderRecords();
+  }
+
+  function showTab(name) {
+    document.querySelectorAll('[data-tab]').forEach(function (btn) {
+      var on = btn.getAttribute('data-tab') === name;
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    ['card', 'profile', 'request', 'donate', 'settings'].forEach(function (id) {
+      document.getElementById('panel-' + id).hidden = id === name ? false : true;
+    });
+  }
+
+  document.querySelectorAll('[data-tab]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      showTab(btn.getAttribute('data-tab'));
+    });
+  });
+
+  nameInput.addEventListener('input', renderCard);
+  payInput.addEventListener('input', renderCard);
+
+  document.getElementById('profileForm').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var name = nameInput.value.trim();
+    var payid = payInput.value.trim();
+    if (name === '' || payid === '') {
+      setStatus('Add a name and a PayID.');
+      return;
+    }
+    state.name = name;
+    state.payid = payid;
+    record('Profile saved');
+    if (persist()) setStatus('Profile saved on this device.');
+    else setStatus('Could not save on this device.');
+    renderCard();
+    renderRecords();
+  });
+
+  document.querySelectorAll('[data-records]').forEach(function (box) {
+    box.addEventListener('change', function () {
+      state.recordsOn = box.checked === true;
+      if (persist() === false) setStatus('Could not save on this device.');
+      syncRecords();
+    });
+  });
+
+  document.getElementById('build').addEventListener('click', function () {
+    if (state.name === '' || state.payid === '') {
+      setStatus('Save your profile first.');
+      showTab('profile');
+      return;
+    }
+    var amount = Number(document.getElementById('amount').value);
+    if (Number.isFinite(amount) === false || amount <= 0) {
+      setStatus('Add an amount greater than zero.');
+      return;
+    }
+    var url = new URL(location.href);
+    url.hash = '';
+    url.search = '';
+    url.searchParams.set('name', state.name);
+    url.searchParams.set('to', state.payid);
+    url.searchParams.set('amount', amount.toFixed(2));
+    var note = document.getElementById('note').value.trim();
+    if (note === '') { /* amount-only link */ }
+    else url.searchParams.set('note', note.slice(0, 140));
+    document.getElementById('linkOut').value = url.toString();
+    record('Payment link built');
+    if (persist()) setStatus('Shareable link ready.');
+    else setStatus('Could not save on this device.');
+    renderRecords();
+  });
+
+  document.getElementById('copy').addEventListener('click', function () {
+    var linkOut = document.getElementById('linkOut');
+    var text = linkOut.value;
+    if (text === '') {
+      setStatus('Build a link first.');
+      return;
+    }
+    var clip = navigator.clipboard;
+    if (clip && clip.writeText) {
+      clip.writeText(text).then(function () {
+        setStatus('Link copied.');
+      }, function () {
+        linkOut.focus();
+        linkOut.select();
+        setStatus('Select the link and copy it.');
+      });
+      return;
+    }
+    linkOut.focus();
+    linkOut.select();
+    setStatus('Select the link and copy it.');
+  });
+
+  document.getElementById('flipCard').addEventListener('click', function () {
+    showIncoming = showIncoming === false;
+    renderCard();
+  });
+
+  document.getElementById('clearRecords').addEventListener('click', function () {
+    state.records = [];
+    if (persist()) setStatus('Records cleared.');
+    renderRecords();
+  });
+
+  document.getElementById('clearProfile').addEventListener('click', function () {
+    state.name = '';
+    state.payid = '';
+    nameInput.value = '';
+    payInput.value = '';
+    if (persist()) setStatus('Profile cleared on this device.');
+    renderCard();
+  });
+
+  syncRecords();
+  renderCard();
+  showTab('card');
+})();
+</script>
+</body>
+</html>

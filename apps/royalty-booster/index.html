@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coffeebreak Royalty Booster</title>
+<link rel="icon" href="../cb-logo.png">
+<meta name="description" content="Coffeebreak Royalty Booster. A planning tool for independent artists: royalty audit, catalog, six-week release plan and revenue.">
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f3efe6;color:#24160f;font-size:16px;line-height:1.45}
+.wrap{width:min(760px,100%);margin:0 auto;padding:16px 14px 90px;flex:1}
+header{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.logo{width:84px;height:84px;object-fit:contain;background:#fff;border-radius:16px;border:2px solid #8a4b2f;flex:0 0 auto}
+h1{font-size:1.4rem;margin:0}
+.lede{margin:4px 0 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0}
+.stat{background:#fffdf8;border:2px solid #e4d3c2;border-radius:16px;padding:10px 12px}
+.kicker{margin:0;font-size:.82rem;font-weight:700;color:#6b4b38}
+.num{margin:4px 0 0;font-size:1.45rem;font-weight:800;color:#1f7a4d}
+.sub{margin:2px 0 0;font-size:.85rem}
+nav{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+nav button{flex:1 1 40%;min-height:44px;border-radius:999px;border:2px solid #24160f;background:#fffdf8;color:#24160f;font-weight:800;cursor:pointer;padding:8px 10px}
+nav button[aria-selected="true"]{background:#8a4b2f;color:#fffdf8;border-color:#8a4b2f}
+.panel{background:#fffdf8;border:2px solid #e4d3c2;border-radius:18px;padding:14px}
+label{display:block;font-weight:700;margin:8px 0}
+input,select,textarea{width:100%;min-height:44px;padding:10px 12px;border:2px solid #e4d3c2;border-radius:12px;background:#fff;color:#24160f}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:600;margin:0 0 10px;padding:8px;border-radius:12px;background:#f7f1e8}
+.check input{width:22px;height:22px;min-height:0;margin-top:2px;accent-color:#1f7a4d;flex:0 0 auto}
+.week{margin:12px 0;padding-top:8px;border-top:1px solid #e4d3c2}
+.week h3{margin:0 0 8px;font-size:1rem}
+.song,.earn{border:1px solid #e4d3c2;border-radius:12px;padding:10px;margin:8px 0}
+.song p,.earn p{margin:2px 0}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+button.act,button.primary{min-height:44px;border-radius:999px;padding:8px 14px;font-weight:800;cursor:pointer}
+button.primary{background:#1f7a4d;color:#fff;border:0}
+button.act{background:#fff;color:#24160f;border:2px solid #24160f}
+.totals{margin-top:12px}
+.totals p{margin:4px 0;font-weight:700}
+.savebar{position:sticky;bottom:0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#24160f;color:#fffdf8;padding:10px 14px;z-index:2}
+.savebar button{min-height:44px;border:0;border-radius:999px;background:#f0c973;color:#24160f;font-weight:800;padding:8px 16px;cursor:pointer}
+#saveMsg{margin:0;font-weight:700}
+.paybox{width:min(760px,100%);margin:0 auto;padding:12px 14px 0}
+.box{border:2px dashed #8a4b2f;border-radius:16px;padding:12px;text-align:center;background:#fffdf8}
+.price{margin:0 0 4px;font-size:1.15rem;font-weight:800}
+.paylabel{margin:0;font-weight:700;overflow-wrap:anywhere}
+footer{width:min(760px,100%);margin:0 auto;padding:8px 14px 24px;text-align:center;font-size:.92rem}
+footer a{color:#24160f;font-weight:800;margin:0 6px}
+footer p{margin:6px 0}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #1f7a4d;outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<img class="logo" src="../cb-logo.png" alt="Coffeebreak logo" width="84" height="84">
+<div>
+<h1>Coffeebreak Royalty Booster</h1>
+<p class="lede">A planning tool for independent artists. Your audit, catalog, plan and earnings stay on this device.</p>
+</div>
+</header>
+<section class="stats" aria-label="Dashboard">
+<article class="stat"><p class="kicker">Royalty Health Score</p><p class="num" id="score">0%</p><p class="sub" id="scoreDetail">0 of 16 audit items</p></article>
+<article class="stat"><p class="kicker">Songs tracked</p><p class="num" id="songStat">0</p></article>
+<article class="stat"><p class="kicker">Tasks done out of 22</p><p class="num" id="taskStat">0</p></article>
+<article class="stat"><p class="kicker">Next release date</p><p class="num" id="dateStat">Not set</p><p class="sub" id="dateLabel"></p></article>
+</section>
+<nav aria-label="Planner sections">
+<button type="button" data-tab="audit" aria-selected="true">Royalty Audit</button>
+<button type="button" data-tab="catalog" aria-selected="false">My Catalog</button>
+<button type="button" data-tab="plan" aria-selected="false">Release Planner</button>
+<button type="button" data-tab="revenue" aria-selected="false">Revenue</button>
+</nav>
+<section class="panel" id="panel-audit"><h2>Royalty Audit</h2><div id="auditList"></div></section>
+<section class="panel" id="panel-catalog" hidden>
+<h2>My Catalog</h2>
+<form id="songForm">
+<h3 id="songHeading">Add a song</h3>
+<label for="songTitle">Title<input id="songTitle" maxlength="120" required></label>
+<label for="songArtist">Artist<input id="songArtist" maxlength="120"></label>
+<label for="songIsrc">ISRC<input id="songIsrc" maxlength="20" placeholder="CC-XXX-YY-NNNNN"></label>
+<label for="songWriters">Writers<input id="songWriters" maxlength="200"></label>
+<label for="songDate">Release date<input id="songDate" type="date"></label>
+<label for="songStatus">Status<select id="songStatus"><option>Idea</option><option>In the studio</option><option>Registered</option><option>Released</option></select></label>
+<div class="actions"><button class="primary" type="submit" id="songSubmit">Add song</button><button class="act" type="button" id="songCancel" hidden>Cancel edit</button></div>
+</form>
+<div id="songList"></div>
+</section>
+<section class="panel" id="panel-plan" hidden>
+<h2>Release Planner</h2>
+<p>A six-week plan ending on the release date.</p>
+<label for="planTitle">Release title<input id="planTitle" maxlength="120"></label>
+<label for="planDate">Release date<input id="planDate" type="date"></label>
+<div id="weeks"></div>
+</section>
+<section class="panel" id="panel-revenue" hidden>
+<h2>Revenue</h2>
+<form id="earnForm">
+<label for="earnSource">Source<select id="earnSource">
+<option>Streaming</option>
+<option>Downloads</option>
+<option>APRA AMCOS performance</option>
+<option>Mechanical</option>
+<option>SoundExchange or PPCA neighbouring rights</option>
+<option>YouTube Content ID</option>
+<option>Sync</option>
+<option>Other</option>
+</select></label>
+<label for="earnAmount">Amount in US dollars<input id="earnAmount" inputmode="decimal" placeholder="0.00"></label>
+<label for="earnPeriod">Period<input id="earnPeriod" maxlength="40" placeholder="2026 Q1"></label>
+<label for="earnNote">Note<input id="earnNote" maxlength="140"></label>
+<button class="primary" type="submit">Add earning</button>
+</form>
+<div class="totals" id="totals"></div>
+<div id="earnList"></div>
+</section>
+</div>
+<div class="savebar">
+<button type="button" id="saveBtn">Save</button>
+<p id="saveMsg" role="status"></p>
+</div>
+<aside class="paybox">
+<div class="box">
+<p class="price">Price US$10</p>
+<p class="paylabel">Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+</div>
+</aside>
+<footer>
+<p><a href="https://www.tesla.com" target="_blank" rel="noopener noreferrer">Tesla</a><a href="https://www.starlink.com" target="_blank" rel="noopener noreferrer">Starlink</a><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener noreferrer">https://coffeebreaks.itch.io</a></p>
+<p>Karen keeps all rights to this app.</p>
+<p>Other brand names are trademarks of their respective owners. Coffeebreak claims no ownership of them, and they are named only to describe the items.</p>
+</footer>
+<script>
+(function () {
+  var KEY = 'cb-royalty-booster';
+  var AUDIT = [
+    {id: 'a1', text: 'Writer membership with APRA AMCOS is active.'},
+    {id: 'a2', text: 'Publisher membership with APRA AMCOS is active, or a publishing administrator is appointed.'},
+    {id: 'a3', text: 'Each composition is registered with APRA AMCOS, with the title, the writers and the splits.'},
+    {id: 'a4', text: 'The ISWC for each composition is written in the catalog.'},
+    {id: 'a5', text: 'Each master recording has its own ISRC.'},
+    {id: 'a6', text: 'Neighbouring rights for the master are registered with SoundExchange or PPCA.'},
+    {id: 'a7', text: 'Publishing administration covers collection outside Australia.'},
+    {id: 'a8', text: 'YouTube Content ID is claimed on the master.'},
+    {id: 'a9', text: 'Lyrics for each released song are on Musixmatch.'},
+    {id: 'a10', text: 'Mechanical royalties are set up through AMCOS and, for United States streams, The MLC.'},
+    {id: 'a11', text: 'Distributor metadata names the writers, the publisher and the ISRC. A distributor such as TuneCore can carry those fields to the stores.'},
+    {id: 'a12', text: 'A signed split sheet is on file for every co-written song.'},
+    {id: 'a13', text: 'Performer and master-owner shares for neighbouring rights are agreed in writing.'},
+    {id: 'a14', text: 'Artist profiles on the stores that report plays are claimed.'},
+    {id: 'a15', text: 'Cue sheets are ready for any film, television or advertisement use.'},
+    {id: 'a16', text: 'Royalty statements are checked against the catalog ISRCs each quarter.'}
+  ];
+  var WEEKS = [
+    {week: 1, title: 'Lock the recording', tasks: [
+      {id: 't1', text: 'Finish the mix'},
+      {id: 't2', text: 'Finish the master'},
+      {id: 't3', text: 'Write the split sheet'},
+      {id: 't4', text: 'Choose the release title'}
+    ]},
+    {week: 2, title: 'Rights and codes', tasks: [
+      {id: 't5', text: 'Assign the ISRC'},
+      {id: 't6', text: 'Register the work with APRA AMCOS'},
+      {id: 't7', text: 'Confirm publishing admin or self-published details'},
+      {id: 't8', text: 'Register the master with SoundExchange or PPCA'}
+    ]},
+    {week: 3, title: 'Words and artwork', tasks: [
+      {id: 't9', text: 'Add writers and the publisher to the distributor metadata'},
+      {id: 't10', text: 'Submit the lyrics to Musixmatch'},
+      {id: 't11', text: 'Prepare the artwork'},
+      {id: 't12', text: 'Write the short description'}
+    ]},
+    {week: 4, title: 'Delivery', tasks: [
+      {id: 't13', text: 'Upload the master to the distributor'},
+      {id: 't14', text: 'Turn on YouTube Content ID where the distributor offers it'},
+      {id: 't15', text: 'Set the store release date'},
+      {id: 't16', text: 'Check the preview clips'}
+    ]},
+    {week: 5, title: 'Tell people', tasks: [
+      {id: 't17', text: 'Announce the date'},
+      {id: 't18', text: 'Send the playlist and radio pitch'},
+      {id: 't19', text: 'Schedule the release week posts'}
+    ]},
+    {week: 6, title: 'Release week', tasks: [
+      {id: 't20', text: 'Confirm the track is live on the stores'},
+      {id: 't21', text: 'Post the release note'},
+      {id: 't22', text: 'Enter the first earnings under Revenue'}
+    ]}
+  ];
+  var state = load();
+  var editing = '';
+  var saveMsg = document.getElementById('saveMsg');
+
+  function blank() {
+    return {audit: {}, songs: [], tasks: {}, plan: {title: '', date: ''}, revenue: []};
+  }
+
+  function isObj(v) {
+    if (v === null || v === undefined) return false;
+    var t = typeof v;
+    return t === 'object';
+  }
+
+  function load() {
+    var empty = blank();
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw === null || raw === '') return empty;
+      var data = JSON.parse(raw);
+      if (isObj(data) === false || Array.isArray(data)) return empty;
+      if (isObj(data.audit)) empty.audit = data.audit;
+      if (Array.isArray(data.songs)) empty.songs = data.songs;
+      if (isObj(data.tasks)) empty.tasks = data.tasks;
+      if (isObj(data.plan)) {
+        empty.plan.title = typeof data.plan.title === 'string' ? data.plan.title : '';
+        empty.plan.date = typeof data.plan.date === 'string' ? data.plan.date : '';
+      }
+      if (Array.isArray(data.revenue)) empty.revenue = data.revenue;
+      return empty;
+    } catch (err) {
+      return blank();
+    }
+  }
+
+  function save(show) {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(state));
+      if (show === true) saveMsg.textContent = 'Saved to your records';
+      return true;
+    } catch (err) {
+      saveMsg.textContent = 'Could not save on this device.';
+      return false;
+    }
+  }
+
+  function taskCount() {
+    var n = 0;
+    WEEKS.forEach(function (week) { n += week.tasks.length; });
+    return n;
+  }
+
+  function tasksDone() {
+    var n = 0;
+    WEEKS.forEach(function (week) {
+      week.tasks.forEach(function (task) {
+        if (state.tasks[task.id] === true) n += 1;
+      });
+    });
+    return n;
+  }
+
+  function auditDone() {
+    var n = 0;
+    AUDIT.forEach(function (item) {
+      if (state.audit[item.id] === true) n += 1;
+    });
+    return n;
+  }
+
+  function parseDay(iso) {
+    if (typeof iso === 'string' && iso.length >= 10) {
+      var d = new Date(iso.slice(0, 10) + 'T00:00:00');
+      if (isNaN(d.getTime())) return null;
+      return d;
+    }
+    return null;
+  }
+
+  function fmt(d) {
+    return d.toLocaleDateString('en-AU', {day: 'numeric', month: 'short', year: 'numeric'});
+  }
+
+  function addDays(d, days) {
+    var next = new Date(d.getTime());
+    next.setDate(next.getDate() + days);
+    return next;
+  }
+
+  function nextRelease() {
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var items = [];
+    if (state.plan.date) items.push({date: state.plan.date, label: state.plan.title || 'Release plan'});
+    state.songs.forEach(function (song) {
+      if (song.date) items.push({date: song.date, label: song.title || 'Song'});
+    });
+    var upcoming = [];
+    items.forEach(function (item) {
+      var d = parseDay(item.date);
+      if (d === null) return;
+      if (d >= today) upcoming.push({time: d.getTime(), date: d, label: item.label});
+    });
+    upcoming.sort(function (a, b) { return a.time - b.time; });
+    if (upcoming.length === 0) return null;
+    return upcoming[0];
+  }
+
+  function paintDash() {
+    var done = auditDone();
+    var pct = Math.round((done / AUDIT.length) * 100);
+    document.getElementById('score').textContent = pct + '%';
+    document.getElementById('scoreDetail').textContent = done + ' of ' + AUDIT.length + ' audit items';
+    document.getElementById('songStat').textContent = String(state.songs.length);
+    document.getElementById('taskStat').textContent = String(tasksDone());
+    var next = nextRelease();
+    if (next === null) {
+      document.getElementById('dateStat').textContent = 'Not set';
+      document.getElementById('dateLabel').textContent = '';
+    } else {
+      document.getElementById('dateStat').textContent = fmt(next.date);
+      document.getElementById('dateLabel').textContent = next.label;
+    }
+  }
+
+  function showTab(name) {
+    document.querySelectorAll('[data-tab]').forEach(function (btn) {
+      var on = btn.getAttribute('data-tab') === name;
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    ['audit', 'catalog', 'plan', 'revenue'].forEach(function (id) {
+      document.getElementById('panel-' + id).hidden = id === name ? false : true;
+    });
+  }
+
+  function renderAudit() {
+    var list = document.getElementById('auditList');
+    list.replaceChildren();
+    AUDIT.forEach(function (item) {
+      var label = document.createElement('label');
+      label.className = 'check';
+      var input = document.createElement('input');
+      input.type = 'checkbox';
+      input.checked = state.audit[item.id] === true;
+      input.addEventListener('change', function () {
+        state.audit[item.id] = input.checked === true;
+        paintDash();
+        save(true);
+      });
+      var span = document.createElement('span');
+      span.textContent = item.text;
+      label.appendChild(input);
+      label.appendChild(span);
+      list.appendChild(label);
+    });
+  }
+
+  function fillSongForm(song) {
+    document.getElementById('songTitle').value = song ? song.title : '';
+    document.getElementById('songArtist').value = song ? song.artist : '';
+    document.getElementById('songIsrc').value = song ? song.isrc : '';
+    document.getElementById('songWriters').value = song ? song.writers : '';
+    document.getElementById('songDate').value = song ? song.date : '';
+    document.getElementById('songStatus').value = song ? song.status : 'Idea';
+    document.getElementById('songHeading').textContent = song ? 'Edit song' : 'Add a song';
+    document.getElementById('songSubmit').textContent = song ? 'Save song' : 'Add song';
+    document.getElementById('songCancel').hidden = song ? false : true;
+  }
+
+  function renderSongs() {
+    var list = document.getElementById('songList');
+    list.replaceChildren();
+    if (state.songs.length === 0) {
+      var empty = document.createElement('p');
+      empty.textContent = 'No songs yet.';
+      list.appendChild(empty);
+      return;
+    }
+    state.songs.forEach(function (song) {
+      var card = document.createElement('article');
+      card.className = 'song';
+      var title = document.createElement('p');
+      title.textContent = song.title;
+      var meta = document.createElement('p');
+      meta.textContent = [song.artist, song.status, song.isrc].filter(function (part) { return part; }).join(' · ');
+      var writers = document.createElement('p');
+      writers.textContent = song.writers ? 'Writers: ' + song.writers : '';
+      var when = document.createElement('p');
+      var day = parseDay(song.date);
+      when.textContent = day === null ? '' : 'Release date: ' + fmt(day);
+      var actions = document.createElement('div');
+      actions.className = 'actions';
+      var edit = document.createElement('button');
+      edit.type = 'button';
+      edit.className = 'act';
+      edit.textContent = 'Edit';
+      edit.addEventListener('click', function () {
+        editing = song.id;
+        fillSongForm(song);
+        document.getElementById('songTitle').focus();
+      });
+      var remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'act';
+      remove.textContent = 'Remove';
+      remove.addEventListener('click', function () {
+        state.songs = state.songs.filter(function (row) { return row.id === song.id ? false : true; });
+        if (editing === song.id) {
+          editing = '';
+          fillSongForm(null);
+        }
+        renderSongs();
+        paintDash();
+        save(true);
+      });
+      actions.appendChild(edit);
+      actions.appendChild(remove);
+      card.appendChild(title);
+      card.appendChild(meta);
+      if (writers.textContent) card.appendChild(writers);
+      if (when.textContent) card.appendChild(when);
+      card.appendChild(actions);
+      list.appendChild(card);
+    });
+  }
+
+  function renderPlan() {
+    var root = document.getElementById('weeks');
+    root.replaceChildren();
+    var release = parseDay(state.plan.date);
+    WEEKS.forEach(function (week) {
+      var block = document.createElement('section');
+      block.className = 'week';
+      var h = document.createElement('h3');
+      var range = '';
+      if (release === null) range = '';
+      else {
+        var end = addDays(release, -((6 - week.week) * 7));
+        var start = addDays(end, -6);
+        range = ' · ' + fmt(start) + ' to ' + fmt(end);
+      }
+      h.textContent = 'Week ' + week.week + ' — ' + week.title + range;
+      block.appendChild(h);
+      week.tasks.forEach(function (task) {
+        var label = document.createElement('label');
+        label.className = 'check';
+        var input = document.createElement('input');
+        input.type = 'checkbox';
+        input.checked = state.tasks[task.id] === true;
+        input.addEventListener('change', function () {
+          state.tasks[task.id] = input.checked === true;
+          paintDash();
+          save(true);
+        });
+        var span = document.createElement('span');
+        span.textContent = task.text;
+        label.appendChild(input);
+        label.appendChild(span);
+        block.appendChild(label);
+      });
+      root.appendChild(block);
+    });
+  }
+
+  function money(n) {
+    return 'US$' + n.toFixed(2);
+  }
+
+  function renderRevenue() {
+    var totals = document.getElementById('totals');
+    var list = document.getElementById('earnList');
+    totals.replaceChildren();
+    list.replaceChildren();
+    var bySource = {};
+    var grand = 0;
+    state.revenue.forEach(function (row) {
+      var amount = Number(row.amount);
+      if (Number.isFinite(amount) === false) amount = 0;
+      grand += amount;
+      bySource[row.source] = (bySource[row.source] || 0) + amount;
+    });
+    var head = document.createElement('p');
+    head.textContent = 'Total ' + money(grand);
+    totals.appendChild(head);
+    Object.keys(bySource).forEach(function (source) {
+      var line = document.createElement('p');
+      line.textContent = source + ': ' + money(bySource[source]);
+      totals.appendChild(line);
+    });
+    if (state.revenue.length === 0) {
+      var empty = document.createElement('p');
+      empty.textContent = 'No earnings yet.';
+      list.appendChild(empty);
+      return;
+    }
+    state.revenue.forEach(function (row) {
+      var card = document.createElement('article');
+      card.className = 'earn';
+      var p = document.createElement('p');
+      var amount = Number(row.amount);
+      if (Number.isFinite(amount) === false) amount = 0;
+      p.textContent = row.source + ' · ' + money(amount);
+      var meta = document.createElement('p');
+      meta.textContent = [row.period, row.note].filter(function (part) { return part; }).join(' · ');
+      var remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'act';
+      remove.textContent = 'Remove';
+      remove.addEventListener('click', function () {
+        state.revenue = state.revenue.filter(function (item) { return item.id === row.id ? false : true; });
+        renderRevenue();
+        save(true);
+      });
+      card.appendChild(p);
+      if (meta.textContent) card.appendChild(meta);
+      card.appendChild(remove);
+      list.appendChild(card);
+    });
+  }
+
+  document.querySelectorAll('[data-tab]').forEach(function (btn) {
+    btn.addEventListener('click', function () { showTab(btn.getAttribute('data-tab')); });
+  });
+
+  document.getElementById('songForm').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var title = document.getElementById('songTitle').value.trim();
+    if (title === '') return;
+    var song = {
+      id: editing || String(Date.now()),
+      title: title,
+      artist: document.getElementById('songArtist').value.trim(),
+      isrc: document.getElementById('songIsrc').value.trim(),
+      writers: document.getElementById('songWriters').value.trim(),
+      date: document.getElementById('songDate').value,
+      status: document.getElementById('songStatus').value
+    };
+    if (editing) {
+      state.songs = state.songs.map(function (row) { return row.id === editing ? song : row; });
+    } else {
+      state.songs.unshift(song);
+    }
+    editing = '';
+    fillSongForm(null);
+    renderSongs();
+    paintDash();
+    save(true);
+  });
+
+  document.getElementById('songCancel').addEventListener('click', function () {
+    editing = '';
+    fillSongForm(null);
+  });
+
+  document.getElementById('planTitle').value = state.plan.title;
+  document.getElementById('planDate').value = state.plan.date;
+  document.getElementById('planTitle').addEventListener('input', function () {
+    state.plan.title = document.getElementById('planTitle').value.trim();
+    paintDash();
+    save(true);
+  });
+  document.getElementById('planDate').addEventListener('change', function () {
+    state.plan.date = document.getElementById('planDate').value;
+    renderPlan();
+    paintDash();
+    save(true);
+  });
+
+  document.getElementById('earnForm').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var amount = Number(document.getElementById('earnAmount').value);
+    if (Number.isFinite(amount) === false || amount < 0) {
+      saveMsg.textContent = 'Add an amount of zero or more.';
+      return;
+    }
+    state.revenue.unshift({
+      id: String(Date.now()),
+      source: document.getElementById('earnSource').value,
+      amount: Math.round(amount * 100) / 100,
+      period: document.getElementById('earnPeriod').value.trim(),
+      note: document.getElementById('earnNote').value.trim()
+    });
+    document.getElementById('earnAmount').value = '';
+    document.getElementById('earnPeriod').value = '';
+    document.getElementById('earnNote').value = '';
+    renderRevenue();
+    save(true);
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', function () { save(true); });
+
+  renderAudit();
+  renderSongs();
+  renderPlan();
+  renderRevenue();
+  paintDash();
+  showTab('audit');
+})();
+</script>
+</body>
+</html>
