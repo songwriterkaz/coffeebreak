@@ -946,6 +946,9 @@ CBG.cfg=cfg;
 (function(){
 const Q=s=>document.querySelector(s);
 function go(){
+  if(!window.CB_SONGS_HEADLESS && /Studio Espresso/.test(document.title||'') && CBG.rightsText.indexOf('100% of the commercial rights')<0){
+    CBG.rightsText+=' You own 100% of the commercial rights to songs you create in Studio Espresso. You can release, sell, stream and license them without paying royalties to Coffeebreak.';
+  }
   CBG.init({key:'espresso',name:'Coffeebreak Studio Espresso',btnClass:'sm',logo:'logo.jpg',maxSec:(typeof DEMO!=='undefined'&&DEMO)?DEMO_MAX:0,
     theme:{bg:'var(--bg)',fg:'var(--ink)',ac:'var(--a)',acfg:'#fff',line:'var(--b)',card:'var(--card)',font:'inherit'},
     getCtx:()=>AC(),
