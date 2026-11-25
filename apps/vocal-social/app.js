@@ -2,6 +2,7 @@
 (function () {
   'use strict';
   var API = (window.CB_VS_API || '').replace(/\/+$/, '');
+  var walls = window.CBWalls ? window.CBWalls.create({ api: API, channel: 'vocal', storageKey: 'cb-walls-vocal-v1' }) : null;
   var LOCAL = 'cb-vocal-social-v2';
   var OLD = 'cb-vocal-social-v1';
   var AVATARS = 12;
@@ -196,6 +197,7 @@
     var hash = (location.hash || '#feed').replace(/^#/, '');
     var i = hash.indexOf('='); var name = i < 0 ? hash : hash.slice(0, i); var arg = i < 0 ? '' : decodeURIComponent(hash.slice(i + 1));
     if (name === 'post' && arg) { showView('feed'); openFeed(state.mode, arg); return; }
+    if (name === 'wall') { showView('wall'); renderWall(arg || (local.profile && local.profile.handle) || 'you'); return; }
     if (name === 'u' && arg) { showView('profile'); renderProfile(arg); return; }
     if (name === 'make' && arg === 'challenge') { showView('make'); setupChallengeToggle(true); return; }
     if (name === 'make' && arg) { applyShareMake(arg); showView('make'); return; }
@@ -210,7 +212,7 @@
     if (name === 'vocals') renderVocals();
   }
   function showView(name) {
-    ['make', 'feed', 'people', 'me', 'profile', 'play', 'vocals'].forEach(function (id) { var v = $('view-' + id); if (v) v.hidden = id !== name; });
+    ['make', 'feed', 'people', 'me', 'profile', 'play', 'vocals', 'wall'].forEach(function (id) { var v = $('view-' + id); if (v) v.hidden = id !== name; });
     document.querySelectorAll('nav.tabs a').forEach(function (a) { a.classList.toggle('on', a.getAttribute('data-r') === name); });
     if (name !== 'feed' && player && !player.paused) player.pause();
   }
@@ -226,6 +228,7 @@
   }
   function openFeed(mode, focusId) {
     setMode(mode || 'trending');
+    if ((mode || state.mode) === 'news') { renderNews(); return; }
     var reel = $('reel'); reel.replaceChildren(); reel.scrollTop = 0;
     state.posts = []; state.done = false;
     var loading = el('div', 'reel-empty', 'Loading songs.'); reel.appendChild(loading);
@@ -1072,7 +1075,90 @@
     });
     if ($('voc-prev')) $('voc-prev').addEventListener('click', function () { if (vocState.page > 0) { vocState.page--; renderVocals(); } });
     if ($('voc-next')) $('voc-next').addEventListener('click', function () { vocState.page++; renderVocals(); });
+    if ($('wall-open')) $('wall-open').addEventListener('click', function () {
+      var who = ($('wall-who').value || '').trim();
+      location.hash = '#wall=' + encodeURIComponent(who || (local.profile && local.profile.handle) || 'you');
+    });
     window.addEventListener('hashchange', route);
+  }
+
+  function wallName() { return (local.profile && (local.profile.name || local.profile.handle)) || 'You'; }
+  function newsCard(p) {
+    var card = el('article', 'news-card');
+    var who = (p.author && (p.author.name || p.author.handle)) || 'Someone';
+    var wall = p.wall && p.wall.handle ? p.wall.handle : '';
+    card.appendChild(el('p', 'meta', who + (wall ? ' · wall @' + wall : '') + ' · ' + ago(p.created || Date.now())));
+    if (p.device) card.appendChild(el('p', 'device-tag', 'On this device for now'));
+    card.appendChild(el('p', null, p.text || ''));
+    var comments = el('div');
+    card.appendChild(comments);
+    var form = el('form', 'comment-form');
+    var input = el('input'); input.maxLength = 280; input.placeholder = 'Comment';
+    var go = el('button', 'btn quiet', 'Comment'); go.type = 'submit';
+    form.appendChild(input); form.appendChild(go);
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      if (!walls || !input.value.trim()) return;
+      walls.comment(p.id, input.value.trim(), wallName()).then(function () { input.value = ''; fillComments(); }, function (err) { status(err.message); });
+    });
+    card.appendChild(form);
+    function fillComments() {
+      if (!walls) return;
+      walls.commentsFor(p.id).then(function (list) {
+        comments.replaceChildren();
+        (list || []).forEach(function (c) {
+          var line = el('p', 'meta', ((c.author && (c.author.name || c.author.handle)) || 'Someone') + ': ' + (c.text || ''));
+          comments.appendChild(line);
+        });
+      });
+    }
+    fillComments();
+    return card;
+  }
+  function composer(host, after) {
+    var box = el('form', 'card');
+    var area = el('textarea'); area.maxLength = 500; area.rows = 3; area.placeholder = 'Write on your wall';
+    var go = el('button', 'btn', 'Post on your wall'); go.type = 'submit';
+    box.appendChild(area); box.appendChild(go);
+    box.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      if (!walls) return;
+      var text = area.value.trim();
+      if (!text) return;
+      go.disabled = true;
+      walls.publish(text, wallName()).then(function (post) {
+        area.value = '';
+        status(post && post.device ? 'On this device for now. The shared wall Worker is not answering yet.' : 'Posted on your wall and in the newsfeed.');
+        if (after) after();
+      }, function (err) { status(err.message); }).then(function () { go.disabled = false; });
+    });
+    host.appendChild(box);
+  }
+  function renderNews() {
+    var reel = $('reel'); if (!reel || !walls) return;
+    reel.replaceChildren();
+    reel.appendChild(el('div', 'reel-empty', 'Loading the newsfeed.'));
+    walls.feed().then(function (j) {
+      reel.replaceChildren();
+      var note = el('p', 'hint', j.shared ? 'Shared newsfeed. Posts on a wall show up here for everyone.' : 'On this device for now. The live Worker does not accept text posts yet, so these notes stay in this browser.');
+      reel.appendChild(note);
+      composer(reel, renderNews);
+      if (!j.posts.length) reel.appendChild(el('p', 'hint', 'No wall posts yet.'));
+      j.posts.forEach(function (p) { reel.appendChild(newsCard(p)); });
+    });
+  }
+  function renderWall(handle) {
+    var box = $('wall-box'); if (!box || !walls) return;
+    if ($('wall-who') && handle && handle !== 'you') $('wall-who').value = handle;
+    box.replaceChildren(el('p', 'hint', 'Loading.'));
+    var mine = !handle || handle === 'you' || (local.profile && handle === local.profile.handle);
+    walls.wall(mine ? ((local.profile && local.profile.handle) || 'you') : handle).then(function (j) {
+      box.replaceChildren();
+      box.appendChild(el('p', 'hint', j.shared ? 'This wall is shared.' : 'On this device for now. A shared wall will show here after the Worker deploy.'));
+      if (mine) composer(box, function () { renderWall(handle); });
+      (j.posts || []).forEach(function (p) { box.appendChild(newsCard(p)); });
+      if (!(j.posts || []).length) box.appendChild(el('p', 'hint', 'No posts on this wall yet.'));
+    });
   }
 
   loadLocal();

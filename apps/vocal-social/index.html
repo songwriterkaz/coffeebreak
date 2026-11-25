@@ -26,6 +26,7 @@
 <main id="vs-app" class="wrap">
   <nav class="tabs" aria-label="Vocal Social">
     <a href="#feed" data-r="feed">Feed</a>
+    <a href="#wall" data-r="wall">Wall</a>
     <a href="#play" data-r="play">Play</a>
     <a href="#make" data-r="make">Make</a>
     <a href="#vocals" data-r="vocals">Vocals</a>
@@ -42,6 +43,7 @@
       <button type="button" class="chip" data-mode="trending" aria-pressed="true">For you</button>
       <button type="button" class="chip" data-mode="latest" aria-pressed="false">Latest</button>
       <button type="button" class="chip" data-mode="following" aria-pressed="false">Following</button>
+      <button type="button" class="chip" data-mode="news" aria-pressed="false">News</button>
     </div>
     <div id="reel" class="reel" aria-label="Songs"></div>
   </section>
@@ -140,6 +142,16 @@
     </div>
   </section>
 
+  <section id="view-wall" class="view" hidden>
+    <h2>Wall</h2>
+    <p class="hint" id="wall-note">Each person has a wall. A post here is also listed in the News feed. If the shared Worker is not deployed yet, the post stays on this device.</p>
+    <label>Whose wall
+      <input id="wall-who" type="text" maxlength="20" placeholder="handle" autocomplete="off">
+    </label>
+    <div class="row actions"><button type="button" class="btn quiet" id="wall-open">Open wall</button></div>
+    <div id="wall-box"></div>
+  </section>
+
   <section id="view-profile" class="view" hidden>
     <div id="profile-box"></div>
   </section>
@@ -229,6 +241,7 @@
 <script src="../studio-espresso/songs-core.js"></script>
 <script src="../studio-espresso/create.js"></script>
 <script>window.CB_VS_API="https://cb-vocal-social.coffeebreaks.workers.dev";</script>
+<script src="walls.js"></script>
 <script src="app.js"></script>
 <script type="application/json" id="cb-real-shop-data">{"title": "Real things for singers", "logo": "cb-logo.png", "note": "Coffeebreak music, merch and gear for singing. Each card opens in a new tab, so your song stays here.", "items": [{"name": "Billionaire by Coffeebreak", "price": "Listen on Apple Music", "store": "Apple Music", "url": "https://music.apple.com/au/album/billionaire/1542958072?i=1542958079", "icon": "🎵", "bg": "linear-gradient(135deg,#ffd6e8,#ffb3d1)", "cta": "Listen on Apple Music"}, {"name": "Coffeebreak Records: Everything Bundle", "price": "A$20", "store": "Coffeebreak Records", "checkout": "PayID", "url": "../../records-store/", "icon": "💿", "bg": "linear-gradient(135deg,#e8e0ff,#cbb8ff)"}, {"name": "Coffeebreak album", "price": "A$10", "store": "Coffeebreak Records", "checkout": "PayID", "url": "../../records-store/", "icon": "🎶", "bg": "linear-gradient(135deg,#e0f0ff,#b8d8ff)"}, {"name": "Noise reduction headphones", "price": "US$51.95", "store": "Coffeebreak Sensory Shop", "checkout": "PayID cart", "url": "../../stores/sensory-shop/#item-quiet-headphones", "icon": "🎧", "bg": "linear-gradient(135deg,#ffe0f0,#e6dcff)"}, {"name": "Coffeebreak Tee (Black), logo design", "price": "A$40.05", "store": "Coffeebreak Merch", "checkout": "PayID cart", "url": "../../apps/merch/", "icon": "👕", "bg": "linear-gradient(135deg,#eee,#cfcfcf)"}, {"name": "Coffeebreak Hoodie (Black), logo design", "price": "A$69.05", "store": "Coffeebreak Merch", "checkout": "PayID cart", "url": "../../apps/merch/", "icon": "🧥", "bg": "linear-gradient(135deg,#eee,#cfcfcf)"}, {"name": "Coffeebreak Mug 11oz, logo design", "price": "A$32.05", "store": "Coffeebreak Merch", "checkout": "PayID cart", "url": "../../apps/merch/", "icon": "☕", "bg": "linear-gradient(135deg,#fff3e0,#f5d6b0)"}], "foot": "Prices as shown in each store on 19 Nov 2026. Store checkout is PayID. Vocal Social stays free and the real items are optional."}</script>
 <script src="../../pages/cb-real-shop.js" defer></script>

@@ -104,7 +104,10 @@ footer.legal p{margin:0 0 10px;max-width:80ch}
 .btn.big{width:100%;font-size:1.1rem;min-height:54px;border-radius:16px}
 a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
 .link-btn{background:none;border:0;color:#b8336f;font:inherit;font-size:.85rem;cursor:pointer;padding:4px 0;text-decoration:underline}
-.feed-modes{display:flex;gap:8px;justify-content:center;margin:0 0 10px}
+.news-card{background:#fff;color:var(--ink);border-radius:16px;padding:12px;margin:0 0 10px}
+.news-card .meta{color:var(--soft);font-size:.9rem}
+.device-tag{display:inline-block;background:#fff3c4;color:#5a3b00;border-radius:999px;padding:2px 8px;font-size:.8rem;font-weight:700}
+.feed-modes{display:flex;gap:8px;justify-content:center;margin:0 0 10px;flex-wrap:wrap}
 .chip{min-height:40px;padding:6px 16px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);font:700 15px system-ui,sans-serif;cursor:pointer}
 .chip[aria-pressed="true"]{background:#2a0b1d;color:#fff;border-color:#2a0b1d}
 .reel{height:calc(100svh - 120px);min-height:460px;overflow-y:auto;scroll-snap-type:y mandatory;border-radius:22px;background:#2a0b1d;overscroll-behavior:contain;scrollbar-width:none}
