@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KOB Country Music Record Store — Digital &amp; Physical</title>
+<meta name="description" content="Coffeebreak and KOB country songs as digital singles and physical pre-orders. Pay by PayID only.">
+<link rel="icon" href="../cb-logo.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#shelves">
+    <img src="../cb-logo.png" alt="Coffeebreak cup logo" width="56" height="56">
+    <span>
+      <strong>KOB Country Music Record Store</strong>
+      <small>Digital &amp; Physical</small>
+    </span>
+  </a>
+  <nav class="jump">
+    <a href="#shelves">Shelves</a>
+    <a href="#about">About</a>
+    <a href="#how">How it works</a>
+    <a href="#request">Request a Song</a>
+    <button type="button" id="open-wish">Wishlist <b id="wish-n">0</b></button>
+    <button type="button" id="open-cart">Cart <b id="cart-n">0</b></button>
+  </nav>
+</header>
+<section class="hero">
+  <img src="../cb-logo.png" alt="" width="72" height="72">
+  <h1>Songs from the front porch — pressed, printed, and ready to take home.</h1>
+  <p>Coffeebreak / KOB country music. Digital singles and physical pre-orders.</p>
+</section>
+<main>
+  <section id="shelves">
+    <div class="tools">
+      <label>Search <input id="q" type="search" placeholder="Song, album or format"></label>
+      <div class="filters" id="filters" aria-label="Filters"></div>
+    </div>
+    <div id="shelf" class="shelf"></div>
+  </section>
+  <section id="about" class="panel">
+    <h2>About</h2>
+    <p>This is the Coffeebreak country counter. The songs on the shelves are titles already released under Coffeebreak, including the radio set and the records-store albums. Digital copies are US$10. Physical formats are pre-orders at US$10. You are buying from Coffeebreak / KOB.</p>
+  </section>
+  <section id="how" class="panel">
+    <h2>How it works</h2>
+    <ol>
+      <li>Search the shelves. Filter by Digital or Physical, and by format.</li>
+      <li>Add a title to your wishlist or your cart. Both stay in this browser.</li>
+      <li>At checkout, pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com. Put the reference in the payment description.</li>
+      <li>This page does not take card payments and it does not mark an order paid by itself.</li>
+    </ol>
+  </section>
+  <section id="request" class="panel">
+    <h2>Request a Song</h2>
+    <form id="request-form">
+      <label>Your name <input id="req-name" maxlength="80" required></label>
+      <label>Song you want <input id="req-song" maxlength="120" required></label>
+      <label>Note <textarea id="req-note" maxlength="500" rows="4"></textarea></label>
+      <button class="btn" type="submit">Email the request</button>
+    </form>
+    <p>The button opens your email app to darkokaz@gmx.com. Nothing is stored on a server from this form.</p>
+  </section>
+</main>
+<aside id="drawer" hidden>
+  <div class="drawer">
+    <header><h2 id="drawer-title">Cart</h2><button type="button" id="drawer-close">Close</button></header>
+    <div id="drawer-body"></div>
+  </div>
+</aside>
+<footer class="legal">
+  <img src="../cb-logo.png" alt="Coffeebreak cup logo" width="60" height="60">
+  <p><b>Disclaimer:</b> Provided as is for personal and entertainment use. It is not professional, medical, legal or financial advice. Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Subject to Australian Consumer Law. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners. Coffeebreak is not affiliated with or endorsed by them.</p>
+  <p class="cta">
+    <a class="btn quiet" href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Subscribe</a>
+    <a class="btn big" href="https://songwriterkaz.github.io/coffeebreak-stream/" target="_blank" rel="noopener">Stream my music</a>
+    <a class="btn gfm" href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener">Support Coffeebreak on GoFundMe</a>
+  </p>
+  <p>Checkout is Pay by PayID (Teachers Mutual Bank): <b>darkokaz@gmx.com</b>.</p>
+  <p class="links">Supporting the future with <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> · <a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">YouTube</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a></p>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
