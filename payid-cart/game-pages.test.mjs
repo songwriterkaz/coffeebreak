@@ -41,6 +41,14 @@ test('every in-repo game page mounts the shared PayID cart', () => {
     assert.match(html, /https:\/\/www\.starlink\.com/, rel);
     assert.match(html, /Report a problem|cbreport\.js/, rel);
     assert.match(html, /third-party/i, rel);
+    assert.match(html, /Subject to Australian Consumer Law/, rel);
+    assert.match(html, /claims no ownership of (?:any )?third-party brands/i, rel);
+    assert.match(html, /<img\b[^>]*(?:logo|cb-logo)/i, rel);
+    data.items.forEach((item) => {
+      if (item.kind === 'food' || item.kind === 'prize' || item.kind === 'physical' || game.isPhysicalItem(item, data.storeId)) return;
+      assert.equal(item.currency, 'USD', rel + ' ' + item.name);
+      assert.equal(item.amount, '10.00', rel + ' ' + item.name);
+    });
     assert.doesNotMatch(html, /gumroad\.com|payhip\.com|ko-fi\.com|href="#pending"|store pending|headspace/i, rel);
   }
   assert.ok(priced.USD + priced.AUD > 0);
@@ -49,8 +57,8 @@ test('every in-repo game page mounts the shared PayID cart', () => {
 
 test('representative games keep published prices and owner access', () => {
   const arcade = game.readOffer(page('canva-games/index.html'), 'canva-games/index.html');
-  assert.equal(arcade.currency, 'AUD');
-  assert.equal(arcade.items[0].amount, '5.00');
+  assert.equal(arcade.currency, 'USD');
+  assert.equal(arcade.items[0].amount, '10.00');
   const drag = game.readOffer(page('mens-games/drag-race/index.html'), 'mens-games/drag-race/index.html');
   assert.equal(drag.currency, 'USD');
   assert.equal(drag.items[0].amount, '10.00');
