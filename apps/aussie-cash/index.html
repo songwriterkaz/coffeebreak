@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Aussie Cash</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#e7f6e4;color:#14301c}
+main{max-width:720px;margin:auto;padding:16px}
+.banner{background:#14301c;color:#fff;border-radius:16px;padding:14px;font-weight:800}
+.card{background:#fff;border-radius:16px;padding:14px;margin:12px 0}
+h1{margin:8px 0}
+button{background:#1f7a3a;color:#fff;border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+input{width:100%;box-sizing:border-box;padding:8px;border:2px solid #b7e0c0;border-radius:10px;margin:6px 0}
+.bal{font-size:2.4rem;font-weight:800}
+footer{text-align:center;padding:16px}a{color:#1f7a3a}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<main>
+<p><a href="../../">Coffeebreak hub</a></p>
+<p class="banner">This is play money. It is not real Australian currency. It cannot be spent at a bank or a shop, and it is not financial advice.</p>
+<div class="card">
+<img src="../cb-logo.png" alt="Coffeebreak logo" width="64" height="64" style="border-radius:12px">
+<h1>Aussie Cash</h1>
+<p class="bal" id="bal"></p>
+<label>Send play dollars to a toy name<input id="to" maxlength="40" placeholder="A made-up name"></label>
+<label>Amount<input id="amt" type="number" min="1" step="1" value="10"></label>
+<p><button type="button" id="send">Send play money</button> <button type="button" id="reset">Reset to 100</button></p>
+<div id="log"></div>
+</div>
+<div class="card">
+<p><small>Coffeebreak keeps all rights to this app. Third-party trademarks, including any real bank names, belong to their owners. Nothing here is a real transfer.</small></p>
+<p><a href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener">Support Coffeebreak on GoFundMe</a></p>
+</div>
+</main>
+<footer>
+<p>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></p>
+</footer>
+<script>
+var KEY='cb-aussie-play';
+var S={bal:100,log:[]};
+try{S=Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+function save(){localStorage.setItem(KEY,JSON.stringify(S));draw()}
+function draw(){
+ document.getElementById('bal').textContent='Play $'+S.bal.toFixed(2);
+ document.getElementById('log').innerHTML=S.log.map(function(x){return '<p>'+x+'</p>'}).join('')||'<p>No play transfers yet.</p>';
+}
+document.getElementById('send').onclick=function(){
+ var n=+document.getElementById('amt').value;
+ var to=document.getElementById('to').value.trim()||'a toy name';
+ if(!(n>0)||n>S.bal){return}
+ S.bal-=n;
+ S.log.unshift('Sent play $'+n.toFixed(2)+' to '+to.replace(/</g,''));
+ save();
+};
+document.getElementById('reset').onclick=function(){S={bal:100,log:['Reset to play $100.00']};save()};
+draw();
+</script>
+</body>
+</html>
