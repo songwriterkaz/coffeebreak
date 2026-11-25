@@ -1,9 +1,78 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="cb-gallery-v1"><title>Coffeebreak Business Plan</title>
-<style>body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}main{max-width:1100px;margin:auto;padding:20px}h1{color:#d6336c}.price{font-size:1.4em;font-weight:800;color:#d6336c}.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.c{margin:0;background:#fff;border-radius:14px;padding:8px;text-align:center;box-shadow:0 4px 14px #ff69b433}.c img{width:100%;height:170px;object-fit:contain;border-radius:8px;background:#fff}.c figcaption{font-size:.75rem;margin-top:4px}a{color:#d6336c}</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
-</head><body><main>
-<p><a href="../../">&larr; Coffeebreak hub</a></p><h1>Coffeebreak Business Plan</h1><p class="price">Free &middot; tip if you like</p><p>2 designs from Coffeebreak. Tap any picture to view it bigger.</p>
-<div class="g"><figure class="c"><a href="img/001.jpg" target="_blank"><img src="img/001.jpg" alt="cover 630x500" loading="lazy"></a><figcaption>cover 630x500</figcaption></figure><figure class="c"><a href="img/002.jpg" target="_blank"><img src="img/002.jpg" alt="page top" loading="lazy"></a><figcaption>page top</figcaption></figure></div></main><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
-<p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
-<p><b>&#9749; Free to use &mdash; tip if you like:</b> PayID <b>darkokaz@gmx.com</b> (Teachers Mutual Bank). Put the app name in the reference.</p>
-<p><small><b>Disclaimer:</b> Provided as is for personal and entertainment use; not professional, medical, legal or financial advice. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners.</small></p>
-<p><small>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></small></p></div></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Business Plan</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#ffe0ef,#ffc2dd);color:#4a1030}
+main{max-width:900px;margin:auto;padding:20px}
+h1,h2{color:#d6336c}
+.card{background:#fff;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 4px 16px #ff69b433}
+label{display:block;font-weight:700;margin-top:10px}
+input,textarea{width:100%;box-sizing:border-box;border:2px solid #ffb3d1;border-radius:10px;padding:8px;font:inherit}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+img{width:100%;border-radius:12px}
+button{background:#ff4f9a;color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer}
+footer{text-align:center;padding:20px}footer img{width:72px;height:72px}
+a{color:#d6336c}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<main>
+<p><a href="../../">Coffeebreak hub</a></p>
+<div class="card">
+<img src="../cb-logo.png" alt="Coffeebreak logo" width="72" height="72" style="width:72px;height:72px">
+<h1>Coffeebreak Business Plan</h1>
+<p>This is a working plan you can type and keep on this device. It is not financial advice, and it does not forecast profit.</p>
+<p>The only business-plan files already in this repo are the two pictures below. There is no separate written plan document to link.</p>
+<div class="g">
+<figure><a href="img/001.jpg"><img src="img/001.jpg" alt="Business plan cover picture"></a><figcaption>Cover picture</figcaption></figure>
+<figure><a href="img/002.jpg"><img src="img/002.jpg" alt="Business plan page picture"></a><figcaption>Page picture</figcaption></figure>
+</div>
+</div>
+<div class="card">
+<h2>Write the plan</h2>
+<label>What Coffeebreak sells<textarea id="offer" rows="3"></textarea></label>
+<label>Who it is for<textarea id="who" rows="2"></textarea></label>
+<label>Prices<textarea id="prices" rows="3"></textarea></label>
+<label>How people pay<textarea id="pay" rows="2"></textarea></label>
+<label>Notes for the next month<textarea id="next" rows="3"></textarea></label>
+<p><button type="button" id="save">Save on this device</button> <button type="button" id="copy">Copy the plan</button></p>
+<p id="msg"></p>
+</div>
+<div class="card">
+<p>Coffeebreak makes music, apps and stores that run in the browser.</p>
+<p><small>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Third-party trademarks belong to their owners. Not professional, medical, legal or financial advice.</small></p>
+<p><a href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener">Support Coffeebreak on GoFundMe</a></p>
+</div>
+</main>
+<footer>
+<img src="../cb-logo.png" alt="Coffeebreak logo">
+<p>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></p>
+<p>Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com</p>
+</footer>
+<script>
+var KEY='cb-biz-plan';
+var fields=['offer','who','prices','pay','next'];
+var saved={};
+try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){}
+if(!saved.offer){
+  saved.offer='Browser apps, music and digital cards.';
+  saved.who='People who use Coffeebreak on the web.';
+  saved.prices='Apps US$10. Music software US$1,500. Camera app US$96.99.';
+  saved.pay='Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
+  saved.next='';
+}
+fields.forEach(function(id){document.getElementById(id).value=saved[id]||''});
+function read(){var o={};fields.forEach(function(id){o[id]=document.getElementById(id).value});return o}
+document.getElementById('save').onclick=function(){localStorage.setItem(KEY,JSON.stringify(read()));document.getElementById('msg').textContent='Saved on this device.';};
+document.getElementById('copy').onclick=function(){
+  var o=read();
+  var t='Coffeebreak business plan\n\nOffer\n'+o.offer+'\n\nWho\n'+o.who+'\n\nPrices\n'+o.prices+'\n\nPay\n'+o.pay+'\n\nNext\n'+o.next;
+  navigator.clipboard.writeText(t).then(function(){document.getElementById('msg').textContent='Copied.';}).catch(function(){document.getElementById('msg').textContent='Could not copy. Select the text yourself.';});
+};
+</script>
+</body>
+</html>

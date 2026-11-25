@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Getting to Sleep</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#eef6ff;color:#223;min-height:100vh}
+header{text-align:center;padding:10px}h1{margin:0;color:#3b6fd8}
+nav{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:6px}
+button{font:inherit;font-size:1.05rem;border:0;border-radius:14px;padding:12px 14px;background:#fff;box-shadow:0 2px 6px #0002;cursor:pointer}
+nav button.on{background:#3b6fd8;color:#fff}
+main{max-width:900px;margin:0 auto;padding:8px 10px 40px}
+.card{background:#fff;border-radius:16px;padding:14px;margin:10px 0}
+.sch p{display:flex;gap:10px;align-items:center;font-size:1.15rem}
+footer{text-align:center;padding:16px}a{color:#3b6fd8}
+</style>
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
+</head>
+<body>
+<header><img src="../cb-logo.png" alt="Coffeebreak logo" width="56" height="56" style="border-radius:12px"><h1>Getting to sleep</h1></header>
+<nav id="nav"></nav>
+<main id="m"></main>
+<footer>
+<p>A calm checklist, in the same simple style as the tidy-up app. It does not treat sleep problems and it is not medical advice.</p>
+<p><a href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener">Support Coffeebreak on GoFundMe</a></p>
+<p>Supporting the future with <a href="https://www.tesla.com">Tesla</a> and <a href="https://www.starlink.com">Starlink</a></p>
+<p><a href="../../">Coffeebreak hub</a></p>
+</footer>
+<script>
+var Tabs=[['steps','Checklist'],['room','Quiet room'],['timer','Soft timer']];
+var nav=document.getElementById('nav'),m=document.getElementById('m');
+Tabs.forEach(function(t){var b=document.createElement('button');b.textContent=t[1];b.onclick=function(){show(t[0])};nav.appendChild(b)});
+var STEPS=['Dim the lamp','Put the phone face down','One drink of water','Same bedtime as last night','Lights out when the list is ticked'];
+function say(t){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.rate=0.9;speechSynthesis.speak(u)}catch(e){}}
+function show(id){
+ [].forEach.call(nav.children,function(b,i){b.classList.toggle('on',Tabs[i][0]===id)});
+ if(id==='steps'){
+  var done={};try{done=JSON.parse(localStorage.getItem('cb-sleep')||'{}')}catch(e){}
+  m.innerHTML='<div class="card sch">'+STEPS.map(function(s,i){return '<p><input type="checkbox" data-i="'+i+'"'+(done[i]?' checked':'')+'> '+s+'</p>'}).join('')+'<p><button type="button" id="say">Read the list</button></p></div>';
+  m.onchange=function(e){done[e.target.dataset.i]=e.target.checked;localStorage.setItem('cb-sleep',JSON.stringify(done))};
+  document.getElementById('say').onclick=function(){say(STEPS.join('. '))};
+ } else if(id==='room'){
+  m.innerHTML='<div class="card"><p>Picture a tidy room: bed clear, one soft light, shoes by the door.</p><div id="room" style="height:220px;border-radius:16px;background:linear-gradient(#1b2744 70%,#2a2148);position:relative"><div style="position:absolute;left:18%;bottom:18%;font-size:3rem">🛏️</div><div style="position:absolute;right:16%;top:18%;font-size:2rem">🌙</div></div><p><button type="button" id="calm">Say a calm line</button></p></div>';
+  document.getElementById('calm').onclick=function(){say('The room is quiet. The list is done. Rest when you are ready.')};
+ } else {
+  m.innerHTML='<div class="card"><p>A five minute quiet timer. It does not play a new song.</p><p id="clock" style="font-size:2.4rem;text-align:center">5:00</p><p style="text-align:center"><button type="button" id="go">Start</button> <button type="button" id="stop">Stop</button></p></div>';
+  var left=300,t=null;
+  function paint(){var m=Math.floor(left/60),s=left%60;document.getElementById('clock').textContent=m+':'+(s<10?'0':'')+s}
+  document.getElementById('go').onclick=function(){if(t)return;t=setInterval(function(){left--;paint();if(left<=0){clearInterval(t);t=null;say('The five minutes are done.')}},1000)};
+  document.getElementById('stop').onclick=function(){clearInterval(t);t=null;left=300;paint()};
+ }
+}
+show('steps');
+</script>
+</body>
+</html>
