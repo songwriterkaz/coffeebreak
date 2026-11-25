@@ -1,17 +1,19 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Coffee Mail</title><style>body{margin:0;font-family:Arial,sans-serif;background:#ffe4f1;color:#4a0030}
 header{background:#ff4fa3;color:#fff;display:flex;align-items:center;gap:12px;padding:10px}
-header img{height:56px;border-radius:8px;background:#fff}
+header img{height:56px;width:auto;aspect-ratio:4/3;border-radius:8px;background:#fff}
+#inbox>.card,#sent>.card{content-visibility:auto;contain-intrinsic-size:auto 140px}
 .banner{background:#ffc2df;padding:10px;text-align:center;font-weight:bold}
 .banner a,footer a{color:#b0005a}
 button{background:#ff4fa3;color:#fff;border:0;border-radius:8px;padding:8px 14px;margin:3px;cursor:pointer}
 .card{background:#fff;border-radius:12px;padding:12px;margin:10px;box-shadow:0 2px 6px #f9a}
 footer{background:#ffb6d9;padding:12px;font-size:13px}
 input,textarea,select{width:95%;padding:6px;margin:4px 0;border:1px solid #f8a;border-radius:6px}
-</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
-<script src="cbreport.js" data-app="Coffeebreak Coffee Mail" defer></script>
+</style><link rel="modulepreload" href="../mail-signature-pen/mail-routing.mjs">
+<script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer fetchpriority="low"></script>
+<script src="cbreport.js" data-app="Coffeebreak Coffee Mail" defer fetchpriority="low"></script>
 <script type="module" src="../mail-signature-pen/mail-routing.mjs"></script>
 </head><body>
-<header><img src="cb-logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Coffee Mail</h1></header><div class="banner">Full version $5. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com | <a href="https://coffeebreaks.itch.io">https://coffeebreaks.itch.io</a></div>
+<header><img src="cb-logo.png" alt="Coffeebreak logo" width="240" height="180" fetchpriority="high"><h1>Coffeebreak Coffee Mail</h1></header><div class="banner">Full version $5. Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com | <a href="https://coffeebreaks.itch.io">https://coffeebreaks.itch.io</a></div>
 <div class="card"><b>On this device.</b> Messages saved here stay in this browser. This page does not send by itself. Outside mail needs a Coffeebreak Mail sign-in, then Send.</div>
 <nav class="card"><button id="tInbox" onclick="show('inbox')">Inbox</button><button onclick="show('compose')">Compose</button><button onclick="show('sent')">Sent</button><button id="tShop" onclick="show('shop')">Coffee Shop</button></nav>
 <section class="card" id="liveCard"><h2>Outside mail</h2><p id="liveStatus">On this device until you sign in.</p><input id="liveN" placeholder="Name" autocomplete="name"><input id="liveH" placeholder="Handle" autocomplete="username"><input id="liveP" placeholder="Password" type="password" autocomplete="current-password"><button id="liveNew" type="button">Create address</button><button id="liveGo" type="button">Sign in</button><button id="liveCheck" type="button">Check for outside mail</button><button id="liveOff" type="button">Sign out</button><p id="liveMsg"></p></section>
@@ -37,18 +39,28 @@ const M=[['Flat White',5],['Cappuccino',5],['Latte',5.5],['Long Black',4.5],['Pi
 const SZ=[['Small',0],['Regular',.5],['Large',1]],MK=[['Full cream',0],['Skim',0],['Oat',.7],['Almond',.7]],SG=['No sugar','1 sugar','2 sugars'];
 const opt=a=>a.map((o,i)=>'<option value="'+i+'">'+(Array.isArray(o)?o[0]+(o[1]?' +$'+o[1].toFixed(2):''):o)+'</option>').join('');
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function show(id){['inbox','sent','compose','shop'].forEach(x=>document.getElementById(x).style.display=x==id?'block':'none');render()}
+function show(id){['inbox','sent','compose','shop'].forEach(x=>document.getElementById(x).style.display=x==id?'block':'none');
+ if(id==='inbox')renderInbox();else if(id==='sent')renderSent();else if(id==='shop')renderShop()}
 function list(a,t){return '<h2>'+t+'</h2>'+(a.length?a.slice().reverse().map(m=>'<div class="card"><b>'+esc(m.subj)+'</b><br><small>'+esc(m.from||('To: '+m.to))+' | '+esc(m.t)+(m.onDevice?' | On this device':'')+'</small><pre style="white-space:pre-wrap">'+esc(m.body)+'</pre></div>').join(''):'<p>Nothing here yet.</p>')}
-function render(){inbox.innerHTML=list(S.inbox,'Inbox');sent.innerHTML=list(S.sent,'Sent');
-menu.innerHTML=M.map((m,i)=>'<div class="card"><b>'+m[0]+'</b> $'+m[1].toFixed(2)+'<br><select id="sz'+i+'">'+opt(SZ)+'</select><select id="mk'+i+'">'+opt(MK)+'</select><select id="sg'+i+'">'+opt(SG)+'</select><button class="add" onclick="add('+i+')">Add</button></div>').join('');
-let tot=0;cart.innerHTML=S.cart.map((c,i)=>{tot+=c.p;return '<div>'+esc(c.d)+' $'+c.p.toFixed(2)+' <button onclick="S.cart.splice('+i+',1);save();render()">Remove</button></div>'}).join('')+'<p><b>Total: $'+tot.toFixed(2)+'</b></p>'}
-function add(i){const s=SZ[document.getElementById('sz'+i).value],k=MK[document.getElementById('mk'+i).value],g=SG[document.getElementById('sg'+i).value];S.cart.push({d:M[i][0]+' ('+s[0]+', '+k[0]+', '+g+')',p:M[i][1]+s[1]+k[1]});save();render()}
+function renderInbox(){inbox.innerHTML=list(S.inbox,'Inbox')}
+function renderSent(){sent.innerHTML=list(S.sent,'Sent')}
+function renderMenu(){menu.innerHTML=M.map((m,i)=>'<div class="card"><b>'+m[0]+'</b> $'+m[1].toFixed(2)+'<br><select id="sz'+i+'">'+opt(SZ)+'</select><select id="mk'+i+'">'+opt(MK)+'</select><select id="sg'+i+'">'+opt(SG)+'</select><button class="add" onclick="add('+i+')">Add</button></div>').join('')}
+function renderCart(){let tot=0;cart.innerHTML=S.cart.map((c,i)=>{tot+=c.p;return '<div>'+esc(c.d)+' $'+c.p.toFixed(2)+' <button onclick="S.cart.splice('+i+',1);save();renderCart()">Remove</button></div>'}).join('')+'<p><b>Total: $'+tot.toFixed(2)+'</b></p>'}
+function renderShop(){renderMenu();renderCart()}
+function add(i){const s=SZ[document.getElementById('sz'+i).value],k=MK[document.getElementById('mk'+i).value],g=SG[document.getElementById('sg'+i).value];S.cart.push({d:M[i][0]+' ('+s[0]+', '+k[0]+', '+g+')',p:M[i][1]+s[1]+k[1]});save();renderShop()}
 const LIVE_KEY='cbCoffeeMailLive';
 function liveSession(){try{return JSON.parse(localStorage.getItem(LIVE_KEY)||'null')}catch(e){return null}}
 function saveLive(s){if(s&&s.token)localStorage.setItem(LIVE_KEY,JSON.stringify({token:s.token,address:s.address}));else localStorage.removeItem(LIVE_KEY)}
 function liveClient(){return window.CBMailRoute.createLiveClient({onUnauthorized(){saveLive(null);paintLive()}})}
-async function paintLive(){if(!window.CBMailRoute)return;let status=null;try{status=await liveClient().status()}catch(e){status=null}
- const session=liveSession();document.getElementById('liveStatus').textContent=window.CBMailRoute.describeLiveStatus(status,session&&session.address?{address:session.address}:null)}
+const STATUS_KEY='cbCoffeeMailStatus';
+function sessionView(){const session=liveSession();return session&&session.address?{address:session.address}:null}
+function readStatusCache(){try{const o=JSON.parse(localStorage.getItem(STATUS_KEY)||'null');if(!o||!o.status||typeof o.at!=='number'||Date.now()-o.at>86400000)return null;return o.status}catch(e){return null}}
+function writeStatusCache(status){try{localStorage.setItem(STATUS_KEY,JSON.stringify({at:Date.now(),status}))}catch(e){}}
+function paintStatus(status){document.getElementById('liveStatus').textContent=window.CBMailRoute.describeLiveStatus(status,sessionView())}
+function paintCached(){if(!window.CBMailRoute)return;const cached=readStatusCache();if(cached)paintStatus(cached)}
+async function paintLive(){if(!window.CBMailRoute)return;const cached=readStatusCache();if(cached)paintStatus(cached);
+ let status=null;try{status=await liveClient().status()}catch(e){status=null}
+ if(status&&!status.error)writeStatusCache(status);paintStatus(status||cached)}
 async function liveAuth(mode){const route=window.CBMailRoute,msg=document.getElementById('liveMsg');if(!route){msg.textContent='The mail helper has not loaded.';return}
  const handle=document.getElementById('liveH').value.trim(),password=document.getElementById('liveP').value,name=document.getElementById('liveN').value.trim();
  if(mode==='signup'&&!name){msg.textContent='Add your name.';return}
@@ -63,26 +75,31 @@ async function pullOutside(show){const route=window.CBMailRoute,session=liveSess
  if(!session){if(show)document.getElementById('liveMsg').textContent=route.describeReceive({signedIn:false});return}
  try{const j=await liveClient().pull(session.token,0);const picked=route.newServerInbox(j.mail,seenIds());
   picked.fresh.forEach(m=>S.inbox.push({from:m.from||'',subj:m.subject||'(no subject)',body:m.body||'',t:m.date||new Date().toLocaleString(),outside:true}));
-  localStorage.setItem(SEEN_KEY,JSON.stringify(picked.seen));save();render();
+  localStorage.setItem(SEEN_KEY,JSON.stringify(picked.seen));save();renderInbox();
   document.getElementById('liveMsg').textContent=route.describeReceive({signedIn:true,count:picked.fresh.length})}
  catch(e){document.getElementById('liveMsg').textContent=route.describeReceive({signedIn:true,error:e.message})}}
 document.getElementById('liveCheck').onclick=()=>pullOutside(true);
-window.addEventListener('cbmailroute',()=>{paintLive();if(liveSession())pullOutside(false)});
+function refreshOutside(){paintLive();if(liveSession())pullOutside(false)}
+window.addEventListener('cbmailroute',()=>{paintCached();if(document.readyState==='complete')refreshOutside();else window.addEventListener('load',refreshOutside,{once:true})});
 async function sendMail(){const route=window.CBMailRoute;if(!to.value){mailMsg.textContent='Add a recipient.';return}
  if(!route){mailMsg.textContent='The mail helper has not loaded.';return}
  const plan=route.planRecipients(to.value,[]);if(plan.invalid.length){mailMsg.textContent=plan.invalid[0].reason;return}
  const sub=subj.value||'(no subject)',text=body.value,session=liveSession(),hand=!!(plan.outside.length&&session);
- S.sent.push({to:to.value,subj:sub,body:text,t:new Date().toLocaleString(),onDevice:true});save();
+ const item={to:to.value,subj:sub,body:text,t:new Date().toLocaleString(),onDevice:true};
+ S.sent.push(item);
+ if(!hand){const note=route.describeSend({localCount:1,outsideCount:plan.outside.length,signedIn:false,accepted:0,error:'',waiting:false});item.result=note;item.body=text+'\n\n'+note}
+ save();to.value=subj.value=body.value='';mailMsg.textContent=item.result||'';show('sent');
+ if(!hand)return;
  let accepted=0,error='',waiting=false;
- if(hand){try{const j=await liveClient().send(session.token,{to:plan.outside.map(x=>x.address).join(', '),subject:sub,text:text});accepted=(j.results||[]).filter(r=>r.ok).length;waiting=j.outsideState==='waiting';error=((j.results||[]).find(r=>!r.ok)||{}).error||''}catch(e){error=e.message}}
- const note=route.describeSend({localCount:1,outsideCount:plan.outside.length,signedIn:!!hand,accepted,error,waiting});
- const last=S.sent[S.sent.length-1];last.result=note;last.body=text+'\n\n'+note;save();
- mailMsg.textContent=note;
- to.value=subj.value=body.value='';show('sent')}
+ try{const j=await liveClient().send(session.token,{to:plan.outside.map(x=>x.address).join(', '),subject:sub,text:text});accepted=(j.results||[]).filter(r=>r.ok).length;waiting=j.outsideState==='waiting';error=((j.results||[]).find(r=>!r.ok)||{}).error||''}catch(e){error=e.message}
+ const note=route.describeSend({localCount:1,outsideCount:plan.outside.length,signedIn:true,accepted,error,waiting});
+ item.result=note;item.body=text+'\n\n'+note;save();mailMsg.textContent=note;
+ if(document.getElementById('sent').style.display!=='none')renderSent()}
 function checkout(){if(!S.cart.length){orderMsg.textContent='Your cart is empty.';return}const tot=S.cart.reduce((a,c)=>a+c.p,0),id='CB'+Date.now().toString().slice(-6);
 const b='Order '+id+'\nName: '+(cname.value||'Guest')+'\nNotes: '+cnote.value+'\n\n'+S.cart.map(c=>c.d+' $'+c.p.toFixed(2)).join('\n')+'\n\nTotal: $'+tot.toFixed(2)+'\nPay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
 S.orders.push({id:id,body:b,t:new Date().toLocaleString()});S.cart=[];save();
 orderMsg.textContent='Order '+id+' is saved on this device. This page did not email the order. Pay by PayID with reference '+id+'.';
 show('shop')}
 show('inbox');
+window.addEventListener('load',function(){if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1'))navigator.serviceWorker.register('sw.js').catch(function(){})});
 </script></body></html>
