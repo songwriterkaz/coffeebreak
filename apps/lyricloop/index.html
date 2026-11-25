@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>LyricLoop: Play · Write · Win</title>
+<meta name="description" content="LyricLoop is a free Coffeebreak lyric game. Write lines, sing them with 12,000 vocal presets, and keep your streak on this device.">
+<link rel="icon" href="../cb-logo.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#home">
+    <img src="../cb-logo.png" alt="Coffeebreak cup logo" width="52" height="52">
+    <span>
+      <strong>LyricLoop</strong>
+      <small>Play · Write · Win</small>
+    </span>
+  </a>
+  <button type="button" id="btn-full" class="btn gold">Full screen</button>
+</header>
+<div id="stats" class="stats" aria-live="polite"></div>
+<div class="shell">
+  <nav class="side" aria-label="LyricLoop">
+    <a href="#home" data-view="home">Game Home</a>
+    <a href="#pad" data-view="pad">Lyric Pad</a>
+    <a href="#feed" data-view="feed">Feed</a>
+    <a href="#journal" data-view="journal">Journal</a>
+    <a href="#profile" data-view="profile">Profile</a>
+    <a href="#vocals" data-view="vocals">Vocals Library</a>
+    <a href="#downloads" data-view="downloads">Download Center</a>
+  </nav>
+  <main id="view" class="main" tabindex="-1"></main>
+</div>
+<footer class="legal">
+  <img src="../cb-logo.png" alt="Coffeebreak cup logo" width="60" height="60">
+  <p><b>Disclaimer:</b> Provided as is for personal and entertainment use. It is not professional, medical, legal or financial advice. Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell physical products they bought, but may not copy them or make their own versions. Subject to Australian Consumer Law. Coffeebreak and app names are trademarks of Karen O'Brien. Other brands belong to their owners. Coffeebreak is not affiliated with or endorsed by them.</p>
+  <p class="cta">
+    <a class="btn" href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">Subscribe</a>
+    <a class="btn gold big-stream" href="https://songwriterkaz.github.io/coffeebreak-stream/" target="_blank" rel="noopener">Stream my music</a>
+    <a class="btn gfm" href="https://www.gofundme.com/f/help-our-family-through-multiple-health-crises-advocacy-st" target="_blank" rel="noopener">Support Coffeebreak on GoFundMe</a>
+  </p>
+  <p>Pay by PayID (Teachers Mutual Bank): <b>darkokaz@gmx.com</b>. A tip does not unlock anything in LyricLoop. Coins in the shop are earned in the game.</p>
+  <p class="links">Supporting the future with <a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a> and <a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a> · <a href="https://www.youtube.com/@coffeebreakTVSERIES" target="_blank" rel="noopener">YouTube</a> · <a href="https://songwriterkaz.github.io/coffeebreak/">Coffeebreak hub</a></p>
+  <p class="tagline">LyricLoop 🎮 — Write it. Hear it. Share it. Play it.</p>
+</footer>
+<script src="../../cb-voice/voice.js"></script>
+<script src="../vocal-social/vocals.js"></script>
+<script src="../../wifiphone-jumbo/qrcode.min.js"></script>
+<script src="../studio-espresso/lame.min.js"></script>
+<script src="../studio-espresso/dsp.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
