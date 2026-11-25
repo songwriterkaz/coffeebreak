@@ -67,13 +67,14 @@ canvas{width:100%;height:260px;background:#12171c;border-radius:10px}
 <div class="panel"><h2>Your pitch</h2><textarea id="ptOut" rows="14"></textarea><p><button onclick="navigator.clipboard.writeText(ptOut.value)">Copy</button></p></div></div></section>
 <section class="tab" id="page"><div class="cols"><div class="panel"><h2>Artist page details</h2>
 <label>Artist name</label><input id="aN" value="Coffeebreak"><label>Short bio</label><textarea id="aB" rows="3">Songwriter and creator from Newcastle NSW, making country songs, stories, games and handmade goods.</textarea>
-<label>Links, one per line as Name | https://link</label><textarea id="aLinks" rows="6">Coffeebreak on itch.io | https://coffeebreaks.itch.io</textarea>
+<label>Links, one per line as Name | https://link</label><textarea id="aLinks" rows="6">Coffeebreak hub | https://songwriterkaz.github.io/coffeebreak/
+Billionaire on Apple Music | https://music.apple.com/au/album/billionaire/1542958072?i=1542958079</textarea>
 <label>Support line</label><input id="aPay" value="Support my music: Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com">
 <p><button onclick="drawPage()">Update preview</button> <button class="alt" onclick="dlPage()">Download page as HTML</button></p></div>
 <div class="panel"><h2>Preview</h2><div class="prev" id="prev"></div></div></div></section>
 </main>
 <footer class="cbfoot">
-<p><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">More from Coffeebreak at coffeebreaks.itch.io</a></p>
+<p><a href="../../">Coffeebreak hub</a> · <a href="https://music.apple.com/au/album/billionaire/1542958072?i=1542958079">Billionaire on Apple Music</a></p>
 <p>Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell the physical products they bought, but may not copy them or make their own versions. Coffeebreak claims no ownership of third-party brands or products named; those trademarks belong to their owners and are used only to describe items.</p>
 </footer>
 <script>
@@ -95,7 +96,7 @@ function chart(){const c=$('chart'),x=c.getContext('2d');x.clearRect(0,0,c.width
 const m=Math.max(...w.map(a=>a.p),1),W=c.width-60,H=c.height-50;x.strokeStyle='#2b343d';for(let i=0;i<=4;i++){const y=20+H*i/4;x.beginPath();x.moveTo(40,y);x.lineTo(40+W,y);x.stroke();x.fillText(Math.round(m*(1-i/4)),2,y+4)}
 x.strokeStyle='#3ddc97';x.lineWidth=3;x.beginPath();w.forEach((a,i)=>{const px=40+(w.length<2?W/2:W*i/(w.length-1)),py=20+H*(1-a.p/m);i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke();
 x.fillStyle='#3ddc97';w.forEach((a,i)=>{const px=40+(w.length<2?W/2:W*i/(w.length-1)),py=20+H*(1-a.p/m);x.beginPath();x.arc(px,py,4,0,7);x.fill()})}
-function pitch(){const v=i=>$(i).value.trim();$('ptOut').value=`Hello,\n\nI would love you to hear my song "${v('ptS')}", a ${v('ptM')} ${v('ptG')} track.\n\n${v('ptA')}\n\n${v('ptLike')?'For fans of '+v('ptLike')+'.\n\n':''}I think it suits ${v('ptFor')||'your listeners'}.\n\nAbout me: Coffeebreak is a songwriter and creator from Newcastle NSW, Australia, making country songs, stories, games and handmade goods.\n\nMore of my work: https://coffeebreaks.itch.io\n\nThank you for listening,\nCoffeebreak`}
+function pitch(){const v=i=>$(i).value.trim();$('ptOut').value=`Hello,\n\nI would love you to hear my song "${v('ptS')}", a ${v('ptM')} ${v('ptG')} track.\n\n${v('ptA')}\n\n${v('ptLike')?'For fans of '+v('ptLike')+'.\n\n':''}I think it suits ${v('ptFor')||'your listeners'}.\n\nAbout me: Coffeebreak is a songwriter and creator from Newcastle NSW, Australia, making country songs, stories, games and handmade goods.\n\nMore of my work: https://songwriterkaz.github.io/coffeebreak/\n\nThank you for listening,\nCoffeebreak`}
 function pageHTML(inner){return inner}
 function drawPage(){const links=$('aLinks').value.split('\n').map(l=>l.split('|').map(s=>s.trim())).filter(a=>a[1]);$('prev').innerHTML=`<img src="img/logo.webp" alt="logo"><h2>${esc($('aN').value)}</h2><p>${esc($('aB').value)}</p>${links.map(a=>`<a href="${esc(a[1])}" target="_blank" rel="noopener">${esc(a[0])}</a>`).join('')}<p style="font-size:.9rem">${esc($('aPay').value)}</p>`}
 function dlPage(){drawPage();const html=`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc($('aN').value)}</title><style>body{font-family:system-ui;background:#f4f4f4;margin:0;padding:30px;text-align:center}img{width:96px;height:96px;border-radius:50%}a{display:block;margin:10px auto;max-width:360px;padding:12px;border-radius:999px;background:#111;color:#fff;text-decoration:none}</style></head><body>${$('prev').innerHTML.replace('src="img/logo.webp"','src="logo.webp"')}</body></html>`;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='artist-page.html';a.click()}

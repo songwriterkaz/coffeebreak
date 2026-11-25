@@ -26,12 +26,15 @@ function $(i){return document.getElementById(i)}
 var A=new Audio();A.preload='auto';['timeupdate','seeked','play','loadedmetadata'].forEach(function(ev){A.addEventListener(ev,function(){try{draw()}catch(e){}})});A.crossOrigin='anonymous';var S=[],cur=-1,lines=[],ac,micStream,an,rec,chunks=[],mixDest,songNode,raf;
 function fmt(t){t=Math.max(0,t|0);return (t/60|0)+':'+('0'+t%60).slice(-2)}
 function msg(t){$('cbmsMsg').textContent=t||''}
-function list(){var q=$('cbmsQ').value.toLowerCase(),h='';S.forEach(function(s,i){if(q&&s.title.toLowerCase().indexOf(q)<0)return;var lk=LIMIT&&i>=LIMIT;h+='<div class="cbmsI'+(i==cur?' cur':'')+(lk?' lk':'')+'" data-i="'+i+'">'+(lk?'🔒 ':'🎵 ')+s.title+'<small>'+fmt(s.dur)+'</small></div>'});$('cbmsItems').innerHTML=h||'<div style="opacity:.7;padding:8px">No songs match.</div>'}
-function load(i,play){if(i<0||i>=S.length)return;if(LIMIT&&i>=LIMIT){msg('This song is in the full version. Buy for $5. '+PAY+'.');return}
-cur=i;var s=S[i];lines=s.lines||[];$('cbmsT').textContent=s.title;$('cbmsSync').textContent=s.sync=='instrumental'?'Instrumental - sing along your own way':(s.sync=='heard'?'Lyrics written down by ear from the recording':'Lyrics timed to the vocals');
-var h='';lines.forEach(function(l,j){h+='<div class="cbmsL" id="cbmsL'+j+'">'+esc(l.x)+'</div>'});$('cbmsLyIn').innerHTML=h||'<div class="cbmsL now" style="color:#fff">♪ Instrumental ♪</div>';$('cbmsLyIn').style.top='40%';
-lastN=-2;if(!s.file){A.removeAttribute('src');msg('This recording is not in the library.');list();return}
-A.src=BASE+s.file;A.load();msg('Loading '+s.title);list();if(play)A.play().then(function(){msg('')}).catch(function(){msg('Press Play to start.')})}
+function list(){var q=$('cbmsQ').value.toLowerCase(),h='';S.forEach(function(s,i){if(q&&s.title.toLowerCase().indexOf(q)<0)return;var lk=LIMIT&&i>=LIMIT&&!s.custom;h+='<div class="cbmsI'+(i==cur?' cur':'')+(lk?' lk':'')+'" data-i="'+i+'">'+(s.custom?'📁 ':'')+(lk?'🔒 ':'🎵 ')+s.title+'<small>'+fmt(s.dur)+'</small></div>'});$('cbmsItems').innerHTML=h||'<div style="opacity:.7;padding:8px">No songs match.</div>'}
+function load(i,play){if(i<0||i>=S.length)return;var s=S[i];if(LIMIT&&i>=LIMIT&&!s.custom){msg('This song is in the full version. Buy for $5. '+PAY+'.');return}
+cur=i;lines=s.lines||[];$('cbmsT').textContent=s.title;$('cbmsSync').textContent=s.sync=='tap'?'Tap Mark line while it plays to time each line':(s.sync=='instrumental'?'Instrumental - sing along your own way':(s.sync=='heard'?'Lyrics written down by ear from the recording':'Lyrics timed to the vocals'));
+var h='';lines.forEach(function(l,j){h+='<div class="cbmsL" id="cbmsL'+j+'">'+esc(l.x)+'</div>'});$('cbmsLyIn').innerHTML=h||'<div class="cbmsL now" style="color:#fff">Instrumental</div>';$('cbmsLyIn').style.top='40%';
+lastN=-2;if(s._url){try{URL.revokeObjectURL(s._url)}catch(e){}}
+if(s.blob){s._url=URL.createObjectURL(s.blob);A.src=s._url}
+else if(!s.file){A.removeAttribute('src');msg('This recording is not in the library.');list();return}
+else A.src=BASE+s.file;
+A.load();msg('Loading '+s.title);list();if(play)A.play().then(function(){msg('')}).catch(function(){msg('Press Play to start.')})}
 function esc(t){return String(t).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
 var lastN=-2;function tick(){draw();raf=requestAnimationFrame(tick)}
 function draw(){var t=A.currentTime||0,d=A.duration||S[cur]&&S[cur].dur||0;$('cbmsBar').firstChild.style.width=(d?t/d*100:0)+'%';$('cbmsTime').textContent=fmt(t)+' / '+fmt(d);
@@ -61,7 +64,24 @@ $('cbmsVol').oninput=function(){A.volume=+this.value};$('cbmsMic').onclick=mic;$
 $('cbmsBar').onclick=function(e){var r=this.getBoundingClientRect();if(A.duration)A.currentTime=(e.clientX-r.left)/r.width*A.duration};
 A.onplay=function(){$('cbmsPlay').textContent='Pause'};A.onpause=function(){$('cbmsPlay').textContent='Play'};A.onended=function(){$('cbmsNext').onclick()};
 A.onerror=function(){msg('This song could not load. Try another one.')};A.oncanplay=function(){if($('cbmsMsg').textContent.indexOf('Loading')==0)msg('')};
-fetch(BASE+'songs.json').then(function(r){return r.json()}).then(function(j){S=j.songs||j;list();if(C.autoOpen!==false)open()}).catch(function(){msg('Song list could not load.')});tick()}
+var up=document.createElement('div');up.style.cssText='padding:6px;font-size:13px';
+up.innerHTML='<b>Your song</b><input id="cbmsFile" type="file" accept="audio/*" style="width:100%;margin:4px 0"><input id="cbmsTitle" placeholder="Song title" style="width:100%;padding:6px;border:0;border-radius:8px;margin-bottom:4px"><textarea id="cbmsWords" placeholder="One line of lyrics per line" style="width:100%;height:70px;border:0;border-radius:8px"></textarea><button type="button" id="cbmsAdd" class="g">Add this song</button> <button type="button" id="cbmsMark" class="g">Mark line</button>';
+$('cbmsList').insertBefore(up,$('cbmsQ'));
+var markAt=0;
+function kdb(){return new Promise(function(res,rej){var r=indexedDB.open('cb-karaoke-mine',1);r.onupgradeneeded=function(){r.result.createObjectStore('songs',{keyPath:'id'})};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
+function saveMine(song){return kdb().then(function(db){return new Promise(function(res,rej){var t=db.transaction('songs','readwrite');t.objectStore('songs').put(song);t.oncomplete=function(){res()};t.onerror=function(){rej(t.error)}})})}
+function loadMine(){return kdb().then(function(db){return new Promise(function(res,rej){var q=db.transaction('songs').objectStore('songs').getAll();q.onsuccess=function(){res(q.result||[])};q.onerror=function(){rej(q.error)}})})}
+$('cbmsAdd').onclick=function(){var f=$('cbmsFile').files[0];var title=($('cbmsTitle').value||(f&&f.name)||'My song').replace(/\.[a-z0-9]+$/i,'');var words=$('cbmsWords').value.split(/\n/).map(function(x){return x.trim()}).filter(Boolean);
+ if(!f){msg('Choose an audio file first.');return}
+ var song={id:'up-'+Date.now(),title:title,custom:1,sync:'tap',dur:0,lines:words.map(function(x){return {t:0,x:x}}),blob:f};
+ S.unshift(song);markAt=0;load(0,false);saveMine({id:song.id,title:song.title,lines:song.lines,blob:f}).then(function(){msg('Saved on this device. Press Play, then Mark line as each line starts.')}).catch(function(){msg('The song is loaded for this visit. This browser did not keep the file.')})}
+$('cbmsMark').onclick=function(){var s=S[cur];if(!s||!s.custom){msg('Mark line is for a song you added.');return}
+ if(!s.lines.length){msg('Add the words first, one line each.');return}
+ if(markAt>=s.lines.length)markAt=0;
+ s.lines[markAt].t=A.currentTime||0;if(markAt)s.lines[markAt-1].e=s.lines[markAt].t;
+ markAt++;msg('Line '+markAt+' of '+s.lines.length+' timed.');
+ saveMine({id:s.id,title:s.title,lines:s.lines,blob:s.blob}).catch(function(){})}
+fetch(BASE+'songs.json').then(function(r){return r.json()}).then(function(j){return loadMine().catch(function(){return []}).then(function(mine){S=(j.songs||j).slice();mine.forEach(function(s){s.custom=1;s.sync='tap';S.unshift(s)});list();if(C.autoOpen!==false)open()})}).catch(function(){msg('Song list could not load.')});tick()}
 window.CBMySongs={open:open,load:load,audio:A,songs:function(){return S},current:function(){return cur}};
 if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();

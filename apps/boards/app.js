@@ -5,7 +5,7 @@ const KEY='coffeebreak.boards.v1';
 const STATUSES=[{k:'Not started',c:'#8a8f98'},{k:'Working on it',c:'#f2a33a'},{k:'Stuck',c:'#e2445c'},{k:'Review',c:'#a25ddc'},{k:'Done',c:'#00c875'}];
 const PRIOS=[{k:'Low',c:'#579bfc'},{k:'Medium',c:'#5559df'},{k:'High',c:'#f08c00'},{k:'Critical',c:'#c1121f'}];
 const GCOL=['#579bfc','#a25ddc','#00a86b','#e8890c','#e2445c','#0086c0','#d6457a','#7a8a99'];
-const VIEWS=[['table','Table'],['kanban','Kanban'],['calendar','Calendar'],['timeline','Timeline'],['dashboard','Dashboard']];
+const VIEWS=[['table','Table'],['kanban','Kanban'],['calendar','Calendar'],['timeline','Timeline'],['dashboard','Dashboard'],['news','Newsletter']];
 const RULES=[
  ['doneProgress','When status becomes Done, set progress to 100%',true],
  ['progressDone','When progress reaches 100%, set status to Done',true],
@@ -205,7 +205,7 @@ function renderFilters(){
 function countLbl(){const c=$('#fcount');if(!c)return;const b=board();c.textContent=filtersActive()?`${visibleItems(b).length} of ${b.items.length} items shown`:`${b.items.length} items`}
 function renderView(){
   const b=board(),v=$('#view');
-  const fn={table:viewTable,kanban:viewKanban,calendar:viewCalendar,timeline:viewTimeline,dashboard:viewDash}[b.view]||viewTable;
+  const fn={table:viewTable,kanban:viewKanban,calendar:viewCalendar,timeline:viewTimeline,dashboard:viewDash,news:viewNews}[b.view]||viewTable;
   fill(v,fn(b));
 }
 
@@ -353,7 +353,9 @@ function viewCalendar(b){
   const wrap=el('div');
   const go=n=>{UI.cal=new Date(m.getFullYear(),m.getMonth()+n,1);renderView()};
   ap(wrap,el('div',{class:'calbar'},el('button',{class:'btn','aria-label':'Previous month',onclick:()=>go(-1)},'‹'),el('h3',null,m.toLocaleDateString(undefined,{month:'long',year:'numeric'})),
-    el('button',{class:'btn','aria-label':'Next month',onclick:()=>go(1)},'›'),el('button',{class:'btn',onclick:()=>{UI.cal=null;renderView()}},'Today'),el('span',{class:'muted'},'Drag an item to another day to change its due date')));
+    el('button',{class:'btn','aria-label':'Next month',onclick:()=>go(1)},'›'),el('button',{class:'btn',onclick:()=>{UI.cal=null;renderView()}},'Today'),
+    el('button',{class:'btn',onclick:()=>{const due=items.filter(it=>it.due===iso(today())&&it.status!=='Done');const line=due.length?due.map(it=>it.name).join('. '):'Nothing is due today.';try{var u=new SpeechSynthesisUtterance('Today. '+line);u.lang='en-AU';speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}toast(line)}},'Read today'),
+    el('span',{class:'muted'},'Drag an item to another day to change its due date')));
   const cal=el('div',{class:'cal'});
   ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(d=>ap(cal,el('div',{class:'wd'},d)));
   const start=addD(m,-((m.getDay()+6)%7)),ti=iso(today());
@@ -366,6 +368,23 @@ function viewCalendar(b){
   ap(wrap,cal);
   const nod=items.filter(i=>!i.due);
   if(nod.length)ap(wrap,el('p',{class:'note'},`No due date (${nod.length}): `,nod.slice(0,12).map((it,i)=>[i?', ':'',el('a',{href:'#',onclick:e=>{e.preventDefault();openItem(it.id)}},it.name)])));
+  return wrap;
+}
+
+function viewNews(b){
+  const items=visibleItems(b);
+  const wrap=el('div',{class:'panel',style:'max-width:720px'});
+  ap(wrap,el('h3',null,(b.name||'Board')+' notes'));
+  ap(wrap,el('p',{class:'muted'},'A newsletter made from the items on this board. It stays on this device.'));
+  items.forEach(it=>{
+    const box=el('div',{style:'background:'+(it.sticky||'#fff4b8')+';border-radius:12px;padding:10px;margin:8px 0'});
+    ap(box,el('b',null,it.name));
+    if(it.due)ap(box,el('div',{class:'muted'},'Due '+it.due));
+    if(it.stickyText)ap(box,el('p',null,it.stickyText));
+    else if(it.notes)ap(box,el('p',null,it.notes));
+    ap(wrap,box);
+  });
+  if(!items.length)ap(wrap,el('p',null,'No items to print yet.'));
   return wrap;
 }
 
@@ -456,6 +475,8 @@ function renderDrawer(){
       fld('Tags (comma separated)',el('input',{value:it.tags.join(', '),onchange:e=>commit(()=>{it.tags=tagsParse(e.target.value)})}))),
     isOverdue(it)?el('p',{class:'list red',style:'margin:0'},`Overdue by ${diffDays(parse(it.due),today())} days`):null,
     el('h4',null,'Notes'),el('textarea',{value:it.notes,placeholder:'Links, ideas, details','aria-label':'Notes',onchange:e=>commit(()=>{it.notes=e.target.value},true)}),
+    el('h4',null,'Sticky note'),el('textarea',{value:it.stickyText||'',placeholder:'A short note for the newsletter','aria-label':'Sticky note',onchange:e=>commit(()=>{it.stickyText=e.target.value},true)}),
+    el('div',{class:'row'},['#fff4b8','#ffd6ea','#d9f5d6','#d6e8ff'].map(c=>el('button',{class:'btn',style:'background:'+c,onclick:()=>commit(()=>{it.sticky=c})},'Colour'))),
     el('h4',null,`Subitems (${it.subitems.filter(s=>s.done).length}/${it.subitems.length})`),subRows(it),
     el('h4',null,'Updates'),updForm,it.updates.map(u=>el('div',{class:'upd'},el('small',null,u.t),u.text)),
     el('div',{class:'dactions'},el('button',{class:'btn',onclick:()=>moveItem(it,-1)},'Move up'),el('button',{class:'btn',onclick:()=>moveItem(it,1)},'Move down'),
@@ -502,7 +523,7 @@ function openHelp(){closeSide();
     el('li',null,'Search and filters work in every view.'),
     el('li',null,'Shortcuts: Ctrl+Z undo, Ctrl+Y redo, / search, N new item, Esc close.'),
     el('li',null,'Everything saves in this browser and works offline. Export a JSON backup now and then, and import it on another device.')),
-    el('p',{class:'muted'},'Made by Karen at Coffeebreak. More apps at ',el('a',{href:'https://coffeebreaks.itch.io',target:'_blank',rel:'noopener'},'coffeebreaks.itch.io'),'.')]);
+    el('p',{class:'muted'},'More apps are on the ',el('a',{href:'../../'},'Coffeebreak hub'),'.')]);
 }
 function openSide(){$('#side').classList.add('open');$('#scrim').classList.add('open')}
 function closeSide(){$('#side').classList.remove('open');$('#scrim').classList.remove('open')}

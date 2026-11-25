@@ -22,11 +22,14 @@ function drawCar(x,col,o,ox,oy,s){x.save();x.translate(ox,oy);x.scale(s,s);const
  [-190,200].forEach(wx=>{const w=o.wh;x.fillStyle='#1a1a1a';x.beginPath();x.arc(wx,60,48,0,7);x.fill();if(w=='white'){x.fillStyle='#fff';x.beginPath();x.arc(wx,60,36,0,7);x.fill();x.fillStyle='#1a1a1a';x.beginPath();x.arc(wx,60,26,0,7);x.fill();}
   const rim={gold:'#e8b730',chrome:'#d8dde3',black:'#222',white:'#ccc'}[w];x.fillStyle=rim;x.beginPath();x.arc(wx,60,w=='white'?22:32,0,7);x.fill();x.strokeStyle=w=='black'?'#ff4fa3':'#fff';x.lineWidth=3;for(let a=0;a<6;a++){x.beginPath();x.moveTo(wx,60);x.lineTo(wx+Math.cos(a)*30,60+Math.sin(a)*30);x.stroke();}});
  x.fillStyle='#fff';x.fillRect(250,30,70,24);x.strokeStyle='#e0117a';x.lineWidth=2;x.strokeRect(250,30,70,24);x.fillStyle='#e0117a';x.font='bold 15px sans-serif';x.textAlign='center';x.fillText((o.plate||'').toUpperCase(),285,48);
+ if(o.roof&&o.roof!=='body'){var rc={black:'#222',glass:'rgba(180,220,255,.55)',white:'#f4f4f4'}[o.roof]||col;x.fillStyle=rc;x.beginPath();x.moveTo(ev?-40:-20,-8);x.lineTo(ev?70:90,-48);x.lineTo(ev?150:170,-8);x.closePath();x.fill()}
+ if(o.spoiler==='lip'){x.fillStyle='#222';x.fillRect(ev?150:180,-18,70,8)}
+ if(o.spoiler==='wing'){x.fillStyle='#222';x.fillRect(ev?140:170,-36,90,8);x.fillRect(ev?155:185,-36,6,28);x.fillRect(ev?210:240,-36,6,28)}
  if(o.bee&&bee.complete)x.drawImage(bee,-110,-10,60,60);if(logo.complete){x.save();x.beginPath();x.arc(60,15,24,0,7);x.clip();x.drawImage(logo,36,-9,48,48);x.restore();}x.restore();}
 function cfg(){const c=$('cfg'),x=c.getContext('2d');const g=x.createLinearGradient(0,0,0,420);g.addColorStop(0,'#fff0f7');g.addColorStop(1,'#ffc0dc');x.fillStyle=g;x.fillRect(0,0,900,420);x.fillStyle='#ff9ac8';x.fillRect(0,350,900,70);
- drawCar(x,$('cCol').value,{body:$('cBody').value,wh:$('cWh').value,plate:$('cPlate').value,bee:$('cBee').checked},430,250,1);
+ drawCar(x,$('cCol').value,{body:$('cBody').value,wh:$('cWh').value,plate:$('cPlate').value,bee:$('cBee').checked,roof:$('cRoof').value,spoiler:$('cSpoiler').value},430,250,1);
  if($('cGirl').checked&&girl.complete)x.drawImage(girl,770,180,110,110*girl.height/girl.width);x.fillStyle='#e0117a';x.font='bold 26px Georgia';x.textAlign='left';x.fillText('My Coffeebreak Car',20,40);x.font='italic 13px Georgia';x.fillText('Coffeebreak Motors',20,62);}
-['cBody','cCol','cWh','cPlate','cBee','cGirl'].forEach(i=>$(i).oninput=cfg);[logo,bee,girl].forEach(i=>i.onload=cfg);cfg();
+['cBody','cCol','cWh','cPlate','cBee','cGirl','cRoof','cSpoiler'].forEach(i=>$(i).oninput=cfg);[logo,bee,girl].forEach(i=>i.onload=cfg);cfg();
 $('cDl').onclick=()=>{const a=document.createElement('a');a.download='my-coffeebreak-car.png';a.href=$('cfg').toDataURL();a.click();};
 // order
 let cart=[];const all=[...SHOP.flash,...SHOP.wraps,...SHOP.legs];document.addEventListener('click',e=>{const id=e.target.dataset&&e.target.dataset.add;if(id){cart.push(all.find(i=>i.id==id));showCart();}});

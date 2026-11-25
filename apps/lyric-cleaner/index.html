@@ -26,6 +26,14 @@ small,footer{color:#6b5545}footer{padding:16px;text-align:center;font-size:13px}
 <button id="scan">Clean check</button><button id="all" class="alt">Apply all rewrites</button></div>
 <p id="sum"></p></div>
 <div class="card"><h3>2. Line by line</h3><div id="out"><small>Press Clean check to scan.</small></div></div>
+<div class="card"><h3>Video links and a translation you type</h3>
+<p><small>This page does not call a translation service. Paste a video link, keep the lyrics, and type your own translation. It is saved on this device.</small></p>
+<div class="row"><label>Video link <input id="vurl" placeholder="https://" style="min-width:240px"></label>
+<label>Title <input id="vtitle" placeholder="Song title"></label></div>
+<label>Translation<textarea id="vtr" placeholder="Type the translation here"></textarea></label>
+<div class="row"><button id="vsave" type="button">Save link and lyrics</button></div>
+<div id="vlist"></div>
+</div>
 <div class="card"><h3>3. Before and after</h3><div class="diff"><div id="before"></div><div id="after"></div></div>
 <div class="row"><button id="copy">Copy clean lyrics</button><button id="save" class="alt">Export .txt</button></div></div>
 <div class="card"><details><summary><b>Edit word lists</b> (add your own words)</summary>
@@ -59,6 +67,12 @@ $('wlsave').onclick=()=>{try{W=JSON.parse($('wl').value);localStorage.lcW=JSON.s
 $('wlreset').onclick=()=>{localStorage.removeItem('lcW');W=DEF;$('wl').value=JSON.stringify(W,null,1)};
 const G={love:['Your coffee smile at the break of day','Grown and steady, darling, here we stay','I would cross the Hunter just to hold your hand','Two old hearts still making plans'],heartbreak:['The cup went cold when you walked out','I sing it slow so I can work it out','The kitchen light still hums your name','Some Sundays never feel the same'],party:['Turn it up, the whole town is here','Clink your cup and give a cheer','Dance like the rent is paid tonight','Newcastle sparkling, burning bright'],country:['Red dust road and a radio tune','Singing to the dog and the silver moon','Boots by the door and the kettle on','Home is where my heart belongs']};
 $('gen').onclick=()=>{const t=$('topic').value.trim()||'Sunday coffee';const L=G[$('mood').value];$('lyrics').value='[Verse]\n'+t+', you got me feeling fine\n'+L.join('\n')+'\n\n[Chorus]\nOh '+t+', '+L[0].toLowerCase()+'\n'+L[1]+'\n'+L[3];run()};
+var VKEY='cb-lyric-videos';
+function vload(){try{return JSON.parse(localStorage.getItem(VKEY)||'[]')||[]}catch(e){return []}}
+function vdraw(){var rows=vload();$('vlist').innerHTML=rows.map(function(r,i){return '<div class="ln"><b>'+h(r.title||'Untitled')+'</b><br><a href="'+h(r.url)+'" target="_blank" rel="noopener">'+h(r.url)+'</a><br><small>'+h(r.lyrics||'')+'</small>'+(r.tr?'<br><small>Translation: '+h(r.tr)+'</small>':'')+' <button type="button" data-v="'+i+'">Load</button> <button type="button" data-x="'+i+'">Remove</button></div>'}).join('')||'<small>No saved video links yet.</small>'}
+$('vsave').onclick=function(){var url=$('vurl').value.trim();if(!/^https?:\/\//.test(url)){$('vurl').focus();return}var rows=vload();rows.unshift({url:url,title:$('vtitle').value.trim(),lyrics:$('lyrics').value,tr:$('vtr').value});localStorage.setItem(VKEY,JSON.stringify(rows.slice(0,40)));vdraw()};
+$('vlist').onclick=function(e){var i=e.target.dataset.v,x=e.target.dataset.x,rows=vload();if(i!=null){var r=rows[+i];$('lyrics').value=r.lyrics||'';$('vurl').value=r.url;$('vtitle').value=r.title||'';$('vtr').value=r.tr||'';run()}if(x!=null){rows.splice(+x,1);localStorage.setItem(VKEY,JSON.stringify(rows));vdraw()}};
+vdraw();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script><div id="cb-hubbar" style="max-width:900px;margin:24px auto;padding:14px;border-radius:14px;background:#fff0f6;color:#4a1030;font:14px system-ui,sans-serif">
 <p><a href="../../" style="color:#d6336c">&larr; Back to the Coffeebreak hub</a></p>
