@@ -878,6 +878,35 @@
     var btn = $('btn-generate'); btn.disabled = true; btn.textContent = 'Singing.';
     status('Getting the singer ready.');
     try {
+      if ($('studio-on') && $('studio-on').checked && window.CBStudioQuality) {
+        try {
+          var made = await window.CBStudioQuality.sing(lyrics, [$('genre').value, $('mood').value, 'sung vocal'].filter(Boolean).join(', '), status);
+          var audioRes = await fetch(made.url);
+          if (!audioRes.ok) throw new Error('The studio file could not be downloaded.');
+          var audioBytes = await audioRes.arrayBuffer();
+          var studioCtx = window.AC ? window.AC() : new (window.AudioContext || window.webkitAudioContext)();
+          var studioBuf = await studioCtx.decodeAudioData(audioBytes.slice(0));
+          var studioBlob = new Blob([audioBytes], { type: audioRes.headers.get('content-type') || 'audio/mpeg' });
+          if (state.draft && state.draft.url) URL.revokeObjectURL(state.draft.url);
+          state.draft = {
+            songId: 'studio', title: ($('title').value || '').trim() || 'Studio song', lyrics: lyrics,
+            summary: 'Studio quality · ' + (made.backend || 'ACE-Step'), genre: $('genre').value, mood: $('mood').value,
+            bpm: $('bpm').value || '', duration: studioBuf.duration, peaks: peaksOf(studioBuf, 64),
+            buffer: studioBuf, wav: studioBlob, url: URL.createObjectURL(studioBlob), vocal: { model: made.backend || 'ACE-Step' }
+          };
+          var studioDraft = $('draft'); studioDraft.hidden = false;
+          $('draft-art').style.background = artBackground('studio');
+          $('draft-meta').textContent = state.draft.title + ' · ' + state.draft.summary;
+          var studioItem = { card: $('draft-art'), canvas: $('draft-wave'), peaks: state.draft.peaks, button: $('draft-play'), src: state.draft.url };
+          state.draftItem = studioItem; $('draft-play').innerHTML = ICON.play;
+          drawWave(studioItem.canvas, studioItem.peaks, 0);
+          status('Studio quality is ready from ' + (made.backend || 'Coffeebreak Studio') + '.');
+          btn.disabled = false; btn.textContent = 'Create song';
+          return;
+        } catch (studioErr) {
+          status('Studio quality did not answer (' + (studioErr.message || 'busy') + '). Singing with the in-browser voice.');
+        }
+      }
       if (window.AC) try { window.AC(); } catch (e) {}
       var picked = window.CBVocals && window.CBVocals.getSelected && window.CBVocals.getSelected();
       if (picked) {

@@ -254,6 +254,7 @@
   }
 
   function singAceStep(lyrics, opts) {
+    // Older name only. This does not call ACE-Step. The verified client is apps/coffeebreak-studio/studio-core.js.
     return singVoice(lyrics, opts);
   }
 

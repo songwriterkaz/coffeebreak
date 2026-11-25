@@ -85,7 +85,8 @@
       <button type="button" id="btn-generate" class="btn big">Create song</button>
     </div>
     <p id="vocal-picked" class="hint small"></p>
-    <p class="hint small">The vocal is sung in your browser. Each word is voiced by the free, open Piper voice and tuned to the melody, with drums, bass and keys from the Coffeebreak studio. The first song on a device downloads the voice once (about 60 MB). No paid service is used, and it will not sound as finished as a studio singer.</p>
+    <label class="chal-row"><input type="checkbox" id="studio-on"> Studio quality. This asks the same free ACE-Step path as Coffeebreak Studio. If that engine does not answer, the song is sung in this browser instead.</label>
+    <p class="hint small">The in-browser vocal is the Coffeebreak voice, shaped by the preset you picked: smoother pitch glides, breath and a short room. The Piper neural voice is tried first when it is already on this page. Studio quality is optional and is not a guaranteed studio singer. Nothing here is a paid unlock.</p>
     <div id="draft" class="draft" hidden>
       <div class="draft-art" id="draft-art">
         <button type="button" class="play-big" id="draft-play" aria-label="Play your song"></button>
@@ -242,6 +243,7 @@
 <script src="../studio-espresso/create.js"></script>
 <script>window.CB_VS_API="https://cb-vocal-social.coffeebreaks.workers.dev";</script>
 <script src="walls.js"></script>
+<script src="studio-option.js"></script>
 <script src="app.js"></script>
 <script type="application/json" id="cb-real-shop-data">{"title": "Real things for singers", "logo": "cb-logo.png", "note": "Coffeebreak music, merch and gear for singing. Each card opens in a new tab, so your song stays here.", "items": [{"name": "Billionaire by Coffeebreak", "price": "Listen on Apple Music", "store": "Apple Music", "url": "https://music.apple.com/au/album/billionaire/1542958072?i=1542958079", "icon": "🎵", "bg": "linear-gradient(135deg,#ffd6e8,#ffb3d1)", "cta": "Listen on Apple Music"}, {"name": "Coffeebreak Records: Everything Bundle", "price": "A$20", "store": "Coffeebreak Records", "checkout": "PayID", "url": "../../records-store/", "icon": "💿", "bg": "linear-gradient(135deg,#e8e0ff,#cbb8ff)"}, {"name": "Coffeebreak album", "price": "A$10", "store": "Coffeebreak Records", "checkout": "PayID", "url": "../../records-store/", "icon": "🎶", "bg": "linear-gradient(135deg,#e0f0ff,#b8d8ff)"}, {"name": "Noise reduction headphones", "price": "US$51.95", "store": "Coffeebreak Sensory Shop", "checkout": "PayID cart", "url": "../../stores/sensory-shop/#item-quiet-headphones", "icon": "🎧", "bg": "linear-gradient(135deg,#ffe0f0,#e6dcff)"}, {"name": "Coffeebreak Tee (Black), logo design", "price": "A$40.05", "store": "Coffeebreak Merch", "checkout": "PayID cart", "url": "../../apps/merch/", "icon": "👕", "bg": "linear-gradient(135deg,#eee,#cfcfcf)"}, {"name": "Coffeebreak Hoodie (Black), logo design", "price": "A$69.05", "store": "Coffeebreak Merch", "checkout": "PayID cart", "url": "../../apps/merch/", "icon": "🧥", "bg": "linear-gradient(135deg,#eee,#cfcfcf)"}, {"name": "Coffeebreak Mug 11oz, logo design", "price": "A$32.05", "store": "Coffeebreak Merch", "checkout": "PayID cart", "url": "../../apps/merch/", "icon": "☕", "bg": "linear-gradient(135deg,#fff3e0,#f5d6b0)"}], "foot": "Prices as shown in each store on 19 Nov 2026. Store checkout is PayID. Vocal Social stays free and the real items are optional."}</script>
 <script src="../../pages/cb-real-shop.js" defer></script>

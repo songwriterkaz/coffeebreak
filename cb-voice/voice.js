@@ -319,8 +319,8 @@
 
   const NAT = {
     IY:0.16,IH:0.12,EY:0.16,EH:0.13,AE:0.14,AA:0.15,AO:0.15,OW:0.16,UH:0.12,UW:0.16,AH:0.12,ER:0.14,AY:0.18,AW:0.18,OY:0.18,
-    S:0.085,SH:0.09,F:0.07,TH:0.07,HH:0.065,Z:0.08,ZH:0.08,V:0.07,DH:0.065,
-    P:0.075,T:0.07,K:0.08,B:0.06,D:0.06,G:0.07,CH:0.09,JH:0.08,
+    S:0.09,SH:0.095,F:0.075,TH:0.075,HH:0.08,Z:0.085,ZH:0.085,V:0.075,DH:0.07,
+    P:0.09,T:0.085,K:0.095,B:0.075,D:0.075,G:0.085,CH:0.1,JH:0.09,
     M:0.08,N:0.085,NG:0.09,L:0.085,R:0.07,W:0.055,Y:0.05
   };
 
@@ -565,8 +565,8 @@
   function vocalChain(buf, sr) {
     const hp = biquad('highpass', 90, 0.7, 0, sr);
     const scoop = biquad('peaking', 380, 0.9, -2.0, sr);
-    const presence = biquad('peaking', 3200, 1.0, 3.2, sr);
-    const air = biquad('highshelf', 8500, 0.7, 2.0, sr);
+    const presence = biquad('peaking', 2800, 0.8, 1.35, sr);
+    const air = biquad('highshelf', 9000, 0.7, 1.15, sr);
     const essF = 2 * Math.PI * 6500 / sr;
     const essA = Math.exp(-essF);
     let lp = 0, env = 0, cenv = 0;
@@ -690,7 +690,7 @@
 
     function targets(seg, u, prevF, nextF) {
       let f = formantsOf(seg.ph, u);
-      const trans = 0.02 / Math.max(0.04, seg.d);
+      const trans = Math.min(0.45, 0.055 / Math.max(0.05, seg.d));
       if (prevF && u < trans) {
         const k = smooth(u / trans);
         f = [lerp(prevF[0], f[0], k), lerp(prevF[1], f[1], k), lerp(prevF[2], f[2], k), lerp(prevF[3], f[3], k), lerp(prevF[4] || 4000, f[4] || 4000, k)];
@@ -709,14 +709,14 @@
       const targetHz = midiHz(clamp(seg.p, 48, 84));
       const fromHz = prevHz > 0 ? prevHz : targetHz * Math.pow(2, typ === 'vowel' ? -0.06 : -0.02);
       const leap = Math.abs(Math.log2(targetHz / Math.max(70, fromHz)));
-      const glideT = clamp(0.05 + leap * 0.08, 0.05, 0.18);
+      const glideT = clamp(0.09 + leap * 0.14, 0.09, 0.32);
       const phraseLike = typ === 'vowel';
       const scoopCents = ((phraseLike && leap > 0.08 ? 50 : 28) + rand() * 35) * scoopScale * (typ === 'vowel' ? 1 : 0.25);
       const scoopT = 0.05 + rand() * 0.035;
       const vibDelay = 0.17 + rand() * 0.13;
       const vibGrow = 0.32 + rand() * 0.28;
-      const vibRate0 = 5.05 + rand() * 0.75;
-      const vibDepth0 = (0.017 + rand() * 0.012) * Math.max(0, vibScale);
+          const vibRate0 = 4.7 + rand() * 0.55;
+      const vibDepth0 = (0.012 + rand() * 0.008) * Math.max(0, vibScale);
       const vibRateJit = 0.12 + rand() * 0.1;
       const vibDepthJit = 0.18 + rand() * 0.12;
       const vibPhase = rand() * Math.PI * 2;
@@ -795,13 +795,13 @@
           }
           const sourcePulse = lf(phase) * shim;
           let breath = rand() * 2 - 1;
-          airLp += 0.12 * (breath - airLp);
+          airLp += 0.22 * (breath - airLp);
           breath = breath - airLp;
-          const breathAmt = (0.03 + 0.018 * (1 - u) + (seg.ph === 'HH' ? 0.045 * (1 - smooth(t / 0.2)) : 0)) * Math.max(0, breathScale);
+          const breathAmt = (0.045 + 0.03 * (1 - u) + (seg.ph === 'HH' ? 0.07 * (1 - smooth(t / 0.28)) : 0)) * Math.max(0, breathScale);
           const source = sourcePulse * 0.95 + breath * breathAmt;
           const fv = targets(seg, u, prevF, nextF);
           const bwMul = typ === 'nasal' ? 0.85 : 1;
-          for (let k = 0; k < 5; k++) res[k].set((fv[k] || 4000) * formant * (1 + 0.004 * Math.sin(2 * Math.PI * 0.7 * (seg.t + t) + k)), BW[k] * bwMul);
+          for (let k = 0; k < 5; k++) res[k].set((fv[k] || 4000) * formant * (1 + 0.0012 * Math.sin(2 * Math.PI * 0.45 * (seg.t + t) + k)), BW[k] * bwMul * (1 + 0.08 * (1 - u)));
           let vf = res[0].tick(source) * 1.05
             + res[1].tick(source) * 0.95
             + res[2].tick(source) * 0.55
