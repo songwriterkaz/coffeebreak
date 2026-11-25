@@ -125,7 +125,9 @@ test('school coffee totals use the cart core and purchases stay closed', () => {
   }
 });
 
-test('coverage counts this milestone and leaves the other catalogues alone', () => {
+test('coverage manifest matches every checkout script', () => {
+  const manifest = JSON.parse(readFileSync(new URL('./coverage.json', import.meta.url), 'utf8'));
+  const note = "window.CB_STORE_NOTE='Some items in this catalogue can only be delivered inside Australia. This page does not arrange that delivery and does not take payment.';\n";
   const found = [];
   function walk(dir) {
     for (const name of readdirSync(dir)) {
@@ -136,11 +138,49 @@ test('coverage counts this milestone and leaves the other catalogues alone', () 
     }
   }
   walk('.');
-  const integrated = found.filter((path) => readFileSync(path, 'utf8') === loader);
-  const legacy = found.filter((path) => !integrated.includes(path));
-  assert.deepEqual(integrated.sort(), ['apps/flowers/cb-pay.js', 'shoes/cb-pay.js']);
-  assert.ok(legacy.length > 0);
+  const listed = manifest.integratedScripts.slice().sort();
+  let mounted = 0;
+  for (const path of listed) {
+    const text = readFileSync(new URL('../' + path, import.meta.url), 'utf8');
+    const australia = manifest.australiaOnlyNote.includes(path);
+    assert.equal(text, australia ? note + loader : loader, path);
+    assert.equal(cart.payidMountUrl('https://songwriterkaz.github.io/coffeebreak/' + path).endsWith('/payid-cart/mount.js'), true, path);
+    assert.doesNotMatch(text, /paypal\.com|stripe|gumroad|0\.69/i);
+    const dir = path.slice(0, path.lastIndexOf('/'));
+    let html = '';
+    try { html = readFileSync(new URL('../' + dir + '/index.html', import.meta.url), 'utf8'); }
+    catch { try { html = readFileSync(new URL('../' + dir.split('/').slice(0, -1).join('/') + '/index.html', import.meta.url), 'utf8'); } catch { html = ''; } }
+    if (html.includes('cb-pay.js')) mounted += 1;
+    try {
+      const products = readFileSync(new URL('../' + dir + '/products.js', import.meta.url), 'utf8');
+      for (const sell of [...products.matchAll(/"sell":\s*(\d+(?:\.\d+)?)/g)].map((item) => Number(item[1]))) {
+        const view = cart.catalogueCheckout(
+          [{ id: 'p', name: 'Item', amount: sell, qty: 1 }],
+          { currency: 'AUD', storeId: dir, fulfilmentVerified: false, rng: seqRng() }
+        );
+        assert.equal(view.requestsPayment, false);
+        assert.equal(view.paid, false);
+        assert.equal(view.currency, 'AUD');
+        assert.equal(view.totalLabel, sell.toFixed(2));
+      }
+    } catch (err) {
+      if (!err || err.code !== 'ENOENT') throw err;
+    }
+  }
+  assert.deepEqual(listed, found.filter((path) => listed.includes(path)).sort());
+  assert.equal(listed.length, manifest.integratedCount);
+  const excludedPay = manifest.excluded.filter((item) => String(item.path).endsWith('cb-pay.js'));
+  assert.equal(excludedPay.length, 4);
+  for (const item of excludedPay) {
+    const text = readFileSync(new URL('../' + item.path, import.meta.url), 'utf8');
+    assert.equal(text.includes('payid-cart/mount.js'), false);
+  }
+  assert.equal(found.filter((path) => !listed.includes(path)).sort().join('|'), excludedPay.map((item) => item.path).sort().join('|'));
+  assert.deepEqual(manifest.australiaOnlyNote.slice().sort(), [
+    'apps/boats/cb-pay.js', 'apps/bonsai/cb-pay.js', 'apps/coffeebreaks-bakery/cb-pay.js', 'apps/garden/shop/cb-pay.js', 'apps/pies/cb-pay.js'
+  ]);
+  const mount = readFileSync(new URL('./mount.js', import.meta.url), 'utf8');
+  assert.match(mount, /restriction\.textContent = window\.CB_STORE_NOTE/);
   assert.equal(found.some((path) => path.includes('vintage-midwife-bags')), false);
-  assert.equal(legacy.some((path) => path.includes('social/')), false);
-  console.log('COVERAGE integrated=' + integrated.length + ' legacy=' + legacy.length + ' school=gated');
+  console.log('COVERAGE scripts=' + listed.length + ' mountedIndexes=' + mounted + ' excludedPay=' + excludedPay.length);
 });

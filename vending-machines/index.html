@@ -7,7 +7,7 @@ var A=window.alert,C=window.confirm;window.alert=function(m){var t=Date.now();tr
 window.__cbNav=function(u){var w=null;try{w=window.open(u,'_blank')}catch(e){}if(!w){var a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}};})();</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coffeebreak Vending Machines</title><link rel="stylesheet" href="style.css"><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
 </head><body data-store="COFFEEBREAK VENDING MACHINES">
-<div class="strip">Secure checkout with PayID • Prices in AUD include delivery within Australia • Overseas orders welcome</div>
+<div class="strip">Catalogue prices in AUD. Payment is not requested. Delivery is not confirmed on this page.</div>
 <header><div class="float">🎰</div><img src="cb-logo.jpg" alt="Coffeebreak logo" style="width:110px;border-radius:14px;display:block;margin:6px auto"><h1>Coffeebreak Vending Machines</h1><p class="tag">Gacha capsule machines, gumball &amp; toy vending machines, capsules &amp; tokens – delivered Australia-wide</p>
 <nav><button data-t="shop" class="on">Shop</button><button data-t="place">📍 Free placement</button><button data-t="cart">🛒 Cart (<span id="cc">0</span>)</button></nav></header>
 <main>
@@ -33,7 +33,7 @@ window.__cbNav=function(u){var w=null;try{w=window.open(u,'_blank')}catch(e){}if
 <textarea name="notes" placeholder="Space available (a 7 ft table needs about 5 x 4 m), opening hours"></textarea>
 <button type="submit">Send my pool table enquiry</button></form></div>
 <p class="note">Enquiries go to Coffeebreak, who matches your site with a local licensed operator. Placement depends on the operator's site check. Coffeebreak may receive a referral fee from the operator, never from you. Love the idea? Use the Support Coffeebreak button to donate.</p></section>
-<section id="cart" hidden><h2>Your cart</h2><div id="lines"></div><p class="tot">Total: AUD $<span id="tot">0.00</span> <small>(delivery included)</small></p>
+<section id="cart" hidden><h2>Your cart</h2><div id="lines"></div><p class="tot">Total: AUD $<span id="tot">0.00</span> <small>(catalogue total)</small></p>
 <div class="form"><input id="cName" placeholder="Your name"><input id="cEmail" type="email" placeholder="Email"><input id="cPhone" placeholder="Phone"><textarea id="cAddr" placeholder="Delivery address (street, suburb, state, postcode)"></textarea></div>
 <div id="PayID-buttons"></div></section>
 </main><!--cb-contact-start-->
