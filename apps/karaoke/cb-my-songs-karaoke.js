@@ -2,7 +2,7 @@
 (function(){
 var C=window.CB_MYSONGS_CFG||{};var BASE=C.base||'assets/my-songs/';var LIMIT=C.limit||0;var BUY=C.buy||'';
 var PAY='Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
-var css="#cbms{position:fixed;inset:0;z-index:99990;background:linear-gradient(160deg,#ad1457,#e91e63 55%,#ff6fb5);color:#fff;font-family:system-ui,Segoe UI,Arial,sans-serif;display:none;flex-direction:column}"+
+var css="#cbms{position:fixed;inset:0;z-index:2147483646;background:linear-gradient(160deg,#ad1457,#e91e63 55%,#ff6fb5);color:#fff;font-family:system-ui,Segoe UI,Arial,sans-serif;display:none;flex-direction:column}"+
 "#cbms.on{display:flex}#cbms *{box-sizing:border-box}#cbms header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(0,0,0,.35)}#cbms header img{height:34px;border-radius:8px}#cbms header b{font-size:18px;flex:1}"+
 "#cbms button{background:#ff4fa3;color:#fff;border:0;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;font-size:14px}#cbms button.g{background:rgba(255,255,255,.15)}#cbms button:disabled{opacity:.45}"+
 "#cbmsMain{flex:1;display:flex;min-height:0}#cbmsList{width:300px;overflow:auto;background:rgba(0,0,0,.25);padding:6px}#cbmsList input{width:100%;padding:8px;border-radius:8px;border:0;margin-bottom:6px}"+
@@ -48,7 +48,12 @@ function record(){if(rec&&rec.state=='recording'){rec.stop();return}if(!window.M
 rec.ondataavailable=function(e){if(e.data.size)chunks.push(e.data)};rec.onstop=function(){$('cbmsRec').textContent='Record';var b=new Blob(chunks,{type:rec.mimeType||'audio/webm'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='my-coffeebreak-karaoke.webm';a.textContent='Download your recording';a.style.color='#fff';var m=$('cbmsMsg');m.innerHTML='';m.appendChild(a)};rec.start();$('cbmsRec').textContent='Stop recording';msg('Recording your voice with the song.');if(A.paused)A.play()}
 function open(){R.classList.add('on');if(cur<0&&S.length)load(0,false)}
 function init(){document.body.appendChild(R);var ob=document.createElement('button');ob.id='cbmsOpen';ob.textContent='🎤 Sing my songs';ob.onclick=open;document.body.appendChild(ob);
-$('cbmsX').onclick=function(){R.classList.remove('on');A.pause()};$('cbmsFs').onclick=function(){var d=document.documentElement;if(document.fullscreenElement)document.exitFullscreen();else if(d.requestFullscreen)d.requestFullscreen()};
+function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement||null}
+function exitFs(){var ex=document.exitFullscreen||document.webkitExitFullscreen;if(fsEl()&&ex)ex.call(document)}
+function goFs(el){var d=el||R;var req=d.requestFullscreen||d.webkitRequestFullscreen;if(req){var p=req.call(d);if(p&&p.catch)p.catch(function(){})} }
+$('cbmsX').onclick=function(e){if(e)e.stopPropagation();exitFs();R.classList.remove('on');A.pause()};
+$('cbmsFs').onclick=function(e){if(e)e.stopPropagation();if(fsEl())exitFs();else goFs(R)};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&R.classList.contains('on')){$('cbmsX').click()}});
 $('cbmsQ').oninput=list;$('cbmsItems').onclick=function(e){var it=e.target.closest('.cbmsI');if(it)load(+it.dataset.i,true)};
 $('cbmsPlay').onclick=function(){ctx();if(cur<0)load(0,true);else if(A.paused)A.play().catch(function(){msg('Press Play again to start.')});else A.pause()};
 $('cbmsPrev').onclick=function(){load(Math.max(0,cur-1),true)};$('cbmsNext').onclick=function(){var n=cur+1;if(LIMIT&&n>=LIMIT)n=0;load(n%S.length,true)};

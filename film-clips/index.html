@@ -8,23 +8,24 @@ input,select,textarea{font-size:1rem;padding:9px;border:2px solid #ffb3d6;border
 .tabs button{margin:2px}.muted{color:#8a5a78;font-size:.9rem}#scr{position:relative;border-radius:18px;overflow:hidden;background:#000;aspect-ratio:16/9}#cv{width:100%;height:100%;display:block}#ttl{position:absolute;left:16px;bottom:14px;color:#fff;font-size:1.6rem;font-weight:800;text-shadow:0 2px 8px #000}.song{display:flex;gap:10px;align-items:center}.song img,.song .ph{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#ff4fa3;display:flex;align-items:center;justify-content:center;font-size:1.6rem}</style><script id="cb-pages-bar-script" src="https://songwriterkaz.github.io/coffeebreak/pages/cb-pages-bar.js" defer></script>
 </head><body>
 <header><img src="cb-logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Film Clips</h1></header><main><div class="card"><div id="scr"><canvas id="cv" width="960" height="540"></canvas><div id="ttl">Pick a song</div></div>
-<p><button id="pp">▶ Play</button><button id="nx">⏭ Next</button><label for="sty">Visual style</label><select id="sty"><option>Pink hearts</option><option>Neon bars</option><option>Coffee swirl</option><option>Cover zoom</option></select></p><audio id="au" controls style="width:100%"></audio><p class="muted">Lyrics: not stored yet. Captions can be added when Karen supplies them.</p></div>
+<p><button id="pp" type="button">Play</button><button id="nx" type="button">Next</button><a id="dl" class="btn" href="media/s1.mp3" download>Download this song</a><label for="sty">Visual style</label><select id="sty"><option>Pink hearts</option><option>Neon bars</option><option>Coffee swirl</option><option>Cover zoom</option></select></p><audio id="au" controls style="width:100%"></audio><p id="soon" class="muted" hidden>Song coming soon.</p><p class="muted">Pick a song, press Play, then Download to keep that file. Lyrics are not stored on this page yet.</p></div>
 <div class="card"><h2>Coffeebreak songs</h2><div id="list"></div><p><a href="https://suno.com/@coffeebreakkobs" target="_blank" rel="noopener">More Coffeebreak songs on Suno</a></p></div>
 <div class="price card" role="note">Full version $5 AUD &middot; Pay by PayID (Teachers Mutual Bank): <b>darkokaz@gmx.com</b><br><span class="muted">Put "Coffeebreak Film Clips" and your email in the payment description.</span></div></main>
 <footer><p>&copy; Coffeebreak. All rights reserved. Coffeebreak keeps all rights to its products, designs, apps, name and logo. Buyers may resell what they bought but may not copy it or make their own versions. Third-party trademarks belong to their owners and are used only to describe items.</p>
 <p><a href="https://www.tesla.com" target="_blank" rel="noopener">Tesla</a><a href="https://www.starlink.com" target="_blank" rel="noopener">Starlink</a><a href="https://coffeebreaks.itch.io" target="_blank" rel="noopener">Coffeebreak on itch</a></p></footer>
-<script>const P='https://suno.com/@coffeebreakkobs',S=[
-['Coffee Break','','media/s1.mp3',''],
-['Coffeebreak After Dark','','media/s2.mp3',''],
-['Im Weak','','media/s3.mp3',''],
-['Knee Deep Mashup','27efb7f0-6374-4082-98dc-9d3e825bec05','media/s4.mp3',''],
-['Drip Drip Drip (Country)','57ed9d0b-1040-407b-93b4-4210db11c13f','media/s5.mp3',''],
-['Cinnamon Candy','f029b889-404c-433e-9d67-44016d2e4252','media/s6.mp3',''],
-['Sweet Juices Cotton Candy','14933c53-4633-4132-9bc9-be99be992840','media/s7.mp3','']];
-const $=i=>document.getElementById(i),au=$('au'),c=$('cv').getContext('2d');let ac,an,cur=0,img=new Image(),t=0;
-$('list').innerHTML=S.map((s,i)=>`<div class="song card"><${s[1]?`img src="media/c${i+1}.jpg" alt=""`:'div class="ph"'}>${s[1]?'':'☕</div>'}<div style="flex:1"><b>${s[0]}</b><br><a href="${s[1]?'https://suno.com/song/'+s[1]:P}" target="_blank" rel="noopener">Open on Suno</a></div><button onclick="load(${i},1)" aria-label="Play ${s[0]}">▶</button></div>`).join('');
-function load(i,go){cur=(i+S.length)%S.length;au.src='media/s'+(cur+1)+'.mp3';$('ttl').textContent=S[cur][0];img=new Image();if(S[cur][1])img.src='media/c'+(cur+1)+'.jpg';if(go)play()}
-function play(){if(!ac){ac=new AudioContext();an=ac.createAnalyser();an.fftSize=256;ac.createMediaElementSource(au).connect(an);an.connect(ac.destination)}ac.resume();au.play()}
+<script>const S=[
+['Coffee Break','media/s1.mp3','media/c1.jpg'],
+['Coffeebreak After Dark','media/s2.mp3','media/c2.jpg'],
+['I\'m Weak','media/s3.mp3','media/c3.jpg'],
+['Knee Deep Mashup','media/s4.mp3','media/c4.jpg'],
+['Drip Drip Drip (Country)','media/s5.mp3','media/c5.jpg'],
+['Cinnamon Candy','media/s6.mp3','media/c6.jpg'],
+['Sweet Juices Cotton Candy','media/s7.mp3','media/c7.jpg']];
+const $=i=>document.getElementById(i),au=$('au'),c=$('cv').getContext('2d');let ac,an,cur=0,img=new Image(),t=0,bad=0;
+$('list').innerHTML=S.map((s,i)=>`<div class="song card"><div class="ph">&#9749;</div><div style="flex:1"><b>${s[0]}</b><br><span class="muted">Plays on this page</span></div><button type="button" onclick="load(${i},1)" aria-label="Play ${s[0]}">Play</button></div>`).join('');
+function load(i,go){cur=(i+S.length)%S.length;var s=S[cur];au.src=s[1];$('dl').href=s[1];$('dl').setAttribute('download',s[0].replace(/[^\w]+/g,'-').toLowerCase()+'.mp3');$('ttl').textContent=s[0];$('soon').hidden=true;img=new Image();if(s[2])img.src=s[2];if(go)play()}
+function play(){if(!ac){ac=new AudioContext();an=ac.createAnalyser();an.fftSize=256;ac.createMediaElementSource(au).connect(an);an.connect(ac.destination)}ac.resume();var p=au.play();if(p)p.catch(function(){$('soon').hidden=false;$('soon').textContent='Press Play to start. If the file is missing, this song is coming soon.'})}
+au.addEventListener('error',function(){$('soon').hidden=false;$('soon').textContent='Song coming soon.';$('ttl').textContent=S[cur][0]+' — Song coming soon'});
 au.onplay=()=>$('pp').textContent='⏸ Pause';au.onpause=()=>$('pp').textContent='▶ Play';au.onended=()=>load(cur+1,1);
 $('pp').onclick=()=>au.paused?play():au.pause();$('nx').onclick=()=>load(cur+1,1);
 const d=new Uint8Array(128);(function f(){t+=.016;if(an)an.getByteFrequencyData(d);const lv=d.slice(0,16).reduce((a,b)=>a+b,0)/4096,st=$('sty').value;

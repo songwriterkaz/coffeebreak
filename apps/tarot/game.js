@@ -27,10 +27,14 @@ function art(cv,cd){const c=cv.getContext('2d'),w=cv.width=220,h=cv.height=360;c
  c.fillStyle='rgba(232,160,176,.12)';c.beginPath();c.arc(w/2,h/2-20,70,0,7);c.fill();c.strokeStyle='rgba(255,207,106,.5)';for(let i=0;i<12;i++){c.beginPath();c.moveTo(w/2+Math.cos(i*.52)*74,h/2-20+Math.sin(i*.52)*74);c.lineTo(w/2+Math.cos(i*.52)*88,h/2-20+Math.sin(i*.52)*88);c.stroke()}
  c.textAlign='center';c.textBaseline='middle';c.fillStyle='#ffcf6a';c.font='bold 22px Georgia';c.fillText(cd.maj?roman(cd.num):(cd.num<=10?cd.num:cd.name.split(' ')[0][0]),w/2,40);
  if(cd.maj||cd.num>10||cd.num===1){c.font='64px serif';c.fillText(cd.sym,w/2,h/2-20)}else{c.font='26px serif';const n=cd.num;for(let i=0;i<n;i++){const cols=n>6?3:2,r=i/cols|0,cc=i%cols,rows=Math.ceil(n/cols);c.fillText(cd.sym,w/2+(cc-(Math.min(cols,n-r*cols)-1)/2)*44,h/2-20+(r-(rows-1)/2)*36)}}
- skull(w/2,h-92,1.3);c.fillStyle='#ffe9c7';c.font='bold 17px Georgia';c.fillText(cd.name,w/2,h-50)}
+ skull(w/2,h-108,1.15);
+ const words=cd.name.split(' ');
+ const lines=cd.name.length>16&&words.length>1?[words.slice(0,Math.ceil(words.length/2)).join(' '),words.slice(Math.ceil(words.length/2)).join(' ')]:[cd.name];
+ c.fillStyle='#ffe9c7';c.font='bold 16px Georgia';
+ lines.forEach((line,n)=>c.fillText(line,w/2,h-(lines.length>1?68:50)+n*18))}
 function back(cv){const c=cv.getContext('2d'),w=cv.width=220,h=cv.height=360;c.fillStyle='#1a0a10';c.fillRect(0,0,w,h);c.strokeStyle='#e8a0b0';c.lineWidth=4;c.strokeRect(8,8,w-16,h-16);
  for(let i=0;i<8;i++){c.strokeStyle='rgba(232,160,176,'+(.15+i*.06)+')';c.beginPath();c.arc(w/2,h/2,10+i*11,0,7);c.stroke()}c.font='60px serif';c.textAlign='center';c.textBaseline='middle';c.fillText('💀',w/2,h/2);c.font='22px serif';c.fillText('🌹',w/2,50);c.fillText('🌹',w/2,h-50)}
-function cardEl(d,lab,small){const e=document.createElement('div');e.className='tc';if(small){e.style.width='88px';e.style.height='144px'}e.innerHTML=`${lab?`<div class="lab">${esc(lab)}</div>`:''}<div class="in"><canvas class="b"></canvas><canvas class="f"></canvas></div>`;
+function cardEl(d,lab,small){const e=document.createElement('div');e.className='tc';if(small){e.style.width='88px';e.style.height='144px'}e.innerHTML=`${lab?`<div class="lab">${esc(lab)}</div>`:''}<div class="spin"><div class="in"><canvas class="b"></canvas><canvas class="f"></canvas></div></div>`;
  back(e.querySelector('.b'));const f=e.querySelector('.f');art(f,DECK[d.id]);if(d.rev)f.style.transform='rotateY(180deg) rotate(180deg)';return e}
 const SPREADS={single:{n:'Single card',p:['Your message']},three:{n:'Past · Present · Future',p:['Past','Present','Future']},celtic:{n:'Celtic Cross',p:['The present','The challenge','The foundation','The recent past','The best outcome','The near future','Yourself','Your environment','Hopes and fears','The outcome']}};
 const CEL=[[230,170],[230,170],[230,340],[110,170],[230,0],[350,170],[500,450],[500,300],[500,150],[500,0]];
@@ -50,10 +54,11 @@ function read(sp,q,fixed){G.state='play';const spec=sp==='daily'?{n:'Daily card'
  const cards=fixed||spec.p.map((p,i)=>({id:deck[i],rev:Math.random()<.3}));let flipped=0;
  S.innerHTML=`<div class="scr" style="text-align:center"><h2>${spec.n}</h2>${q?`<p><i>“${esc(q)}”</i></p>`:''}<p id="hint">Shuffling the deck…</p><div id="lay" style="position:relative;margin:auto"></div><div id="mean" style="text-align:left;max-width:860px;margin:auto"></div>${ENT}</div>`;
  const lay=$('lay'),cel=sp==='celtic';if(cel){lay.style.width='600px';lay.style.height='600px'}
- const els=cards.map((cd,i)=>{const e=cardEl(cd,spec.p[i],cel);if(cel){e.style.position='absolute';e.style.left=CEL[i][0]+'px';e.style.top=(CEL[i][1]+16)+'px';e.style.margin=0;if(i===1){e.style.transform='rotate(90deg)';e.style.zIndex=2}}e.classList.add('shuf');lay.appendChild(e);return e});
+ const els=cards.map((cd,i)=>{const e=cardEl(cd,spec.p[i],cel);if(cel){e.style.position='absolute';e.style.left=CEL[i][0]+'px';e.style.top=(CEL[i][1]+16)+'px';e.style.margin=0;if(i===1){const spin=e.querySelector('.spin');if(spin)spin.style.transform='rotate(90deg)';e.style.zIndex=2}}e.classList.add('shuf');lay.appendChild(e);return e});
  setTimeout(()=>{$('hint').textContent='Tap each card to turn it over.';els.forEach(e=>e.classList.remove('shuf'))},1100);
  els.forEach((e,i)=>e.onclick=()=>{if(e.classList.contains('up'))return;e.classList.add('up');flipped++;const cd=cards[i],D=DECK[cd.id];
-  $('mean').insertAdjacentHTML('beforeend',`<p><b style="color:#e8a0b0">${esc(spec.p[i])}: ${D.name}${cd.rev?' (reversed)':''}</b><br>${cd.rev?'Reversed':'Upright'}: ${cd.rev?D.rv:D.up}.</p>`);
+  const lab=e.querySelector('.lab');if(lab)lab.textContent=spec.p[i]+': '+D.name+(cd.rev?' (reversed)':'');
+  $('mean').insertAdjacentHTML('beforeend',`<p><b style="color:#e8a0b0">${esc(spec.p[i])}: ${esc(D.name)}${cd.rev?' (reversed)':''}</b><br>${cd.rev?'Reversed':'Upright'}: ${esc(cd.rev?D.rv:D.up)}.</p>`);
   if(flipped===cards.length)setTimeout(()=>summary(sp,q,cards,spec),700)})}
 function summary(sp,q,cards,spec){G.state='over';const D=cards.map(c=>DECK[c.id]),maj=D.filter(d=>d.maj).length,rev=cards.filter(c=>c.rev).length;
  const cnt={};D.filter(d=>!d.maj).forEach(d=>cnt[d.suit]=(cnt[d.suit]||0)+1);const dom=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];

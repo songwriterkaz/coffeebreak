@@ -2,11 +2,12 @@ const c=document.getElementById('c');let x=c.getContext('2d');const $=id=>docume
 // ---- music playlist (shuffle, mute, skip, now playing) ----
 const music=$('music');let muted=localStorage.hsMuted==='1',musicOK=true,PL=(window.PLAYLIST||[]).slice(),ti=0,bad=0;
 for(let i=PL.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[PL[i],PL[j]]=[PL[j],PL[i]]}
-function load(){if(!PL.length){musicOK=false;$('np').textContent='No music in playlist';return}const t=PL[ti%PL.length];music.src='assets/music/'+t.file;$('np').textContent='Now playing: '+t.title}
+const trackURL=t=>t&&(t.url||((/^(https?:|\/)/).test(t.file||'')?t.file:'assets/music/'+t.file))||'';
+function load(){PL=PL.filter(t=>trackURL(t));if(!PL.length){musicOK=false;$('np').textContent='Song coming soon';return}const t=PL[ti%PL.length];music.src=trackURL(t);$('np').textContent='Now playing: '+t.title}
 function next(){ti=(ti+1)%Math.max(1,PL.length);load();if(started&&!muted)music.play().catch(()=>{})}
 let started=false;load();
 music.addEventListener('ended',next);music.addEventListener('playing',()=>bad=0);
-music.addEventListener('error',()=>{if(++bad>=PL.length){musicOK=false;$('np').textContent='Music file missing'}else next()});
+music.addEventListener('error',()=>{if(++bad>=PL.length){musicOK=false;$('np').textContent='Song coming soon'}else next()});
 $('skip').onclick=e=>{e.stopPropagation();started=true;next()};
 function startMusic(){started=true;if(musicOK&&!muted&&music.paused)music.play().catch(()=>{})}
 $('mute').onclick=e=>{e.stopPropagation();muted=!muted;localStorage.hsMuted=muted?'1':'0';music.muted=muted;$('mute').textContent=muted?'🔇 Muted':'🔊 Music';if(!muted)startMusic()};
@@ -290,9 +291,9 @@ async movie(){const pub=await posted();await allSongs();let extra=[];
 };
 // --- Music: built-in Coffeebreak playlist + user imports ---
 let SONGS=[],LISTS=[],Q=[],qi=0,shuf=false,rep='all',curList='coffeebreak';const P=new Audio();P.preload='auto';
-const songURL=so=>so.blob?(so._u||(so._u=URL.createObjectURL(so.blob))):'assets/music/'+so.file;
+const songURL=so=>so.blob?(so._u||(so._u=URL.createObjectURL(so.blob))):(so.url||((/^(https?:|\/)/).test(so.file||'')?so.file:'assets/music/'+so.file));
 const artURL=so=>so.art?(so._a||(so._a=URL.createObjectURL(so.art))):(window.HERO_SRC||'assets/hero.png');
-async function allSongs(){const b=(window.PLAYLIST||[]).map(p=>({id:'cb:'+p.file,title:p.title,artist:'Coffeebreak',file:p.file,builtin:1}));const u=((await tx('readonly',s=>s.getAll(),'songs'))||[]).sort((a,b)=>a.t-b.t);SONGS=b.concat(u);LISTS=(await tx('readonly',s=>s.getAll(),'lists'))||[];return SONGS}
+async function allSongs(){const b=(window.PLAYLIST||[]).map(p=>({id:'cb:'+p.file,title:p.title,artist:'Coffeebreak',file:p.file,url:p.url||'',builtin:1}));const u=((await tx('readonly',s=>s.getAll(),'songs'))||[]).sort((a,b)=>a.t-b.t);SONGS=b.concat(u);LISTS=(await tx('readonly',s=>s.getAll(),'lists'))||[];return SONGS}
 function listSongs(id){if(id==='coffeebreak')return SONGS.filter(s=>s.builtin);if(id==='mine')return SONGS.filter(s=>!s.builtin);const l=LISTS.find(z=>z.id===id);return l?l.ids.map(i=>SONGS.find(s=>s.id===i)).filter(Boolean):[]}
 function id3art(buf){try{const b=new Uint8Array(buf);if(b[0]!==73||b[1]!==68||b[2]!==51)return null;const v=b[3],sz=(b[6]<<21)|(b[7]<<14)|(b[8]<<7)|b[9];let i=10;const tg=String.fromCharCode;let o={};
  while(i<sz+10&&b[i]){const id=tg(b[i],b[i+1],b[i+2],b[i+3]);const fs=v===4?(b[i+4]<<21)|(b[i+5]<<14)|(b[i+6]<<7)|b[i+7]:(b[i+4]<<24)|(b[i+5]<<16)|(b[i+6]<<8)|b[i+7];const d=b.subarray(i+10,i+10+fs);
@@ -393,7 +394,7 @@ async function kdel(id){const d=await kdb();return new Promise(r=>{const t=d.tra
 function kstop(){try{K.el&&K.el.pause()}catch(e){}try{K.rec&&K.rec.state!=='inactive'&&K.rec.stop()}catch(e){}K.stopVis()}
 VIEWS.karaoke=async function(){
  try{music.pause()}catch(e){}try{typeof P!=='undefined'&&P.pause()}catch(e){}
- const songs=(window.PLAYLIST||[]).map(p=>({title:p.title,url:'assets/music/'+p.file,file:p.file}));
+ const songs=(window.PLAYLIST||[]).map(p=>({title:p.title,url:p.url||'assets/music/'+p.file,file:p.file}));
  let user=[];try{user=(await allSongs()).filter(s=>s.blob)}catch(e){}
  const all=songs.concat(user.map(s=>({title:s.title,blob:s.blob,file:s.id})));
  const lyr=LS('ckLyrics',{});
@@ -591,7 +592,7 @@ const DUR={"suno-cinnamon-candy-v1.mp3": 28.06, "suno-coffee-break-v1.mp3": 212.
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const EPOCH=Date.UTC(2026,0,1)/1000;
 // fixed station order: playlist entries that have a known duration, deterministic shuffle (same on every device)
-const LIST=(window.PLAYLIST||[]).filter(p=>DUR[p.file]).map(p=>({file:p.file,title:p.title,d:DUR[p.file]}));
+const LIST=(window.PLAYLIST||[]).filter(p=>p.dur||DUR[p.file]).map(p=>({file:p.file,title:p.title,d:p.dur||DUR[p.file],url:p.url||('assets/music/'+p.file)}));
 let sd=20261013;const rnd=()=>{sd=(sd*1103515245+12345)%2147483648;return sd/2147483648};
 LIST.sort((a,b)=>a.file<b.file?-1:1);for(let i=LIST.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[LIST[i],LIST[j]]=[LIST[j],LIST[i]]}
 const TOTAL=LIST.reduce((s,x)=>s+x.d,0);
@@ -606,7 +607,7 @@ const st=document.createElement('style');st.textContent='.oaL{display:inline-blo
 const R={el:null,on:false,timer:0,lastI:-1,jingles:true};
 function jingle(text){if(!R.jingles||!window.speechSynthesis)return;try{const u=new SpeechSynthesisUtterance(text);u.rate=1.02;u.pitch=1.1;const v=R.el;if(v)v.volume=.35;u.onend=u.onerror=()=>{if(R.el)R.el.volume=1};speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 function tune(){const n=at(Date.now());const el=R.el;if(!el)return n;
- if(R.lastI!==n.i||!el.src.endsWith(encodeURI(n.song.file))){const first=R.lastI<0;R.lastI=n.i;el.src='assets/music/'+n.song.file;el.currentTime=0;el.addEventListener('loadedmetadata',()=>{el.currentTime=at(Date.now()).pos},{once:true});el.play().catch(()=>{});
+ const src=n.song.url||('assets/music/'+n.song.file);if(R.lastI!==n.i||!el.src.endsWith(encodeURI(src.split('/').pop()))){const first=R.lastI<0;R.lastI=n.i;el.src=src;el.currentTime=0;el.addEventListener('loadedmetadata',()=>{el.currentTime=at(Date.now()).pos},{once:true});el.play().catch(()=>{});
   const sh=show(new Date());jingle(first?sh.dj+' Here is '+n.song.title+'.':'You are tuned to Coffeebreak Radio, '+sh.n.replace(/^\W+/,'')+'. Up now, '+n.song.title+'.')}
  else if(el.readyState>=1&&Math.abs(el.currentTime-n.pos)>2.5)el.currentTime=n.pos;// drift correction
  return n}
