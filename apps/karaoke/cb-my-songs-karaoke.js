@@ -2,8 +2,8 @@
 (function(){
 var C=window.CB_MYSONGS_CFG||{};var BASE=C.base||'assets/my-songs/';var LIMIT=C.limit||0;var BUY=C.buy||'';
 var PAY='Pay by PayID (Teachers Mutual Bank): darkokaz@gmx.com';
-var css="#cbms{position:fixed;inset:0;z-index:2147483646;background:linear-gradient(160deg,#ad1457,#e91e63 55%,#ff6fb5);color:#fff;font-family:system-ui,Segoe UI,Arial,sans-serif;display:none;flex-direction:column}"+
-"#cbms.on{display:flex}#cbms *{box-sizing:border-box}#cbms header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(0,0,0,.35)}#cbms header img{height:34px;border-radius:8px}#cbms header b{font-size:18px;flex:1}"+
+var css="#cbms{position:fixed;inset:0;z-index:2147483647;background:linear-gradient(160deg,#ad1457,#e91e63 55%,#ff6fb5);color:#fff;font-family:system-ui,Segoe UI,Arial,sans-serif;display:none;flex-direction:column}"+
+"#cbms.on{display:flex}#cbms *{box-sizing:border-box}#cbms header{position:relative;z-index:2;display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(0,0,0,.35)}#cbms header img{height:34px;border-radius:8px}#cbms header b{font-size:18px;flex:1}"+
 "#cbms button{background:#ff4fa3;color:#fff;border:0;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;font-size:14px}#cbms button.g{background:rgba(255,255,255,.15)}#cbms button:disabled{opacity:.45}"+
 "#cbmsMain{flex:1;display:flex;min-height:0}#cbmsList{width:300px;overflow:auto;background:rgba(0,0,0,.25);padding:6px}#cbmsList input{width:100%;padding:8px;border-radius:8px;border:0;margin-bottom:6px}"+
 ".cbmsI{padding:8px;border-radius:8px;cursor:pointer;display:flex;gap:6px;align-items:center;font-size:14px}.cbmsI:hover{background:rgba(255,79,163,.25)}.cbmsI.cur{background:#ff4fa3}.cbmsI small{opacity:.7;margin-left:auto}.cbmsI.lk{opacity:.55}"+
