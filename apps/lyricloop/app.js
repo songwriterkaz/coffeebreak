@@ -205,14 +205,55 @@
     return rows.slice(0, 8);
   }
 
+  function liveLyrics() {
+    var box = document.getElementById('lyrics');
+    return box ? box.value : (state.lyrics || '');
+  }
+  function selectedPreset() {
+    var lib = window.CBVocals;
+    if (!lib) return null;
+    return lib.getSelected() || lib.presetAt(state.vocalId || 0) || lib.presetAt(0);
+  }
+  function padPanelInner() {
+    var lines = linesOf(liveLyrics());
+    var preset = selectedPreset();
+    var voice = preset ? esc(preset.name) : 'Coffeebreak voice';
+    var pads;
+    if (!lines.length) {
+      pads = [1, 2, 3, 4].map(function (n) {
+        return '<button type="button" class="vocal-pad" disabled><span class="pad-num">Pad ' + n + '</span><span class="pad-text">Write a lyric line to play it</span></button>';
+      }).join('');
+    } else {
+      pads = lines.map(function (line, i) {
+        return '<button type="button" class="vocal-pad" data-act="play-line" data-id="' + i + '" aria-label="Play line ' + (i + 1) + '">' +
+          '<span class="pad-num">Pad ' + (i + 1) + '</span><span class="pad-text">' + esc(line) + '</span></button>';
+      }).join('');
+    }
+    return '<h2>Vocal pads</h2>' +
+      '<p>Press a pad to hear that lyric line sung with the in-browser Coffeebreak voice. If the singer cannot start, the line is spoken instead.</p>' +
+      '<div class="vocal-pads" id="vocal-pads">' + pads + '</div>' +
+      '<p class="row">' +
+      '<button type="button" class="btn" data-act="play-all-lines"' + (lines.length ? '' : ' disabled') + '>Play all lines</button>' +
+      '<button type="button" class="btn quiet" data-act="speak-all-lines"' + (lines.length ? '' : ' disabled') + '>Speak all lines</button>' +
+      '</p>' +
+      '<p>Voice: ' + voice + ' · <a href="#vocals">Pick a vocal</a></p>' +
+      '<p class="msg" id="pad-audio-msg"></p>';
+  }
+  function refreshPads() {
+    var card = document.getElementById('vocal-pad-card');
+    if (!card) return;
+    card.innerHTML = padPanelInner();
+    card.querySelectorAll('[data-act]').forEach(function (b) { b.addEventListener('click', onAct); });
+  }
   function viewPad() {
     var pink = state.equipped.pad ? ' pad-pink' : '';
-    return '<section class="card' + pink + '"><h1>Lyric Pad</h1><p>Four non-empty lines finish today\'s writing quest.</p>' +
+    return '<section class="card' + pink + '"><h1>Lyric Pad</h1><p>Four non-empty lines finish today\'s writing quest. Press a pad below to hear each line.</p>' +
       '<textarea id="lyrics" maxlength="2000">' + esc(state.lyrics || '') + '</textarea>' +
       '<p class="row"><button type="button" class="btn" data-act="save-lyrics">Save lines</button>' +
       '<button type="button" class="btn quiet" data-act="mark-chorus">Mark as chorus</button>' +
       '<button type="button" class="btn gold" data-act="publish">Publish on this device</button></p>' +
-      '<p class="msg" id="pad-msg">' + (state.chorus ? 'Chorus marked.' : '') + '</p></section>';
+      '<p class="msg" id="pad-msg">' + (state.chorus ? 'Chorus marked.' : '') + '</p></section>' +
+      '<section class="card" id="vocal-pad-card">' + padPanelInner() + '</section>';
   }
 
   function viewFeed() {
@@ -293,7 +334,7 @@
     paintQR();
     box.querySelectorAll('[data-act]').forEach(function (b) { b.addEventListener('click', onAct); });
     var lyrics = document.getElementById('lyrics');
-    if (lyrics) lyrics.addEventListener('input', function () { state.lyrics = lyrics.value; });
+    if (lyrics) lyrics.addEventListener('input', function () { state.lyrics = lyrics.value; refreshPads(); });
   }
 
   function onAct(ev) {
@@ -361,6 +402,9 @@
     else if (act === 'dl-wav') singDownload('wav');
     else if (act === 'dl-mp3') singDownload('mp3');
     else if (act === 'studio') studioTry();
+    else if (act === 'play-line') playPadLine(+id, false);
+    else if (act === 'play-all-lines') playPadAll(false);
+    else if (act === 'speak-all-lines') playPadAll(true);
   }
 
   var spinTimer = 0;
@@ -542,6 +586,229 @@
       if (msg) msg.textContent = 'Studio quality did not answer (' + (err.message || 'busy') + '). Download sung WAV uses the in-browser voice.';
     });
   }
+  var audioCtx = null;
+  var padSource = null;
+  var padAudioEl = null;
+  var playAllGen = 0;
+  var audioUnlocked = false;
+
+  function ensureAudio() {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    if (!audioCtx || audioCtx.state === 'closed') audioCtx = new AC();
+    if (audioCtx.state === 'suspended') {
+      var p = audioCtx.resume();
+      if (p && p.catch) p.catch(function () {});
+    }
+    return audioCtx;
+  }
+  function unlockAudio() {
+    var ctx = ensureAudio();
+    if (ctx) {
+      try {
+        var buf = ctx.createBuffer(1, 1, ctx.sampleRate || 44100);
+        var src = ctx.createBufferSource();
+        src.buffer = buf;
+        src.connect(ctx.destination);
+        src.start(0);
+      } catch (e) {}
+    }
+    if (window.speechSynthesis) {
+      try { window.speechSynthesis.resume(); } catch (e) {}
+      try { window.speechSynthesis.getVoices(); } catch (e) {}
+    }
+    audioUnlocked = true;
+  }
+  function onFirstGesture() {
+    if (audioUnlocked) return;
+    unlockAudio();
+  }
+  ['pointerdown', 'touchstart', 'click', 'keydown'].forEach(function (ev) {
+    document.addEventListener(ev, onFirstGesture, true);
+  });
+
+  function stopCurrentSound() {
+    try { if (padSource) { padSource.onended = null; padSource.stop(); padSource.disconnect(); } } catch (e) {}
+    padSource = null;
+    if (padAudioEl) {
+      try { padAudioEl.onended = null; padAudioEl.pause(); padAudioEl.removeAttribute('src'); padAudioEl.load(); } catch (e) {}
+    }
+    if (window.speechSynthesis) {
+      try { window.speechSynthesis.cancel(); } catch (e) {}
+    }
+    document.querySelectorAll('.vocal-pad.playing').forEach(function (el) { el.classList.remove('playing'); });
+  }
+  function stopPadAudio() {
+    playAllGen += 1;
+    stopCurrentSound();
+  }
+  function markPad(index) {
+    document.querySelectorAll('.vocal-pad').forEach(function (el, i) {
+      var id = el.getAttribute('data-id');
+      el.classList.toggle('playing', id != null ? +id === index : i === index);
+    });
+  }
+  function bytesToArrayBuffer(bytes) {
+    if (!bytes) return new ArrayBuffer(0);
+    if (bytes instanceof ArrayBuffer) return bytes.slice(0);
+    if (ArrayBuffer.isView(bytes)) return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+    return new Uint8Array(bytes).buffer;
+  }
+  function singLineBytes(text) {
+    var lib = window.CBVocals;
+    var voice = window.CBVoice;
+    if (!lib || !voice || typeof voice.sing !== 'function') throw new Error('The vocal engine is not on this page.');
+    var preset = selectedPreset();
+    if (!preset) throw new Error('Pick a vocal first.');
+    var words = String(text || '').trim().split(/\s+/).filter(Boolean);
+    if (!words.length) throw new Error('Write a line first.');
+    var notes = [];
+    var t = 0.06;
+    var melody = [0, 2, 4, 5, 4, 2, 0, -2];
+    for (var i = 0; i < words.length; i++) {
+      var pitch = 62 + melody[i % melody.length];
+      notes.push({ w: words[i], text: words[i], p: pitch, pitch: pitch, t: t, d: 0.42, duration: 0.42 });
+      t += 0.46;
+    }
+    var score = { notes: notes, seconds: t + 0.25 };
+    if (typeof lib.prepareScore === 'function') lib.prepareScore(score, preset);
+    var wav = voice.sing(score, { seed: (preset.id || 0) + 17, style: lib.voiceStyle ? lib.voiceStyle(preset) : {} });
+    if (!wav || wav.byteLength < 100) throw new Error('That vocal was silent.');
+    if (typeof lib.processSungWav === 'function') return lib.processSungWav(wav, preset);
+    return wav;
+  }
+  function speakLine(text, onDone) {
+    if (!window.speechSynthesis) {
+      if (onDone) onDone(new Error('Speech is not available in this browser.'));
+      return;
+    }
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+    try { window.speechSynthesis.resume(); } catch (e) {}
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-AU';
+    u.rate = 0.95;
+    try {
+      var voices = window.speechSynthesis.getVoices() || [];
+      var pick = null;
+      for (var i = 0; i < voices.length; i++) {
+        var lang = voices[i].lang || '';
+        if (/en-AU/i.test(lang)) { pick = voices[i]; break; }
+        if (!pick && /^en/i.test(lang)) pick = voices[i];
+      }
+      if (pick) u.voice = pick;
+    } catch (e) {}
+    u.onend = function () { if (onDone) onDone(null); };
+    u.onerror = function () { if (onDone) onDone(new Error('The line could not be spoken.')); };
+    window.speechSynthesis.speak(u);
+    window.__lyricPadLast = { mode: 'speak', text: text, at: Date.now() };
+  }
+  function playWavBytes(bytes, onDone) {
+    var ctx = ensureAudio();
+    var ab = bytesToArrayBuffer(bytes);
+    function fallback() {
+      try {
+        var blob = new Blob([ab], { type: 'audio/wav' });
+        var url = URL.createObjectURL(blob);
+        if (!padAudioEl) padAudioEl = new Audio();
+        padAudioEl.onended = function () { if (onDone) onDone(null); };
+        padAudioEl.onerror = function () { if (onDone) onDone(new Error('The pad audio could not play.')); };
+        padAudioEl.src = url;
+        var p = padAudioEl.play();
+        if (p && p.catch) p.catch(function (err) { if (onDone) onDone(err || new Error('Playback was blocked.')); });
+      } catch (err) {
+        if (onDone) onDone(err);
+      }
+    }
+    if (!ctx || typeof ctx.decodeAudioData !== 'function') {
+      fallback();
+      return;
+    }
+    var decode = ctx.decodeAudioData(ab.slice(0), function (buf) {
+      try {
+        try { if (padSource) { padSource.onended = null; padSource.stop(); padSource.disconnect(); } } catch (e) {}
+        var src = ctx.createBufferSource();
+        src.buffer = buf;
+        src.connect(ctx.destination);
+        src.onended = function () { if (padSource === src) padSource = null; if (onDone) onDone(null); };
+        src.start(0);
+        padSource = src;
+      } catch (err) {
+        fallback();
+      }
+    }, function () { fallback(); });
+    if (decode && typeof decode.then === 'function') {
+      decode.then(function () {}, function () {});
+    }
+  }
+  function playPadLine(index, speakOnly, onDone) {
+    unlockAudio();
+    var lines = linesOf(liveLyrics());
+    var text = lines[index];
+    if (!text) {
+      say('pad-audio-msg', 'Write a line on this pad first.');
+      if (onDone) onDone(new Error('empty'));
+      return;
+    }
+    if (!onDone) stopPadAudio();
+    else stopCurrentSound();
+    markPad(index);
+    say('pad-audio-msg', (speakOnly ? 'Speaking' : 'Playing') + ' line ' + (index + 1) + '.');
+    window.__lyricPadLast = { mode: speakOnly ? 'speak' : 'sing', index: index, text: text, at: Date.now() };
+    if (speakOnly) {
+      speakLine(text, function (err) {
+        document.querySelectorAll('.vocal-pad.playing').forEach(function (el) { el.classList.remove('playing'); });
+        if (err) say('pad-audio-msg', err.message || 'The line could not be spoken.');
+        if (onDone) onDone(err || null);
+      });
+      quest('vocal');
+      save();
+      return;
+    }
+    try {
+      var bytes = singLineBytes(text);
+      quest('vocal');
+      save();
+      playWavBytes(bytes, function (err) {
+        document.querySelectorAll('.vocal-pad.playing').forEach(function (el) { el.classList.remove('playing'); });
+        if (err) {
+          say('pad-audio-msg', 'Singing could not play, so this line will be spoken.');
+          speakLine(text, onDone);
+          return;
+        }
+        if (onDone) onDone(null);
+      });
+    } catch (err) {
+      say('pad-audio-msg', 'Speaking line ' + (index + 1) + '.');
+      window.__lyricPadLast = { mode: 'speak-fallback', index: index, text: text, at: Date.now(), reason: (err && err.message) || 'sing failed' };
+      speakLine(text, function (speakErr) {
+        document.querySelectorAll('.vocal-pad.playing').forEach(function (el) { el.classList.remove('playing'); });
+        if (speakErr) say('pad-audio-msg', speakErr.message || 'The line could not be played.');
+        if (onDone) onDone(speakErr || null);
+      });
+      quest('vocal');
+      save();
+    }
+  }
+  function playPadAll(speakOnly) {
+    unlockAudio();
+    stopPadAudio();
+    var lines = linesOf(liveLyrics());
+    if (!lines.length) { say('pad-audio-msg', 'Write a line first.'); return; }
+    var gen = playAllGen;
+    var i = 0;
+    function next() {
+      if (gen !== playAllGen) return;
+      if (i >= lines.length) {
+        say('pad-audio-msg', speakOnly ? 'Finished speaking the lines.' : 'Finished playing the lines.');
+        return;
+      }
+      var idx = i;
+      i += 1;
+      playPadLine(idx, speakOnly, function () { if (gen === playAllGen) next(); });
+    }
+    next();
+  }
+
   function say(id, text) { var n = document.getElementById(id); if (n) n.textContent = text; }
 
   document.getElementById('btn-full').addEventListener('click', function () {

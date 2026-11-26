@@ -56,3 +56,16 @@ textarea{min-height:160px}
   .main{padding:12px}
 }
 body:fullscreen,body:-webkit-full-screen{width:100%;height:100%}
+
+.vocal-pads{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:10px 0}
+.vocal-pad{min-height:76px;width:100%;border:2px solid var(--line);border-radius:16px;padding:10px 12px;background:linear-gradient(180deg,#3a1860,#24103c);color:var(--ink);font:700 15px/1.3 system-ui,sans-serif;cursor:pointer;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:4px;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.vocal-pad .pad-num{color:var(--gold);font-size:.8rem;letter-spacing:.04em;text-transform:uppercase}
+.vocal-pad .pad-text{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vocal-pad:hover,.vocal-pad:focus-visible{border-color:var(--pink);outline:none}
+.vocal-pad.playing,.vocal-pad:active{border-color:var(--gold);background:linear-gradient(180deg,var(--pink),var(--orange));color:#1a0814}
+.vocal-pad.playing .pad-num,.vocal-pad:active .pad-num{color:#2a1608}
+.vocal-pad:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:800px){
+  .vocal-pads{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .vocal-pad{min-height:88px}
+}
